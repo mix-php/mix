@@ -1,0 +1,12 @@
+{
+
+    "autoload": {
+
+        "psr-4": {
+            "express\\": "express/library/",
+            "www\\": "application/www/"
+        }
+        
+    }
+
+}
