@@ -46,8 +46,6 @@ class Application
                 }
                 $this->$name->$key = $value;
             }
-            // 执行初始化
-            method_exists($this->$name, 'init') and $this->$name->init();
         }
         return $this->$name;
     }

@@ -7,7 +7,7 @@
 
 namespace express\base;
 
-class Config
+class Config extends Object
 {
 
     // 配置文件参数
@@ -65,7 +65,7 @@ class Config
                 return $this->params;
             }
         }
-        $array  = explode('.', $name);
+        $array = explode('.', $name);
         $level = count($array);
         // 一级配置
         if ($level == 1) {
@@ -98,7 +98,7 @@ class Config
      */
     public function has($name = '')
     {
-        $array  = explode('.', $name);
+        $array = explode('.', $name);
         $level = count($array);
         // 一级配置
         if ($level == 1) {

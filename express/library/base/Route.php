@@ -7,7 +7,7 @@
 
 namespace express\base;
 
-class Route
+class Route extends Object
 {
 
     // 控制器命名空间
