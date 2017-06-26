@@ -1,6 +1,6 @@
 ## 欢迎使用 ExpressPHP V2
 
-`ExpressPHP V2` 是一个高性能极简Web开发MVC框架，融合 YII2 的开发效率、ThinkPHP5 的现代化，CodeIgniter 的轻量级，拥有基于 Swoole/Http/Server 的高性能 HttpServer，基于 Swoole/process 的多进程多线程 QueueConsumerServer，同时兼顾了开发效率、高性能与低学习成本。
+ExpressPHP V2 是一个高性能极简Web开发MVC框架，融合 YII2 的开发效率、ThinkPHP5 的现代化，CodeIgniter 的轻量级，拥有基于 Swoole/Http/Server 的高性能 SwooleHttpServer，基于 Swoole/process 的多进程多线程 QueueConsumerServer，同时兼顾了开发效率、高性能与低学习成本。
 
 ## 我是一个这样的框架
 
