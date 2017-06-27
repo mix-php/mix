@@ -11,7 +11,7 @@ use express\web\Controller;
 
 class siteController extends Controller
 {
-
+    
     public function actionIndex($request)
     {
         $request = \Express::$app->request->create($request);

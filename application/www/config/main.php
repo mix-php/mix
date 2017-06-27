@@ -12,7 +12,7 @@ return [
     'register'            => [
 
         // 配置
-        'config'  => [
+        'config'   => [
             // 类路径
             'class'    => 'express\base\Config',
             // 自动加载
@@ -20,7 +20,7 @@ return [
         ],
 
         // 路由
-        'route'   => [
+        'route'    => [
             // 类路径
             'class'          => 'express\base\Route',
             // 默认变量规则
@@ -36,9 +36,15 @@ return [
         ],
 
         // 请求
-        'request' => [
+        'request'  => [
             // 类路径
             'class' => 'express\web\Request',
+        ],
+
+        // 响应
+        'response' => [
+            // 类路径
+            'class' => 'express\web\Response',
         ],
 
     ],
