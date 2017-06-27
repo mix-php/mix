@@ -7,7 +7,9 @@
 
 namespace www\controller;
 
-class siteController
+use express\web\Controller;
+
+class siteController extends Controller
 {
 
     public function actionIndex($request)
