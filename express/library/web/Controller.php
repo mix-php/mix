@@ -12,6 +12,9 @@ use express\base\Object;
 class Controller extends Object
 {
 
-    
+    public function render($view, $data = [])
+    {
+
+    }
 
 }

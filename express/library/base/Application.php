@@ -37,18 +37,33 @@ class Application
      */
     public function __get($name)
     {
-        if (!isset($this->$name)) {
+        $list  = $this->register[$name];
+        $class = $list['class'];
+        // 返回新对象
+        if (isset($list['singleton']) && $list['singleton'] == false) {
             // 实例化
-            $list        = $this->register[$name];
-            $class       = $list['class'];
-            $this->$name = new $class();
+            $object = new $class();
             // 属性导入
             foreach ($list as $key => $value) {
-                if ($key == 'class') {
+                if (in_array($key, ['class', 'singleton'])) {
                     continue;
                 }
-                $this->$name->$key = $value;
+                $object->$key = $value;
             }
+            return $object;
+        }
+        // 返回单例
+        if (!isset($this->$name)) {
+            // 实例化
+            $object = new $class();
+            // 属性导入
+            foreach ($list as $key => $value) {
+                if (in_array($key, ['class', 'singleton'])) {
+                    continue;
+                }
+                $object->$key = $value;
+            }
+            $this->$name = $object;
         }
         return $this->$name;
     }
@@ -58,25 +73,38 @@ class Application
      */
     public function run()
     {
-        $action   = empty($_SERVER['PATH_INFO']) ? '' : substr($_SERVER['PATH_INFO'], 1);
-        $response = $this->runAction($action, ['get' => $_GET, 'post' => $_POST]);
-        print_r($response);
+        $action  = empty($_SERVER['PATH_INFO']) ? '' : substr($_SERVER['PATH_INFO'], 1);
+        $content = $this->runAction($action);
+        \Express::$app->response->setContent($content)->send();
+    }
+
+    public function runSwooleAction($requester, $responder)
+    {
+        $request  = \Express::$app->swooleRequest->setRequester($requester);
+        $response = \Express::$app->swooleResponse->setResponder($responder);
+        $action   = empty($requester->header['pathinfo']) ? '' : substr($requester->header['pathinfo'], 1);
+        $content  = $this->runAction($action, ['request' => $request, 'response' => $response]);
+        $response->setContent($content)->send();
     }
 
     /**
      * 执行功能并返回
      * @param  string $action
-     * @param  array  $requestParams
+     * @param  array  $inout
      * @return mixed
      */
-    public function runAction($action, $requestParams = ['get' => [], 'post' => []])
+    public function runAction($action, $inout = [])
     {
         $method = empty($_SERVER['REQUEST_METHOD']) ? (PHP_SAPI == 'cli' ? 'CLI' : '') : $_SERVER['REQUEST_METHOD'];
         $action = "{$method} {$action}";
         // 路由匹配
         list($action, $urlParams) = \Express::$app->route->match($action);
         // 路由参数导入请求类
-        \Express::$app->request->setRoute($urlParams);
+        if (empty($inout['request'])) {
+            \Express::$app->request->setRoute($urlParams);
+        } else {
+            $inout['request']->setRoute($urlParams);
+        }
         // index处理
         if (isset($urlParams['controller']) && strpos($action, ':action') !== false) {
             $action = str_replace(':action', 'index', $action);
@@ -100,7 +128,11 @@ class Application
             // 判断方法是否存在
             if (method_exists($controller, $method)) {
                 // 执行控制器的方法
-                return $controller->$method($requestParams + ['route' => $urlParams]);
+                if (empty($inout)) {
+                    return $controller->$method();
+                } else {
+                    return $controller->$method($inout['request'], $inout['response']);
+                }
             }
         }
         throw new \express\exception\HttpException(404, 'URL不存在');

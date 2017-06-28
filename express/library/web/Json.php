@@ -5,29 +5,13 @@
  * @author 刘健 <code.liu@qq.com>
  */
 
-namespace sys\web;
-
-use sys\Config;
+namespace express\web;
 
 class Json
 {
 
-    // 原始数据
-    private $array;
-
-    public function __construct($array)
-    {
-        $this->array = $array;
-    }
-
-    // 创建实例
-    public static function create($array)
-    {
-        return new self($array);
-    }
-
-    // 输出
-    public function output()
+    // 编码
+    public static function encode()
     {
         // 过滤null
         if (Config::get('main.json.null_to_string')) {

@@ -5,37 +5,24 @@
  * @author 刘健 <code.liu@qq.com>
  */
 
-namespace express\web;
+namespace express\swoole;
 
 use express\base\Object;
 
 class Request extends Object
 {
 
+    private $requester
     private $get;
     private $post;
     private $route;
 
-    public function init()
+    public function setRequester($requester)
     {
-        $this->get  = $_GET;
-        $this->post = $_POST;
-    }
-
-    public function create($requestParams)
-    {
-        $object = new self;
-        $object->setGet($requestParams['get']);
-        $object->setPost($requestParams['post']);
-        $object->setRoute($requestParams['route']);
-        return $object;
-    }
-
-    public function clear()
-    {
-        $this->get   = null;
-        $this->post  = null;
-        $this->route = null;
+        $this->requester = $requester;
+        $this->setGet($requester->get());
+        $this->setPost($requester->post());
+        return $this;
     }
 
     public function setGet($get)

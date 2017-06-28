@@ -8,13 +8,14 @@
 namespace www\controller;
 
 use express\web\Controller;
+use express\web\Request;
 
 class siteController extends Controller
 {
     
     public function actionIndex($request)
     {
-        $request = \Express::$app->request->create($request);
+        $request = Request::create($request);
         return $request;
     }
 

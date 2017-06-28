@@ -5,30 +5,30 @@
  * @author 刘健 <code.liu@qq.com>
  */
 
-namespace sys\web;
+namespace express\web;
 
-class Response
+use express\base\Object;
+
+class Response extends Object
 {
 
-    // 自己的引用
-    private static $instance;
+    // 输出格式
+    public $format;
+    // 格式值
+    const FORMAT_JSON  = 0;
+    const FORMAT_JSONP = 1;
+    const FORMAT_XML   = 2;
+    // 内容
+    private $content;
 
-    // 响应主体
-    private $body;
-
-    // 获取单例
-    public static function instance()
+    public function create()
     {
-        if (!isset(self::$instance)) {
-            return new self();
-        }
-        return self::$instance;
+        return new self;
     }
 
-    public function setBody($body)
+    public function setContent($content)
     {
-        $this->body = $body;
-        return $this;
+        $this->content = $content;
     }
 
     // 设置HTTP状态码
@@ -76,34 +76,36 @@ class Response
             504 => 'HTTP/1.1 504 Gateway Time-out',
         );
         header($http[$code]);
-        return $this;
     }
 
     // 输出
     public function send()
     {
-        $body = $this->body;
-        if (is_array($body)) {
-            switch (Config::get('main.response.array_default_convert')) {
-                case 'json':
-                    $body = Json::create($body);
+        echo $this->encode();
+    }
+
+    // 编码
+    public function encode()
+    {
+        $content = $this->content;
+        if (is_array($content)) {
+            switch ($this->format) {
+                case self::FORMAT_JSON:                    
+                    $content = Json::encode($content);
                     break;
-                case 'jsonp':
-                    $body = Jsonp::create($body);
+                case self::FORMAT_JSONP:
+                    $content = Jsonp::encode($content);
                     break;
-                case 'xml':
-                    $body = Xml::create($body);
+                case self::FORMAT_XML:
+                    $content = Xml::encode($content);
                     break;
                 default:
-                    $body = Json::create($body);
+                    $content = Json::encode($content);
                     break;
             }
         }
-        if (is_object($body)) {
-            $body->output();
-        }
-        if (is_scalar($body)) {
-            echo $body;
+        if (is_scalar($content)) {
+            return $content;
         }
     }
 
