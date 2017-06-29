@@ -69,48 +69,28 @@ class Application
     }
 
     /**
-     * 执行功能 (LAMP架构)
-     */
-    public function run()
-    {
-        $action  = empty($_SERVER['PATH_INFO']) ? '' : substr($_SERVER['PATH_INFO'], 1);
-        $content = $this->runAction($action);
-        \Express::$app->response->setContent($content)->send();
-    }
-
-    public function runSwooleAction($requester, $responder)
-    {
-        $request  = \Express::$app->swooleRequest->setRequester($requester);
-        $response = \Express::$app->swooleResponse->setResponder($responder);
-        $action   = empty($requester->header['pathinfo']) ? '' : substr($requester->header['pathinfo'], 1);
-        $content  = $this->runAction($action, ['request' => $request, 'response' => $response]);
-        $response->setContent($content)->send();
-    }
-
-    /**
      * 执行功能并返回
      * @param  string $action
      * @param  array  $inout
      * @return mixed
      */
-    public function runAction($action, $inout = [])
+    public function runAction($method, $action, $inout = [])
     {
-        $method = empty($_SERVER['REQUEST_METHOD']) ? (PHP_SAPI == 'cli' ? 'CLI' : '') : $_SERVER['REQUEST_METHOD'];
         $action = "{$method} {$action}";
         // 路由匹配
         list($action, $urlParams) = \Express::$app->route->match($action);
-        // 路由参数导入请求类
-        if (empty($inout['request'])) {
-            \Express::$app->request->setRoute($urlParams);
-        } else {
-            $inout['request']->setRoute($urlParams);
-        }
-        // index处理
-        if (isset($urlParams['controller']) && strpos($action, ':action') !== false) {
-            $action = str_replace(':action', 'index', $action);
-        }
-        // 执行
+        // 执行功能
         if ($action) {
+            // 路由参数导入请求类
+            if (empty($inout['request'])) {
+                \Express::$app->request->setRoute($urlParams);
+            } else {
+                $inout['request']->setRoute($urlParams);
+            }
+            // index处理
+            if (isset($urlParams['controller']) && strpos($action, ':action') !== false) {
+                $action = str_replace(':action', 'index', $action);
+            }
             // 实例化控制器
             $action    = "{$this->controllerNamespace}\\{$action}";
             $classFull = dirname($action);

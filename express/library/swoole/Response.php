@@ -37,6 +37,7 @@ class Response extends Object
     public function setHeader($key, $value)
     {
         $this->responder->header($key, $value);
+        return $this;
     }
 
     // 设置HTTP状态码

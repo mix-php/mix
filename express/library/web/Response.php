@@ -12,29 +12,31 @@ use express\base\Object;
 class Response extends Object
 {
 
-    // 输出格式
-    public $format;
     // 格式值
     const FORMAT_JSON  = 0;
     const FORMAT_JSONP = 1;
     const FORMAT_XML   = 2;
+    // 输出格式
+    public $format = FORMAT_JSON;
     // 内容
     private $content;
-
-    public function create()
-    {
-        return new self;
-    }
 
     public function setContent($content)
     {
         $this->content = $content;
+        return $this;
+    }
+
+    public function setHeader($key, $value)
+    {
+        header("{$key}: {$value}");
+        return $this;
     }
 
     // 设置HTTP状态码
-    public function code($code)
+    public function setStatusCode($code)
     {
-        $http = array(
+        $status = array(
             100 => 'HTTP/1.1 100 Continue',
             101 => 'HTTP/1.1 101 Switching Protocols',
             200 => 'HTTP/1.1 200 OK',
@@ -75,37 +77,35 @@ class Response extends Object
             503 => 'HTTP/1.1 503 Service Unavailable',
             504 => 'HTTP/1.1 504 Gateway Time-out',
         );
-        header($http[$code]);
+        header($status[$code]);
+        return $this;
     }
 
     // 输出
     public function send()
     {
-        echo $this->encode();
-    }
-
-    // 编码
-    public function encode()
-    {
-        $content = $this->content;
         if (is_array($content)) {
             switch ($this->format) {
-                case self::FORMAT_JSON:                    
-                    $content = Json::encode($content);
+                case self::FORMAT_JSON:
+                    $this->setHeader('Content-Type', 'application/json;charset=utf-8');
+                    $content = \express\web\Json::encode($content);
                     break;
                 case self::FORMAT_JSONP:
-                    $content = Jsonp::encode($content);
+                    $this->setHeader('Content-Type', 'application/json;charset=utf-8');
+                    $content = \express\web\Jsonp::encode($content);
                     break;
                 case self::FORMAT_XML:
-                    $content = Xml::encode($content);
+                    $this->setHeader('Content-Type', 'text/xml;charset=utf-8');
+                    $content = \express\web\Xml::encode($content);
                     break;
                 default:
-                    $content = Json::encode($content);
+                    $this->setHeader('Content-Type', 'application/json;charset=utf-8');
+                    $content = \express\web\Json::encode($content);
                     break;
             }
         }
         if (is_scalar($content)) {
-            return $content;
+            echo $content;
         }
     }
 

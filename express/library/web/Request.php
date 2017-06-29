@@ -18,24 +18,8 @@ class Request extends Object
 
     public function init()
     {
-        $this->get  = $_GET;
-        $this->post = $_POST;
-    }
-
-    public function create($requestParams)
-    {
-        $object = new self;
-        $object->setGet($requestParams['get']);
-        $object->setPost($requestParams['post']);
-        $object->setRoute($requestParams['route']);
-        return $object;
-    }
-
-    public function clear()
-    {
-        $this->get   = null;
-        $this->post  = null;
-        $this->route = null;
+        $this->setGet($_GET);
+        $this->setPost($_POST);
     }
 
     public function setGet($get)
