@@ -7,9 +7,7 @@
 
 namespace express\web;
 
-use express\base\Application;
-
-class Application extends Application
+class Application extends \express\base\Application
 {
 
     /**

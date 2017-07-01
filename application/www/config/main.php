@@ -47,24 +47,41 @@ return [
             'class'  => 'express\web\Response',
             // 输出格式
             'format' => express\web\Response::FORMAT_JSON,
+            // json
+            'json'   => [
+                // 类路径
+                'class' => 'express\web\Json',
+            ],
+            // jsonp
+            'jsonp'  => [
+                // 类路径
+                'class'        => 'express\web\Jsonp',
+                // callback名称
+                'callbackName' => 'callback',
+            ],
+            // xml
+            'xml'    => [
+                // 类路径
+                'class' => 'express\web\Xml',
+            ],
         ],
 
         // 请求
         'swooleRequest'  => [
-            // 类路径
-            'class' => 'express\swoole\Request',
             // 单例模式
             'singleton' => false,
+            // 类路径
+            'class'     => 'express\swoole\Request',
         ],
 
         // 响应
         'swooleResponse' => [
-            // 类路径
-            'class'  => 'express\swoole\Response',
             // 单例模式
             'singleton' => false,
+            // 类路径
+            'class'     => 'express\swoole\Response',
             // 输出格式
-            'format' => express\swoole\Response::FORMAT_JSON,
+            'format'    => express\swoole\Response::FORMAT_JSON,
         ],
 
     ],

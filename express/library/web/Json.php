@@ -11,26 +11,10 @@ class Json
 {
 
     // 编码
-    public static function encode()
+    public static function encode($array)
     {
-        // 过滤null
-        if (Config::get('main.json.null_to_string')) {
-            $this->array = self::filterNull($this->array);
-        }
-        // 设置Content-Type
-        header('Content-Type:application/json;charset=utf-8');
         // 不转义中文、斜杠
-        echo json_encode($this->array, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        exit;
-    }
-
-    // 过滤null
-    public static function filterNull($array)
-    {
-        if (is_array($array)) {
-            return array_map([__CLASS__, __METHOD__], $array);
-        }
-        return is_null($array) ? '' : $array;
+        return json_encode($array, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 
 }

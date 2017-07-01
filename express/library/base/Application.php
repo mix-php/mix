@@ -37,35 +37,44 @@ class Application
      */
     public function __get($name)
     {
+        // 返回单例
+        if (isset($this->$name)) {
+            return $this->$name;
+        }
+        // 获取配置
         $list  = $this->register[$name];
         $class = $list['class'];
+        // 实例化
+        $object = new $class();
+        // 属性导入
+        foreach ($list as $key => $value) {
+            // 跳过保留key
+            if (in_array($key, ['class', 'singleton'])) {
+                continue;
+            }
+            // 属性赋值
+            if (is_array($value) && isset($value['class'])) {
+                // 获取配置
+                $subClass = $value['class'];
+                // 实例化
+                $subObject = new $subClass();
+                // 属性导入
+                foreach ($value as $k => $v) {
+                    if (in_array($k, ['class'])) {
+                        continue;
+                    }
+                    $subObject->$k = $v;
+                }
+                $object->$key = $subObject;
+            } else {
+                $object->$key = $value;
+            }
+        }
         // 返回新对象
         if (isset($list['singleton']) && $list['singleton'] == false) {
-            // 实例化
-            $object = new $class();
-            // 属性导入
-            foreach ($list as $key => $value) {
-                if (in_array($key, ['class', 'singleton'])) {
-                    continue;
-                }
-                $object->$key = $value;
-            }
             return $object;
         }
-        // 返回单例
-        if (!isset($this->$name)) {
-            // 实例化
-            $object = new $class();
-            // 属性导入
-            foreach ($list as $key => $value) {
-                if (in_array($key, ['class', 'singleton'])) {
-                    continue;
-                }
-                $object->$key = $value;
-            }
-            $this->$name = $object;
-        }
-        return $this->$name;
+        return $this->$name = $object;
     }
 
     /**

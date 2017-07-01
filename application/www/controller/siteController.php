@@ -8,20 +8,15 @@
 namespace www\controller;
 
 use express\web\Controller;
-use express\web\Request;
 
 class siteController extends Controller
 {
-    
-    public function actionIndex($request)
-    {
-        $request = Request::create($request);
-        return $request;
-    }
 
-    public function actionMyTest()
+    public function actionIndex()
     {
-        return \Express::$app->request->route();
+        \Express::$app->response->statusCode = 404;
+        \Express::$app->response->format = \express\web\Response::FORMAT_XML;
+        return ['errcode' => 0, 'errmsg' => 'ok'];
     }
 
 }
