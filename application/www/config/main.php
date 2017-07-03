@@ -68,7 +68,7 @@ return [
 
         // 请求
         'swooleRequest'  => [
-            // 单例模式
+            // 非单例模式
             'singleton' => false,
             // 类路径
             'class'     => 'express\swoole\Request',
@@ -76,7 +76,7 @@ return [
 
         // 响应
         'swooleResponse' => [
-            // 单例模式
+            // 非单例模式
             'singleton' => false,
             // 类路径
             'class'     => 'express\swoole\Response',

@@ -14,9 +14,11 @@ class siteController extends Controller
 
     public function actionIndex()
     {
-        \Express::$app->response->statusCode = 404;
-        \Express::$app->response->format = \express\web\Response::FORMAT_XML;
-        return ['errcode' => 0, 'errmsg' => 'ok'];
+        // \Express::$app->response->statusCode = 404;
+        // \Express::$app->response->format = \express\web\Response::FORMAT_JSONP;
+        // return ['errcode' => 0, 'errmsg' => 'ok'];
+        
+        return $this->render('news.article', ['name' => 'xiaoliu' , 'sex' => 'nan']);
     }
 
 }

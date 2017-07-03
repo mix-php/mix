@@ -1,9 +1,8 @@
-<html>
-<body>
+<?php
+$this->title = 'Express View';
+?>
 
 	Welcome,
 	name: <?php echo $name; ?>
 	sex: <?php echo $sex; ?>
-
-</body>
-</html>
+	
