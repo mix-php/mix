@@ -20,7 +20,7 @@ class Controller extends Object
     public function render($name, $data = [])
     {
         if (strpos($name, '.') === false) {
-            $name = $this->controllerName() . '.' . $name;
+            $name = $this->viewPrefix() . '.' . $name;
         }
         $view            = new View();
         $data['content'] = $view->import($name, $data);
@@ -31,17 +31,16 @@ class Controller extends Object
     public function renderPartial($name, $data = [])
     {
         if (strpos($name, '.') === false) {
-            $name = $this->controllerName() . '.' . $name;
+            $name = $this->viewPrefix() . '.' . $name;
         }
         $view = new View();
         return $view->import($name, $data);
     }
 
-    // 控制器名称
-    public function controllerName()
+    // 视图前缀
+    private function viewPrefix()
     {
-        $className = basename(get_class($this));
-        return substr($className, 0, strpos($className, 'Controller'));
+        return str_replace([\Express::$app->controllerNamespace . '\\', '\\', 'Controller'], ['', '.', ''], get_class($this));
     }
 
 }
