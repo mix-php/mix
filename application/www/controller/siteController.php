@@ -18,7 +18,7 @@ class siteController extends Controller
         // \Express::$app->response->format = \express\web\Response::FORMAT_JSONP;
         // return ['errcode' => 0, 'errmsg' => 'ok'];
         
-        return $this->render('news.article', ['name' => 'xiaoliu' , 'sex' => 'nan']);
+        return $this->render('article', ['name' => 'xiaoliu' , 'sex' => 'nan']);
     }
 
 }

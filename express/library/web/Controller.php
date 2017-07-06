@@ -19,6 +19,9 @@ class Controller extends Object
     // 提取视图 (包含布局)
     public function render($name, $data = [])
     {
+        if (strpos($name, '.') === false) {
+            $name = $this->controllerName() . '.' . $name;
+        }
         $view            = new View();
         $data['content'] = $view->import($name, $data);
         return $view->import("layout.{$this->layout}", $data);
@@ -27,8 +30,18 @@ class Controller extends Object
     // 提取视图 (不包含布局)
     public function renderPartial($name, $data = [])
     {
+        if (strpos($name, '.') === false) {
+            $name = $this->controllerName() . '.' . $name;
+        }
         $view = new View();
         return $view->import($name, $data);
+    }
+
+    // 控制器名称
+    public function controllerName()
+    {
+        $className = basename(get_class($this));
+        return substr($className, 0, strpos($className, 'Controller'));
     }
 
 }
