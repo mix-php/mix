@@ -7,12 +7,7 @@
 
 namespace express\exception;
 
-class RouteException extends NotFoundException
+class RouteException extends \RuntimeException
 {
-
-    public function __construct($message, $location)
-    {
-        parent::__construct($message, $location);
-    }
 
 }

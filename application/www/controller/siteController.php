@@ -9,7 +9,7 @@ namespace www\controller;
 
 use express\web\Controller;
 
-class siteController extends Controller
+class SiteController extends Controller
 {
 
     public function actionIndex()
@@ -17,8 +17,8 @@ class siteController extends Controller
         // \Express::$app->response->statusCode = 404;
         // \Express::$app->response->format = \express\web\Response::FORMAT_JSONP;
         // return ['errcode' => 0, 'errmsg' => 'ok'];
-        
-        return $this->render('article', ['name' => 'xiaoliu' , 'sex' => 'nan']);
+
+        return $this->render('article', ['name' => 'xiaoliu', 'sex' => 'nan']);
     }
 
 }

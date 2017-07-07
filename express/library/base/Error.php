@@ -11,22 +11,22 @@ class Error
 {
 
     // 注册异常处理
-    public static function register()
+    public function register()
     {
         error_reporting(E_ALL);
-        set_error_handler([__CLASS__, 'appError']);
-        set_exception_handler([__CLASS__, 'appException']);
-        register_shutdown_function([__CLASS__, 'appShutdown']);
+        set_error_handler([$this, 'appError']);
+        set_exception_handler([$this, 'appException']);
+        register_shutdown_function([$this, 'appShutdown']);
     }
 
     // Error Handler
-    public static function appError($errno, $errstr, $errfile = '', $errline = 0, $errcontext = [])
+    public function appError($errno, $errstr, $errfile = '', $errline = 0, $errcontext = [])
     {
         throw new \sys\exception\ErrorException($errno, $errstr, $errfile, $errline);
     }
 
     // Error Handler
-    public static function appShutdown()
+    public function appShutdown()
     {
         if ($error = error_get_last()) {
             self::appException(new \sys\exception\ErrorException($error['type'], $error['message'], $error['file'], $error['line']));
@@ -34,7 +34,7 @@ class Error
     }
 
     // Exception Handler
-    public static function appException($e)
+    public function appException($e)
     {
         // 获取配置
         $appDebug = Config::get('main.app_debug');
@@ -44,14 +44,14 @@ class Error
         // http异常处理
         if ($e instanceof \sys\exception\HttpException) {
             $httpExceptionTemplate = Config::get('main.http_exception');
-            $data['message'] = [$e->getStatusCode() . ' / ' . $e->getMessage()];
+            $data['message']       = [$e->getStatusCode() . ' / ' . $e->getMessage()];
             if ($appDebug) {
-                $data['file'] = $e->getFile();
-                $data['line'] = $e->getLine();
+                $data['file']  = $e->getFile();
+                $data['line']  = $e->getLine();
                 $data['trace'] = $e->getTraceAsString();
             }
             $statusCode = $e->getStatusCode();
-            $template = $httpExceptionTemplate[$statusCode];
+            $template   = $httpExceptionTemplate[$statusCode];
             if (!empty($template)) {
                 if (is_array($template)) {
                     switch (Config::get('main.response.array_default_convert')) {
@@ -90,7 +90,7 @@ class Error
         } else if ($e instanceof \sys\exception\ErrorException) {
             $data['message'] = ['系统错误', $e->getMessage()];
         } else if ($e instanceof \sys\exception\RouteException) {
-            $data['code'] = 404;
+            $data['code']    = 404;
             $data['message'] = ['路由错误', $e->getMessage() . ':' . $e->getLocation()];
         } else if ($e instanceof \sys\exception\ConfigException) {
             $data['message'] = ['配置错误', $e->getMessage() . ':' . $e->getLocation()];
@@ -99,17 +99,17 @@ class Error
         } else if ($e instanceof \sys\exception\TemplateException) {
             $data['message'] = ['模板错误', $e->getMessage() . ':' . $e->getLocation()];
         } else if ($e instanceof \PDOException) {
-            $data['message'] = ['PDO错误', $e->getMessage()];
+            $data['message']                                            = ['PDO错误', $e->getMessage()];
             '' == ($sql = \sys\Pdo::getLastSql()) or $data['message'][] = $sql;
         } else {
             $data['message'] = ['未定义错误', $e->getMessage()];
         }
         if ($appDebug) {
-            $data['file'] = $e->getFile();
-            $data['line'] = $e->getLine();
+            $data['file']  = $e->getFile();
+            $data['line']  = $e->getLine();
             $data['trace'] = $e->getTraceAsString();
         }
-        $error = \sys\web\Error::create($data);
+        $error    = \sys\web\Error::create($data);
         $response = \sys\web\Response::instance()->setBody($error);
         $response->code($data['code']);
         $response->send();

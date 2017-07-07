@@ -7,12 +7,7 @@
 
 namespace express\exception;
 
-class ViewException extends NotFoundException
+class ViewException extends \RuntimeException
 {
-
-    public function __construct($message, $location)
-    {
-        parent::__construct($message, $location);
-    }
 
 }

@@ -84,6 +84,24 @@ return [
             'format'    => express\swoole\Response::FORMAT_JSON,
         ],
 
+        // 错误
+        'error'          => [
+            // 类路径
+            'class'  => 'express\base\Error',
+            // 输出格式
+            'format' => express\base\Error::FORMAT_VIEW,
+            // FORMAT_VIEW
+            'view'   => [
+                404 => 'error.view.not_found',
+                500 => 'error.view.internal_server_error',
+            ],
+            // FORMAT_JSON
+            'json'   => [
+                404 => 'error.json.not_found',
+                500 => 'error.json.internal_server_error',
+            ],
+        ],
+
     ],
 
 ];

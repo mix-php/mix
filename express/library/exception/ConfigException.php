@@ -7,12 +7,7 @@
 
 namespace express\exception;
 
-class ConfigException extends NotFoundException
+class ConfigException extends \RuntimeException
 {
-
-    public function __construct($message, $location)
-    {
-        parent::__construct($message, $location);
-    }
 
 }
