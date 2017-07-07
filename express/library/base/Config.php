@@ -46,7 +46,7 @@ class Config extends Object
     {
         $filePath = \Express::$app->getConfigPath() . $file . '.php';
         if (!is_file($filePath)) {
-            throw new \express\exception\ConfigException('配置文件不存在', $file . '.php');
+            throw new \express\exception\ConfigException("配置文件不存在：{$file}.php", 500);
         }
         $params = include $filePath;
         return is_array($params) ? $params : [];
@@ -88,7 +88,7 @@ class Config extends Object
                 return $this->params[$oneLevel][$secondLevel][$threeLevel];
             }
         }
-        throw new \express\exception\ConfigException('配置项不存在', $name);
+        throw new \express\exception\ConfigException("配置项不存在：{$name}", 500);
     }
 
     /**

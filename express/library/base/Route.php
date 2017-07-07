@@ -104,7 +104,7 @@ class Route extends Object
     }
 
     /**
-     * 将蛇形命名转换为驼峰命名
+     * 蛇形命名转换为驼峰命名
      * @param  string  $name
      * @param  boolean $ucfirst
      * @return string
@@ -114,6 +114,22 @@ class Route extends Object
         $name = ucwords(str_replace(['_', '-'], ' ', $name));
         $name = str_replace(' ', '', lcfirst($name));
         return $ucfirst ? ucfirst($name) : $name;
+    }
+
+    /**
+     * 驼峰命名转换为蛇形命名
+     * @param  string  $name
+     * @return string
+     */
+    public function camelToSnake($name)
+    {
+        $name = preg_replace_callback('/([A-Z]{1})/', function ($matches) {
+            return '_' . strtolower($matches[0]);
+        }, $name);
+        if (substr($name, 0, 1) == '_') {
+            return substr($name, 1);
+        }
+        return $name;
     }
 
 }

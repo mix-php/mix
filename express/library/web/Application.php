@@ -15,6 +15,7 @@ class Application extends \express\base\Application
      */
     public function run()
     {
+        \Express::$app->error->register();
         $method  = empty($_SERVER['REQUEST_METHOD']) ? (PHP_SAPI == 'cli' ? 'CLI' : '') : $_SERVER['REQUEST_METHOD'];
         $action  = empty($_SERVER['PATH_INFO']) ? '' : substr($_SERVER['PATH_INFO'], 1);
         $content = $this->runAction($method, $action);

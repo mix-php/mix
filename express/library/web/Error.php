@@ -1,51 +1,72 @@
 <?php
 
 /**
- * SysView类
+ * Error类
  * @author 刘健 <code.liu@qq.com>
  */
 
-namespace sys\web;
+namespace express\web;
+
+use express\web\View;
 
 class Error
 {
 
-    // 模板变量
-    private $data = [];
+    // 格式值
+    const FORMAT_VIEW = 'view';
+    const FORMAT_JSON = 'json';
+    // 输出格式
+    public $format = self::FORMAT_VIEW;
+    // view
+    public $view;
+    // json
+    public $json;
 
-    public function __construct($data = [])
+    // 注册异常处理
+    public function register()
     {
-        $this->data = $data;
+        error_reporting(E_ALL);
+        set_error_handler([$this, 'appError']);
+        set_exception_handler([$this, 'appException']);
+        register_shutdown_function([$this, 'appShutdown']);
     }
 
-    // 创建实例
-    public static function create($data = [])
+    // Error Handler
+    public function appError($errno, $errstr, $errfile = '', $errline = 0, $errcontext = [])
     {
-        return new self($data);
+        throw new \express\exception\ErrorException($errno, $errstr, $errfile, $errline);
     }
 
-    // 输出
-    public function output()
+    // Error Handler
+    public function appShutdown()
     {
-        echo self::import($this->data);
-        exit;
-    }
-
-    // 导入模板文件
-    protected static function import($data)
-    {
-        $template = 'exception';
-        // 传入变量
-        foreach ($data as $key => $value) {
-            $$key = $value;
+        if ($error = error_get_last()) {
+            self::appException(new \express\exception\ErrorException($error['type'], $error['message'], $error['file'], $error['line']));
         }
-        // 生成视图
-        $filePath = TPL_PATH . str_replace('.', DS, $template) . '.php';
-        if (!is_file($filePath)) {
-            throw new \sys\exception\TemplateException('模板文件不存在', $template);
+    }
+
+    // Exception Handler
+    public function appException($e)
+    {
+        $data = [
+            'code'    => $e->getCode(),
+            'message' => $e->getMessage(),
+            'file'    => $e->getFile(),
+            'line'    => $e->getLine(),
+            'trace'   => $e->getTraceAsString(),
+        ];
+        $view    = new View();
+        $content = '';
+        switch ($this->format) {
+            case self::FORMAT_VIEW:
+                $content = $view->import($this->view[$e->getCode()], $data);
+                break;
+            case self::FORMAT_JSON:
+                $content = $view->import($this->json[$e->getCode()], $data);
+                break;
         }
-        include $filePath;
-        return ob_get_clean();
+        \Express::$app->response->statusCode = $e->getCode();
+        \Express::$app->response->setContent($content)->send();
     }
 
 }

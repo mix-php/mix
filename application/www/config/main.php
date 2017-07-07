@@ -87,9 +87,9 @@ return [
         // 错误
         'error'          => [
             // 类路径
-            'class'  => 'express\base\Error',
+            'class'  => 'express\web\Error',
             // 输出格式
-            'format' => express\base\Error::FORMAT_VIEW,
+            'format' => express\web\Error::FORMAT_VIEW,
             // FORMAT_VIEW
             'view'   => [
                 404 => 'error.view.not_found',

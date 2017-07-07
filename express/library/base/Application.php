@@ -111,7 +111,7 @@ class Application
             try {
                 $reflect = new \ReflectionClass($class);
             } catch (\ReflectionException $e) {
-                throw new \express\exception\RouteException('控制器未找到', $class);
+                throw new \express\exception\HttpException("URL不存在", 404);
             }
             $controller = $reflect->newInstanceArgs();
             // 判断方法是否存在
@@ -124,7 +124,7 @@ class Application
                 }
             }
         }
-        throw new \express\exception\HttpException(404, 'URL不存在');
+        throw new \express\exception\HttpException("URL不存在", 404);
     }
 
     /**

@@ -21,7 +21,7 @@ class View
         // 生成视图
         $__filepath__ = \Express::$app->getViewPath() . str_replace('.', DS, $__template__) . '.php';
         if (!is_file($__filepath__)) {
-            throw new \express\exception\ViewException('视图文件不存在', $__template__);
+            throw new \express\exception\ViewException("视图文件不存在：{$__filepath__}", 500);
         }
         ob_start();
         include $__filepath__;
