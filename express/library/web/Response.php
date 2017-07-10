@@ -29,12 +29,14 @@ class Response extends Object
     // 状态码
     public $statusCode = 200;
 
+    // 设置内容
     public function setContent($content)
     {
         $this->content = $content;
         return $this;
     }
 
+    // 设置Header信息
     public function setHeader($key, $value)
     {
         header("{$key}: {$value}");

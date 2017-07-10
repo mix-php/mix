@@ -12,7 +12,7 @@ return [
     'register'            => [
 
         // 配置
-        'config'         => [
+        'config'   => [
             // 类路径
             'class'    => 'express\base\Config',
             // 自动加载
@@ -20,7 +20,7 @@ return [
         ],
 
         // 路由
-        'route'          => [
+        'route'    => [
             // 类路径
             'class'          => 'express\base\Route',
             // 默认变量规则
@@ -50,7 +50,24 @@ return [
             // 类路径
             'class'     => 'express\swoole\Response',
             // 输出格式
-            'format'    => express\swoole\Response::FORMAT_JSON,
+            'format'    => express\web\Response::FORMAT_JSON,
+            // json
+            'json'      => [
+                // 类路径
+                'class' => 'express\web\Json',
+            ],
+            // jsonp
+            'jsonp'     => [
+                // 类路径
+                'class'        => 'express\web\Jsonp',
+                // callback名称
+                'callbackName' => 'callback',
+            ],
+            // xml
+            'xml'       => [
+                // 类路径
+                'class' => 'express\web\Xml',
+            ],
         ],
 
     ],
