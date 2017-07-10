@@ -45,7 +45,7 @@ class Error
     // Exception Handler
     public function appException($e)
     {
-
+        ob_clean();
         $data = [
             'code'    => $e->getCode(),
             'message' => $e->getMessage(),
@@ -53,7 +53,8 @@ class Error
             'line'    => $e->getLine(),
             'trace'   => $e->getTraceAsString(),
         ];
-        if (!EXPRESS_DEBUG && $e->getCode() == 500) {
+        $statusCode = $e->getCode() == 404 ? 404 : 500;
+        if (!EXPRESS_DEBUG && $statusCode == 500) {
             $data = [
                 'code'    => 500,
                 'message' => '服务器内部错误',
@@ -63,9 +64,10 @@ class Error
             404 => "error.{$this->format}.not_found",
             500 => "error.{$this->format}.internal_server_error",
         ];
-        $content                             = (new View())->import($tpl[$e->getCode()], $data);
-        \Express::$app->response->statusCode = $e->getCode();
+        $content                             = (new View())->import($tpl[$statusCode], $data);
+        \Express::$app->response->statusCode = $statusCode;
         \Express::$app->response->setContent($content);
+
         switch ($this->format) {
             case self::FORMAT_JSON:
                 \Express::$app->response->setHeader('Content-Type', 'application/json;charset=utf-8');
