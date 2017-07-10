@@ -89,17 +89,7 @@ return [
             // 类路径
             'class'  => 'express\web\Error',
             // 输出格式
-            'format' => express\web\Error::FORMAT_VIEW,
-            // FORMAT_VIEW
-            'view'   => [
-                404 => 'error.view.not_found',
-                500 => 'error.view.internal_server_error',
-            ],
-            // FORMAT_JSON
-            'json'   => [
-                404 => 'error.json.not_found',
-                500 => 'error.json.internal_server_error',
-            ],
+            'format' => express\web\Error::FORMAT_HTML,
         ],
 
     ],

@@ -13,14 +13,11 @@ class Error
 {
 
     // 格式值
-    const FORMAT_VIEW = 'view';
+    const FORMAT_HTML = 'html';
     const FORMAT_JSON = 'json';
+    const FORMAT_XML  = 'xml';
     // 输出格式
-    public $format = self::FORMAT_VIEW;
-    // view
-    public $view;
-    // json
-    public $json;
+    public $format = self::FORMAT_HTML;
 
     // 注册异常处理
     public function register()
@@ -55,18 +52,22 @@ class Error
             'line'    => $e->getLine(),
             'trace'   => $e->getTraceAsString(),
         ];
-        $view    = new View();
-        $content = '';
+        $tpl = [
+            404 => "error.{$this->format}.not_found",
+            500 => "error.{$this->format}.internal_server_error",
+        ];
+        $content                             = (new View())->import($tpl[$e->getCode()], $data);
+        \Express::$app->response->statusCode = $e->getCode();
+        \Express::$app->response->setContent($content);
         switch ($this->format) {
-            case self::FORMAT_VIEW:
-                $content = $view->import($this->view[$e->getCode()], $data);
-                break;
             case self::FORMAT_JSON:
-                $content = $view->import($this->json[$e->getCode()], $data);
+                \Express::$app->response->setHeader('Content-Type', 'application/json;charset=utf-8');
+                break;
+            case self::FORMAT_XML:
+                \Express::$app->response->setHeader('Content-Type', 'text/xml;charset=utf-8');
                 break;
         }
-        \Express::$app->response->statusCode = $e->getCode();
-        \Express::$app->response->setContent($content)->send();
+        \Express::$app->response->send();
     }
 
 }
