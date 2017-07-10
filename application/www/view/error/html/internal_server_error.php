@@ -32,8 +32,10 @@
 
 <h1><?php echo $message ?></h1>
 
+<?php if(!empty($file)): ?>
 <p><?php echo $file ?> line <?php echo $line ?></p>
 <p><?php echo str_replace("\n", '<br>', $trace); ?></p>
+<?php endif; ?>
 
 </body>
 </html>

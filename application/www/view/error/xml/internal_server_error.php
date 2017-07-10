@@ -1,5 +1,9 @@
 <?php
 
 use express\web\Xml;
-$xml = new Xml();
-echo $xml->encode(['code' => $code, 'message' => $message, 'file' => $file, 'line' => $line, 'trace' => $trace]);
+$xml  = new Xml();
+$data = [];
+foreach (['code', 'message', 'file', 'line', 'trace'] as $name) {
+    isset($$name) and $data[$name] = $$name;
+}
+echo $xml->encode($data);

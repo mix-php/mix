@@ -45,6 +45,7 @@ class Error
     // Exception Handler
     public function appException($e)
     {
+
         $data = [
             'code'    => $e->getCode(),
             'message' => $e->getMessage(),
@@ -52,6 +53,12 @@ class Error
             'line'    => $e->getLine(),
             'trace'   => $e->getTraceAsString(),
         ];
+        if (!EXPRESS_DEBUG && $e->getCode() == 500) {
+            $data = [
+                'code'    => 500,
+                'message' => '服务器内部错误',
+            ];
+        }
         $tpl = [
             404 => "error.{$this->format}.not_found",
             500 => "error.{$this->format}.internal_server_error",
