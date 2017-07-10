@@ -17,8 +17,8 @@ class Application extends Application
      */
     public function run($requester, $responder)
     {
-        $request  = \Express::$app->swooleRequest->setRequester($requester);
-        $response = \Express::$app->swooleResponse->setResponder($responder);
+        $request  = \Express::$app->request->setRequester($requester);
+        $response = \Express::$app->response->setResponder($responder);
         $method   = strtoupper($requester->header['request_method']);
         $action   = empty($requester->header['pathinfo']) ? '' : substr($requester->header['pathinfo'], 1);
         $content  = $this->runAction($method, $action, ['request' => $request, 'response' => $response]);

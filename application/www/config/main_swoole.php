@@ -36,42 +36,21 @@ return [
         ],
 
         // 请求
-        'request'        => [
+        'request'  => [
+            // 非单例模式
+            'singleton' => false,
             // 类路径
-            'class' => 'express\web\Request',
+            'class'     => 'express\swoole\Request',
         ],
 
         // 响应
-        'response'       => [
+        'response' => [
+            // 非单例模式
+            'singleton' => false,
             // 类路径
-            'class'  => 'express\web\Response',
+            'class'     => 'express\swoole\Response',
             // 输出格式
-            'format' => express\web\Response::FORMAT_JSON,
-            // json
-            'json'   => [
-                // 类路径
-                'class' => 'express\web\Json',
-            ],
-            // jsonp
-            'jsonp'  => [
-                // 类路径
-                'class'        => 'express\web\Jsonp',
-                // callback名称
-                'callbackName' => 'callback',
-            ],
-            // xml
-            'xml'    => [
-                // 类路径
-                'class' => 'express\web\Xml',
-            ],
-        ],
-
-        // 错误
-        'error'          => [
-            // 类路径
-            'class'  => 'express\web\Error',
-            // 输出格式
-            'format' => express\web\Error::FORMAT_HTML,
+            'format'    => express\swoole\Response::FORMAT_JSON,
         ],
 
     ],
