@@ -3,6 +3,7 @@
 // APP配置文件
 return [
 
+    // 基础路径
     'basePath'            => dirname(__DIR__) . DS,
 
     // 控制器命名空间

@@ -3,6 +3,7 @@
 // APP配置文件
 return [
 
+    // 基础路径
     'basePath'            => dirname(__DIR__) . DS,
 
     // 控制器命名空间
@@ -12,7 +13,7 @@ return [
     'register'            => [
 
         // 配置
-        'config'         => [
+        'config'   => [
             // 类路径
             'class'    => 'express\base\Config',
             // 自动加载
@@ -20,7 +21,7 @@ return [
         ],
 
         // 路由
-        'route'          => [
+        'route'    => [
             // 类路径
             'class'          => 'express\base\Route',
             // 默认变量规则
@@ -36,13 +37,13 @@ return [
         ],
 
         // 请求
-        'request'        => [
+        'request'  => [
             // 类路径
             'class' => 'express\web\Request',
         ],
 
         // 响应
-        'response'       => [
+        'response' => [
             // 类路径
             'class'  => 'express\web\Response',
             // 输出格式
@@ -67,12 +68,14 @@ return [
         ],
 
         // 错误
-        'error'          => [
+        'error'    => [
             // 类路径
             'class'  => 'express\web\Error',
             // 输出格式
             'format' => express\web\Error::FORMAT_HTML,
         ],
+
+        
 
     ],
 
