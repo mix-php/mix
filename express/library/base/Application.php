@@ -45,7 +45,7 @@ class Application
         $list  = $this->register[$name];
         $class = $list['class'];
         // 实例化
-        $object = new $class();
+        $object = new $class(['disableInit' => true]);
         // 属性导入
         foreach ($list as $key => $value) {
             // 跳过保留key
@@ -57,7 +57,7 @@ class Application
                 // 获取配置
                 $subClass = $value['class'];
                 // 实例化
-                $subObject = new $subClass();
+                $subObject = new $subClass(['disableInit' => true]);
                 // 属性导入
                 foreach ($value as $k => $v) {
                     if (in_array($k, ['class'])) {
@@ -66,10 +66,14 @@ class Application
                     $subObject->$k = $v;
                 }
                 $object->$key = $subObject;
+                // 执行初始化方法
+                method_exists($subObject, 'init') and $subObject->init();
             } else {
                 $object->$key = $value;
             }
         }
+        // 执行初始化方法
+        method_exists($object, 'init') and $object->init();
         // 返回新对象
         if (isset($list['singleton']) && $list['singleton'] == false) {
             return $object;

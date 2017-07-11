@@ -10,10 +10,12 @@ namespace express\base;
 class Object
 {
 
-    public function __construct()
+    public function __construct($config = [])
     {
-        // 执行初始化
-        method_exists($this, 'init') and $this->init();
+        // 执行初始化方法
+        if (empty($config['disableInit'])) {
+            method_exists($this, 'init') and $this->init();
+        }
     }
 
 }

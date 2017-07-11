@@ -75,7 +75,19 @@ return [
             'format' => express\web\Error::FORMAT_HTML,
         ],
 
-        
+        // SESSION
+        'session'  => [
+            // 类路径
+            'class'         => 'express\web\Session',
+            // 处理者
+            'saveHandler'   => express\web\Session::HANDLER_REDIS,
+            // 保存路径
+            'savePath'      => 'tcp://127.0.0.1:6379?auth=&database=9&prefix=EXPRESS_SSID:',
+            // 生存时间
+            'gcMaxLifetime' => 7200,
+            // session名
+            'name'          => 'EXPRESS_SSID',
+        ],
 
     ],
 

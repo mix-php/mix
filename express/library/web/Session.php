@@ -5,42 +5,39 @@
  * @author 刘健 <code.liu@qq.com>
  */
 
-namespace sys\web;
+namespace express\web;
 
-class Session
+use express\base\Object;
+
+class Session extends Object
 {
 
-    // 是否初始化完成
-    private static $initComplete;
+    // 处理者值
+    const HANDLER_FILES    = 'files';
+    const HANDLER_MEMCACHE = 'memcache';
+    const HANDLER_REDIS    = 'redis';
+    // 处理者
+    public $saveHandler = self::HANDLER_FILES;
+    // 保存路径
+    public $savePath;
+    // 生存时间
+    public $gcMaxLifetime;
+    // session名
+    public $name;
 
     // 初始化
-    private static function init()
+    public function init()
     {
-        if (!isset(self::$initComplete)) {
-            $config = Config::get('main.session');
-            ini_set('session.save_handler', $config['save_handler']);
-            ini_set('session.gc_maxlifetime', $config['gc_maxlifetime']);            
-            ini_set('session.name', $config['name']);
-            switch ($config['save_handler']) {
-                case 'files':
-                    ini_set('session.save_path', $config['files_save_path']);
-                    break;
-                case 'redis':
-                    ini_set('session.save_path', 'tcp://' . Config::get('redis.hostname') . ':' . Config::get('redis.hostport') . '?auth=' . Config::get('redis.password'));
-                    break;
-                case 'memcache':
-                    ini_set('session.save_path', 'tcp://' . Config::get('memcache.hostname') . ':' . Config::get('memcache.hostport') . '?auth=' . Config::get('memcache.password'));
-                    break;
-            }
-            session_start();
-            self::$initComplete = true;
-        }
+        ini_set('session.save_handler', $this->saveHandler);
+        ini_set('session.save_path', $this->savePath);
+        ini_set('session.gc_maxlifetime', $this->gcMaxLifetime);
+        ini_set('session.name', $this->name);
+        session_start();
     }
 
     // 取值
-    public static function get($name = null)
+    public function get($name = null)
     {
-        self::init();
         if (is_null($name)) {
             return $_SESSION;
         }
@@ -48,30 +45,26 @@ class Session
     }
 
     // 赋值
-    public static function set($name, $value)
+    public function set($name, $value)
     {
-        self::init();
         $_SESSION[$name] = $value;
     }
 
     // 判断是否存在
-    public static function has($name)
+    public function has($name)
     {
-        self::init();
         return isset($_SESSION[$name]);
     }
 
     // 删除
-    public static function delete($name)
+    public function delete($name)
     {
-        self::init();
         unset($_SESSION[$name]);
     }
 
     // 清除session
-    public static function clear()
+    public function clear()
     {
-        self::init();
         session_unset();
         session_destroy();
     }
