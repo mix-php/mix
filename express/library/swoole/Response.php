@@ -12,6 +12,7 @@ use express\base\Object;
 class Response extends Object
 {
 
+    // 响应对象
     private $responder;
     // 格式值
     const FORMAT_JSON  = 0;

@@ -12,11 +12,14 @@ use express\base\Object;
 class Request extends Object
 {
 
+    // 请求对象
     private $requester
+    // 请求数据
     private $get;
     private $post;
     private $route;
 
+    // 设置请求对象
     public function setRequester($requester)
     {
         $this->requester = $requester;
@@ -25,34 +28,40 @@ class Request extends Object
         return $this;
     }
 
+    // 设置GET值
     public function setGet($get)
     {
         $this->get = $get;
     }
 
+    // 设置POST值
     public function setPost($post)
     {
         $this->post = $post;
     }
 
+    // 设置Route值
     public function setRoute($route)
     {
         $this->route = $route;
     }
 
-    public function get()
+    // 获取GET值
+    public function get($name = null)
     {
-        return $this->get;
+        return is_null($name) ? $this->get : $this->get[$name];
     }
 
-    public function post()
+    // 获取POST值
+    public function post($name = null)
     {
-        return $this->post;
+        return is_null($name) ? $this->post : $this->post[$name];
     }
 
-    public function route()
+    // 获取Route值
+    public function route($name = null)
     {
-        return $this->route;
+        return is_null($name) ? $this->route : $this->route[$name];
     }
 
 }
