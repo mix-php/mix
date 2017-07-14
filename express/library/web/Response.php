@@ -43,6 +43,12 @@ class Response extends Object
         return $this;
     }
 
+    // 重定向
+    public function redirect($url)
+    {
+        header("Location: {$url}");
+    }
+
     // 输出
     public function send()
     {

@@ -20,8 +20,8 @@ class SiteController extends Controller
 
         // return $this->render('article', ['name' => 'xiaoliu', 'sex' => 'nan']);
 
-        \Express::$app->session->set('user', ['name' => 'xiaoliu', 'sex' => 'nan']);
-        var_dump(\Express::$app->session->get());
+        // \Express::$app->session->set('user', ['name' => 'xiaoliu', 'sex' => 'nan']);
+        // var_dump(\Express::$app->session->get());
     }
 
 }
