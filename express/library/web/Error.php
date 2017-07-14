@@ -67,7 +67,6 @@ class Error
         $content                             = (new View())->import($tpl[$statusCode], $data);
         \Express::$app->response->statusCode = $statusCode;
         \Express::$app->response->setContent($content);
-
         switch ($this->format) {
             case self::FORMAT_JSON:
                 \Express::$app->response->setHeader('Content-Type', 'application/json;charset=utf-8');

@@ -32,5 +32,7 @@
 
 <h1><?php echo $message ?></h1>
 
+<p>ExpressPHP V2</p>
+
 </body>
 </html>

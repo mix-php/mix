@@ -37,5 +37,7 @@
 <p><?php echo str_replace("\n", '<br>', $trace); ?></p>
 <?php endif; ?>
 
+<p>ExpressPHP V2</p>
+
 </body>
 </html>
