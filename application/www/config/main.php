@@ -75,7 +75,7 @@ return [
             'format' => express\web\Error::FORMAT_HTML,
         ],
 
-        // SESSION
+        // Session
         'session'  => [
             // 类路径
             'class'         => 'express\web\Session',
@@ -87,6 +87,11 @@ return [
             'gcMaxLifetime' => 7200,
             // session名
             'name'          => 'EXPRESS_SSID',
+        ],
+
+        // Cookie
+        'cookie'   => [
+            
         ],
 
     ],

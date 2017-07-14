@@ -20,9 +20,7 @@
     color: #868686;
   }
   h1, p {
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: #CCC;
+    border-bottom: 1px solid #CCC;
     padding: 10px;
     margin: 0px;
   }
