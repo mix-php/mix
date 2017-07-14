@@ -7,6 +7,6 @@ define('DS', DIRECTORY_SEPARATOR);
 require __DIR__ . '/../../../vendor/autoload.php';
 require __DIR__ . '/../../../express/library/Express.php';
 
-$config = require __DIR__ . '/../config/main.php';
+$config = require __DIR__ . '/../config/main_web.php';
 
 (new express\web\Application($config))->run();

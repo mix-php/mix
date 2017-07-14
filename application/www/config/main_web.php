@@ -91,7 +91,18 @@ return [
 
         // Cookie
         'cookie'   => [
-            
+            // 类路径
+            'class'    => 'express\web\Cookie',
+            // 过期时间
+            'expire'   => 31536000,
+            // 有效的服务器路径
+            'path'     => '/',
+            // 有效域名/子域名
+            'domain'   => '',
+            // 仅通过安全的 HTTPS 连接传给客户端
+            'secure'   => false,
+            // 仅可通过 HTTP 协议访问
+            'httponly' => false,
         ],
 
     ],

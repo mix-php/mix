@@ -11,7 +11,7 @@ class Jsonp
 {
 
     // callback名称
-    public $callbackName;
+    public $callbackName = 'callback';
 
     // 编码
     public function encode($array)

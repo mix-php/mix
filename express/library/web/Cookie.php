@@ -5,100 +5,57 @@
  * @author 刘健 <code.liu@qq.com>
  */
 
-namespace sys\web;
+namespace express\web;
 
-class Cookie
+use express\base\Object;
+
+class Cookie extends Object
 {
 
-    // 是否初始化完成
-    private static $initComplete;
-
-    // 配置
-    private static $conf;
-
-    // 初始化
-    public static function init($conf = null)
-    {
-        if (!isset(self::$initComplete)) {
-            self::$conf = Config::get('main.cookie');
-            self::$initComplete = true;
-        }
-        is_null($conf) or self::$conf = array_merge(self::$conf, $conf);
-    }
+    // 过期时间
+    public $expire = 31536000;
+    // 有效的服务器路径
+    public $path = '/';
+    // 有效域名/子域名
+    public $domain = '';
+    // 仅通过安全的 HTTPS 连接传给客户端
+    public $secure = false;
+    // 仅可通过 HTTP 协议访问
+    public $httponly = false;
 
     // 取值
-    public static function get($name = null)
+    public function get($name = null)
     {
-        self::init();
         if (is_null($name)) {
-            $tmp = [];
-            foreach ($_COOKIE as $name => $value) {
-                $tmp[] = self::getValue($name, $_COOKIE[$name], self::$conf['signature_key']);
-            }
-            return $tmp;
+            return $_COOKIE;
         }
-        if (isset($_COOKIE[$name])) {
-            return self::getValue($name, $_COOKIE[$name], self::$conf['signature_key']);
-        }
-        return null;
+        return isset($_COOKIE[$name]) ? $_COOKIE[$name] : null;
     }
 
     // 赋值
-    public static function set($name, $value, $uExpire = null)
+    public function set($name, $value, $expire = null)
     {
-        self::init();
-        // 定义配置变量
-        extract(self::$conf);
-        // 赋值
-        $value = self::signature($name, $value, $signature_key);
-        $expire = is_null($uExpire) ? $expire : $uExpire;
-        setcookie($name, $value, time() + $expire, $domain, $secure, $httponly);
+        setcookie($name, $value, time() + (is_null($expire) ? $this->expire : $expire), $this->domain, $this->secure, $this->httponly);
     }
 
     // 判断是否存在
-    public static function has($name)
+    public function has($name)
     {
-        self::init();
         return isset($_COOKIE[$name]);
     }
 
     // 删除
-    public static function delete($name)
+    public function delete($name)
     {
-        self::set($name, null);
+        $this->set($name, null);
     }
 
     // 清空当前域所有cookie
-    public static function clear()
+    public function clear()
     {
         foreach ($_COOKIE as $name => $value) {
-            self::set($name, null);
+            $this->set($name, null);
         }
-    }
-
-    // 签名
-    private static function signature($name, $value, $signatureKey)
-    {
-        if ($signatureKey == '' || is_null($value) || $value == '') {
-            return $value;
-        }
-        $signature = substr(md5($name . $value . $signatureKey), 8, 16);
-        return $value . '|' . $signature;
-    }
-
-    // 获取签名效验后的值
-    private static function getValue($name, $value, $signatureKey)
-    {
-        if ($signatureKey == '') {
-            return $value;
-        }
-        $tmp = explode('|', $value);
-        if (count($tmp) == 2) {
-            if (self::signature($name, $unValue = array_shift($tmp), $signatureKey) == $value) {
-                return $unValue;
-            }
-        }
-        return null;
     }
 
 }

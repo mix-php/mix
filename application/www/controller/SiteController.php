@@ -22,6 +22,8 @@ class SiteController extends Controller
 
         // \Express::$app->session->set('user', ['name' => 'xiaoliu', 'sex' => 'nan']);
         // var_dump(\Express::$app->session->get());
+        
+        // \Express::$app->cookie->set('user', 'xiaoliu');
 
         return 'ExpressPHP V2';
     }
