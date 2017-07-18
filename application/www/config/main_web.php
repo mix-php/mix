@@ -105,6 +105,20 @@ return [
             'httponly' => false,
         ],
 
+        // redis
+        'redis'    => [
+            // 类路径
+            'class'    => 'express\nosql\Redis',
+            // 主机
+            'host'     => '127.0.0.1',
+            // 端口
+            'port'     => 6379,
+            // 密码
+            'password' => '',
+            // 数据库
+            'database' => 0,
+        ],
+
     ],
 
 ];

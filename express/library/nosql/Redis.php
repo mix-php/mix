@@ -1,50 +1,57 @@
 <?php
 
 /**
- * redis 类
+ * redis 驱动
  * @author 刘健 <code.liu@qq.com>
  */
 
-namespace sys\nosql;
+namespace express\nosql;
 
-use sys\Config;
+use express\base\Object;
 
-class Redis
+class Redis extends Object
 {
 
-    // redis对象
-    private static $redis;
-
     // 配置信息
-    private static $config;
+    public $host;
+    public $port;
+    public $password;
+    public $database;
+    // redis对象
+    private $redis;
 
-    // 配置
-    public static function config()
+    /**
+     * 初始化
+     * @author 刘健 <code.liu@qq.com>
+     */
+    public function init()
     {
-        self::$config = Config::get('redis');
+        $this->connect();
     }
 
-    // 连接redis服务器
-    public static function connect()
+    /**
+     * 连接
+     * @author 刘健 <code.liu@qq.com>
+     */
+    private function connect()
     {
-        if (!isset(self::$redis)) {
-            self::config();
-            $redis = new \Redis();
-            // connect 这里如果设置timeout，是全局有效的，执行brPop时会受影响
-            if (!$redis->connect(self::$config['host'], self::$config['port'])) {
-                throw new \Exception('Redis Connect Failure', 1);
-            }
-            $redis->auth(self::$config['password']);
-            $redis->select(self::$config['database']);
-            self::$redis = $redis;
+        $redis = new \Redis();
+        // connect 这里如果设置timeout，是全局有效的，执行brPop时会受影响
+        if (!$redis->connect($this->host, $this->port)) {
+            throw new \Exception('Redis Connect Failure');
         }
-        return self::$redis;
+        $redis->auth($this->password);
+        $redis->select($this->database);
+        $this->redis = $redis;
     }
 
-    public static function __callStatic($name, $arguments)
+    /**
+     * 执行命令
+     * @author 刘健 <code.liu@qq.com>
+     */
+    public function __call($name, $arguments)
     {
-        $redis = self::connect();
-        return call_user_func_array([$redis, $name], $arguments);
+        return call_user_func_array([$this->redis, $name], $arguments);
     }
 
 }
