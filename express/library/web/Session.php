@@ -28,11 +28,13 @@ class Session extends Object
     // 初始化
     public function init()
     {
-        ini_set('session.save_handler', $this->saveHandler);
-        ini_set('session.save_path', $this->savePath);
-        ini_set('session.gc_maxlifetime', $this->gcMaxLifetime);
-        ini_set('session.name', $this->name);
-        session_start();
+        if (session_status() != PHP_SESSION_ACTIVE) {
+            ini_set('session.save_handler', $this->saveHandler);
+            ini_set('session.save_path', $this->savePath);
+            ini_set('session.gc_maxlifetime', $this->gcMaxLifetime);
+            ini_set('session.name', $this->name);
+            session_start();
+        }
     }
 
     // 取值

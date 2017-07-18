@@ -25,8 +25,17 @@ class SiteController extends Controller
 
         // \Express::$app->cookie->set('user', 'xiaoliu');
 
-        \Express::$app->redis->set('user', 'xiaoliu');
-        var_dump(\Express::$app->redis->get('user'));
+        // \Express::$app->redis->set('user', 'xiaoliu');
+        // var_dump(\Express::$app->redis->get('user'));
+        
+        // \Express::$app->config;
+        // \Express::$app->route;
+        // \Express::$app->request;
+        // \Express::$app->response;
+        // \Express::$app->error;
+        // \Express::$app->session;
+        // \Express::$app->cookie;
+        // \Express::$app->redis;
 
         return 'ExpressPHP V2';
     }
