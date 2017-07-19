@@ -1,7 +1,5 @@
 <?php
 
-$data = [];
-foreach (['code', 'message', 'file', 'line', 'trace'] as $name) {
-    isset($$name) and $data[$name] = $$name;
-}
-echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+use express\web\Json;
+$json = new Json();
+echo $json->encode(compact('code', 'message', 'type', 'file', 'line', 'trace'));

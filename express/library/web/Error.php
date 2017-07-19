@@ -51,6 +51,7 @@ class Error
             'message' => $e->getMessage(),
             'file'    => $e->getFile(),
             'line'    => $e->getLine(),
+            'type'    => get_class($e),
             'trace'   => $e->getTraceAsString(),
         ];
         $statusCode = $e->getCode() == 404 ? 404 : 500;
