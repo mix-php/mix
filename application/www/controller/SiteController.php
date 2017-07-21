@@ -27,7 +27,7 @@ class SiteController extends Controller
 
         // \Express::$app->redis->set('user', 'xiaoliu');
         // var_dump(\Express::$app->redis->get('user'));
-        
+
         // \Express::$app->config;
         // \Express::$app->route;
         // \Express::$app->request;
@@ -39,7 +39,12 @@ class SiteController extends Controller
 
         $rows = \Express::$app->rdb->createCommand("SELECT * FROM `post`")->queryAll();
 
-        return $rows;
+        return \Express::$app->rdb->getLastSql();
+    }
+
+    public function actionPhpinfo()
+    {
+        phpinfo();
     }
 
 }

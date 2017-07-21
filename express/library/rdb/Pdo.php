@@ -207,7 +207,7 @@ class Pdo extends Object
             $sql = vsprintf(str_replace('?', '%s', $sql), $values);
             return $sql;
         }
-        return '';
+        return $this->sql;
     }
 
 }
