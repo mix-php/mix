@@ -37,7 +37,9 @@ class SiteController extends Controller
         // \Express::$app->cookie;
         // \Express::$app->redis;
 
-        return 'ExpressPHP V2';
+        $rows = \Express::$app->rdb->createCommand("SELECT * FROM `post`")->queryAll();
+
+        return $rows;
     }
 
 }

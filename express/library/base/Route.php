@@ -14,17 +14,17 @@ class Route extends Object
     public $defaultPattern = '[\w-]+';
     // 路由变量规则
     public $patterns = [];
-    // 初始路由规则
+    // 路由规则
+    public $rules = [];
+    // 路由数据
+    private $data = [];
+    // 默认路由规则
     private $defaultRules = [
         // 首页
         ''                    => 'site/index',
         // 一级目录
         ':controller/:action' => ':controller/:action',
     ];
-    // 路由规则
-    public $rules = [];
-    // 路由数据
-    private $data = [];
 
     /**
      * 初始化
@@ -32,7 +32,7 @@ class Route extends Object
      */
     public function init()
     {
-        $rules = $this->defaultRules + $this->rules;
+        $rules = $this->rules + $this->defaultRules;
         // index处理
         foreach ($rules as $rule => $action) {
             if (strpos($rule, ':controller') !== false && strpos($rule, ':action') !== false) {
@@ -45,16 +45,16 @@ class Route extends Object
             if ($blank = strpos($rule, ' ')) {
                 $method = substr($rule, 0, $blank);
                 $method = "(?:{$method}) ";
-                $rule   = substr($rule, $blank + 1);
+                $rule = substr($rule, $blank + 1);
             } else {
                 $method = '(?:POST|GET|CLI)* ';
             }
             // path
             $fragment = explode('/', $rule);
-            $names    = [];
+            $names = [];
             foreach ($fragment as $k => $v) {
                 $prefix = substr($v, 0, 1);
-                $fname  = substr($v, 1);
+                $fname = substr($v, 1);
                 if ($prefix == ':') {
                     if (isset($this->patterns[$fname])) {
                         $fragment[$k] = '(' . $this->patterns[$fname] . ')';
@@ -89,7 +89,7 @@ class Route extends Object
                 $fragment = explode('/', $action);
                 foreach ($fragment as $k => $v) {
                     $prefix = substr($v, 0, 1);
-                    $fname  = substr($v, 1);
+                    $fname = substr($v, 1);
                     if ($prefix == ':') {
                         if (isset($urlParams[$fname])) {
                             $fragment[$k] = $urlParams[$fname];
@@ -105,7 +105,7 @@ class Route extends Object
 
     /**
      * 蛇形命名转换为驼峰命名
-     * @param  string  $name
+     * @param  string $name
      * @param  boolean $ucfirst
      * @return string
      */
@@ -118,7 +118,7 @@ class Route extends Object
 
     /**
      * 驼峰命名转换为蛇形命名
-     * @param  string  $name
+     * @param  string $name
      * @return string
      */
     public function camelToSnake($name)

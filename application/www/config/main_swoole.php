@@ -17,7 +17,7 @@ return [
             // 类路径
             'class'    => 'express\base\Config',
             // 自动加载
-            'autoload' => ['common'],
+            'autoload' => ['common', 'site'],
         ],
 
         // 路由

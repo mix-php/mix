@@ -5,120 +5,181 @@
  * @author 刘健 <code.liu@qq.com>
  */
 
-namespace sys\rdb;
+namespace express\rdb;
 
-class Pdo
+use express\base\Object;
+
+class Pdo extends Object
 {
 
-    // pdo
-    private static $pdo;
-
-    // 最后sql数据
-    private static $lastSqlData;
-
+    // 数据源格式
+    public $dsn = '';
+    // 数据库用户名
+    public $username = 'root';
+    // 数据库密码
+    public $password = '';
+    // 设置PDO属性
+    public $attribute = [];
     // 回滚含有零影响行数的事务
-    private static $rollbackZeroAffected;
+    public $rollbackZeroAffected = false;
+    // PDO
+    private $pdo;
+    // PDOStatement
+    private $pdoStatement;
+    // sql
+    private $sql;
+    // 最后sql数据
+    private $lastSqlData;
+    // 默认属性
+    private $defaultAttribute = [
+        \PDO::ATTR_EMULATE_PREPARES   => false,
+        \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
+        \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+    ];
 
-    // 连接
-    public static function connect()
+    // 初始化
+    public function init()
     {
-        if (!isset(self::$pdo)) {
-            $conf = Config::get('pdo');
-            $params = [
-                \PDO::ATTR_EMULATE_PREPARES => false,
-                \PDO::ATTR_ERRMODE          => \PDO::ERRMODE_EXCEPTION,
-            ];
-            self::$pdo = new \PDO(
-                $conf['dsn'],
-                $conf['username'],
-                $conf['password'],
-                $params += $conf['attribute']
-            );
-            self::$rollbackZeroAffected = $conf['transaction']['rollback_zero_affected'];
-        }
+        $this->pdo = new \PDO(
+            $this->dsn,
+            $this->username,
+            $this->password,
+            $this->attribute + $this->defaultAttribute
+        );
     }
 
-    // 执行一条 SQL 语句，并返回结果集
-    public static function query($sql, $data = [])
+    // 创建命令
+    public function createCommand($sql)
     {
-        self::connect();
-        list($sql, $params, $values) = self::$lastSqlData = self::prepare($sql, $data);
-        $statement                   = self::$pdo->prepare($sql);
-        foreach ($params as $key => &$value) {
-            $statement->bindParam($key, $value);
-        }
-        foreach ($values as $key => &$value) {
-            $statement->bindValue($key + 1, $value);
-        }
-        $statement->execute();
-        return new Statement($statement);
+        $this->sql = $sql;
+        return $this;
     }
 
-    // 执行一条 SQL 语句，并返回受影响的行数
-    public static function execute($sql, $data = [])
+    // 绑定预处理, 扩展绑定数组参数
+    private function bindPrepare($sql, $data)
     {
-        $statement    = self::query($sql, $data);
-        $affectedRows = $statement->rowCount();
-        $lastInsertId = self::$pdo->lastInsertId();
-        if (self::$pdo->inTransaction() && self::$rollbackZeroAffected && $affectedRows == 0) {
-            throw new \PDOException('事物内查询的影响行数为零');
+        $params = $values = [];
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $tmp = [];
+                foreach ($value as $k => $v) {
+                    $tmp[] = '?';
+                    $values[] = $v;
+                }
+                $sql = str_replace(':' . $key, implode(',', $tmp), $sql);
+            } else {
+                $params[$key] = $value;
+            }
+        }
+        return [$sql, $params, $values];
+    }
+
+    // 绑定参数
+    public function bindValue($data = [])
+    {
+        if (empty($data)) {
+            $this->pdoStatement = $this->pdo->prepare($this->sql);
+        } else {
+            list($sql, $params, $values) = $this->lastSqlData = $this->bindPrepare($this->sql, $data);
+            $this->pdoStatement = $this->pdo->prepare($sql);
+            foreach ($params as $key => &$value) {
+                $this->pdoStatement->bindParam($key, $value);
+            }
+            foreach ($values as $key => &$value) {
+                $this->pdoStatement->bindValue($key + 1, $value);
+            }
+        }
+        return $this;
+    }
+
+    // 执行查询，并返回报表类
+    public function query()
+    {
+        $this->bindValue();
+        $this->pdoStatement->execute();
+        return $this->pdoStatement;
+    }
+
+    // 返回多行
+    public function queryAll()
+    {
+        $this->bindValue();
+        $this->pdoStatement->execute();
+        return $this->pdoStatement->fetchAll();
+    }
+
+    // 返回一行
+    public function queryOne()
+    {
+        $this->bindValue();
+        $this->pdoStatement->execute();
+        return $this->pdoStatement->fetch(isset($this->attribute[\PDO::ATTR_DEFAULT_FETCH_MODE]) ? $this->attribute[\PDO::ATTR_DEFAULT_FETCH_MODE] : $this->defaultAttribute[\PDO::ATTR_DEFAULT_FETCH_MODE]);
+    }
+
+    // 返回一列 (第一列)
+    public function queryColumn()
+    {
+        $this->bindValue();
+        $this->pdoStatement->execute();
+        $column = false;
+        while ($row = $this->pdoStatement->fetchColumn()) {
+            $column[] = $row;
+        }
+        return $column;
+    }
+
+    // 返回一个标量值
+    public function queryScalar()
+    {
+        $this->bindValue();
+        $this->pdoStatement->execute();
+        return $this->pdoStatement->fetchColumn();
+    }
+
+    // 执行SQL语句，并返InsertId或回受影响的行数
+    public function execute()
+    {
+        $this->bindValue();
+        $this->pdoStatement->execute();
+        $affectedRows = $this->pdoStatement->rowCount();
+        $lastInsertId = $this->pdo->lastInsertId();
+        if ($this->pdo->inTransaction() && $this->rollbackZeroAffected && $affectedRows == 0) {
+            throw new \PDOException('affected rows in the transaction is zero');
         }
         return $lastInsertId ?: $affectedRows;
     }
 
     // 自动事务
-    public static function transaction($func, $debug = true)
+    public function transaction($closure)
     {
-        self::beginTransaction();
+        $this->beginTransaction();
         try {
-            $func();
+            $closure();
             // 提交事务
-            self::commit();
-            return true;
+            $this->commit();
         } catch (\Exception $e) {
             // 回滚事务
-            self::rollBack();
-            // 调试
-            if ($debug) {
-                throw $e;
-            }
-            return false;
+            $this->rollBack();
+            throw $e;
         }
     }
 
     // 开始事务
-    public static function beginTransaction()
+    public function beginTransaction()
     {
-        self::connect();
-        self::$pdo->beginTransaction();
+        $this->pdo->beginTransaction();
     }
 
     // 提交事务
-    public static function commit()
+    public function commit()
     {
-        self::$pdo->commit();
+        $this->pdo->commit();
     }
 
     // 回滚事务
-    public static function rollBack()
+    public function rollBack()
     {
-        self::$pdo->rollBack();
-    }
-
-    // 返回最后执行的SQL语句
-    public static function getLastSql()
-    {
-        if (isset(self::$lastSqlData)) {
-            list($sql, $params, $values) = self::$lastSqlData;
-            $params                      = self::quotes($params);
-            $values                      = self::quotes($values);
-            foreach ($params as $key => $value) {
-                $sql = str_replace(':' . $key, $value, $sql);
-            }
-            $sql = vsprintf(str_replace('?', '%s', $sql), $values);
-            return $sql;
-        }
-        return '';
+        $this->pdo->rollBack();
     }
 
     // 给字符串加引号
@@ -133,23 +194,20 @@ class Pdo
         return is_numeric($var) ? $var : "'{$var}'";
     }
 
-    // 预处理, 扩展数组参数的支持
-    private static function prepare($sql, $data)
+    // 返回最后执行的SQL语句
+    public function getLastSql()
     {
-        $params = $values = [];
-        foreach ($data as $key => $value) {
-            if (is_array($value)) {
-                $tmp = [];
-                foreach ($value as $k => $v) {
-                    $tmp[]    = '?';
-                    $values[] = $v;
-                }
-                $sql = str_replace(':' . $key, implode(',', $tmp), $sql);
-            } else {
-                $params[$key] = $value;
+        if (isset($this->lastSqlData)) {
+            list($sql, $params, $values) = $this->lastSqlData;
+            $params = self::quotes($params);
+            $values = self::quotes($values);
+            foreach ($params as $key => $value) {
+                $sql = str_replace(':' . $key, $value, $sql);
             }
+            $sql = vsprintf(str_replace('?', '%s', $sql), $values);
+            return $sql;
         }
-        return [$sql, $params, $values];
+        return '';
     }
 
 }
