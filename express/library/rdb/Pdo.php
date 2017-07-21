@@ -77,6 +77,9 @@ class Pdo extends Object
     // 绑定参数
     public function bindValue($data = [])
     {
+        if (isset($this->pdoStatement)) {
+            return $this;
+        }
         if (empty($data)) {
             $this->pdoStatement = $this->pdo->prepare($this->sql);
         } else {
