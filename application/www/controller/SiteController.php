@@ -38,7 +38,7 @@ class SiteController extends Controller
         // \Express::$app->redis;
 
         $rows = \Express::$app->rdb->createCommand("SELECT * FROM `post` WHERE mobile = :mobile")->bindValue([
-            'mobile' => '18600001111'
+            ':mobile' => '18600001111'
         ])->queryAll();
 
         return \Express::$app->rdb->getLastSql();

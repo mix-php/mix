@@ -205,7 +205,8 @@ class Pdo extends Object
             $params = self::quotes($params);
             $values = self::quotes($values);
             foreach ($params as $key => $value) {
-                $sql = str_replace(':' . $key, $value, $sql);
+                $key = substr($key, 0, 1) == ':' ? $key : ":{$key}";
+                $sql = str_replace($key, $value, $sql);
             }
             $sql = vsprintf(str_replace('?', '%s', $sql), $values);
             return $sql;
