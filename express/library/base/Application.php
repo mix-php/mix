@@ -42,7 +42,7 @@ class Application
             return $this->$name;
         }
         // 获取配置
-        $list  = $this->register[$name];
+        $list = $this->register[$name];
         $class = $list['class'];
         // 实例化
         $object = new $class(['disableInit' => true]);
@@ -84,10 +84,10 @@ class Application
     /**
      * 执行功能并返回
      * @param  string $action
-     * @param  array  $inout
+     * @param  array $inout
      * @return mixed
      */
-    public function runAction($method, $action, $inout = [])
+    public function runAction($method, $action)
     {
         $action = "{$method} {$action}";
         // 路由匹配
@@ -95,23 +95,19 @@ class Application
         // 执行功能
         if ($action) {
             // 路由参数导入请求类
-            if (empty($inout['request'])) {
-                \Express::$app->request->setRoute($urlParams);
-            } else {
-                $inout['request']->setRoute($urlParams);
-            }
+            \Express::$app->request->setRoute($urlParams);
             // index处理
             if (isset($urlParams['controller']) && strpos($action, ':action') !== false) {
                 $action = str_replace(':action', 'index', $action);
             }
             // 实例化控制器
-            $action    = "{$this->controllerNamespace}\\{$action}";
+            $action = "{$this->controllerNamespace}\\{$action}";
             $classFull = dirname($action);
             $classPath = dirname($classFull);
             $className = \Express::$app->route->snakeToCamel(basename($classFull));
-            $method    = \Express::$app->route->snakeToCamel(basename($action), true);
-            $class     = "{$classPath}\\{$className}Controller";
-            $method    = "action{$method}";
+            $method = \Express::$app->route->snakeToCamel(basename($action), true);
+            $class = "{$classPath}\\{$className}Controller";
+            $method = "action{$method}";
             try {
                 $reflect = new \ReflectionClass($class);
             } catch (\ReflectionException $e) {
@@ -121,11 +117,7 @@ class Application
             // 判断方法是否存在
             if (method_exists($controller, $method)) {
                 // 执行控制器的方法
-                if (empty($inout)) {
-                    return $controller->$method();
-                } else {
-                    return $controller->$method($inout['request'], $inout['response']);
-                }
+                return $controller->$method();
             }
         }
         throw new \express\exception\HttpException("URL不存在", 404);

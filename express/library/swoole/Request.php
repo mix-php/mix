@@ -13,7 +13,7 @@ class Request extends Object
 {
 
     // 请求对象
-    private $requester
+    private $requester;
     // 请求数据
     private $get;
     private $post;
