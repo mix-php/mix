@@ -46,8 +46,6 @@ return [
         'response' => [
             // 类路径
             'class'  => 'express\console\Response',
-            // 输出格式
-            'format' => express\web\Response::FORMAT_RAW,
         ],
 
         // rdb

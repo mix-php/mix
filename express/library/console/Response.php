@@ -5,7 +5,7 @@
  * @author 刘健 <code.liu@qq.com>
  */
 
-namespace express\web;
+namespace express\console;
 
 use express\base\Object;
 
