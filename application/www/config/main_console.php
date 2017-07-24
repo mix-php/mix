@@ -45,7 +45,7 @@ return [
         // 响应
         'response' => [
             // 类路径
-            'class'  => 'express\web\Response',
+            'class'  => 'express\console\Response',
             // 输出格式
             'format' => express\web\Response::FORMAT_RAW,
         ],

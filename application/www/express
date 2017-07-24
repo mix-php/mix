@@ -1,5 +1,7 @@
 <?php
 
+// console 入口文件
+
 define('EXPRESS_DEBUG', true);
 define('EXPRESS_ENV', 'dev');
 define('DS', DIRECTORY_SEPARATOR);

@@ -13,10 +13,9 @@ class Response extends Object
 {
 
     // 格式值
-    const FORMAT_RAW = -1;
-    const FORMAT_JSON  = 0;
+    const FORMAT_JSON = 0;
     const FORMAT_JSONP = 1;
-    const FORMAT_XML   = 2;
+    const FORMAT_XML = 2;
     // 输出格式
     public $format = self::FORMAT_JSON;
     // json
@@ -56,9 +55,6 @@ class Response extends Object
         $content = $this->content;
         if (is_array($content)) {
             switch ($this->format) {
-                case self::FORMAT_RAW:
-                    $content = 'Array';
-                    break;
                 case self::FORMAT_JSON:
                     $this->setHeader('Content-Type', 'application/json;charset=utf-8');
                     $content = $this->json->encode($content);
@@ -86,9 +82,6 @@ class Response extends Object
     // 设置HTTP状态码
     private function setStatusCode()
     {
-        if($this->format == self::FORMAT_RAW){
-            return;
-        }
         $status = array(
             100 => 'HTTP/1.1 100 Continue',
             101 => 'HTTP/1.1 101 Switching Protocols',
