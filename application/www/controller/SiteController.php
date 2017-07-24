@@ -37,11 +37,15 @@ class SiteController extends Controller
         // \Express::$app->cookie;
         // \Express::$app->redis;
 
-        $rows = \Express::$app->rdb->createCommand("SELECT * FROM `post` WHERE mobile = :mobile")->bindValue([
-            ':mobile' => '18600001111'
-        ])->queryAll();
+        //$rows = \Express::$app->rdb->createCommand("SELECT * FROM `post` WHERE mobile = :mobile")->bindValue([
+        //    ':mobile' => '18600001111'
+        //])->queryAll();
 
-        return \Express::$app->rdb->getLastSql();
+        $insertId = \Express::$app->rdb->insert('post', ['name' => 'xiaoliu', 'content' => 'hahahaha'])->execute();
+
+        //var_dump(\Express::$app->rdb->getLastSql());
+
+        return $insertId;
     }
 
     public function actionPhpinfo()

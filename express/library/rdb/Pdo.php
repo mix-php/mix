@@ -139,6 +139,19 @@ class Pdo extends Object
         return $this->pdoStatement->fetchColumn();
     }
 
+    // 插入
+    public function insert($table, $data)
+    {
+        $keys = array_keys($data);
+        $variables = array_map(function ($key) {
+            return ":{$key}";
+        }, $keys);
+        $sql = "INSERT INTO `{$table}` (" . implode(', ', $keys) . ") VALUES (" . implode(', ', $variables) . ")";
+        $this->createCommand($sql);
+        $this->bindValue($data);
+        return $this;
+    }
+
     // 执行SQL语句，并返InsertId或回受影响的行数
     public function execute()
     {
