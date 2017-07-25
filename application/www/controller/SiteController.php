@@ -28,21 +28,20 @@ class SiteController extends Controller
         // \Express::$app->redis->set('user', 'xiaoliu');
         // var_dump(\Express::$app->redis->get('user'));
 
-        // \Express::$app->config;
-        // \Express::$app->route;
-        // \Express::$app->request;
-        // \Express::$app->response;
-        // \Express::$app->error;
-        // \Express::$app->session;
-        // \Express::$app->cookie;
-        // \Express::$app->redis;
-
         //$rows = \Express::$app->rdb->createCommand("SELECT * FROM `post` WHERE mobile = :mobile")->bindValue([
         //    ':mobile' => '18600001111'
         //])->queryAll();
 
         $insertId = \Express::$app->rdb->insert('post', ['name' => 'xiaoliu', 'content' => 'hahahaha'])->execute();
+        var_dump(\Express::$app->rdb->getLastSql());
 
+        //$data = [
+        //    ['name' => 'xiaoliu', 'content' => 'hahahaha'],
+        //    ['name' => 'xiaoliu', 'content' => 'hahahaha'],
+        //    ['name' => 'xiaoliu', 'content' => 'hahahaha'],
+        //    ['name' => 'xiaoliu', 'content' => 'hahahaha'],
+        //];
+        //$affectedRows = \Express::$app->rdb->batchInsert('post', $data)->execute();
         //var_dump(\Express::$app->rdb->getLastSql());
 
         return $insertId;

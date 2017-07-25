@@ -146,11 +146,39 @@ class Pdo extends Object
         $variables = array_map(function ($key) {
             return ":{$key}";
         }, $keys);
-        $sql = "INSERT INTO `{$table}` (" . implode(', ', $keys) . ") VALUES (" . implode(', ', $variables) . ")";
+        $sql = "INSERT INTO `{$table}` (`" . implode('`, `', $keys) . "`) VALUES (" . implode(', ', $variables) . ")";
         $this->createCommand($sql);
         $this->bindValue($data);
         return $this;
     }
+
+    // 批量插入
+    public function batchInsert($table, $data)
+    {
+        $keys = array_keys($data[0]);
+        $sql = "INSERT INTO `{$table}` (`" . implode('`, `', $keys) . "`) VALUES ";
+        $variables = [];
+        for ($i = 0; $i < count($keys); $i++) {
+            $variables[] = '?';
+        }
+        $values = [];
+        $valuesSql = [];
+        foreach ($data as $item) {
+            foreach ($item as $value) {
+                $values[] = $value;
+            }
+            $valuesSql[] = "(" . implode(', ', $variables) . ")";
+        }
+        $sql .= implode(', ', $valuesSql);
+        $this->pdoStatement = $this->pdo->prepare($sql);
+        foreach ($values as $key => &$value) {
+            $this->pdoStatement->bindValue($key + 1, $value);
+        }
+        $this->lastSqlData = [$sql, [], $values];
+        return $this;
+    }
+
+    
 
     // 执行SQL语句，并返InsertId或回受影响的行数
     public function execute()
@@ -162,7 +190,7 @@ class Pdo extends Object
         if ($this->pdo->inTransaction() && $this->rollbackZeroAffected && $affectedRows == 0) {
             throw new \PDOException('affected rows in the transaction is zero');
         }
-        return $lastInsertId ?: $affectedRows;
+        return $affectedRows == 1 ? $lastInsertId : $affectedRows;
     }
 
     // 自动事务
