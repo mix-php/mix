@@ -32,8 +32,8 @@ class SiteController extends Controller
         //    ':mobile' => '18600001111'
         //])->queryAll();
 
-        $insertId = \Express::$app->rdb->insert('post', ['name' => 'xiaoliu', 'content' => 'hahahaha'])->execute();
-        var_dump(\Express::$app->rdb->getLastSql());
+        //$insertId = \Express::$app->rdb->insert('post', ['name' => 'xiaoliu', 'content' => 'hahahaha'])->execute();
+        //var_dump(\Express::$app->rdb->getLastSql());
 
         //$data = [
         //    ['name' => 'xiaoliu', 'content' => 'hahahaha'],
@@ -44,7 +44,10 @@ class SiteController extends Controller
         //$affectedRows = \Express::$app->rdb->batchInsert('post', $data)->execute();
         //var_dump(\Express::$app->rdb->getLastSql());
 
-        return $insertId;
+        $affectedRows = \Express::$app->rdb->update('post', ['name' => 'liuliu', 'id' => 16], [['id', '=', 15]])->execute();
+        var_dump(\Express::$app->rdb->getLastSql());
+
+        return $affectedRows;
     }
 
     public function actionPhpinfo()

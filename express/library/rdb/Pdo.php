@@ -28,6 +28,8 @@ class Pdo extends Object
     private $pdoStatement;
     // sql
     private $sql;
+    // values
+    private $values = [];
     // 最后sql数据
     private $lastSqlData;
     // 默认属性
@@ -55,6 +57,13 @@ class Pdo extends Object
         return $this;
     }
 
+    // 绑定参数
+    public function bindValue($data)
+    {
+        $this->values += $data;
+        return $this;
+    }
+
     // 绑定预处理, 扩展绑定数组参数
     private function bindPrepare($sql, $data)
     {
@@ -74,16 +83,18 @@ class Pdo extends Object
         return [$sql, $params, $values];
     }
 
-    // 绑定参数
-    public function bindValue($data = [])
+    // 开始绑定参数
+    private function bindStart()
     {
-        if (isset($this->pdoStatement)) {
-            return $this;
-        }
-        if (empty($data)) {
+        if (empty($this->values)) {
             $this->pdoStatement = $this->pdo->prepare($this->sql);
         } else {
-            list($sql, $params, $values) = $this->lastSqlData = $this->bindPrepare($this->sql, $data);
+            list($sql, $params, $values) = $this->lastSqlData = $this->bindPrepare($this->sql, $this->values);
+
+            var_dump($sql);
+            var_dump($params);
+            var_dump($values);
+
             $this->pdoStatement = $this->pdo->prepare($sql);
             foreach ($params as $key => &$value) {
                 $this->pdoStatement->bindParam($key, $value);
@@ -92,13 +103,13 @@ class Pdo extends Object
                 $this->pdoStatement->bindValue($key + 1, $value);
             }
         }
-        return $this;
+        $this->values = null;
     }
 
     // 执行查询，并返回报表类
     public function query()
     {
-        $this->bindValue();
+        $this->bindStart();
         $this->pdoStatement->execute();
         return $this->pdoStatement;
     }
@@ -106,7 +117,7 @@ class Pdo extends Object
     // 返回多行
     public function queryAll()
     {
-        $this->bindValue();
+        $this->bindStart();
         $this->pdoStatement->execute();
         return $this->pdoStatement->fetchAll();
     }
@@ -114,7 +125,7 @@ class Pdo extends Object
     // 返回一行
     public function queryOne()
     {
-        $this->bindValue();
+        $this->bindStart();
         $this->pdoStatement->execute();
         return $this->pdoStatement->fetch(isset($this->attribute[\PDO::ATTR_DEFAULT_FETCH_MODE]) ? $this->attribute[\PDO::ATTR_DEFAULT_FETCH_MODE] : $this->defaultAttribute[\PDO::ATTR_DEFAULT_FETCH_MODE]);
     }
@@ -122,7 +133,7 @@ class Pdo extends Object
     // 返回一列 (第一列)
     public function queryColumn()
     {
-        $this->bindValue();
+        $this->bindStart();
         $this->pdoStatement->execute();
         $column = false;
         while ($row = $this->pdoStatement->fetchColumn()) {
@@ -134,19 +145,32 @@ class Pdo extends Object
     // 返回一个标量值
     public function queryScalar()
     {
-        $this->bindValue();
+        $this->bindStart();
         $this->pdoStatement->execute();
         return $this->pdoStatement->fetchColumn();
+    }
+
+    // 执行SQL语句，并返InsertId或回受影响的行数
+    public function execute()
+    {
+        $this->bindStart();
+        $this->pdoStatement->execute();
+        $affectedRows = $this->pdoStatement->rowCount();
+        $lastInsertId = $this->pdo->lastInsertId();
+        if ($this->pdo->inTransaction() && $this->rollbackZeroAffected && $affectedRows == 0) {
+            throw new \PDOException('affected rows in the transaction is zero');
+        }
+        return ($affectedRows == 1 && $lastInsertId > 0) ? $lastInsertId : $affectedRows;
     }
 
     // 插入
     public function insert($table, $data)
     {
         $keys = array_keys($data);
-        $variables = array_map(function ($key) {
+        $fields = array_map(function ($key) {
             return ":{$key}";
         }, $keys);
-        $sql = "INSERT INTO `{$table}` (`" . implode('`, `', $keys) . "`) VALUES (" . implode(', ', $variables) . ")";
+        $sql = "INSERT INTO `{$table}` (`" . implode('`, `', $keys) . "`) VALUES (" . implode(', ', $fields) . ")";
         $this->createCommand($sql);
         $this->bindValue($data);
         return $this;
@@ -157,9 +181,9 @@ class Pdo extends Object
     {
         $keys = array_keys($data[0]);
         $sql = "INSERT INTO `{$table}` (`" . implode('`, `', $keys) . "`) VALUES ";
-        $variables = [];
+        $fields = [];
         for ($i = 0; $i < count($keys); $i++) {
-            $variables[] = '?';
+            $fields[] = '?';
         }
         $values = [];
         $valuesSql = [];
@@ -167,7 +191,7 @@ class Pdo extends Object
             foreach ($item as $value) {
                 $values[] = $value;
             }
-            $valuesSql[] = "(" . implode(', ', $variables) . ")";
+            $valuesSql[] = "(" . implode(', ', $fields) . ")";
         }
         $sql .= implode(', ', $valuesSql);
         $this->pdoStatement = $this->pdo->prepare($sql);
@@ -178,19 +202,23 @@ class Pdo extends Object
         return $this;
     }
 
-    
-
-    // 执行SQL语句，并返InsertId或回受影响的行数
-    public function execute()
+    // 更新
+    public function update($table, $data, $where)
     {
-        $this->bindValue();
-        $this->pdoStatement->execute();
-        $affectedRows = $this->pdoStatement->rowCount();
-        $lastInsertId = $this->pdo->lastInsertId();
-        if ($this->pdo->inTransaction() && $this->rollbackZeroAffected && $affectedRows == 0) {
-            throw new \PDOException('affected rows in the transaction is zero');
+        $keys = array_keys($data);
+        $fieldsSql = array_map(function ($key) {
+            return "`{$key}` = :{$key}";
+        }, $keys);
+        $whereParams = [];
+        foreach ($where as $key => $value) {
+            $where[$key] = "`{$value[0]}` {$value[1]} :where_{$value[0]}";
+            $whereParams["where_{$value[0]}"] = $value[2];
         }
-        return $affectedRows == 1 ? $lastInsertId : $affectedRows;
+        $sql = "UPDATE `{$table}` SET " . implode(', ', $fieldsSql) . " WHERE " . implode(', ', $where);
+        $this->createCommand($sql);
+        $this->bindValue($data);
+        $this->bindValue($whereParams);
+        return $this;
     }
 
     // 自动事务
