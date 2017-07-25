@@ -25,8 +25,10 @@ class Application extends \express\base\Application
 
     /**
      * 执行功能并返回
+     * @param  string $method
      * @param  string $action
-     * @param  array $inout
+     * @param  object $request
+     * @param  object $response
      * @return mixed
      */
     public function runAction($method, $action, $request, $response)

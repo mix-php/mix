@@ -83,8 +83,8 @@ class Application
 
     /**
      * 执行功能并返回
+     * @param  string $method
      * @param  string $action
-     * @param  array $inout
      * @return mixed
      */
     public function runAction($method, $action)
