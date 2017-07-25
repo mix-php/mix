@@ -75,7 +75,8 @@ class Pdo extends Object
                     $tmp[] = '?';
                     $values[] = $v;
                 }
-                $sql = str_replace(':' . $key, implode(',', $tmp), $sql);
+                $key = substr($key, 0, 1) == ':' ? $key : ":{$key}";
+                $sql = str_replace($key, implode(',', $tmp), $sql);
             } else {
                 $params[$key] = $value;
             }
