@@ -44,7 +44,10 @@ class SiteController extends Controller
         //$affectedRows = \Express::$app->rdb->batchInsert('post', $data)->execute();
         //var_dump(\Express::$app->rdb->getLastSql());
 
-        $affectedRows = \Express::$app->rdb->update('post', ['name' => 'liuliu', 'id' => 16], [['id', '=', 15]])->execute();
+        //$affectedRows = \Express::$app->rdb->update('post', ['name' => 'liuliu', 'id' => 16], [['id', '=', 15]])->execute();
+        //var_dump(\Express::$app->rdb->getLastSql());
+
+        $affectedRows = \Express::$app->rdb->delete('post', [['id', '=', 15]])->execute();
         var_dump(\Express::$app->rdb->getLastSql());
 
         return $affectedRows;

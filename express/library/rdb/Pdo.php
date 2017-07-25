@@ -90,11 +90,6 @@ class Pdo extends Object
             $this->pdoStatement = $this->pdo->prepare($this->sql);
         } else {
             list($sql, $params, $values) = $this->lastSqlData = $this->bindPrepare($this->sql, $this->values);
-
-            var_dump($sql);
-            var_dump($params);
-            var_dump($values);
-
             $this->pdoStatement = $this->pdo->prepare($sql);
             foreach ($params as $key => &$value) {
                 $this->pdoStatement->bindParam($key, $value);
@@ -217,6 +212,20 @@ class Pdo extends Object
         $sql = "UPDATE `{$table}` SET " . implode(', ', $fieldsSql) . " WHERE " . implode(', ', $where);
         $this->createCommand($sql);
         $this->bindValue($data);
+        $this->bindValue($whereParams);
+        return $this;
+    }
+
+    // 删除
+    public function delete($table, $where)
+    {
+        $whereParams = [];
+        foreach ($where as $key => $value) {
+            $where[$key] = "`{$value[0]}` {$value[1]} :{$value[0]}";
+            $whereParams["{$value[0]}"] = $value[2];
+        }
+        $sql = "DELETE FROM `{$table}` WHERE " . implode(', ', $where);
+        $this->createCommand($sql);
         $this->bindValue($whereParams);
         return $this;
     }
