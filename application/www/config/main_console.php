@@ -15,7 +15,7 @@ return [
         // 配置
         'config'   => [
             // 类路径
-            'class'    => 'express\base\Config',
+            'class'    => 'mix\base\Config',
             // 自动加载
             'autoload' => ['common', 'local'],
         ],
@@ -23,7 +23,7 @@ return [
         // 路由
         'route'    => [
             // 类路径
-            'class'          => 'express\base\Route',
+            'class'          => 'mix\base\Route',
             // 默认变量规则
             'defaultPattern' => '[\w-]+',
             // 路由变量规则
@@ -39,19 +39,19 @@ return [
         // 请求
         'request'  => [
             // 类路径
-            'class' => 'express\console\Request',
+            'class' => 'mix\console\Request',
         ],
 
         // 响应
         'response' => [
             // 类路径
-            'class'  => 'express\console\Response',
+            'class'  => 'mix\console\Response',
         ],
 
         // rdb
         'rdb'      => [
             // 类路径
-            'class'                => 'express\rdb\Pdo',
+            'class'                => 'mix\rdb\Pdo',
             // 数据源格式
             'dsn'                  => 'mysql:host=127.0.0.1;port=3306;charset=utf8;dbname=test',
             // 数据库用户名
@@ -74,7 +74,7 @@ return [
         // redis
         'redis'    => [
             // 类路径
-            'class'    => 'express\nosql\Redis',
+            'class'    => 'mix\nosql\Redis',
             // 主机
             'host'     => '127.0.0.1',
             // 端口

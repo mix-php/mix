@@ -1,5 +1,5 @@
 <?php
-$this->title = 'Express View';
+$this->title = 'Mix View';
 ?>
 
 	Welcome,

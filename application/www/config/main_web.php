@@ -15,7 +15,7 @@ return [
         // 配置
         'config'   => [
             // 类路径
-            'class'    => 'express\base\Config',
+            'class'    => 'mix\base\Config',
             // 自动加载
             'autoload' => ['common', 'local'],
         ],
@@ -23,7 +23,7 @@ return [
         // 路由
         'route'    => [
             // 类路径
-            'class'          => 'express\base\Route',
+            'class'          => 'mix\base\Route',
             // 默认变量规则
             'defaultPattern' => '[\w-]+',
             // 路由变量规则
@@ -39,48 +39,48 @@ return [
         // 请求
         'request'  => [
             // 类路径
-            'class' => 'express\web\Request',
+            'class' => 'mix\web\Request',
         ],
 
         // 响应
         'response' => [
             // 类路径
-            'class'  => 'express\web\Response',
+            'class'  => 'mix\web\Response',
             // 输出格式
-            'format' => express\web\Response::FORMAT_JSON,
+            'format' => mix\web\Response::FORMAT_JSON,
             // json
             'json'   => [
                 // 类路径
-                'class' => 'express\web\Json',
+                'class' => 'mix\web\Json',
             ],
             // jsonp
             'jsonp'  => [
                 // 类路径
-                'class'        => 'express\web\Jsonp',
+                'class'        => 'mix\web\Jsonp',
                 // callback名称
                 'callbackName' => 'callback',
             ],
             // xml
             'xml'    => [
                 // 类路径
-                'class' => 'express\web\Xml',
+                'class' => 'mix\web\Xml',
             ],
         ],
 
         // 错误
         'error'    => [
             // 类路径
-            'class'  => 'express\web\Error',
+            'class'  => 'mix\web\Error',
             // 输出格式
-            'format' => express\web\Error::FORMAT_HTML,
+            'format' => mix\web\Error::FORMAT_HTML,
         ],
 
         // Session
         'session'  => [
             // 类路径
-            'class'         => 'express\web\Session',
+            'class'         => 'mix\web\Session',
             // 处理者
-            'saveHandler'   => express\web\Session::HANDLER_REDIS,
+            'saveHandler'   => mix\web\Session::HANDLER_REDIS,
             // 保存路径
             'savePath'      => 'tcp://127.0.0.1:6379?auth=&database=9&prefix=EXPRESS_SSID:',
             // 生存时间
@@ -92,7 +92,7 @@ return [
         // Cookie
         'cookie'   => [
             // 类路径
-            'class'    => 'express\web\Cookie',
+            'class'    => 'mix\web\Cookie',
             // 过期时间
             'expire'   => 31536000,
             // 有效的服务器路径
@@ -108,7 +108,7 @@ return [
         // rdb
         'rdb'      => [
             // 类路径
-            'class'                => 'express\rdb\Pdo',
+            'class'                => 'mix\rdb\Pdo',
             // 数据源格式
             'dsn'                  => 'mysql:host=127.0.0.1;port=3306;charset=utf8;dbname=test',
             // 数据库用户名
@@ -131,7 +131,7 @@ return [
         // redis
         'redis'    => [
             // 类路径
-            'class'    => 'express\nosql\Redis',
+            'class'    => 'mix\nosql\Redis',
             // 主机
             'host'     => '127.0.0.1',
             // 端口

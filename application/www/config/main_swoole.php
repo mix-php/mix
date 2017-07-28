@@ -15,7 +15,7 @@ return [
         // 配置
         'config'   => [
             // 类路径
-            'class'    => 'express\base\Config',
+            'class'    => 'mix\base\Config',
             // 自动加载
             'autoload' => ['common', 'local'],
         ],
@@ -23,7 +23,7 @@ return [
         // 路由
         'route'    => [
             // 类路径
-            'class'          => 'express\base\Route',
+            'class'          => 'mix\base\Route',
             // 默认变量规则
             'defaultPattern' => '[\w-]+',
             // 路由变量规则
@@ -41,7 +41,7 @@ return [
             // 非单例模式
             'singleton' => false,
             // 类路径
-            'class'     => 'express\swoole\Request',
+            'class'     => 'mix\swoole\Request',
         ],
 
         // 响应
@@ -49,25 +49,25 @@ return [
             // 非单例模式
             'singleton' => false,
             // 类路径
-            'class'     => 'express\swoole\Response',
+            'class'     => 'mix\swoole\Response',
             // 输出格式
-            'format'    => express\web\Response::FORMAT_JSON,
+            'format'    => mix\web\Response::FORMAT_JSON,
             // json
             'json'      => [
                 // 类路径
-                'class' => 'express\web\Json',
+                'class' => 'mix\web\Json',
             ],
             // jsonp
             'jsonp'     => [
                 // 类路径
-                'class'        => 'express\web\Jsonp',
+                'class'        => 'mix\web\Jsonp',
                 // callback名称
                 'callbackName' => 'callback',
             ],
             // xml
             'xml'       => [
                 // 类路径
-                'class' => 'express\web\Xml',
+                'class' => 'mix\web\Xml',
             ],
         ],
 

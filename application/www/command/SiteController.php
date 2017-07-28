@@ -7,14 +7,14 @@
 
 namespace www\command;
 
-use express\web\Controller;
+use mix\web\Controller;
 
 class SiteController extends Controller
 {
 
     public function actionIndex()
     {
-        $param = \Express::$app->request->param();
+        $param = \Mix::$app->request->param();
         return 'hello world';
     }
 

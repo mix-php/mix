@@ -1,5 +1,5 @@
 <?php
 
-use express\web\Xml;
+use mix\web\Xml;
 $xml = new Xml();
 echo $xml->encode(compact('code', 'message'));

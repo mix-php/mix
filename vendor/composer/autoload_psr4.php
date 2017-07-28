@@ -7,5 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'www\\' => array($baseDir . '/application/www'),
-    'express\\' => array($baseDir . '/express/library'),
+    'mix\\' => array($baseDir . '/mixphp/mix1'),
 );

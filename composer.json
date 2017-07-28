@@ -1,12 +1,8 @@
 {
-
     "autoload": {
-
         "psr-4": {
-            "express\\": "express/library/",
+            "mix\\": "mixphp/mix1/",
             "www\\": "application/www/"
         }
-        
     }
-
 }

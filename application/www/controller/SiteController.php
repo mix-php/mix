@@ -7,33 +7,33 @@
 
 namespace www\controller;
 
-use express\web\Controller;
+use mix\web\Controller;
 
 class SiteController extends Controller
 {
 
     public function actionIndex()
     {
-        // \Express::$app->response->statusCode = 404;
-        // \Express::$app->response->format = \express\web\Response::FORMAT_JSONP;
+        // \Mix::$app->response->statusCode = 404;
+        // \Mix::$app->response->format = \mix\web\Response::FORMAT_JSONP;
         // return ['errcode' => 0, 'errmsg' => 'ok'];
 
         // return $this->render('index', ['name' => 'xiaoliu', 'sex' => 'nan']);
 
-        // \Express::$app->session->set('user', ['name' => 'xiaoliu', 'sex' => 'nan']);
-        // var_dump(\Express::$app->session->get());
+        // \Mix::$app->session->set('user', ['name' => 'xiaoliu', 'sex' => 'nan']);
+        // var_dump(\Mix::$app->session->get());
 
-        // \Express::$app->cookie->set('user', 'xiaoliu');
+        // \Mix::$app->cookie->set('user', 'xiaoliu');
 
-        // \Express::$app->redis->set('user', 'xiaoliu');
-        // var_dump(\Express::$app->redis->get('user'));
+        // \Mix::$app->redis->set('user', 'xiaoliu');
+        // var_dump(\Mix::$app->redis->get('user'));
 
-        //$rows = \Express::$app->rdb->createCommand("SELECT * FROM `post` WHERE mobile = :mobile")->bindValue([
+        //$rows = \Mix::$app->rdb->createCommand("SELECT * FROM `post` WHERE mobile = :mobile")->bindValue([
         //    ':mobile' => '18600001111'
         //])->queryAll();
 
-        //$insertId = \Express::$app->rdb->insert('post', ['name' => 'xiaoliu', 'content' => 'hahahaha'])->execute();
-        //var_dump(\Express::$app->rdb->getLastSql());
+        //$insertId = \Mix::$app->rdb->insert('post', ['name' => 'xiaoliu', 'content' => 'hahahaha'])->execute();
+        //var_dump(\Mix::$app->rdb->getLastSql());
 
         //$data = [
         //    ['name' => 'xiaoliu', 'content' => 'hahahaha'],
@@ -41,19 +41,19 @@ class SiteController extends Controller
         //    ['name' => 'xiaoliu', 'content' => 'hahahaha'],
         //    ['name' => 'xiaoliu', 'content' => 'hahahaha'],
         //];
-        //$affectedRows = \Express::$app->rdb->batchInsert('post', $data)->execute();
-        //var_dump(\Express::$app->rdb->getLastSql());
+        //$affectedRows = \Mix::$app->rdb->batchInsert('post', $data)->execute();
+        //var_dump(\Mix::$app->rdb->getLastSql());
 
-        //$affectedRows = \Express::$app->rdb->update('post', ['name' => 'liuliu', 'id' => 16], [['id', '=', 15]])->execute();
-        //var_dump(\Express::$app->rdb->getLastSql());
+        //$affectedRows = \Mix::$app->rdb->update('post', ['name' => 'liuliu', 'id' => 16], [['id', '=', 15]])->execute();
+        //var_dump(\Mix::$app->rdb->getLastSql());
 
-        //$affectedRows = \Express::$app->rdb->delete('post', [['id', '=', 15]])->execute();
-        //var_dump(\Express::$app->rdb->getLastSql());
+        //$affectedRows = \Mix::$app->rdb->delete('post', [['id', '=', 15]])->execute();
+        //var_dump(\Mix::$app->rdb->getLastSql());
 
-        $rows = \Express::$app->rdb->createCommand("SELECT * FROM `post` WHERE id IN (:id)")->bindValue([
+        $rows = \Mix::$app->rdb->createCommand("SELECT * FROM `post` WHERE id IN (:id)")->bindValue([
             'id' => [15, 16],
         ])->queryAll();
-        var_dump(\Express::$app->rdb->getLastSql());
+        var_dump(\Mix::$app->rdb->getLastSql());
 
         return $rows;
     }
