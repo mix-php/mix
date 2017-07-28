@@ -30,7 +30,7 @@
 
 <h1><?php echo $message ?></h1>
 
-<p>MixPHP V2</p>
+<p><a href="http://www.mixphp.cn" target="_blank">MixPHP V1</a></p>
 
 </body>
 </html>

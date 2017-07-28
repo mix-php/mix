@@ -36,7 +36,7 @@
 <p><?php echo str_replace("\n", '<br>', $trace); ?></p>
 <?php endif; ?>
 
-<p>MixPHP V2</p>
+<p><a href="http://www.mixphp.cn" target="_blank">MixPHP V1</a></p>
 
 </body>
 </html>
