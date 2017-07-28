@@ -1,4 +1,4 @@
-## 欢迎使用 MixPHP V2
+## 欢迎使用 MixPHP V1
 
 MixPHP 是一个高性能极简Web开发MVC框架，同时兼顾了开发效率、高性能与低学习成本，融合 YII2 的开发效率、ThinkPHP5 的现代化，CodeIgniter 的轻量级，并且拥有基于 Swoole/Http/Server 的高性能 mixphp_http_server。
 
