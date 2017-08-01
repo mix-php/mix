@@ -54,7 +54,6 @@ class SiteController extends Controller
             'id' => [15, 16],
         ])->queryAll();
         var_dump(\Mix::$app->rdb->getLastSql());
-
         return $rows;
     }
 
