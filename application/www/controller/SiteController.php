@@ -50,11 +50,19 @@ class SiteController extends Controller
         //$affectedRows = \Mix::$app->rdb->delete('post', [['id', '=', 15]])->execute();
         //var_dump(\Mix::$app->rdb->getLastSql());
 
-        $rows = \Mix::$app->rdb->createCommand("SELECT * FROM `post` WHERE id IN (:id)")->bindValue([
-            'id' => [15, 16],
-        ])->queryAll();
-        var_dump(\Mix::$app->rdb->getLastSql());
-        return $rows;
+        //$rows = \Mix::$app->rdb->createCommand("SELECT * FROM `post` WHERE id IN (:id)")->bindValue([
+        //    'id' => [15, 16],
+        //])->queryAll();
+        //var_dump(\Mix::$app->rdb->getLastSql());
+        //return $rows;
+
+        $model = new \www\model\UserModel();
+        $model->attributes = \Mix::$app->request->get() + \Mix::$app->request->post();
+        $model->setScenario('test');
+        if (!$model->validate()) {
+            return ['code' => 1, 'message' => '参数格式效验失败', 'data' => $model->errors];
+        }
+        return ['code' => 0, 'message' => 'OK'];
     }
 
     public function actionPhpinfo()
