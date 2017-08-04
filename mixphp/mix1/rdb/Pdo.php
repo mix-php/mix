@@ -28,6 +28,8 @@ class Pdo extends Object
     private $pdoStatement;
     // sql
     private $sql;
+    // sql缓存
+    private $sqlCache = [];
     // values
     private $values = [];
     // 最后sql数据
@@ -50,10 +52,34 @@ class Pdo extends Object
         );
     }
 
-    // 创建命令
-    public function createCommand($sql)
+    // 查询构建
+    public function queryBuilder($sqlItem)
     {
-        $this->sql = $sql;
+        if (isset($sqlItem['where']) && $sqlItem['where'] == false) {
+            return $this;
+        }
+        if (isset($sqlItem['values'])) {
+            $this->bindValue($sqlItem['values']);
+        }
+        $this->sqlCache[] = array_shift($sqlItem);
+        return $this;
+    }
+
+    // 创建命令
+    public function createCommand($sql = null)
+    {
+        if (is_null($sql)) {
+            $this->sql = implode(' ', $this->sqlCache);
+        }
+        if (is_string($sql)) {
+            $this->sql = $sql;
+        }
+        if (is_array($sql)) {
+            foreach ($sql as $item) {
+                $this->queryBuilder($item);
+            }
+            $this->sql = implode(' ', $this->sqlCache);
+        }
         return $this;
     }
 

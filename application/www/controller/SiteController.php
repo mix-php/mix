@@ -56,13 +56,20 @@ class SiteController extends Controller
         //var_dump(\Mix::$app->rdb->getLastSql());
         //return $rows;
 
-        $model = new \www\model\UserModel();
-        $model->attributes = \Mix::$app->request->get() + \Mix::$app->request->post();
-        $model->setScenario('test');
-        if (!$model->validate()) {
-            return ['code' => 1, 'message' => '参数格式效验失败', 'data' => $model->errors];
-        }
-        return ['code' => 0, 'message' => 'OK'];
+        //$model = new \www\model\UserModel();
+        //$model->attributes = \Mix::$app->request->get() + \Mix::$app->request->post();
+        //$model->setScenario('test');
+        //if (!$model->validate()) {
+        //    return ['code' => 1, 'message' => '参数格式效验失败', 'data' => $model->errors];
+        //}
+        //return ['code' => 0, 'message' => 'OK'];
+
+        $rows = \Mix::$app->rdb->createCommand([
+            ["SELECT *"],
+            ["FROM `post`"],
+            ["WHERE id = :id", 'values' => ['id' => 15], 'where' => true],
+        ])->queryAll();
+        return $rows;
     }
 
     public function actionPhpinfo()
