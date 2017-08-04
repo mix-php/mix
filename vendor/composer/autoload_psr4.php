@@ -8,4 +8,5 @@ $baseDir = dirname($vendorDir);
 return array(
     'www\\' => array($baseDir . '/application/www'),
     'mix\\' => array($baseDir . '/mixphp/mix1'),
+    'console\\' => array($baseDir . '/application/console'),
 );

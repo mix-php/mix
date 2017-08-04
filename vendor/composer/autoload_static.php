@@ -15,6 +15,10 @@ class ComposerStaticInit7b86a9c973b6deb108af8f47275b0dd2
         array (
             'mix\\' => 4,
         ),
+        'c' => 
+        array (
+            'console\\' => 8,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -25,6 +29,10 @@ class ComposerStaticInit7b86a9c973b6deb108af8f47275b0dd2
         'mix\\' => 
         array (
             0 => __DIR__ . '/../..' . '/mixphp/mix1',
+        ),
+        'console\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/application/console',
         ),
     );
 

@@ -2,7 +2,8 @@
     "autoload": {
         "psr-4": {
             "mix\\": "mixphp/mix1/",
-            "www\\": "application/www/"
+            "www\\": "application/www/",
+            "console\\": "application/console/"
         }
     }
 }
