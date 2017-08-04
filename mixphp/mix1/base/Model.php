@@ -74,10 +74,13 @@ class Model extends Object
     public function validate()
     {
         if (!isset($this->_scenario)) {
-            throw new \mix\exception\ModelException("场景未设置");
+            throw new \mix\exception\ModelException("未设置场景");
         }
         $rules = $this->rules();
+        $action = new \mix\validator\ActionValidator();
+        foreach($this->_validatorsClass as $class){
 
+        }
     }
 
 }

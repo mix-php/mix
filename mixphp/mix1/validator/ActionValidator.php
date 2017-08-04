@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Validator类
+ * ActionValidator类
  * @author 刘健 <code.liu@qq.com>
  */
 
-namespace mix\validators;
+namespace mix\validator;
 
-class Validator
+class ActionValidator
 {
 
     // 无符号验证
