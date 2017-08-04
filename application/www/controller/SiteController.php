@@ -64,12 +64,16 @@ class SiteController extends Controller
         //}
         //return ['code' => 0, 'message' => 'OK'];
 
-        $rows = \Mix::$app->rdb->createCommand([
-            ["SELECT *"],
-            ["FROM `post`"],
-            ["WHERE id = :id", 'values' => ['id' => 15], 'where' => true],
-        ])->queryAll();
-        return $rows;
+        //$rows = \Mix::$app->rdb->createCommand([
+        //    ["SELECT *"],
+        //    ["FROM `post`"],
+        //    ["WHERE id = :id", 'values' => ['id' => 15], 'where' => true],
+        //])->queryAll();
+        //\Mix::$app->rdb->queryBuilder(["SELECT *"]);
+        //\Mix::$app->rdb->queryBuilder(["FROM `post`"]);
+        //\Mix::$app->rdb->queryBuilder(["WHERE id = :id", 'values' => ['id' => 15], 'where' => true]);
+        //$rows = \Mix::$app->rdb->createCommand()->queryAll();
+        //return $rows;
     }
 
     public function actionPhpinfo()
