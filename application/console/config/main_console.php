@@ -7,7 +7,7 @@ return [
     'basePath'            => dirname(__DIR__) . DS,
 
     // 控制器命名空间
-    'controllerNamespace' => 'www\command',
+    'controllerNamespace' => 'console\command',
 
     // 注册树
     'register'            => [
