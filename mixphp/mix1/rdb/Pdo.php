@@ -115,17 +115,19 @@ class Pdo extends Object
     {
         if (empty($this->values)) {
             $this->pdoStatement = $this->pdo->prepare($this->sql);
+            $this->lastSqlData = null;
         } else {
             list($sql, $params, $values) = $this->lastSqlData = $this->bindPrepare($this->sql, $this->values);
             $this->pdoStatement = $this->pdo->prepare($sql);
-            foreach ($params as $key => &$value) {
+            foreach ($params as $key => $value) {
                 $this->pdoStatement->bindParam($key, $value);
             }
-            foreach ($values as $key => &$value) {
+            foreach ($values as $key => $value) {
                 $this->pdoStatement->bindValue($key + 1, $value);
             }
         }
-        $this->values = null;
+        $this->sqlCache = [];
+        $this->values = [];
     }
 
     // 执行查询，并返回报表类
