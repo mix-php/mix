@@ -16,7 +16,7 @@ class UserModel extends Model
     public function rules()
     {
         return [
-            ['uid', 'integer', 'unsigned' => true],
+            ['uid', 'double', 'unsigned' => true, 'min' => 20, 'max' => 50, 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
         ];
         //return [
         //    ['a', 'integer', 'unsigned' => true, 'min' => 1, 'max' => 1000000, 'length' => 40, 'minLength' => 1, 'maxLength' => 15],
@@ -39,7 +39,7 @@ class UserModel extends Model
     public function scenarios()
     {
         return [
-            'test' => ['required' => ['uid']],
+            'test' => ['required' => ['uid', 'a']],
             //'test' => ['required' => ['a', 'b', 'c', 'd'], 'optional' => ['e']],
         ];
     }

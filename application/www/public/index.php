@@ -2,8 +2,8 @@
 
 // web 入口文件
 
-define('EXPRESS_DEBUG', true);
-define('EXPRESS_ENV', 'dev');
+define('MIX_DEBUG', true);
+define('MIX_ENV', 'dev');
 define('DS', DIRECTORY_SEPARATOR);
 
 require __DIR__ . '/../../../vendor/autoload.php';

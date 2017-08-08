@@ -16,7 +16,7 @@ class BaseValidator
     // 当前属性名称
     public $attribute;
 
-    // 属性通知
+    // 属性消息
     public $attributeMessage;
 
     // 属性标签
@@ -64,10 +64,11 @@ class BaseValidator
         $value = $this->attributeValue;
         if ($param && is_null($value)) {
             if (is_null($this->attributeMessage)) {
-                $this->errors[] = "{$this->attributeLabel}不能为空.";
+                $error = "{$this->attributeLabel}不能为空.";
             } else {
-                $this->errors[] = "{$this->attributeLabel}{$this->attributeMessage}";
+                $error = "{$this->attributeLabel}{$this->attributeMessage}";
             }
+            $this->errors[] = $error;
             return false;
         }
         return true;
@@ -79,10 +80,91 @@ class BaseValidator
         $value = $this->attributeValue;
         if ($param && substr($value, 0, 1) == '-') {
             if (is_null($this->attributeMessage)) {
-                $this->errors[] = "{$this->attributeLabel}不能为负数.";
+                $error = "{$this->attributeLabel}不能为负数.";
             } else {
-                $this->errors[] = "{$this->attributeLabel}{$this->attributeMessage}";
+                $error = "{$this->attributeLabel}{$this->attributeMessage}";
             }
+            $this->errors[] = $error;
+            return false;
+        }
+        return true;
+    }
+
+    // 最小数值验证
+    protected function min($param)
+    {
+        $value = $this->attributeValue;
+        if ($value < $param) {
+            if (is_null($this->attributeMessage)) {
+                $error = "{$this->attributeLabel}不能小于%s.";
+            } else {
+                $error = "{$this->attributeLabel}{$this->attributeMessage}";
+            }
+            $this->errors[] = sprintf($error, $param);
+            return false;
+        }
+        return true;
+    }
+
+    // 最大数值验证
+    protected function max($param)
+    {
+        $value = $this->attributeValue;
+        if ($value > $param) {
+            if (is_null($this->attributeMessage)) {
+                $error = "{$this->attributeLabel}不能大于%s.";
+            } else {
+                $error = "{$this->attributeLabel}{$this->attributeMessage}";
+            }
+            $this->errors[] = sprintf($error, $param);
+            return false;
+        }
+        return true;
+    }
+
+    // 固定长度验证
+    protected function length($param)
+    {
+        $value = $this->attributeValue;
+        if (mb_strlen($value) != $param) {
+            if (is_null($this->attributeMessage)) {
+                $error = "{$this->attributeLabel}长度只能为%s位.";
+            } else {
+                $error = "{$this->attributeLabel}{$this->attributeMessage}";
+            }
+            $this->errors[] = sprintf($error, $param);
+            return false;
+        }
+        return true;
+    }
+
+    // 最小长度验证
+    protected function minLength($param)
+    {
+        $value = $this->attributeValue;
+        if (mb_strlen($value) < $param) {
+            if (is_null($this->attributeMessage)) {
+                $error = "{$this->attributeLabel}长度不能小于%s位.";
+            } else {
+                $error = "{$this->attributeLabel}{$this->attributeMessage}";
+            }
+            $this->errors[] = sprintf($error, $param);
+            return false;
+        }
+        return true;
+    }
+
+    // 最大长度验证
+    protected function maxLength($param)
+    {
+        $value = $this->attributeValue;
+        if (mb_strlen($value) > $param) {
+            if (is_null($this->attributeMessage)) {
+                $error = "{$this->attributeLabel}长度不能大于%s位.";
+            } else {
+                $error = "{$this->attributeLabel}{$this->attributeMessage}";
+            }
+            $this->errors[] = sprintf($error, $param);
             return false;
         }
         return true;

@@ -15,7 +15,7 @@ class Error
     // 格式值
     const FORMAT_HTML = 'html';
     const FORMAT_JSON = 'json';
-    const FORMAT_XML  = 'xml';
+    const FORMAT_XML = 'xml';
     // 输出格式
     public $format = self::FORMAT_HTML;
 
@@ -46,26 +46,35 @@ class Error
     public function appException($e)
     {
         ob_clean();
-        $data = [
-            'code'    => $e->getCode(),
-            'message' => $e->getMessage(),
-            'file'    => $e->getFile(),
-            'line'    => $e->getLine(),
-            'type'    => get_class($e),
-            'trace'   => $e->getTraceAsString(),
-        ];
         $statusCode = $e->getCode() == 404 ? 404 : 500;
-        if (!EXPRESS_DEBUG && $statusCode == 500) {
+        if (MIX_DEBUG) {
             $data = [
-                'code'    => 500,
-                'message' => '服务器内部错误',
+                'code'    => $statusCode,
+                'message' => $e->getMessage(),
+                'file'    => $e->getFile(),
+                'line'    => $e->getLine(),
+                'type'    => get_class($e),
+                'trace'   => $e->getTraceAsString(),
             ];
+        } else {
+            if ($statusCode == 404) {
+                $data = [
+                    'code'    => 404,
+                    'message' => $e->getMessage(),
+                ];
+            }
+            if ($statusCode == 500) {
+                $data = [
+                    'code'    => 500,
+                    'message' => '服务器内部错误',
+                ];
+            }
         }
         $tpl = [
             404 => "error.{$this->format}.not_found",
             500 => "error.{$this->format}.internal_server_error",
         ];
-        $content                             = (new View())->import($tpl[$statusCode], $data);
+        $content = (new View())->import($tpl[$statusCode], $data);
         \Mix::$app->response->statusCode = $statusCode;
         \Mix::$app->response->setContent($content);
         switch ($this->format) {

@@ -48,7 +48,7 @@ class Model extends Object
         return [];
     }
 
-    // 属性通知
+    // 属性消息
     public function attributeMessages()
     {
         return [];

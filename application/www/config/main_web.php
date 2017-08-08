@@ -82,11 +82,11 @@ return [
             // 处理者
             'saveHandler'   => mix\web\Session::HANDLER_REDIS,
             // 保存路径
-            'savePath'      => 'tcp://127.0.0.1:6379?auth=&database=9&prefix=EXPRESS_SSID:',
+            'savePath'      => 'tcp://127.0.0.1:6379?auth=&database=9&prefix=MIX_SSID:',
             // 生存时间
             'gcMaxLifetime' => 7200,
             // session名
-            'name'          => 'EXPRESS_SSID',
+            'name'          => 'MIX_SSID',
         ],
 
         // Cookie
