@@ -94,7 +94,7 @@ class BaseValidator
     protected function min($param)
     {
         $value = $this->attributeValue;
-        if ($value < $param) {
+        if (is_numeric($value) && $value < $param) {
             if (is_null($this->attributeMessage)) {
                 $error = "{$this->attributeLabel}不能小于%s.";
             } else {
@@ -110,7 +110,7 @@ class BaseValidator
     protected function max($param)
     {
         $value = $this->attributeValue;
-        if ($value > $param) {
+        if (is_numeric($value) && $value > $param) {
             if (is_null($this->attributeMessage)) {
                 $error = "{$this->attributeLabel}不能大于%s.";
             } else {
