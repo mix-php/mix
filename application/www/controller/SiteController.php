@@ -56,25 +56,25 @@ class SiteController extends Controller
         //var_dump(\Mix::$app->rdb->getLastSql());
         //return $rows;
 
-        //$model = new \www\model\UserModel();
-        //$model->attributes = \Mix::$app->request->get() + \Mix::$app->request->post();
-        //$model->setScenario('test');
-        //if (!$model->validate()) {
-        //    return ['code' => 1, 'message' => '参数格式效验失败', 'data' => $model->errors];
-        //}
-        //return ['code' => 0, 'message' => 'OK'];
+        $model = new \www\model\UserModel();
+        $model->attributes = \Mix::$app->request->get() + \Mix::$app->request->post();
+        $model->setScenario('test');
+        if (!$model->validate()) {
+            return ['code' => 1, 'message' => '参数格式效验失败', 'data' => $model->errors];
+        }
+        return ['code' => 0, 'message' => 'OK'];
 
-        $rows = \Mix::$app->rdb->createCommand([
-            ["SELECT *"],
-            ["FROM `post`"],
-            ["WHERE id = :id", 'values' => ['id' => 12], 'where' => true],
-        ])->queryAll();
-
-        \Mix::$app->rdb->queryBuilder(["SELECT *"]);
-        \Mix::$app->rdb->queryBuilder(["FROM `post`"]);
-        \Mix::$app->rdb->queryBuilder(["WHERE id = :id", 'values' => ['id' => 15], 'where' => true]);
-        $rows = \Mix::$app->rdb->createCommand()->queryAll();
-        return \Mix::$app->rdb->getLastSql();
+        //$rows = \Mix::$app->rdb->createCommand([
+        //    ["SELECT *"],
+        //    ["FROM `post`"],
+        //    ["WHERE id = :id", 'values' => ['id' => 12], 'where' => true],
+        //])->queryAll();
+        //
+        //\Mix::$app->rdb->queryBuilder(["SELECT *"]);
+        //\Mix::$app->rdb->queryBuilder(["FROM `post`"]);
+        //\Mix::$app->rdb->queryBuilder(["WHERE id = :id", 'values' => ['id' => 15], 'where' => true]);
+        //$rows = \Mix::$app->rdb->createCommand()->queryAll();
+        //return \Mix::$app->rdb->getLastSql();
     }
 
     public function actionPhpinfo()

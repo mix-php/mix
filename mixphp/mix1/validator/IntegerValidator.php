@@ -7,13 +7,22 @@
 
 namespace mix\validator;
 
-class IntegerValidator
+class IntegerValidator extends BaseValidator
 {
 
-    // 无符号验证
-    public function unsigned($value)
+    // 允许的功能集合
+    protected $allowActions = ['type', 'unsigned', 'min', 'max', 'length', 'minLength', 'maxLength'];
+
+    // 类型检测
+    protected function type()
     {
-        if (strlen($value) == 0 || substr($value, 0, 1) !== '-') {
+        $value = $this->attributeValue;
+        if (!preg_match('/^[-]{0,1}[0-9]+$/i', $value)) {
+            if (is_null($this->attributeMessage)) {
+                $this->errors[] = "{$this->attributeLabel}只能为整数.";
+            } else {
+                $this->errors[] = "{$this->attributeLabel}{$this->attributeMessage}";
+            }
             return false;
         }
         return true;
