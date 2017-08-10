@@ -89,7 +89,7 @@ class Model extends Object
         $attributeLabels = $this->attributeLabels();
         foreach ($rules as $rule) {
             $attribute = array_shift($rule);
-            if (!in_array($attribute, $scenario['required'] + $scenario['optional'])) {
+            if (!in_array($attribute, array_merge($scenario['required'] , $scenario['optional']))) {
                 continue;
             }
             $validatorType = array_shift($rule);
@@ -104,7 +104,7 @@ class Model extends Object
                 array_unshift($rule, false);
             }
             $validator->actions = $rule;
-            $validator->attributes = $this->attributes;
+            $validator->attributes = &$this->attributes;
             $validator->attribute = $attribute;
             $validator->attributeMessage = isset($attributeMessages[$attribute]) ? $attributeMessages[$attribute] : null;
             $validator->attributeLabel = isset($attributeLabels[$attribute]) ? $attributeLabels[$attribute] : ucfirst($attribute);

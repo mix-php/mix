@@ -16,19 +16,19 @@ class UserModel extends Model
     public function rules()
     {
         return [
-            ['uid', 'double', 'unsigned' => true, 'min' => 20, 'max' => 50, 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
+            ['uid', 'string', 'minLength' => 3, 'maxLength' => 5, 'filter' => ['trim', 'strip_tags', 'htmlspecialchars']],
         ];
         //return [
-        //    ['a', 'integer', 'unsigned' => true, 'min' => 1, 'max' => 1000000, 'length' => 40, 'minLength' => 1, 'maxLength' => 15],
-        //    ['b', 'double', 'unsigned' => true, 'min' => 1, 'max' => 1000000, 'length' => 40, 'minLength' => 1, 'maxLength' => 15],
-        //    ['c', 'alpha', 'length' => 40, 'minLength' => 1, 'maxLength' => 15],
-        //    ['d', 'alphaNumeric', 'length' => 40, 'minLength' => 1, 'maxLength' => 15],
-        //    ['e', 'string', 'length' => 40, 'minLength' => 1, 'maxLength' => 15, 'filter' => ['trim', 'strip_tags', 'htmlspecialchars']],
+        //    ['a', 'integer', 'unsigned' => true, 'min' => 1, 'max' => 1000000, 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
+        //    ['b', 'double', 'unsigned' => true, 'min' => 1, 'max' => 1000000, 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
+        //    ['c', 'alpha', 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
+        //    ['d', 'alphaNumeric', 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
+        //    ['e', 'string', 'length' => 10, 'minLength' => 3, 'maxLength' => 5, 'filter' => ['trim', 'strip_tags', 'htmlspecialchars']],
         //    ['f', 'in', 'range' => ['A', 'B']],
         //    ['g', 'date', 'format' => 'yyyy-mm-dd'],
-        //    ['h', 'email', 'length' => 40, 'minLength' => 1, 'maxLength' => 15],
-        //    ['i', 'phone', 'length' => 40, 'minLength' => 1, 'maxLength' => 15],
-        //    ['j', 'url', 'length' => 40, 'minLength' => 1, 'maxLength' => 15],
+        //    ['h', 'email', 'length' => 40, 'minLength' => 3, 'maxLength' => 5],
+        //    ['i', 'phone', 'length' => 40, 'minLength' => 3, 'maxLength' => 5],
+        //    ['j', 'url', 'length' => 40, 'minLength' => 3, 'maxLength' => 5],
         //    ['k', 'compare', 'compareAttribute' => 'a'],
         //    ['l', 'match', 'pattern' => '/^[\w]{1,30}$/'],
         //    ['m', 'call', 'callback' => [$this, 'checkFile']],
@@ -39,7 +39,7 @@ class UserModel extends Model
     public function scenarios()
     {
         return [
-            'test' => ['required' => ['uid', 'a']],
+            'test' => ['required' => [], 'optional' => ['uid']],
             //'test' => ['required' => ['a', 'b', 'c', 'd'], 'optional' => ['e']],
         ];
     }

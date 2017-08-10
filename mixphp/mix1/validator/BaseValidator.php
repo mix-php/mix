@@ -37,7 +37,13 @@ class BaseValidator
     // 获取属性值
     private function getAttributeValue()
     {
-        return isset($this->attributes[$this->attribute]) ? $this->attributes[$this->attribute] : null;
+        if (!isset($this->attributes[$this->attribute])) {
+            return null;
+        }
+        if ($this->attributes[$this->attribute] == '') {
+            return null;
+        }
+        return $this->attributes[$this->attribute];
     }
 
     // 验证
@@ -46,7 +52,9 @@ class BaseValidator
         $this->errors = null;
         $this->attributeValue = $this->getAttributeValue();
         $this->required(array_shift($this->actions));
-        $this->actions = ['type' => true] + $this->actions;
+        if (in_array('type', $this->allowActions)) {
+            $this->actions = ['type' => null] + $this->actions;
+        }
         if (!is_null($this->attributeValue)) {
             foreach ($this->actions as $action => $param) {
                 if (!in_array($action, $this->allowActions)) {

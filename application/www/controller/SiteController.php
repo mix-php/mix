@@ -62,7 +62,7 @@ class SiteController extends Controller
         if (!$model->validate()) {
             return ['code' => 1, 'message' => '参数格式效验失败', 'data' => $model->errors];
         }
-        return ['code' => 0, 'message' => 'OK'];
+        return ['code' => 0, 'message' => 'OK', 'data' => $model->attributes];
 
         //$rows = \Mix::$app->rdb->createCommand([
         //    ["SELECT *"],
