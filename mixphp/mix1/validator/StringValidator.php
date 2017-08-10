@@ -19,13 +19,13 @@ class StringValidator extends BaseValidator
         foreach ($param as $value) {
             switch ($value) {
                 case 'trim':
-                    $this->attributes[$this->attribute] = trim($this->attributeValue);
+                    $this->attributes[$this->attribute] = trim($this->attributes[$this->attribute]);
                     break;
                 case 'strip_tags':
-                    $this->attributes[$this->attribute] = strip_tags($this->attributeValue);
+                    $this->attributes[$this->attribute] = strip_tags($this->attributes[$this->attribute]);
                     break;
                 case 'htmlspecialchars':
-                    $this->attributes[$this->attribute] = htmlspecialchars($this->attributeValue);
+                    $this->attributes[$this->attribute] = htmlspecialchars($this->attributes[$this->attribute]);
                     break;
             }
         }

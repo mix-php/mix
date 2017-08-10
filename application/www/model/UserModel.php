@@ -16,7 +16,7 @@ class UserModel extends Model
     public function rules()
     {
         return [
-            ['uid', 'string', 'minLength' => 3, 'maxLength' => 5, 'filter' => ['trim', 'strip_tags', 'htmlspecialchars']],
+            ['uid','email'],
         ];
         //return [
         //    ['a', 'integer', 'unsigned' => true, 'min' => 1, 'max' => 1000000, 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
@@ -24,11 +24,11 @@ class UserModel extends Model
         //    ['c', 'alpha', 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
         //    ['d', 'alphaNumeric', 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
         //    ['e', 'string', 'length' => 10, 'minLength' => 3, 'maxLength' => 5, 'filter' => ['trim', 'strip_tags', 'htmlspecialchars']],
-        //    ['f', 'in', 'range' => ['A', 'B']],
-        //    ['g', 'date', 'format' => 'yyyy-mm-dd'],
         //    ['h', 'email', 'length' => 40, 'minLength' => 3, 'maxLength' => 5],
         //    ['i', 'phone', 'length' => 40, 'minLength' => 3, 'maxLength' => 5],
         //    ['j', 'url', 'length' => 40, 'minLength' => 3, 'maxLength' => 5],
+        //    ['f', 'in', 'range' => ['A', 'B']],
+        //    ['g', 'date', 'format' => 'Y-m-d'],
         //    ['k', 'compare', 'compareAttribute' => 'a'],
         //    ['l', 'match', 'pattern' => '/^[\w]{1,30}$/'],
         //    ['m', 'call', 'callback' => [$this, 'checkFile']],
@@ -39,7 +39,7 @@ class UserModel extends Model
     public function scenarios()
     {
         return [
-            'test' => ['required' => [], 'optional' => ['uid']],
+            'test' => ['required' => ['uid']],
             //'test' => ['required' => ['a', 'b', 'c', 'd'], 'optional' => ['e']],
         ];
     }
