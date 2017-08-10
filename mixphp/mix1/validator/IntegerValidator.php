@@ -13,7 +13,7 @@ class IntegerValidator extends BaseValidator
     // 允许的功能集合
     protected $allowActions = ['type', 'unsigned', 'min', 'max', 'length', 'minLength', 'maxLength'];
 
-    // 类型检测
+    // 类型验证
     protected function type()
     {
         $value = $this->attributeValue;

@@ -1,25 +1,25 @@
 <?php
 
 /**
- * DoubleValidator类
+ * AlphaValidator类
  * @author 刘健 <code.liu@qq.com>
  */
 
 namespace mix\validator;
 
-class DoubleValidator extends BaseValidator
+class AlphaValidator extends BaseValidator
 {
 
     // 允许的功能集合
-    protected $allowActions = ['type', 'unsigned', 'min', 'max', 'length', 'minLength', 'maxLength'];
+    protected $allowActions = ['type', 'length', 'minLength', 'maxLength'];
 
     // 类型验证
     protected function type()
     {
         $value = $this->attributeValue;
-        if (!preg_match('/^[-]{0,1}[0-9]+[.][0-9]+$|^[-]{0,1}[0-9]$/i', $value)) {
+        if (!preg_match('/^[a-zA-Z]+$/i', $value)) {
             if (is_null($this->attributeMessage)) {
-                $error = "{$this->attributeLabel}只能为小数.";
+                $error = "{$this->attributeLabel}只能为字母.";
             } else {
                 $error = "{$this->attributeLabel}{$this->attributeMessage}";
             }
