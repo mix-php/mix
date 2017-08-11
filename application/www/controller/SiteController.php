@@ -57,7 +57,7 @@ class SiteController extends Controller
         //return $rows;
 
         $model = new \www\model\UserModel();
-        $model->attributes = \Mix::$app->request->get() + \Mix::$app->request->post();
+        $model->attributes = \Mix::$app->request->all();
         $model->setScenario('test');
         if (!$model->validate()) {
             return ['code' => 1, 'message' => '参数格式效验失败', 'data' => $model->errors];

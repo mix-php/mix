@@ -32,6 +32,7 @@ class UserModel extends Model
         //    ['k', 'compare', 'compareAttribute' => 'a'],
         //    ['l', 'match', 'pattern' => '/^[\w]{1,30}$/'],
         //    ['m', 'call', 'callback' => [$this, 'check']],
+        //
         //];
     }
 
