@@ -41,7 +41,7 @@ class BaseValidator
     protected $allowActions = [];
 
     // 获取消息
-    private function getAttributeMessage()
+    protected function getAttributeMessage()
     {
         if (!isset($this->attributeMessages[$this->attribute])) {
             return null;
@@ -50,13 +50,13 @@ class BaseValidator
     }
 
     // 获取标签
-    private function getAttributeLabel()
+    protected function getAttributeLabel()
     {
         return isset($this->attributeLabels[$this->attribute]) ? $this->attributeLabels[$this->attribute] : ucfirst($this->attribute);
     }
 
     // 获取属性值
-    private function getAttributeValue()
+    protected function getAttributeValue()
     {
         if (!isset($this->attributes[$this->attribute])) {
             return null;

@@ -16,7 +16,8 @@ class UserModel extends Model
     public function rules()
     {
         return [
-            ['uid', 'call', 'callback' => [$this, 'check']],
+            ['uid', 'image', 'mimes' => ['audio/mp3', 'video/mp4'], 'maxSize' => 5000],
+            //['uuid', 'image', 'mimes' => ['image/gif', 'image/jpeg', 'image/png'], 'maxSize' => 200],
         ];
         //return [
         //    ['a', 'integer', 'unsigned' => true, 'min' => 1, 'max' => 1000000, 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
@@ -24,15 +25,15 @@ class UserModel extends Model
         //    ['c', 'alpha', 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
         //    ['d', 'alphaNumeric', 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
         //    ['e', 'string', 'length' => 10, 'minLength' => 3, 'maxLength' => 5, 'filter' => ['trim', 'strip_tags', 'htmlspecialchars']],
-        //    ['h', 'email', 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
-        //    ['i', 'phone'],
-        //    ['j', 'url', 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
-        //    ['f', 'in', 'range' => ['A', 'B']],
-        //    ['g', 'date', 'format' => 'Y-m-d'],
+        //    ['f', 'email', 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
+        //    ['g', 'phone'],
+        //    ['h', 'url', 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
+        //    ['i', 'in', 'range' => ['A', 'B']],
+        //    ['j', 'date', 'format' => 'Y-m-d'],
         //    ['k', 'compare', 'compareAttribute' => 'a'],
         //    ['l', 'match', 'pattern' => '/^[\w]{1,30}$/'],
         //    ['m', 'call', 'callback' => [$this, 'check']],
-        //
+        //    ['n', 'file', 'mimes' => ['image/gif', 'image/jpeg', 'image/png'], 'maxSize' => 677060],
         //];
     }
 

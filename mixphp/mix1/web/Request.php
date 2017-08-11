@@ -59,31 +59,25 @@ class Request extends Object
     // 提取GET值
     public function get($name = null)
     {
-        return is_null($name) ? $this->get : $this->get[$name];
+        return is_null($name) ? $this->get : (isset($this->get[$name]) ? $this->get[$name] : null);
     }
 
     // 提取POST值
     public function post($name = null)
     {
-        return is_null($name) ? $this->post : $this->post[$name];
+        return is_null($name) ? $this->post : (isset($this->post[$name]) ? $this->post[$name] : null);
     }
 
-    // 提取POST值
+    // 提取FILES值
     public function files($name = null)
     {
-        return is_null($name) ? $this->files : $this->files[$name];
+        return is_null($name) ? $this->files : (isset($this->files[$name]) ? $this->files[$name] : null);
     }
 
     // 提取Route值
     public function route($name = null)
     {
-        return is_null($name) ? $this->route : $this->route[$name];
-    }
-
-    // 提取全部
-    public function all()
-    {
-        return $this->route + $this->get + $this->post + $this->files;
+        return is_null($name) ? $this->route : (isset($this->route[$name]) ? $this->route[$name] : null);
     }
 
 }

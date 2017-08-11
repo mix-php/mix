@@ -34,6 +34,8 @@ class Model extends Object
         'compare'      => '\mix\validator\CompareValidator',
         'match'        => '\mix\validator\MatchValidator',
         'call'         => '\mix\validator\CallValidator',
+        'file'         => '\mix\validator\FileValidator',
+        'image'         => '\mix\validator\ImageValidator',
     ];
 
     // 规则

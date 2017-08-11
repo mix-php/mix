@@ -57,12 +57,12 @@ class SiteController extends Controller
         //return $rows;
 
         $model = new \www\model\UserModel();
-        $model->attributes = \Mix::$app->request->all();
+        $model->attributes = \Mix::$app->request->get() + \Mix::$app->request->post();
         $model->setScenario('test');
         if (!$model->validate()) {
             return ['code' => 1, 'message' => '参数格式效验失败', 'data' => $model->errors];
         }
-        return ['code' => 0, 'message' => 'OK', 'data' => $model->attributes];
+        return ['code' => 0, 'message' => 'OK', 'data' => $_FILES];
 
         //$rows = \Mix::$app->rdb->createCommand([
         //    ["SELECT *"],
