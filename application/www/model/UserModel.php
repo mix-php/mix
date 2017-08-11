@@ -16,7 +16,7 @@ class UserModel extends Model
     public function rules()
     {
         return [
-            ['uid','email'],
+            ['uid', 'call', 'callback' => [$this, 'check']],
         ];
         //return [
         //    ['a', 'integer', 'unsigned' => true, 'min' => 1, 'max' => 1000000, 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
@@ -24,27 +24,33 @@ class UserModel extends Model
         //    ['c', 'alpha', 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
         //    ['d', 'alphaNumeric', 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
         //    ['e', 'string', 'length' => 10, 'minLength' => 3, 'maxLength' => 5, 'filter' => ['trim', 'strip_tags', 'htmlspecialchars']],
-        //    ['h', 'email', 'length' => 40, 'minLength' => 3, 'maxLength' => 5],
-        //    ['i', 'phone', 'length' => 40, 'minLength' => 3, 'maxLength' => 5],
-        //    ['j', 'url', 'length' => 40, 'minLength' => 3, 'maxLength' => 5],
+        //    ['h', 'email', 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
+        //    ['i', 'phone'],
+        //    ['j', 'url', 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
         //    ['f', 'in', 'range' => ['A', 'B']],
         //    ['g', 'date', 'format' => 'Y-m-d'],
         //    ['k', 'compare', 'compareAttribute' => 'a'],
         //    ['l', 'match', 'pattern' => '/^[\w]{1,30}$/'],
-        //    ['m', 'call', 'callback' => [$this, 'checkFile']],
+        //    ['m', 'call', 'callback' => [$this, 'check']],
         //];
+    }
+
+    // 自定义验证
+    public function check()
+    {
+        return false;
     }
 
     // 场景
     public function scenarios()
     {
         return [
-            'test' => ['required' => ['uid']],
+            'test' => ['required' => ['uid', 'uuid']],
             //'test' => ['required' => ['a', 'b', 'c', 'd'], 'optional' => ['e']],
         ];
     }
 
-    // 属性标签
+    // 属性消息
     public function attributeMessages()
     {
         return [
@@ -61,8 +67,8 @@ class UserModel extends Model
     public function attributeLabels()
     {
         return [
-            //'uid' => '用户ID',
-            //'a' => '参数A',
+            //'uid' => '用户UID',
+            //'uuid' => '用户UUID',
             //'b' => '参数B',
             //'c' => '参数C',
             //'d' => '参数D',

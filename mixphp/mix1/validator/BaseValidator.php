@@ -16,8 +16,14 @@ class BaseValidator
     // 当前属性名称
     public $attribute;
 
+    // 全部消息
+    public $attributeMessages;
+
     // 属性消息
     public $attributeMessage;
+
+    // 全部标签
+    public $attributeLabels;
 
     // 属性标签
     public $attributeLabel;
@@ -33,6 +39,21 @@ class BaseValidator
 
     // 允许的功能集合
     protected $allowActions = [];
+
+    // 获取消息
+    private function getAttributeMessage()
+    {
+        if (!isset($this->attributeMessages[$this->attribute])) {
+            return null;
+        }
+        return $this->attributeMessages[$this->attribute];
+    }
+
+    // 获取标签
+    private function getAttributeLabel()
+    {
+        return isset($this->attributeLabels[$this->attribute]) ? $this->attributeLabels[$this->attribute] : ucfirst($this->attribute);
+    }
 
     // 获取属性值
     private function getAttributeValue()
@@ -51,6 +72,8 @@ class BaseValidator
     {
         $this->errors = null;
         $this->attributeValue = $this->getAttributeValue();
+        $this->attributeMessage = $this->getAttributeMessage();
+        $this->attributeLabel = $this->getAttributeLabel();
         $this->required(array_shift($this->actions));
         if (in_array('type', $this->allowActions)) {
             $this->actions = ['type' => null] + $this->actions;
