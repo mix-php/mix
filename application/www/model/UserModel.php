@@ -38,7 +38,7 @@ class UserModel extends Model
     // 自定义验证
     public function check()
     {
-        return false;
+        return true;
     }
 
     // 场景

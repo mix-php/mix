@@ -84,12 +84,14 @@ class Model extends Object
         }
         $this->errors = null;
         $scenario = $this->_scenario;
+        $scenarioAttributes = array_merge($scenario['required'], $scenario['optional']);
         $rules = $this->rules();
         $attributeMessages = $this->attributeMessages();
         $attributeLabels = $this->attributeLabels();
+        // 验证器验证
         foreach ($rules as $rule) {
             $attribute = array_shift($rule);
-            if (!in_array($attribute, array_merge($scenario['required'], $scenario['optional']))) {
+            if (!in_array($attribute, $scenarioAttributes)) {
                 continue;
             }
             $validatorType = array_shift($rule);
@@ -114,6 +116,14 @@ class Model extends Object
                 } else {
                     $this->errors[$attribute] = array_merge($this->errors[$attribute], $validator->errors);
                 }
+            }
+        }
+        // 验证后赋值
+        foreach ($scenarioAttributes as $scenarioAttribute) {
+            if (!isset($this->errors[$scenarioAttribute]) && isset($this->attributes[$scenarioAttribute])) {
+                $this->$scenarioAttribute = $this->attributes[$scenarioAttribute];
+            } else {
+                $this->$scenarioAttribute = null;
             }
         }
         return is_null($this->errors);
