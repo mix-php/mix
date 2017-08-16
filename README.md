@@ -4,10 +4,8 @@
 
 ## 完全开发手册
 
-[![MixPHP V1 完全开发手册](https://cover.kancloud.cn/onanying/mixphp1!middle)](https://www.kancloud.cn/onanying/mixphp1/379324)
-
-[在线查看手册](https://www.kancloud.cn/onanying/mixphp1/379324)
-[下载手册](https://www.kancloud.cn/onanying/mixphp1)
+[![MixPHP V1 完全开发手册](https://cover.kancloud.cn/onanying/mixphp1!small)](https://www.kancloud.cn/onanying/mixphp1/379324)     
+[在线查看手册](https://www.kancloud.cn/onanying/mixphp1/379324) || [下载手册](https://www.kancloud.cn/onanying/mixphp1)
 
 ## 极其简单
 
