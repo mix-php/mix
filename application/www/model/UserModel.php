@@ -16,8 +16,7 @@ class UserModel extends Model
     public function rules()
     {
         return [
-            ['uid', 'image', 'mimes' => ['image/gif', 'image/jpeg', 'image/png'], 'maxSize' => 1024 * 1],
-            //['uuid', 'image', 'mimes' => ['audio/mp3', 'video/mp4'], 'maxSize' => 200],
+            ['uid', 'file', 'mimes' => ['audio/mp3', 'video/mp4'], 'maxSize' => 1024 * 1],
         ];
         //return [
         //    ['a', 'integer', 'unsigned' => true, 'min' => 1, 'max' => 1000000, 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
@@ -33,7 +32,8 @@ class UserModel extends Model
         //    ['k', 'compare', 'compareAttribute' => 'a'],
         //    ['l', 'match', 'pattern' => '/^[\w]{1,30}$/'],
         //    ['m', 'call', 'callback' => [$this, 'check']],
-        //    ['n', 'file', 'mimes' => ['image/gif', 'image/jpeg', 'image/png'], 'maxSize' => 677060],
+        //    ['n', 'file', 'mimes' => ['audio/mp3', 'video/mp4'], 'maxSize' => 1024 * 1],
+        //    ['r', 'image', 'mimes' => ['image/gif', 'image/jpeg', 'image/png'], 'maxSize' => 1024 * 1],
         //];
     }
 

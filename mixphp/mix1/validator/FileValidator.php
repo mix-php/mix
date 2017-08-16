@@ -103,10 +103,9 @@ class FileValidator extends BaseValidator
         return true;
     }
 
-    // 验证通过
-    public function pass()
+    // 建立文件对象
+    public function createInstance()
     {
-        // 建立文件对象
         $this->attributes[$this->attribute] = \mix\web\UploadFile::getInstanceByName($this->attribute);
     }
 

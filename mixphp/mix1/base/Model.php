@@ -35,7 +35,7 @@ class Model extends Object
         'match'        => '\mix\validator\MatchValidator',
         'call'         => '\mix\validator\CallValidator',
         'file'         => '\mix\validator\FileValidator',
-        'image'         => '\mix\validator\ImageValidator',
+        'image'        => '\mix\validator\ImageValidator',
     ];
 
     // 规则
@@ -119,9 +119,8 @@ class Model extends Object
                 } else {
                     $this->errors[$attribute] = array_merge($this->errors[$attribute], $validator->errors);
                 }
-            }else{
-                // 执行验证通过方法
-                method_exists($validator, 'pass') and $validator->pass();
+            } else if ($validator instanceof \mix\validator\FileValidator) {
+                $validator->createInstance();
             }
         }
         // 验证通过后属性赋值
