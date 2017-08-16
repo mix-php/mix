@@ -21,7 +21,7 @@ class InValidator extends BaseValidator
             if (is_null($this->attributeMessage)) {
                 $error = "{$this->attributeLabel}不在%s范围内.";
             } else {
-                $error = "{$this->attributeLabel}{$this->attributeMessage}";
+                $error = $this->attributeMessage;
             }
             $this->errors[] = sprintf($error, implode('、', $param));
             return false;

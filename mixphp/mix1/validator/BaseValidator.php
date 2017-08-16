@@ -97,7 +97,7 @@ class BaseValidator
             if (is_null($this->attributeMessage)) {
                 $error = "{$this->attributeLabel}不能为空.";
             } else {
-                $error = "{$this->attributeLabel}{$this->attributeMessage}";
+                $error = $this->attributeMessage;
             }
             $this->errors[] = $error;
             return false;
@@ -113,7 +113,7 @@ class BaseValidator
             if (is_null($this->attributeMessage)) {
                 $error = "{$this->attributeLabel}不能为负数.";
             } else {
-                $error = "{$this->attributeLabel}{$this->attributeMessage}";
+                $error = $this->attributeMessage;
             }
             $this->errors[] = $error;
             return false;
@@ -129,7 +129,7 @@ class BaseValidator
             if (is_null($this->attributeMessage)) {
                 $error = "{$this->attributeLabel}不能小于%s.";
             } else {
-                $error = "{$this->attributeLabel}{$this->attributeMessage}";
+                $error = $this->attributeMessage;
             }
             $this->errors[] = sprintf($error, $param);
             return false;
@@ -145,7 +145,7 @@ class BaseValidator
             if (is_null($this->attributeMessage)) {
                 $error = "{$this->attributeLabel}不能大于%s.";
             } else {
-                $error = "{$this->attributeLabel}{$this->attributeMessage}";
+                $error = $this->attributeMessage;
             }
             $this->errors[] = sprintf($error, $param);
             return false;
@@ -161,7 +161,7 @@ class BaseValidator
             if (is_null($this->attributeMessage)) {
                 $error = "{$this->attributeLabel}长度只能为%s位.";
             } else {
-                $error = "{$this->attributeLabel}{$this->attributeMessage}";
+                $error = $this->attributeMessage;
             }
             $this->errors[] = sprintf($error, $param);
             return false;
@@ -177,7 +177,7 @@ class BaseValidator
             if (is_null($this->attributeMessage)) {
                 $error = "{$this->attributeLabel}长度不能小于%s位.";
             } else {
-                $error = "{$this->attributeLabel}{$this->attributeMessage}";
+                $error = $this->attributeMessage;
             }
             $this->errors[] = sprintf($error, $param);
             return false;
@@ -193,7 +193,7 @@ class BaseValidator
             if (is_null($this->attributeMessage)) {
                 $error = "{$this->attributeLabel}长度不能大于%s位.";
             } else {
-                $error = "{$this->attributeLabel}{$this->attributeMessage}";
+                $error = $this->attributeMessage;
             }
             $this->errors[] = sprintf($error, $param);
             return false;
