@@ -22,7 +22,7 @@ class DateValidator extends BaseValidator
             if (is_null($this->attributeMessage)) {
                 $error = "{$this->attributeLabel}不符合日期格式.";
             } else {
-                $error = "{$this->attributeLabel}{$this->attributeMessage}";
+                $error = $this->attributeMessage;
             }
             $this->errors[] = sprintf($error, $param);
             return false;

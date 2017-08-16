@@ -14,7 +14,13 @@ class FileValidator extends BaseValidator
     protected $allowActions = ['type', 'mimes', 'maxSize'];
 
     // 文件类型描述
-    protected $fileTypeDesc = '文件';
+    protected $typeLabel = '文件';
+
+    // 获取标签
+    protected function getAttributeLabel()
+    {
+        return isset($this->attributeLabels[$this->attribute]) ? $this->attributeLabels[$this->attribute] : $this->typeLabel;
+    }
 
     // 获取属性值
     protected function getAttributeValue()
@@ -26,8 +32,6 @@ class FileValidator extends BaseValidator
     protected function type()
     {
         $this->uploadError();
-        // 创建文件对象
-        
     }
 
     // 上传错误效验
@@ -73,11 +77,11 @@ class FileValidator extends BaseValidator
         $value = $this->attributeValue;
         if (!in_array($value['type'], $param)) {
             if (is_null($this->attributeMessage)) {
-                $error = "{$this->fileTypeDesc}类型不在%s范围内.";
+                $error = "{$this->attributeLabel}类型不在%s范围内.";
             } else {
-                $error = "{$this->attributeLabel}{$this->attributeMessage}";
+                $error = $this->attributeMessage;
             }
-            $this->errors[] = sprintf($error, implode('、', $param));
+            $this->errors[] = sprintf($error, implode(',', $param));
             return false;
         }
         return true;
@@ -89,14 +93,20 @@ class FileValidator extends BaseValidator
         $value = $this->attributeValue;
         if ($value['size'] > $param * 1024) {
             if (is_null($this->attributeMessage)) {
-                $error = "{$this->fileTypeDesc}不能大于%sKB.";
+                $error = "{$this->attributeLabel}不能大于%sKB.";
             } else {
-                $error = "{$this->attributeLabel}{$this->attributeMessage}";
+                $error = $this->attributeMessage;
             }
             $this->errors[] = sprintf($error, number_format($param));
             return false;
         }
         return true;
+    }
+
+    // 建立文件对象
+    public function createInstance()
+    {
+        $this->attributes[$this->attribute] = \mix\web\UploadFile::getInstanceByName($this->attribute);
     }
 
 }

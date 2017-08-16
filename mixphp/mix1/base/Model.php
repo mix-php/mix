@@ -35,7 +35,7 @@ class Model extends Object
         'match'        => '\mix\validator\MatchValidator',
         'call'         => '\mix\validator\CallValidator',
         'file'         => '\mix\validator\FileValidator',
-        'image'         => '\mix\validator\ImageValidator',
+        'image'        => '\mix\validator\ImageValidator',
     ];
 
     // 规则
@@ -113,14 +113,17 @@ class Model extends Object
             $validator->attributeLabels = $attributeLabels;
             $validator->attribute = $attribute;
             if (!$validator->validate()) {
+                // 累计汇总错误信息
                 if (!isset($this->errors[$attribute])) {
                     $this->errors[$attribute] = $validator->errors;
                 } else {
                     $this->errors[$attribute] = array_merge($this->errors[$attribute], $validator->errors);
                 }
+            } else if ($validator instanceof \mix\validator\FileValidator) {
+                $validator->createInstance();
             }
         }
-        // 验证后赋值
+        // 验证通过后属性赋值
         foreach ($scenarioAttributes as $scenarioAttribute) {
             if (!isset($this->errors[$scenarioAttribute]) && isset($this->attributes[$scenarioAttribute])) {
                 $this->$scenarioAttribute = $this->attributes[$scenarioAttribute];

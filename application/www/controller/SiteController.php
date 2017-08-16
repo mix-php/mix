@@ -62,7 +62,8 @@ class SiteController extends Controller
         if (!$model->validate()) {
             return ['code' => 1, 'message' => '参数格式效验失败', 'data' => $model->errors];
         }
-        return ['code' => 0, 'message' => 'OK', 'data' => $_FILES];
+        $model->uid->saveAs(\Mix::$app->getPublicPath() . 'uploads/2017/08/' . $model->uid->getRandomName());
+        return ['code' => 0, 'message' => 'OK', 'data' => $model->attributes];
 
         //$rows = \Mix::$app->rdb->createCommand([
         //    ["SELECT *"],

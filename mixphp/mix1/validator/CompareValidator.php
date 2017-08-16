@@ -21,7 +21,7 @@ class CompareValidator extends BaseValidator
             if (is_null($this->attributeMessage)) {
                 $error = "{$this->attributeLabel}不等于%s.";
             } else {
-                $error = "{$this->attributeLabel}{$this->attributeMessage}";
+                $error = $this->attributeMessage;
             }
             $paramLabel = isset($this->attributeLabels[$param]) ? $this->attributeLabels[$param] : ucfirst($param);
             $this->errors[] = sprintf($error, $paramLabel);

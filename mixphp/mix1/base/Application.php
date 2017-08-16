@@ -124,7 +124,16 @@ class Application
     }
 
     /**
-     * 获取配置路径
+     * 获取公开目录路径
+     * @return string
+     */
+    public function getPublicPath()
+    {
+        return $this->basePath . 'public' . DS;
+    }
+
+    /**
+     * 获取配置目录路径
      * @return string
      */
     public function getConfigPath()
@@ -133,7 +142,7 @@ class Application
     }
 
     /**
-     * 获取运行路径
+     * 获取运行目录路径
      * @return string
      */
     public function getRuntimePath()
@@ -142,7 +151,7 @@ class Application
     }
 
     /**
-     * 获取视图路径
+     * 获取视图目录路径
      * @return string
      */
     public function getViewPath()

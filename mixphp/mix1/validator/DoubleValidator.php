@@ -21,7 +21,7 @@ class DoubleValidator extends BaseValidator
             if (is_null($this->attributeMessage)) {
                 $error = "{$this->attributeLabel}只能为小数.";
             } else {
-                $error = "{$this->attributeLabel}{$this->attributeMessage}";
+                $error = $this->attributeMessage;
             }
             $this->errors[] = $error;
             return false;
