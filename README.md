@@ -1,8 +1,13 @@
-> 关注我的简书，获取最新开发进度 [>撸代码的乡下人<](http://www.jianshu.com/u/55160f370bf1)
-
 ## 欢迎使用 MixPHP V1
 
-`MixPHP` 是一个极简高性能PHP开发框架，参考国内流行的 `Yii2` `ThinkPHP5` `CodeIgniter` 三大框架的优点，结合 `Swoole` 扩展的特性，简化整合并加以创新，以快速、规范、本土化、并能适应企业不同阶段开发需求为目的正向研发的一款MVC框架。
+`MixPHP` 是一个极简高性能PHP开发框架，参考国内流行的 `Yii2` `ThinkPHP5` `CodeIgniter` 三大框架的优点，结合 `Swoole` 扩展的特性，简化整合并加以创新，以简单、快速、规范、本土化为理念而正向研发的一款MVC框架。
+
+## 完全开发手册
+
+[![MixPHP V1 完全开发手册](https://cover.kancloud.cn/onanying/mixphp1!middle)](https://www.kancloud.cn/onanying/mixphp1/379324)
+
+[在线查看手册](https://www.kancloud.cn/onanying/mixphp1/379324)
+[下载手册](https://www.kancloud.cn/onanying/mixphp1)
 
 ## 极其简单
 
@@ -19,11 +24,16 @@
 ## 超高性能
 
 - 短小精悍，比CodeIgniter还要小巧，更接近原生的性能；
-- 基于Swoole的HTTP应用服务器，让你的API性能起飞，达到Yaf/Phalcon的性能；
+- 基于Swoole的HTTP应用服务，让你的API性能起飞，达到Yaf/Phalcon的性能；
 - 通过进程管理的真正MySQL长连接，让你的数据库不再那么忙碌；
 
-## 独门技能
+## 与众不同
 
-- 基于Swoole的HTTP应用服务器：替代Apache/phpfpm，类似Node.js，适用于开发高性能API；
+- HTTP应用服务：基于Swoole，可替代Apache/phpfpm，适用于高性能API开发；
+- 错误处理：404，500错误可以配置为html,json,xml三种响应格式；
+- 自动加载：完全使用Composer，统一且高效；
+- 路由：底层全正则实现，性能高，配置简单；
+- 模型：模型集成了使用简单但功能强大的验证器；
+- 查询构造器：独创的SQL构造方法，可灵活优雅的构造复杂语句；
 - ~~控制台命令：封装了多线程、消息队列，适用于后台任务处理、消息队列 "消费者" 开发；~~
-- ~~定时任务服务器：动态多进程定时任务服务器，负责定时执行框架内的控制台命令；~~
+- ~~定时任务服务：动态多进程定时任务服务器，负责定时执行框架内的控制台命令；~~
