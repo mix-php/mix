@@ -79,7 +79,7 @@ class SiteController extends Controller
 
         $filename = \Mix::$app->getPublicPath() . 'aaaaaa.jpg';
         $thumbname = str_replace('.', '.thumb.', $filename);
-        \mix\web\Image::open($filename)->crop(100, 100)->saveAs($thumbname);
+        \mix\web\Image::open($filename)->crop(100, 100)->save();
     }
 
     public function actionPhpinfo()
