@@ -77,7 +77,9 @@ class SiteController extends Controller
         //$rows = \Mix::$app->rdb->createCommand()->queryAll();
         //return \Mix::$app->rdb->getLastSql();
 
-        \mix\web\Image::open(\Mix::$app->getPublicPath().'aaaaaa.jpg')->crop(100, 100)->saveAs(\Mix::$app->getPublicPath().'aaaaaa1.jpg');
+        $filename = \Mix::$app->getPublicPath() . 'aaaaaa.jpg';
+        $thumbname = str_replace('.', '.thumb.', $filename);
+        \mix\web\Image::open($filename)->crop(100, 100)->saveAs($thumbname);
     }
 
     public function actionPhpinfo()
