@@ -43,13 +43,13 @@ class UploadFile
     }
 
     // 文件另存为
-    public function saveAs($file)
+    public function saveAs($filename)
     {
-        $dir = dirname($file);
+        $dir = dirname($filename);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
         }
-        file_put_contents($file, file_get_contents($this->tmpName));
+        file_put_contents($filename, file_get_contents($this->tmpName));
         return true;
     }
 

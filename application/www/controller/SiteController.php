@@ -56,14 +56,14 @@ class SiteController extends Controller
         //var_dump(\Mix::$app->rdb->getLastSql());
         //return $rows;
 
-        $model = new \www\model\UserModel();
-        $model->attributes = \Mix::$app->request->get() + \Mix::$app->request->post();
-        $model->setScenario('test');
-        if (!$model->validate()) {
-            return ['code' => 1, 'message' => '参数格式效验失败', 'data' => $model->errors];
-        }
-        $model->uid->saveAs(\Mix::$app->getPublicPath() . 'uploads/2017/08/' . $model->uid->getRandomName());
-        return ['code' => 0, 'message' => 'OK', 'data' => $model->attributes];
+        //$model = new \www\model\UserModel();
+        //$model->attributes = \Mix::$app->request->get() + \Mix::$app->request->post();
+        //$model->setScenario('test');
+        //if (!$model->validate()) {
+        //    return ['code' => 1, 'message' => '参数格式效验失败', 'data' => $model->errors];
+        //}
+        //$model->uid->saveAs(\Mix::$app->getPublicPath() . 'uploads/2017/08/' . $model->uid->getRandomName());
+        //return ['code' => 0, 'message' => 'OK', 'data' => $model->attributes];
 
         //$rows = \Mix::$app->rdb->createCommand([
         //    ["SELECT *"],
@@ -76,6 +76,8 @@ class SiteController extends Controller
         //\Mix::$app->rdb->queryBuilder(["WHERE id = :id", 'values' => ['id' => 15], 'where' => true]);
         //$rows = \Mix::$app->rdb->createCommand()->queryAll();
         //return \Mix::$app->rdb->getLastSql();
+
+        \mix\web\Image::open(\Mix::$app->getPublicPath().'aaaaaa.jpg')->crop(100, 100)->saveAs(\Mix::$app->getPublicPath().'aaaaaa1.jpg');
     }
 
     public function actionPhpinfo()
