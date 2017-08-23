@@ -16,16 +16,16 @@ class Request extends Object
     private $requester;
 
     // GET参数
-    private $get;
+    private $get = [];
 
     // POST参数
-    private $post;
+    private $post = [];
 
     // FILES参数
-    private $files;
+    private $files = [];
 
-    // 路由参数
-    private $route;
+    // ROUTE参数
+    private $route = [];
 
     // 设置请求对象
     public function setRequester($requester)
@@ -37,7 +37,7 @@ class Request extends Object
         return $this;
     }
 
-    // 设置Route值
+    // 设置ROUTE值
     public function setRoute($route)
     {
         $this->route = $route;
@@ -79,7 +79,7 @@ class Request extends Object
         return is_null($name) ? $this->files : (isset($this->files[$name]) ? $this->files[$name] : null);
     }
 
-    // 提取Route值
+    // 提取ROUTE值
     public function route($name = null)
     {
         return is_null($name) ? $this->route : (isset($this->route[$name]) ? $this->route[$name] : null);

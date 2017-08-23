@@ -12,17 +12,19 @@ use mix\base\Object;
 class Request extends Object
 {
 
-    // 请求数据
-    private $param;
-    private $route;
+    // CLI参数
+    private $param = [];
+
+    // ROUTE参数
+    private $route = [];
 
     // 初始化
     public function init()
     {
         // 解析参数
         $param = [];
-        foreach($GLOBALS['argv'] as $key =>$value){
-            if($key > 1){
+        foreach ($GLOBALS['argv'] as $key => $value) {
+            if ($key > 1) {
                 $param[] = $value;
             }
         }
@@ -37,19 +39,19 @@ class Request extends Object
         $this->param = $param;
     }
 
-    // 设置Route值
+    // 设置ROUTE值
     public function setRoute($route)
     {
         $this->route = $route;
     }
 
-    // 获取GET值
+    // 获取CLI参数
     public function param($name = null)
     {
         return is_null($name) ? $this->param : $this->param[$name];
     }
 
-    // 获取Route值
+    // 获取ROUTE值
     public function route($name = null)
     {
         return is_null($name) ? $this->route : $this->route[$name];
