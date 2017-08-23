@@ -10,6 +10,12 @@ namespace mix\web;
 class Image
 {
 
+    // 居中剪裁
+    const CROP_CENTER = 0;
+
+    // 顶部剪裁
+    const CROP_TOP = 1;
+
     // 文件地址
     public $filename;
 
@@ -35,6 +41,12 @@ class Image
         $object->height = $imageInfo[1];
         $object->mime = $imageInfo['mime'];
         return $object;
+    }
+
+    // 获取文件大小
+    public function getSize()
+    {
+        return filesize($this->filename);
     }
 
     // 选择执行
@@ -106,7 +118,7 @@ class Image
     }
 
     // 居中剪裁
-    public function crop($width, $height)
+    public function crop($width, $height, $mode = self::CROP_CENTER)
     {
         // 创建图像
         $imageCreate = $this->switchExecute('CREATE');
@@ -119,15 +131,22 @@ class Image
             $cropWidth = $this->width;
             $cropHeight = $this->width * $cropRatio;
             $cropX = 0;
-            $cropY = ($this->height - $cropHeight) / 2;
+            if ($mode == self::CROP_CENTER) {
+                $cropY = ($this->height - $cropHeight) / 2;
+            }
+            if ($mode == self::CROP_TOP) {
+                $cropY = 0;
+            }
         } elseif ($imageRatio < $cropRatio) {
             // 源图过宽
             $cropWidth = $this->height / $cropRatio;
             $cropHeight = $this->height;
-            $cropX = ($this->width - $cropWidth) / 2;
+            if ($mode == self::CROP_CENTER || $mode == self::CROP_TOP) {
+                $cropX = ($this->width - $cropWidth) / 2;
+            }
             $cropY = 0;
         } else {
-            // 源图适中
+            // 源图相等
             $cropWidth = $this->width;
             $cropHeight = $this->height;
             $cropX = 0;
