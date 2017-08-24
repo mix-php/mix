@@ -48,13 +48,13 @@ class Request extends Object
     // 获取CLI参数
     public function param($name = null)
     {
-        return is_null($name) ? $this->param : $this->param[$name];
+        return is_null($name) ? $this->param : (isset($this->param[$name]) ? $this->param[$name] : null);
     }
 
     // 获取ROUTE值
     public function route($name = null)
     {
-        return is_null($name) ? $this->route : $this->route[$name];
+        return is_null($name) ? $this->route : (isset($this->route[$name]) ? $this->route[$name] : null);
     }
 
 }
