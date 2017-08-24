@@ -5,7 +5,7 @@
  * @author 刘健 <code.liu@qq.com>
  */
 
-namespace www\controller;
+namespace web\controller;
 
 use mix\web\Controller;
 
@@ -56,7 +56,7 @@ class SiteController extends Controller
         //var_dump(\Mix::$app->rdb->getLastSql());
         //return $rows;
 
-        //$model = new \www\model\UserModel();
+        //$model = new \web\model\UserModel();
         //$model->attributes = \Mix::$app->request->get() + \Mix::$app->request->post();
         //$model->setScenario('test');
         //if (!$model->validate()) {
