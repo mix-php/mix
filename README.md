@@ -1,6 +1,6 @@
 ## 欢迎使用 MixPHP V1
 
-`MixPHP` 是一个极简高性能PHP开发框架，参考国内流行的 `Yii2` `ThinkPHP5` `CodeIgniter` 三大框架的优点，结合 `Swoole` 扩展的特性，简化整合并加以创新，以简单、快速、规范、本土化为理念而正向研发的一款MVC框架。
+MixPHP 是一个极简高性能PHP开发框架，参考国内流行的 `Yii2` `ThinkPHP5` `CodeIgniter3` 三大框架的优点，结合 `Swoole` 扩展的特性，简化整合并加以创新，以简单、快速、规范、本土化为理念而正向研发的一款MVC框架。
 
 ## 完全开发手册
 
