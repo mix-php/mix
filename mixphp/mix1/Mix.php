@@ -8,7 +8,7 @@
 class Mix
 {
 
-	// App 实例
+    // App 实例
     public static $app;
 
 }
