@@ -1,10 +1,10 @@
 <html>
 <head>
-	<title><?= $this->title ?></title>
+    <title><?= $this->title ?></title>
 </head>
 <body>
 
-	<?= $content ?>
+<?= $content ?>
 
 </body>
 </html>
