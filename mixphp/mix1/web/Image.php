@@ -16,7 +16,7 @@ class Image
     // 顶部剪裁
     const CROP_TOP = 1;
 
-    // 文件地址
+    // 图片的路径
     public $filename;
 
     // 图片宽度
@@ -31,7 +31,7 @@ class Image
     // 处理过后的图片
     protected $image;
 
-    // 打开文件
+    // 打开图片
     public static function open($filename)
     {
         $imageInfo = getimagesize($filename);
@@ -43,7 +43,7 @@ class Image
         return $object;
     }
 
-    // 获取文件大小
+    // 获取图片文件大小
     public function getSize()
     {
         return filesize($this->filename);
@@ -117,7 +117,7 @@ class Image
         return $this;
     }
 
-    // 居中剪裁
+    // 图片剪裁
     public function crop($width, $height, $mode = self::CROP_CENTER)
     {
         // 创建图像
