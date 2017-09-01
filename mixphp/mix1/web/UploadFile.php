@@ -68,15 +68,12 @@ class UploadFile
     // 获取随机文件名
     public function getRandomName()
     {
-        if (!isset($this->randomName)) {
-            $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
-            $name = '';
-            for ($i = 0; $i < 32; $i++) {
-                $name .= $chars{mt_rand(0, 61)};
-            }
-            $this->randomName = md5($name) . '.' . $this->getExtension();
+        $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
+        $name = '';
+        for ($i = 0; $i < 32; $i++) {
+            $name .= $chars{mt_rand(0, 61)};
         }
-        return $this->randomName;
+        return md5($name) . '.' . $this->getExtension();
     }
 
 }
