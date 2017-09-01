@@ -58,10 +58,13 @@ class Application extends \mix\base\Application
                 throw new \mix\exception\HttpException("URL不存在", 404);
             }
             $controller = $reflect->newInstanceArgs();
+            // 放入请求响应对象
+            $controller->request = $request;
+            $controller->response = $response;
             // 判断方法是否存在
             if (method_exists($controller, $method)) {
                 // 执行控制器的方法
-                return $controller->$method($request, $response);
+                return $controller->$method();
             }
         }
         throw new \mix\exception\HttpException("URL不存在", 404);
