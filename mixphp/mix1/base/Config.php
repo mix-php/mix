@@ -36,6 +36,7 @@ class Config extends Object
         if (!isset($this->params[$file])) {
             $this->params[$file] = self::import($file);
         }
+        return $this;
     }
 
     /**
