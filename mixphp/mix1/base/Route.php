@@ -32,15 +32,15 @@ class Route extends Object
      */
     public function init()
     {
-        $rules = $this->rules + $this->defaultRules;
+        $this->rules += $this->defaultRules;
         // index处理
-        foreach ($rules as $rule => $action) {
+        foreach ($this->rules as $rule => $action) {
             if (strpos($rule, ':controller') !== false && strpos($rule, ':action') !== false) {
-                $rules[dirname($rule)] = $action;
+                $this->rules[dirname($rule)] = $action;
             }
         }
         // 转正则
-        foreach ($rules as $rule => $action) {
+        foreach ($this->rules as $rule => $action) {
             // method
             if ($blank = strpos($rule, ' ')) {
                 $method = substr($rule, 0, $blank);

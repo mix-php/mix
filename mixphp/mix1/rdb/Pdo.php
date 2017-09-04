@@ -48,7 +48,7 @@ class Pdo extends Object
             $this->dsn,
             $this->username,
             $this->password,
-            $this->attribute + $this->defaultAttribute
+            $this->attribute += $this->defaultAttribute
         );
     }
 
@@ -151,16 +151,16 @@ class Pdo extends Object
     {
         $this->bindStart();
         $this->pdoStatement->execute();
-        return $this->pdoStatement->fetch(isset($this->attribute[\PDO::ATTR_DEFAULT_FETCH_MODE]) ? $this->attribute[\PDO::ATTR_DEFAULT_FETCH_MODE] : $this->defaultAttribute[\PDO::ATTR_DEFAULT_FETCH_MODE]);
+        return $this->pdoStatement->fetch($this->attribute[\PDO::ATTR_DEFAULT_FETCH_MODE]);
     }
 
     // 返回一列 (第一列)
-    public function queryColumn()
+    public function queryColumn($columnNumber = 0)
     {
         $this->bindStart();
         $this->pdoStatement->execute();
-        $column = false;
-        while ($row = $this->pdoStatement->fetchColumn()) {
+        $column = [];
+        while ($row = $this->pdoStatement->fetchColumn($columnNumber)) {
             $column[] = $row;
         }
         return $column;
