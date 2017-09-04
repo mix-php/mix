@@ -11,7 +11,7 @@ class Config extends Object
 {
 
     // 配置文件参数
-    public $params;
+    public $params = [];
 
     // 自动加载列表
     public $autoload = [];
@@ -25,18 +25,6 @@ class Config extends Object
         foreach ($this->autoload as $file) {
             $this->load($file);
         }
-    }
-
-    /**
-     * 加载配置
-     * @param  string $file
-     */
-    public function load($file)
-    {
-        if (!isset($this->params[$file])) {
-            $this->params[$file] = self::import($file);
-        }
-        return $this;
     }
 
     /**
@@ -55,6 +43,17 @@ class Config extends Object
     }
 
     /**
+     * 加载配置
+     * @param  string $file
+     */
+    public function load($file)
+    {
+        if (!isset($this->params[$file])) {
+            $this->params[$file] = self::import($file);
+        }
+    }
+
+    /**
      * 读取配置
      * @param  string $name 支持三级
      * @return array or scalar
@@ -63,9 +62,7 @@ class Config extends Object
     {
         // 全部配置
         if ($name == '') {
-            if (isset($this->params)) {
-                return $this->params;
-            }
+            return $this->params;
         }
         $array = explode('.', $name);
         $level = count($array);
