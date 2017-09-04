@@ -12,6 +12,7 @@ class Config extends Object
 
     // 配置文件参数
     public $params;
+
     // 自动加载列表
     public $autoload = [];
 
@@ -42,7 +43,7 @@ class Config extends Object
      * @param  string $file
      * @return array
      */
-    public static function import($file)
+    private static function import($file)
     {
         $filePath = \Mix::$app->getConfigPath() . $file . '.php';
         if (!is_file($filePath)) {
