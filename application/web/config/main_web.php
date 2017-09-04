@@ -105,7 +105,7 @@ return [
             'httponly' => false,
         ],
 
-        // rdb
+        // 数据库
         'rdb'      => [
             // 类路径
             'class'                => 'mix\rdb\Pdo',
@@ -125,7 +125,7 @@ return [
                 \PDO::ATTR_CASE               => \PDO::CASE_NATURAL,
             ],
             // 回滚含有零影响行数的事务
-            'rollbackZeroAffected' => false,
+            'rollbackZeroAffectedTransaction' => false,
         ],
 
         // redis

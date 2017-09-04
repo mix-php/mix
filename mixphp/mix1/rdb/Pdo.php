@@ -21,7 +21,7 @@ class Pdo extends Object
     // 设置PDO属性
     public $attribute = [];
     // 回滚含有零影响行数的事务
-    public $rollbackZeroAffected = false;
+    public $rollbackZeroAffectedTransaction = false;
     // PDO
     private $pdo;
     // PDOStatement
@@ -181,7 +181,7 @@ class Pdo extends Object
         $this->pdoStatement->execute();
         $affectedRows = $this->pdoStatement->rowCount();
         $lastInsertId = $this->pdo->lastInsertId();
-        if ($this->pdo->inTransaction() && $this->rollbackZeroAffected && $affectedRows == 0) {
+        if ($this->pdo->inTransaction() && $this->rollbackZeroAffectedTransaction && $affectedRows == 0) {
             throw new \PDOException('affected rows in the transaction is zero');
         }
         return ($affectedRows == 1 && $lastInsertId > 0) ? $lastInsertId : $affectedRows;
