@@ -59,7 +59,7 @@ class Pdo extends Object
             return $this;
         }
         if (isset($sqlItem['values'])) {
-            $this->bindValue($sqlItem['values']);
+            $this->bindValues($sqlItem['values']);
         }
         $this->sqlCache[] = array_shift($sqlItem);
         return $this;
@@ -84,7 +84,7 @@ class Pdo extends Object
     }
 
     // 绑定参数
-    public function bindValue($data)
+    public function bindValues($data)
     {
         $this->values += $data;
         return $this;
@@ -196,7 +196,7 @@ class Pdo extends Object
         }, $keys);
         $sql = "INSERT INTO `{$table}` (`" . implode('`, `', $keys) . "`) VALUES (" . implode(', ', $fields) . ")";
         $this->createCommand($sql);
-        $this->bindValue($data);
+        $this->bindValues($data);
         return $this;
     }
 
@@ -219,7 +219,7 @@ class Pdo extends Object
         }
         $sql .= implode(', ', $valuesSql);
         $this->pdoStatement = $this->pdo->prepare($sql);
-        foreach ($values as $key => &$value) {
+        foreach ($values as $key => $value) {
             $this->pdoStatement->bindValue($key + 1, $value);
         }
         $this->lastSqlData = [$sql, [], $values];
@@ -240,8 +240,8 @@ class Pdo extends Object
         }
         $sql = "UPDATE `{$table}` SET " . implode(', ', $fieldsSql) . " WHERE " . implode(', ', $where);
         $this->createCommand($sql);
-        $this->bindValue($data);
-        $this->bindValue($whereParams);
+        $this->bindValues($data);
+        $this->bindValues($whereParams);
         return $this;
     }
 
@@ -255,7 +255,7 @@ class Pdo extends Object
         }
         $sql = "DELETE FROM `{$table}` WHERE " . implode(', ', $where);
         $this->createCommand($sql);
-        $this->bindValue($whereParams);
+        $this->bindValues($whereParams);
         return $this;
     }
 
