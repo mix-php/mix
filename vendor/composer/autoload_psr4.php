@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'web\\' => array($baseDir . '/application/web'),
+    'swooleweb\\' => array($baseDir . '/application/swooleweb'),
     'mix\\' => array($baseDir . '/mixphp/mix1'),
     'console\\' => array($baseDir . '/application/console'),
 );

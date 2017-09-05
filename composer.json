@@ -1,9 +1,10 @@
 {
-    "autoload": {
-        "psr-4": {
-            "mix\\": "mixphp/mix1/",
-            "web\\": "application/web/",
-            "console\\": "application/console/"
-        }
+  "autoload": {
+    "psr-4": {
+      "mix\\": "mixphp/mix1/",
+      "web\\": "application/web/",
+      "console\\": "application/console/",
+      "swooleweb\\": "application/swooleweb/"
     }
+  }
 }
