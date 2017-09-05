@@ -24,8 +24,8 @@ class Request extends Object
         // 解析参数
         $param = [];
         foreach ($GLOBALS['argv'] as $key => $value) {
-            if ($key > 1) {
-                $param[] = $value;
+            if ($key > 1 && substr($value, 0, 2) == '--') {
+                $param[] = substr($value, 2);
             }
         }
         parse_str(implode('&', $param), $param);
