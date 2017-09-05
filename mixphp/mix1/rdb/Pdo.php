@@ -119,7 +119,7 @@ class Pdo extends Object
         } else {
             list($sql, $params, $values) = $this->lastSqlData = $this->bindPrepare($this->sql, $this->values);
             $this->pdoStatement = $this->pdo->prepare($sql);
-            foreach ($params as $key => $value) {
+            foreach ($params as $key => &$value) {
                 $this->pdoStatement->bindParam($key, $value);
             }
             foreach ($values as $key => $value) {
