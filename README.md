@@ -1,7 +1,7 @@
 <br>
 
 <center>
-![MixPHP V1](//git.kancloud.cn/repos/onanying/mixphp1/raw/ba9d4f9d235c24da0a7b8d8a8aa53a57b8e83331/images/logo.png?access-token=1899f10823ef02e1745183298b8c71d3)
+<img src="https://git.kancloud.cn/repos/onanying/mixphp1/raw/ba9d4f9d235c24da0a7b8d8a8aa53a57b8e83331/images/logo.png?access-token=1899f10823ef02e1745183298b8c71d3" alt="MixPHP V1">
 </center>
 
 <center>极简PHP开发框架<br>结合 Swoole 扩展，正向研发的多功能MVC框架</center>
@@ -48,5 +48,4 @@ SwooleWeb + MixHttpd 是 Swoole 在 HTTP 领域的开发，未来 MixPHP 还会�
 
 ## 开发手册
  
-[在线查看手册](https://www.kancloud.cn/onanying/mixphp1/379324)    
-[下载手册](https://www.kancloud.cn/onanying/mixphp1)
+[在线查看手册](https://www.kancloud.cn/onanying/mixphp1/379324) | [下载手册](https://www.kancloud.cn/onanying/mixphp1)
