@@ -1,10 +1,10 @@
 <br>
 
-<center>
+<p align="center">
 <img src="https://git.kancloud.cn/repos/onanying/mixphp1/raw/ba9d4f9d235c24da0a7b8d8a8aa53a57b8e83331/images/logo.png?access-token=1899f10823ef02e1745183298b8c71d3" alt="MixPHP V1">
-</center>
+</p>
 
-<center>极简PHP开发框架<br>结合 Swoole 扩展，正向研发的多功能MVC框架</center>
+<p align="center">极简PHP开发框架<br>结合 Swoole 扩展，正向研发的多功能MVC框架</p>
 
 <br>
 <br>
