@@ -16,6 +16,7 @@ class Error
     const FORMAT_HTML = 'html';
     const FORMAT_JSON = 'json';
     const FORMAT_XML = 'xml';
+
     // 输出格式
     public $format = self::FORMAT_HTML;
 
@@ -45,26 +46,47 @@ class Error
     // Exception Handler
     public function appException($e)
     {
+        $errors = [
+            'code'    => $e->getCode(),
+            'message' => $e->getMessage(),
+            'file'    => $e->getFile(),
+            'line'    => $e->getLine(),
+            'type'    => get_class($e),
+            'trace'   => $e->getTraceAsString(),
+        ];
+        isset($e->statusCode) or $e->statusCode = 500;
+        // 日志处理
+        if (!is_null(\Mix::$app->log) && $e->statusCode != 404) {
+            $time = date('Y-m-d H:i:s');
+            $message = "[time] {$time}" . PHP_EOL;
+            $message .= "[code] {$errors['code']}" . PHP_EOL;
+            $message .= "[message] {$errors['message']}" . PHP_EOL;
+            $message .= "[type] {$errors['type']}" . PHP_EOL;
+            $message .= "[file] {$errors['file']} line {$errors['line']}" . PHP_EOL;
+            $message .= "[trace] {$errors['trace']}" . PHP_EOL;
+            ob_start();
+            print_r($_SERVER);
+            $message .= str_replace('Array', '$_SERVER', ob_get_clean());
+            ob_start();
+            print_r($_GET);
+            $message .= str_replace('Array', '$_GET', ob_get_clean());
+            ob_start();
+            print_r($_POST);
+            $message .= str_replace('Array', '$_POST', ob_get_clean());
+            $message .= PHP_EOL;
+            \Mix::$app->log->error($message);
+        }
+        // 错误响应
         ob_clean();
-        $statusCode = $e->getCode() == 404 ? 404 : 500;
-        if (MIX_DEBUG) {
-            $data = [
-                'code'    => $statusCode,
-                'message' => $e->getMessage(),
-                'file'    => $e->getFile(),
-                'line'    => $e->getLine(),
-                'type'    => get_class($e),
-                'trace'   => $e->getTraceAsString(),
-            ];
-        } else {
-            if ($statusCode == 404) {
-                $data = [
+        if (!MIX_DEBUG) {
+            if ($e->statusCode == 404) {
+                $errors = [
                     'code'    => 404,
                     'message' => $e->getMessage(),
                 ];
             }
-            if ($statusCode == 500) {
-                $data = [
+            if ($e->statusCode == 500) {
+                $errors = [
                     'code'    => 500,
                     'message' => '服务器内部错误',
                 ];
@@ -74,8 +96,8 @@ class Error
             404 => "error.{$this->format}.not_found",
             500 => "error.{$this->format}.internal_server_error",
         ];
-        $content = (new View())->import($tpl[$statusCode], $data);
-        \Mix::$app->response->statusCode = $statusCode;
+        $content = (new View())->import($tpl[$e->statusCode], $errors);
+        \Mix::$app->response->statusCode = $e->statusCode;
         \Mix::$app->response->setContent($content);
         switch ($this->format) {
             case self::FORMAT_JSON:

@@ -7,7 +7,7 @@
 
 namespace mix\exception;
 
-class ConfigException extends \RuntimeException
+class ConfigException extends BaseException
 {
 
 }

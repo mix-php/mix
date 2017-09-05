@@ -21,7 +21,7 @@ class View
         // 生成视图
         $__filepath__ = \Mix::$app->getViewPath() . str_replace('.', DS, $__template__) . '.php';
         if (!is_file($__filepath__)) {
-            throw new \mix\exception\ViewException("视图文件不存在：{$__filepath__}", 500);
+            throw new \mix\exception\ViewException("视图文件不存在：{$__filepath__}");
         }
         ob_start();
         include $__filepath__;

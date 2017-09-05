@@ -7,7 +7,7 @@
 
 namespace mix\exception;
 
-class RouteException extends \RuntimeException
+class RouteException extends BaseException
 {
 
 }

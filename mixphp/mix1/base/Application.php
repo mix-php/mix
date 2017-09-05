@@ -41,6 +41,10 @@ class Application
         if (isset($this->$name)) {
             return $this->$name;
         }
+        // 判断是否注册
+        if (!isset($this->register[$name])) {
+            return null;
+        }
         // 获取配置
         $list = $this->register[$name];
         $class = $list['class'];

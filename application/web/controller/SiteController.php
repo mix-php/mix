@@ -81,6 +81,8 @@ class SiteController extends Controller
         //$thumbname = str_replace('.', '.thumb.', $filename);
         //\mix\web\Image::open($filename)->crop(200, 200, \mix\web\Image::CROP_TOP)->save();
         //return \mix\web\Image::open($filename)->getSize();
+
+        dfdfdf;
     }
 
     public function actionPhpinfo()

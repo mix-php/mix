@@ -7,7 +7,7 @@
 
 namespace mix\exception;
 
-class HttpException extends \RuntimeException
+class HttpException extends BaseException
 {
 
 }

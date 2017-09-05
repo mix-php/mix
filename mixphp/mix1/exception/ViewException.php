@@ -7,7 +7,7 @@
 
 namespace mix\exception;
 
-class ViewException extends \RuntimeException
+class ViewException extends BaseException
 {
 
 }

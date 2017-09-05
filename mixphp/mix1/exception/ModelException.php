@@ -7,7 +7,7 @@
 
 namespace mix\exception;
 
-class ModelException extends \RuntimeException
+class ModelException extends BaseException
 {
 
 }

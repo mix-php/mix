@@ -36,7 +36,7 @@ class Config extends Object
     {
         $filePath = \Mix::$app->getConfigPath() . $file . '.php';
         if (!is_file($filePath)) {
-            throw new \mix\exception\ConfigException("配置文件不存在：{$file}.php", 500);
+            throw new \mix\exception\ConfigException("配置文件不存在：{$file}.php");
         }
         $params = include $filePath;
         return is_array($params) ? $params : [];
@@ -87,7 +87,7 @@ class Config extends Object
                 return $this->params[$oneLevel][$secondLevel][$threeLevel];
             }
         }
-        throw new \mix\exception\ConfigException("配置项不存在：{$name}", 500);
+        throw new \mix\exception\ConfigException("配置项不存在：{$name}");
     }
 
     /**

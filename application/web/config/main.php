@@ -75,6 +75,13 @@ return [
             'format' => mix\web\Error::FORMAT_HTML,
         ],
 
+        // 日志
+        'log'      => [
+            // 类路径
+            'class'  => 'mix\base\Log',
+            //
+        ],
+
         // Session
         'session'  => [
             // 类路径
@@ -108,15 +115,15 @@ return [
         // 数据库
         'rdb'      => [
             // 类路径
-            'class'                => 'mix\rdb\Pdo',
+            'class'                           => 'mix\rdb\Pdo',
             // 数据源格式
-            'dsn'                  => 'mysql:host=127.0.0.1;port=3306;charset=utf8;dbname=test',
+            'dsn'                             => 'mysql:host=127.0.0.1;port=3306;charset=utf8;dbname=test',
             // 数据库用户名
-            'username'             => 'root',
+            'username'                        => 'root',
             // 数据库密码
-            'password'             => '123456',
+            'password'                        => '123456',
             // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
-            'attribute'            => [
+            'attribute'                       => [
                 // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
                 \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
                 // 转换 NULL 和空字符串（在所有驱动中都可用，不仅限于Oracle）
