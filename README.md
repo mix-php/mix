@@ -1,16 +1,17 @@
 <br>
 
-<p style="text-align: center;"><img src="//git.kancloud.cn/repos/onanying/mixphp1/raw/ba9d4f9d235c24da0a7b8d8a8aa53a57b8e83331/images/logo.png?access-token=1899f10823ef02e1745183298b8c71d3" alt="MixPHP V1"></p>
+<center>
+![MixPHP V1](//git.kancloud.cn/repos/onanying/mixphp1/raw/ba9d4f9d235c24da0a7b8d8a8aa53a57b8e83331/images/logo.png?access-token=1899f10823ef02e1745183298b8c71d3)
+</center>
 
-<h3 style="text-align: center;">极简PHP开发框架<br>结合 Swoole 扩展，正向研发的多功能MVC框架</h3>
+<center>极简PHP开发框架<br>结合 Swoole 扩展，正向研发的多功能MVC框架</center>
 
 <br>
+<br>
 
->[danger] MixPHP最大的优势：『 即可作小刀，又能当斧头，小刀还能升级为斧头』
+MixPHP最大的优势：『 即可作小刀，又能当斧头，小刀还能升级为斧头』    
 
-* * * * *
-
->[success]	支持的朋友请到 [GitHub](https://github.com/onanying/MixPHP-V1) 加个Star吧，让更多的朋友发现MixPHP。
+支持的朋友请到 [GitHub](https://github.com/onanying/MixPHP-V1) 加个Star吧，让更多的朋友发现MixPHP。
 
 ## 核心特征
 
@@ -47,6 +48,5 @@ SwooleWeb + MixHttpd 是 Swoole 在 HTTP 领域的开发，未来 MixPHP 还会�
 
 ## 开发手册
  
-[在线查看手册](https://www.kancloud.cn/onanying/mixphp1/379324)
-
+[在线查看手册](https://www.kancloud.cn/onanying/mixphp1/379324)    
 [下载手册](https://www.kancloud.cn/onanying/mixphp1)
