@@ -4,9 +4,9 @@
 <img src="https://git.kancloud.cn/repos/onanying/mixphp1/raw/ba9d4f9d235c24da0a7b8d8a8aa53a57b8e83331/images/logo.png?access-token=1899f10823ef02e1745183298b8c71d3" alt="MixPHP V1">
 </p>
 
-<p align="center">极简PHP开发框架</p>
+<p align="center">极简多功能PHP开发框架</p>
 
-<p align="center">结合 Swoole 扩展，正向研发的多功能MVC框架</p>
+<p align="center">结合 Swoole 扩展，正向研发的MVC框架</p>
 
 <p align="center">MixPHP最大的优势：『 即可作小刀，又能当斧头，小刀还能升级为斧头』</p>
 
