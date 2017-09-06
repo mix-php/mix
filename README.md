@@ -8,10 +8,7 @@
 
 <p align="center">结合 Swoole 扩展，正向研发的多功能MVC框架</p>
 
-<br>
-<br>
-
-MixPHP最大的优势：『 即可作小刀，又能当斧头，小刀还能升级为斧头』    
+<p align="center">MixPHP最大的优势：『 即可作小刀，又能当斧头，小刀还能升级为斧头』</p>
 
 ## 核心特征
 
@@ -27,7 +24,7 @@ MixHttpd：基于Swoole，可替代Apache/phpfpm作为应用服务器；
 
 查询构造器：独创的SQL构造方法，可灵活优雅的构造复杂语句；
 
-错误处理：错误可以配置为html,json,xml三种响应格式；
+错误处理：错误可以配置为html/json/xml三种响应格式；
 
 ## 框架定位
 
