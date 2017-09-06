@@ -18,20 +18,35 @@ class Log extends Object
     // 日志目录
     public $logDir = 'logs';
 
+    // 日志记录级别
+    public $level = ['error', 'info', 'debug'];
+
     // 日志轮转类型
     public $logRotate = self::ROTATE_DAY;
 
     // 最大文件尺寸
-    public $maxFileSize = 2048;
+    public $maxFileSize = 2048 * 1024;
 
-    // 写入错误信息
-    public function error($message)
+    // 调试日志
+    public function debug($message)
     {
-        $this->write('error', $message);
+        in_array('debug', $this->level) and $this->write('debug', $message);
     }
 
-    // 写入
-    public function write($type, $message)
+    // 信息日志
+    public function info($message)
+    {
+        in_array('info', $this->level) and $this->write('info', $message);
+    }
+
+    // 错误日志
+    public function error($message)
+    {
+        in_array('error', $this->level) and $this->write('error', $message);
+    }
+
+    // 写入信息
+    public function write($level, $message)
     {
         switch ($this->logRotate) {
             case self::ROTATE_HOUR:
@@ -47,12 +62,12 @@ class Log extends Object
                 $timeFormat = date('Ymd');
                 break;
         }
-        $filename = "{$type}_{$timeFormat}";
+        $filename = "{$level}_{$timeFormat}";
         $dir = \Mix::$app->getRuntimePath() . $this->logDir;
         is_dir($dir) or mkdir($dir);
         $file = $dir . DS . $filename . '.log';
         $number = 0;
-        while (file_exists($file) && filesize($file) >= $this->maxFileSize * 1024) {
+        while (file_exists($file) && filesize($file) >= $this->maxFileSize) {
             $file = $dir . DS . $filename . '_' . ++$number . '.log';
         }
         file_put_contents($file, $message, FILE_APPEND);

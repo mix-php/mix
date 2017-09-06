@@ -79,12 +79,14 @@ return [
         'log'      => [
             // 类路径
             'class'       => 'mix\base\Log',
+            // 日志记录级别
+            'level'       => ['error', 'info', 'debug'],
             // 日志目录
             'logDir'      => 'logs',
             // 日志轮转类型
             'logRotate'   => mix\base\Log::ROTATE_DAY,
             // 最大文件尺寸
-            'maxFileSize' => 2048,
+            'maxFileSize' => 2048 * 1024,
         ],
 
         // Session
