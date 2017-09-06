@@ -25,7 +25,7 @@ class Log extends Object
     public $logRotate = self::ROTATE_DAY;
 
     // 最大文件尺寸
-    public $maxFileSize = 2048 * 1024;
+    public $maxFileSize = 2097152;
 
     // 调试日志
     public function debug($message)

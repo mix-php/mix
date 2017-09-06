@@ -13,17 +13,17 @@ class Session extends Object
 {
 
     // 处理者值
-    const HANDLER_FILES    = 'files';
+    const HANDLER_FILES = 'files';
     const HANDLER_MEMCACHE = 'memcache';
-    const HANDLER_REDIS    = 'redis';
+    const HANDLER_REDIS = 'redis';
     // 处理者
     public $saveHandler = self::HANDLER_FILES;
     // 保存路径
-    public $savePath;
+    public $savePath = '';
     // 生存时间
-    public $gcMaxLifetime;
+    public $gcMaxLifetime = 7200;
     // session名
-    public $name;
+    public $name = 'MIX_SSID';
 
     // 初始化
     public function init()

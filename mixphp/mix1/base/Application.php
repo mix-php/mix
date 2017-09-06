@@ -106,10 +106,10 @@ class Application
             }
             // 实例化控制器
             $action = "{$this->controllerNamespace}\\{$action}";
-            $classFull = dirname($action);
-            $classPath = dirname($classFull);
-            $className = \Mix::$app->route->snakeToCamel(basename($classFull));
-            $method = \Mix::$app->route->snakeToCamel(basename($action), true);
+            $classFull = \mix\base\Route::dirname($action);
+            $classPath = \mix\base\Route::dirname($classFull);
+            $className = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($classFull), true);
+            $method = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($action), true);
             $class = "{$classPath}\\{$className}Controller";
             $method = "action{$method}";
             try {

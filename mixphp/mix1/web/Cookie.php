@@ -14,12 +14,16 @@ class Cookie extends Object
 
     // 过期时间
     public $expire = 31536000;
+
     // 有效的服务器路径
     public $path = '/';
+
     // 有效域名/子域名
     public $domain = '';
+
     // 仅通过安全的 HTTPS 连接传给客户端
     public $secure = false;
+
     // 仅可通过 HTTP 协议访问
     public $httponly = false;
 

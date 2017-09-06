@@ -48,8 +48,8 @@ class Application extends \mix\base\Application
             $action = "{$this->controllerNamespace}\\{$action}";
             $classFull = dirname($action);
             $classPath = dirname($classFull);
-            $className = \Mix::$app->route->snakeToCamel(basename($classFull));
-            $method = \Mix::$app->route->snakeToCamel(basename($action), true);
+            $className = \mix\base\Route::snakeToCamel(basename($classFull));
+            $method = \mix\base\Route::snakeToCamel(basename($action), true);
             $class = "{$classPath}\\{$className}Controller";
             $method = "action{$method}";
             try {
