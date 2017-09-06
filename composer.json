@@ -3,8 +3,8 @@
     "psr-4": {
       "mix\\": "mixphp/mix1/",
       "web\\": "application/web/",
-      "console\\": "application/console/",
-      "swooleweb\\": "application/swooleweb/"
+      "swooleweb\\": "application/swooleweb/",
+      "console\\": "application/console/"
     }
   }
 }
