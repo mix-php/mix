@@ -7,6 +7,8 @@
 
 namespace mix\web;
 
+use mix\web\View;
+
 class Error
 {
 
@@ -18,19 +20,13 @@ class Error
     // 输出格式
     public $format = self::FORMAT_HTML;
 
-    // 响应对象
-    private $response;
-
     // 注册异常处理
-    public function register($response)
+    public function register()
     {
-        // 注册handler
         error_reporting(E_ALL);
         set_error_handler([$this, 'appError']);
         set_exception_handler([$this, 'appException']);
         register_shutdown_function([$this, 'appShutdown']);
-        // 导入参数
-        $this->response = $response;
     }
 
     // Error Handler
@@ -101,17 +97,17 @@ class Error
             500 => "error.{$this->format}.internal_server_error",
         ];
         $content = (new View())->import($tpl[$e->statusCode], $errors);
-        $this->response->statusCode = $e->statusCode;
-        $this->response->setContent($content);
+        \Mix::$app->response->statusCode = $e->statusCode;
+        \Mix::$app->response->setContent($content);
         switch ($this->format) {
             case self::FORMAT_JSON:
-                $this->response->setHeader('Content-Type', 'application/json;charset=utf-8');
+                \Mix::$app->response->setHeader('Content-Type', 'application/json;charset=utf-8');
                 break;
             case self::FORMAT_XML:
-                $this->response->setHeader('Content-Type', 'text/xml;charset=utf-8');
+                \Mix::$app->response->setHeader('Content-Type', 'text/xml;charset=utf-8');
                 break;
         }
-        $this->response->send();
+        \Mix::$app->response->send();
     }
 
 }

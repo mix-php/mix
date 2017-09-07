@@ -30,16 +30,12 @@ return [
 
         // 请求
         'request'  => [
-            // 非单例模式
-            'singleton' => false,
             // 类路径
             'class'     => 'mix\swoole\Request',
         ],
 
         // 响应
         'response' => [
-            // 非单例模式
-            'singleton' => false,
             // 类路径
             'class'     => 'mix\swoole\Response',
             // 输出格式

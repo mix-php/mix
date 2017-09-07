@@ -41,7 +41,7 @@ class Application
         if (isset($this->$name)) {
             return $this->$name;
         }
-        // 判断是否注册
+        // 未注册
         if (!isset($this->register[$name])) {
             return null;
         }
@@ -53,7 +53,7 @@ class Application
         // 属性导入
         foreach ($list as $key => $value) {
             // 跳过保留key
-            if (in_array($key, ['class', 'singleton'])) {
+            if (in_array($key, ['class'])) {
                 continue;
             }
             // 属性赋值
@@ -69,39 +69,35 @@ class Application
                     }
                     $subObject->$k = $v;
                 }
-                $object->$key = $subObject;
                 // 执行初始化方法
                 method_exists($subObject, 'init') and $subObject->init();
+                $object->$key = $subObject;
             } else {
                 $object->$key = $value;
             }
         }
         // 执行初始化方法
         method_exists($object, 'init') and $object->init();
-        // 返回新对象
-        if (isset($list['singleton']) && $list['singleton'] == false) {
-            return $object;
-        }
         return $this->$name = $object;
     }
 
     /**
      * 执行功能并返回
-     * @param  array $params
+     * @param  string $method
+     * @param  string $action
      * @return mixed
      */
-    public function runAction($params)
+    public function runAction($method, $action)
     {
-        list($method, $action) = $params;
         $action = "{$method} {$action}";
         // 路由匹配
-        list($action, $urlParams) = \Mix::$app->route->match($action);
+        list($action, $queryParams) = \Mix::$app->route->match($action);
         // 执行功能
         if ($action) {
             // 路由参数导入请求类
-            \Mix::$app->request->setRoute($urlParams);
+            \Mix::$app->request->setRoute($queryParams);
             // index处理
-            if (isset($urlParams['controller']) && strpos($action, ':action') !== false) {
+            if (isset($queryParams['controller']) && strpos($action, ':action') !== false) {
                 $action = str_replace(':action', 'index', $action);
             }
             // 实例化控制器
