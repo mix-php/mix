@@ -14,22 +14,29 @@ class Response extends Object
 
     // 响应对象
     private $responder;
+
     // 格式值
-    const FORMAT_JSON  = 0;
+    const FORMAT_JSON = 0;
     const FORMAT_JSONP = 1;
-    const FORMAT_XML   = 2;
+    const FORMAT_XML = 2;
+
     // 输出格式
     public $format = self::FORMAT_JSON;
+
     // json
     public $json;
+
     // jsonp
     public $jsonp;
+
     // xml
     public $xml;
-    // 内容
-    private $content;
+
     // 状态码
     public $statusCode = 200;
+
+    // 内容
+    private $content;
 
     // 设置响应者
     public function setResponder($responder)
@@ -55,6 +62,7 @@ class Response extends Object
     // 输出
     public function send()
     {
+        $content = $this->content;
         if (is_array($content)) {
             switch ($this->format) {
                 case self::FORMAT_JSON:

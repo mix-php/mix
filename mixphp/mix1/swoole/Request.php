@@ -31,9 +31,9 @@ class Request extends Object
     public function setRequester($requester)
     {
         $this->requester = $requester;
-        $this->setGet($requester->get);
-        $this->setPost($requester->post);
-        $this->setFiles($requester->files);
+        $this->setGet(isset($requester->get) ? $requester->get : []);
+        $this->setPost(isset($requester->post) ? $requester->post : []);
+        $this->setFiles(isset($requester->files) ? $requester->files : []);
         return $this;
     }
 

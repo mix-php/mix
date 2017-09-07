@@ -12,14 +12,6 @@ return [
     // 注册树
     'register'            => [
 
-        // 配置
-        'config'   => [
-            // 类路径
-            'class'    => 'mix\base\Config',
-            // 自动加载
-            'autoload' => ['common', 'local'],
-        ],
-
         // 路由
         'route'    => [
             // 类路径
@@ -83,6 +75,14 @@ return [
             'password' => '',
             // 数据库
             'database' => 0,
+        ],
+
+        // 配置
+        'config'   => [
+            // 类路径
+            'class'    => 'mix\base\Config',
+            // 自动加载
+            'autoload' => ['common', 'local'],
         ],
 
     ],

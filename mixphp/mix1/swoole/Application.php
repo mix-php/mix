@@ -11,28 +11,27 @@ class Application extends \mix\base\Application
 {
 
     /**
-     * 执行功能 (LNSMP架构)
+     * 执行功能 (Swoole架构)
      */
     public function run($requester, $responder)
     {
         $request = \Mix::$app->request->setRequester($requester);
         $response = \Mix::$app->response->setResponder($responder);
-        $method = strtoupper($requester->header['request_method']);
-        $action = empty($requester->header['pathinfo']) ? '' : substr($requester->header['pathinfo'], 1);
-        $content = $this->runAction($method, $action, $request, $response);
+        \Mix::$app->error->register($response);
+        $method = strtoupper($requester->server['request_method']);
+        $action = empty($requester->server['path_info']) ? '' : substr($requester->server['path_info'], 1);
+        $content = $this->runAction([$method, $action, $request, $response]);
         $response->setContent($content)->send();
     }
 
     /**
      * 执行功能并返回
-     * @param  string $method
-     * @param  string $action
-     * @param  object $request
-     * @param  object $response
+     * @param  array $params
      * @return mixed
      */
-    public function runAction($method, $action, $request, $response)
+    public function runAction($params)
     {
+        list($method, $action, $request, $response) = $params;
         $action = "{$method} {$action}";
         // 路由匹配
         list($action, $urlParams) = \Mix::$app->route->match($action);
@@ -46,10 +45,10 @@ class Application extends \mix\base\Application
             }
             // 实例化控制器
             $action = "{$this->controllerNamespace}\\{$action}";
-            $classFull = dirname($action);
-            $classPath = dirname($classFull);
-            $className = \mix\base\Route::snakeToCamel(basename($classFull));
-            $method = \mix\base\Route::snakeToCamel(basename($action), true);
+            $classFull = \mix\base\Route::dirname($action);
+            $classPath = \mix\base\Route::dirname($classFull);
+            $className = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($classFull), true);
+            $method = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($action), true);
             $class = "{$classPath}\\{$className}Controller";
             $method = "action{$method}";
             try {

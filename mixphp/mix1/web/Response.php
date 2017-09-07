@@ -16,18 +16,24 @@ class Response extends Object
     const FORMAT_JSON = 0;
     const FORMAT_JSONP = 1;
     const FORMAT_XML = 2;
+
     // 输出格式
     public $format = self::FORMAT_JSON;
+
     // json
     public $json;
+
     // jsonp
     public $jsonp;
+
     // xml
     public $xml;
-    // 内容
-    private $content;
+
     // 状态码
     public $statusCode = 200;
+
+    // 内容
+    private $content;
 
     // 设置内容
     public function setContent($content)

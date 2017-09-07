@@ -87,12 +87,12 @@ class Application
 
     /**
      * 执行功能并返回
-     * @param  string $method
-     * @param  string $action
+     * @param  array $params
      * @return mixed
      */
-    public function runAction($method, $action)
+    public function runAction($params)
     {
+        list($method, $action) = $params;
         $action = "{$method} {$action}";
         // 路由匹配
         list($action, $urlParams) = \Mix::$app->route->match($action);

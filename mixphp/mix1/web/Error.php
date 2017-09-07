@@ -7,8 +7,6 @@
 
 namespace mix\web;
 
-use mix\web\View;
-
 class Error
 {
 
@@ -20,13 +18,19 @@ class Error
     // 输出格式
     public $format = self::FORMAT_HTML;
 
+    // 响应对象
+    private $response;
+
     // 注册异常处理
-    public function register()
+    public function register($response)
     {
+        // 注册handler
         error_reporting(E_ALL);
         set_error_handler([$this, 'appError']);
         set_exception_handler([$this, 'appException']);
         register_shutdown_function([$this, 'appShutdown']);
+        // 导入参数
+        $this->response = $response;
     }
 
     // Error Handler
@@ -77,7 +81,7 @@ class Error
             \Mix::$app->log->error($message);
         }
         // 错误响应
-        ob_clean();
+        ob_get_contents() and ob_clean();
         if (!MIX_DEBUG) {
             if ($e->statusCode == 404) {
                 $errors = [
@@ -97,17 +101,17 @@ class Error
             500 => "error.{$this->format}.internal_server_error",
         ];
         $content = (new View())->import($tpl[$e->statusCode], $errors);
-        \Mix::$app->response->statusCode = $e->statusCode;
-        \Mix::$app->response->setContent($content);
+        $this->response->statusCode = $e->statusCode;
+        $this->response->setContent($content);
         switch ($this->format) {
             case self::FORMAT_JSON:
-                \Mix::$app->response->setHeader('Content-Type', 'application/json;charset=utf-8');
+                $this->response->setHeader('Content-Type', 'application/json;charset=utf-8');
                 break;
             case self::FORMAT_XML:
-                \Mix::$app->response->setHeader('Content-Type', 'text/xml;charset=utf-8');
+                $this->response->setHeader('Content-Type', 'text/xml;charset=utf-8');
                 break;
         }
-        \Mix::$app->response->send();
+        $this->response->send();
     }
 
 }
