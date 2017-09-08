@@ -43,6 +43,8 @@ class HttpServer extends Object
         $this->server->on('Start', function ($server) {
             // 进程命名
             swoole_set_process_name("mixhttpd {$this->processLabel} master");
+            // 输出
+            echo 'mixhttpd started' . PHP_EOL;
         });
     }
 
@@ -66,10 +68,10 @@ class HttpServer extends Object
                 swoole_set_process_name("mixhttpd {$this->processLabel} task");
             }
             // 实例化Apps
-            \Mix::$apps = [];
+            \Mix::apps = [];
             foreach ($this->virtualHosts as $host => $virtualHost) {
-                $config       = require $virtualHost['config'];
-                \Mix::$apps[$host] = new $virtualHost['class']($config);
+                $config           = require $virtualHost['config'];
+                \Mix::apps[$host] = new $virtualHost['class']($config);
             }
         });
     }
@@ -78,23 +80,15 @@ class HttpServer extends Object
     private function onRequest()
     {
         $this->server->on('request', function ($request, $response) {
-            $host = $request->header['host'];
+            \Mix::$host = $request->header['host'];
             // 执行请求
-            try {             
-
-                \Mix::$app->error->register();
-                \Mix::$app->request->setRequester($request);
-                \Mix::$app->response->setResponder($response);
-                
-                if ($hostname == $this->virtualHost['hostname']) {
-                    $this->app->run($request, $response);
-                } else if ($this->virtualHost['hostname'] == '*') {
-                    $this->app->run($request, $response);
-                } else {
-                    throw new \mix\exception\HttpException("VirtualHost Not Found", 404);
-                }
+            try {
+                \Mix::app()->error->register();
+                \Mix::app()->request->setRequester($request);
+                \Mix::app()->response->setResponder($response);
+                $this->app->run($request, $response);
             } catch (\Exception $e) {
-                \Mix::$app->error->appException($e);
+                \Mix::app()->error->appException($e);
             }
         });
     }

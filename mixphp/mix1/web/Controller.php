@@ -40,7 +40,7 @@ class Controller extends Object
     // 视图前缀
     private function viewPrefix()
     {
-        return \mix\base\Route::camelToSnake(str_replace([\Mix::$app->controllerNamespace . '\\', '\\', 'Controller'], ['', '.', ''], get_class($this)));
+        return \mix\base\Route::camelToSnake(str_replace([\Mix::app()->controllerNamespace . '\\', '\\', 'Controller'], ['', '.', ''], get_class($this)));
     }
 
 }

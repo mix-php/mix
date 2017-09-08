@@ -15,11 +15,11 @@ class Application extends \mix\base\Application
      */
     public function run()
     {
-        \Mix::$app->error->register();
+        \Mix::app()->error->register();
         $method  = empty($_SERVER['REQUEST_METHOD']) ? (PHP_SAPI == 'cli' ? 'CLI' : '') : $_SERVER['REQUEST_METHOD'];
         $action  = empty($_SERVER['PATH_INFO']) ? '' : substr($_SERVER['PATH_INFO'], 1);
         $content = $this->runAction($method, $action);
-        \Mix::$app->response->setContent($content)->send();
+        \Mix::app()->response->setContent($content)->send();
     }
 
 }

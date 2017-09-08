@@ -14,7 +14,7 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        $param = \Mix::$app->request->param();
+        $param = \Mix::app()->request->param();
         return 'Hello World';
     }
 

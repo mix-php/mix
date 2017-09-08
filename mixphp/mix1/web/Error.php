@@ -56,7 +56,7 @@ class Error
         ];
         isset($e->statusCode) or $e->statusCode = 500;
         // 日志处理
-        if (!is_null(\Mix::$app->log) && $e->statusCode != 404) {
+        if (!is_null(\Mix::app()->log) && $e->statusCode != 404) {
             $time = date('Y-m-d H:i:s');
             $message = "[time] {$time}" . PHP_EOL;
             $message .= "[code] {$errors['code']}" . PHP_EOL;
@@ -74,7 +74,7 @@ class Error
             print_r($_POST);
             $message .= str_replace('Array', '$_POST', ob_get_clean());
             $message .= PHP_EOL;
-            \Mix::$app->log->error($message);
+            \Mix::app()->log->error($message);
         }
         // 错误响应
         ob_get_contents() and ob_clean();
@@ -97,17 +97,17 @@ class Error
             500 => "error.{$this->format}.internal_server_error",
         ];
         $content = (new View())->import($tpl[$e->statusCode], $errors);
-        \Mix::$app->response->statusCode = $e->statusCode;
-        \Mix::$app->response->setContent($content);
+        \Mix::app()->response->statusCode = $e->statusCode;
+        \Mix::app()->response->setContent($content);
         switch ($this->format) {
             case self::FORMAT_JSON:
-                \Mix::$app->response->setHeader('Content-Type', 'application/json;charset=utf-8');
+                \Mix::app()->response->setHeader('Content-Type', 'application/json;charset=utf-8');
                 break;
             case self::FORMAT_XML:
-                \Mix::$app->response->setHeader('Content-Type', 'text/xml;charset=utf-8');
+                \Mix::app()->response->setHeader('Content-Type', 'text/xml;charset=utf-8');
                 break;
         }
-        \Mix::$app->response->send();
+        \Mix::app()->response->send();
     }
 
 }

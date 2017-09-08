@@ -28,7 +28,7 @@ class UploadFile
     // 通过$_FILES获取实例
     public static function getInstanceByName($name)
     {
-        $file = \Mix::$app->request->files($name);
+        $file = \Mix::app()->request->files($name);
         return is_null($file) ? $file : new self($file);
     }
 

@@ -63,7 +63,7 @@ class Log extends Object
                 break;
         }
         $filename = "{$level}_{$timeFormat}";
-        $dir = \Mix::$app->getRuntimePath() . $this->logDir;
+        $dir = \Mix::app()->getRuntimePath() . $this->logDir;
         is_dir($dir) or mkdir($dir);
         $file = $dir . DS . $filename . '.log';
         $number = 0;

@@ -28,7 +28,7 @@ class Application
             $this->$key = $value;
         }
         // 快捷引用
-        \Mix::$app = $this;
+        \Mix::$_app = $this;
     }
 
     /**
@@ -46,7 +46,7 @@ class Application
             return null;
         }
         // 获取配置
-        $list = $this->register[$name];
+        $list  = $this->register[$name];
         $class = $list['class'];
         // 实例化
         $object = new $class(['disableInit' => true]);
@@ -91,23 +91,23 @@ class Application
     {
         $action = "{$method} {$action}";
         // 路由匹配
-        list($action, $queryParams) = \Mix::$app->route->match($action);
+        list($action, $queryParams) = \Mix::app()->route->match($action);
         // 执行功能
         if ($action) {
             // 路由参数导入请求类
-            \Mix::$app->request->setRoute($queryParams);
+            \Mix::app()->request->setRoute($queryParams);
             // index处理
             if (isset($queryParams['controller']) && strpos($action, ':action') !== false) {
                 $action = str_replace(':action', 'index', $action);
             }
             // 实例化控制器
-            $action = "{$this->controllerNamespace}\\{$action}";
+            $action    = "{$this->controllerNamespace}\\{$action}";
             $classFull = \mix\base\Route::dirname($action);
             $classPath = \mix\base\Route::dirname($classFull);
             $className = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($classFull), true);
-            $method = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($action), true);
-            $class = "{$classPath}\\{$className}Controller";
-            $method = "action{$method}";
+            $method    = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($action), true);
+            $class     = "{$classPath}\\{$className}Controller";
+            $method    = "action{$method}";
             try {
                 $reflect = new \ReflectionClass($class);
             } catch (\ReflectionException $e) {

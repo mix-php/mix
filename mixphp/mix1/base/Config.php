@@ -34,7 +34,7 @@ class Config extends Object
      */
     private static function import($file)
     {
-        $filePath = \Mix::$app->getConfigPath() . $file . '.php';
+        $filePath = \Mix::app()->getConfigPath() . $file . '.php';
         if (!is_file($filePath)) {
             throw new \mix\exception\ConfigException("配置文件不存在：{$file}.php");
         }

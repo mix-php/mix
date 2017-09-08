@@ -8,22 +8,22 @@
 class Mix
 {
 
-	// 应用池
-	public static $apps;
+    // App实例池
+    public static $apps = [];
 
     // 主机名称
     public static $host;
 
-    /**
-     * 
-     * @param  string $name
-     */
-    public function __get($name)
+    // 返回App
+    public static function app()
     {
-    	if($name == 'app'){
-    		return $this->apps[$host];
-    	}
-    	return null;
+        if (isset(self::$apps[self::$host])) {
+            return self::$apps[self::$host];
+        }
+        if (isset(self::$apps['*'])) {
+            return self::$apps['*'];
+        }
+        return array_shift(self::$apps);
     }
 
 }

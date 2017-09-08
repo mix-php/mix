@@ -25,7 +25,7 @@ class FileValidator extends BaseValidator
     // 获取属性值
     protected function getAttributeValue()
     {
-        return \Mix::$app->request->files($this->attribute);
+        return \Mix::app()->request->files($this->attribute);
     }
 
     // 类型验证
