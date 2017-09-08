@@ -29,7 +29,7 @@ class ComposerStaticInit7b86a9c973b6deb108af8f47275b0dd2
         ),
         'mixhttpd\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/application/swooleweb',
+            0 => __DIR__ . '/../..' . '/application/mixhttpd',
         ),
         'mix\\' => 
         array (

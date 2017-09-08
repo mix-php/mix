@@ -64,7 +64,7 @@ return [
             // 类路径
             'class'  => 'mix\web\Error',
             // 输出格式
-            'format' => mix\web\Error::FORMAT_JSON,
+            'format' => mix\web\Error::FORMAT_HTML,
         ],
 
         // 日志

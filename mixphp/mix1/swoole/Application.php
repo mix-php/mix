@@ -15,9 +15,6 @@ class Application extends \mix\base\Application
      */
     public function run($requester, $responder)
     {
-        \Mix::$app->request->setRequester($requester);
-        \Mix::$app->response->setResponder($responder);
-        \Mix::$app->error->register();
         $method = strtoupper($requester->server['request_method']);
         $action = empty($requester->server['path_info']) ? '' : substr($requester->server['path_info'], 1);
         $content = $this->runAction($method, $action);

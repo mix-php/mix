@@ -111,7 +111,7 @@ class Application
             try {
                 $reflect = new \ReflectionClass($class);
             } catch (\ReflectionException $e) {
-                throw new \mix\exception\HttpException("URL不存在", 404);
+                throw new \mix\exception\HttpException("Not Found", 404);
             }
             $controller = $reflect->newInstanceArgs();
             // 判断方法是否存在
@@ -120,7 +120,7 @@ class Application
                 return $controller->$method();
             }
         }
-        throw new \mix\exception\HttpException("URL不存在", 404);
+        throw new \mix\exception\HttpException("Not Found", 404);
     }
 
     /**

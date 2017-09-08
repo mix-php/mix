@@ -6,7 +6,7 @@
 
 <p align="center">极简 • 高性能 • 多功能</p>
 
-<p align="center">『 拥有 Yii2/TP5/CI3 传统框架的开发效率，又拥有 Yaf/Phalcon C扩展框架的性能 』</p>
+<p align="center">『 拥有 Yii2/TP5/CI3 传统框架的开发效率，又拥有 Swoole 扩展的高性能 』</p>
 
 ## 核心特征
 
