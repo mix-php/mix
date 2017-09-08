@@ -67,11 +67,11 @@ class HttpServer extends Object
             } else {
                 swoole_set_process_name("mixhttpd {$this->processLabel} task");
             }
-            // 实例化Apps
-            \Mix::apps = [];
+            // 实例化App
+            \Mix::$app = [];
             foreach ($this->virtualHosts as $host => $virtualHost) {
                 $config           = require $virtualHost['config'];
-                \Mix::apps[$host] = new $virtualHost['class']($config);
+                \Mix::$app[$host] = new $virtualHost['class']($config);
             }
         });
     }
@@ -86,7 +86,7 @@ class HttpServer extends Object
                 \Mix::app()->error->register();
                 \Mix::app()->request->setRequester($request);
                 \Mix::app()->response->setResponder($response);
-                $this->app->run($request, $response);
+                \Mix::app()->run($request, $response);
             } catch (\Exception $e) {
                 \Mix::app()->error->appException($e);
             }

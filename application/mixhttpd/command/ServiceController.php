@@ -14,8 +14,8 @@ class ServiceController extends Controller
 
     // 启动服务
     public function actionStart()
-    {        
-        \Mix::app()->server->start();
+    {
+        return \Mix::app()->server->start();
     }
 
     // 停止服务

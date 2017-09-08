@@ -52,7 +52,7 @@ return [
             'setting'      => [
                 'worker_num'      => 4,
                 'task_worker_num' => 2,
-                'daemonize'       => true,
+                'daemonize'       => false,
             ],
             // 虚拟主机：运行在Server内的Web应用
             'virtualHosts' => [

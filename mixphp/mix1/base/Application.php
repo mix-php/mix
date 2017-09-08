@@ -28,7 +28,7 @@ class Application
             $this->$key = $value;
         }
         // 快捷引用
-        \Mix::$_app = $this;
+        \Mix::$app = $this;
     }
 
     /**
