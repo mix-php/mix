@@ -22,7 +22,7 @@ class HttpServer extends Object
     public $setting = [];
 
     // 虚拟主机
-    public $virtualHost = [];
+    public $virtualHosts = [];
 
     // SwooleHttpServer对象
     private $server;
@@ -33,7 +33,7 @@ class HttpServer extends Object
     // 初始化
     public function init()
     {
-        $this->server = new \swoole_http_server($this->host, $this->port);
+        $this->server       = new \swoole_http_server($this->host, $this->port);
         $this->processLabel = "{$this->host}:{$this->port} {$this->virtualHost['hostname']}";
     }
 
@@ -65,9 +65,12 @@ class HttpServer extends Object
             } else {
                 swoole_set_process_name("mixhttpd {$this->processLabel} task");
             }
-            // 实例化App
-            $config = require $this->virtualHost['config'];
-            $this->app = new $this->virtualHost['appClass']($config);
+            // 实例化Apps
+            \Mix::$apps = [];
+            foreach ($this->virtualHosts as $host => $virtualHost) {
+                $config       = require $virtualHost['config'];
+                \Mix::$apps[$host] = new $virtualHost['class']($config);
+            }
         });
     }
 
@@ -75,12 +78,14 @@ class HttpServer extends Object
     private function onRequest()
     {
         $this->server->on('request', function ($request, $response) {
-            $hostname = $request->header['host'];
+            $host = $request->header['host'];
             // 执行请求
-            try {
+            try {             
+
+                \Mix::$app->error->register();
                 \Mix::$app->request->setRequester($request);
                 \Mix::$app->response->setResponder($response);
-                \Mix::$app->error->register();
+                
                 if ($hostname == $this->virtualHost['hostname']) {
                     $this->app->run($request, $response);
                 } else if ($this->virtualHost['hostname'] == '*') {
