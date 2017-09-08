@@ -38,7 +38,9 @@ MixPHP 极简特性非常适合个人开发者快速搭建产品。
 
 MixPHP 的高性能、多功能特性则可以满足企业用户各种规模的开发需求。
 
-基于 Swoole 的开发已经成为高级 PHPer 必备技能之一，MixPHP 让 Swoole 的使用简单化。
+基于 Swoole 的开发已经成为高级 PHPer 必备技能之一，MixPHP 让 Swoole 的使用简单化，
+
+用户可专心于业务开发，而无需了解 Swoole 复杂的生命周期、变量作用域、进程模型等问题。
 
 SwooleWeb + MixHttpd 是 HTTP 领域的开发，未来 MixPHP 还会增加 TCP/UDP 领域的支持。
 
