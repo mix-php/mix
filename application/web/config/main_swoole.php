@@ -7,7 +7,7 @@ return [
     'basePath'            => dirname(__DIR__) . DS,
 
     // 控制器命名空间
-    'controllerNamespace' => 'swooleweb\controller',
+    'controllerNamespace' => 'web\controller',
 
     // 注册树
     'register'            => [

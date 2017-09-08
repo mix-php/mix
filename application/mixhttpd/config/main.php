@@ -47,7 +47,7 @@ return [
             // 主机
             'host'        => '192.168.181.130',
             // 端口
-            'port'        => 9501,
+            'port'        => 8501,
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
             'setting'     => [
                 'worker_num'      => 4,
@@ -56,13 +56,12 @@ return [
             ],
             // 虚拟主机：运行在Server内的Web应用 (只能运行一个应用)
             'virtualHost' => [
-                // 主机名称：*为全部
-                '*' => [
-                    // 类路径
-                    'class'  => 'mix\swoole\Application',
-                    // 配置路径
-                    'config' => __DIR__ . '/../../web/config/main_swoole.php',
-                ],
+                // 主机名称
+                'hostname' => '*',
+                // APP路径
+                'appClass' => 'mix\swoole\Application',
+                // 配置路径
+                'config'   => __DIR__ . '/../../web/config/main_swoole.php',
             ],
         ],
 

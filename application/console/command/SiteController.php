@@ -7,7 +7,7 @@
 
 namespace console\command;
 
-use mix\web\Controller;
+use mix\console\Controller;
 
 class SiteController extends Controller
 {

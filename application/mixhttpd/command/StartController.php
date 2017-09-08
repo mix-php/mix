@@ -7,15 +7,16 @@
 
 namespace mixhttpd\command;
 
-use mix\web\Controller;
+use mix\console\Controller;
 
 class StartController extends Controller
 {
 
+    // 启动服务
     public function actionIndex()
     {
+        echo 'mixhttpd started' . PHP_EOL;
         \Mix::$app->server->start();
-        return 'mixhttpd started' . PHP_EOL;
     }
 
 }
