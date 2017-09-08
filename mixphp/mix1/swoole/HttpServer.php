@@ -33,8 +33,8 @@ class HttpServer extends Object
     // 初始化
     public function init()
     {
-        $this->server       = new \swoole_http_server($this->host, $this->port);
-        $this->processLabel = "{$this->host}:{$this->port} {$this->virtualHost['hostname']}";
+        $this->server = new \swoole_http_server($this->host, $this->port);
+        $this->processLabel = "{$this->host}:{$this->port}";
     }
 
     // 主进程启动事件
@@ -67,12 +67,14 @@ class HttpServer extends Object
             } else {
                 swoole_set_process_name("mixhttpd {$this->processLabel} task");
             }
-            // 实例化App
-            \Mix::$app = [];
+            // 实例化Apps
+            $apps = [];
             foreach ($this->virtualHosts as $host => $virtualHost) {
-                $config           = require $virtualHost['config'];
-                \Mix::$app[$host] = new $virtualHost['class']($config);
+                $config = require $virtualHost['config'];
+                $apps[$host] = new $virtualHost['class']($config);
             }
+            \Mix::$_app = null;
+            \Mix::$apps = $apps;
         });
     }
 
@@ -93,20 +95,6 @@ class HttpServer extends Object
         });
     }
 
-    // 执行任务事件
-    private function onTask()
-    {
-        $this->server->on('Task', function ($server, $taskId, $srcWorkerId, $data) {
-        });
-    }
-
-    // 任务结束事件
-    private function onFinish()
-    {
-        $this->server->on('Finish', function ($server, $taskId, $data) {
-        });
-    }
-
     // 启动服务
     public function start()
     {
@@ -114,8 +102,6 @@ class HttpServer extends Object
         $this->onManagerStart();
         $this->onWorkerStart();
         $this->onRequest();
-        $this->onTask();
-        $this->onFinish();
         $this->server->set($this->setting);
         $this->server->start();
     }

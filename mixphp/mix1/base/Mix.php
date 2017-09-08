@@ -9,28 +9,28 @@ class Mix
 {
 
     // App实例
-    // LNMP架构是对象，Swoole架构是数组
-    public static $app;
+    public static $_app;
 
+    // App实例池
+    public static $apps;
     // 主机名称
     public static $host;
 
     // 返回App
     public static function app()
     {
-        if(is_object(self::$app)){
-            return self::$app;
+        // baseApp
+        if(isset(self::$_app)){
+            return self::$_app;
         }
-        if(is_array(self::$app)){
-            if (isset(self::$app[self::$host])) {
-                return self::$app[self::$host];
-            }
-            if (isset(self::$app['*'])) {
-                return self::$app['*'];
-            }
-            return array_shift(self::$app);
+        // swooleApp
+        if (isset(self::$apps[self::$host])) {
+            return self::$apps[self::$host];
         }
-        return null;
+        if (isset(self::$apps['*'])) {
+            return self::$apps['*'];
+        }
+        return array_shift(self::$apps);
     }
 
 }
