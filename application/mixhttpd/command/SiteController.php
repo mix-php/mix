@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Site控制器类
+ * 控制器
  * @author 刘健 <code.liu@qq.com>
  */
 
-namespace swooleweb\controller;
+namespace console\command;
 
 use mix\web\Controller;
 
@@ -14,7 +14,8 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return 'MixPHP V1';
+        $param = \Mix::$app->request->param();
+        return 'Hello World';
     }
 
 }

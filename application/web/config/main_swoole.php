@@ -7,7 +7,7 @@ return [
     'basePath'            => dirname(__DIR__) . DS,
 
     // 控制器命名空间
-    'controllerNamespace' => 'web\controller',
+    'controllerNamespace' => 'swooleweb\controller',
 
     // 注册树
     'register'            => [
@@ -31,29 +31,29 @@ return [
         // 请求
         'request'  => [
             // 类路径
-            'class'     => 'mix\swoole\Request',
+            'class' => 'mix\swoole\Request',
         ],
 
         // 响应
         'response' => [
             // 类路径
-            'class'     => 'mix\swoole\Response',
+            'class'  => 'mix\swoole\Response',
             // 输出格式
-            'format'    => mix\web\Response::FORMAT_JSON,
+            'format' => mix\web\Response::FORMAT_JSON,
             // json
-            'json'      => [
+            'json'   => [
                 // 类路径
                 'class' => 'mix\web\Json',
             ],
             // jsonp
-            'jsonp'     => [
+            'jsonp'  => [
                 // 类路径
                 'class'        => 'mix\web\Jsonp',
                 // callback名称
                 'callbackName' => 'callback',
             ],
             // xml
-            'xml'       => [
+            'xml'    => [
                 // 类路径
                 'class' => 'mix\web\Xml',
             ],
@@ -64,7 +64,7 @@ return [
             // 类路径
             'class'  => 'mix\web\Error',
             // 输出格式
-            'format' => mix\web\Error::FORMAT_HTML,
+            'format' => mix\web\Error::FORMAT_JSON,
         ],
 
         // 日志

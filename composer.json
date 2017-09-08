@@ -2,8 +2,8 @@
   "autoload": {
     "psr-4": {
       "mix\\": "mixphp/mix1/",
+      "mixhttpd\\": "application/swooleweb/",
       "web\\": "application/web/",
-      "swooleweb\\": "application/swooleweb/",
       "console\\": "application/console/"
     }
   }

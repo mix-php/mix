@@ -11,12 +11,9 @@ class ComposerStaticInit7b86a9c973b6deb108af8f47275b0dd2
         array (
             'web\\' => 4,
         ),
-        's' => 
-        array (
-            'swooleweb\\' => 10,
-        ),
         'm' => 
         array (
+            'mixhttpd\\' => 9,
             'mix\\' => 4,
         ),
         'c' => 
@@ -30,7 +27,7 @@ class ComposerStaticInit7b86a9c973b6deb108af8f47275b0dd2
         array (
             0 => __DIR__ . '/../..' . '/application/web',
         ),
-        'swooleweb\\' => 
+        'mixhttpd\\' => 
         array (
             0 => __DIR__ . '/../..' . '/application/swooleweb',
         ),
