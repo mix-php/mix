@@ -7,37 +7,29 @@ namespace Composer\Autoload;
 class ComposerStaticInit7b86a9c973b6deb108af8f47275b0dd2
 {
     public static $prefixLengthsPsr4 = array (
-        'w' => 
-        array (
-            'web\\' => 4,
-        ),
         'm' => 
         array (
             'mixhttpd\\' => 9,
             'mix\\' => 4,
         ),
-        'c' => 
+        'i' => 
         array (
-            'console\\' => 8,
+            'index\\' => 6,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'web\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/application/web',
-        ),
         'mixhttpd\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/application/mixhttpd',
+            0 => __DIR__ . '/../..' . '/mixhttpd',
         ),
         'mix\\' => 
         array (
             0 => __DIR__ . '/../..' . '/mixphp/mix1',
         ),
-        'console\\' => 
+        'index\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/application/console',
+            0 => __DIR__ . '/../..' . '/application/index',
         ),
     );
 

@@ -5,7 +5,7 @@
  * @author 刘健 <code.liu@qq.com>
  */
 
-namespace console\command;
+namespace index\command;
 
 use mix\console\Controller;
 

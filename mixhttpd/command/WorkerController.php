@@ -16,7 +16,7 @@ class WorkerController extends Controller
     public function actionReload()
     {
         exec('ps -ef | grep mixhttpd | awk \'NR==1{print $2}\' | xargs -n1 kill -USR1');
-        echo 'mixhttpd worker reloaded' . PHP_EOL;
+        echo '工作进程重启完成' . PHP_EOL;
     }
 
 }

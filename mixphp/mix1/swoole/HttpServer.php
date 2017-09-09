@@ -43,8 +43,6 @@ class HttpServer extends Object
         $this->server->on('Start', function ($server) {
             // 进程命名
             swoole_set_process_name("mixhttpd {$this->processLabel} master");
-            // 输出
-            echo 'mixhttpd started' . PHP_EOL;
         });
     }
 
@@ -73,8 +71,7 @@ class HttpServer extends Object
                 $config = require $virtualHost['config'];
                 $apps[$host] = new $virtualHost['class']($config);
             }
-            \Mix::$_app = null;
-            \Mix::$apps = $apps;
+            \Mix::$app = $apps;
         });
     }
 

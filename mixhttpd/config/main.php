@@ -60,7 +60,7 @@ return [
                     // APP路径
                     'class'  => 'mix\swoole\Application',
                     // 配置路径
-                    'config' => __DIR__ . '/../../web/config/main_swoole.php',
+                    'config' => __DIR__ . '/../../application/index/config/main_swoole.php',
                 ],
                 
             ],

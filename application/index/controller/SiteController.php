@@ -5,7 +5,7 @@
  * @author 刘健 <code.liu@qq.com>
  */
 
-namespace web\controller;
+namespace index\controller;
 
 use mix\web\Controller;
 
