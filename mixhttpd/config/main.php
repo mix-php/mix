@@ -50,8 +50,8 @@ return [
             'port'         => 8501,
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
             'setting'      => [
-                'worker_num' => 4,
-                'daemonize'  => true,
+                'worker_num' => 1,
+                'daemonize'  => false,
                 'log_file'   => __DIR__ . '/../runtime/log/mixhttpd.log',
             ],
             // 虚拟主机：运行在Server内的Web应用

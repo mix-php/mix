@@ -14,8 +14,10 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        $rows = \Mix::app()->rdb->createCommand("SELECT * FROM `post`")->queryAll();
-        return $rows;
+        //$rows = \Mix::app()->rdb->createCommand("SELECT * FROM `post`")->queryAll();
+        //return $rows;
+        \Mix::app()->redis->set('test:haha', 'haha');
+        return 'OK';
     }
 
 }

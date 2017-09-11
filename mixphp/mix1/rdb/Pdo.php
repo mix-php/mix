@@ -134,6 +134,8 @@ class Pdo extends Object
             if (($e instanceof \Exception and $e->getCode() == 2) or ($e instanceof \PDOException and $e->getCode() == 'HY000')) {
                 $this->init();
                 $this->bindStart();
+            } else {
+                throw $e;
             }
         }
     }

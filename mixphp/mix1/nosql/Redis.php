@@ -51,7 +51,22 @@ class Redis extends Object
      */
     public function __call($name, $arguments)
     {
-        return call_user_func_array([$this->redis, $name], $arguments);
+        try {
+            $returnVal = call_user_func_array([$this->redis, $name], $arguments);
+            // 执行出错
+            if ($returnVal === false) {
+                throw new \RedisException('Connection lost');
+            }
+            return $returnVal;
+        } catch (\Exception $e) {
+            // 长连接超时处理
+            if (($e instanceof \Exception and $e->getCode() == 8) or ($e instanceof \RedisException and $e->getMessage() == 'Connection lost')) {
+                $this->init();
+                return call_user_func_array([$this->redis, $name], $arguments);
+            } else {
+                throw $e;
+            }
+        }
     }
 
 }
