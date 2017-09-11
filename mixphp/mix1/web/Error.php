@@ -64,15 +64,9 @@ class Error
             $message .= "[type] {$errors['type']}" . PHP_EOL;
             $message .= "[file] {$errors['file']} line {$errors['line']}" . PHP_EOL;
             $message .= "[trace] {$errors['trace']}" . PHP_EOL;
-            ob_start();
-            print_r($_SERVER);
-            $message .= str_replace('Array', '$_SERVER', ob_get_clean());
-            ob_start();
-            print_r($_GET);
-            $message .= str_replace('Array', '$_GET', ob_get_clean());
-            ob_start();
-            print_r($_POST);
-            $message .= str_replace('Array', '$_POST', ob_get_clean());
+            $message .= str_replace('Array', '$_SERVER', print_r($_SERVER, true));
+            $message .= str_replace('Array', '$_GET', print_r($_GET, true));
+            $message .= str_replace('Array', '$_POST', print_r($_POST, true));
             $message .= PHP_EOL;
             \Mix::app()->log->error($message);
         }
