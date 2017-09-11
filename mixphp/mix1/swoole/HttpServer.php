@@ -67,11 +67,11 @@ class HttpServer extends Object
             }
             // 实例化Apps
             $apps = [];
-            foreach ($this->virtualHosts as $host => $virtualHost) {
-                $config = require $virtualHost['config'];
-                $apps[$host] = new $virtualHost['class']($config);
+            foreach ($this->virtualHosts as $host => $configFile) {
+                $config = require $configFile;
+                $apps[$host] = new Application($config);
             }
-            \Mix::$app = $apps;
+            \Mix::setApps($apps);
         });
     }
 
@@ -79,7 +79,7 @@ class HttpServer extends Object
     private function onRequest()
     {
         $this->server->on('request', function ($request, $response) {
-            \Mix::$host = $request->header['host'];
+            \Mix::setHost($request->header['host']);
             // 执行请求
             try {
                 \Mix::app()->error->register();

@@ -56,14 +56,10 @@ return [
             ],
             // 虚拟主机：运行在Server内的Web应用
             'virtualHosts' => [
-
-                '*' => [
-                    // APP路径
-                    'class'  => 'mix\swoole\Application',
-                    // 配置路径
-                    'config' => __DIR__ . '/../../application/index/config/main_swoole.php',
-                ],
-
+                // 匹配全部主机
+                '*'               => __DIR__ . '/../../application/index/config/main_swoole.php',
+                // 匹配多个主机
+                'www.t.com|t.com' => __DIR__ . '/../../application/index/config/main_swoole.php',
             ],
         ],
 
