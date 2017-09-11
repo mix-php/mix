@@ -14,7 +14,8 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return 'MixPHP V1';
+        $rows = \Mix::app()->rdb->createCommand("SELECT * FROM `post`")->queryAll();
+        return $rows;
     }
 
 }

@@ -116,7 +116,7 @@ return [
             // 类路径
             'class'                           => 'mix\rdb\Pdo',
             // 数据源格式
-            'dsn'                             => 'mysql:host=127.0.0.1;port=3306;charset=utf8;dbname=test',
+            'dsn'                             => 'mysql:host=192.168.181.1;port=3306;charset=utf8;dbname=test',
             // 数据库用户名
             'username'                        => 'root',
             // 数据库密码

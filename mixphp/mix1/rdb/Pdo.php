@@ -113,21 +113,29 @@ class Pdo extends Object
     // 开始绑定参数
     private function bindStart()
     {
-        if (empty($this->values)) {
-            $this->pdoStatement = $this->pdo->prepare($this->sql);
-            $this->lastSqlData = null;
-        } else {
-            list($sql, $params, $values) = $this->lastSqlData = $this->bindPrepare($this->sql, $this->values);
-            $this->pdoStatement = $this->pdo->prepare($sql);
-            foreach ($params as $key => &$value) {
-                $this->pdoStatement->bindParam($key, $value);
+        try {
+            if (empty($this->values)) {
+                $this->pdoStatement = $this->pdo->prepare($this->sql);
+                $this->lastSqlData = null;
+            } else {
+                list($sql, $params, $values) = $this->lastSqlData = $this->bindPrepare($this->sql, $this->values);
+                $this->pdoStatement = $this->pdo->prepare($sql);
+                foreach ($params as $key => &$value) {
+                    $this->pdoStatement->bindParam($key, $value);
+                }
+                foreach ($values as $key => $value) {
+                    $this->pdoStatement->bindValue($key + 1, $value);
+                }
             }
-            foreach ($values as $key => $value) {
-                $this->pdoStatement->bindValue($key + 1, $value);
+            $this->sqlCache = [];
+            $this->values = [];
+        } catch (\Exception $e) {
+            // 长连接超时处理
+            if (($e instanceof \Exception and $e->getCode() == 2) or ($e instanceof \PDOException and $e->getCode() == 'HY000')) {
+                $this->init();
+                $this->bindStart();
             }
         }
-        $this->sqlCache = [];
-        $this->values = [];
     }
 
     // 执行查询，并返回报表类
