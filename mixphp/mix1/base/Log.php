@@ -16,7 +16,7 @@ class Log extends Object
     const ROTATE_WEEKLY = 2;
 
     // 日志目录
-    public $logDir = 'logs';
+    public $logDir = 'log';
 
     // 日志记录级别
     public $level = ['error', 'info', 'debug'];

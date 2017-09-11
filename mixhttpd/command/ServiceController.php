@@ -12,16 +12,23 @@ use mix\console\Controller;
 class ServiceController extends Controller
 {
 
+    // 服务是否启动
+    public function isStart()
+    {
+        $output = \Mix::app()->exec('ps -ef | grep mixhttpd');
+        foreach ($output as $item) {
+            if (strpos($item, 'mixhttpd') !== false && strpos($item, 'master') !== false) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // 启动服务
     public function actionStart()
     {
-        exec('ps -ef | grep mixhttpd', $output, $status);
-        if ($status != 0) {
-            return '命令执行错误' . PHP_EOL;
-        }
-        $master = array_shift($output);
-        if (strpos($master, 'mixhttpd') !== false && strpos($master, 'master') !== false) {
-            return '服务在运行中' . PHP_EOL;
+        if ($this->isStart()) {
+            return '服务运行中' . PHP_EOL;
         }
         return \Mix::app()->server->start();
     }
@@ -29,8 +36,18 @@ class ServiceController extends Controller
     // 停止服务
     public function actionStop()
     {
-        exec('ps -ef | grep mixhttpd | awk \'NR==1{print $2}\' | xargs -n1 kill');
+        if ($this->isStart()) {
+            \Mix::app()->exec('ps -ef | grep mixhttpd | awk \'NR==1{print $2}\' | xargs -n1 kill');
+        }
+        sleep(1);
         return '服务停止完成' . PHP_EOL;
+    }
+
+    // 重启服务
+    public function actionRestart()
+    {
+        $this->actionStop();
+        $this->actionStart();
     }
 
 }
