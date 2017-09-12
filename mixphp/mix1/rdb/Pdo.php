@@ -131,12 +131,8 @@ class Pdo extends Object
             $this->values = [];
         } catch (\Exception $e) {
             // 长连接超时处理
-            if (($e instanceof \Exception and $e->getCode() == 2) or ($e instanceof \PDOException and $e->getCode() == 'HY000')) {
-                $this->init();
-                $this->bindStart();
-            } else {
-                throw $e;
-            }
+            $this->init();
+            throw $e;
         }
     }
 

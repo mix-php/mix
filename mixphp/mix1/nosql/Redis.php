@@ -17,6 +17,7 @@ class Redis extends Object
     public $port;
     public $password;
     public $database;
+
     // redis对象
     private $redis;
 
@@ -26,19 +27,10 @@ class Redis extends Object
      */
     public function init()
     {
-        $this->connect();
-    }
-
-    /**
-     * 连接
-     * @author 刘健 <code.liu@qq.com>
-     */
-    private function connect()
-    {
         $redis = new \Redis();
         // connect 这里如果设置timeout，是全局有效的，执行brPop时会受影响
         if (!$redis->connect($this->host, $this->port)) {
-            throw new \Exception('Redis Connect Failure');
+            throw new \Exception('Redis连接失败');
         }
         $redis->auth($this->password);
         $redis->select($this->database);
@@ -53,19 +45,14 @@ class Redis extends Object
     {
         try {
             $returnVal = call_user_func_array([$this->redis, $name], $arguments);
-            // 执行出错
             if ($returnVal === false) {
-                throw new \RedisException('Connection lost');
+                throw new \RedisException('执行命令出错');
             }
             return $returnVal;
         } catch (\Exception $e) {
             // 长连接超时处理
-            if (($e instanceof \Exception and $e->getCode() == 8) or ($e instanceof \RedisException and $e->getMessage() == 'Connection lost')) {
-                $this->init();
-                return call_user_func_array([$this->redis, $name], $arguments);
-            } else {
-                throw $e;
-            }
+            $this->init();
+            throw $e;
         }
     }
 
