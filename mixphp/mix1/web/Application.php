@@ -1,12 +1,11 @@
 <?php
 
+namespace mix\web;
+
 /**
  * App类
  * @author 刘健 <code.liu@qq.com>
  */
-
-namespace mix\web;
-
 class Application extends \mix\base\Application
 {
 

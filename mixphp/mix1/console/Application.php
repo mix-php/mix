@@ -1,12 +1,11 @@
 <?php
 
+namespace mix\console;
+
 /**
  * App类
  * @author 刘健 <code.liu@qq.com>
  */
-
-namespace mix\console;
-
 class Application extends \mix\base\Application
 {
 

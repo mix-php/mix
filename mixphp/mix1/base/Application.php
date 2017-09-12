@@ -1,19 +1,31 @@
 <?php
 
+namespace mix\base;
+
 /**
  * App类
  * @author 刘健 <code.liu@qq.com>
+ *
+ * @property \mix\base\Route $route
+ * @property \mix\web\Request|\mix\swoole\Request $request
+ * @property \mix\web\Response|\mix\swoole\Response $response
+ * @property \mix\web\Error $error
+ * @property \mix\base\Log $log
+ * @property \mix\web\Session $session
+ * @property \mix\web\Cookie $cookie
+ * @property \mix\rdb\Pdo $rdb
+ * @property \mix\nosql\Redis $redis
+ * @property \mix\base\Config $config
  */
-
-namespace mix\base;
-
 class Application
 {
 
     // 应用根路径
     public $basePath = '\\';
+
     // 控制器命名空间
     public $controllerNamespace = 'www\controller';
+
     // 注册树配置
     public $register = [];
 

@@ -13,7 +13,11 @@ class Mix
     // 主机
     protected static $host;
 
-    // 返回App
+    /**
+     * 返回App
+     *
+     * @return \mix\web\Application|\mix\console\Application
+     */
     public static function app()
     {
         if (is_object(self::$app)) {

@@ -16,8 +16,8 @@ class SiteController extends Controller
     {
         $rows = \Mix::app()->rdb->createCommand("SELECT * FROM `post`")->queryAll();
         return $rows;
-        \Mix::app()->redis->set('test:haha', '11');
-        return 'OK';
+        //\Mix::app()->redis->set('test:haha', '11');
+        //return 'OK';
     }
 
 }
