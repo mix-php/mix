@@ -21,13 +21,9 @@ class Redis extends Object
     public $password = '';
     // 数据库
     public $database = '';
-    // 重连时间
-    public $reconnection = 7200;
 
     // redis对象
-    private $_redis;
-    // 连接时间
-    private $_connectTime;
+    protected $_redis;
 
     /**
      * 初始化
@@ -35,8 +31,12 @@ class Redis extends Object
      */
     public function init()
     {
-        $this->_connectTime = time();
-        isset($this->_redis) and $this->_redis = null; // 置空才会释放旧连接
+        $this->connect();
+    }
+
+    // 连接
+    public function connect()
+    {
         $redis = new \Redis();
         // connect 这里如果设置timeout，是全局有效的，执行brPop时会受影响
         if (!$redis->connect($this->host, $this->port)) {
@@ -53,27 +53,11 @@ class Redis extends Object
      */
     public function __call($name, $arguments)
     {
-        // 主动重新连接
-        if (\Mix::app() instanceof \mix\swoole\Application) {
-            if ($this->_connectTime + $this->reconnection < time()) {
-                var_dump('init');
-                $this->init();
-            }
+        $returnVal = call_user_func_array([$this->_redis, $name], $arguments);
+        if ($returnVal === false) {
+            throw new \RedisException('执行命令出错');
         }
-        try {
-            // 执行命令
-            $returnVal = call_user_func_array([$this->_redis, $name], $arguments);
-            if ($returnVal === false) {
-                throw new \RedisException('执行命令出错');
-            }
-            return $returnVal;
-        } catch (\Exception $e) {
-            // 长连接超时处理
-            if (\Mix::app() instanceof \mix\swoole\Application) {
-                $this->init();
-            }
-            throw $e;
-        }
+        return $returnVal;
     }
 
 }

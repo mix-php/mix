@@ -52,7 +52,7 @@ return [
 
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
             'setting'      => [
-                'worker_num' => 1,
+                'worker_num' => 4,
                 'daemonize'  => false,
                 'log_file'   => __DIR__ . '/../runtime/log/mixhttpd.log',
             ],

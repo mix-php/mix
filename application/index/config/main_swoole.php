@@ -106,21 +106,21 @@ return [
             'reconnection'                    => 7200,
         ],
 
-        //// redis
-        //'redis'    => [
-        //    // 类路径
-        //    'class'        => 'mix\nosql\Redis',
-        //    // 主机
-        //    'host'         => '192.168.1.78',
-        //    // 端口
-        //    'port'         => 6379,
-        //    // 密码
-        //    'password'     => '',
-        //    // 数据库
-        //    'database'     => 0,
-        //    // 重连时间(秒)
-        //    'reconnection' => 7200,
-        //],
+        // redis
+        'redis'    => [
+            // 类路径
+            'class'        => 'mix\swoole\Redis',
+            // 主机
+            'host'         => '192.168.1.78',
+            // 端口
+            'port'         => 6379,
+            // 密码
+            'password'     => '',
+            // 数据库
+            'database'     => 0,
+            // 重连时间(秒)
+            'reconnection' => 20,
+        ],
 
         // 配置
         'config'   => [

@@ -8,10 +8,10 @@ class Mix
 {
 
     // App实例
-    public static $_app;
+    protected static $_app;
 
     // 主机
-    public static $_host;
+    protected static $_host;
 
     // 容器
     public static $container;

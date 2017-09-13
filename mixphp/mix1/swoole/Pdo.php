@@ -24,8 +24,6 @@ class Pdo extends \mix\web\Pdo
         if (is_null($this->_pdo)) {
             // 连接
             $this->connect();
-        } else {
-            $this->_connectTime = time();
         }
     }
 
@@ -42,7 +40,6 @@ class Pdo extends \mix\web\Pdo
     {
         // 主动重新连接
         if ($this->_connectTime + $this->reconnection < time()) {
-            var_dump('init');
             $this->connect();
         }
         try {
