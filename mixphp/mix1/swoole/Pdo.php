@@ -20,7 +20,7 @@ class Pdo extends \mix\web\Pdo
     {
         // 共用连接对象
         $this->_pdo = &\Mix::$container['_pdo'];
-        $this->_connectTime = &\Mix::$container['_connectTime'];
+        $this->_connectTime = &\Mix::$container['_pdoConnectTime'];
         if (is_null($this->_pdo)) {
             // 连接
             $this->connect();
