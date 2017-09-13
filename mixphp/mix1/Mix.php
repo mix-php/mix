@@ -8,10 +8,13 @@ class Mix
 {
 
     // App实例
-    protected static $app;
+    protected static $_app;
 
     // 主机
-    protected static $host;
+    protected static $_host;
+
+    // 容器
+    public static $container = [];
 
     /**
      * 返回App
@@ -20,11 +23,11 @@ class Mix
      */
     public static function app()
     {
-        if (is_object(self::$app)) {
-            return self::$app;
+        if (is_object(self::$_app)) {
+            return self::$_app;
         }
-        if (is_array(self::$app)) {
-            return self::$app[self::$host];
+        if (is_array(self::$_app)) {
+            return self::$_app[self::$_host];
         }
         return null;
     }
@@ -32,31 +35,31 @@ class Mix
     // 设置App
     public static function setApp($app)
     {
-        self::$app = $app;
+        self::$_app = $app;
     }
 
     // 设置Apps
     public static function setApps($apps)
     {
-        self::$app = $apps;
+        self::$_app = $apps;
     }
 
     // 设置host
     public static function setHost($host)
     {
-        self::$host = null;
-        $vHosts = array_keys(self::$app);
+        self::$_host = null;
+        $vHosts = array_keys(self::$_app);
         foreach ($vHosts as $vHost) {
             if ($vHost == '*') {
                 continue;
             }
             if (preg_match("/{$vHost}/i", $host)) {
-                self::$host = $vHost;
+                self::$_host = $vHost;
                 break;
             }
         }
-        if (is_null(self::$host)) {
-            self::$host = isset(self::$app['*']) ? '*' : array_shift($vHosts);
+        if (is_null(self::$_host)) {
+            self::$_host = isset(self::$_app['*']) ? '*' : array_shift($vHosts);
         }
     }
 

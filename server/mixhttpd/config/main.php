@@ -42,25 +42,29 @@ return [
 
         // HttpServer
         'server'   => [
+
             // 类路径
             'class'        => 'mix\swoole\HttpServer',
             // 主机
-            'host'         => '192.168.181.130',
+            'host'         => '192.168.1.146',
             // 端口
-            'port'         => 8501,
+            'port'         => 9501,
+
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
             'setting'      => [
                 'worker_num' => 1,
                 'daemonize'  => false,
                 'log_file'   => __DIR__ . '/../runtime/log/mixhttpd.log',
             ],
+
             // 虚拟主机：运行在Server内的Web应用
             'virtualHosts' => [
                 // 匹配全部主机
-                '*'               => __DIR__ . '/../../application/index/config/main_swoole.php',
+                '*'               => __DIR__ . '/../../../application/index/config/main_swoole.php',
                 // 匹配多个主机
-                'www.t.com|t.com' => __DIR__ . '/../../application/index/config/main_swoole.php',
+                'www.t.com|t.com' => __DIR__ . '/../../../application/index/config/main_swoole.php',
             ],
+
         ],
 
     ],

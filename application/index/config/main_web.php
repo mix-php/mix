@@ -88,7 +88,7 @@ return [
             // 处理者
             'saveHandler'   => mix\web\Session::HANDLER_REDIS,
             // 保存路径
-            'savePath'      => 'tcp://127.0.0.1:6379?auth=&database=9&prefix=MIX_SSID:',
+            'savePath'      => 'tcp://192.168.1.78:6379?auth=&database=9&prefix=MIX_SSID:',
             // 生存时间
             'gcMaxLifetime' => 7200,
             // session名
@@ -116,7 +116,7 @@ return [
             // 类路径
             'class'                           => 'mix\rdb\Pdo',
             // 数据源格式
-            'dsn'                             => 'mysql:host=192.168.181.1;port=3306;charset=utf8;dbname=test',
+            'dsn'                             => 'mysql:host=192.168.1.78;port=3306;charset=utf8;dbname=test',
             // 数据库用户名
             'username'                        => 'root',
             // 数据库密码
@@ -139,7 +139,7 @@ return [
             // 类路径
             'class'    => 'mix\nosql\Redis',
             // 主机
-            'host'     => '192.168.181.1',
+            'host'     => '192.168.1.78',
             // 端口
             'port'     => 6379,
             // 密码

@@ -35,6 +35,11 @@ class HttpServer extends Object
     {
         $this->server = new \swoole_http_server($this->host, $this->port);
         $this->processLabel = "{$this->host}:{$this->port}";
+        // 新建日志目录
+        if (isset($this->setting['log_file'])) {
+            $dir = dirname($this->setting['log_file']);
+            is_dir($dir) or mkdir($dir);
+        }
     }
 
     // 主进程启动事件

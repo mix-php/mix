@@ -86,7 +86,7 @@ return [
             // 类路径
             'class'                           => 'mix\rdb\Pdo',
             // 数据源格式
-            'dsn'                             => 'mysql:host=192.168.181.1;port=3306;charset=utf8;dbname=test',
+            'dsn'                             => 'mysql:host=192.168.1.78;port=3306;charset=utf8;dbname=test',
             // 数据库用户名
             'username'                        => 'root',
             // 数据库密码
@@ -102,20 +102,24 @@ return [
             ],
             // 回滚含有零影响行数的事务
             'rollbackZeroAffectedTransaction' => false,
+            // 重连时间(秒)
+            'reconnection'                    => 7200,
         ],
 
         // redis
         'redis'    => [
             // 类路径
-            'class'    => 'mix\nosql\Redis',
+            'class'        => 'mix\nosql\Redis',
             // 主机
-            'host'     => '192.168.181.1',
+            'host'         => '192.168.1.78',
             // 端口
-            'port'     => 6379,
+            'port'         => 6379,
             // 密码
-            'password' => '',
+            'password'     => '',
             // 数据库
-            'database' => 0,
+            'database'     => 0,
+            // 重连时间(秒)
+            'reconnection' => 7200,
         ],
 
         // 配置

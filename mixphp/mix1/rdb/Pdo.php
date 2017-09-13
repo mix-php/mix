@@ -1,14 +1,13 @@
 <?php
 
-/**
- * Mysql类
- * @author 刘健 <code.liu@qq.com>
- */
-
 namespace mix\rdb;
 
 use mix\base\Object;
 
+/**
+ * Mysql类
+ * @author 刘健 <code.liu@qq.com>
+ */
 class Pdo extends Object
 {
 
@@ -22,6 +21,9 @@ class Pdo extends Object
     public $attribute = [];
     // 回滚含有零影响行数的事务
     public $rollbackZeroAffectedTransaction = false;
+    // 重连时间
+    public $reconnection = 7200;
+
     // PDO
     private $pdo;
     // PDOStatement
@@ -40,10 +42,14 @@ class Pdo extends Object
         \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
         \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
     ];
+    // 连接时间
+    private $connectTime;
 
     // 初始化
     public function init()
     {
+        $this->connectTime = time();
+        isset($this->pdo) and $this->pdo = null; // 置空才会释放旧连接
         $this->pdo = new \PDO(
             $this->dsn,
             $this->username,
@@ -113,7 +119,15 @@ class Pdo extends Object
     // 开始绑定参数
     private function bindStart()
     {
+        // 主动重新连接
+        if (\Mix::app() instanceof \mix\swoole\Application) {
+            if ($this->connectTime + $this->reconnection < time()) {
+                var_dump('init');
+                $this->init();
+            }
+        }
         try {
+            // 绑定参数
             if (empty($this->values)) {
                 $this->pdoStatement = $this->pdo->prepare($this->sql);
                 $this->lastSqlData = null;
@@ -131,17 +145,11 @@ class Pdo extends Object
             $this->values = [];
         } catch (\Exception $e) {
             // 长连接超时处理
-            $this->init();
+            if (\Mix::app() instanceof \mix\swoole\Application) {
+                $this->init();
+            }
             throw $e;
         }
-    }
-
-    // 执行查询，并返回报表类
-    public function query()
-    {
-        $this->bindStart();
-        $this->pdoStatement->execute();
-        return $this->pdoStatement;
     }
 
     // 返回多行

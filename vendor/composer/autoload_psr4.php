@@ -6,7 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'mixhttpd\\' => array($baseDir . '/mixhttpd'),
+    'mixhttpd\\' => array($baseDir . '/server/mixhttpd'),
     'mix\\' => array($baseDir . '/mixphp/mix1'),
     'index\\' => array($baseDir . '/application/index'),
 );

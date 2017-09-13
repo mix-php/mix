@@ -21,4 +21,22 @@ class Application extends \mix\base\Application
         \Mix::app()->response->setContent($content)->send();
     }
 
+    /**
+     * 获取公开目录路径
+     * @return string
+     */
+    public function getPublicPath()
+    {
+        return $this->basePath . 'public' . DIRECTORY_SEPARATOR;
+    }
+
+    /**
+     * 获取视图目录路径
+     * @return string
+     */
+    public function getViewPath()
+    {
+        return $this->basePath . 'view' . DIRECTORY_SEPARATOR;
+    }
+
 }

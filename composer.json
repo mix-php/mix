@@ -2,7 +2,7 @@
   "autoload": {
     "psr-4": {
       "mix\\": "mixphp/mix1/",
-      "mixhttpd\\": "mixhttpd/",
+      "mixhttpd\\": "server/mixhttpd/",
       "index\\": "application/index/"
     }
   }

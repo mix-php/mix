@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Site控制器类
+ * 默认控制器
  * @author 刘健 <code.liu@qq.com>
  */
 
@@ -9,15 +9,14 @@ namespace index\controller;
 
 use mix\web\Controller;
 
-class SiteController extends Controller
+class IndexController extends Controller
 {
 
     public function actionIndex()
     {
-        $rows = \Mix::app()->rdb->createCommand("SELECT * FROM `post`")->queryAll();
-        return $rows;
-        //\Mix::app()->redis->set('test:haha', '11');
-        //return 'OK';
+        //$rows = \Mix::app()->rdb->createCommand("SELECT * FROM `post`")->queryAll();
+        //return $rows;
+        return \Mix::app()->redis->set('test:haha', '11');
     }
 
 }

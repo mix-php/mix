@@ -21,7 +21,7 @@ class ComposerStaticInit7b86a9c973b6deb108af8f47275b0dd2
     public static $prefixDirsPsr4 = array (
         'mixhttpd\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/mixhttpd',
+            0 => __DIR__ . '/../..' . '/server/mixhttpd',
         ),
         'mix\\' => 
         array (

@@ -1,25 +1,33 @@
 <?php
 
-/**
- * redis 驱动
- * @author 刘健 <code.liu@qq.com>
- */
-
 namespace mix\nosql;
 
 use mix\base\Object;
 
+/**
+ * redis 驱动
+ *
+ * @author 刘健 <code.liu@qq.com>
+ * @method set($key, $value)
+ */
 class Redis extends Object
 {
 
-    // 配置信息
-    public $host;
-    public $port;
-    public $password;
-    public $database;
+    // 主机
+    public $host = '';
+    // 端口
+    public $port = '';
+    // 密码
+    public $password = '';
+    // 数据库
+    public $database = '';
+    // 重连时间
+    public $reconnection = 7200;
 
     // redis对象
-    private $redis;
+    private $_redis;
+    // 连接时间
+    private $connectTime;
 
     /**
      * 初始化
@@ -27,6 +35,8 @@ class Redis extends Object
      */
     public function init()
     {
+        $this->connectTime = time();
+        isset($this->_redis) and $this->_redis = null; // 置空才会释放旧连接
         $redis = new \Redis();
         // connect 这里如果设置timeout，是全局有效的，执行brPop时会受影响
         if (!$redis->connect($this->host, $this->port)) {
@@ -34,7 +44,7 @@ class Redis extends Object
         }
         $redis->auth($this->password);
         $redis->select($this->database);
-        $this->redis = $redis;
+        $this->_redis = $redis;
     }
 
     /**
@@ -43,15 +53,25 @@ class Redis extends Object
      */
     public function __call($name, $arguments)
     {
+        // 主动重新连接
+        if (\Mix::app() instanceof \mix\swoole\Application) {
+            if ($this->connectTime + $this->reconnection < time()) {
+                var_dump('init');
+                $this->init();
+            }
+        }
         try {
-            $returnVal = call_user_func_array([$this->redis, $name], $arguments);
+            // 执行命令
+            $returnVal = call_user_func_array([$this->_redis, $name], $arguments);
             if ($returnVal === false) {
                 throw new \RedisException('执行命令出错');
             }
             return $returnVal;
         } catch (\Exception $e) {
             // 长连接超时处理
-            $this->init();
+            if (\Mix::app() instanceof \mix\swoole\Application) {
+                $this->init();
+            }
             throw $e;
         }
     }
