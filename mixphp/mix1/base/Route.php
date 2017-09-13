@@ -21,7 +21,7 @@ class Route extends Object
     // 默认路由规则
     private $defaultRules = [
         // 首页
-        ''                    => 'site/index',
+        ''                    => 'index/index',
         // 一级目录
         ':controller/:action' => ':controller/:action',
     ];
