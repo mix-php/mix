@@ -84,7 +84,7 @@ return [
         // 数据库
         'rdb'      => [
             // 类路径
-            'class'                           => 'mix\rdb\Pdo',
+            'class'                           => 'mix\swoole\Pdo',
             // 数据源格式
             'dsn'                             => 'mysql:host=192.168.1.78;port=3306;charset=utf8;dbname=test',
             // 数据库用户名
@@ -106,21 +106,21 @@ return [
             'reconnection'                    => 7200,
         ],
 
-        // redis
-        'redis'    => [
-            // 类路径
-            'class'        => 'mix\nosql\Redis',
-            // 主机
-            'host'         => '192.168.1.78',
-            // 端口
-            'port'         => 6379,
-            // 密码
-            'password'     => '',
-            // 数据库
-            'database'     => 0,
-            // 重连时间(秒)
-            'reconnection' => 7200,
-        ],
+        //// redis
+        //'redis'    => [
+        //    // 类路径
+        //    'class'        => 'mix\nosql\Redis',
+        //    // 主机
+        //    'host'         => '192.168.1.78',
+        //    // 端口
+        //    'port'         => 6379,
+        //    // 密码
+        //    'password'     => '',
+        //    // 数据库
+        //    'database'     => 0,
+        //    // 重连时间(秒)
+        //    'reconnection' => 7200,
+        //],
 
         // 配置
         'config'   => [

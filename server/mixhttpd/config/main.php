@@ -62,7 +62,7 @@ return [
                 // 匹配全部主机
                 '*'               => __DIR__ . '/../../../application/index/config/main_swoole.php',
                 // 匹配多个主机
-                'www.t.com|t.com' => __DIR__ . '/../../../application/index/config/main_swoole.php',
+                'www.ve.com:9501' => __DIR__ . '/../../../application/index/config/main_swoole.php',
             ],
 
         ],

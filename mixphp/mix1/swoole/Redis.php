@@ -1,6 +1,6 @@
 <?php
 
-namespace mix\nosql;
+namespace mix\web;
 
 use mix\base\Object;
 
@@ -27,7 +27,7 @@ class Redis extends Object
     // redis对象
     private $_redis;
     // 连接时间
-    private $connectTime;
+    private $_connectTime;
 
     /**
      * 初始化
@@ -35,7 +35,7 @@ class Redis extends Object
      */
     public function init()
     {
-        $this->connectTime = time();
+        $this->_connectTime = time();
         isset($this->_redis) and $this->_redis = null; // 置空才会释放旧连接
         $redis = new \Redis();
         // connect 这里如果设置timeout，是全局有效的，执行brPop时会受影响
@@ -55,7 +55,7 @@ class Redis extends Object
     {
         // 主动重新连接
         if (\Mix::app() instanceof \mix\swoole\Application) {
-            if ($this->connectTime + $this->reconnection < time()) {
+            if ($this->_connectTime + $this->reconnection < time()) {
                 var_dump('init');
                 $this->init();
             }

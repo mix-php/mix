@@ -1,6 +1,6 @@
 <?php
 
-namespace mix\rdb;
+namespace mix\web;
 
 use mix\base\Object;
 
@@ -21,40 +21,39 @@ class Pdo extends Object
     public $attribute = [];
     // 回滚含有零影响行数的事务
     public $rollbackZeroAffectedTransaction = false;
-    // 重连时间
-    public $reconnection = 7200;
-
     // PDO
-    private $pdo;
+    protected $_pdo;
     // PDOStatement
-    private $pdoStatement;
+    protected $_pdoStatement;
     // sql
-    private $sql;
+    protected $_sql;
     // sql缓存
-    private $sqlCache = [];
+    protected $_sqlCache = [];
     // values
-    private $values = [];
+    protected $_values = [];
     // 最后sql数据
-    private $lastSqlData;
+    protected $_lastSqlData;
     // 默认属性
-    private $defaultAttribute = [
+    protected $_defaultAttribute = [
         \PDO::ATTR_EMULATE_PREPARES   => false,
         \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
         \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
     ];
-    // 连接时间
-    private $connectTime;
 
     // 初始化
     public function init()
     {
-        $this->connectTime = time();
-        isset($this->pdo) and $this->pdo = null; // 置空才会释放旧连接
-        $this->pdo = new \PDO(
+        $this->connect();
+    }
+
+    // 连接
+    public function connect()
+    {
+        $this->_pdo = new \PDO(
             $this->dsn,
             $this->username,
             $this->password,
-            $this->attribute += $this->defaultAttribute
+            $this->attribute += $this->_defaultAttribute
         );
     }
 
@@ -67,7 +66,7 @@ class Pdo extends Object
         if (isset($sqlItem['values'])) {
             $this->bindValues($sqlItem['values']);
         }
-        $this->sqlCache[] = array_shift($sqlItem);
+        $this->_sqlCache[] = array_shift($sqlItem);
         return $this;
     }
 
@@ -75,16 +74,16 @@ class Pdo extends Object
     public function createCommand($sql = null)
     {
         if (is_null($sql)) {
-            $this->sql = implode(' ', $this->sqlCache);
+            $this->_sql = implode(' ', $this->_sqlCache);
         }
         if (is_string($sql)) {
-            $this->sql = $sql;
+            $this->_sql = $sql;
         }
         if (is_array($sql)) {
             foreach ($sql as $item) {
                 $this->queryBuilder($item);
             }
-            $this->sql = implode(' ', $this->sqlCache);
+            $this->_sql = implode(' ', $this->_sqlCache);
         }
         return $this;
     }
@@ -92,12 +91,12 @@ class Pdo extends Object
     // 绑定参数
     public function bindValues($data)
     {
-        $this->values += $data;
+        $this->_values += $data;
         return $this;
     }
 
     // 绑定预处理, 扩展绑定数组参数
-    private function bindPrepare($sql, $data)
+    protected function bindPrepare($sql, $data)
     {
         $params = $values = [];
         foreach ($data as $key => $value) {
@@ -117,64 +116,48 @@ class Pdo extends Object
     }
 
     // 开始绑定参数
-    private function bindStart()
+    protected function bindStart()
     {
-        // 主动重新连接
-        if (\Mix::app() instanceof \mix\swoole\Application) {
-            if ($this->connectTime + $this->reconnection < time()) {
-                var_dump('init');
-                $this->init();
+        if (empty($this->_values)) {
+            $this->_pdoStatement = $this->_pdo->prepare($this->_sql);
+            $this->_lastSqlData = null;
+        } else {
+            list($sql, $params, $values) = $this->_lastSqlData = $this->bindPrepare($this->_sql, $this->_values);
+            $this->_pdoStatement = $this->_pdo->prepare($sql);
+            foreach ($params as $key => &$value) {
+                $this->_pdoStatement->bindParam($key, $value);
+            }
+            foreach ($values as $key => $value) {
+                $this->_pdoStatement->bindValue($key + 1, $value);
             }
         }
-        try {
-            // 绑定参数
-            if (empty($this->values)) {
-                $this->pdoStatement = $this->pdo->prepare($this->sql);
-                $this->lastSqlData = null;
-            } else {
-                list($sql, $params, $values) = $this->lastSqlData = $this->bindPrepare($this->sql, $this->values);
-                $this->pdoStatement = $this->pdo->prepare($sql);
-                foreach ($params as $key => &$value) {
-                    $this->pdoStatement->bindParam($key, $value);
-                }
-                foreach ($values as $key => $value) {
-                    $this->pdoStatement->bindValue($key + 1, $value);
-                }
-            }
-            $this->sqlCache = [];
-            $this->values = [];
-        } catch (\Exception $e) {
-            // 长连接超时处理
-            if (\Mix::app() instanceof \mix\swoole\Application) {
-                $this->init();
-            }
-            throw $e;
-        }
+        $this->_sqlCache = [];
+        $this->_values = [];
     }
 
     // 返回多行
     public function queryAll()
     {
         $this->bindStart();
-        $this->pdoStatement->execute();
-        return $this->pdoStatement->fetchAll();
+        $this->_pdoStatement->execute();
+        return $this->_pdoStatement->fetchAll();
     }
 
     // 返回一行
     public function queryOne()
     {
         $this->bindStart();
-        $this->pdoStatement->execute();
-        return $this->pdoStatement->fetch($this->attribute[\PDO::ATTR_DEFAULT_FETCH_MODE]);
+        $this->_pdoStatement->execute();
+        return $this->_pdoStatement->fetch($this->attribute[\PDO::ATTR_DEFAULT_FETCH_MODE]);
     }
 
     // 返回一列 (第一列)
     public function queryColumn($columnNumber = 0)
     {
         $this->bindStart();
-        $this->pdoStatement->execute();
+        $this->_pdoStatement->execute();
         $column = [];
-        while ($row = $this->pdoStatement->fetchColumn($columnNumber)) {
+        while ($row = $this->_pdoStatement->fetchColumn($columnNumber)) {
             $column[] = $row;
         }
         return $column;
@@ -184,18 +167,18 @@ class Pdo extends Object
     public function queryScalar()
     {
         $this->bindStart();
-        $this->pdoStatement->execute();
-        return $this->pdoStatement->fetchColumn();
+        $this->_pdoStatement->execute();
+        return $this->_pdoStatement->fetchColumn();
     }
 
     // 执行SQL语句，并返InsertId或回受影响的行数
     public function execute()
     {
         $this->bindStart();
-        $this->pdoStatement->execute();
-        $affectedRows = $this->pdoStatement->rowCount();
-        $lastInsertId = $this->pdo->lastInsertId();
-        if ($this->pdo->inTransaction() && $this->rollbackZeroAffectedTransaction && $affectedRows == 0) {
+        $this->_pdoStatement->execute();
+        $affectedRows = $this->_pdoStatement->rowCount();
+        $lastInsertId = $this->_pdo->lastInsertId();
+        if ($this->_pdo->inTransaction() && $this->rollbackZeroAffectedTransaction && $affectedRows == 0) {
             throw new \PDOException('affected rows in the transaction is zero');
         }
         return ($affectedRows == 1 && $lastInsertId > 0) ? $lastInsertId : $affectedRows;
@@ -232,11 +215,11 @@ class Pdo extends Object
             $valuesSql[] = "(" . implode(', ', $fields) . ")";
         }
         $sql .= implode(', ', $valuesSql);
-        $this->pdoStatement = $this->pdo->prepare($sql);
+        $this->_pdoStatement = $this->_pdo->prepare($sql);
         foreach ($values as $key => $value) {
-            $this->pdoStatement->bindValue($key + 1, $value);
+            $this->_pdoStatement->bindValue($key + 1, $value);
         }
-        $this->lastSqlData = [$sql, [], $values];
+        $this->_lastSqlData = [$sql, [], $values];
         return $this;
     }
 
@@ -291,23 +274,23 @@ class Pdo extends Object
     // 开始事务
     public function beginTransaction()
     {
-        $this->pdo->beginTransaction();
+        $this->_pdo->beginTransaction();
     }
 
     // 提交事务
     public function commit()
     {
-        $this->pdo->commit();
+        $this->_pdo->commit();
     }
 
     // 回滚事务
     public function rollBack()
     {
-        $this->pdo->rollBack();
+        $this->_pdo->rollBack();
     }
 
     // 给字符串加引号
-    private static function quotes($var)
+    protected static function quotes($var)
     {
         if (is_array($var)) {
             foreach ($var as $k => $v) {
@@ -321,8 +304,8 @@ class Pdo extends Object
     // 返回最后执行的SQL语句
     public function getLastSql()
     {
-        if (isset($this->lastSqlData)) {
-            list($sql, $params, $values) = $this->lastSqlData;
+        if (isset($this->_lastSqlData)) {
+            list($sql, $params, $values) = $this->_lastSqlData;
             $params = self::quotes($params);
             $values = self::quotes($values);
             foreach ($params as $key => $value) {
@@ -332,7 +315,7 @@ class Pdo extends Object
             $sql = vsprintf(str_replace('?', '%s', $sql), $values);
             return $sql;
         }
-        return $this->sql;
+        return $this->_sql;
     }
 
 }

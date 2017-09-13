@@ -8,13 +8,13 @@ class Mix
 {
 
     // App实例
-    protected static $_app;
+    public static $_app;
 
     // 主机
-    protected static $_host;
+    public static $_host;
 
     // 容器
-    public static $container = [];
+    public static $container;
 
     /**
      * 返回App
