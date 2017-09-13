@@ -21,10 +21,10 @@ class Application
 {
 
     // 应用根路径
-    public $basePath = '\\';
+    public $basePath = '';
 
     // 控制器命名空间
-    public $controllerNamespace = 'www\controller';
+    public $controllerNamespace = 'index\controller';
 
     // 注册树配置
     public $register = [];
@@ -58,7 +58,7 @@ class Application
             return null;
         }
         // 获取配置
-        $list  = $this->register[$name];
+        $list = $this->register[$name];
         $class = $list['class'];
         // 实例化
         $object = new $class(['disableInit' => true]);
@@ -113,13 +113,13 @@ class Application
                 $action = str_replace(':action', 'index', $action);
             }
             // 实例化控制器
-            $action    = "{$this->controllerNamespace}\\{$action}";
+            $action = "{$this->controllerNamespace}\\{$action}";
             $classFull = \mix\base\Route::dirname($action);
             $classPath = \mix\base\Route::dirname($classFull);
             $className = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($classFull), true);
-            $method    = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($action), true);
-            $class     = "{$classPath}\\{$className}Controller";
-            $method    = "action{$method}";
+            $method = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($action), true);
+            $class = "{$classPath}\\{$className}Controller";
+            $method = "action{$method}";
             try {
                 $reflect = new \ReflectionClass($class);
             } catch (\ReflectionException $e) {
@@ -136,21 +136,12 @@ class Application
     }
 
     /**
-     * 获取公开目录路径
-     * @return string
-     */
-    public function getPublicPath()
-    {
-        return $this->basePath . 'public' . DS;
-    }
-
-    /**
      * 获取配置目录路径
      * @return string
      */
     public function getConfigPath()
     {
-        return $this->basePath . 'config' . DS;
+        return $this->basePath . 'config' . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -159,16 +150,7 @@ class Application
      */
     public function getRuntimePath()
     {
-        return $this->basePath . 'runtime' . DS;
-    }
-
-    /**
-     * 获取视图目录路径
-     * @return string
-     */
-    public function getViewPath()
-    {
-        return $this->basePath . 'view' . DS;
+        return $this->basePath . 'runtime' . DIRECTORY_SEPARATOR;
     }
 
 }

@@ -11,8 +11,8 @@ class Log extends Object
 {
 
     // 轮转规则
-    const ROTATE_HOUR = 0;
-    const ROTATE_DAY = 1;
+    const ROTATE_HOUR   = 0;
+    const ROTATE_DAY    = 1;
     const ROTATE_WEEKLY = 2;
 
     // 日志目录
@@ -58,17 +58,17 @@ class Log extends Object
             case self::ROTATE_WEEKLY:
                 $timeFormat = date('YW');
                 break;
-            default :
+            default:
                 $timeFormat = date('Ymd');
                 break;
         }
         $filename = "{$level}_{$timeFormat}";
-        $dir = \Mix::app()->getRuntimePath() . $this->logDir;
+        $dir      = \Mix::app()->getRuntimePath() . $this->logDir;
         is_dir($dir) or mkdir($dir);
-        $file = $dir . DS . $filename . '.log';
+        $file   = $dir . '/' . $filename . '.log';
         $number = 0;
         while (file_exists($file) && filesize($file) >= $this->maxFileSize) {
-            $file = $dir . DS . $filename . '_' . ++$number . '.log';
+            $file = $dir . '/' . $filename . '_' . ++$number . '.log';
         }
         file_put_contents($file, $message, FILE_APPEND);
     }

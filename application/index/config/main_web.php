@@ -4,7 +4,7 @@
 return [
 
     // 基础路径
-    'basePath'            => dirname(__DIR__) . DS,
+    'basePath'            => dirname(__DIR__) . DIRECTORY_SEPARATOR,
 
     // 控制器命名空间
     'controllerNamespace' => 'index\controller',
