@@ -13,8 +13,8 @@ namespace mix\base;
  * @property \mix\base\Log $log
  * @property \mix\web\Session $session
  * @property \mix\web\Cookie $cookie
- * @property \mix\rdb\Pdo $rdb
- * @property \mix\nosql\Redis $redis
+ * @property \mix\web\Pdo|\mix\swoole\Pdo $rdb
+ * @property \mix\web\Redis|\mix\swoole\Redis $redis
  * @property \mix\base\Config $config
  */
 class Application

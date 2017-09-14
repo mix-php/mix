@@ -84,7 +84,6 @@ class HttpServer extends Object
     private function onRequest()
     {
         $this->server->on('request', function ($request, $response) {
-            var_dump($this->server->worker_id);
             \Mix::setHost($request->header['host']);
             // 执行请求
             try {

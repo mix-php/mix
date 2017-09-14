@@ -14,9 +14,7 @@ class IndexController extends Controller
 
     public function actionIndex()
     {
-        //$rows = \Mix::app()->rdb->createCommand("SELECT * FROM `post`")->queryAll();
-        //return $rows;
-        return \Mix::app()->redis->set('test:haha', '11');
+        return 'Hello World';
     }
 
 }

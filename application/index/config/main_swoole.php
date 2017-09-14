@@ -86,11 +86,11 @@ return [
             // 类路径
             'class'                           => 'mix\swoole\Pdo',
             // 数据源格式
-            'dsn'                             => 'mysql:host=192.168.1.78;port=3306;charset=utf8;dbname=test',
+            'dsn'                             => 'mysql:host=192.168.1.11;port=3306;charset=utf8;dbname=resource',
             // 数据库用户名
             'username'                        => 'root',
             // 数据库密码
-            'password'                        => '123456',
+            'password'                        => 'hfwl@2109',
             // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
             'attribute'                       => [
                 // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
