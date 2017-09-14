@@ -34,7 +34,7 @@ MixPHP 参考了多个流行框架特性，目的是要让用户更简单的开�
 
 MixPHP 做到了架构简单、使用简单、框架代码量小，能轻易改造与扩展。
 
-MixPHP 基于 Swoole 的Web开发，轻松获取超高性能，[ [对比测试](http://www.jianshu.com/p/0ce1a9885e01) ]
+MixPHP 基于 Swoole 的Web开发，轻松获取超高性能，[ [对比测试](http://www.jianshu.com/p/0ce1a9885e01) ] 。
 
 为了达到开发效率与性能兼顾，MixPHP实现了夸架构，
 
