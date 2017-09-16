@@ -8,7 +8,7 @@ namespace mix\swoole;
  * @author 刘健 <code.liu@qq.com>
  * @method set($key, $value)
  */
-class Redis extends \mix\web\Redis
+class Redis extends \mix\nosql\Redis
 {
 
     // 重连时间

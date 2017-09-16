@@ -6,7 +6,7 @@ namespace mix\swoole;
  * Mysql类
  * @author 刘健 <code.liu@qq.com>
  */
-class Pdo extends \mix\web\Pdo
+class Pdo extends \mix\rdb\Pdo
 {
 
     // 重连时间

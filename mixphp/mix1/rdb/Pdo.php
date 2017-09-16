@@ -1,6 +1,6 @@
 <?php
 
-namespace mix\web;
+namespace mix\rdb;
 
 use mix\base\Object;
 

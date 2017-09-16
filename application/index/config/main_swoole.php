@@ -9,7 +9,7 @@ return [
     // 控制器命名空间
     'controllerNamespace' => 'index\controller',
 
-    // 注册树
+    // 组件树
     'register'            => [
 
         // 路由
@@ -119,7 +119,7 @@ return [
             // 数据库
             'database'     => 0,
             // 重连时间(秒)
-            'reconnection' => 20,
+            'reconnection' => 7200,
         ],
 
         // 配置

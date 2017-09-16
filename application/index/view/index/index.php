@@ -1,5 +1,5 @@
 <?php
-$this->title = 'Mix View';
+$this->title = 'MixPHP View';
 ?>
 
 <p>Welcome, name: <?= $name ?>, sex: <?= $sex ?></p>

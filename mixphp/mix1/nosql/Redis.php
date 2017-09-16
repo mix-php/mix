@@ -1,6 +1,6 @@
 <?php
 
-namespace mix\web;
+namespace mix\nosql;
 
 use mix\base\Object;
 

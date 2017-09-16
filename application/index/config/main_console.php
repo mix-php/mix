@@ -9,7 +9,7 @@ return [
     // 控制器命名空间
     'controllerNamespace' => 'index\command',
 
-    // 注册树
+    // 组件树
     'register'            => [
 
         // 路由
