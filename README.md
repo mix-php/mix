@@ -34,9 +34,11 @@ MixPHP 专注打造兼容LAMP/LNMP/WAMP技术栈，让小白也能掌握Swoole�
 
 将复杂封装在框架里，只留下简单，用户无需了解 Swoole 复杂的生命周期、变量作用域、进程模型等问题。
 
+让更多中小型团队也能低成本通过Swoole提升业务性能。
+
 ## 下载
 
-- [MixPHP V1 发行版本](https://github.com/mixstart/mixphp/releases)
+[MixPHP V1 发行版本](https://github.com/mixstart/mixphp/releases)
 
 ## 文档
  
