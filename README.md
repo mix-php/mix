@@ -10,23 +10,23 @@
 
 ## 核心特征
 
-夸架构：同一份代码可在Apache/Nginx+phpfpm、Nginx+Swoole两类架构中运行；
+* 夸架构：同一份代码可在Apache/Nginx+phpfpm、Nginx+Swoole两类架构中运行；
 
-高性能：代码长驻内存，达到超过Yaf/phalcon这类C扩展框架的性能；
+* 高性能：极简架构+Swoole，达到超过Yaf/phalcon这类C扩展框架的性能，[ [对比测试](http://www.jianshu.com/p/0ce1a9885e01) ] ；
 
-长连接：按进程保持的长连接，支持Mysql/Redis；
+* 长连接：按进程保持的长连接，支持Mysql/Redis；
 
-服务器：框架自带MixHttpd替代Apache/phpfpm作为高性能HTTP服务器；
+* 服务器：框架自带MixHttpd替代Apache/phpfpm作为高性能HTTP服务器；
 
-自动加载：完全使用Composer，统一且高效；
+* 自动加载：完全使用Composer，统一且高效；
 
-路由：底层全正则实现，性能高，配置简单；
+* 路由：底层全正则实现，性能高，配置简单；
 
-模型：模型集成了使用简单但功能强大的验证器，支持多场景控制；
+* 模型：模型集成了使用简单但功能强大的验证器，支持多场景控制；
 
-查询构造器：独创的SQL构造方法，可灵活优雅的构造复杂语句；
+* 查询构造器：独创的SQL构造方法，可灵活优雅的构造复杂语句；
 
-视图：使用PHP做引擎，支持布局、属性；
+* 视图：使用PHP做引擎，支持布局、属性；
 
 ## 框架定位
 
@@ -34,7 +34,7 @@ MixPHP 参考了多个流行框架特性，目的是要让用户更简单的开�
 
 MixPHP 做到了架构简单、使用简单、框架代码量小，能轻易改造与扩展。
 
-MixPHP 基于 Swoole 的Web开发，轻松获取超高性能，[ [对比测试](http://www.jianshu.com/p/0ce1a9885e01) ] 。
+MixPHP 基于 Swoole 的Web开发，轻松获取超高性能。
 
 为了达到开发效率与性能兼顾，MixPHP实现了夸架构，
 
