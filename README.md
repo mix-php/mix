@@ -6,11 +6,11 @@
 
 <p align="center">高性能 • 极简 • 夸架构</p>
 
-<p align="center">『 拥有 Yii2/TP5/CI3 传统框架的开发效率，又拥有 Swoole 扩展的高性能 』</p>
+<p align="center">『 让小白也能掌握Swoole的PHP框架 』</p>
 
 ## 核心特征
 
-* 夸架构：同一份代码可在Apache/Nginx+phpfpm、Nginx+Swoole两类架构中运行；
+* 夸架构：同一份代码可在LAMP/LNMP/WAMP、Nginx+Swoole两种架构中运行；
 
 * 高性能：极简架构+Swoole，达到超过Yaf/phalcon这类C扩展框架的性能，[ [对比测试](http://www.jianshu.com/p/0ce1a9885e01) ] ；
 
@@ -30,30 +30,17 @@
 
 ## 框架定位
 
-MixPHP 参考了多个流行框架特性，目的是要让用户更简单的开发应用。
+MixPHP 专注打造兼容LAMP/LNMP/WAMP技术栈，让小白也能掌握Swoole的PHP框架。
 
-MixPHP 做到了架构简单、使用简单、框架代码量小，能轻易改造与扩展。
+将复杂封装在框架里，只留下简单，用户无需了解 Swoole 复杂的生命周期、变量作用域、进程模型等问题。
 
-MixPHP 基于 Swoole 的Web开发，轻松获取超高性能。
+## 下载
 
-为了达到开发效率与性能兼顾，MixPHP实现了夸架构，
+- [MixPHP V1 发行版本](https://github.com/mixstart/mixphp/releases)
 
-项目前期可采用简单的LNMP架构，当出现性能瓶颈时再切换为Swoole架构，
-
-即便是在LNMP架构下，MixPHP的性能也毫不逊色于传统框架，
-
-夸架构还带来了开发上的便利，可在LNMP中开发，在Swoole中生产部署，无需担心热更新问题。
-
-基于 Swoole 的开发已经成为高级 PHPer 必备技能之一，MixPHP 让 Swoole 的使用简单化，
-
-用户可专心于业务开发，而无需了解 Swoole 复杂的生命周期、变量作用域、进程模型等问题。
-
-SwooleWeb + MixHttpd 是 HTTP 领域的开发，未来 MixPHP 还会增加 TCP/UDP 领域的支持。
-
-
-## 开发手册
+## 文档
  
-[在线查看手册](https://www.kancloud.cn/onanying/mixphp1/379324) | [下载手册](https://www.kancloud.cn/onanying/mixphp1)
+在线手册：[MixPHP开发指南](https://www.kancloud.cn/onanying/mixphp1/379324) | [下载](https://www.kancloud.cn/onanying/mixphp1)
 
 ## 技术交流
 
