@@ -12,78 +12,97 @@ use mix\base\Object;
 class Request extends Object
 {
 
+    // ROUTE参数
+    protected $_route = [];
+
     // 请求对象
-    private $requester;
+    protected $_requester;
 
     // GET参数
-    private $get = [];
+    protected $_get = [];
 
     // POST参数
-    private $post = [];
+    protected $_post = [];
 
     // FILES参数
-    private $files = [];
+    protected $_files = [];
 
-    // ROUTE参数
-    private $route = [];
+    // COOKIE参数
+    protected $_cookie = [];
+
+    // SERVER参数
+    protected $_server = [];
+
+    // HEADER参数
+    protected $_header = [];
 
     // 设置请求对象
     public function setRequester($requester)
     {
-        $this->requester = $requester;
+        $this->_requester = $requester;
+        // 重设请求数据
         $this->setRoute([]);
-        $this->setGet(isset($requester->get) ? $requester->get : []);
-        $this->setPost(isset($requester->post) ? $requester->post : []);
-        $this->setFiles(isset($requester->files) ? $requester->files : []);
+        $this->_get    = isset($requester->get) ? $requester->get : [];
+        $this->_post   = isset($requester->post) ? $requester->post : [];
+        $this->_files  = isset($requester->files) ? $requester->files : [];
+        $this->_cookie = isset($requester->cookie) ? $requester->cookie : [];
+        $this->_server = isset($requester->server) ? $requester->server : [];
+        $this->_header = isset($requester->header) ? $requester->header : [];
         return $this;
     }
 
     // 设置ROUTE值
     public function setRoute($route)
     {
-        $this->route = $route;
-    }
-
-    // 设置GET值
-    public function setGet($get)
-    {
-        $this->get = $get;
-    }
-
-    // 设置POST值
-    public function setPost($post)
-    {
-        $this->post = $post;
-    }
-
-    // 设置FILES值
-    public function setFiles($files)
-    {
-        $this->files = $files;
+        $this->_route = $route;
     }
 
     // 提取GET值
     public function get($name = null)
     {
-        return is_null($name) ? $this->get : (isset($this->get[$name]) ? $this->get[$name] : null);
+        return $this->fetch($name, $this->_get);
     }
 
     // 提取POST值
     public function post($name = null)
     {
-        return is_null($name) ? $this->post : (isset($this->post[$name]) ? $this->post[$name] : null);
+        return $this->fetch($name, $this->_post);
     }
 
     // 提取FILES值
     public function files($name = null)
     {
-        return is_null($name) ? $this->files : (isset($this->files[$name]) ? $this->files[$name] : null);
+        return $this->fetch($name, $this->_files);
     }
 
     // 提取ROUTE值
     public function route($name = null)
     {
-        return is_null($name) ? $this->route : (isset($this->route[$name]) ? $this->route[$name] : null);
+        return $this->fetch($name, $this->_route);
+    }
+
+    // 提取COOKIE值
+    public function cookie($name = null)
+    {
+        return $this->fetch($name, $this->_cookie);
+    }
+
+    // 提取SERVER值
+    public function server($name = null)
+    {
+        return $this->fetch($name, $this->_server);
+    }
+
+    // 提取HEADER值
+    public function header($name = null)
+    {
+        return $this->fetch($name, $this->_header);
+    }
+
+    // 提取数据
+    protected function fetch($name, $container)
+    {
+        return is_null($name) ? $container : (isset($container[$name]) ? $container[$name] : null);
     }
 
 }

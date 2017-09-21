@@ -32,25 +32,25 @@ class Response extends Object
     public $statusCode = 200;
 
     // 内容
-    private $content;
+    protected $_content;
 
     // 设置内容
     public function setContent($content)
     {
-        $this->content = $content;
+        $this->_content = $content;
         return $this;
-    }
-
-    // 设置Cookie
-    public function setCookie($name, $value = "", $expire = 0, $path = "", $domain = "", $secure = false, $httponly = false)
-    {
-        setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
     }
 
     // 设置Header信息
     public function setHeader($key, $value)
     {
         header("{$key}: {$value}");
+    }
+
+    // 设置Cookie
+    public function setCookie($name, $value = "", $expire = 0, $path = "", $domain = "", $secure = false, $httponly = false)
+    {
+        setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
     }
 
     // 重定向
@@ -62,7 +62,7 @@ class Response extends Object
     // 输出
     public function send()
     {
-        $content = $this->content;
+        $content = $this->_content;
         if (is_array($content)) {
             switch ($this->format) {
                 case self::FORMAT_JSON:
@@ -90,7 +90,7 @@ class Response extends Object
     }
 
     // 设置HTTP状态码
-    private function setStatusCode()
+    protected function setStatusCode()
     {
         $status = [
             100 => 'HTTP/1.1 100 Continue',

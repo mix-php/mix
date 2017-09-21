@@ -1,24 +1,23 @@
 <?php
 
-/**
- * Response类
- * @author 刘健 <code.liu@qq.com>
- */
-
 namespace mix\swoole;
 
 use mix\base\Object;
 
+/**
+ * Response类
+ * @author 刘健 <code.liu@qq.com>
+ */
 class Response extends Object
 {
 
     // 响应对象
-    private $responder;
+    protected $_responder;
 
     // 格式值
-    const FORMAT_JSON = 0;
+    const FORMAT_JSON  = 0;
     const FORMAT_JSONP = 1;
-    const FORMAT_XML = 2;
+    const FORMAT_XML   = 2;
 
     // 输出格式
     public $format = self::FORMAT_JSON;
@@ -36,27 +35,33 @@ class Response extends Object
     public $statusCode = 200;
 
     // 内容
-    private $content;
+    protected $_content;
 
     // 设置响应者
     public function setResponder($responder)
     {
-        $this->responder = $responder;
+        $this->_responder = $responder;
         return $this;
     }
 
     // 设置内容
     public function setContent($content)
     {
-        $this->content = $content;
+        $this->_content = $content;
         return $this;
     }
 
     // 设置Header信息
     public function setHeader($key, $value)
     {
-        $this->responder->header($key, $value);
+        $this->_responder->header($key, $value);
         return $this;
+    }
+
+    // 设置Cookie
+    public function setCookie($name, $value = "", $expire = 0, $path = "", $domain = "", $secure = false, $httponly = false)
+    {
+        $this->_responder->cookie($name, $value, $expire, $path, $domain, $secure, $httponly);
     }
 
     // 重定向
@@ -68,7 +73,7 @@ class Response extends Object
     // 输出
     public function send()
     {
-        $content = $this->content;
+        $content = $this->_content;
         if (is_array($content)) {
             switch ($this->format) {
                 case self::FORMAT_JSON:
@@ -91,14 +96,14 @@ class Response extends Object
         }
         if (is_scalar($content)) {
             $this->setStatusCode();
-            $this->responder->end($content);
+            $this->_responder->end($content);
         }
     }
 
     // 设置HTTP状态码
     private function setStatusCode()
     {
-        $this->responder->status($this->statusCode);
+        $this->_responder->status($this->statusCode);
     }
 
 }

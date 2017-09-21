@@ -11,6 +11,9 @@ use mix\base\Object;
 class Request extends Object
 {
 
+    // ROUTE参数
+    protected $_route = [];
+
     // GET参数
     protected $_get = [];
 
@@ -19,9 +22,6 @@ class Request extends Object
 
     // FILES参数
     protected $_files = [];
-
-    // ROUTE参数
-    protected $_route = [];
 
     // COOKIE参数
     protected $_cookie = [];

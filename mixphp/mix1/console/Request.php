@@ -1,25 +1,30 @@
 <?php
 
-/**
- * Request类
- * @author 刘健 <code.liu@qq.com>
- */
-
 namespace mix\console;
 
 use mix\base\Object;
 
+/**
+ * Request类
+ * @author 刘健 <code.liu@qq.com>
+ */
 class Request extends Object
 {
 
-    // CLI参数
-    private $param = [];
-
     // ROUTE参数
-    private $route = [];
+    protected $_route = [];
+
+    // CLI参数
+    protected $_param = [];
 
     // 初始化
     public function init()
+    {
+        $this->setParam();
+    }
+
+    // 设置CLI参数
+    public function setParam()
     {
         // 解析参数
         $param = [];
@@ -29,32 +34,31 @@ class Request extends Object
             }
         }
         parse_str(implode('&', $param), $param);
-        // 赋值
-        $this->setParam($param);
-    }
-
-    // 设置GET值
-    public function setParam($param)
-    {
-        $this->param = $param;
+        $this->_param = $param;
     }
 
     // 设置ROUTE值
     public function setRoute($route)
     {
-        $this->route = $route;
+        $this->_route = $route;
     }
 
     // 获取CLI参数
     public function param($name = null)
     {
-        return is_null($name) ? $this->param : (isset($this->param[$name]) ? $this->param[$name] : null);
+        return $this->fetch($name, $this->_param);
     }
 
     // 获取ROUTE值
     public function route($name = null)
     {
-        return is_null($name) ? $this->route : (isset($this->route[$name]) ? $this->route[$name] : null);
+        return $this->fetch($name, $this->_route);
+    }
+
+    // 提取数据
+    protected function fetch($name, $container)
+    {
+        return is_null($name) ? $container : (isset($container[$name]) ? $container[$name] : null);
     }
 
 }

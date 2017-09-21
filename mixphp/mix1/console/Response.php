@@ -1,14 +1,13 @@
 <?php
 
-/**
- * Response类
- * @author 刘健 <code.liu@qq.com>
- */
-
 namespace mix\console;
 
 use mix\base\Object;
 
+/**
+ * Response类
+ * @author 刘健 <code.liu@qq.com>
+ */
 class Response extends Object
 {
 
@@ -17,19 +16,19 @@ class Response extends Object
     // 输出格式
     public $format = self::FORMAT_RAW;
     // 内容
-    private $content;
+    protected $_content;
 
     // 设置内容
     public function setContent($content)
     {
-        $this->content = $content;
+        $this->_content = $content;
         return $this;
     }
 
     // 输出
     public function send()
     {
-        $content = $this->content;
+        $content = $this->_content;
         if (is_array($content)) {
             switch ($this->format) {
                 case self::FORMAT_RAW:
