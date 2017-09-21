@@ -35,11 +35,11 @@ class Request extends Object
     // 初始化
     public function init()
     {
-        $this->_get = $_GET;
-        $this->_post = $_POST;
-        $this->_files = $_FILES;
+        $this->_get    = $_GET;
+        $this->_post   = $_POST;
+        $this->_files  = $_FILES;
         $this->_cookie = $_COOKIE;
-        $this->_server = $_SERVER;
+        $this->setServer();
         $this->setHeader();
     }
 
@@ -49,13 +49,19 @@ class Request extends Object
         $this->_route = $route;
     }
 
+    // 设置SERVER值
+    protected function setServer()
+    {
+        $this->_server = array_change_key_case($_SERVER, CASE_LOWER);
+    }
+
     // 设置HEADER值
     protected function setHeader()
     {
         $header = [];
         foreach ($_SERVER as $name => $value) {
             if (substr($name, 0, 5) == 'HTTP_') {
-                $header[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+                $header[str_replace(' ', '-', strtolower(str_replace('_', ' ', substr($name, 5))))] = $value;
             }
         }
         $this->_header = $header;

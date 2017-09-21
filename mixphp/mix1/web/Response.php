@@ -12,9 +12,9 @@ class Response extends Object
 {
 
     // 格式值
-    const FORMAT_JSON = 0;
+    const FORMAT_JSON  = 0;
     const FORMAT_JSONP = 1;
-    const FORMAT_XML = 2;
+    const FORMAT_XML   = 2;
 
     // 输出格式
     public $format = self::FORMAT_JSON;

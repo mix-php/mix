@@ -26,27 +26,34 @@ class Cookie extends Object
     // 仅可通过 HTTP 协议访问
     public $httponly = false;
 
-    //
+    // 用户Cookie
+    protected $_cookie;
+
+    // 初始化
+    public function init()
+    {
+        $this->_cookie = \Mix::app()->request->cookie();
+    }
 
     // 取值
     public function get($name = null)
     {
         if (is_null($name)) {
-            return $_COOKIE;
+            return $this->_cookie;
         }
-        return isset($_COOKIE[$name]) ? $_COOKIE[$name] : null;
+        return isset($this->_cookie[$name]) ? $this->_cookie[$name] : null;
     }
 
     // 赋值
     public function set($name, $value, $expire = null)
     {
-        setcookie($name, $value, time() + (is_null($expire) ? $this->expire : $expire), $this->path, $this->domain, $this->secure, $this->httponly);
+        \Mix::app()->response->setCookie($name, $value, time() + (is_null($expire) ? $this->expire : $expire), $this->path, $this->domain, $this->secure, $this->httponly);
     }
 
     // 判断是否存在
     public function has($name)
     {
-        return isset($_COOKIE[$name]);
+        return isset($this->_cookie[$name]);
     }
 
     // 删除
@@ -58,7 +65,7 @@ class Cookie extends Object
     // 清空当前域所有cookie
     public function clear()
     {
-        foreach ($_COOKIE as $name => $value) {
+        foreach ($this->_cookie as $name => $value) {
             $this->set($name, null);
         }
     }
