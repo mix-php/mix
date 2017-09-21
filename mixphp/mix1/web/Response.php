@@ -1,14 +1,13 @@
 <?php
 
-/**
- * Response类
- * @author 刘健 <code.liu@qq.com>
- */
-
 namespace mix\web;
 
 use mix\base\Object;
 
+/**
+ * Response类
+ * @author 刘健 <code.liu@qq.com>
+ */
 class Response extends Object
 {
 
@@ -42,17 +41,22 @@ class Response extends Object
         return $this;
     }
 
+    // 设置Cookie
+    public function setCookie($name, $value = "", $expire = 0, $path = "", $domain = "", $secure = false, $httponly = false)
+    {
+        setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
+    }
+
     // 设置Header信息
     public function setHeader($key, $value)
     {
         header("{$key}: {$value}");
-        return $this;
     }
 
     // 重定向
     public function redirect($url)
     {
-        header("Location: {$url}");
+        $this->setHeader('Location', $url);
     }
 
     // 输出
@@ -88,7 +92,7 @@ class Response extends Object
     // 设置HTTP状态码
     private function setStatusCode()
     {
-        $status = array(
+        $status = [
             100 => 'HTTP/1.1 100 Continue',
             101 => 'HTTP/1.1 101 Switching Protocols',
             200 => 'HTTP/1.1 200 OK',
@@ -128,7 +132,7 @@ class Response extends Object
             502 => 'HTTP/1.1 502 Bad Gateway',
             503 => 'HTTP/1.1 503 Service Unavailable',
             504 => 'HTTP/1.1 504 Gateway Time-out',
-        );
+        ];
         header($status[$this->statusCode]);
     }
 

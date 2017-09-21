@@ -44,7 +44,7 @@ return [
         'server'   => [
 
             // 类路径
-            'class'        => 'mix\swoole\HttpServer',
+            'class'        => 'mix\swoole\server\HttpServer',
             // 主机
             'host'         => '192.168.1.146',
             // 端口

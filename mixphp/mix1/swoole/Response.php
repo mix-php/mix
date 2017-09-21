@@ -59,6 +59,12 @@ class Response extends Object
         return $this;
     }
 
+    // 重定向
+    public function redirect($url)
+    {
+        $this->setHeader('Location', $url);
+    }
+
     // 输出
     public function send()
     {

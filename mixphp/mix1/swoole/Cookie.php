@@ -1,6 +1,6 @@
 <?php
 
-namespace mix\web;
+namespace mix\swoole;
 
 use mix\base\Object;
 
@@ -25,8 +25,6 @@ class Cookie extends Object
 
     // 仅可通过 HTTP 协议访问
     public $httponly = false;
-
-    //
 
     // 取值
     public function get($name = null)

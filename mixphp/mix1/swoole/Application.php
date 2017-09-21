@@ -13,7 +13,7 @@ class Application extends \mix\base\Application
     /**
      * 执行功能 (Swoole架构)
      */
-    public function run($requester, $responder)
+    public function run($requester)
     {
         $method = strtoupper($requester->server['request_method']);
         $action = empty($requester->server['path_info']) ? '' : substr($requester->server['path_info'], 1);

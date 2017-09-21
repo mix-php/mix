@@ -81,6 +81,36 @@ return [
             'maxFileSize' => 2048 * 1024,
         ],
 
+        // Session
+        'session'  => [
+            // 类路径
+            'class'         => 'mix\web\Session',
+            // 处理者
+            'saveHandler'   => mix\swoole\Session::HANDLER_REDIS,
+            // 保存路径
+            'savePath'      => 'tcp://192.168.1.78:6379?auth=&database=9&prefix=MIX_SSID:',
+            // 生存时间
+            'gcMaxLifetime' => 7200,
+            // session名
+            'name'          => 'MIX_SSID',
+        ],
+
+        // Cookie
+        'cookie'   => [
+            // 类路径
+            'class'    => 'mix\web\Cookie',
+            // 过期时间
+            'expire'   => 31536000,
+            // 有效的服务器路径
+            'path'     => '/',
+            // 有效域名/子域名
+            'domain'   => '',
+            // 仅通过安全的 HTTPS 连接传给客户端
+            'secure'   => false,
+            // 仅可通过 HTTP 协议访问
+            'httponly' => false,
+        ],
+
         // 数据库
         'rdb'      => [
             // 类路径

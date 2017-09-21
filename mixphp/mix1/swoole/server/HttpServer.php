@@ -1,14 +1,14 @@
 <?php
 
+namespace mix\swoole\server;
+
+use mix\base\Object;
+use mix\swoole\Application;
+
 /**
  * HttpServer类
  * @author 刘健 <code.liu@qq.com>
  */
-
-namespace mix\swoole;
-
-use mix\base\Object;
-
 class HttpServer extends Object
 {
 
@@ -25,10 +25,10 @@ class HttpServer extends Object
     public $virtualHosts = [];
 
     // SwooleHttpServer对象
-    private $server;
+    protected $server;
 
     // 进程名称
-    private $processLabel;
+    protected $processLabel;
 
     // 初始化
     public function init()
@@ -43,7 +43,7 @@ class HttpServer extends Object
     }
 
     // 主进程启动事件
-    private function onStart()
+    protected function onStart()
     {
         $this->server->on('Start', function ($server) {
             // 进程命名
@@ -52,7 +52,7 @@ class HttpServer extends Object
     }
 
     // 管理进程启动事件
-    private function onManagerStart()
+    protected function onManagerStart()
     {
         $this->server->on('ManagerStart', function ($server) {
             // 进程命名
@@ -61,7 +61,7 @@ class HttpServer extends Object
     }
 
     // 工作进程启动事件
-    private function onWorkerStart()
+    protected function onWorkerStart()
     {
         $this->server->on('WorkerStart', function ($server, $workerId) {
             // 进程命名
@@ -81,7 +81,7 @@ class HttpServer extends Object
     }
 
     // 请求事件
-    private function onRequest()
+    protected function onRequest()
     {
         $this->server->on('request', function ($request, $response) {
             \Mix::setHost($request->header['host']);
@@ -90,16 +90,39 @@ class HttpServer extends Object
                 \Mix::app()->error->register();
                 \Mix::app()->request->setRequester($request);
                 \Mix::app()->response->setResponder($response);
-                \Mix::app()->run($request, $response);
+                \Mix::app()->run($request);
             } catch (\Exception $e) {
                 \Mix::app()->error->appException($e);
             }
         });
     }
 
+    // 欢迎信息
+    protected function welcome()
+    {
+        $swooleVersion = swoole_version();
+        $phpVersion = PHP_VERSION;
+        echo <<<EOL
+                           _____
+_______ ___ _____ ___ _____  / /_  ____
+__/ __ `__ \/ /\ \/ / / __ \/ __ \/ __ \
+_/ / / / / / / /\ \/ / /_/ / / / / /_/ /
+/_/ /_/ /_/_/ /_/\_\/ .___/_/ /_/ .___/
+                   /_/         /_/
+
+Server     Name: mixhttpd
+PHP     Version: {$phpVersion}
+Swoole  Version: {$swooleVersion}
+Listen     Addr: {$this->host}
+Listen     Port: {$this->port}
+
+EOL;
+    }
+
     // 启动服务
     public function start()
     {
+        $this->welcome();
         $this->onStart();
         $this->onManagerStart();
         $this->onWorkerStart();
