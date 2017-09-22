@@ -8,6 +8,11 @@
 
 <p align="center">『 让小白也能掌握Swoole的PHP框架 』</p>
 
+<p align="center">
+[![Github All Releases](https://img.shields.io/github/downloads/atom/atom/total.svg)](https://github.com/mixstart/mixphp)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/mixstart/mixphp)
+</p>
+
 ## 核心特征
 
 * 夸架构：同一份代码可在LAMP/LNMP/WAMP、Nginx+Swoole两种架构中运行；
