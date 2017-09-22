@@ -10,9 +10,8 @@
 
 <p align="center">
 <img src="https://poser.pugx.org/mixstart/mixphp/version">
-<img src="https://poser.pugx.org/mixstart/mixphp/downloads">
-<img src="https://poser.pugx.org/mixstart/mixphp/license">
-<img src="https://poser.pugx.org/mixstart/mixphp/v/unstable">
+<img src="https://img.shields.io/badge/downloads-503-green.svg">
+<img src="https://img.shields.io/badge/platform-linux%20%7C%20win%20%7C%20osx-lightgrey.svg">
 </p>
 
 ## 核心特征
