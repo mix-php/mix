@@ -9,8 +9,10 @@
 <p align="center">『 让小白也能掌握Swoole的PHP框架 』</p>
 
 <p align="center">
-[![Github All Releases](https://img.shields.io/github/downloads/atom/atom/total.svg)](https://github.com/mixstart/mixphp)
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/mixstart/mixphp)
+<img src="https://poser.pugx.org/mixstart/mixphp/version">
+<img src="https://poser.pugx.org/mixstart/mixphp/downloads">
+<img src="https://poser.pugx.org/mixstart/mixphp/license">
+<img src="https://poser.pugx.org/mixstart/mixphp/v/unstable">
 </p>
 
 ## 核心特征
