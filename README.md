@@ -51,14 +51,13 @@ download mixphp zip ... ok
 unzip ... ok
 clean temp files ... ok
 download composer.phar (It's a little slow) ... ok
-Successfully installed in "/data/mixphp-Beta2"
-
+Successfully installed in "/data/mixphp-master"
 ```
 
 接下来启动mixhttpd服务器
 
 ```
-$>cd /data/mixphp-Beta2/server/mixhttpd/
+$>cd /data/mixphp-master/server/mixhttpd/
 $>php mixhttpd service/start
 ```
 
