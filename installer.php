@@ -22,12 +22,8 @@ unlink('mixphp.zip');
 echo 'ok' . PHP_EOL;
 
 echo 'download composer.phar (It\'s a little slow) ... ';
-try{
-    copy('https://getcomposer.org/composer.phar', __DIR__ . '/' . $dirname . 'composer.phar');
-    echo 'ok' . PHP_EOL;
-}catch(\Exception $e){
-    echo 'failure' . PHP_EOL;
-}
+copy('https://getcomposer.org/composer.phar', __DIR__ . '/' . $dirname . 'composer.phar');
+echo 'ok' . PHP_EOL;
 
-echo 'install complete' . PHP_EOL;
+echo 'Successfully installed in "' . __DIR__ . DIRECTORY_SEPARATOR . substr($dirname,0,strlen($dirname)-1) . '"' . PHP_EOL;
 unlink(__FILE__);
