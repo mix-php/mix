@@ -50,7 +50,7 @@
 $>php -r "copy('https://raw.githubusercontent.com/mixstart/mixphp/master/installer.php', 'installer.php');include 'installer.php';"
 ```
 
-composer.phar 下载容易出错，多试几次，最后你将看到如下的输出：
+输出如下：
 
 ```
 download mixphp zip ... ok
@@ -96,7 +96,9 @@ MixPHP 专注打造兼容LAMP/LNMP/WAMP技术栈，让小白也能掌握Swoole�
 
 将复杂封装在框架里，只留下简单，用户无需了解 Swoole 复杂的生命周期、变量作用域、进程模型等问题。
 
-让更多中小型团队也能低成本通过Swoole提升业务性能。
+让更多中小型团队也能低成本通过MixPHP享受到Swoole带来的性能提升。
+
+除了性能，MixPHP基于组件的架构设计、强大的模型、独特的查询构造器都是提升开发效率的利器。
 
 ## 文档
 
