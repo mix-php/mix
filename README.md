@@ -8,6 +8,12 @@
 
 <p align="center">『 让小白也能掌握Swoole的PHP框架 』</p>
 
+<p align="center">
+<img src="https://img.shields.io/badge/downloads-503-green.svg">
+<img src="https://img.shields.io/badge/platform-linux%20%7C%20win%20%7C%20osx-lightgrey.svg">
+<img src="https://img.shields.io/packagist/l/doctrine/orm.svg">
+</p>
+
 ## 核心特征
 
 * 夸架构：同一份代码可在LAMP/LNMP/WAMP、Nginx+Swoole两种架构中运行；
