@@ -36,6 +36,56 @@
 
 * 视图：使用PHP做引擎，支持布局、属性；
 
+## 快速开始
+
+一键安装
+
+```
+$>php -r "copy('https://raw.githubusercontent.com/mixstart/mixphp/master/installer.php', 'installer.php');include 'installer.php';"
+```
+
+composer.phar 下载容易出错，多试几次，最后你将看到如下的输出：
+
+```
+download mixphp zip ... ok
+unzip ... ok
+clean temp files ... ok
+download composer.phar (It's a little slow) ... ok
+Successfully installed in "/data/mixphp-Beta2"
+
+```
+
+接下来启动mixhttpd服务器
+
+```
+$>cd /data/mixphp-Beta2/server/mixhttpd/
+$>php mixhttpd service/start
+```
+
+如果一切顺利，运行到最后你将看到如下的输出：
+
+```
+                           _____
+_______ ___ _____ ___ _____  / /_  ____
+__/ __ `__ \/ /\ \/ / / __ \/ __ \/ __ \
+_/ / / / / / / /\ \/ / /_/ / / / / /_/ /
+/_/ /_/ /_/_/ /_/\_\/ .___/_/ /_/ .___/
+                   /_/         /_/
+
+Server     Name: mixhttpd
+PHP     Version: 5.4.45
+Swoole  Version: 1.9.12
+Listen     Addr: 127.0.0.1
+Listen     Port: 9501
+```
+
+访问测试：
+
+```
+$>curl http://127.0.0.1:9501/
+Hello World
+```
+
 ## 框架定位
 
 MixPHP 专注打造兼容LAMP/LNMP/WAMP技术栈，让小白也能掌握Swoole的PHP框架。
@@ -44,13 +94,13 @@ MixPHP 专注打造兼容LAMP/LNMP/WAMP技术栈，让小白也能掌握Swoole�
 
 让更多中小型团队也能低成本通过Swoole提升业务性能。
 
+## 文档
+
+在线手册：[MixPHP开发指南](https://www.kancloud.cn/onanying/mixphp1/379324) | [下载](https://www.kancloud.cn/onanying/mixphp1)
+
 ## 下载
 
 [MixPHP V1 发行版本](https://github.com/mixstart/mixphp/releases)
-
-## 文档
- 
-在线手册：[MixPHP开发指南](https://www.kancloud.cn/onanying/mixphp1/379324) | [下载](https://www.kancloud.cn/onanying/mixphp1)
 
 ## 技术交流
 
