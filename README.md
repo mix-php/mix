@@ -36,6 +36,12 @@
 
 * 视图：使用PHP做引擎，支持布局、属性；
 
+## 环境要求
+
+* PHP >= 5.4
+* Swoole >= 1.7.18
+* Composer
+
 ## 快速开始
 
 一键安装
@@ -50,7 +56,6 @@ composer.phar 下载容易出错，多试几次，最后你将看到如下的输
 download mixphp zip ... ok
 unzip ... ok
 clean temp files ... ok
-download composer.phar (It's a little slow) ... ok
 Successfully installed in "/data/mixphp-master"
 ```
 
