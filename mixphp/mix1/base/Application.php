@@ -132,7 +132,7 @@ class Application
                 return $controller->$method();
             }
         }
-        throw new \mix\exception\HttpException("Not Found", 404);
+        throw new \mix\exception\HttpException("Not Found (#404)", 404);
     }
 
     /**

@@ -17,7 +17,7 @@ class ServiceController extends Controller
     {
         $output = \Mix::app()->exec('ps -ef | grep mixhttpd');
         foreach ($output as $item) {
-            if (strpos($item, 'mixhttpd') !== false && strpos($item, 'master') !== false) {
+            if (strpos($item, 'mixhttpd') !== false && substr($item, -6, 6) == 'master') {
                 return true;
             }
         }
@@ -28,7 +28,7 @@ class ServiceController extends Controller
     public function actionStart()
     {
         if ($this->isStart()) {
-            return '服务运行中' . PHP_EOL;
+            return 'mixhttpd is runing' . PHP_EOL;
         }
         return \Mix::app()->server->start();
     }
@@ -39,8 +39,9 @@ class ServiceController extends Controller
         if ($this->isStart()) {
             \Mix::app()->exec('ps -ef | grep mixhttpd | awk \'NR==1{print $2}\' | xargs -n1 kill');
         }
-        sleep(1);
-        return '服务停止完成' . PHP_EOL;
+        while ($this->isStart()) {
+        }
+        return 'mixhttpd stopped' . PHP_EOL;
     }
 
     // 重启服务
