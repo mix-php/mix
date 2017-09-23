@@ -6,7 +6,7 @@
  */
 
 echo 'download mixphp zip ... ';
-copy('https://github.com/mixstart/mixphp/archive/Beta2.zip', 'mixphp.zip');
+copy('https://github.com/mixstart/mixphp/archive/master.zip', 'mixphp.zip');
 echo 'ok' . PHP_EOL;
 
 echo 'unzip ... ';
