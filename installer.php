@@ -1,21 +1,29 @@
 <?php
 
-echo '下载 MixPHP ...' . PHP_EOL;
+/**
+ * 一键安装
+ * @author 刘健 <code.liu@qq.com>
+ */
 
+echo 'download mixphp zip ... ';
 copy('https://github.com/mixstart/mixphp/archive/Beta2.zip', 'mixphp.zip');
+echo 'ok' . PHP_EOL;
 
-echo '解压 MixPHP ...' . PHP_EOL;
+echo 'unzip ... ';
 $zip = new ZipArchive;
-$res = $zip->open('mixphp.zip');
-$mixdir = $zip->getNameIndex(0);
-$zip->extractTo(__DIR__ .'/');
+$zip->open('mixphp.zip');
+$dirname = $zip->getNameIndex(0);
+$zip->extractTo(__DIR__ . '/');
 $zip->close();
+echo 'ok' . PHP_EOL;
 
-echo '清理临时文件' . PHP_EOL;
+echo 'clean temp files ... ';
 unlink('mixphp.zip');
-unlink('installer.php');
+echo 'ok' . PHP_EOL;
 
-echo '下载 Composer ...' . PHP_EOL;
-copy('https://getcomposer.org/download/1.5.2/composer.phar', __DIR__. '/' . $mixdir . 'composer.phar');
+echo 'download composer.phar (Wait a minute. It\'s a little slow) ... ';
+copy('https://getcomposer.org/composer.phar', __DIR__ . '/' . $dirname . 'composer.phar');
+echo 'ok' . PHP_EOL;
 
-echo '安装完成' . PHP_EOL;
+echo 'install complete' . PHP_EOL;
+unlink(__FILE__);
