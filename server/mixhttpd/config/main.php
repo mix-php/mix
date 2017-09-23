@@ -46,7 +46,7 @@ return [
             // 类路径
             'class'        => 'mix\swoole\server\HttpServer',
             // 主机
-            'host'         => '192.168.1.146',
+            'host'         => '127.0.0.1',
             // 端口
             'port'         => 9501,
 

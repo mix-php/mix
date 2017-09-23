@@ -123,7 +123,7 @@ class Application
             try {
                 $reflect = new \ReflectionClass($class);
             } catch (\ReflectionException $e) {
-                throw new \mix\exception\HttpException("Not Found", 404);
+                throw new \mix\exception\HttpException("Not Found (#404)", 404);
             }
             $controller = $reflect->newInstanceArgs();
             // 判断方法是否存在
