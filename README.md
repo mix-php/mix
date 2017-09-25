@@ -39,7 +39,7 @@
 ## 环境要求
 
 * PHP >= 5.4
-* Swoole >= 1.7.18
+* Swoole >= 1.7.18 (LAMP/LNMP/WAMP架构不需要)
 * Composer
 
 ## 快速开始
