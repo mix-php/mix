@@ -1,24 +1,38 @@
 <br>
 
 <p align="center">
-<img src="https://git.kancloud.cn/repos/onanying/mixphp1/raw/ba9d4f9d235c24da0a7b8d8a8aa53a57b8e83331/images/logo.png?access-token=1899f10823ef02e1745183298b8c71d3" alt="MixPHP V1">
+<img src="https://git.kancloud.cn/repos/onanying/mixphp1/raw/ba9d4f9d235c24da0a7b8d8a8aa53a57b8e83331/images/logo.png?access-token=1899f10823ef02e1745183298b8c71d3" alt="MixPHP">
 </p>
 
 <p align="center">高性能 • 极简 • 夸架构</p>
 
-<p align="center">『 让小白也能掌握Swoole的PHP框架 』</p>
-
 <p align="center">
-<img src="https://img.shields.io/badge/downloads-503-green.svg">
+<img src="https://img.shields.io/badge/downloads-1326-green.svg">
 <img src="https://img.shields.io/badge/platform-linux%20%7C%20win%20%7C%20osx-lightgrey.svg">
 <img src="https://img.shields.io/packagist/l/doctrine/orm.svg">
 </p>
+
+## MixPHP是什么
+
+MixPHP 是本着 “让每个公司只需使用一种框架” 的理念而创造，它拥有极高的性能，使用非常简单，可搭建在多种架构之中，几乎能完成后端开发的所有任务。
+
+## 与其他框架的比较
+
+MixPHP 采用 Swoole扩展 作为底层引擎，能完成其他框架不能想象或者很难实现的功能。
+
+MixPHP 与传统 PHP 的 Web 框架非常不同，MixPHP可以不需要 Web 服务器(phpfpm/Apache)，框架自带 MixHttpd 高性能HTTP服务器，传统的 PHP 应用程序中脚本结束后，所有的对象在请求后都将销毁，而 MixHttpd 不同，框架组件对象常驻于内存，减少对象反复创建销毁的性能损失。
+
+众所周知，PHP的命令行开发能力很弱，MixPHP 却拥有多线程、多进程控制能力，能完成更高要求的后台任务处理开发。
+
+MixPHP 也不同于那些微型高性能框架，只提供一个简单的框架，MixPHP 拥有 Web 开发所需的大量组件，且支持多模块开发。
+
+你也可以像传统 Web 框架那样使用 MixPHP 框架，直接搭建在 LAMP/LNMP/WAMP 即可。
 
 ## 核心特征
 
 * 夸架构：同一份代码可在LAMP/LNMP/WAMP、Nginx+Swoole两种架构中运行；
 
-* 高性能：极简架构+Swoole，达到超过Yaf/phalcon这类C扩展框架的性能，[ [对比测试](http://www.jianshu.com/p/0ce1a9885e01) ] ；
+* 高性能：极简架构+Swoole引擎，达到超过Yaf/phalcon这类C扩展框架的性能，[ [对比测试](http://www.jianshu.com/p/0ce1a9885e01) ] ；
 
 * 长连接：按进程保持的长连接，支持Mysql/Redis；
 
@@ -35,6 +49,10 @@
 * 查询构造器：独创的SQL构造方法，可灵活优雅的构造复杂语句；
 
 * 视图：使用PHP做引擎，支持布局、属性；
+
+## 文档
+
+在线手册：[MixPHP开发指南](https://www.kancloud.cn/onanying/mixphp1/379324) | [下载](https://www.kancloud.cn/onanying/mixphp1)
 
 ## 环境要求
 
@@ -89,20 +107,6 @@ Listen     Port: 9501
 $>curl http://127.0.0.1:9501/
 Hello World
 ```
-
-## 框架定位
-
-MixPHP 专注打造兼容LAMP/LNMP/WAMP技术栈，让小白也能掌握Swoole的PHP框架。
-
-将复杂封装在框架里，只留下简单，用户无需了解 Swoole 复杂的生命周期、变量作用域、进程模型等问题。
-
-让更多中小型团队也能低成本通过MixPHP享受到Swoole带来的性能提升。
-
-除了性能，MixPHP基于组件的架构设计、强大的模型、独特的查询构造器都是提升开发效率的利器。
-
-## 文档
-
-在线手册：[MixPHP开发指南](https://www.kancloud.cn/onanying/mixphp1/379324) | [下载](https://www.kancloud.cn/onanying/mixphp1)
 
 ## 下载
 
