@@ -4,7 +4,7 @@
 <img src="https://git.kancloud.cn/repos/onanying/mixphp1/raw/ba9d4f9d235c24da0a7b8d8a8aa53a57b8e83331/images/logo.png?access-token=1899f10823ef02e1745183298b8c71d3" alt="MixPHP">
 </p>
 
-<p align="center">高性能 • 极简 • 夸架构</p>
+<p align="center">高性能 • 极简 • 多功能</p>
 
 <p align="center">
 <img src="https://img.shields.io/badge/downloads-1326-green.svg">
@@ -14,19 +14,15 @@
 
 ## MixPHP是什么
 
-MixPHP 是本着 “让每个公司只需使用一种框架” 的理念而创造，它拥有极高的性能，使用非常简单，可搭建在多种架构之中，几乎能完成后端开发的所有任务。
-
-MixPHP 采用 Swoole扩展 作为底层引擎，能完成其他框架不能想象或者很难实现的功能。
+MixPHP 是本着 “让每个公司只需使用一种框架” 的理念而创造，采用 Swoole 扩展作为底层引擎，努力打造 Web 开发领域的 “瑞士军刀”。
 
 ## 与其他框架的比较
 
-MixPHP 与传统 PHP 的 Web 框架非常不同，MixPHP可以不需要 Web 服务器(phpfpm/Apache)，框架自带 MixHttpd 高性能HTTP服务器，传统的 PHP 应用程序中脚本结束后，所有的对象在请求后都将销毁，而 MixHttpd 不同，框架组件对象常驻于内存，减少对象反复创建销毁的性能损失。
+MixPHP 与传统 PHP 的 Web 框架非常不同，MixPHP可以不需要 Web 服务器(phpfpm/Apache)，框架自带 MixHttpd 高性能HTTP服务器，传统的 PHP 应用程序中脚本结束后，所有的对象在请求后都将销毁，而 MixHttpd 不同，框架组件对象常驻于内存，减少对象反复创建销毁的性能损失，具有传统框架无法比拟的性能优势。
 
-众所周知，PHP的命令行开发能力很弱，MixPHP 却拥有多线程、多进程控制能力，能完成更高要求的后台任务处理开发。
+MixPHP 也不同于其他基于 Swoole 的全异步服务型框架，只聚焦于 WebService 领域，MixPHP 定位于 Web 开发的全部领域。
 
-许多微型框架，提供一个简单的"框架"，只支持单模块开发，还需自己动手开发常用类库才可使用，而 MixPHP 支持多模块开发，拥有 Web 开发所需的大量组件，并且开箱即用。
-
-你也可以像传统 Web 框架那样使用 MixPHP 框架，直接搭建在 LAMP/LNMP/WAMP 即可。
+MixPHP 更像是传统 Web 框架的次世代版本，拥有更高的性能又保留了快速开发的能力，还能完成传统框架不能想象或者很难实现的功能，比如：多线程、多进程、TCP/UDP服务器。
 
 ## 核心特征
 
