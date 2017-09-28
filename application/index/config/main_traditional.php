@@ -31,13 +31,13 @@ return [
         // 请求
         'request'  => [
             // 类路径
-            'class' => 'mix\swoole\Request',
+            'class' => 'mix\web\Request',
         ],
 
         // 响应
         'response' => [
             // 类路径
-            'class'  => 'mix\swoole\Response',
+            'class'  => 'mix\web\Response',
             // 输出格式
             'format' => mix\web\Response::FORMAT_JSON,
             // json
@@ -86,7 +86,7 @@ return [
             // 类路径
             'class'         => 'mix\web\Session',
             // 处理者
-            'saveHandler'   => mix\swoole\Session::HANDLER_REDIS,
+            'saveHandler'   => mix\web\Session::HANDLER_REDIS,
             // 保存路径
             'savePath'      => 'tcp://192.168.1.78:6379?auth=&database=9&prefix=MIX_SSID:',
             // 生存时间
@@ -114,13 +114,13 @@ return [
         // 数据库
         'rdb'      => [
             // 类路径
-            'class'                           => 'mix\swoole\Pdo',
+            'class'                           => 'mix\web\Pdo',
             // 数据源格式
-            'dsn'                             => 'mysql:host=192.168.1.11;port=3306;charset=utf8;dbname=resource',
+            'dsn'                             => 'mysql:host=192.168.1.78;port=3306;charset=utf8;dbname=test',
             // 数据库用户名
             'username'                        => 'root',
             // 数据库密码
-            'password'                        => 'hfwl@2109',
+            'password'                        => '123456',
             // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
             'attribute'                       => [
                 // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
@@ -132,24 +132,20 @@ return [
             ],
             // 回滚含有零影响行数的事务
             'rollbackZeroAffectedTransaction' => false,
-            // 重连时间(秒)
-            'reconnection'                    => 7200,
         ],
 
         // redis
         'redis'    => [
             // 类路径
-            'class'        => 'mix\swoole\Redis',
+            'class'    => 'mix\web\Redis',
             // 主机
-            'host'         => '192.168.1.78',
+            'host'     => '192.168.1.78',
             // 端口
-            'port'         => 6379,
+            'port'     => 6379,
             // 密码
-            'password'     => '',
+            'password' => '',
             // 数据库
-            'database'     => 0,
-            // 重连时间(秒)
-            'reconnection' => 7200,
+            'database' => 0,
         ],
 
         // 配置
