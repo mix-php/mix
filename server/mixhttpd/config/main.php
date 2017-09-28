@@ -60,11 +60,11 @@ return [
             // 虚拟主机：运行在Server内的Web应用
             'virtualHosts' => [
                 // 默认主机
-                '*'                          => __DIR__ . '/../../../application/index/config/main_swoole.php',
+                '*'                          => __DIR__ . '/../../../application/index/config/main_web.php',
                 // 匹配单个主机
-                'www.t.com'                  => __DIR__ . '/../../../application/index/config/main_swoole.php',
+                'www.t.com'                  => __DIR__ . '/../../../application/index/config/main_web.php',
                 // 匹配多个主机
-                'www.ve.com:9501|www.ve.com' => __DIR__ . '/../../../application/index/config/main_swoole.php',
+                'www.ve.com:9501|www.ve.com' => __DIR__ . '/../../../application/index/config/main_web.php',
             ],
 
         ],
