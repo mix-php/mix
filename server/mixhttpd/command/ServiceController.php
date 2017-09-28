@@ -30,6 +30,11 @@ class ServiceController extends Controller
         if ($this->isStart()) {
             return 'mixhttpd is runing' . PHP_EOL;
         }
+        if(!is_null($param = \Mix::app()->request->param('hot-update'))){
+            $server = \Mix::app()->server;
+            $server->setting['max_request']  = 1;
+            return $server->start();
+        }
         return \Mix::app()->server->start();
     }
 
