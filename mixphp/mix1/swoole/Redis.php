@@ -5,7 +5,7 @@ namespace mix\swoole;
 /**
  * redis 驱动
  *
- * @author 刘健 <code.liu@qq.com>
+ * @author 刘健 <coder.liu@qq.com>
  * @method set($key, $value)
  */
 class Redis extends \mix\nosql\Redis
@@ -19,7 +19,7 @@ class Redis extends \mix\nosql\Redis
 
     /**
      * 初始化
-     * @author 刘健 <code.liu@qq.com>
+     * @author 刘健 <coder.liu@qq.com>
      */
     public function init()
     {
@@ -42,7 +42,7 @@ class Redis extends \mix\nosql\Redis
 
     /**
      * 执行命令
-     * @author 刘健 <code.liu@qq.com>
+     * @author 刘健 <coder.liu@qq.com>
      */
     public function __call($name, $arguments)
     {

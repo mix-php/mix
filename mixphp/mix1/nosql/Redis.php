@@ -7,7 +7,7 @@ use mix\base\Object;
 /**
  * redis 驱动
  *
- * @author 刘健 <code.liu@qq.com>
+ * @author 刘健 <coder.liu@qq.com>
  * @method set($key, $value)
  */
 class Redis extends Object
@@ -27,7 +27,7 @@ class Redis extends Object
 
     /**
      * 初始化
-     * @author 刘健 <code.liu@qq.com>
+     * @author 刘健 <coder.liu@qq.com>
      */
     public function init()
     {
@@ -49,7 +49,7 @@ class Redis extends Object
 
     /**
      * 执行命令
-     * @author 刘健 <code.liu@qq.com>
+     * @author 刘健 <coder.liu@qq.com>
      */
     public function __call($name, $arguments)
     {

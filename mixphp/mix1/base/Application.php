@@ -4,7 +4,7 @@ namespace mix\base;
 
 /**
  * App类
- * @author 刘健 <code.liu@qq.com>
+ * @author 刘健 <coder.liu@qq.com>
  *
  * @property \mix\base\Route $route
  * @property \mix\web\Request|\mix\swoole\Request $request

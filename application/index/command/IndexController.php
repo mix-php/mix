@@ -6,7 +6,7 @@ use mix\console\Controller;
 
 /**
  * 默认控制器
- * @author 刘健 <code.liu@qq.com>
+ * @author 刘健 <coder.liu@qq.com>
  */
 class IndexController extends Controller
 {

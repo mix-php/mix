@@ -6,7 +6,7 @@ use mix\base\Object;
 
 /**
  * Mysql类
- * @author 刘健 <code.liu@qq.com>
+ * @author 刘健 <coder.liu@qq.com>
  */
 class Pdo extends Object
 {
