@@ -33,7 +33,7 @@ class HttpServer extends Object
     // 初始化
     public function init()
     {
-        $this->server = new \swoole_http_server($this->host, $this->port);
+        $this->server       = new \swoole_http_server($this->host, $this->port);
         $this->processLabel = "{$this->host}:{$this->port}";
         // 新建日志目录
         if (isset($this->setting['log_file'])) {
@@ -73,7 +73,7 @@ class HttpServer extends Object
             // 实例化Apps
             $apps = [];
             foreach ($this->virtualHosts as $host => $configFile) {
-                $config = require $configFile;
+                $config      = require $configFile;
                 $apps[$host] = new Application($config);
             }
             \Mix::setApps($apps);
@@ -101,22 +101,22 @@ class HttpServer extends Object
     protected function welcome()
     {
         $swooleVersion = swoole_version();
-        $phpVersion = PHP_VERSION;
+        $phpVersion    = PHP_VERSION;
         echo <<<EOL
-                           _____
-_______ ___ _____ ___ _____  / /_  ____
-__/ __ `__ \/ /\ \/ / / __ \/ __ \/ __ \
-_/ / / / / / / /\ \/ / /_/ / / / / /_/ /
-/_/ /_/ /_/_/ /_/\_\/ .___/_/ /_/ .___/
-                   /_/         /_/
+                            _____
+_______ ___ _____ ___  _____  / /_  ____
+__/ __ `__ \/ /\ \/ /  / __ \/ __ \/ __ \
+_/ / / / / / / /\ \/  / /_/ / / / / /_/ /
+/_/ /_/ /_/_/ /_/\_\ / .___/_/ /_/ .___/
+                    /_/         /_/
 
-Server     Name: mixhttpd
-PHP     Version: {$phpVersion}
-Swoole  Version: {$swooleVersion}
-Listen     Addr: {$this->host}
-Listen     Port: {$this->port}
 
 EOL;
+        $this->send('Server    Name: mixhttpd');
+        $this->send("PHP    Version: {$phpVersion}");
+        $this->send("Swoole Version: {$swooleVersion}");
+        $this->send("Listen    Addr: {$this->host}");
+        $this->send("Listen    Port: {$this->port}");
     }
 
     // 启动服务
@@ -129,6 +129,13 @@ EOL;
         $this->onRequest();
         $this->server->set($this->setting);
         $this->server->start();
+    }
+
+    // 发送至屏幕
+    public function send($msg)
+    {
+        $time = date('Y-m-d H:i:s');
+        echo "[{$time}] " . $msg . PHP_EOL;
     }
 
 }
