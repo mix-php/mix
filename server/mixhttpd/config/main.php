@@ -44,7 +44,7 @@ return [
         'server'   => [
 
             // 类路径
-            'class'        => 'mix\swoole\server\HttpServer',
+            'class'        => 'mixhttpd\server\HttpServer',
             // 主机
             'host'         => '127.0.0.1',
             // 端口
