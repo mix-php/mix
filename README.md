@@ -18,7 +18,7 @@ MixPHP 是秉承 "让每个公司只需使用一种框架" 的理念而创造，
 
 ## 与其他框架的比较
 
-MixPHP 与传统 PHP 的 Web 框架非常不同，MixPHP可以不需要 Web 服务器(Apache/PHP-FPM)，框架自带 MixHttpd 高性能HTTP服务器，传统的 PHP 应用程序中脚本结束后，所有的对象在请求后都将销毁，而 MixHttpd 不同，框架组件对象常驻于内存，减少对象反复创建销毁的性能损失，具有传统框架无法比拟的性能优势。
+MixPHP 与传统 PHP 的 Web 框架非常不同，MixPHP 可以不需要 Web 服务器(Apache/PHP-FPM)，框架自带 MixHttpd 高性能HTTP服务器，传统的 PHP 应用程序中脚本结束后，所有的对象在请求后都将销毁，而 MixHttpd 不同，框架组件对象常驻于内存，减少对象反复创建销毁的性能损失，具有传统框架无法比拟的性能优势。
 
 MixPHP 也不同于其他基于 Swoole 的全异步服务型框架，只聚焦于 WebService 领域，MixPHP 定位于 Web 开发的全部领域。
 
@@ -59,7 +59,7 @@ MixPHP 更像是传统 Web 框架的次世代版本，拥有更高的性能又�
 一键安装
 
 ```
-$>php -r "copy('https://raw.githubusercontent.com/mixstart/mixphp/master/installer.php', 'installer.php');include 'installer.php';"
+$> php -r "copy('https://raw.githubusercontent.com/mixstart/mixphp/master/installer.php', 'installer.php');include 'installer.php';"
 ```
 
 输出如下：
@@ -74,8 +74,8 @@ Successfully installed in "/data/mixphp-master"
 接下来启动mixhttpd服务器
 
 ```
-$>cd /data/mixphp-master/server/mixhttpd/
-$>php mixhttpd service/start
+$> cd /data/mixphp-master/server/mixhttpd/
+$> php mixhttpd service/start
 ```
 
 如果一切顺利，运行到最后你将看到如下的输出：
@@ -98,7 +98,7 @@ Listen     Port: 9501
 访问测试：
 
 ```
-$>curl http://127.0.0.1:9501/
+$> curl http://127.0.0.1:9501/
 Hello World
 ```
 
