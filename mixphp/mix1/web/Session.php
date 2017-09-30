@@ -23,7 +23,7 @@ class Session extends Object
     // 生存时间
     public $gcMaxLifetime = 7200;
     // session名
-    public $name = 'MIX_SSID';
+    public $name = 'MIXSSID';
 
     // 初始化
     public function init()
