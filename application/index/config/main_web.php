@@ -114,7 +114,7 @@ return [
         // 数据库
         'rdb'      => [
             // 类路径
-            'class'                           => 'mix\swoole\Pdo',
+            'class'                           => 'mix\swoole\PdoPersistent',
             // 数据源格式
             'dsn'                             => 'mysql:host=192.168.1.78;port=3306;charset=utf8;dbname=test',
             // 数据库用户名
@@ -132,12 +132,14 @@ return [
             ],
             // 回滚含有零影响行数的事务
             'rollbackZeroAffectedTransaction' => false,
+            // 重连时间
+            'reconnection'                    => 7200,
         ],
 
         // redis
         'redis'    => [
             // 类路径
-            'class'        => 'mix\swoole\Redis',
+            'class'        => 'mix\swoole\RedisPersistent',
             // 主机
             'host'         => '192.168.1.78',
             // 端口
@@ -146,6 +148,8 @@ return [
             'password'     => '',
             // 数据库
             'database'     => 0,
+            // 重连时间
+            'reconnection' => 7200,
         ],
 
         // 配置

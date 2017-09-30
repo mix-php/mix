@@ -97,6 +97,8 @@ class Response extends Component
         if (is_scalar($content)) {
             $this->setStatusCode();
             $this->_responder->end($content);
+        }else{
+            $this->_responder->end('');
         }
     }
 
