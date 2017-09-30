@@ -73,8 +73,10 @@ class HttpServer extends Component
             // 实例化Apps
             $apps = [];
             foreach ($this->virtualHosts as $host => $configFile) {
-                $config      = require $configFile;
-                $apps[$host] = new Application($config);
+                $config = require $configFile;
+                $app    = new Application($config);
+                $app->loadAllComponent();
+                $apps[$host] = $app;
             }
             \Mix::setApps($apps);
         });

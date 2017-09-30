@@ -25,16 +25,10 @@ class Redis extends Component
     // redis对象
     protected $_redis;
 
-    // 请求开始事件
-    public function onRequestStart()
+    // 初始化事件
+    public function onInitialize()
     {
         $this->connect();
-    }
-
-    // 请求结束事件
-    public function onRequestEnd()
-    {
-        $this->_redis = null;
     }
 
     // 连接

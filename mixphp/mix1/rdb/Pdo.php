@@ -40,16 +40,10 @@ class Pdo extends Component
         \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
     ];
 
-    // 请求开始事件
-    public function onRequestStart()
+    // 初始化事件
+    public function onInitialize()
     {
         $this->connect();
-    }
-
-    // 请求结束事件
-    public function onRequestEnd()
-    {
-        $this->_pdo = null;
     }
 
     // 连接
@@ -109,7 +103,7 @@ class Pdo extends Component
             if (is_array($value)) {
                 $tmp = [];
                 foreach ($value as $k => $v) {
-                    $tmp[] = '?';
+                    $tmp[]    = '?';
                     $values[] = $v;
                 }
                 $key = substr($key, 0, 1) == ':' ? $key : ":{$key}";
@@ -126,7 +120,7 @@ class Pdo extends Component
     {
         if (empty($this->_values)) {
             $this->_pdoStatement = $this->_pdo->prepare($this->_sql);
-            $this->_lastSqlData = null;
+            $this->_lastSqlData  = null;
         } else {
             list($sql, $params, $values) = $this->_lastSqlData = $this->bindPrepare($this->_sql, $this->_values);
             $this->_pdoStatement = $this->_pdo->prepare($sql);
@@ -138,7 +132,7 @@ class Pdo extends Component
             }
         }
         $this->_sqlCache = [];
-        $this->_values = [];
+        $this->_values   = [];
     }
 
     // 返回多行
@@ -193,11 +187,11 @@ class Pdo extends Component
     // 插入
     public function insert($table, $data)
     {
-        $keys = array_keys($data);
+        $keys   = array_keys($data);
         $fields = array_map(function ($key) {
             return ":{$key}";
         }, $keys);
-        $sql = "INSERT INTO `{$table}` (`" . implode('`, `', $keys) . "`) VALUES (" . implode(', ', $fields) . ")";
+        $sql    = "INSERT INTO `{$table}` (`" . implode('`, `', $keys) . "`) VALUES (" . implode(', ', $fields) . ")";
         $this->createCommand($sql);
         $this->bindValues($data);
         return $this;
@@ -206,13 +200,13 @@ class Pdo extends Component
     // 批量插入
     public function batchInsert($table, $data)
     {
-        $keys = array_keys($data[0]);
-        $sql = "INSERT INTO `{$table}` (`" . implode('`, `', $keys) . "`) VALUES ";
+        $keys   = array_keys($data[0]);
+        $sql    = "INSERT INTO `{$table}` (`" . implode('`, `', $keys) . "`) VALUES ";
         $fields = [];
         for ($i = 0; $i < count($keys); $i++) {
             $fields[] = '?';
         }
-        $values = [];
+        $values    = [];
         $valuesSql = [];
         foreach ($data as $item) {
             foreach ($item as $value) {
@@ -232,13 +226,13 @@ class Pdo extends Component
     // 更新
     public function update($table, $data, $where)
     {
-        $keys = array_keys($data);
-        $fieldsSql = array_map(function ($key) {
+        $keys        = array_keys($data);
+        $fieldsSql   = array_map(function ($key) {
             return "`{$key}` = :{$key}";
         }, $keys);
         $whereParams = [];
         foreach ($where as $key => $value) {
-            $where[$key] = "`{$value[0]}` {$value[1]} :where_{$value[0]}";
+            $where[$key]                      = "`{$value[0]}` {$value[1]} :where_{$value[0]}";
             $whereParams["where_{$value[0]}"] = $value[2];
         }
         $sql = "UPDATE `{$table}` SET " . implode(', ', $fieldsSql) . " WHERE " . implode(', ', $where);
@@ -253,7 +247,7 @@ class Pdo extends Component
     {
         $whereParams = [];
         foreach ($where as $key => $value) {
-            $where[$key] = "`{$value[0]}` {$value[1]} :{$value[0]}";
+            $where[$key]                = "`{$value[0]}` {$value[1]} :{$value[0]}";
             $whereParams["{$value[0]}"] = $value[2];
         }
         $sql = "DELETE FROM `{$table}` WHERE " . implode(', ', $where);

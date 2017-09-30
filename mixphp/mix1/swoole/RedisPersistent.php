@@ -1,12 +1,14 @@
 <?php
 
-namespace mix\rdb;
+namespace mix\swoole;
 
 /**
- * Mysql长连接组件
+ * redis长连接组件
  * @author 刘健 <coder.liu@qq.com>
+ *
+ * @method set($key, $value)
  */
-class PdoPersistent extends Pdo
+class RedisPersistent extends \mix\nosql\Redis
 {
 
     // 重连时间
@@ -19,9 +21,9 @@ class PdoPersistent extends Pdo
     public function onInitialize()
     {
         // 共用连接对象
-        $this->_pdo = &\Mix::$container['_pdo'];
-        $this->_connectTime = &\Mix::$container['_pdoConnectTime'];
-        if (is_null($this->_pdo)) {
+        $this->_redis       = &\Mix::$container['_redis'];
+        $this->_connectTime = &\Mix::$container['_redisConnectTime'];
+        if (is_null($this->_redis)) {
             // 连接
             $this->connect();
         }
@@ -40,21 +42,24 @@ class PdoPersistent extends Pdo
     // 连接
     public function connect()
     {
-        isset($this->_pdo) and $this->_pdo = null; // 置空才会释放旧连接
+        isset($this->_redis) and $this->_redis = null; // 置空才会释放旧连接
         $this->_connectTime = time();
         parent::connect();
     }
 
-    // 开始绑定参数
-    protected function bindStart()
+    /**
+     * 执行命令
+     * @author 刘健 <coder.liu@qq.com>
+     */
+    public function __call($name, $arguments)
     {
         // 主动重新连接
         if ($this->_connectTime + $this->reconnection < time()) {
             $this->connect();
         }
         try {
-            // 开始绑定参数
-            parent::bindStart();
+            // 执行命令
+            return parent::__call($name, $arguments);
         } catch (\Exception $e) {
             // 长连接超时处理
             $this->connect();

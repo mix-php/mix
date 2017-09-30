@@ -1,6 +1,6 @@
 <?php
 
-// APP配置文件
+// 应用配置
 return [
 
     // 基础路径
@@ -45,7 +45,7 @@ return [
             // 类路径
             'class'                => 'mix\rdb\Pdo',
             // 数据源格式
-            'dsn'                  => 'mysql:host=192.168.181.1;port=3306;charset=utf8;dbname=test',
+            'dsn'                  => 'mysql:host=192.168.1.78;port=3306;charset=utf8;dbname=test',
             // 数据库用户名
             'username'             => 'root',
             // 数据库密码
@@ -68,7 +68,7 @@ return [
             // 类路径
             'class'    => 'mix\nosql\Redis',
             // 主机
-            'host'     => '192.168.181.1',
+            'host'     => '192.168.1.78',
             // 端口
             'port'     => 6379,
             // 密码

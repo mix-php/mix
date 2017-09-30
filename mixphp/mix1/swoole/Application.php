@@ -25,6 +25,16 @@ class Application extends \mix\web\Application
     }
 
     /**
+     * 装载全部组件
+     */
+    public function loadAllComponent()
+    {
+        foreach ($this->register as $key => $value) {
+            $this->$key;
+        }
+    }
+
+    /**
      * 触发开始事件
      */
     public function triggerRequestStart()
