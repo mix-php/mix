@@ -1,13 +1,12 @@
 <?php
 
-/**
- * 配置类
- * @author 刘健 <coder.liu@qq.com>
- */
-
 namespace mix\base;
 
-class Config extends Object
+/**
+ * 配置组件
+ * @author 刘健 <coder.liu@qq.com>
+ */
+class Config extends Component
 {
 
     // 配置文件参数
@@ -19,7 +18,7 @@ class Config extends Object
     /**
      * 初始化
      */
-    public function init()
+    public function onInitialize()
     {
         // 自动加载
         foreach ($this->autoload as $file) {

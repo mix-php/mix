@@ -1,12 +1,11 @@
 <?php
 
-/**
- * Model类
- * @author 刘健 <coder.liu@qq.com>
- */
-
 namespace mix\base;
 
+/**
+ * Model基类
+ * @author 刘健 <coder.liu@qq.com>
+ */
 class Model extends Object
 {
 

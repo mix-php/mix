@@ -1,12 +1,11 @@
 <?php
 
+namespace mix\exception;
+
 /**
  * 异常基类
  * @author 刘健 <coder.liu@qq.com>
  */
-
-namespace mix\exception;
-
 class BaseException extends \RuntimeException
 {
 

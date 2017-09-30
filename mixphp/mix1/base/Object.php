@@ -1,21 +1,24 @@
 <?php
 
+namespace mix\base;
+
 /**
  * 对象基类
  * @author 刘健 <coder.liu@qq.com>
  */
-
-namespace mix\base;
-
 class Object
 {
 
+    // 构造
     public function __construct($config = [])
     {
-        // 执行初始化方法
-        if (empty($config['disableInit'])) {
-            method_exists($this, 'init') and $this->init();
-        }
+        method_exists($this, 'onConstruct') and $this->onConstruct();
+    }
+
+    // 析构
+    public function __destruct()
+    {
+        method_exists($this, 'onDestruct') and $this->onDestruct();
     }
 
 }

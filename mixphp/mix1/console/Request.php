@@ -2,13 +2,13 @@
 
 namespace mix\console;
 
-use mix\base\Object;
+use mix\base\Component;
 
 /**
  * Request类
  * @author 刘健 <coder.liu@qq.com>
  */
-class Request extends Object
+class Request extends Component
 {
 
     // ROUTE参数
@@ -18,7 +18,7 @@ class Request extends Object
     protected $_param = [];
 
     // 初始化
-    public function init()
+    public function onInitialize()
     {
         $this->setParam();
     }

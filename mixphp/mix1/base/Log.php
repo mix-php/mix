@@ -1,13 +1,12 @@
 <?php
 
-/**
- * Log类
- * @author 刘健 <coder.liu@qq.com>
- */
-
 namespace mix\base;
 
-class Log extends Object
+/**
+ * Log组件
+ * @author 刘健 <coder.liu@qq.com>
+ */
+class Log extends Component
 {
 
     // 轮转规则

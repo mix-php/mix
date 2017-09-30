@@ -46,25 +46,25 @@ return [
             // 类路径
             'class'        => 'mixhttpd\server\HttpServer',
             // 主机
-            'host'         => '127.0.0.1',
+            'host'         => 'localhost',
             // 端口
             'port'         => 9501,
 
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
             'setting'      => [
-                'worker_num' => 8,
-                'daemonize'  => true,
+                'worker_num' => 1,
+                'daemonize'  => false,
                 'log_file'   => __DIR__ . '/../runtime/log/mixhttpd.log',
             ],
 
             // 虚拟主机：运行在Server内的Web应用
             'virtualHosts' => [
                 // 默认主机
-                '*'                          => __DIR__ . '/../../../application/index/config/main_web.php',
+                '*'                        => __DIR__ . '/../../../application/index/config/main_web.php',
                 // 匹配单个主机
-                'www.t.com'                  => __DIR__ . '/../../../application/index/config/main_web.php',
+                'www.t.com'                => __DIR__ . '/../../../application/index/config/main_web.php',
                 // 匹配多个主机
-                'www.ve.com:9501|www.ve.com' => __DIR__ . '/../../../application/index/config/main_web.php',
+                'www.v.com:9501|www.v.com' => __DIR__ . '/../../../application/index/config/main_web.php',
             ],
 
         ],

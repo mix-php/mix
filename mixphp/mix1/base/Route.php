@@ -1,23 +1,26 @@
 <?php
 
-/**
- * Route类
- * @author 刘健 <coder.liu@qq.com>
- */
-
 namespace mix\base;
 
-class Route extends Object
+/**
+ * Route组件
+ * @author 刘健 <coder.liu@qq.com>
+ */
+class Route extends Component
 {
 
     // 默认变量规则
     public $defaultPattern = '[\w-]+';
+
     // 路由变量规则
     public $patterns = [];
+
     // 路由规则
     public $rules = [];
+
     // 路由数据
     private $data = [];
+
     // 默认路由规则
     private $defaultRules = [
         // 首页
@@ -30,7 +33,7 @@ class Route extends Object
      * 初始化
      * 生成路由数据，将路由规则转换为正则表达式，并提取路由参数名
      */
-    public function init()
+    public function onInitialize()
     {
         $this->rules += $this->defaultRules;
         // index处理

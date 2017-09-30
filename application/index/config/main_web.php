@@ -84,15 +84,15 @@ return [
         // Session
         'session'  => [
             // 类路径
-            'class'         => 'mix\web\Session',
+            'class'         => 'mix\swoole\Session',
             // 处理者
             'saveHandler'   => mix\swoole\Session::HANDLER_REDIS,
             // 保存路径
-            'savePath'      => 'tcp://192.168.1.78:6379?auth=&database=9&prefix=MIX_SSID:',
+            'savePath'      => 'tcp://192.168.1.78:6379?auth=&database=9&prefix=MIXSSID:',
             // 生存时间
             'gcMaxLifetime' => 7200,
             // session名
-            'name'          => 'MIX_SSID',
+            'name'          => 'MIXSSID',
         ],
 
         // Cookie

@@ -1,12 +1,11 @@
 <?php
 
+namespace mix\exception;
+
 /**
  * ErrorException类
  * @author 刘健 <coder.liu@qq.com>
  */
-
-namespace mix\exception;
-
 class ErrorException extends BaseException
 {
 

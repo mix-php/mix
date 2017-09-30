@@ -2,13 +2,13 @@
 
 namespace mix\console;
 
-use mix\base\Object;
+use mix\base\Component;
 
 /**
  * Response类
  * @author 刘健 <coder.liu@qq.com>
  */
-class Response extends Object
+class Response extends Component
 {
 
     // 格式值

@@ -19,7 +19,7 @@ class Mix
     /**
      * 返回App
      *
-     * @return \mix\web\Application|\mix\console\Application
+     * @return \mix\swoole\Application|\mix\web\Application|\mix\console\Application|
      */
     public static function app()
     {
