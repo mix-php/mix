@@ -2,14 +2,14 @@
 
 namespace mixhttpd\server;
 
-use mix\base\Object;
+use mix\base\Component;
 use mix\swoole\Application;
 
 /**
  * HttpServer类
  * @author 刘健 <coder.liu@qq.com>
  */
-class HttpServer extends Object
+class HttpServer extends Component
 {
 
     // 主机
@@ -30,8 +30,8 @@ class HttpServer extends Object
     // 进程名称
     protected $processLabel;
 
-    // 初始化
-    public function init()
+    // 初始化事件
+    public function onInitialize()
     {
         $this->server       = new \swoole_http_server($this->host, $this->port);
         $this->processLabel = "{$this->host}:{$this->port}";

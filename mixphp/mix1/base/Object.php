@@ -12,13 +12,23 @@ class Object
     // 构造
     public function __construct($config = [])
     {
-        method_exists($this, 'onConstruct') and $this->onConstruct();
+        $this->onConstruct();
+    }
+
+    // 构造事件
+    public function onConstruct()
+    {
+    }
+
+    // 析构事件
+    public function onDestruct()
+    {
     }
 
     // 析构
     public function __destruct()
     {
-        method_exists($this, 'onDestruct') and $this->onDestruct();
+        $this->onDestruct();
     }
 
 }

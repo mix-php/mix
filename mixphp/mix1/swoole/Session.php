@@ -31,15 +31,15 @@ class Session extends Component
     // 保存的key
     protected $_saveKey;
 
-    // 开始事件
-    public function onStart()
+    // 请求开始事件
+    public function onRequestStart()
     {
         $this->createHandler();
         $this->loadSessionId();
     }
 
-    // 结束事件
-    public function onEnd()
+    // 请求结束事件
+    public function onRequestEnd()
     {
         $this->_handler   = null;
         $this->_sessionId = null;

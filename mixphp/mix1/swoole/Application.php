@@ -15,23 +15,23 @@ class Application extends \mix\web\Application
      */
     public function run()
     {
-        $server = \Mix::app()->request->server();
-        $method = strtoupper($server['request_method']);
-        $action = empty($server['path_info']) ? '' : substr($server['path_info'], 1);
-        $this->startEvent();
+        $this->triggerRequestStart();
+        $server  = \Mix::app()->request->server();
+        $method  = strtoupper($server['request_method']);
+        $action  = empty($server['path_info']) ? '' : substr($server['path_info'], 1);
         $content = $this->runAction($method, $action);
-        $this->endEvent();
         \Mix::app()->response->setContent($content)->send();
+        $this->triggerRequestEnd();
     }
 
     /**
      * 触发开始事件
      */
-    public function startEvent()
+    public function triggerRequestStart()
     {
         foreach ($this as $key => $value) {
-            if (is_object($value) && $value instanceof \mix\base\Component && method_exists($value, 'onStart')) {
-                $value->onStart();
+            if (is_object($value) && $value instanceof \mix\base\Component && method_exists($value, 'onRequestStart')) {
+                $value->onRequestStart();
             }
         }
     }
@@ -39,11 +39,11 @@ class Application extends \mix\web\Application
     /**
      * 触发结束事件
      */
-    public function endEvent()
+    public function triggerRequestEnd()
     {
         foreach ($this as $key => $value) {
-            if (is_object($value) && $value instanceof \mix\base\Component && method_exists($value, 'onEnd')) {
-                $value->onEnd();
+            if (is_object($value) && $value instanceof \mix\base\Component && method_exists($value, 'onRequestEnd')) {
+                $value->onRequestEnd();
             }
         }
     }
