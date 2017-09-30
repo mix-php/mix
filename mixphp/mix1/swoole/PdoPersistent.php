@@ -40,7 +40,11 @@ class PdoPersistent extends \mix\rdb\Pdo
     // 连接
     public function connect()
     {
-        isset($this->_pdo) and $this->_pdo = null; // 置空才会释放旧连接
+        if (isset($this->_pdo)) {
+            // 置空才会释放旧连接
+            $this->_pdoStatement = null;
+            $this->_pdo          = null;
+        }
         $this->_connectTime = time();
         parent::connect();
     }
