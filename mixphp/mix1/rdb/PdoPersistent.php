@@ -1,12 +1,12 @@
 <?php
 
-namespace mix\swoole;
+namespace mix\rdb;
 
 /**
- * Mysql类
+ * Mysql长连接组件
  * @author 刘健 <coder.liu@qq.com>
  */
-class Pdo extends \mix\rdb\Pdo
+class PdoPersistent extends Pdo
 {
 
     // 重连时间
@@ -15,8 +15,8 @@ class Pdo extends \mix\rdb\Pdo
     // 连接时间
     protected $_connectTime;
 
-    // 初始化
-    public function init()
+    // 初始化事件
+    public function onInitialize()
     {
         // 共用连接对象
         $this->_pdo = &\Mix::$container['_pdo'];
@@ -25,6 +25,16 @@ class Pdo extends \mix\rdb\Pdo
             // 连接
             $this->connect();
         }
+    }
+
+    // 开始事件
+    public function onStart()
+    {
+    }
+
+    // 结束事件
+    public function onEnd()
+    {
     }
 
     // 连接

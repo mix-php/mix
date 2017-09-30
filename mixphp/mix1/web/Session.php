@@ -1,15 +1,14 @@
 <?php
 
-/**
- * Session类
- * @author 刘健 <coder.liu@qq.com>
- */
-
 namespace mix\web;
 
-use mix\base\Object;
+use mix\base\Component;
 
-class Session extends Object
+/**
+ * Session组件
+ * @author 刘健 <coder.liu@qq.com>
+ */
+class Session extends Component
 {
 
     // 处理者值
@@ -25,8 +24,8 @@ class Session extends Object
     // session名
     public $name = 'MIXSSID';
 
-    // 初始化
-    public function init()
+    // 初始化事件
+    public function onInitialize()
     {
         if (session_status() != PHP_SESSION_ACTIVE) {
             ini_set('session.save_handler', $this->saveHandler);

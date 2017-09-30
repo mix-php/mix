@@ -1,14 +1,14 @@
 <?php
 
-namespace mix\swoole;
+namespace mix\nosql;
 
 /**
- * redis 驱动
- *
+ * redis长连接组件
  * @author 刘健 <coder.liu@qq.com>
+ *
  * @method set($key, $value)
  */
-class Redis extends \mix\nosql\Redis
+class RedisPersistent extends Redis
 {
 
     // 重连时间
@@ -17,19 +17,26 @@ class Redis extends \mix\nosql\Redis
     // 连接时间
     protected $_connectTime;
 
-    /**
-     * 初始化
-     * @author 刘健 <coder.liu@qq.com>
-     */
-    public function init()
+    // 初始化事件
+    public function onInitialize()
     {
         // 共用连接对象
-        $this->_redis = &\Mix::$container['_redis'];
+        $this->_redis       = &\Mix::$container['_redis'];
         $this->_connectTime = &\Mix::$container['_redisConnectTime'];
         if (is_null($this->_redis)) {
             // 连接
             $this->connect();
         }
+    }
+
+    // 开始事件
+    public function onStart()
+    {
+    }
+
+    // 结束事件
+    public function onEnd()
+    {
     }
 
     // 连接

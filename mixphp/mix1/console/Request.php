@@ -5,7 +5,7 @@ namespace mix\console;
 use mix\base\Component;
 
 /**
- * Request类
+ * Request组件
  * @author 刘健 <coder.liu@qq.com>
  */
 class Request extends Component
@@ -24,7 +24,7 @@ class Request extends Component
     }
 
     // 设置CLI参数
-    public function setParam()
+    protected function setParam()
     {
         // 解析参数
         $param = [];

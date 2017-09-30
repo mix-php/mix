@@ -2,13 +2,13 @@
 
 namespace mix\rdb;
 
-use mix\base\Object;
+use mix\base\Component;
 
 /**
- * Mysql类
+ * Mysql组件
  * @author 刘健 <coder.liu@qq.com>
  */
-class Pdo extends Object
+class Pdo extends Component
 {
 
     // 数据源格式
@@ -40,10 +40,16 @@ class Pdo extends Object
         \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
     ];
 
-    // 初始化
-    public function init()
+    // 开始事件
+    public function onStart()
     {
         $this->connect();
+    }
+
+    // 结束事件
+    public function onEnd()
+    {
+        $this->_pdo = null;
     }
 
     // 连接

@@ -1,15 +1,14 @@
 <?php
 
-/**
- * Controller类
- * @author 刘健 <coder.liu@qq.com>
- */
-
 namespace mix\web;
 
 use mix\base\Object;
 use mix\web\View;
 
+/**
+ * Controller类
+ * @author 刘健 <coder.liu@qq.com>
+ */
 class Controller extends Object
 {
 

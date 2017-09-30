@@ -2,13 +2,13 @@
 
 namespace mix\web;
 
-use mix\base\Object;
+use mix\base\Component;
 
 /**
- * Request类
+ * Request组件
  * @author 刘健 <coder.liu@qq.com>
  */
-class Request extends Object
+class Request extends Component
 {
 
     // ROUTE参数
@@ -32,8 +32,8 @@ class Request extends Object
     // HEADER参数
     protected $_header = [];
 
-    // 初始化
-    public function init()
+    // 初始化事件
+    public function onInitialize()
     {
         $this->_get    = $_GET;
         $this->_post   = $_POST;

@@ -2,13 +2,13 @@
 
 namespace mix\swoole;
 
-use mix\base\Object;
+use mix\base\Component;
 
 /**
- * Response类
+ * Response组件
  * @author 刘健 <coder.liu@qq.com>
  */
-class Response extends Object
+class Response extends Component
 {
 
     // 响应对象
@@ -101,7 +101,7 @@ class Response extends Object
     }
 
     // 设置HTTP状态码
-    private function setStatusCode()
+    protected function setStatusCode()
     {
         $this->_responder->status($this->statusCode);
     }

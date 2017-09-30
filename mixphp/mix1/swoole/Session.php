@@ -2,13 +2,13 @@
 
 namespace mix\swoole;
 
-use mix\base\Object;
+use mix\base\Component;
 
 /**
- * Session类
+ * Session组件
  * @author 刘健 <coder.liu@qq.com>
  */
-class Session extends Object
+class Session extends Component
 {
 
     // 处理者值
@@ -31,7 +31,7 @@ class Session extends Object
     // 保存的key
     protected $_saveKey;
 
-    // 启动事件
+    // 开始事件
     public function onStart()
     {
         $this->createHandler();

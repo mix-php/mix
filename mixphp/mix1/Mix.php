@@ -13,7 +13,7 @@ class Mix
     // 主机
     protected static $_host;
 
-    // 容器
+    // 公共容器
     public static $container;
 
     /**

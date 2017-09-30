@@ -2,13 +2,13 @@
 
 namespace mix\web;
 
-use mix\base\Object;
+use mix\base\Component;
 
 /**
- * Cookie类
+ * Cookie组件
  * @author 刘健 <coder.liu@qq.com>
  */
-class Cookie extends Object
+class Cookie extends Component
 {
 
     // 过期时间

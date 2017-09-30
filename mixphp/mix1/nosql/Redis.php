@@ -2,15 +2,15 @@
 
 namespace mix\nosql;
 
-use mix\base\Object;
+use mix\base\Component;
 
 /**
- * redis 驱动
- *
+ * redis组件
  * @author 刘健 <coder.liu@qq.com>
+ *
  * @method set($key, $value)
  */
-class Redis extends Object
+class Redis extends Component
 {
 
     // 主机
@@ -25,13 +25,16 @@ class Redis extends Object
     // redis对象
     protected $_redis;
 
-    /**
-     * 初始化
-     * @author 刘健 <coder.liu@qq.com>
-     */
-    public function init()
+    // 开始事件
+    public function onStart()
     {
         $this->connect();
+    }
+
+    // 结束事件
+    public function onEnd()
+    {
+        $this->_redis = null;
     }
 
     // 连接

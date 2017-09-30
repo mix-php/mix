@@ -1,15 +1,14 @@
 <?php
 
-/**
- * Request类
- * @author 刘健 <coder.liu@qq.com>
- */
-
 namespace mix\swoole;
 
-use mix\base\Object;
+use mix\base\Component;
 
-class Request extends Object
+/**
+ * Request组件
+ * @author 刘健 <coder.liu@qq.com>
+ */
+class Request extends Component
 {
 
     // ROUTE参数

@@ -7,8 +7,8 @@ namespace mix\base;
  * @author 刘健 <coder.liu@qq.com>
  *
  * @property \mix\base\Route $route
- * @property \mix\web\Request|\mix\swoole\Request $request
- * @property \mix\web\Response|\mix\swoole\Response $response
+ * @property \mix\web\Request|\mix\swoole\Request|\mix\console\Request $request
+ * @property \mix\web\Response|\mix\swoole\Response|\mix\console\Response $response
  * @property \mix\web\Error $error
  * @property \mix\base\Log $log
  * @property \mix\web\Session $session
@@ -58,10 +58,10 @@ class Application
             return null;
         }
         // 获取配置
-        $list = $this->register[$name];
+        $list  = $this->register[$name];
         $class = $list['class'];
         // 实例化
-        $object = new $class(['disableInit' => true]);
+        $object = new $class();
         // 属性导入
         foreach ($list as $key => $value) {
             // 跳过保留key
@@ -73,7 +73,7 @@ class Application
                 // 获取配置
                 $subClass = $value['class'];
                 // 实例化
-                $subObject = new $subClass(['disableInit' => true]);
+                $subObject = new $subClass();
                 // 属性导入
                 foreach ($value as $k => $v) {
                     if (in_array($k, ['class'])) {
@@ -81,15 +81,15 @@ class Application
                     }
                     $subObject->$k = $v;
                 }
-                // 执行初始化方法
-                method_exists($subObject, 'init') and $subObject->init();
+                // 触发初始化事件
+                method_exists($subObject, 'onInitialize') and $subObject->onInitialize();
                 $object->$key = $subObject;
             } else {
                 $object->$key = $value;
             }
         }
-        // 执行初始化方法
-        method_exists($object, 'init') and $object->init();
+        // 触发初始化事件
+        method_exists($object, 'onInitialize') and $object->onInitialize();
         return $this->$name = $object;
     }
 
@@ -113,13 +113,13 @@ class Application
                 $action = str_replace(':action', 'index', $action);
             }
             // 实例化控制器
-            $action = "{$this->controllerNamespace}\\{$action}";
+            $action    = "{$this->controllerNamespace}\\{$action}";
             $classFull = \mix\base\Route::dirname($action);
             $classPath = \mix\base\Route::dirname($classFull);
             $className = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($classFull), true);
-            $method = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($action), true);
-            $class = "{$classPath}\\{$className}Controller";
-            $method = "action{$method}";
+            $method    = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($action), true);
+            $class     = "{$classPath}\\{$className}Controller";
+            $method    = "action{$method}";
             try {
                 $reflect = new \ReflectionClass($class);
             } catch (\ReflectionException $e) {

@@ -1,12 +1,11 @@
 <?php
 
+namespace mix\web;
+
 /**
  * View类
  * @author 刘健 <coder.liu@qq.com>
  */
-
-namespace mix\web;
-
 class Jsonp
 {
 
