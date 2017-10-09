@@ -28,7 +28,7 @@ class ServiceController extends Controller
     public function actionStart()
     {
         if ($this->isStart()) {
-            return 'mixhttpd is runing' . PHP_EOL;
+            return 'mixhttpd is running' . PHP_EOL;
         }
         $server = \Mix::app()->server;
         if (!is_null(\Mix::app()->request->param('hot-update'))) {
