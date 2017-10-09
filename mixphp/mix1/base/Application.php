@@ -2,6 +2,8 @@
 
 namespace mix\base;
 
+use mix\base\Component;
+
 /**
  * App类
  * @author 刘健 <coder.liu@qq.com>
@@ -13,8 +15,8 @@ namespace mix\base;
  * @property \mix\base\Log $log
  * @property \mix\web\Session $session
  * @property \mix\web\Cookie $cookie
- * @property \mix\web\Pdo|\mix\swoole\Pdo $rdb
- * @property \mix\web\Redis|\mix\swoole\Redis $redis
+ * @property \mix\rdb\Pdo $rdb
+ * @property \mix\nosql\Redis $redis
  * @property \mix\base\Config $config
  */
 class Application
@@ -44,24 +46,34 @@ class Application
     }
 
     /**
-     * 注册树实例化
+     * 组件实例化
      * @param  string $name
      */
     public function __get($name)
     {
         // 返回单例
         if (isset($this->$name)) {
+            // 触发请求开始事件
+            if ($this->$name->getStatus() == Component::STATUS_READY) {
+                $this->$name->onRequestStart();
+                $this->$name->setStatus(Component::STATUS_RUNNING);
+            }
+            // 返回对象
             return $this->$name;
         }
         // 未注册
         if (!isset($this->register[$name])) {
-            return null;
+            throw new \mix\exception\ComponentException("组件不存在：{$name}");
         }
         // 获取配置
         $list  = $this->register[$name];
         $class = $list['class'];
         // 实例化
         $object = new $class();
+        // 组件效验
+        if (!($object instanceof Component)) {
+            throw new \mix\exception\ComponentException("不是组件类型：{$class}");
+        }
         // 属性导入
         foreach ($list as $key => $value) {
             // 跳过保留key
@@ -81,15 +93,18 @@ class Application
                     }
                     $subObject->$k = $v;
                 }
-                // 触发初始化事件
-                method_exists($subObject, 'onInitialize') and $subObject->onInitialize();
                 $object->$key = $subObject;
             } else {
                 $object->$key = $value;
             }
         }
         // 触发初始化事件
-        method_exists($object, 'onInitialize') and $object->onInitialize();
+        $object->onInitialize();
+        $object->setStatus(Component::STATUS_READY);
+        // 触发请求开始事件
+        $object->onRequestStart();
+        $object->setStatus(Component::STATUS_RUNNING);
+        // 返回对象
         return $this->$name = $object;
     }
 
@@ -151,6 +166,30 @@ class Application
     public function getRuntimePath()
     {
         return $this->basePath . 'runtime' . DIRECTORY_SEPARATOR;
+    }
+
+    /**
+     * 装载全部组件
+     */
+    public function loadAllComponent()
+    {
+        foreach ($this->register as $key => $value) {
+            $this->$key;
+        }
+    }
+
+    /**
+     * 清扫组件
+     * 只清扫 STATUS_RUNNING 状态的组件
+     */
+    public function cleanComponent()
+    {
+        foreach ($this as $name => $attribute) {
+            if(is_object($attribute) && $attribute instanceof Component && $attribute->getStatus() == Component::STATUS_RUNNING){
+                $attribute->onRequestEnd();
+                $attribute->setStatus(Component::STATUS_READY);
+            }
+        }
     }
 
 }

@@ -10,7 +10,7 @@ class Object
 {
 
     // 构造
-    public function __construct($config = [])
+    public function __construct()
     {
         $this->onConstruct();
     }

@@ -17,10 +17,11 @@ class Application extends \mix\base\Application
         if (PHP_SAPI != 'cli') {
             die('请在 CLI 模式下运行' . PHP_EOL);
         }
-        $method = 'CLI';
-        $action = empty($GLOBALS['argv'][1]) ? '' : $GLOBALS['argv'][1];
+        $method  = 'CLI';
+        $action  = empty($GLOBALS['argv'][1]) ? '' : $GLOBALS['argv'][1];
         $content = $this->runAction($method, $action);
         \Mix::app()->response->setContent($content)->send();
+        $this->cleanComponent();
     }
 
     /**

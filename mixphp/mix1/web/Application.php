@@ -15,11 +15,12 @@ class Application extends \mix\base\Application
     public function run()
     {
         \Mix::app()->error->register();
-        $server = \Mix::app()->request->server();
-        $method = strtoupper($server['request_method']);
-        $action = empty($server['path_info']) ? '' : substr($server['path_info'], 1);
+        $server  = \Mix::app()->request->server();
+        $method  = strtoupper($server['request_method']);
+        $action  = empty($server['path_info']) ? '' : substr($server['path_info'], 1);
         $content = $this->runAction($method, $action);
         \Mix::app()->response->setContent($content)->send();
+        $this->cleanComponent();
     }
 
     /**
