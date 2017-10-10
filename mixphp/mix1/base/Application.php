@@ -46,7 +46,7 @@ class Application
     }
 
     /**
-     * 组件实例化
+     * 获取组件
      * @param  string $name
      */
     public function __get($name)
@@ -61,6 +61,20 @@ class Application
             // 返回对象
             return $this->$name;
         }
+        // 装载组件
+        $this->loadComponent($name);
+        // 触发请求开始事件
+        $this->$name->onRequestStart();
+        $this->$name->setStatus(Component::STATUS_RUNNING);
+        // 返回对象
+        return $this->$name;
+    }
+
+    /**
+     * 装载组件
+     */
+    public function loadComponent($name)
+    {
         // 未注册
         if (!isset($this->register[$name])) {
             throw new \mix\exception\ComponentException("组件不存在：{$name}");
@@ -101,11 +115,8 @@ class Application
         // 触发初始化事件
         $object->onInitialize();
         $object->setStatus(Component::STATUS_READY);
-        // 触发请求开始事件
-        $object->onRequestStart();
-        $object->setStatus(Component::STATUS_RUNNING);
-        // 返回对象
-        return $this->$name = $object;
+        // 装载
+        $this->$name = $object;
     }
 
     /**
@@ -173,8 +184,8 @@ class Application
      */
     public function loadAllComponent()
     {
-        foreach ($this->register as $key => $value) {
-            $this->$key;
+        foreach (array_keys($this->register) as $name) {
+            $this->loadComponent($name);
         }
     }
 
@@ -185,7 +196,7 @@ class Application
     public function cleanComponent()
     {
         foreach ($this as $name => $attribute) {
-            if(is_object($attribute) && $attribute instanceof Component && $attribute->getStatus() == Component::STATUS_RUNNING){
+            if (is_object($attribute) && $attribute instanceof Component && $attribute->getStatus() == Component::STATUS_RUNNING) {
                 $attribute->onRequestEnd();
                 $attribute->setStatus(Component::STATUS_READY);
             }

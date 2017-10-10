@@ -2,13 +2,14 @@
 
 namespace mix\web;
 
+use mix\base\Component;
 use mix\web\View;
 
 /**
  * Error类
  * @author 刘健 <coder.liu@qq.com>
  */
-class Error
+class Error extends Component
 {
 
     // 格式值
