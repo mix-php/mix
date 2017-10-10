@@ -12,27 +12,48 @@ class Response extends Component
 {
 
     // 格式值
-    const FORMAT_JSON  = 0;
+    const FORMAT_JSON = 0;
     const FORMAT_JSONP = 1;
-    const FORMAT_XML   = 2;
+    const FORMAT_XML = 2;
 
-    // 输出格式
-    public $format = self::FORMAT_JSON;
+    // 默认输出格式
+    public $defaultFormat = self::FORMAT_JSON;
 
     // json
-    public $json;
+    public $json = [
+        // 类路径
+        'class' => 'mix\web\Json',
+    ];
 
     // jsonp
-    public $jsonp;
+    public $jsonp = [
+        // 类路径
+        'class'        => 'mix\web\Jsonp',
+        // callback名称
+        'callbackName' => 'callback',
+    ];
 
     // xml
-    public $xml;
+    public $xml = [
+        // 类路径
+        'class' => 'mix\web\Xml',
+    ];
+
+    // 当前输出格式
+    public $format;
 
     // 状态码
-    public $statusCode = 200;
+    public $statusCode;
 
     // 内容
     protected $_content;
+
+    // 请求开始事件
+    public function onRequestStart()
+    {
+        $this->format     = $this->defaultFormat;
+        $this->statusCode = 200;
+    }
 
     // 设置内容
     public function setContent($content)

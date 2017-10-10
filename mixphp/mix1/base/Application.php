@@ -31,13 +31,18 @@ class Application
     // 注册树配置
     public $register = [];
 
+    // 组件容器
+    protected $_components;
+
     /**
      * 构造
      * @param array $config
      */
     public function __construct($config)
     {
-        // 添加属性
+        // 初始化
+        $this->_components = (object)[];
+        // 导入配置
         foreach ($config as $key => $value) {
             $this->$key = $value;
         }
@@ -52,22 +57,22 @@ class Application
     public function __get($name)
     {
         // 返回单例
-        if (isset($this->$name)) {
+        if (isset($this->_components->$name)) {
             // 触发请求开始事件
-            if ($this->$name->getStatus() == Component::STATUS_READY) {
-                $this->$name->onRequestStart();
-                $this->$name->setStatus(Component::STATUS_RUNNING);
+            if ($this->_components->$name->getStatus() == Component::STATUS_READY) {
+                $this->_components->$name->onRequestStart();
+                $this->_components->$name->setStatus(Component::STATUS_RUNNING);
             }
             // 返回对象
-            return $this->$name;
+            return $this->_components->$name;
         }
         // 装载组件
         $this->loadComponent($name);
         // 触发请求开始事件
-        $this->$name->onRequestStart();
-        $this->$name->setStatus(Component::STATUS_RUNNING);
+        $this->_components->$name->onRequestStart();
+        $this->_components->$name->setStatus(Component::STATUS_RUNNING);
         // 返回对象
-        return $this->$name;
+        return $this->_components->$name;
     }
 
     /**
@@ -115,8 +120,8 @@ class Application
         // 触发初始化事件
         $object->onInitialize();
         $object->setStatus(Component::STATUS_READY);
-        // 装载
-        $this->$name = $object;
+        // 装入容器
+        $this->_components->$name = $object;
     }
 
     /**
@@ -190,15 +195,15 @@ class Application
     }
 
     /**
-     * 清扫组件
+     * 清扫组件容器
      * 只清扫 STATUS_RUNNING 状态的组件
      */
-    public function cleanComponent()
+    public function cleanComponents()
     {
-        foreach ($this as $name => $attribute) {
-            if (is_object($attribute) && $attribute instanceof Component && $attribute->getStatus() == Component::STATUS_RUNNING) {
-                $attribute->onRequestEnd();
-                $attribute->setStatus(Component::STATUS_READY);
+        foreach ($this->_components as $component) {
+            if ($component->getStatus() == Component::STATUS_RUNNING) {
+                $component->onRequestEnd();
+                $component->setStatus(Component::STATUS_READY);
             }
         }
     }

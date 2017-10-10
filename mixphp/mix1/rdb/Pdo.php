@@ -40,10 +40,17 @@ class Pdo extends Component
         \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
     ];
 
-    // 初始化事件
-    public function onInitialize()
+    // 请求开始事件
+    public function onRequestStart()
     {
         $this->connect();
+    }
+
+    // 请求结束事件
+    public function onRequestEnd()
+    {
+        $this->_pdoStatement = null;
+        $this->_pdo = null;
     }
 
     // 连接

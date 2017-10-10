@@ -13,8 +13,10 @@ class Response extends Component
 
     // 格式值
     const FORMAT_RAW = -1;
+
     // 输出格式
     public $format = self::FORMAT_RAW;
+
     // 内容
     protected $_content;
 

@@ -38,8 +38,8 @@ return [
         'response' => [
             // 类路径
             'class'  => 'mix\swoole\Response',
-            // 输出格式
-            'format' => mix\swoole\Response::FORMAT_JSON,
+            // 默认输出格式
+            'defaultFormat' => mix\swoole\Response::FORMAT_JSON,
             // json
             'json'   => [
                 // 类路径

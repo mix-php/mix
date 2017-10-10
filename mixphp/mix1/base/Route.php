@@ -19,10 +19,10 @@ class Route extends Component
     public $rules = [];
 
     // 路由数据
-    private $data = [];
+    protected $data = [];
 
     // 默认路由规则
-    private $defaultRules = [
+    protected $defaultRules = [
         // 首页
         ''                    => 'index/index',
         // 一级目录
@@ -48,16 +48,16 @@ class Route extends Component
             if ($blank = strpos($rule, ' ')) {
                 $method = substr($rule, 0, $blank);
                 $method = "(?:{$method}) ";
-                $rule = substr($rule, $blank + 1);
+                $rule   = substr($rule, $blank + 1);
             } else {
                 $method = '(?:POST|GET|CLI)* ';
             }
             // path
             $fragment = explode('/', $rule);
-            $names = [];
+            $names    = [];
             foreach ($fragment as $k => $v) {
                 $prefix = substr($v, 0, 1);
-                $fname = substr($v, 1);
+                $fname  = substr($v, 1);
                 if ($prefix == ':') {
                     if (isset($this->patterns[$fname])) {
                         $fragment[$k] = '(' . $this->patterns[$fname] . ')';
@@ -92,7 +92,7 @@ class Route extends Component
                 $fragment = explode('/', $action);
                 foreach ($fragment as $k => $v) {
                     $prefix = substr($v, 0, 1);
-                    $fname = substr($v, 1);
+                    $fname  = substr($v, 1);
                     if ($prefix == ':') {
                         if (isset($urlParams[$fname])) {
                             $fragment[$k] = $urlParams[$fname];
