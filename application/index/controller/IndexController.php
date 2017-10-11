@@ -13,7 +13,6 @@ class IndexController extends Controller
 
     public function actionIndex()
     {
-        //return \Mix::app()->rdb->createCommand("SELECT * FROM `post`")->queryAll();
         return 'Hello World' . PHP_EOL;
     }
 

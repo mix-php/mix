@@ -43,7 +43,7 @@ return [
         // 错误
         'error'    => [
             // 类路径
-            'class'  => 'mix\console\Error',
+            'class' => 'mix\console\Error',
         ],
 
         // 日志
@@ -66,26 +66,20 @@ return [
             // 类路径
             'class'        => 'mixhttpd\server\HttpServer',
             // 主机
-            'host'         => 'localhost',
+            'host'         => '127.0.0.1',
             // 端口
             'port'         => 9501,
 
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
             'setting'      => [
-                'reactor_num' => 8,
-                'worker_num'  => 8,
-                'daemonize'   => false,
-                'log_file'    => __DIR__ . '/../runtime/log/mixhttpd.log',
+                'daemonize' => true,
+                'log_file'  => __DIR__ . '/../runtime/log/mixhttpd.log',
             ],
 
             // 虚拟主机：运行在Server内的Web应用
             'virtualHosts' => [
                 // 默认主机
-                '*'                        => __DIR__ . '/../../../application/index/config/main_web.php',
-                // 匹配单个主机
-                'www.t.com'                => __DIR__ . '/../../../application/index/config/main_web.php',
-                // 匹配多个主机
-                'www.v.com:9501|www.v.com' => __DIR__ . '/../../../application/index/config/main_web.php',
+                '*' => __DIR__ . '/../../../application/index/config/main_web.php',
             ],
 
         ],

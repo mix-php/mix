@@ -6,7 +6,7 @@
  */
 
 //$url = 'https://github.com/mixstart/mixphp/archive/master.zip';
-$url = 'https://github.com/mixstart/mixphp/archive/Beta3.zip';
+$url = 'https://github.com/mixstart/mixphp/archive/RC1.zip';
 echo "download {$url} ... ";
 copy($url, 'mixphp.zip');
 echo 'ok' . PHP_EOL;
