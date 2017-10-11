@@ -15,13 +15,14 @@ class Application extends \mix\base\Application
     public function run()
     {
         if (PHP_SAPI != 'cli') {
-            die('请在 CLI 模式下运行' . PHP_EOL);
+            throw new \mix\exception\CommandException('Please run in CLI mode');
         }
+        \Mix::app()->error->register();
         $method  = 'CLI';
         $action  = empty($GLOBALS['argv'][1]) ? '' : $GLOBALS['argv'][1];
         $content = $this->runAction($method, $action);
         \Mix::app()->response->setContent($content)->send();
-        $this->cleanComponent();
+        $this->cleanComponents();
     }
 
     /**
@@ -31,7 +32,7 @@ class Application extends \mix\base\Application
     {
         exec($command, $output, $returnVar);
         if ($returnVar != 0) {
-            throw new \mix\exception\CommandException('命令执行错误');
+            throw new \mix\exception\CommandException('Command execute failure');
         }
         return $output;
     }

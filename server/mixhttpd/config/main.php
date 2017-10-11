@@ -40,6 +40,26 @@ return [
             'class' => 'mix\console\Response',
         ],
 
+        // 错误
+        'error'    => [
+            // 类路径
+            'class'  => 'mix\console\Error',
+        ],
+
+        // 日志
+        'log'      => [
+            // 类路径
+            'class'       => 'mix\base\Log',
+            // 日志记录级别
+            'level'       => ['error', 'info', 'debug'],
+            // 日志目录
+            'logDir'      => 'log',
+            // 日志轮转类型
+            'logRotate'   => mix\base\Log::ROTATE_DAY,
+            // 最大文件尺寸
+            'maxFileSize' => 2048 * 1024,
+        ],
+
         // HttpServer
         'server'   => [
 
@@ -52,8 +72,10 @@ return [
 
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
             'setting'      => [
-                'daemonize' => false,
-                'log_file'  => __DIR__ . '/../runtime/log/mixhttpd.log',
+                'reactor_num' => 8,
+                'worker_num'  => 8,
+                'daemonize'   => false,
+                'log_file'    => __DIR__ . '/../runtime/log/mixhttpd.log',
             ],
 
             // 虚拟主机：运行在Server内的Web应用

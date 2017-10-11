@@ -40,6 +40,26 @@ return [
             'class'  => 'mix\console\Response',
         ],
 
+        // 错误
+        'error'    => [
+            // 类路径
+            'class'  => 'mix\console\Error',
+        ],
+
+        // 日志
+        'log'      => [
+            // 类路径
+            'class'       => 'mix\base\Log',
+            // 日志记录级别
+            'level'       => ['error', 'info', 'debug'],
+            // 日志目录
+            'logDir'      => 'log',
+            // 日志轮转类型
+            'logRotate'   => mix\base\Log::ROTATE_DAY,
+            // 最大文件尺寸
+            'maxFileSize' => 2048 * 1024,
+        ],
+
         // rdb
         'rdb'      => [
             // 类路径

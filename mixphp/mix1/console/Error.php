@@ -1,9 +1,8 @@
 <?php
 
-namespace mix\web;
+namespace mix\console;
 
 use mix\base\Component;
-use mix\web\View;
 
 /**
  * Error类
@@ -11,14 +10,6 @@ use mix\web\View;
  */
 class Error extends Component
 {
-
-    // 格式值
-    const FORMAT_HTML = 'html';
-    const FORMAT_JSON = 'json';
-    const FORMAT_XML = 'xml';
-
-    // 输出格式
-    public $format = self::FORMAT_HTML;
 
     // 注册异常处理
     public function register()
@@ -72,36 +63,11 @@ class Error extends Component
         }
         // 错误响应
         ob_get_contents() and ob_clean();
-        if (!MIX_DEBUG) {
-            if ($e->statusCode == 404) {
-                $errors = [
-                    'code'    => 404,
-                    'message' => $e->getMessage(),
-                ];
-            }
-            if ($e->statusCode == 500) {
-                $errors = [
-                    'code'    => 500,
-                    'message' => '服务器内部错误',
-                ];
-            }
-        }
-        $tpl                              = [
-            404 => "error.{$this->format}.not_found",
-            500 => "error.{$this->format}.internal_server_error",
-        ];
-        $content                          = (new View())->import($tpl[$e->statusCode], $errors);
-        \Mix::app()->response->statusCode = $e->statusCode;
-        \Mix::app()->response->setContent($content);
-        switch ($this->format) {
-            case self::FORMAT_JSON:
-                \Mix::app()->response->setHeader('Content-Type', 'application/json;charset=utf-8');
-                break;
-            case self::FORMAT_XML:
-                \Mix::app()->response->setHeader('Content-Type', 'text/xml;charset=utf-8');
-                break;
-        }
-        \Mix::app()->response->send();
+        $e->statusCode == 404 and $errors['message'] = 'Command cannot find';
+        echo "{$errors['message']}" . PHP_EOL;
+        echo "{$errors['type']} code {$errors['code']}" . PHP_EOL;
+        echo "{$errors['file']} line {$errors['line']}" . PHP_EOL;
+        echo $errors['trace'];
     }
 
 }
