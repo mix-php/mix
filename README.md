@@ -26,11 +26,11 @@ MixPHP 更像是传统 Web 框架的次世代版本，拥有更高的性能又�
 
 ## 核心特征
 
-* 高性能：极简架构+Swoole引擎，超过Yaf/Phalcon这类C扩展框架的性能，[ [对比测试](http://www.jianshu.com/p/0ce1a9885e01) ] ；
+* 高性能：极简架构+Swoole引擎，超过Yaf/Phalcon这类C扩展框架的性能，[ [对比测试](http://www.jianshu.com/p/f769b6be1caf) ] ；
 
 * 长连接：按进程保持的长连接，支持Mysql/Redis；
 
-* 服务器：框架自带MixHttpd替代Apache/phpfpm作为高性能HTTP服务器；
+* 服务器：框架自带MixHttpd替代Apache/PHP-FPM作为高性能HTTP服务器；
 
 * 组件：基于组件的框架结构，可通用的Web编程框架；
 
