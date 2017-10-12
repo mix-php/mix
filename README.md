@@ -14,7 +14,7 @@
 
 ## MixPHP是什么
 
-MixPHP 是秉承 "让每个公司只需使用一种框架" 的理念而创造，采用 Swoole 扩展作为底层引擎，努力打造 Web 开发领域的 "瑞士军刀"。
+MixPHP 是秉承 "做一款入口即化的高性能框架" 的理念而创造，采用 Swoole 扩展作为底层引擎，围绕常驻内存的方式设计，架构设计简洁而有扩展性，开发可以很灵活，提供了 Web 开发所需的众多核心组件，开箱即可简单使用。
 
 ## 与其他框架的比较
 
@@ -22,11 +22,11 @@ MixPHP 与传统 PHP 的 Web 框架非常不同，MixPHP 可以不需要 Web 服
 
 MixPHP 也不同于其他基于 Swoole 的全异步服务型框架，只聚焦于 WebService 领域，MixPHP 定位于 Web 开发的全部领域。
 
-MixPHP 更像是传统 Web 框架的次世代版本，拥有更高的性能又保留了快速开发的能力，还能完成传统框架不能想象或者很难实现的功能，比如：多线程、多进程、TCP/UDP服务器。
+MixPHP 更像是传统 Web 框架的次世代版本，拥有更高的性能又保留了快速开发的能力，还能完成传统框架不能想象或者很难实现的功能。
 
 ## 核心特征
 
-* 高性能：极简架构+Swoole引擎，超过Yaf/Phalcon这类C扩展框架的性能，[ [对比测试](http://www.jianshu.com/p/f769b6be1caf) ] ；
+* 高性能：极简架构+Swoole引擎，超过Phalcon这类C扩展框架的性能，[ [对比测试](http://www.jianshu.com/p/f769b6be1caf) ] ；
 
 * 长连接：按进程保持的长连接，支持Mysql/Redis；
 
@@ -104,7 +104,7 @@ Hello World
 
 ## 下载
 
-[MixPHP V1 发行版本](https://github.com/mixstart/mixphp/releases)
+[MixPHP 发行版本](https://github.com/mixstart/mixphp/releases)
 
 ## 技术交流
 
