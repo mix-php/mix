@@ -24,7 +24,7 @@ MixPHP 与传统 PHP 的 Web 框架非常不同，MixPHP 可以不需要 Web 服
 
 MixPHP 也不同于其他基于 Swoole 的全异步服务型框架，只聚焦于 WebService 领域，MixPHP 定位于 Web 开发的全部领域。
 
-MixPHP 更像是传统 Web 框架的次世代版本，拥有更高的性能又保留了快速开发的能力，还能完成传统框架不能想象或者很难实现的功能。
+MixPHP 更像是传统 Web 框架的 [次世代](https://baike.baidu.com/item/%E6%AC%A1%E4%B8%96%E4%BB%A3/536193) 版本，拥有更高的性能又保留了快速开发的能力，还能完成传统框架不能想象或者很难实现的功能。
 
 ## 核心特征
 
