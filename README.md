@@ -110,7 +110,7 @@ Hello World
 
 ## 技术交流
 
-官方QQ群：284806582
+官方QQ群：284806582，敲门暗号：phper
 
 ## License
 
