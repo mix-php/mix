@@ -16,6 +16,9 @@ class Response extends Component
     const FORMAT_JSONP = 1;
     const FORMAT_XML = 2;
 
+    // 默认格式
+    public $defaultContentType = 'text/html;charset=utf-8';
+
     // 默认输出格式
     public $defaultFormat = self::FORMAT_JSON;
 
@@ -106,6 +109,7 @@ class Response extends Component
         }
         if (is_scalar($content)) {
             $this->setStatusCode();
+            $this->setHeader('Content-Type', $this->defaultContentType);
             echo $content;
         }
     }

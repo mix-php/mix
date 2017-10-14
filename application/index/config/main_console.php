@@ -1,6 +1,6 @@
 <?php
 
-// 应用配置
+// Console应用配置
 return [
 
     // 基础路径
@@ -9,7 +9,7 @@ return [
     // 控制器命名空间
     'controllerNamespace' => 'index\command',
 
-    // 组件树
+    // 组件注册
     'register'            => [
 
         // 路由

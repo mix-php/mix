@@ -1,6 +1,6 @@
 <?php
 
-// APP配置文件
+// Console应用配置
 return [
 
     // 基础路径
@@ -9,7 +9,7 @@ return [
     // 控制器命名空间
     'controllerNamespace' => 'mixhttpd\command',
 
-    // 注册树
+    // 组件注册
     'register'            => [
 
         // 路由
@@ -66,14 +66,19 @@ return [
             // 类路径
             'class'        => 'mixhttpd\server\HttpServer',
             // 主机
-            'host'         => '127.0.0.1',
+            'host'         => 'localhost',
             // 端口
             'port'         => 9501,
 
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
             'setting'      => [
+                // 连接处理线程数
+                'reactor_num' => 8,
+                // 工作进程数
                 'worker_num' => 8,
+                // 是否脱离终端
                 'daemonize' => true,
+                // 日志文件路径
                 'log_file'  => __DIR__ . '/../runtime/log/mixhttpd.log',
             ],
 
