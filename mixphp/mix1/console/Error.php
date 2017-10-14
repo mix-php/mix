@@ -63,11 +63,11 @@ class Error extends Component
         }
         // 错误响应
         ob_get_contents() and ob_clean();
-        $e->statusCode == 404 and $errors['message'] = 'Command cannot find';
+        $e->statusCode == 404 and $errors['message'] = 'Command Not Found';
         echo "{$errors['message']}" . PHP_EOL;
         echo "{$errors['type']} code {$errors['code']}" . PHP_EOL;
         echo "{$errors['file']} line {$errors['line']}" . PHP_EOL;
-        echo $errors['trace'];
+        echo $errors['trace'] . PHP_EOL;
     }
 
 }

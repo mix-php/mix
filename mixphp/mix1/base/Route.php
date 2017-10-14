@@ -50,7 +50,7 @@ class Route extends Component
                 $method = "(?:{$method}) ";
                 $rule   = substr($rule, $blank + 1);
             } else {
-                $method = '(?:POST|GET|CLI)* ';
+                $method = '(?:CLI|GET|POST|PUT|PATCH|DELETE|OPTIONS|HEAD|TRACE) ';
             }
             // path
             $fragment = explode('/', $rule);
