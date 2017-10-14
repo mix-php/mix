@@ -66,7 +66,7 @@ return [
             // 类路径
             'class'        => 'mixhttpd\server\HttpServer',
             // 主机
-            'host'         => 'localhost',
+            'host'         => '127.0.0.1',
             // 端口
             'port'         => 9501,
 
