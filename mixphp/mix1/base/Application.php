@@ -167,24 +167,6 @@ class Application
     }
 
     /**
-     * 获取配置目录路径
-     * @return string
-     */
-    public function getConfigPath()
-    {
-        return $this->basePath . 'config' . DIRECTORY_SEPARATOR;
-    }
-
-    /**
-     * 获取运行目录路径
-     * @return string
-     */
-    public function getRuntimePath()
-    {
-        return $this->basePath . 'runtime' . DIRECTORY_SEPARATOR;
-    }
-
-    /**
      * 装载全部组件
      */
     public function loadAllComponent()
@@ -206,6 +188,24 @@ class Application
                 $component->setStatus(Component::STATUS_READY);
             }
         }
+    }
+
+    /**
+     * 获取配置目录路径
+     * @return string
+     */
+    public function getConfigPath()
+    {
+        return $this->basePath . 'config' . DIRECTORY_SEPARATOR;
+    }
+
+    /**
+     * 获取运行目录路径
+     * @return string
+     */
+    public function getRuntimePath()
+    {
+        return $this->basePath . 'runtime' . DIRECTORY_SEPARATOR;
     }
 
 }
