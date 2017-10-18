@@ -10,7 +10,7 @@ class Pagination
 {
 
     // 内容
-    public $items;
+    public $items = [];
 
     // 总记录数
     public $totalItems;
@@ -20,6 +20,12 @@ class Pagination
 
     // 每页数量
     public $perPage;
+
+    // 数字链接数量
+    public $numberLinks = 5;
+
+    // 固定最小最大数字
+    public $fixedMinMax = true;
 
     // 构造
     public function __construct($config = [])
@@ -74,50 +80,82 @@ class Pagination
         return (int)ceil($this->totalItems / $this->perPage);
     }
 
-    // 连续出现的页码集合
-    public function groups($number = 5)
+    // 数字页码
+    public function numbers()
     {
-        $number      = $number > $this->totalPages() ? $this->totalPages() : $number;
+        $totalPages  = $this->totalPages();
+        $number      = $this->numberLinks > $totalPages ? $totalPages : $this->numberLinks;
         $leftNumber  = $number / 2;
         $leftNumber  = is_integer($leftNumber) ? ($leftNumber - 1) : (int)floor($leftNumber);
         $rightNumber = $number - $leftNumber - 1;
         $leftShort   = ($this->currentPage - $leftNumber) < 1 ? true : false;
-        $rightShort  = ($this->currentPage + $rightNumber) > $this->totalPages() ? true : false;
+        $rightShort  = ($this->currentPage + $rightNumber) > $totalPages ? true : false;
         $center      = (!$leftShort && !$rightShort) ? true : false;
         $data        = [];
         $numberRange = [];
         // 左边短
         if ($leftShort) {
-            var_dump('$leftShort');
             $numberRange = range(1, $number);
         }
         // 右边短
         if ($rightShort) {
-            var_dump('$rightShort');
-            $startNumber = $this->totalPages() - $number;
-            $numberRange = range($startNumber, $startNumber + $number);
+            $startNumber = $totalPages - $number + 1;
+            $numberRange = range($startNumber, $startNumber + ($number - 1));
         }
         // 居中
         if ($center) {
-            var_dump('$center');
             $startNumber = $this->currentPage - $leftNumber;
             $numberRange = range($startNumber, $startNumber + $number - 1);
         }
         // 生成数据
         foreach ($numberRange as $value) {
             $data[] = (object)[
-                'number'   => $value,
+                'text'     => $value,
                 'selected' => ($value == $this->currentPage) ? true : false,
             ];
+        }
+        // 固定最小最大数字
+        if ($this->fixedMinMax) {
+            $temp  = $data;
+            $pop   = array_pop($temp);
+            $shift = array_shift($temp);
+            // 后面加省略号
+            if (($leftShort || $center) && $pop->text < $totalPages) {
+                $pop->text != ($totalPages - 1) and array_push(
+                    $data,
+                    (object)[
+                        'text'     => 'ellipsis',
+                        'selected' => false,
+                    ]
+                );
+                array_push(
+                    $data,
+                    (object)[
+                        'text'     => $totalPages,
+                        'selected' => false,
+                    ]
+                );
+            }
+            // 前面加省略号
+            if (($rightShort || $center) && $shift->text > 1) {
+                $shift->text != 2 and array_unshift(
+                    $data,
+                    (object)[
+                        'text'     => 'ellipsis',
+                        'selected' => false,
+                    ]
+                );
+                array_unshift(
+                    $data,
+                    (object)[
+                        'text'     => 1,
+                        'selected' => false,
+                    ]
+                );
+
+            }
         }
         return $data;
     }
 
 }
-
-$pagination = new Pagination([
-    'totalItems'  => 1000,
-    'currentPage' => 2,
-    'perPage'     => 10,
-]);
-print_r($pagination->groups(10));
