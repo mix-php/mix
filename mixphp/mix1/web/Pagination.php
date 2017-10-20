@@ -36,32 +36,47 @@ class Pagination
         }
     }
 
+    // 是否显示
+    public function display()
+    {
+        return $this->totalPages() < 1 ? false : true;
+    }
+
     // 有首页
     public function hasFirst()
     {
+        if ($this->totalPages() <= 1) {
+            return false;
+        }
         return $this->currentPage == 1 ? false : true;
     }
 
     // 有上一页
-    public function hasBefore()
+    public function hasPrev()
     {
-        return !is_null($this->before());
+        if ($this->totalPages() <= 1) {
+            return false;
+        }
+        return !is_null($this->prev());
     }
 
     // 有下一页
     public function hasNext()
     {
-        return !is_null($this->before());
+        return !is_null($this->next());
     }
 
     // 有尾页
     public function hasLast()
     {
-        return $this->currentPage == $this->totalPages() ? false : true;
+        if ($this->totalPages() <= 1) {
+            return false;
+        }
+        return ($this->currentPage == $this->totalPages() || !$this->totalPages()) ? false : true;
     }
 
     // 上一页
-    public function before()
+    public function prev()
     {
         $page = $this->currentPage - 1;
         return $page < 1 ? null : $page;
@@ -83,7 +98,17 @@ class Pagination
     // 数字页码
     public function numbers()
     {
-        $totalPages  = $this->totalPages();
+        // 零页与一页
+        $totalPages = $this->totalPages();
+        if ($totalPages == 1) {
+            return [(object)[
+                'text'     => '1',
+                'selected' => true,
+            ]];
+        } elseif ($totalPages == 0) {
+            return [];
+        }
+        // 多页
         $number      = $this->numberLinks > $totalPages ? $totalPages : $this->numberLinks;
         $leftNumber  = $number / 2;
         $leftNumber  = is_integer($leftNumber) ? ($leftNumber - 1) : (int)floor($leftNumber);
