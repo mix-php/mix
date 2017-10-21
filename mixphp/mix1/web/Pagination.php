@@ -27,6 +27,9 @@ class Pagination
     // 固定最小最大数字
     public $fixedMinMax = true;
 
+    // 总页数
+    public $totalPages;
+
     // 构造
     public function __construct($config = [])
     {
@@ -34,18 +37,20 @@ class Pagination
         foreach ($config as $key => $value) {
             $this->$key = $value;
         }
+        // 计算总页数
+        $this->totalPages = (int)ceil($this->totalItems / $this->perPage);
     }
 
     // 是否显示
     public function display()
     {
-        return $this->totalPages() < 1 ? false : true;
+        return $this->totalPages < 1 ? false : true;
     }
 
     // 有首页
     public function hasFirst()
     {
-        if ($this->totalPages() <= 1) {
+        if ($this->totalPages <= 1) {
             return false;
         }
         return $this->currentPage == 1 ? false : true;
@@ -54,7 +59,7 @@ class Pagination
     // 有上一页
     public function hasPrev()
     {
-        if ($this->totalPages() <= 1) {
+        if ($this->totalPages <= 1) {
             return false;
         }
         return !is_null($this->prev());
@@ -69,10 +74,10 @@ class Pagination
     // 有尾页
     public function hasLast()
     {
-        if ($this->totalPages() <= 1) {
+        if ($this->totalPages <= 1) {
             return false;
         }
-        return ($this->currentPage == $this->totalPages() || !$this->totalPages()) ? false : true;
+        return ($this->currentPage == $this->totalPages || !$this->totalPages) ? false : true;
     }
 
     // 上一页
@@ -86,27 +91,21 @@ class Pagination
     public function next()
     {
         $page = $this->currentPage + 1;
-        return $page > $this->totalPages() ? null : $page;
-    }
-
-    // 总页数
-    public function totalPages()
-    {
-        return (int)ceil($this->totalItems / $this->perPage);
+        return $page > $this->totalPages ? null : $page;
     }
 
     // 数字页码
     public function numbers()
     {
         // 零页与一页
-        $totalPages = $this->totalPages();
-        if ($totalPages == 1) {
+        $totalPages = $this->totalPages;
+        if ($totalPages == 0) {
+            return [];
+        } elseif ($totalPages == 1) {
             return [(object)[
                 'text'     => '1',
                 'selected' => true,
             ]];
-        } elseif ($totalPages == 0) {
-            return [];
         }
         // 多页
         $number      = $this->numberLinks > $totalPages ? $totalPages : $this->numberLinks;
