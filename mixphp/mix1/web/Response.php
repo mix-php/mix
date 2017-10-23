@@ -51,6 +51,9 @@ class Response extends Component
     // 内容
     protected $_content;
 
+    // HTTP 响应头
+    protected $_headers = [];
+
     // 请求开始事件
     public function onRequestStart()
     {
@@ -62,13 +65,12 @@ class Response extends Component
     public function setContent($content)
     {
         $this->_content = $content;
-        return $this;
     }
 
     // 设置Header信息
     public function setHeader($key, $value)
     {
-        header("{$key}: {$value}");
+        $this->_headers[$key] = $value;
     }
 
     // 设置Cookie
@@ -109,7 +111,8 @@ class Response extends Component
         }
         if (is_scalar($content)) {
             $this->setStatusCode();
-            $this->setHeader('Content-Type', $this->defaultContentType);
+            isset($this->_headers['Content-Type']) or $this->_headers['Content-Type'] = $this->defaultContentType;
+            $this->setHeaders();
             echo $content;
         }
     }
@@ -118,6 +121,14 @@ class Response extends Component
     protected function setStatusCode()
     {
         header("HTTP/1.1 {$this->statusCode}");
+    }
+
+    // 设置Header信息
+    protected function setHeaders()
+    {
+        foreach ($this->_headers as $key => $value) {
+            header("{$key}: {$value}");
+        }
     }
 
 }

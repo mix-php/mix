@@ -19,7 +19,8 @@ class Application extends \mix\base\Application
         $method  = strtoupper($server['request_method']);
         $action  = empty($server['path_info']) ? '' : substr($server['path_info'], 1);
         $content = $this->runAction($method, $action);
-        \Mix::app()->response->setContent($content)->send();
+        \Mix::app()->response->setContent($content);
+        \Mix::app()->response->send();
         $this->cleanComponents();
     }
 
