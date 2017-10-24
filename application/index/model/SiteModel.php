@@ -35,7 +35,7 @@ class SiteModel extends Model
     }
 
     // 自定义验证
-    public function check()
+    public function check($attributeValue)
     {
         return true;
     }
