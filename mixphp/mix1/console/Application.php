@@ -33,7 +33,7 @@ class Application extends \mix\base\Application
     {
         exec($command, $output, $returnVar);
         if ($returnVar != 0) {
-            throw new \mix\exception\CommandException('Command execute failure');
+            throw new \mix\exception\CommandException('Command execute failure : ' . $command);
         }
         return $output;
     }
