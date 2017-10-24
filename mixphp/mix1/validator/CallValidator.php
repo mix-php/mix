@@ -16,7 +16,7 @@ class CallValidator extends BaseValidator
     // 回调验证
     protected function callback($param)
     {
-        if (!call_user_func_array($param, $this->attributes[$this->attribute])) {
+        if (!call_user_func_array($param, [$this->attributes[$this->attribute]])) {
             if (is_null($this->attributeMessage)) {
                 $error = "{$this->attributeLabel}是无效的值.";
             } else {
