@@ -1,7 +1,7 @@
 <br>
 
 <p align="center">
-<img src="https://box.kancloud.cn/d451a221cd3c72be2785c9795b3daf1f_120x120.png" alt="MixPHP">
+<img src="https://box.kancloud.cn/5afb2d024ca02dc922153ab22e44bd0d_120x120.png" alt="MixPHP">
 </p>
 
 <p align="center">高性能 • 极简 • 多功能</p>
