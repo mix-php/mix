@@ -36,6 +36,12 @@ class Captcha
     // Y轴随机
     public $yRand = [5, 15];
 
+    // 文本
+    protected $_text;
+
+    // 内容
+    protected $_content;
+
     // 构造
     public function __construct($config = [])
     {
@@ -53,14 +59,27 @@ class Captcha
         $fontColor  = imagecolorallocate($canvas, 32, 64, 160);
         imagefill($canvas, 0, 0, $background);
         for ($i = 1; $i <= $this->wordNumber; $i++) {
-            imagettftext($canvas, $this->fontSize, mt_rand($this->angleRand[0], $this->angleRand[1]), $this->fontSize * ($this->xSpacing * $i), $this->fontSize + mt_rand($this->yRand[0], $this->yRand[1]), $fontColor, $this->fontFile, iconv_substr($this->wordSet, floor(mt_rand(0, mb_strlen($this->wordSet, 'utf-8') - 1)), 1, 'utf-8'));
+            $word = iconv_substr($this->wordSet, floor(mt_rand(0, mb_strlen($this->wordSet, 'utf-8') - 1)), 1, 'utf-8');
+            $this->_text .= $word;
+            imagettftext($canvas, $this->fontSize, mt_rand($this->angleRand[0], $this->angleRand[1]), $this->fontSize * ($this->xSpacing * $i), $this->fontSize + mt_rand($this->yRand[0], $this->yRand[1]), $fontColor, $this->fontFile, $word);
         }
         imagesavealpha($canvas, true);
-        //ob_start();
+        ob_start();
         imagepng($canvas);
         imagedestroy($canvas);
-        $content = ob_get_clean();
-        return $content;
+        $this->_content = ob_get_clean();
+    }
+
+    // 获取文本
+    public function getText()
+    {
+        return $this->_text;
+    }
+
+    // 获取内容
+    public function getContent()
+    {
+        return $this->_content;
     }
 
 }
