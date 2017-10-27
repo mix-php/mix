@@ -7,9 +7,9 @@
 <p align="center">高性能 • 极简 • 多功能</p>
 
 <p align="center">
-<img src="https://img.shields.io/badge/downloads-1326-green.svg">
+<img src="https://img.shields.io/badge/downloads-2.1k-green.svg">
 <img src="https://img.shields.io/badge/platform-linux%20%7C%20win%20%7C%20osx-lightgrey.svg">
-<img src="https://img.shields.io/packagist/l/doctrine/orm.svg">
+<img src="https://img.shields.io/badge/size-160%20KB-green.svg">
 </p>
 
 ## MixPHP是什么
@@ -116,4 +116,4 @@ Hello World
 
 ## License
 
-MixPHP 框架基于 MIT license 进行开源。
+GNU General Public License, version 2 see https://www.gnu.org/licenses/gpl-2.0.html
