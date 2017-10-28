@@ -75,11 +75,13 @@ return [
                 // 连接处理线程数
                 'reactor_num' => 8,
                 // 工作进程数
-                'worker_num' => 8,
+                'worker_num'  => 8,
                 // 是否脱离终端
-                'daemonize' => true,
+                'daemonize'   => true,
                 // 日志文件路径
-                'log_file'  => __DIR__ . '/../runtime/log/mixhttpd.log',
+                'log_file'    => __DIR__ . '/../runtime/log/mixhttpd.log',
+                // 子进程运行用户
+                'user'        => 'www',
             ],
 
             // 虚拟主机：运行在Server内的Web应用
