@@ -112,7 +112,7 @@ Hello World
 
 ## 技术交流
 
-官方QQ群：284806582，敲门暗号：phper
+官方QQ群：284806582，敲门暗号：phper    
 作者微博：http://weibo.com/onanying ，关注最新进展
 
 ## License
