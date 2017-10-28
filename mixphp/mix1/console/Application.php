@@ -2,6 +2,8 @@
 
 namespace mix\console;
 
+use mix\base\Component;
+
 /**
  * App类
  * @author 刘健 <coder.liu@qq.com>
@@ -23,7 +25,25 @@ class Application extends \mix\base\Application
         $content = $this->runAction($method, $action);
         \Mix::app()->response->setContent($content);
         \Mix::app()->response->send();
-        $this->cleanComponents();
+    }
+
+    /**
+     * 获取组件
+     * @param  string $name
+     */
+    public function __get($name)
+    {
+        // 返回单例
+        if (isset($this->_components->$name)) {
+            // 返回对象
+            return $this->_components->$name;
+        }
+        // 装载组件
+        $this->loadComponent($name);
+        // 修改状态
+        $this->_components->$name->setStatus(Component::STATUS_RUNNING);
+        // 返回对象
+        return $this->_components->$name;
     }
 
     /**

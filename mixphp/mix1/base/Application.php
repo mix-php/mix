@@ -2,8 +2,6 @@
 
 namespace mix\base;
 
-use mix\base\Component;
-
 /**
  * App类
  * @author 刘健 <coder.liu@qq.com>
@@ -48,31 +46,6 @@ class Application
         }
         // 快捷引用
         \Mix::setApp($this);
-    }
-
-    /**
-     * 获取组件
-     * @param  string $name
-     */
-    public function __get($name)
-    {
-        // 返回单例
-        if (isset($this->_components->$name)) {
-            // 触发请求开始事件
-            if ($this->_components->$name->getStatus() == Component::STATUS_READY) {
-                $this->_components->$name->onRequestStart();
-                $this->_components->$name->setStatus(Component::STATUS_RUNNING);
-            }
-            // 返回对象
-            return $this->_components->$name;
-        }
-        // 装载组件
-        $this->loadComponent($name);
-        // 触发请求开始事件
-        $this->_components->$name->onRequestStart();
-        $this->_components->$name->setStatus(Component::STATUS_RUNNING);
-        // 返回对象
-        return $this->_components->$name;
     }
 
     /**
@@ -164,30 +137,6 @@ class Application
             }
         }
         throw new \mix\exception\HttpException("Not Found (#404)", 404);
-    }
-
-    /**
-     * 装载全部组件
-     */
-    public function loadAllComponent()
-    {
-        foreach (array_keys($this->register) as $name) {
-            $this->loadComponent($name);
-        }
-    }
-
-    /**
-     * 清扫组件容器
-     * 只清扫 STATUS_RUNNING 状态的组件
-     */
-    public function cleanComponents()
-    {
-        foreach ($this->_components as $component) {
-            if ($component->getStatus() == Component::STATUS_RUNNING) {
-                $component->onRequestEnd();
-                $component->setStatus(Component::STATUS_READY);
-            }
-        }
     }
 
     /**
