@@ -29,6 +29,8 @@ class Pdo extends Component
     protected $_sql;
     // sql缓存
     protected $_sqlCache = [];
+    // params
+    protected $_params = [];
     // values
     protected $_values = [];
     // 最后sql数据
@@ -50,7 +52,7 @@ class Pdo extends Component
     public function onRequestEnd()
     {
         $this->_pdoStatement = null;
-        $this->_pdo = null;
+        $this->_pdo          = null;
     }
 
     // 连接
@@ -71,7 +73,7 @@ class Pdo extends Component
             return $this;
         }
         if (isset($sqlItem['values'])) {
-            $this->bindValues($sqlItem['values']);
+            $this->bindParams($sqlItem['values']);
         }
         $this->_sqlCache[] = array_shift($sqlItem);
         return $this;
@@ -80,30 +82,32 @@ class Pdo extends Component
     // 创建命令
     public function createCommand($sql = null)
     {
-        if (is_null($sql)) {
-            $this->_sql = implode(' ', $this->_sqlCache);
-        }
+        // 字符串构建
         if (is_string($sql)) {
             $this->_sql = $sql;
         }
+        // 数组构建
         if (is_array($sql)) {
             foreach ($sql as $item) {
                 $this->queryBuilder($item);
             }
             $this->_sql = implode(' ', $this->_sqlCache);
         }
+        if (is_null($sql)) {
+            $this->_sql = implode(' ', $this->_sqlCache);
+        }
         return $this;
     }
 
     // 绑定参数
-    public function bindValues($data)
+    public function bindParams($data)
     {
-        $this->_values += $data;
+        $this->_params += $data;
         return $this;
     }
 
-    // 绑定预处理, 扩展绑定数组参数
-    protected function bindPrepare($sql, $data)
+    // 参数扩展对数组的支持
+    protected function paramsExtend($sql, $data)
     {
         $params = $values = [];
         foreach ($data as $key => $value) {
@@ -122,14 +126,12 @@ class Pdo extends Component
         return [$sql, $params, $values];
     }
 
-    // 开始绑定参数
-    protected function bindStart()
+    // 准备
+    protected function prepare()
     {
-        if (empty($this->_values)) {
-            $this->_pdoStatement = $this->_pdo->prepare($this->_sql);
-            $this->_lastSqlData  = null;
-        } else {
-            list($sql, $params, $values) = $this->_lastSqlData = $this->bindPrepare($this->_sql, $this->_values);
+        // _params 与 _values 不会同时出现
+        if (!empty($this->_params)) {
+            list($sql, $params, $values) = $this->_lastSqlData = $this->paramsExtend($this->_sql, $this->_params);
             $this->_pdoStatement = $this->_pdo->prepare($sql);
             foreach ($params as $key => &$value) {
                 $this->_pdoStatement->bindParam($key, $value);
@@ -137,15 +139,25 @@ class Pdo extends Component
             foreach ($values as $key => $value) {
                 $this->_pdoStatement->bindValue($key + 1, $value);
             }
+        } elseif (!empty($this->_values)) {
+            $this->_pdoStatement = $this->_pdo->prepare($this->_sql);
+            foreach ($this->_values as $key => $value) {
+                $this->_pdoStatement->bindValue($key + 1, $value);
+            }
+            $this->_lastSqlData = [$this->_sql, [], $this->_values];
+        } else {
+            $this->_pdoStatement = $this->_pdo->prepare($this->_sql);
+            $this->_lastSqlData  = null;
         }
         $this->_sqlCache = [];
+        $this->_params   = [];
         $this->_values   = [];
     }
 
     // 返回多行
     public function queryAll()
     {
-        $this->bindStart();
+        $this->prepare();
         $this->_pdoStatement->execute();
         return $this->_pdoStatement->fetchAll();
     }
@@ -153,7 +165,7 @@ class Pdo extends Component
     // 返回一行
     public function queryOne()
     {
-        $this->bindStart();
+        $this->prepare();
         $this->_pdoStatement->execute();
         return $this->_pdoStatement->fetch($this->attribute[\PDO::ATTR_DEFAULT_FETCH_MODE]);
     }
@@ -161,7 +173,7 @@ class Pdo extends Component
     // 返回一列 (第一列)
     public function queryColumn($columnNumber = 0)
     {
-        $this->bindStart();
+        $this->prepare();
         $this->_pdoStatement->execute();
         $column = [];
         while ($row = $this->_pdoStatement->fetchColumn($columnNumber)) {
@@ -173,7 +185,7 @@ class Pdo extends Component
     // 返回一个标量值
     public function queryScalar()
     {
-        $this->bindStart();
+        $this->prepare();
         $this->_pdoStatement->execute();
         return $this->_pdoStatement->fetchColumn();
     }
@@ -181,7 +193,7 @@ class Pdo extends Component
     // 执行SQL语句，并返InsertId或回受影响的行数
     public function execute()
     {
-        $this->bindStart();
+        $this->prepare();
         $this->_pdoStatement->execute();
         $affectedRows = $this->_pdoStatement->rowCount();
         $lastInsertId = $this->_pdo->lastInsertId();
@@ -200,7 +212,7 @@ class Pdo extends Component
         }, $keys);
         $sql    = "INSERT INTO `{$table}` (`" . implode('`, `', $keys) . "`) VALUES (" . implode(', ', $fields) . ")";
         $this->createCommand($sql);
-        $this->bindValues($data);
+        $this->bindParams($data);
         return $this;
     }
 
@@ -222,11 +234,8 @@ class Pdo extends Component
             $valuesSql[] = "(" . implode(', ', $fields) . ")";
         }
         $sql .= implode(', ', $valuesSql);
-        $this->_pdoStatement = $this->_pdo->prepare($sql);
-        foreach ($values as $key => $value) {
-            $this->_pdoStatement->bindValue($key + 1, $value);
-        }
-        $this->_lastSqlData = [$sql, [], $values];
+        $this->_sql    = $sql;
+        $this->_values = $values;
         return $this;
     }
 
@@ -244,8 +253,8 @@ class Pdo extends Component
         }
         $sql = "UPDATE `{$table}` SET " . implode(', ', $fieldsSql) . " WHERE " . implode(', ', $where);
         $this->createCommand($sql);
-        $this->bindValues($data);
-        $this->bindValues($whereParams);
+        $this->bindParams($data);
+        $this->bindParams($whereParams);
         return $this;
     }
 
@@ -259,7 +268,7 @@ class Pdo extends Component
         }
         $sql = "DELETE FROM `{$table}` WHERE " . implode(', ', $where);
         $this->createCommand($sql);
-        $this->bindValues($whereParams);
+        $this->bindParams($whereParams);
         return $this;
     }
 
