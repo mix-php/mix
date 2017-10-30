@@ -69,11 +69,11 @@ class Pdo extends Component
     // 查询构建
     public function queryBuilder($sqlItem)
     {
-        if (isset($sqlItem['where']) && $sqlItem['where'] == false) {
+        if (isset($sqlItem['if']) && $sqlItem['if'] == false) {
             return $this;
         }
-        if (isset($sqlItem['values'])) {
-            $this->bindParams($sqlItem['values']);
+        if (isset($sqlItem['params'])) {
+            $this->bindParams($sqlItem['params']);
         }
         $this->_sqlCache[] = array_shift($sqlItem);
         return $this;
@@ -251,7 +251,7 @@ class Pdo extends Component
             $where[$key]                      = "`{$value[0]}` {$value[1]} :where_{$value[0]}";
             $whereParams["where_{$value[0]}"] = $value[2];
         }
-        $sql = "UPDATE `{$table}` SET " . implode(', ', $fieldsSql) . " WHERE " . implode(', ', $where);
+        $sql = "UPDATE `{$table}` SET " . implode(', ', $fieldsSql) . " WHERE " . implode(' AND ', $where);
         $this->createCommand($sql);
         $this->bindParams($data);
         $this->bindParams($whereParams);
@@ -266,7 +266,7 @@ class Pdo extends Component
             $where[$key]                = "`{$value[0]}` {$value[1]} :{$value[0]}";
             $whereParams["{$value[0]}"] = $value[2];
         }
-        $sql = "DELETE FROM `{$table}` WHERE " . implode(', ', $where);
+        $sql = "DELETE FROM `{$table}` WHERE " . implode(' AND ', $where);
         $this->createCommand($sql);
         $this->bindParams($whereParams);
         return $this;
