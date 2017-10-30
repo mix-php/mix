@@ -17,7 +17,7 @@ class ServiceController extends Controller
     {
         $output = \Mix::app()->exec('ps -ef | grep mixhttpd');
         foreach ($output as $item) {
-            if (strpos($item, 'mixhttpd') !== false && substr($item, -6, 6) == 'master') {
+            if (strpos($item, 'mixhttpd master') !== false) {
                 return true;
             }
         }
@@ -56,6 +56,20 @@ class ServiceController extends Controller
     {
         $this->actionStop();
         $this->actionStart();
+    }
+
+    // 查看服务状态
+    public function actionStatus()
+    {
+        if (!$this->isStart()) {
+            return 'mixhttpd is not running' . PHP_EOL;
+        }
+        $output = \Mix::app()->exec('ps -ef | grep mixhttpd');
+        foreach ($output as $item) {
+            if (strpos($item, 'mixhttpd master') !== false || strpos($item, 'mixhttpd manager') !== false || strpos($item, 'mixhttpd worker') !== false) {
+                echo $item . PHP_EOL;
+            }
+        }
     }
 
 }

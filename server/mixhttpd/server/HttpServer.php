@@ -27,14 +27,10 @@ class HttpServer extends Component
     // SwooleHttpServer对象
     protected $server;
 
-    // 进程名称
-    protected $processLabel;
-
     // 初始化事件
     public function onInitialize()
     {
         $this->server       = new \swoole_http_server($this->host, $this->port);
-        $this->processLabel = "{$this->host}:{$this->port}";
         // 新建日志目录
         if (isset($this->setting['log_file'])) {
             $dir = dirname($this->setting['log_file']);
@@ -47,7 +43,7 @@ class HttpServer extends Component
     {
         $this->server->on('Start', function ($server) {
             // 进程命名
-            swoole_set_process_name("mixhttpd {$this->processLabel} master");
+            swoole_set_process_name("mixhttpd master {$this->host}:{$this->port}");
         });
     }
 
@@ -56,7 +52,7 @@ class HttpServer extends Component
     {
         $this->server->on('ManagerStart', function ($server) {
             // 进程命名
-            swoole_set_process_name("mixhttpd {$this->processLabel} manager");
+            swoole_set_process_name("mixhttpd manager");
         });
     }
 
@@ -66,9 +62,9 @@ class HttpServer extends Component
         $this->server->on('WorkerStart', function ($server, $workerId) {
             // 进程命名
             if ($workerId < $server->setting['worker_num']) {
-                swoole_set_process_name("mixhttpd {$this->processLabel} worker #{$workerId}");
+                swoole_set_process_name("mixhttpd worker #{$workerId}");
             } else {
-                swoole_set_process_name("mixhttpd {$this->processLabel} task #{$workerId}");
+                swoole_set_process_name("mixhttpd task #{$workerId}");
             }
             // 实例化Apps
             $apps = [];
