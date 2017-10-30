@@ -114,7 +114,7 @@ return [
         // 数据库
         'rdb'      => [
             // 类路径
-            'class'                           => 'mix\rdb\Pdo',
+            'class'                           => 'mix\web\Pdo',
             // 数据源格式
             'dsn'                             => 'mysql:host=192.168.1.78;port=3306;charset=utf8;dbname=test',
             // 数据库用户名
@@ -139,7 +139,7 @@ return [
         // redis
         'redis'    => [
             // 类路径
-            'class'        => 'mix\nosql\Redis',
+            'class'        => 'mix\web\Redis',
             // 主机
             'host'         => '192.168.1.78',
             // 端口

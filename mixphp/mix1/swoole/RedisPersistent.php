@@ -29,16 +29,6 @@ class RedisPersistent extends \mix\nosql\Redis
         }
     }
 
-    // 请求开始事件
-    public function onRequestStart()
-    {
-    }
-
-    // 请求结束事件
-    public function onRequestEnd()
-    {
-    }
-
     // 连接
     public function connect()
     {
