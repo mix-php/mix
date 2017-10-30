@@ -5,8 +5,7 @@
  * @author 刘健 <coder.liu@qq.com>
  */
 
-//$url = 'https://github.com/mixstart/mixphp/archive/master.zip';
-$url = 'https://github.com/mixstart/mixphp/archive/Beta4.zip';
+$url = 'https://github.com/mixstart/mixphp/archive/Beta5.zip';
 echo "download {$url} ... ";
 copy($url, 'mixphp.zip');
 echo 'ok' . PHP_EOL;
