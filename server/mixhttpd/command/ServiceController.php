@@ -48,7 +48,7 @@ class ServiceController extends Controller
         }
         while ($this->isStart()) {
         }
-        return 'mixhttpd stopped' . PHP_EOL;
+        return 'mixhttpd stop complete' . PHP_EOL;
     }
 
     // 重启服务

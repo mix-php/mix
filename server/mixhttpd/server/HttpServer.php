@@ -66,9 +66,9 @@ class HttpServer extends Component
         $this->server->on('WorkerStart', function ($server, $workerId) {
             // 进程命名
             if ($workerId < $server->setting['worker_num']) {
-                swoole_set_process_name("mixhttpd {$this->processLabel} worker {$workerId}");
+                swoole_set_process_name("mixhttpd {$this->processLabel} worker #{$workerId}");
             } else {
-                swoole_set_process_name("mixhttpd {$this->processLabel} task {$workerId}");
+                swoole_set_process_name("mixhttpd {$this->processLabel} task #{$workerId}");
             }
             // 实例化Apps
             $apps = [];
