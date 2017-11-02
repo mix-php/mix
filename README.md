@@ -59,8 +59,8 @@ MixPHP 非常适合互联网开发，一个框架即可轻松应对多种需求�
 
 ## 文档
 
-MixPHP开发指南：
-http://doc.mixphp.cn
+MixPHP开发指南：    
+http://doc.mixphp.cn    
 https://www.kancloud.cn/onanying/mixphp1/content
 
 ## 环境要求
