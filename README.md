@@ -30,10 +30,9 @@ MixPHP 更像是传统 Web 框架的 [次世代](https://baike.baidu.com/item/%E
 
 ## 适用场景
 
-MixPHP 非常适合互联网开发，一个框架即可轻松应对多种需求。
+对并发性能有更加严格的要求，同时追求开发效率。
 
-* 对并发性能有更加严格的要求，同时追求开发效率。
-* 需求以 API / 后台管理 为主，少量 H5 页为辅。
+* 需求以 API / 后台管理 为主，H5 页为辅。
 * 需要 定时任务 / 守护进程 等后端处理开发。
 * 需要 TCP / WebSocket 等网络服务开发。
 
@@ -59,9 +58,7 @@ MixPHP 非常适合互联网开发，一个框架即可轻松应对多种需求�
 
 ## 文档
 
-MixPHP开发指南：    
-http://doc.mixphp.cn    
-https://www.kancloud.cn/onanying/mixphp1/content
+MixPHP开发指南：http://doc.mixphp.cn
 
 ## 环境要求
 
