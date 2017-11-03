@@ -58,41 +58,28 @@ class Application
             throw new \mix\exception\ComponentException("组件不存在：{$name}");
         }
         // 获取配置
-        $list  = $this->register[$name];
-        $class = $list['class'];
+        $conf  = $this->register[$name];
+        // 属性数组
+        foreach ($conf as $key => $value) {
+            // 跳过保留key
+            if ($key == 'class') {
+                unset($conf[$key]);
+            }
+            // 子类实例化
+            if (is_array($value) && isset($value['class'])) {
+                $subClass = $value['class'];
+                unset($value['class']);
+                $conf[$key] = new $subClass($value);
+            }
+        }
         // 实例化
-        $object = new $class();
+        $class = $conf['class'];
+        unset($conf['class']);
+        $object = new $class($conf);
         // 组件效验
         if (!($object instanceof Component)) {
             throw new \mix\exception\ComponentException("不是组件类型：{$class}");
         }
-        // 属性导入
-        foreach ($list as $key => $value) {
-            // 跳过保留key
-            if (in_array($key, ['class'])) {
-                continue;
-            }
-            // 属性赋值
-            if (is_array($value) && isset($value['class'])) {
-                // 获取配置
-                $subClass = $value['class'];
-                // 实例化
-                $subObject = new $subClass();
-                // 属性导入
-                foreach ($value as $k => $v) {
-                    if (in_array($k, ['class'])) {
-                        continue;
-                    }
-                    $subObject->$k = $v;
-                }
-                $object->$key = $subObject;
-            } else {
-                $object->$key = $value;
-            }
-        }
-        // 触发初始化事件
-        $object->onInitialize();
-        $object->setStatus(Component::STATUS_READY);
         // 装入容器
         $this->_components->$name = $object;
     }

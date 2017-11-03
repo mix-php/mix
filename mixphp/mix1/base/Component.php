@@ -32,16 +32,19 @@ class Component extends Object
     // 初始化事件
     public function onInitialize()
     {
+        $this->setStatus(self::STATUS_READY);
     }
 
     // 请求开始事件
     public function onRequestStart()
     {
+        $this->setStatus(self::STATUS_RUNNING);
     }
 
     // 请求结束事件
     public function onRequestEnd()
     {
+        $this->setStatus(self::STATUS_READY);
     }
 
 }

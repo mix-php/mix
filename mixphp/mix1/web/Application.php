@@ -12,7 +12,7 @@ class Application extends \mix\base\Application
 {
 
     /**
-     * 执行功能 (LAMP|LNMP|WAMP架构)
+     * 执行功能 (Apache/PHP-FPM)
      */
     public function run()
     {
@@ -37,7 +37,6 @@ class Application extends \mix\base\Application
             // 触发请求开始事件
             if ($this->_components->$name->getStatus() == Component::STATUS_READY) {
                 $this->_components->$name->onRequestStart();
-                $this->_components->$name->setStatus(Component::STATUS_RUNNING);
             }
             // 返回对象
             return $this->_components->$name;
@@ -46,7 +45,6 @@ class Application extends \mix\base\Application
         $this->loadComponent($name);
         // 触发请求开始事件
         $this->_components->$name->onRequestStart();
-        $this->_components->$name->setStatus(Component::STATUS_RUNNING);
         // 返回对象
         return $this->_components->$name;
     }
@@ -70,7 +68,6 @@ class Application extends \mix\base\Application
         foreach ($this->_components as $component) {
             if ($component->getStatus() == Component::STATUS_RUNNING) {
                 $component->onRequestEnd();
-                $component->setStatus(Component::STATUS_READY);
             }
         }
     }

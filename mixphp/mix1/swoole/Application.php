@@ -11,7 +11,7 @@ class Application extends \mix\web\Application
 {
 
     /**
-     * 执行功能 (Swoole架构)
+     * 执行功能 (MixHttpd)
      */
     public function run()
     {

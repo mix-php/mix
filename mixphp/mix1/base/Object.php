@@ -10,13 +10,24 @@ class Object
 {
 
     // 构造
-    public function __construct()
+    public function __construct($config = [])
     {
+        if (!empty($config)) {
+            foreach ($config as $key => $value) {
+                $this->$key = $value;
+            }
+            $this->onInitialize();
+        }
         $this->onConstruct();
     }
 
     // 构造事件
     public function onConstruct()
+    {
+    }
+
+    // 初始化事件
+    public function onInitialize()
     {
     }
 

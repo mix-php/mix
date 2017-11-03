@@ -2,11 +2,13 @@
 
 namespace mix\web;
 
+use mix\base\Object;
+
 /**
  * View类
  * @author 刘健 <coder.liu@qq.com>
  */
-class Json
+class Json extends Object
 {
 
     // 编码

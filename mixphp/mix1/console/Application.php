@@ -40,8 +40,6 @@ class Application extends \mix\base\Application
         }
         // 装载组件
         $this->loadComponent($name);
-        // 修改状态
-        $this->_components->$name->setStatus(Component::STATUS_RUNNING);
         // 返回对象
         return $this->_components->$name;
     }

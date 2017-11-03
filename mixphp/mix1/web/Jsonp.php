@@ -2,11 +2,13 @@
 
 namespace mix\web;
 
+use yii\base\Object;
+
 /**
  * View类
  * @author 刘健 <coder.liu@qq.com>
  */
-class Jsonp
+class Jsonp extends Object
 {
 
     // callback名称
