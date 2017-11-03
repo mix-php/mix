@@ -22,7 +22,7 @@ MixPHP 是秉承 **"普及 PHP 常驻内存型解决方案，推动 PHP 往更�
 
 MixPHP 与传统 PHP 的 Web 框架非常不同，MixPHP 可以不需要 Web 服务器(Apache/PHP-FPM)，框架自带 MixHttpd 高性能HTTP服务器，传统的 PHP 应用程序中脚本结束后，所有的对象在请求后都将销毁，而 MixHttpd 不同，框架组件对象常驻于内存，减少对象反复创建销毁的性能损失，具有传统框架无法比拟的性能优势。
 
-MixPHP 也不同于其他基于 Swoole 的微服务框架，只聚焦于微服务治理，MixPHP 定位于 Web 开发的更多领域，覆盖从初创到亿级体量的技术诉求。
+MixPHP 也不同于其他基于 Swoole 的微服务框架，只聚焦于微服务治理，MixPHP 定位于 Web 开发的更多领域，覆盖从初创到亿元级体量的技术诉求。
 
 MixPHP 更像是传统 Web 框架的 [次世代](https://baike.baidu.com/item/%E6%AC%A1%E4%B8%96%E4%BB%A3/536193) 版本，拥有更高的性能又保留了快速开发的能力，还能完成传统框架不能想象或者很难实现的功能。
 
