@@ -2,11 +2,13 @@
 
 namespace mix\web;
 
+use mix\base\Object;
+
 /**
  * Captcha类
  * @author 刘健 <coder.liu@qq.com>
  */
-class Captcha
+class Captcha extends Object
 {
 
     // 宽度
@@ -41,15 +43,6 @@ class Captcha
 
     // 内容
     protected $_content;
-
-    // 构造
-    public function __construct($config = [])
-    {
-        // 导入配置
-        foreach ($config as $key => $value) {
-            $this->$key = $value;
-        }
-    }
 
     // 生成
     public function generate()

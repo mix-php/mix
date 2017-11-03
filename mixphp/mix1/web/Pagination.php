@@ -2,11 +2,13 @@
 
 namespace mix\web;
 
+use mix\base\Object;
+
 /**
  * Pagination类
  * @author 刘健 <coder.liu@qq.com>
  */
-class Pagination
+class Pagination extends Object
 {
 
     // 内容
@@ -30,13 +32,9 @@ class Pagination
     // 总页数
     public $totalPages;
 
-    // 构造
-    public function __construct($config = [])
+    // 初始化事件
+    public function onInitialize()
     {
-        // 导入配置
-        foreach ($config as $key => $value) {
-            $this->$key = $value;
-        }
         // 计算总页数
         $this->totalPages = (int)ceil($this->totalItems / $this->perPage);
     }
