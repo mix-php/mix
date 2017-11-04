@@ -37,23 +37,23 @@ return [
         // 响应
         'response' => [
             // 类路径
-            'class'  => 'mix\swoole\Response',
+            'class'         => 'mix\swoole\Response',
             // 默认输出格式
             'defaultFormat' => mix\swoole\Response::FORMAT_JSON,
             // json
-            'json'   => [
+            'json'          => [
                 // 类路径
                 'class' => 'mix\web\Json',
             ],
             // jsonp
-            'jsonp'  => [
+            'jsonp'         => [
                 // 类路径
                 'class'        => 'mix\web\Jsonp',
                 // callback名称
                 'callbackName' => 'callback',
             ],
             // xml
-            'xml'    => [
+            'xml'           => [
                 // 类路径
                 'class' => 'mix\web\Xml',
             ],
@@ -132,24 +132,24 @@ return [
             ],
             // 回滚含有零影响行数的事务
             'rollbackZeroAffectedTransaction' => false,
-            // 重连时间
-            'reconnection'                    => 7200,
+            // 连接持续时间(秒)
+            'persistentTime'                  => 7200,
         ],
 
         // redis
         'redis'    => [
             // 类路径
-            'class'        => 'mix\web\Redis',
+            'class'          => 'mix\web\Redis',
             // 主机
-            'host'         => '192.168.1.78',
+            'host'           => '192.168.1.78',
             // 端口
-            'port'         => 6379,
+            'port'           => 6379,
             // 密码
-            'password'     => '',
+            'password'       => '',
             // 数据库
-            'database'     => 0,
-            // 重连时间
-            'reconnection' => 7200,
+            'database'       => 0,
+            // 连接持续时间(秒)
+            'persistentTime' => 7200,
         ],
 
         // 配置

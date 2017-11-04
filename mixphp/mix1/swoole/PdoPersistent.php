@@ -9,8 +9,8 @@ namespace mix\swoole;
 class PdoPersistent extends \mix\rdb\Pdo
 {
 
-    // 重连时间
-    public $reconnection = 7200;
+    // 连接持续时间
+    public $persistentTime = 7200;
 
     // 连接时间
     protected $_connectTime;
@@ -37,7 +37,7 @@ class PdoPersistent extends \mix\rdb\Pdo
     protected function prepare()
     {
         // 主动重新连接
-        if ($this->_connectTime + $this->reconnection < time()) {
+        if ($this->_connectTime + $this->persistentTime < time()) {
             $this->connect();
         }
         try {
