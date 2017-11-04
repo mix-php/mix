@@ -32,6 +32,7 @@ class Component extends Object
     // 初始化事件
     public function onInitialize()
     {
+        parent::onInitialize();
         $this->setStatus(self::STATUS_READY);
     }
 

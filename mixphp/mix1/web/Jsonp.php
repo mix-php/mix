@@ -2,7 +2,7 @@
 
 namespace mix\web;
 
-use yii\base\Object;
+use mix\base\Object;
 
 /**
  * View类

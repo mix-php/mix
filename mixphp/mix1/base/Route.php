@@ -35,6 +35,7 @@ class Route extends Component
      */
     public function onInitialize()
     {
+        parent::onInitialize();
         $this->rules += $this->defaultRules;
         // index处理
         foreach ($this->rules as $rule => $action) {

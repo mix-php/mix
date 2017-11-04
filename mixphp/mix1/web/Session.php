@@ -27,6 +27,7 @@ class Session extends Component
     // 初始化事件
     public function onInitialize()
     {
+        parent::onInitialize();
         if (session_status() != PHP_SESSION_ACTIVE) {
             ini_set('session.save_handler', $this->saveHandler);
             ini_set('session.save_path', $this->savePath);

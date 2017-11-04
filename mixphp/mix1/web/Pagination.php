@@ -35,6 +35,7 @@ class Pagination extends Object
     // 初始化事件
     public function onInitialize()
     {
+        parent::onInitialize();
         // 计算总页数
         $this->totalPages = (int)ceil($this->totalItems / $this->perPage);
     }

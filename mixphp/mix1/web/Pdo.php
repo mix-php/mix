@@ -12,12 +12,14 @@ class Pdo extends \mix\rdb\Pdo
     // 请求开始事件
     public function onRequestStart()
     {
+        parent::onRequestStart();
         $this->connect();
     }
 
     // 请求结束事件
     public function onRequestEnd()
     {
+        parent::onRequestEnd();
         $this->_pdoStatement = null;
         $this->_pdo          = null;
     }

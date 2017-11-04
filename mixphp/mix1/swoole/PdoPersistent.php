@@ -18,6 +18,7 @@ class PdoPersistent extends \mix\rdb\Pdo
     // 初始化事件
     public function onInitialize()
     {
+        parent::onInitialize();
         // 共用连接对象
         $this->_pdo         = &\Mix::$container['_pdo'];
         $this->_connectTime = &\Mix::$container['_pdoConnectTime'];

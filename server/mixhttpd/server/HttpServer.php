@@ -30,6 +30,7 @@ class HttpServer extends Component
     // 初始化事件
     public function onInitialize()
     {
+        parent::onInitialize();
         $this->server       = new \swoole_http_server($this->host, $this->port);
         // 新建日志目录
         if (isset($this->setting['log_file'])) {

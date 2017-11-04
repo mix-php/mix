@@ -57,14 +57,10 @@ class Application
         if (!isset($this->register[$name])) {
             throw new \mix\exception\ComponentException("组件不存在：{$name}");
         }
-        // 获取配置
+        // 获取组件配置
         $conf  = $this->register[$name];
-        // 属性数组
+        // 构建属性数组
         foreach ($conf as $key => $value) {
-            // 跳过保留key
-            if ($key == 'class') {
-                unset($conf[$key]);
-            }
             // 子类实例化
             if (is_array($value) && isset($value['class'])) {
                 $subClass = $value['class'];

@@ -14,6 +14,7 @@ class Redis extends \mix\nosql\Redis
     // 初始化事件
     public function onInitialize()
     {
+        parent::onInitialize();
         $this->connect();
     }
 

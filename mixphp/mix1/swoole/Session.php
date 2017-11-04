@@ -34,6 +34,7 @@ class Session extends Component
     // 请求开始事件
     public function onRequestStart()
     {
+        parent::onRequestStart();
         $this->createHandler();
         $this->loadSessionId();
     }
@@ -41,6 +42,7 @@ class Session extends Component
     // 请求结束事件
     public function onRequestEnd()
     {
+        parent::onRequestEnd();
         $this->_handler   = null;
         $this->_sessionId = null;
     }

@@ -14,12 +14,14 @@ class Redis extends \mix\nosql\Redis
     // 请求开始事件
     public function onRequestStart()
     {
+        parent::onRequestStart();
         $this->connect();
     }
 
     // 请求结束事件
     public function onRequestEnd()
     {
+        $this->onRequestEnd();
         $this->_redis = null;
     }
 

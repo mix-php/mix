@@ -20,6 +20,7 @@ class Config extends Component
      */
     public function onInitialize()
     {
+        parent::onInitialize();
         // 自动加载
         foreach ($this->autoload as $file) {
             $this->load($file);

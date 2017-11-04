@@ -20,6 +20,7 @@ class RedisPersistent extends \mix\nosql\Redis
     // 初始化事件
     public function onInitialize()
     {
+        parent::onInitialize();
         // 共用连接对象
         $this->_redis       = &\Mix::$container['_redis'];
         $this->_connectTime = &\Mix::$container['_redisConnectTime'];

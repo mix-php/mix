@@ -20,6 +20,7 @@ class Request extends Component
     // 初始化
     public function onInitialize()
     {
+        parent::onInitialize();
         $this->setParam();
     }
 

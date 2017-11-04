@@ -46,6 +46,7 @@ class Response extends Component
     // 请求开始事件
     public function onRequestStart()
     {
+        parent::onRequestStart();
         $this->format     = $this->defaultFormat;
         $this->statusCode = 200;
     }

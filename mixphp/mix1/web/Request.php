@@ -35,6 +35,7 @@ class Request extends Component
     // 初始化事件
     public function onInitialize()
     {
+        parent::onInitialize();
         $this->_get    = $_GET;
         $this->_post   = $_POST;
         $this->_files  = $_FILES;
