@@ -24,24 +24,18 @@ class RedisPersistent extends \mix\nosql\Redis
         // 共用连接对象
         $this->_redis       = &\Mix::$container['_redis'];
         $this->_connectTime = &\Mix::$container['_redisConnectTime'];
-        if (is_null($this->_redis)) {
-            // 连接
-            $this->connect();
-        }
+        $this->connect();
     }
 
     // 连接
     public function connect()
     {
-        isset($this->_redis) and $this->_redis = null; // 置空才会释放旧连接
+        $this->close();
         $this->_connectTime = time();
         parent::connect();
     }
 
-    /**
-     * 执行命令
-     * @author 刘健 <coder.liu@qq.com>
-     */
+    // 执行命令
     public function __call($name, $arguments)
     {
         // 主动重新连接

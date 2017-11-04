@@ -20,8 +20,7 @@ class Pdo extends \mix\rdb\Pdo
     public function onRequestEnd()
     {
         parent::onRequestEnd();
-        $this->_pdoStatement = null;
-        $this->_pdo          = null;
+        $this->close();
     }
 
 }

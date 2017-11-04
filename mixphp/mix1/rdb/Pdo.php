@@ -53,6 +53,13 @@ class Pdo extends Component
         );
     }
 
+    // 关闭连接
+    public function close()
+    {
+        $this->_pdoStatement = null;
+        $this->_pdo          = null;
+    }
+
     // 查询构建
     public function queryBuilder($sqlItem)
     {
@@ -93,8 +100,15 @@ class Pdo extends Component
         return $this;
     }
 
-    // 参数扩展对数组的支持
-    protected function paramsExtend($sql, $data)
+    // 绑定值
+    protected function bindValues($data)
+    {
+        $this->_values += $data;
+        return $this;
+    }
+
+    // 扩展数组参数的支持
+    protected function usingArray($sql, $data)
     {
         $params = $values = [];
         foreach ($data as $key => $value) {
@@ -113,12 +127,12 @@ class Pdo extends Component
         return [$sql, $params, $values];
     }
 
-    // 准备
+    // 执行前准备
     protected function prepare()
     {
         // _params 与 _values 不会同时出现
         if (!empty($this->_params)) {
-            list($sql, $params, $values) = $this->_lastSqlData = $this->paramsExtend($this->_sql, $this->_params);
+            list($sql, $params, $values) = $this->_lastSqlData = $this->usingArray($this->_sql, $this->_params);
             $this->_pdoStatement = $this->_pdo->prepare($sql);
             foreach ($params as $key => &$value) {
                 $this->_pdoStatement->bindParam($key, $value);
@@ -221,8 +235,8 @@ class Pdo extends Component
             $valuesSql[] = "(" . implode(', ', $fields) . ")";
         }
         $sql .= implode(', ', $valuesSql);
-        $this->_sql    = $sql;
-        $this->_values = $values;
+        $this->createCommand($sql);
+        $this->bindValues($values);
         return $this;
     }
 

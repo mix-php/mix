@@ -44,10 +44,7 @@ class Redis extends Component
         $this->_redis = null;
     }
 
-    /**
-     * 执行命令
-     * @author 刘健 <coder.liu@qq.com>
-     */
+    // 执行命令
     public function __call($name, $arguments)
     {
         $returnVal = call_user_func_array([$this->_redis, $name], $arguments);
