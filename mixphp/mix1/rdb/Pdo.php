@@ -195,13 +195,23 @@ class Pdo extends Component
     public function execute()
     {
         $this->prepare();
-        $this->_pdoStatement->execute();
-        $affectedRows = $this->_pdoStatement->rowCount();
-        $lastInsertId = $this->_pdo->lastInsertId();
-        if ($this->_pdo->inTransaction() && $this->rollbackZeroAffectedTransaction && $affectedRows == 0) {
+        $success = $this->_pdoStatement->execute();
+        if ($this->_pdo->inTransaction() && $this->rollbackZeroAffectedTransaction && $this->getRowCount() == 0) {
             throw new \PDOException('affected rows in the transaction is zero');
         }
-        return ($affectedRows == 1 && $lastInsertId > 0) ? $lastInsertId : $affectedRows;
+        return $success;
+    }
+
+    // 返回最后插入行的ID或序列值
+    public function getLastInsertId()
+    {
+        return $this->_pdo->lastInsertId();
+    }
+
+    // 返回受上一个 SQL 语句影响的行数
+    public function getRowCount()
+    {
+        return $this->_pdoStatement->rowCount();
     }
 
     // 插入
