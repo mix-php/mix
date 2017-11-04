@@ -22,7 +22,7 @@ class Redis extends \mix\nosql\Redis
     public function onRequestEnd()
     {
         $this->onRequestEnd();
-        $this->_redis = null;
+        $this->close();
     }
 
 }

@@ -38,6 +38,12 @@ class Redis extends Component
         $this->_redis = $redis;
     }
 
+    // 关闭连接
+    public function close()
+    {
+        $this->_redis = null;
+    }
+
     /**
      * 执行命令
      * @author 刘健 <coder.liu@qq.com>
