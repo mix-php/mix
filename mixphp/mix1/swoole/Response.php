@@ -23,24 +23,13 @@ class Response extends Component
     public $defaultFormat = self::FORMAT_JSON;
 
     // json
-    public $json = [
-        // 类路径
-        'class' => 'mix\web\Json',
-    ];
+    public $json;
 
     // jsonp
-    public $jsonp = [
-        // 类路径
-        'class'        => 'mix\web\Jsonp',
-        // callback名称
-        'callbackName' => 'callback',
-    ];
+    public $jsonp;
 
     // xml
-    public $xml = [
-        // 类路径
-        'class' => 'mix\web\Xml',
-    ];
+    public $xml;
 
     // 当前输出格式
     public $format;

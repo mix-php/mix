@@ -17,8 +17,8 @@ class Object
             foreach ($config as $key => $value) {
                 $this->$key = $value;
             }
-            $this->onInitialize();
         }
+        $this->onInitialize();
     }
 
     // 构造事件

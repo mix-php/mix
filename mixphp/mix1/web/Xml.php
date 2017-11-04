@@ -25,7 +25,7 @@ class Xml extends Object
     }
 
     // 创建XML子项
-    private static function addChild($key, $value)
+    protected static function addChild($key, $value)
     {
         $xmlString = '';
         if (is_array($value)) {
