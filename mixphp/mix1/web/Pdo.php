@@ -14,6 +14,8 @@ class Pdo extends \mix\rdb\Pdo
     {
         parent::onRequestStart();
         $this->connect();
+
+        var_dump('onRequestStart');
     }
 
     // 请求结束事件
@@ -21,6 +23,8 @@ class Pdo extends \mix\rdb\Pdo
     {
         parent::onRequestEnd();
         $this->close();
+
+        var_dump('onRequestEnd');
     }
 
 }

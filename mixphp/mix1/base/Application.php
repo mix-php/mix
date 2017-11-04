@@ -38,8 +38,6 @@ class Application
      */
     public function __construct($config)
     {
-        // 初始化
-        $this->_components = (object)[];
         // 导入配置
         foreach ($config as $key => $value) {
             $this->$key = $value;
@@ -77,7 +75,7 @@ class Application
             throw new \mix\exception\ComponentException("不是组件类型：{$class}");
         }
         // 装入容器
-        $this->_components->$name = $object;
+        $this->_components[$name] = $object;
     }
 
     /**

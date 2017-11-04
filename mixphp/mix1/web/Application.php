@@ -33,20 +33,20 @@ class Application extends \mix\base\Application
     public function __get($name)
     {
         // 返回单例
-        if (isset($this->_components->$name)) {
+        if (isset($this->_components[$name])) {
             // 触发请求开始事件
-            if ($this->_components->$name->getStatus() == Component::STATUS_READY) {
-                $this->_components->$name->onRequestStart();
+            if ($this->_components[$name]->getStatus() == Component::STATUS_READY) {
+                $this->_components[$name]->onRequestStart();
             }
             // 返回对象
-            return $this->_components->$name;
+            return $this->_components[$name];
         }
         // 装载组件
         $this->loadComponent($name);
         // 触发请求开始事件
-        $this->_components->$name->onRequestStart();
+        $this->_components[$name]->onRequestStart();
         // 返回对象
-        return $this->_components->$name;
+        return $this->_components[$name];
     }
 
     /**

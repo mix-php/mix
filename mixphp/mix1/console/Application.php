@@ -34,14 +34,14 @@ class Application extends \mix\base\Application
     public function __get($name)
     {
         // 返回单例
-        if (isset($this->_components->$name)) {
+        if (isset($this->_components[$name])) {
             // 返回对象
-            return $this->_components->$name;
+            return $this->_components[$name];
         }
         // 装载组件
         $this->loadComponent($name);
         // 返回对象
-        return $this->_components->$name;
+        return $this->_components[$name];
     }
 
     /**
