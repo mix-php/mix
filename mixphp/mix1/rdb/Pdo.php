@@ -328,8 +328,8 @@ class Pdo extends Component
         return is_numeric($var) ? $var : "'{$var}'";
     }
 
-    // 返回最后执行的SQL语句
-    public function getLastSql()
+    // 返回原生SQL语句
+    public function getRawSql()
     {
         if (isset($this->_lastSqlData)) {
             list($sql, $params, $values) = $this->_lastSqlData;
