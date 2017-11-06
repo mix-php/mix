@@ -104,4 +104,22 @@ class Request extends Component
         return is_null($name) ? $container : (isset($container[$name]) ? $container[$name] : null);
     }
 
+    // 返回原始的HTTP包体
+    public function getRawBody()
+    {
+        return $this->_requester->rawContent();
+    }
+
+    // 是否为 GET 请求
+    public function isGet()
+    {
+        return $this->server('request_method') == 'GET';
+    }
+
+    // 是否为 POST 请求
+    public function isPost()
+    {
+        return $this->server('request_method') == 'POST';
+    }
+
 }
