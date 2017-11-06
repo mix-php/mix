@@ -17,7 +17,7 @@ class Application extends \mix\base\Application
     public function run()
     {
         if (PHP_SAPI != 'cli') {
-            throw new \mix\exception\CommandException('Please run in CLI mode');
+            throw new \mix\exception\CommandException('请在 CLI 模式下运行');
         }
         \Mix::app()->error->register();
         $method  = 'CLI';
@@ -51,7 +51,7 @@ class Application extends \mix\base\Application
     {
         exec($command, $output, $returnVar);
         if ($returnVar != 0) {
-            throw new \mix\exception\CommandException('Command execute failure : ' . $command);
+            throw new \mix\exception\CommandException('命令执行失败：' . $command);
         }
         return $output;
     }

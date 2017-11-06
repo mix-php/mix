@@ -197,7 +197,7 @@ class Pdo extends Component
         $this->prepare();
         $success = $this->_pdoStatement->execute();
         if ($this->_pdo->inTransaction() && $this->rollbackZeroAffectedTransaction && $this->getRowCount() == 0) {
-            throw new \PDOException('affected rows in the transaction is zero');
+            throw new \PDOException('事务中包含受影响行数为零的查询');
         }
         return $success;
     }

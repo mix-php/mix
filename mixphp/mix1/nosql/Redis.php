@@ -49,7 +49,7 @@ class Redis extends Component
     {
         $returnVal = call_user_func_array([$this->_redis, $name], $arguments);
         if ($returnVal === false) {
-            throw new \RedisException('执行命令出错');
+            throw new \RedisException('Redis执行命令出错');
         }
         return $returnVal;
     }
