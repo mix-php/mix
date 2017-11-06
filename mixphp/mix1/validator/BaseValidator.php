@@ -52,7 +52,7 @@ class BaseValidator
     // 获取标签
     protected function getAttributeLabel()
     {
-        return isset($this->attributeLabels[$this->attribute]) ? $this->attributeLabels[$this->attribute] : ucfirst($this->attribute);
+        return isset($this->attributeLabels[$this->attribute]) ? $this->attributeLabels[$this->attribute] : \mix\base\Route::snakeToCamel($this->attribute, true);
     }
 
     // 获取属性值
@@ -70,10 +70,10 @@ class BaseValidator
     // 验证
     public function validate()
     {
-        $this->errors = null;
-        $this->attributeValue = $this->getAttributeValue();
+        $this->errors           = null;
+        $this->attributeValue   = $this->getAttributeValue();
         $this->attributeMessage = $this->getAttributeMessage();
-        $this->attributeLabel = $this->getAttributeLabel();
+        $this->attributeLabel   = $this->getAttributeLabel();
         $this->required(array_shift($this->actions));
         if (in_array('type', $this->allowActions)) {
             $this->actions = ['type' => null] + $this->actions;
