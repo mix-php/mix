@@ -110,16 +110,4 @@ class Request extends Component
         return $this->_requester->rawContent();
     }
 
-    // 是否为 GET 请求
-    public function isGet()
-    {
-        return $this->server('request_method') == 'GET';
-    }
-
-    // 是否为 POST 请求
-    public function isPost()
-    {
-        return $this->server('request_method') == 'POST';
-    }
-
 }

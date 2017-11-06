@@ -46,6 +46,13 @@ class Error extends Component
     // Exception Handler
     public function appException($e)
     {
+        // debug处理
+        if ($e instanceof \mix\exception\DebugException) {
+            \Mix::app()->response->setContent($e->getMessage());
+            \Mix::app()->response->send();
+            return;
+        }
+        // 错误参数定义
         isset($e->statusCode) or $e->statusCode = 500;
         $errors = [
             'code'    => $e->getCode(),
