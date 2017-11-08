@@ -56,7 +56,7 @@ class Application
             throw new \mix\exception\ComponentException("组件不存在：{$name}");
         }
         // 获取组件配置
-        $conf  = $this->register[$name];
+        $conf = $this->register[$name];
         // 构建属性数组
         foreach ($conf as $key => $value) {
             // 子类实例化
@@ -136,6 +136,32 @@ class Application
     public function getRuntimePath()
     {
         return $this->basePath . 'runtime' . DIRECTORY_SEPARATOR;
+    }
+
+    /**
+     * 打印变量的相关信息
+     */
+    public function varDump($var, $exit = false)
+    {
+        ob_start();
+        var_dump($var);
+        if ($exit) {
+            $content = ob_get_clean();
+            throw new \mix\exception\DebugException($content);
+        }
+    }
+
+    /**
+     * 打印关于变量的易于理解的信息
+     */
+    public function varPrint($var, $exit = false)
+    {
+        ob_start();
+        print_r($var);
+        if ($exit) {
+            $content = ob_get_clean();
+            throw new \mix\exception\DebugException($content);
+        }
     }
 
 }

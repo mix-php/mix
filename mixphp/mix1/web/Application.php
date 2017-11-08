@@ -90,26 +90,4 @@ class Application extends \mix\base\Application
         return $this->basePath . 'view' . DIRECTORY_SEPARATOR;
     }
 
-    /**
-     * 打印变量的相关信息
-     */
-    public function varDump($var)
-    {
-        ob_start();
-        var_dump($var);
-        $content = ob_get_clean();
-        throw new \mix\exception\DebugException($content);
-    }
-
-    /**
-     * 打印关于变量的易于理解的信息
-     */
-    public function varPrint($var)
-    {
-        ob_start();
-        print_r($var);
-        $content = ob_get_clean();
-        throw new \mix\exception\DebugException($content);
-    }
-
 }
