@@ -12,8 +12,8 @@ class View
     // 标题
     public $title;
 
-    // 导入视图文件
-    public function import($__template__, $__data__)
+    // 渲染视图
+    public function render($__template__, $__data__)
     {
         // 传入变量
         extract($__data__);
