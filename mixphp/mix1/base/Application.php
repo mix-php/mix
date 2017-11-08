@@ -108,7 +108,7 @@ class Application
             try {
                 $reflect = new \ReflectionClass($class);
             } catch (\ReflectionException $e) {
-                throw new \mix\exception\HttpException("未找到 (#404)", 404);
+                throw new \mix\exception\NotFoundException("未找到 (#404)");
             }
             $controller = $reflect->newInstanceArgs();
             // 判断方法是否存在
@@ -117,7 +117,7 @@ class Application
                 return $controller->$method();
             }
         }
-        throw new \mix\exception\HttpException("未找到 (#404)", 404);
+        throw new \mix\exception\NotFoundException("未找到 (#404)");
     }
 
     /**

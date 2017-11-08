@@ -6,7 +6,7 @@ namespace mix\exception;
  * ErrorException类
  * @author 刘健 <coder.liu@qq.com>
  */
-class ErrorException extends BaseException
+class ErrorException extends \RuntimeException
 {
 
     // 构造

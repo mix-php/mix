@@ -53,8 +53,8 @@ class Error extends Component
             return;
         }
         // 错误参数定义
-        isset($e->statusCode) or $e->statusCode = 500;
-        $errors = [
+        $statusCode = $e instanceof \mix\exception\NotFoundException ? 404 : 500;
+        $errors     = [
             'code'    => $e->getCode(),
             'message' => $e->getMessage(),
             'file'    => $e->getFile(),
@@ -63,7 +63,7 @@ class Error extends Component
             'trace'   => $e->getTraceAsString(),
         ];
         // 日志处理
-        if (!is_null(\Mix::app()->log) && $e->statusCode != 404) {
+        if (isset(\Mix::app()->register['log']) && !($e instanceof \mix\exception\NotFoundException)) {
             $time    = date('Y-m-d H:i:s');
             $message = "[time] {$time}" . PHP_EOL;
             $message .= "[code] {$errors['code']}" . PHP_EOL;
@@ -77,16 +77,17 @@ class Error extends Component
             $message .= PHP_EOL;
             \Mix::app()->log->error($message);
         }
-        // 错误响应
+        // 清空系统错误
         ob_get_contents() and ob_clean();
+        // 错误响应
         if (!MIX_DEBUG) {
-            if ($e->statusCode == 404) {
+            if ($statusCode == 404) {
                 $errors = [
                     'code'    => 404,
                     'message' => $e->getMessage(),
                 ];
             }
-            if ($e->statusCode == 500) {
+            if ($statusCode == 500) {
                 $errors = [
                     'code'    => 500,
                     'message' => '服务器内部错误',
@@ -97,8 +98,8 @@ class Error extends Component
             404 => "error.{$this->format}.not_found",
             500 => "error.{$this->format}.internal_server_error",
         ];
-        $content                          = (new View())->import($tpl[$e->statusCode], $errors);
-        \Mix::app()->response->statusCode = $e->statusCode;
+        $content                          = (new View())->render($tpl[$statusCode], $errors);
+        \Mix::app()->response->statusCode = $statusCode;
         \Mix::app()->response->setContent($content);
         switch ($this->format) {
             case self::FORMAT_JSON:

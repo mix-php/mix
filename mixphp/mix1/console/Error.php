@@ -44,7 +44,6 @@ class Error extends Component
             return;
         }
         // 错误参数定义
-        isset($e->statusCode) or $e->statusCode = 500;
         $errors = [
             'code'    => $e->getCode(),
             'message' => $e->getMessage(),
@@ -54,7 +53,7 @@ class Error extends Component
             'trace'   => $e->getTraceAsString(),
         ];
         // 日志处理
-        if (!is_null(\Mix::app()->log) && $e->statusCode != 404) {
+        if (isset(\Mix::app()->register['log']) && !($e instanceof \mix\exception\NotFoundException)) {
             $time    = date('Y-m-d H:i:s');
             $message = "[time] {$time}" . PHP_EOL;
             $message .= "[code] {$errors['code']}" . PHP_EOL;
@@ -68,8 +67,9 @@ class Error extends Component
             $message .= PHP_EOL;
             \Mix::app()->log->error($message);
         }
-        // 错误响应
+        // 清空系统错误
         ob_get_contents() and ob_clean();
+        // 错误响应
         echo "{$errors['message']}" . PHP_EOL;
         echo "{$errors['type']} code {$errors['code']}" . PHP_EOL;
         echo "{$errors['file']} line {$errors['line']}" . PHP_EOL;
