@@ -120,9 +120,11 @@ Hello World
 
 ## 技术交流
 
-官方QQ群：284806582，敲门暗号：phper    
-作者微博：http://weibo.com/onanying ，关注最新进展
+作者微博：http://weibo.com/onanying ，关注最新进展     
+官方QQ群：284806582，敲门暗号：phper
 
-## License
+## 授权
 
-GNU General Public License, version 2 see https://www.gnu.org/licenses/gpl-2.0.html
+国内开源真的很难做，没有任何资金来源，而开源项目的可持续发展离不开资金，所以 MixPHP 希望能通过授权来获得维持项目运行的资金。
+
+MixPHP 的授权全靠用户自愿购买。：http://mixphp.cn/wiki/licence
