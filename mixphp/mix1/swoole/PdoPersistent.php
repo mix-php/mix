@@ -11,7 +11,6 @@ class PdoPersistent extends \mix\rdb\Pdo
 
     // 连接持续时间
     public $persistentTime = 7200;
-
     // 连接时间
     protected $_connectTime;
 
@@ -19,9 +18,11 @@ class PdoPersistent extends \mix\rdb\Pdo
     public function onInitialize()
     {
         parent::onInitialize();
+        // 多库连接处理
+        $hash = md5($this->dsn . $this->username . $this->password);
         // 共用连接对象
-        $this->_pdo         = &\Mix::$container['_pdo'];
-        $this->_connectTime = &\Mix::$container['_pdoConnectTime'];
+        $this->_pdo         = &\Mix::$container['_pdo_' . $hash];
+        $this->_connectTime = &\Mix::$container['_pdoConnectTime_' . $hash];
         $this->connect();
     }
 
