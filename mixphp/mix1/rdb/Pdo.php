@@ -5,7 +5,7 @@ namespace mix\rdb;
 use mix\base\Component;
 
 /**
- * Mysql组件
+ * Pdo组件
  * @author 刘健 <coder.liu@qq.com>
  */
 class Pdo extends Component
