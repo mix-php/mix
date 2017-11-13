@@ -11,53 +11,58 @@ use mix\base\Component;
 class PdoCluster extends Pdo
 {
 
-    // 数据源格式
-    public $dsn = '';
-    // 数据库用户名
-    public $username = 'root';
-    // 数据库密码
-    public $password = '';
-    // 设置PDO属性
-    public $attribute = [];
-    // 回滚含有零影响行数的事务
-    public $rollbackZeroAffectedTransaction = false;
-    // PDO
-    protected $_pdo;
-    // PDOStatement
-    protected $_pdoStatement;
-    // sql
-    protected $_sql;
-    // sql缓存
-    protected $_sqlCache = [];
-    // params
-    protected $_params = [];
-    // values
-    protected $_values = [];
-    // 最后sql数据
-    protected $_lastSqlData;
-    // 默认属性
-    protected $_defaultAttribute = [
-        \PDO::ATTR_EMULATE_PREPARES   => false,
-        \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
-        \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-    ];
+    // 主服务器组
+    protected $masters;
+    // 从服务器组
+    protected $slaves;
+    // pdo池
+    protected $_pdos;
+    // SQL类型
+    const SQL_TYPE_READ = 0;
+    const SQL_TYPE_WRITE = 1;
+    protected $_sqlType;
+
+    // 主连接
+    public function masterConnect()
+    {
+        if (!isset($this->_pdos['master'])) {
+            $this->dsn = $this->masters[array_rand($this->masters)];
+            parent::connect();
+            $this->_pdos['master'] = $this->_pdo;
+        }
+        return $this->_pdos['master'];
+    }
+
+    // 从连接
+    public function slaveConnect()
+    {
+        if (!isset($this->_pdos['slave'])) {
+            $this->dsn = $this->slaves[array_rand($this->slaves)];
+            parent::connect();
+            $this->_pdos['slave'] = $this->_pdo;
+        }
+        return $this->_pdos['slave'];
+    }
 
     // 连接
     public function connect()
     {
-        $this->_pdo = new \PDO(
-            $this->dsn,
-            $this->username,
-            $this->password,
-            $this->attribute += $this->_defaultAttribute
-        );
+        // 主从选择
+        if ($this->_sqlType == self::SQL_TYPE_READ) {
+            $this->slaveConnect();
+        } else {
+            $this->masterConnect();
+        }
     }
 
-    // 关闭连接
-    public function close()
+    // 执行前准备
+    protected function prepare()
     {
-        $this->_pdoStatement = null;
-        $this->_pdo          = null;
+        // SQL类型判断
+
+        // 执行前准备
+        parent::prepare();
     }
+
 
 }
