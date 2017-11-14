@@ -32,10 +32,7 @@ class Application
     // 组件容器
     protected $_components;
 
-    /**
-     * 构造
-     * @param array $config
-     */
+    // 构造
     public function __construct($config)
     {
         // 导入配置
@@ -46,9 +43,7 @@ class Application
         \Mix::setApp($this);
     }
 
-    /**
-     * 装载组件
-     */
+    // 装载组件
     public function loadComponent($name)
     {
         // 未注册
@@ -78,12 +73,7 @@ class Application
         $this->_components[$name] = $object;
     }
 
-    /**
-     * 执行功能并返回
-     * @param  string $method
-     * @param  string $action
-     * @return mixed
-     */
+    // 执行功能并返回
     public function runAction($method, $action)
     {
         $action = "{$method} {$action}";
@@ -120,27 +110,19 @@ class Application
         throw new \mix\exception\NotFoundException("未找到 (#404)");
     }
 
-    /**
-     * 获取配置目录路径
-     * @return string
-     */
+    // 获取配置目录路径
     public function getConfigPath()
     {
         return $this->basePath . 'config' . DIRECTORY_SEPARATOR;
     }
 
-    /**
-     * 获取运行目录路径
-     * @return string
-     */
+    // 获取运行目录路径
     public function getRuntimePath()
     {
         return $this->basePath . 'runtime' . DIRECTORY_SEPARATOR;
     }
 
-    /**
-     * 打印变量的相关信息
-     */
+    // 打印变量的相关信息
     public function varDump($var, $exit = false)
     {
         ob_start();
@@ -151,9 +133,7 @@ class Application
         }
     }
 
-    /**
-     * 打印关于变量的易于理解的信息
-     */
+    // 打印关于变量的易于理解的信息
     public function varPrint($var, $exit = false)
     {
         ob_start();

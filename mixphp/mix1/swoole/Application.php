@@ -10,9 +10,7 @@ namespace mix\swoole;
 class Application extends \mix\web\Application
 {
 
-    /**
-     * 执行功能 (MixHttpd)
-     */
+    // 执行功能 (MixHttpd)
     public function run()
     {
         $server  = \Mix::app()->request->server();

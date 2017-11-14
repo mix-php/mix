@@ -11,9 +11,7 @@ use mix\base\Component;
 class Application extends \mix\base\Application
 {
 
-    /**
-     * 执行功能 (CLI模式)
-     */
+    // 执行功能 (CLI模式)
     public function run()
     {
         if (PHP_SAPI != 'cli') {
@@ -27,10 +25,7 @@ class Application extends \mix\base\Application
         \Mix::app()->response->send();
     }
 
-    /**
-     * 获取组件
-     * @param  string $name
-     */
+    // 获取组件
     public function __get($name)
     {
         // 返回单例
@@ -44,9 +39,7 @@ class Application extends \mix\base\Application
         return $this->_components[$name];
     }
 
-    /**
-     * 执行一个外部程序
-     */
+    // 执行一个外部程序
     public function exec($command)
     {
         exec($command, $output, $returnVar);

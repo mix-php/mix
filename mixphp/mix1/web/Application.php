@@ -11,9 +11,7 @@ use mix\base\Component;
 class Application extends \mix\base\Application
 {
 
-    /**
-     * 执行功能 (Apache/PHP-FPM)
-     */
+    // 执行功能 (Apache/PHP-FPM)
     public function run()
     {
         \Mix::app()->error->register();
@@ -26,10 +24,7 @@ class Application extends \mix\base\Application
         $this->cleanComponents();
     }
 
-    /**
-     * 获取组件
-     * @param  string $name
-     */
+    // 获取组件
     public function __get($name)
     {
         // 返回单例
@@ -49,9 +44,7 @@ class Application extends \mix\base\Application
         return $this->_components[$name];
     }
 
-    /**
-     * 装载全部组件
-     */
+    // 装载全部组件
     public function loadAllComponent()
     {
         foreach (array_keys($this->register) as $name) {
@@ -59,10 +52,7 @@ class Application extends \mix\base\Application
         }
     }
 
-    /**
-     * 清扫组件容器
-     * 只清扫 STATUS_RUNNING 状态的组件
-     */
+    // 清扫组件容器
     public function cleanComponents()
     {
         foreach ($this->_components as $component) {
@@ -72,19 +62,13 @@ class Application extends \mix\base\Application
         }
     }
 
-    /**
-     * 获取公开目录路径
-     * @return string
-     */
+    // 获取公开目录路径
     public function getPublicPath()
     {
         return $this->basePath . 'public' . DIRECTORY_SEPARATOR;
     }
 
-    /**
-     * 获取视图目录路径
-     * @return string
-     */
+    // 获取视图目录路径
     public function getViewPath()
     {
         return $this->basePath . 'view' . DIRECTORY_SEPARATOR;
