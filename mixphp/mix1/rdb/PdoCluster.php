@@ -13,8 +13,12 @@ class PdoCluster extends Pdo
 
     // 主服务器组
     protected $masters = [];
+    // 配置主服务器
+    protected $masterConfig = [];
     // 从服务器组
     protected $slaves = [];
+    // 配置从服务器
+    protected $slaveConfig = [];
     // pdo池
     protected $_pdos;
 
@@ -22,7 +26,9 @@ class PdoCluster extends Pdo
     protected function connectMaster()
     {
         if (!isset($this->_pdos['master'])) {
-            $this->dsn = $this->masters[array_rand($this->masters)];
+            $this->dsn      = $this->masters[array_rand($this->masters)];
+            $this->username = $this->masterConfig['username'];
+            $this->password = $this->masterConfig['password'];
             parent::connect();
             $this->_pdos['master'] = $this->_pdo;
         } else {
@@ -34,7 +40,9 @@ class PdoCluster extends Pdo
     protected function connectSlave()
     {
         if (!isset($this->_pdos['slave'])) {
-            $this->dsn = $this->slaves[array_rand($this->slaves)];
+            $this->dsn      = $this->slaves[array_rand($this->slaves)];
+            $this->username = $this->slaveConfig['username'];
+            $this->password = $this->slaveConfig['password'];
             parent::connect();
             $this->_pdos['slave'] = $this->_pdo;
         } else {
@@ -45,7 +53,7 @@ class PdoCluster extends Pdo
     // 检查是否为Select语句
     protected static function isSelect($sql)
     {
-        if (stripos('SELECT', $sql) === false) {
+        if (stripos($sql, 'SELECT') === false) {
             return false;
         }
         return true;
@@ -61,15 +69,11 @@ class PdoCluster extends Pdo
         return false;
     }
 
-    // 根据SQL类型连接
+    // 连接
     public function connect()
     {
-        // 主从选择
-        if (self::isSelect($this->_sql) && !$this->inTransaction()) {
-            $this->connectSlave();
-        } else {
-            $this->connectMaster();
-        }
+        $this->connectMaster();
+        $this->connectSlave();
     }
 
     // 关闭连接
@@ -79,11 +83,22 @@ class PdoCluster extends Pdo
         $this->_pdos = null;
     }
 
+    // 根据SQL类型自动连接
+    protected function autoConnect()
+    {
+        // 主从选择
+        if (self::isSelect($this->_sql) && !$this->inTransaction()) {
+            $this->connectSlave();
+        } else {
+            $this->connectMaster();
+        }
+    }
+
     // 执行前准备
     protected function prepare()
     {
-        // 根据SQL连接
-        $this->connect();
+        // 根据SQL类型自动连接
+        $this->autoConnect();
         // 执行前准备
         parent::prepare();
     }
