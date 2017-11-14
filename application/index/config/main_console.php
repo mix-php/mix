@@ -65,11 +65,11 @@ return [
             // 类路径
             'class'                => 'mix\console\Pdo',
             // 数据源格式
-            'dsn'                  => 'mysql:host=192.168.1.78;port=3306;charset=utf8;dbname=test',
+            'dsn'                  => 'mysql:host=127.0.0.1;port=3306;charset=utf8;dbname=test',
             // 数据库用户名
             'username'             => 'root',
             // 数据库密码
-            'password'             => '123456',
+            'password'             => '',
             // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
             'attribute'            => [
                 // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
@@ -88,7 +88,7 @@ return [
             // 类路径
             'class'    => 'mix\console\Redis',
             // 主机
-            'host'     => '192.168.1.78',
+            'host'     => '127.0.0.1',
             // 端口
             'port'     => 6379,
             // 数据库
