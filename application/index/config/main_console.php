@@ -37,13 +37,13 @@ return [
         // 响应
         'response' => [
             // 类路径
-            'class'  => 'mix\console\Response',
+            'class' => 'mix\console\Response',
         ],
 
         // 错误
         'error'    => [
             // 类路径
-            'class'  => 'mix\console\Error',
+            'class' => 'mix\console\Error',
         ],
 
         // 日志
@@ -91,10 +91,10 @@ return [
             'host'     => '192.168.1.78',
             // 端口
             'port'     => 6379,
-            // 密码
-            'password' => '',
             // 数据库
             'database' => 0,
+            // 密码
+            'password' => '',
         ],
 
         // 配置

@@ -132,8 +132,6 @@ return [
             ],
             // 回滚含有零影响行数的事务
             'rollbackZeroAffectedTransaction' => false,
-            // 连接持续时间(秒)
-            'persistentTime'                  => 7200,
         ],
 
         // redis
@@ -144,12 +142,10 @@ return [
             'host'           => '192.168.1.78',
             // 端口
             'port'           => 6379,
-            // 密码
-            'password'       => '',
             // 数据库
             'database'       => 0,
-            // 连接持续时间(秒)
-            'persistentTime' => 7200,
+            // 密码
+            'password'       => '',
         ],
 
         // 配置
