@@ -2,20 +2,14 @@
 
 namespace mix\console;
 
+use mix\base\Component;
+
 /**
- * Pdo组件
+ * PdoCluster组件
  * @author 刘健 <coder.liu@qq.com>
  */
-class Pdo extends \mix\rdb\Pdo
+class PdoCluster extends \mix\rdb\PdoCluster
 {
-
-    // 初始化事件
-    public function onInitialize()
-    {
-        parent::onInitialize();
-        // 连接
-        $this->connect();
-    }
 
     // 析构事件
     public function onDestruct()

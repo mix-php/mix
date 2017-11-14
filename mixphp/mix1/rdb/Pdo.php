@@ -26,15 +26,15 @@ class Pdo extends Component
     // PDOStatement
     protected $_pdoStatement;
     // sql
-    protected $_sql;
+    protected $_sql = '';
     // sql缓存
     protected $_sqlCache = [];
+    // sql原始数据
+    protected $sqlRawData = [];
     // params
     protected $_params = [];
     // values
     protected $_values = [];
-    // 最后sql数据
-    protected $_lastSqlData;
     // 默认属性
     protected $_defaultAttribute = [
         \PDO::ATTR_EMULATE_PREPARES   => false,
@@ -132,7 +132,7 @@ class Pdo extends Component
     {
         // _params 与 _values 不会同时出现
         if (!empty($this->_params)) {
-            list($sql, $params, $values) = $this->_lastSqlData = $this->usingArray($this->_sql, $this->_params);
+            list($sql, $params, $values) = $this->sqlRawData = $this->usingArray($this->_sql, $this->_params);
             $this->_pdoStatement = $this->_pdo->prepare($sql);
             foreach ($params as $key => &$value) {
                 $this->_pdoStatement->bindParam($key, $value);
@@ -145,10 +145,10 @@ class Pdo extends Component
             foreach ($this->_values as $key => $value) {
                 $this->_pdoStatement->bindValue($key + 1, $value);
             }
-            $this->_lastSqlData = [$this->_sql, [], $this->_values];
+            $this->sqlRawData = [$this->_sql, [], $this->_values];
         } else {
             $this->_pdoStatement = $this->_pdo->prepare($this->_sql);
-            $this->_lastSqlData  = null;
+            $this->sqlRawData  = [];
         }
         $this->_sqlCache = [];
         $this->_params   = [];
@@ -331,8 +331,8 @@ class Pdo extends Component
     // 返回原生SQL语句
     public function getRawSql()
     {
-        if (isset($this->_lastSqlData)) {
-            list($sql, $params, $values) = $this->_lastSqlData;
+        if (!empty($this->sqlRawData)) {
+            list($sql, $params, $values) = $this->sqlRawData;
             $params = self::quotes($params);
             $values = self::quotes($values);
             foreach ($params as $key => $value) {

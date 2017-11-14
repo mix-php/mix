@@ -17,11 +17,10 @@ class Redis extends Component
     public $host = '';
     // 端口
     public $port = '';
-    // 密码
-    public $password = '';
     // 数据库
     public $database = '';
-
+    // 密码
+    public $password = '';
     // redis对象
     protected $_redis;
 

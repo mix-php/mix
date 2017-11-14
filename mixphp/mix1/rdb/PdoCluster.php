@@ -12,57 +12,87 @@ class PdoCluster extends Pdo
 {
 
     // 主服务器组
-    protected $masters;
+    protected $masters = [];
     // 从服务器组
-    protected $slaves;
+    protected $slaves = [];
     // pdo池
     protected $_pdos;
-    // SQL类型
-    const SQL_TYPE_READ = 0;
-    const SQL_TYPE_WRITE = 1;
-    protected $_sqlType;
 
     // 主连接
-    public function masterConnect()
+    protected function connectMaster()
     {
         if (!isset($this->_pdos['master'])) {
             $this->dsn = $this->masters[array_rand($this->masters)];
             parent::connect();
             $this->_pdos['master'] = $this->_pdo;
+        } else {
+            $this->_pdo = $this->_pdos['master'];
         }
-        return $this->_pdos['master'];
     }
 
     // 从连接
-    public function slaveConnect()
+    protected function connectSlave()
     {
         if (!isset($this->_pdos['slave'])) {
             $this->dsn = $this->slaves[array_rand($this->slaves)];
             parent::connect();
             $this->_pdos['slave'] = $this->_pdo;
+        } else {
+            $this->_pdo = $this->_pdos['slave'];
         }
-        return $this->_pdos['slave'];
     }
 
-    // 连接
+    // 检查是否为Select语句
+    protected static function isSelect($sql)
+    {
+        if (stripos('SELECT', $sql) === false) {
+            return false;
+        }
+        return true;
+    }
+
+    // 检查是否在一个事务内
+    protected function inTransaction()
+    {
+        // 检查是否有Master连接，且在一个事务内
+        if (isset($this->_pdos['master']) && $this->_pdos['master']->inTransaction()) {
+            return true;
+        }
+        return false;
+    }
+
+    // 根据SQL类型连接
     public function connect()
     {
         // 主从选择
-        if ($this->_sqlType == self::SQL_TYPE_READ) {
-            $this->slaveConnect();
+        if (self::isSelect($this->_sql) && !$this->inTransaction()) {
+            $this->connectSlave();
         } else {
-            $this->masterConnect();
+            $this->connectMaster();
         }
+    }
+
+    // 关闭连接
+    public function close()
+    {
+        parent::close();
+        $this->_pdos = null;
     }
 
     // 执行前准备
     protected function prepare()
     {
-        // SQL类型判断
-
+        // 根据SQL连接
+        $this->connect();
         // 执行前准备
         parent::prepare();
     }
 
+    // 开始事务
+    public function beginTransaction()
+    {
+        $this->connectMaster();
+        parent::beginTransaction();
+    }
 
 }

@@ -2,19 +2,19 @@
 
 namespace mix\web;
 
+use mix\base\Component;
+
 /**
- * Mysql组件
+ * PdoCluster组件
  * @author 刘健 <coder.liu@qq.com>
  */
-class Pdo extends \mix\rdb\Pdo
+class PdoCluster extends \mix\rdb\PdoCluster
 {
 
     // 请求开始事件
     public function onRequestStart()
     {
         parent::onRequestStart();
-        // 连接
-        $this->connect();
     }
 
     // 请求结束事件

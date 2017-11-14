@@ -15,7 +15,16 @@ class Redis extends \mix\nosql\Redis
     public function onInitialize()
     {
         parent::onInitialize();
+        // 连接
         $this->connect();
+    }
+
+    // 析构事件
+    public function onDestruct()
+    {
+        parent::onDestruct();
+        // 关闭连接
+        $this->close();
     }
 
 }

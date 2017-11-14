@@ -15,6 +15,7 @@ class Redis extends \mix\nosql\Redis
     public function onRequestStart()
     {
         parent::onRequestStart();
+        // 连接
         $this->connect();
     }
 
@@ -22,6 +23,7 @@ class Redis extends \mix\nosql\Redis
     public function onRequestEnd()
     {
         $this->onRequestEnd();
+        // 关闭连接
         $this->close();
     }
 
