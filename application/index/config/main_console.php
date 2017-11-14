@@ -60,7 +60,7 @@ return [
             'maxFileSize' => 2048 * 1024,
         ],
 
-        // rdb
+        // 数据库
         'rdb'      => [
             // 类路径
             'class'                => 'mix\console\Pdo',
