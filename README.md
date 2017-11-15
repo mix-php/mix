@@ -4,7 +4,7 @@
 <img src="https://box.kancloud.cn/90f9b3c1d667aefa77b09ea1b7ffb054_120x120.png" alt="MixPHP">
 </p>
 
-<p align="center">高性能 • 极简 • 多功能</p>
+<p align="center">高性能 • 轻量级 • 命令行</p>
 
 <p align="center">
 <img src="https://img.shields.io/badge/downloads-2.1k-green.svg">
@@ -14,7 +14,7 @@
 
 ## MixPHP是什么
 
-MixPHP 是秉承 **"普及 PHP 常驻内存型解决方案，促进 PHP 往更后端发展"** 的理念而创造，采用 Swoole 扩展作为底层引擎，围绕常驻内存的方式而设计，架构简洁而有扩展性，开发可以很灵活，提供了 Web 开发所需的众多核心组件，MixPHP 参考了 Yii2 框架的设计思想，如果你使用过 Yii2 基本上可以立即上手。
+MixPHP 是秉承 **"普及 PHP 常驻内存型解决方案，促进 PHP 往更后端发展"** 的理念而创造，采用 Swoole 扩展作为底层引擎，围绕常驻内存的方式而设计，架构设计简洁而有扩展性，开发可以很灵活，提供了 Web 开发所需的众多组件，参考了 Yii2 框架的设计思想，如果你使用过 Yii2 基本上可以立即上手。
 
 框架最新源代码行数：**5497 行**，因此可以很容易的改造它，成为你们公司的专属框架。
 
@@ -64,7 +64,6 @@ MixPHP开发指南：http://doc.mixphp.cn
 
 * PHP >= 5.4
 * Swoole >= 1.7.18
-* Composer
 
 ## 快速开始
 
