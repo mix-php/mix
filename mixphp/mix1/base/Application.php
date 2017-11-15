@@ -43,6 +43,24 @@ class Application
         \Mix::setApp($this);
     }
 
+    // 使用配置创建新对象
+    public function createObject($config)
+    {
+        // 构建属性数组
+        foreach ($config as $key => $value) {
+            // 子类实例化
+            if (is_array($value) && isset($value['class'])) {
+                $subClass = $value['class'];
+                unset($value['class']);
+                $config[$key] = new $subClass($value);
+            }
+        }
+        // 实例化
+        $class = $config['class'];
+        unset($config['class']);
+        return new $class($config);
+    }
+
     // 装载组件
     public function loadComponent($name)
     {
@@ -50,24 +68,11 @@ class Application
         if (!isset($this->register[$name])) {
             throw new \mix\exception\ComponentException("组件不存在：{$name}");
         }
-        // 获取组件配置
-        $conf = $this->register[$name];
-        // 构建属性数组
-        foreach ($conf as $key => $value) {
-            // 子类实例化
-            if (is_array($value) && isset($value['class'])) {
-                $subClass = $value['class'];
-                unset($value['class']);
-                $conf[$key] = new $subClass($value);
-            }
-        }
-        // 实例化
-        $class = $conf['class'];
-        unset($conf['class']);
-        $object = new $class($conf);
+        // 使用配置创建新对象
+        $object = $this->createObject($this->register[$name]);
         // 组件效验
         if (!($object instanceof Component)) {
-            throw new \mix\exception\ComponentException("不是组件类型：{$class}");
+            throw new \mix\exception\ComponentException("不是组件类型：{$this->register[$name]['class']}");
         }
         // 装入容器
         $this->_components[$name] = $object;
