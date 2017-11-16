@@ -43,23 +43,7 @@ class Application
         \Mix::setApp($this);
     }
 
-    // 使用配置创建新对象
-    public function createObject($config)
-    {
-        // 构建属性数组
-        foreach ($config as $key => $value) {
-            // 子类实例化
-            if (is_array($value) && isset($value['class'])) {
-                $subClass = $value['class'];
-                unset($value['class']);
-                $config[$key] = new $subClass($value);
-            }
-        }
-        // 实例化
-        $class = $config['class'];
-        unset($config['class']);
-        return new $class($config);
-    }
+
 
     // 装载组件
     public function loadComponent($name)
@@ -69,7 +53,7 @@ class Application
             throw new \mix\exception\ComponentException("组件不存在：{$name}");
         }
         // 使用配置创建新对象
-        $object = $this->createObject($this->register[$name]);
+        $object = \Mix::createObject($this->register[$name]);
         // 组件效验
         if (!($object instanceof Component)) {
             throw new \mix\exception\ComponentException("不是组件类型：{$this->register[$name]['class']}");
@@ -125,28 +109,6 @@ class Application
     public function getRuntimePath()
     {
         return $this->basePath . 'runtime' . DIRECTORY_SEPARATOR;
-    }
-
-    // 打印变量的相关信息
-    public function varDump($var, $exit = false)
-    {
-        ob_start();
-        var_dump($var);
-        if ($exit) {
-            $content = ob_get_clean();
-            throw new \mix\exception\DebugException($content);
-        }
-    }
-
-    // 打印关于变量的易于理解的信息
-    public function varPrint($var, $exit = false)
-    {
-        ob_start();
-        print_r($var);
-        if ($exit) {
-            $content = ob_get_clean();
-            throw new \mix\exception\DebugException($content);
-        }
     }
 
 }

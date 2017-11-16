@@ -19,7 +19,7 @@ class Mix
     /**
      * 返回App
      *
-     * @return \mix\swoole\Application|\mix\web\Application|\mix\console\Application|
+     * @return \mix\swoole\Application|\mix\web\Application|\mix\console\Application
      */
     public static function app()
     {
@@ -48,7 +48,7 @@ class Mix
     public static function setHost($host)
     {
         self::$_host = null;
-        $vHosts = array_keys(self::$_app);
+        $vHosts      = array_keys(self::$_app);
         foreach ($vHosts as $vHost) {
             if ($vHost == '*') {
                 continue;
@@ -61,6 +61,46 @@ class Mix
         if (is_null(self::$_host)) {
             self::$_host = isset(self::$_app['*']) ? '*' : array_shift($vHosts);
         }
+    }
+
+    // 打印变量的相关信息
+    public static function varDump($var, $exit = false)
+    {
+        ob_start();
+        var_dump($var);
+        if ($exit) {
+            $content = ob_get_clean();
+            throw new \mix\exception\DebugException($content);
+        }
+    }
+
+    // 打印关于变量的易于理解的信息
+    public static function varPrint($var, $exit = false)
+    {
+        ob_start();
+        print_r($var);
+        if ($exit) {
+            $content = ob_get_clean();
+            throw new \mix\exception\DebugException($content);
+        }
+    }
+
+    // 使用配置创建新对象
+    public static function createObject($config)
+    {
+        // 构建属性数组
+        foreach ($config as $key => $value) {
+            // 子类实例化
+            if (is_array($value) && isset($value['class'])) {
+                $subClass = $value['class'];
+                unset($value['class']);
+                $config[$key] = new $subClass($value);
+            }
+        }
+        // 实例化
+        $class = $config['class'];
+        unset($config['class']);
+        return new $class($config);
     }
 
 }
