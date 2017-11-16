@@ -8,27 +8,16 @@
 namespace mixhttpd\command;
 
 use mix\console\Controller;
+use mixhttpd\library\Service;
 
 class ServiceController extends Controller
 {
 
-    // 服务是否启动
-    public function isStart()
-    {
-        $output = \Mix::exec('ps -ef | grep mixhttpd');
-        foreach ($output as $item) {
-            if (strpos($item, 'mixhttpd master') !== false) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     // 启动服务
     public function actionStart()
     {
-        if ($this->isStart()) {
-            return 'mixhttpd is running' . PHP_EOL;
+        if ($pid = Service::getPid()) {
+            return "MixHttpd 正在运行, PID : {$pid}." . PHP_EOL;
         }
         $server = \Mix::app()->server;
         if (!is_null(\Mix::app()->request->param('hot-update'))) {
@@ -43,12 +32,14 @@ class ServiceController extends Controller
     // 停止服务
     public function actionStop()
     {
-        if ($this->isStart()) {
-            \Mix::exec('ps -ef | grep mixhttpd | awk \'NR==1{print $2}\' | xargs -n1 kill');
+        if ($pid = Service::getPid()) {
+            Service::killMaster($pid);
+            while (Service::isRunning($pid)) {
+            }
+            return 'MixHttpd 停止完成.' . PHP_EOL;
+        } else {
+            return 'MixHttpd 没有运行.' . PHP_EOL;
         }
-        while ($this->isStart()) {
-        }
-        return 'mixhttpd stop complete' . PHP_EOL;
     }
 
     // 重启服务
@@ -56,20 +47,6 @@ class ServiceController extends Controller
     {
         $this->actionStop();
         $this->actionStart();
-    }
-
-    // 查看服务状态
-    public function actionStatus()
-    {
-        if (!$this->isStart()) {
-            return 'mixhttpd is not running' . PHP_EOL;
-        }
-        $output = \Mix::exec('ps -ef | grep mixhttpd');
-        foreach ($output as $item) {
-            if (strpos($item, 'mixhttpd master') !== false || strpos($item, 'mixhttpd manager') !== false || strpos($item, 'mixhttpd worker') !== false) {
-                echo $item . PHP_EOL;
-            }
-        }
     }
 
 }

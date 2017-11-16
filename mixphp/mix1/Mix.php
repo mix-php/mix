@@ -103,14 +103,4 @@ class Mix
         return new $class($config);
     }
 
-    // 执行一个外部程序
-    public static function exec($command)
-    {
-        exec($command, $output, $returnVar);
-        if ($returnVar != 0) {
-            throw new \mix\exception\CommandException('命令执行失败：' . $command);
-        }
-        return $output;
-    }
-
 }

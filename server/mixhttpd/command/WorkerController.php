@@ -8,6 +8,7 @@
 namespace mixhttpd\command;
 
 use mix\console\Controller;
+use mixhttpd\library\Service;
 
 class WorkerController extends Controller
 {
@@ -15,8 +16,10 @@ class WorkerController extends Controller
     // 重启工作进程
     public function actionReload()
     {
-        \Mix::exec('ps -ef | grep mixhttpd | awk \'NR==1{print $2}\' | xargs -n1 kill -USR1');
-        echo 'mixhttpd worker reload complete' . PHP_EOL;
+        if ($pid = Service::getPid()) {
+            Service::reloadWorker($pid);
+        }
+        echo 'MixHttpd Worker 进程重新加载完成.' . PHP_EOL;
     }
 
 }

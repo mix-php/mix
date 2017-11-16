@@ -76,8 +76,6 @@ return [
                 'reactor_num' => 8,
                 // 工作进程数
                 'worker_num'  => 8,
-                // 是否脱离终端
-                'daemonize'   => true,
                 // 日志文件路径
                 'log_file'    => __DIR__ . '/../runtime/log/mixhttpd.log',
                 // 子进程运行用户

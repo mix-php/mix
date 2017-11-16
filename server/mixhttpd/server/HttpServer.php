@@ -31,12 +31,15 @@ class HttpServer extends Component
     public function onInitialize()
     {
         parent::onInitialize();
-        $this->server       = new \swoole_http_server($this->host, $this->port);
+        $this->server = new \swoole_http_server($this->host, $this->port);
         // 新建日志目录
         if (isset($this->setting['log_file'])) {
             $dir = dirname($this->setting['log_file']);
             is_dir($dir) or mkdir($dir);
         }
+        // 设置保留配置项
+        $this->setting['pid_file']  = __DIR__ . '/../runtime/server.pid';
+        $this->setting['daemonize'] = false;
     }
 
     // 主进程启动事件
