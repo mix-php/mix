@@ -9,6 +9,12 @@ namespace mix\web;
 class Pdo extends \mix\rdb\Pdo
 {
 
+    // 初始化事件
+    public function onInitialize()
+    {
+        parent::onInitialize();
+    }
+
     // 请求开始事件
     public function onRequestStart()
     {

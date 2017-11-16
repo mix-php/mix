@@ -22,6 +22,14 @@ class PdoCluster extends Pdo
     // pdo池
     protected $_pdos;
 
+    // 析构事件
+    public function onDestruct()
+    {
+        parent::onDestruct();
+        // 关闭连接
+        $this->close();
+    }
+
     // 主连接
     protected function connectMaster()
     {
@@ -50,6 +58,20 @@ class PdoCluster extends Pdo
         }
     }
 
+    // 连接
+    public function connect()
+    {
+        $this->connectMaster();
+        $this->connectSlave();
+    }
+
+    // 关闭连接
+    public function close()
+    {
+        parent::close();
+        $this->_pdos = null;
+    }
+
     // 检查是否为Select语句
     protected static function isSelect($sql)
     {
@@ -67,20 +89,6 @@ class PdoCluster extends Pdo
             return true;
         }
         return false;
-    }
-
-    // 连接
-    public function connect()
-    {
-        $this->connectMaster();
-        $this->connectSlave();
-    }
-
-    // 关闭连接
-    public function close()
-    {
-        parent::close();
-        $this->_pdos = null;
     }
 
     // 根据SQL类型自动连接

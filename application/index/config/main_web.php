@@ -137,15 +137,15 @@ return [
         // redis
         'redis'    => [
             // 类路径
-            'class'          => 'mix\web\Redis',
+            'class'    => 'mix\web\Redis',
             // 主机
-            'host'           => '127.0.0.1',
+            'host'     => '127.0.0.1',
             // 端口
-            'port'           => 6379,
+            'port'     => 6379,
             // 数据库
-            'database'       => 0,
+            'database' => 0,
             // 密码
-            'password'       => '',
+            'password' => '',
         ],
 
         // 配置
@@ -156,6 +156,11 @@ return [
             'autoload' => ['common', 'local'],
         ],
 
+    ],
+
+    // 对象配置
+    'object'              => [
+        
     ],
 
 ];
