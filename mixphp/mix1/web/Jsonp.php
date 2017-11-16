@@ -18,7 +18,7 @@ class Jsonp extends Object
     public function encode($array)
     {
         // 不转义中文、斜杠
-        $jsonString = Json::encode($array);
+        $jsonString = (new Json)->encode($array);
         if (empty($_GET[$this->callbackName])) {
             return $jsonString;
         }

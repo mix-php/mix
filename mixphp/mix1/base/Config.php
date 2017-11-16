@@ -15,9 +15,7 @@ class Config extends Component
     // 自动加载列表
     public $autoload = [];
 
-    /**
-     * 初始化
-     */
+    // 初始化
     public function onInitialize()
     {
         parent::onInitialize();
@@ -27,12 +25,8 @@ class Config extends Component
         }
     }
 
-    /**
-     * 导入配置文件
-     * @param  string $file
-     * @return array
-     */
-    private static function import($file)
+    // 导入配置文件
+    protected static function import($file)
     {
         $filePath = \Mix::app()->getConfigPath() . $file . '.php';
         if (!is_file($filePath)) {
@@ -42,10 +36,7 @@ class Config extends Component
         return is_array($params) ? $params : [];
     }
 
-    /**
-     * 加载配置
-     * @param  string $file
-     */
+    // 加载配置
     public function load($file)
     {
         if (!isset($this->params[$file])) {
@@ -53,11 +44,7 @@ class Config extends Component
         }
     }
 
-    /**
-     * 读取配置
-     * @param  string $name 支持三级
-     * @return array or scalar
-     */
+    // 读取配置
     public function get($name = '')
     {
         // 全部配置
@@ -90,11 +77,7 @@ class Config extends Component
         throw new \mix\exception\ConfigException("配置项不存在：{$name}");
     }
 
-    /**
-     * 判断配置是否存在
-     * @param  string  $name 支持三级
-     * @return boolean
-     */
+    // 判断配置是否存在
     public function has($name = '')
     {
         $array = explode('.', $name);

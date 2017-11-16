@@ -15,7 +15,7 @@ class ServiceController extends Controller
     // 服务是否启动
     public function isStart()
     {
-        $output = \Mix::app()->exec('ps -ef | grep mixhttpd');
+        $output = \Mix::exec('ps -ef | grep mixhttpd');
         foreach ($output as $item) {
             if (strpos($item, 'mixhttpd master') !== false) {
                 return true;
@@ -44,7 +44,7 @@ class ServiceController extends Controller
     public function actionStop()
     {
         if ($this->isStart()) {
-            \Mix::app()->exec('ps -ef | grep mixhttpd | awk \'NR==1{print $2}\' | xargs -n1 kill');
+            \Mix::exec('ps -ef | grep mixhttpd | awk \'NR==1{print $2}\' | xargs -n1 kill');
         }
         while ($this->isStart()) {
         }
@@ -64,7 +64,7 @@ class ServiceController extends Controller
         if (!$this->isStart()) {
             return 'mixhttpd is not running' . PHP_EOL;
         }
-        $output = \Mix::app()->exec('ps -ef | grep mixhttpd');
+        $output = \Mix::exec('ps -ef | grep mixhttpd');
         foreach ($output as $item) {
             if (strpos($item, 'mixhttpd master') !== false || strpos($item, 'mixhttpd manager') !== false || strpos($item, 'mixhttpd worker') !== false) {
                 echo $item . PHP_EOL;

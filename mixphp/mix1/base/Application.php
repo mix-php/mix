@@ -43,8 +43,6 @@ class Application
         \Mix::setApp($this);
     }
 
-
-
     // 装载组件
     public function loadComponent($name)
     {

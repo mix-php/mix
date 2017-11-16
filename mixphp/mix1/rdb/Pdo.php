@@ -108,7 +108,7 @@ class Pdo extends Component
     }
 
     // 扩展数组参数的支持
-    protected function usingArray($sql, $data)
+    protected static function usingArray($sql, $data)
     {
         $params = $values = [];
         foreach ($data as $key => $value) {
@@ -132,7 +132,7 @@ class Pdo extends Component
     {
         // _params 与 _values 不会同时出现
         if (!empty($this->_params)) {
-            list($sql, $params, $values) = $this->sqlRawData = $this->usingArray($this->_sql, $this->_params);
+            list($sql, $params, $values) = $this->sqlRawData = self::usingArray($this->_sql, $this->_params);
             $this->_pdoStatement = $this->_pdo->prepare($sql);
             foreach ($params as $key => &$value) {
                 $this->_pdoStatement->bindParam($key, $value);

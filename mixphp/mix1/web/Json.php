@@ -12,7 +12,7 @@ class Json extends Object
 {
 
     // 编码
-    public static function encode($array)
+    public function encode($array)
     {
         // 不转义中文、斜杠
         return json_encode($array, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);

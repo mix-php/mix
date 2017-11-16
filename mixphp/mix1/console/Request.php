@@ -47,17 +47,17 @@ class Request extends Component
     // 获取CLI参数
     public function param($name = null)
     {
-        return $this->fetch($name, $this->_param);
+        return self::fetch($name, $this->_param);
     }
 
     // 获取ROUTE值
     public function route($name = null)
     {
-        return $this->fetch($name, $this->_route);
+        return self::fetch($name, $this->_route);
     }
 
     // 提取数据
-    protected function fetch($name, $container)
+    protected static function fetch($name, $container)
     {
         return is_null($name) ? $container : (isset($container[$name]) ? $container[$name] : null);
     }

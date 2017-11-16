@@ -21,7 +21,6 @@ class Session extends Component
     public $gcMaxLifetime = 7200;
     // session名
     public $name = 'MIXSSID';
-
     // 处理者
     protected $_handler;
     // SessionID
@@ -83,14 +82,14 @@ class Session extends Component
     {
         $this->_sessionId = \Mix::app()->request->cookie($this->name);
         if (is_null($this->_sessionId)) {
-            $this->_sessionId = $this->createSessionId();
+            $this->_sessionId = self::createSessionId();
         }
         \Mix::app()->response->setCookie($this->name, $this->_sessionId, time() + $this->gcMaxLifetime);
         $this->_saveKey = $this->_savePath['prefix'] . $this->_sessionId;
     }
 
     // 创建session_id
-    protected function createSessionId()
+    protected static function createSessionId()
     {
         $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
         $name  = '';

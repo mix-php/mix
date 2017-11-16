@@ -71,47 +71,47 @@ class Request extends Component
     // 提取GET值
     public function get($name = null)
     {
-        return $this->fetch($name, $this->_get);
+        return self::fetch($name, $this->_get);
     }
 
     // 提取POST值
     public function post($name = null)
     {
-        return $this->fetch($name, $this->_post);
+        return self::fetch($name, $this->_post);
     }
 
     // 提取FILES值
     public function files($name = null)
     {
-        return $this->fetch($name, $this->_files);
+        return self::fetch($name, $this->_files);
     }
 
     // 提取ROUTE值
     public function route($name = null)
     {
-        return $this->fetch($name, $this->_route);
+        return self::fetch($name, $this->_route);
     }
 
     // 提取COOKIE值
     public function cookie($name = null)
     {
-        return $this->fetch($name, $this->_cookie);
+        return self::fetch($name, $this->_cookie);
     }
 
     // 提取SERVER值
     public function server($name = null)
     {
-        return $this->fetch($name, $this->_server);
+        return self::fetch($name, $this->_server);
     }
 
     // 提取HEADER值
     public function header($name = null)
     {
-        return $this->fetch($name, $this->_header);
+        return self::fetch($name, $this->_header);
     }
 
     // 提取数据
-    protected function fetch($name, $container)
+    protected static function fetch($name, $container)
     {
         return is_null($name) ? $container : (isset($container[$name]) ? $container[$name] : null);
     }
