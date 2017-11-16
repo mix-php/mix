@@ -1,12 +1,14 @@
 <?php
 
-namespace mix\rdb;
+namespace mix\nosql;
 
 /**
- * Pdo长连接组件
+ * BaseRedisPersistent组件
  * @author 刘健 <coder.liu@qq.com>
+ *
+ * @method set($key, $value)
  */
-class PdoPersistent extends \mix\rdb\Pdo
+class BaseRedisPersistent extends BaseRedis
 {
 
     // 连接持续时间
@@ -18,9 +20,9 @@ class PdoPersistent extends \mix\rdb\Pdo
     public function initialize()
     {
         // 共用连接对象
-        $hash               = md5($this->dsn . $this->username . $this->password);
-        $this->_pdo         = &\Mix::$container['pdo_' . $hash];
-        $this->_connectTime = &\Mix::$container['pdoConnectTime_' . $hash];
+        $hash               = md5($this->host . $this->port . $this->database . $this->password);
+        $this->_redis       = &\Mix::$container['redis_' . $hash];
+        $this->_connectTime = &\Mix::$container['redisConnectTime_' . $hash];
         // 连接
         $this->connect();
     }
@@ -33,16 +35,16 @@ class PdoPersistent extends \mix\rdb\Pdo
         parent::connect();
     }
 
-    // 执行前准备
-    protected function prepare()
+    // 执行命令
+    public function __call($name, $arguments)
     {
         // 主动重新连接
         if ($this->_connectTime + $this->persistentTime < time()) {
             $this->connect();
         }
         try {
-            // 执行前准备
-            parent::prepare();
+            // 执行命令
+            return parent::__call($name, $arguments);
         } catch (\Exception $e) {
             // 长连接超时处理
             $this->connect();

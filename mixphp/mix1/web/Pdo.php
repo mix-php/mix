@@ -6,7 +6,7 @@ namespace mix\web;
  * Mysql组件
  * @author 刘健 <coder.liu@qq.com>
  */
-class Pdo extends \mix\rdb\Pdo
+class Pdo extends \mix\rdb\BasePdo
 {
 
     // 初始化事件

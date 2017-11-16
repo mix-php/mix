@@ -8,7 +8,7 @@ use mix\base\Component;
  * PdoCluster组件
  * @author 刘健 <coder.liu@qq.com>
  */
-class PdoCluster extends \mix\rdb\PdoCluster
+class PdoCluster extends \mix\rdb\BasePdoCluster
 {
 
     // 请求开始事件

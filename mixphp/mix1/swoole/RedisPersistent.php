@@ -8,7 +8,7 @@ namespace mix\swoole;
  *
  * @method set($key, $value)
  */
-class RedisPersistent extends \mix\nosql\RedisPersistent
+class RedisPersistent extends \mix\nosql\BaseRedisPersistent
 {
 
     // 初始化事件

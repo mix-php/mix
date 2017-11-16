@@ -8,7 +8,7 @@ namespace mix\web;
  *
  * @method set($key, $value)
  */
-class Redis extends \mix\nosql\Redis
+class Redis extends \mix\nosql\BaseRedis
 {
 
     // 初始化事件
