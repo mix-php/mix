@@ -28,7 +28,7 @@ class Redis extends \mix\nosql\BaseRedis
     // 请求结束事件
     public function onRequestEnd()
     {
-        $this->onRequestEnd();
+        parent::onRequestEnd();
         // 关闭连接
         $this->close();
     }

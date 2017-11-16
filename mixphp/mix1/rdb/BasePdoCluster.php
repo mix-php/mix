@@ -22,14 +22,6 @@ class BasePdoCluster extends BasePdo
     // pdo池
     protected $_pdos;
 
-    // 析构事件
-    public function onDestruct()
-    {
-        parent::onDestruct();
-        // 关闭连接
-        $this->close();
-    }
-
     // 主连接
     protected function connectMaster()
     {
