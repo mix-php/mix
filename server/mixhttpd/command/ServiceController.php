@@ -17,7 +17,7 @@ class ServiceController extends Controller
     protected $d = false;
 
     // 是否热更新
-    protected $h = false;
+    protected $u = false;
 
     // 启动服务
     public function actionStart()
@@ -26,7 +26,7 @@ class ServiceController extends Controller
             return "MixHttpd 正在运行, PID : {$pid}." . PHP_EOL;
         }
         $server = \Mix::app()->server;
-        if ($this->h) {
+        if ($this->u) {
             $server->setting['max_request'] = 1;
         }
         $server->setting['daemonize'] = $this->d;
