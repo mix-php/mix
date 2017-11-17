@@ -9,8 +9,8 @@ return [
     // 控制器命名空间
     'controllerNamespace' => 'mixhttpd\command',
 
-    // 组件注册
-    'register'            => [
+    // 组件配置
+    'components'            => [
 
         // 路由
         'route'    => [

@@ -20,14 +20,14 @@ namespace mix\base;
 class Application
 {
 
-    // 应用根路径
+    // 基础路径
     public $basePath = '';
 
     // 控制器命名空间
     public $controllerNamespace = 'index\controller';
 
-    // 注册树配置
-    public $register = [];
+    // 组件配置
+    public $components = [];
 
     // 组件容器
     protected $_components;
@@ -36,11 +36,11 @@ class Application
     protected $_notFoundMessage = 'Not Found';
 
     // 构造
-    public function __construct($config)
+    public function __construct($attributes)
     {
-        // 导入配置
-        foreach ($config as $key => $value) {
-            $this->$key = $value;
+        // 导入属性
+        foreach ($attributes as $name => $attribute) {
+            $this->$name = $attribute;
         }
         // 快捷引用
         \Mix::setApp($this);
@@ -50,14 +50,14 @@ class Application
     public function loadComponent($name)
     {
         // 未注册
-        if (!isset($this->register[$name])) {
+        if (!isset($this->components[$name])) {
             throw new \mix\exception\ComponentException("组件不存在：{$name}");
         }
         // 使用配置创建新对象
-        $object = \Mix::createObject($this->register[$name]);
+        $object = \Mix::createObject($this->components[$name]);
         // 组件效验
         if (!($object instanceof Component)) {
-            throw new \mix\exception\ComponentException("不是组件类型：{$this->register[$name]['class']}");
+            throw new \mix\exception\ComponentException("不是组件类型：{$this->components[$name]['class']}");
         }
         // 装入容器
         $this->_components[$name] = $object;

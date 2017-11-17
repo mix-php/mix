@@ -50,7 +50,7 @@ class Application extends \mix\base\Application
     // 装载全部组件
     public function loadAllComponent()
     {
-        foreach (array_keys($this->register) as $name) {
+        foreach (array_keys($this->components) as $name) {
             $this->loadComponent($name);
         }
     }

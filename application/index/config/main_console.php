@@ -9,8 +9,8 @@ return [
     // 控制器命名空间
     'controllerNamespace' => 'index\command',
 
-    // 组件注册
-    'register'            => [
+    // 组件配置
+    'components'          => [
 
         // 路由
         'route'    => [
@@ -108,7 +108,7 @@ return [
     ],
 
     // 对象配置
-    'object'              => [
+    'objects'              => [
 
     ],
 

@@ -53,7 +53,7 @@ class Error extends Component
             'trace'   => $e->getTraceAsString(),
         ];
         // 日志处理
-        if (isset(\Mix::app()->register['log']) && !($e instanceof \mix\exception\NotFoundException)) {
+        if (isset(\Mix::app()->components['log']) && !($e instanceof \mix\exception\NotFoundException)) {
             $time    = date('Y-m-d H:i:s');
             $message = "[time] {$time}" . PHP_EOL;
             $message .= "[code] {$errors['code']}" . PHP_EOL;
