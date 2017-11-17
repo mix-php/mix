@@ -10,13 +10,11 @@ class Object
 {
 
     // 构造
-    public function __construct($config = [])
+    public function __construct($attributes = [])
     {
         $this->onConstruct();
-        if (!empty($config)) {
-            foreach ($config as $key => $value) {
-                $this->$key = $value;
-            }
+        foreach ($attributes as $name => $attribute) {
+            $this->$name = $attribute;
         }
         $this->onInitialize();
     }

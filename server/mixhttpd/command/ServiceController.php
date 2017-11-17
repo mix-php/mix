@@ -13,6 +13,12 @@ use mixhttpd\library\Service;
 class ServiceController extends Controller
 {
 
+    // 是否后台运行
+    protected $d = false;
+
+    // 是否热更新
+    protected $h = false;
+
     // 启动服务
     public function actionStart()
     {
@@ -20,12 +26,10 @@ class ServiceController extends Controller
             return "MixHttpd 正在运行, PID : {$pid}." . PHP_EOL;
         }
         $server = \Mix::app()->server;
-        if (!is_null(\Mix::app()->request->param('hot-update'))) {
+        if ($this->h) {
             $server->setting['max_request'] = 1;
         }
-        if (!is_null(\Mix::app()->request->param('foreground'))) {
-            $server->setting['daemonize'] = false;
-        }
+        $server->setting['daemonize'] = $this->d;
         return $server->start();
     }
 

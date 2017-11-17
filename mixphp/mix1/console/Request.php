@@ -30,11 +30,21 @@ class Request extends Component
         // 解析参数
         $param = [];
         foreach ($GLOBALS['argv'] as $key => $value) {
-            if ($key > 1 && substr($value, 0, 2) == '--') {
-                $param[] = substr($value, 2);
+            if ($key > 1) {
+                if (substr($value, 0, 2) == '--') {
+                    $param[] = substr($value, 2);
+                } else if (substr($value, 0, 1) == '-') {
+                    $param[] = substr($value, 1);
+                }
             }
         }
         parse_str(implode('&', $param), $param);
+        // 设置默认值
+        foreach ($param as $name => $value) {
+            if ($value === '') {
+                $param[$name] = true;
+            }
+        }
         $this->_param = $param;
     }
 

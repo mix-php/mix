@@ -18,9 +18,10 @@ class Application extends \mix\base\Application
             throw new \mix\exception\CommandException('请在 CLI 模式下运行');
         }
         \Mix::app()->error->register();
-        $method  = 'CLI';
-        $action  = empty($GLOBALS['argv'][1]) ? '' : $GLOBALS['argv'][1];
-        $content = $this->runAction($method, $action);
+        $method               = 'CLI';
+        $action               = empty($GLOBALS['argv'][1]) ? '' : $GLOBALS['argv'][1];
+        $controllerAttributes = \Mix::app()->request->param();
+        $content              = $this->runAction($method, $action, $controllerAttributes);
         \Mix::app()->response->setContent($content);
         \Mix::app()->response->send();
     }

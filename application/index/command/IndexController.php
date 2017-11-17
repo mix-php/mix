@@ -13,7 +13,6 @@ class IndexController extends Controller
 
     public function actionIndex()
     {
-        $param = \Mix::app()->request->param();
         return 'Hello World' . PHP_EOL;
     }
 

@@ -61,7 +61,7 @@ class Application
     }
 
     // 执行功能并返回
-    public function runAction($method, $action)
+    public function runAction($method, $action, $controllerAttributes = [])
     {
         $action = "{$method} {$action}";
         // 路由匹配
@@ -87,7 +87,7 @@ class Application
             } catch (\ReflectionException $e) {
                 throw new \mix\exception\NotFoundException("未找到 (#404)");
             }
-            $controller = $reflect->newInstanceArgs();
+            $controller = $reflect->newInstanceArgs([$controllerAttributes]);
             // 判断方法是否存在
             if (method_exists($controller, $method)) {
                 // 执行控制器的方法

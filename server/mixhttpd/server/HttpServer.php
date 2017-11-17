@@ -39,7 +39,6 @@ class HttpServer extends Component
         }
         // 设置保留配置项
         $this->setting['pid_file']  = __DIR__ . '/../runtime/server.pid';
-        $this->setting['daemonize'] = false;
     }
 
     // 主进程启动事件
