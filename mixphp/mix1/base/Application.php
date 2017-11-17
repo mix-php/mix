@@ -32,6 +32,9 @@ class Application
     // 组件容器
     protected $_components;
 
+    // NotFound错误消息
+    protected $_notFoundMessage = 'Not Found';
+
     // 构造
     public function __construct($config)
     {
@@ -85,7 +88,7 @@ class Application
             try {
                 $reflect = new \ReflectionClass($class);
             } catch (\ReflectionException $e) {
-                throw new \mix\exception\NotFoundException("未找到 (#404)");
+                throw new \mix\exception\NotFoundException($this->_notFoundMessage);
             }
             $controller = $reflect->newInstanceArgs([$controllerAttributes]);
             // 判断方法是否存在
@@ -94,7 +97,7 @@ class Application
                 return $controller->$method();
             }
         }
-        throw new \mix\exception\NotFoundException("未找到 (#404)");
+        throw new \mix\exception\NotFoundException($this->_notFoundMessage);
     }
 
     // 获取配置目录路径

@@ -11,6 +11,9 @@ use mix\base\Component;
 class Application extends \mix\base\Application
 {
 
+    // NotFound错误消息
+    protected $_notFoundMessage = 'Not Found (#404)';
+
     // 执行功能 (Apache/PHP-FPM)
     public function run()
     {

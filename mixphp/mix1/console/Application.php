@@ -11,6 +11,9 @@ use mix\base\Component;
 class Application extends \mix\base\Application
 {
 
+    // NotFound错误消息
+    protected $_notFoundMessage = 'Command Not Found';
+
     // 执行功能 (CLI模式)
     public function run()
     {
