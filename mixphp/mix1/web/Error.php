@@ -102,6 +102,9 @@ class Error extends Component
         \Mix::app()->response->statusCode = $statusCode;
         \Mix::app()->response->setContent($content);
         switch ($this->format) {
+            case self::FORMAT_HTML:
+                \Mix::app()->response->setHeader('Content-Type', 'text/html;charset=utf-8');
+                break;
             case self::FORMAT_JSON:
                 \Mix::app()->response->setHeader('Content-Type', 'application/json;charset=utf-8');
                 break;
