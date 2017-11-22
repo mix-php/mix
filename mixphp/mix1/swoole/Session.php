@@ -30,18 +30,43 @@ class Session extends Component
     // 保存的key
     protected $_saveKey;
 
+    // 初始化事件
+    public function onInitialize()
+    {
+        parent::onInitialize();
+        // 解析参数
+        $savePath = parse_url($this->savePath);
+        parse_str($savePath['query'], $query);
+        $savePath += $query;
+        $this->_savePath = $savePath;
+    }
+
     // 请求开始事件
     public function onRequestStart()
     {
         parent::onRequestStart();
-        $this->createHandler();
-        $this->loadSessionId();
+        // 启动
+        $this->start();
     }
 
     // 请求结束事件
     public function onRequestEnd()
     {
         parent::onRequestEnd();
+        // 关闭
+        $this->close();
+    }
+
+    // 启动
+    protected function start()
+    {
+        $this->createHandler();
+        $this->loadSessionId();
+    }
+
+    // 关闭
+    protected function close()
+    {
         $this->_handler   = null;
         $this->_sessionId = null;
     }
@@ -49,18 +74,10 @@ class Session extends Component
     // 创建 Handler
     protected function createHandler()
     {
-        if (!isset($this->_handler)) {
-            // 解析参数
-            $savePath = parse_url($this->savePath);
-            parse_str($savePath['query'], $query);
-            $savePath += $query;
-            $this->_savePath = $savePath;
-            // Redis Handler
-            switch ($this->saveHandler) {
-                case self::HANDLER_REDIS:
-                    $this->_handler = $this->createRedisHandler();
-                    break;
-            }
+        switch ($this->saveHandler) {
+            case self::HANDLER_REDIS:
+                $this->_handler = $this->createRedisHandler();
+                break;
         }
     }
 
