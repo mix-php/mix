@@ -111,6 +111,31 @@ return [
             'httponly' => false,
         ],
 
+        // Session
+        'token'    => [
+            // 类路径
+            'class'         => 'mix\web\Token',
+            // 处理者
+            'saveHandler'   => mix\web\Token::HANDLER_REDIS,
+            // 处理者配置信息
+            'handlerConfig' => [
+                // 主机
+                'host'     => '127.0.0.1',
+                // 端口
+                'port'     => 6379,
+                // 数据库
+                'database' => 0,
+                // 密码
+                'password' => '',
+                // Key前缀
+                'prefix'   => 'MIXTKID:',
+            ],
+            // 有效期
+            'expires'       => 7200,
+            // session名
+            'name'          => 'access_token',
+        ],
+
         // 数据库
         'rdb'      => [
             // 类路径

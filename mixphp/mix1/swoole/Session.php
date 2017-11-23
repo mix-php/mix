@@ -26,7 +26,7 @@ class Session extends Component
     // 处理者配置信息
     protected $_handlerConfig;
     // Session在处理者内的key
-    protected $_handlerSessionKey;
+    protected $_handlerKey;
     // SessionID
     protected $_sessionId;
 
@@ -94,7 +94,7 @@ class Session extends Component
             $this->_sessionId = self::createSessionId();
         }
         \Mix::app()->response->setCookie($this->name, $this->_sessionId, time() + $this->gcMaxLifetime);
-        $this->_handlerSessionKey = $this->_handlerConfig['prefix'] . $this->_sessionId;
+        $this->_handlerKey = $this->_handlerConfig['prefix'] . $this->_sessionId;
     }
 
     // 创建session_id
@@ -112,40 +112,46 @@ class Session extends Component
     public function get($name = null)
     {
         if (is_null($name)) {
-            $value = $this->_handler->hGetAll($this->_handlerSessionKey);
+            $value = $this->_handler->hGetAll($this->_handlerKey);
             return $value ?: null;
         }
-        $array = $this->_handler->hmGet($this->_handlerSessionKey, [$name]);
+        $array = $this->_handler->hmGet($this->_handlerKey, [$name]);
         return empty($array) ? null : array_shift($array);
     }
 
     // 赋值
     public function set($name, $value)
     {
-        $success = $this->_handler->hMset($this->_handlerSessionKey, [$name => $value]);
-        $this->_handler->setTimeout($this->_handlerSessionKey, $this->gcMaxLifetime);
+        $success = $this->_handler->hMset($this->_handlerKey, [$name => $value]);
+        $this->_handler->setTimeout($this->_handlerKey, $this->gcMaxLifetime);
         return $success ? true : false;
     }
 
     // 判断是否存在
     public function has($name)
     {
-        $exist = $this->_handler->hExists($this->_handlerSessionKey, $name);
+        $exist = $this->_handler->hExists($this->_handlerKey, $name);
         return $exist ? true : false;
     }
 
     // 删除
     public function delete($name)
     {
-        $success = $this->_handler->hDel($this->_handlerSessionKey, $name);
+        $success = $this->_handler->hDel($this->_handlerKey, $name);
         return $success ? true : false;
     }
 
     // 清除session
     public function clear()
     {
-        $success = $this->_handler->del($this->_handlerSessionKey);
+        $success = $this->_handler->del($this->_handlerKey);
         return $success ? true : false;
+    }
+
+    // 获取SessionId
+    public function getSessionId()
+    {
+        return $this->_sessionId;
     }
 
 }

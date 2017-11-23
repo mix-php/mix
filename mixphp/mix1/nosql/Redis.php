@@ -2,8 +2,6 @@
 
 namespace mix\nosql;
 
-use mix\base\Component;
-
 /**
  * redis组件
  * @author 刘健 <coder.liu@qq.com>
