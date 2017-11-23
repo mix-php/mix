@@ -86,9 +86,9 @@ return [
             // 类路径
             'class'         => 'mix\web\Session',
             // 处理者
-            'saveHandler'   => mix\swoole\Session::HANDLER_REDIS,
+            'saveHandler'   => mix\web\Session::HANDLER_REDIS,
             // 保存路径
-            'savePath'      => 'tcp://127.0.0.1:6379?auth=&database=9&prefix=MIXSSID:',
+            'savePath'      => 'tcp://127.0.0.1:6379?auth=&database=0&prefix=MIXSSID:',
             // 生存时间
             'gcMaxLifetime' => 7200,
             // session名
