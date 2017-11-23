@@ -112,17 +112,21 @@ class Session extends Component
     public function get($name = null)
     {
         if (is_null($name)) {
-            $value = $this->_handler->hGetAll($this->_handlerKey);
-            return $value ?: null;
+            $array = $this->_handler->hGetAll($this->_handlerKey);
+            foreach ($array as $key => $item) {
+                $array[$key] = unserialize($item);
+            }
+            return $array ?: [];
         }
-        $array = $this->_handler->hmGet($this->_handlerKey, [$name]);
-        return empty($array) ? null : array_shift($array);
+        $reslut = $this->_handler->hmGet($this->_handlerKey, [$name]);
+        $value  = array_shift($reslut);
+        return $value === false ? null : unserialize($value);
     }
 
     // 赋值
     public function set($name, $value)
     {
-        $success = $this->_handler->hMset($this->_handlerKey, [$name => $value]);
+        $success = $this->_handler->hMset($this->_handlerKey, [$name => serialize($value)]);
         $this->_handler->setTimeout($this->_handlerKey, $this->gcMaxLifetime);
         return $success ? true : false;
     }
