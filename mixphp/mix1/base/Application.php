@@ -7,15 +7,17 @@ namespace mix\base;
  * @author 刘健 <coder.liu@qq.com>
  *
  * @property \mix\base\Route $route
+ * @property \mix\base\Log $log
+ * @property \mix\base\Config $config
  * @property \mix\web\Request|\mix\swoole\Request|\mix\console\Request $request
  * @property \mix\web\Response|\mix\swoole\Response|\mix\console\Response $response
  * @property \mix\web\Error $error
- * @property \mix\base\Log $log
  * @property \mix\web\Session $session
  * @property \mix\web\Cookie $cookie
+ * @property \mix\web\Token $token
  * @property \mix\rdb\Pdo $rdb
  * @property \mix\nosql\Redis $redis
- * @property \mix\base\Config $config
+ *
  */
 class Application
 {

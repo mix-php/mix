@@ -126,7 +126,7 @@ class Session extends Component
     public function set($name, $value)
     {
         $success = $this->_handler->hMset($this->_handlerKey, [$name => serialize($value)]);
-        $this->_handler->setTimeout($this->_handlerKey, $this->gcMaxLifetime);
+        $this->_handler->setTimeout($this->_handlerKey, $this->expires);
         return $success ? true : false;
     }
 

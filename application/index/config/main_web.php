@@ -122,7 +122,7 @@ return [
             'httponly' => false,
         ],
 
-        // Session
+        // Token
         'token'    => [
             // 类路径
             'class'         => 'mix\web\Token',
