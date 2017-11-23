@@ -87,10 +87,21 @@ return [
             'class'         => 'mix\web\Session',
             // 处理者
             'saveHandler'   => mix\web\Session::HANDLER_REDIS,
-            // 保存路径
-            'savePath'      => 'tcp://127.0.0.1:6379?auth=&database=0&prefix=MIXSSID:',
+            // 处理者配置信息
+            'handlerConfig' => [
+                // 主机
+                'host'     => '127.0.0.1',
+                // 端口
+                'port'     => 6379,
+                // 数据库
+                'database' => 0,
+                // 密码
+                'password' => '',
+                // Key前缀
+                'prefix'   => 'MIXSSID:',
+            ],
             // 生存时间
-            'gcMaxLifetime' => 7200,
+            'expires' => 7200,
             // session名
             'name'          => 'MIXSSID',
         ],
@@ -131,7 +142,7 @@ return [
                 'prefix'   => 'MIXTKID:',
             ],
             // 有效期
-            'expires'       => 7200,
+            'expires'       => 604800,
             // session名
             'name'          => 'access_token',
         ],

@@ -15,16 +15,25 @@ class Session extends Component
     const HANDLER_REDIS = 'redis';
     // 处理者
     public $saveHandler = self::HANDLER_REDIS;
-    // 保存路径
-    public $savePath = '';
-    // 生存时间
-    public $gcMaxLifetime = 7200;
+    // 处理者配置信息
+    public $handlerConfig = [
+        // 主机
+        'host'     => '127.0.0.1',
+        // 端口
+        'port'     => 6379,
+        // 数据库
+        'database' => 0,
+        // 密码
+        'password' => '',
+        // Key前缀
+        'prefix'   => 'MIXTKID:',
+    ];
+    // 有效期
+    public $expires = 7200;
     // session名
     public $name = 'MIXSSID';
     // 处理者
     protected $_handler;
-    // 处理者配置信息
-    protected $_handlerConfig;
     // Session在处理者内的key
     protected $_handlerKey;
     // SessionID
@@ -34,8 +43,6 @@ class Session extends Component
     public function onInitialize()
     {
         parent::onInitialize();
-        // 解析参数
-        $this->_handlerConfig = self::parseSavePath($this->savePath);
         // 创建 Handler
         $this->createHandler();
     }
@@ -56,14 +63,6 @@ class Session extends Component
         $this->_handler->close();
     }
 
-    // 解析参数
-    protected static function parseSavePath($savePath)
-    {
-        $savePath = parse_url($savePath);
-        parse_str($savePath['query'], $query);
-        return $savePath += $query;
-    }
-
     // 创建 Handler
     protected function createHandler()
     {
@@ -78,10 +77,10 @@ class Session extends Component
     protected function createRedisHandler()
     {
         $redis          = new \mix\nosql\Redis([
-            'host'     => $this->_handlerConfig['host'],
-            'port'     => $this->_handlerConfig['port'],
-            'database' => $this->_handlerConfig['database'],
-            'password' => $this->_handlerConfig['auth'],
+            'host'     => $this->handlerConfig['host'],
+            'port'     => $this->handlerConfig['port'],
+            'database' => $this->handlerConfig['database'],
+            'password' => $this->handlerConfig['password'],
         ]);
         $this->_handler = $redis;
     }
@@ -93,8 +92,8 @@ class Session extends Component
         if (is_null($this->_sessionId)) {
             $this->_sessionId = self::createSessionId();
         }
-        \Mix::app()->response->setCookie($this->name, $this->_sessionId, time() + $this->gcMaxLifetime);
-        $this->_handlerKey = $this->_handlerConfig['prefix'] . $this->_sessionId;
+        \Mix::app()->response->setCookie($this->name, $this->_sessionId, time() + $this->expires);
+        $this->_handlerKey = $this->handlerConfig['prefix'] . $this->_sessionId;
     }
 
     // 创建session_id
