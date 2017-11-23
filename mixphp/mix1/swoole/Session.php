@@ -23,52 +23,45 @@ class Session extends Component
     public $name = 'MIXSSID';
     // 处理者
     protected $_handler;
+    // 处理者配置信息
+    protected $_handlerConfig;
+    // Session在处理者内的key
+    protected $_handlerSessionKey;
     // SessionID
     protected $_sessionId;
-    // 保存路径参数
-    protected $_savePath;
-    // 保存的key
-    protected $_saveKey;
 
     // 初始化事件
     public function onInitialize()
     {
         parent::onInitialize();
         // 解析参数
-        $savePath = parse_url($this->savePath);
-        parse_str($savePath['query'], $query);
-        $savePath += $query;
-        $this->_savePath = $savePath;
+        $this->_handlerConfig = self::parseSavePath($this->savePath);
+        // 创建 Handler
+        $this->createHandler();
     }
 
     // 请求开始事件
     public function onRequestStart()
     {
         parent::onRequestStart();
-        // 启动
-        $this->start();
+        // 载入session_id
+        $this->loadSessionId();
     }
 
     // 请求结束事件
     public function onRequestEnd()
     {
         parent::onRequestEnd();
-        // 关闭
-        $this->close();
+        // 关闭连接
+        $this->_handler->close();
     }
 
-    // 启动
-    protected function start()
+    // 解析参数
+    protected static function parseSavePath($savePath)
     {
-        $this->createHandler();
-        $this->loadSessionId();
-    }
-
-    // 关闭
-    protected function close()
-    {
-        $this->_handler   = null;
-        $this->_sessionId = null;
+        $savePath = parse_url($savePath);
+        parse_str($savePath['query'], $query);
+        return $savePath += $query;
     }
 
     // 创建 Handler
@@ -76,7 +69,7 @@ class Session extends Component
     {
         switch ($this->saveHandler) {
             case self::HANDLER_REDIS:
-                $this->_handler = $this->createRedisHandler();
+                $this->createRedisHandler();
                 break;
         }
     }
@@ -84,14 +77,13 @@ class Session extends Component
     // 创建 Redis Handler
     protected function createRedisHandler()
     {
-        // 创建 Redis Handler
-        $redis = new \Redis();
-        if (!$redis->connect($this->_savePath['host'], $this->_savePath['port'])) {
-            throw new \Exception('Redis连接失败');
-        }
-        $redis->auth($this->_savePath['auth']);
-        $redis->select($this->_savePath['database']);
-        return $redis;
+        $redis          = new \mix\nosql\Redis([
+            'host'     => $this->_handlerConfig['host'],
+            'port'     => $this->_handlerConfig['port'],
+            'database' => $this->_handlerConfig['database'],
+            'password' => $this->_handlerConfig['auth'],
+        ]);
+        $this->_handler = $redis;
     }
 
     // 载入session_id
@@ -102,7 +94,7 @@ class Session extends Component
             $this->_sessionId = self::createSessionId();
         }
         \Mix::app()->response->setCookie($this->name, $this->_sessionId, time() + $this->gcMaxLifetime);
-        $this->_saveKey = $this->_savePath['prefix'] . $this->_sessionId;
+        $this->_handlerSessionKey = $this->_handlerConfig['prefix'] . $this->_sessionId;
     }
 
     // 创建session_id
@@ -120,39 +112,39 @@ class Session extends Component
     public function get($name = null)
     {
         if (is_null($name)) {
-            $value = $this->_handler->hGetAll($this->_saveKey);
+            $value = $this->_handler->hGetAll($this->_handlerSessionKey);
             return $value ?: null;
         }
-        $array = $this->_handler->hmGet($this->_saveKey, [$name]);
+        $array = $this->_handler->hmGet($this->_handlerSessionKey, [$name]);
         return empty($array) ? null : array_shift($array);
     }
 
     // 赋值
     public function set($name, $value)
     {
-        $success = $this->_handler->hMset($this->_saveKey, [$name => $value]);
-        $this->_handler->setTimeout($this->_saveKey, $this->gcMaxLifetime);
+        $success = $this->_handler->hMset($this->_handlerSessionKey, [$name => $value]);
+        $this->_handler->setTimeout($this->_handlerSessionKey, $this->gcMaxLifetime);
         return $success ? true : false;
     }
 
     // 判断是否存在
     public function has($name)
     {
-        $exist = $this->_handler->hExists($this->_saveKey, $name);
+        $exist = $this->_handler->hExists($this->_handlerSessionKey, $name);
         return $exist ? true : false;
     }
 
     // 删除
     public function delete($name)
     {
-        $success = $this->_handler->hDel($this->_saveKey, $name);
+        $success = $this->_handler->hDel($this->_handlerSessionKey, $name);
         return $success ? true : false;
     }
 
     // 清除session
     public function clear()
     {
-        $success = $this->_handler->del($this->_saveKey);
+        $success = $this->_handler->del($this->_handlerSessionKey);
         return $success ? true : false;
     }
 
