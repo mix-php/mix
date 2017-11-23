@@ -1,6 +1,6 @@
 <?php
 
-namespace mix\swoole;
+namespace mix\nosql;
 
 /**
  * redis长连接组件
@@ -8,7 +8,7 @@ namespace mix\swoole;
  *
  * @method set($key, $value)
  */
-class RedisPersistent extends \mix\nosql\BaseRedisPersistent
+class RedisPersistent extends BaseRedisPersistent
 {
 
     // 初始化事件
@@ -17,6 +17,14 @@ class RedisPersistent extends \mix\nosql\BaseRedisPersistent
         parent::onInitialize();
         // 初始化
         $this->initialize();
+    }
+
+    // 析构事件
+    public function onDestruct()
+    {
+        parent::onDestruct();
+        // 关闭连接
+        $this->close();
     }
 
 }

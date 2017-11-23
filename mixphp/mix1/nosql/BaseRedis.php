@@ -7,8 +7,6 @@ use mix\base\Component;
 /**
  * BaseRedis组件
  * @author 刘健 <coder.liu@qq.com>
- *
- * @method set($key, $value)
  */
 class BaseRedis extends Component
 {
@@ -24,21 +22,13 @@ class BaseRedis extends Component
     // redis对象
     protected $_redis;
 
-    // 析构事件
-    public function onDestruct()
-    {
-        parent::onDestruct();
-        // 关闭连接
-        $this->close();
-    }
-
     // 连接
-    public function connect()
+    protected function connect()
     {
         $redis = new \Redis();
         // connect 这里如果设置timeout，是全局有效的，执行brPop时会受影响
         if (!$redis->connect($this->host, $this->port)) {
-            throw new \Exception('Redis连接失败');
+            throw new \RedisException('Redis连接失败');
         }
         $redis->auth($this->password);
         $redis->select($this->database);
@@ -51,14 +41,25 @@ class BaseRedis extends Component
         $this->_redis = null;
     }
 
+    // 自动连接
+    protected function autoConnect()
+    {
+        if (!isset($this->_redis)) {
+            $this->connect();
+        }
+    }
+
     // 执行命令
     public function __call($name, $arguments)
     {
-        $returnVal = call_user_func_array([$this->_redis, $name], $arguments);
-        if ($returnVal === false) {
+        // 自动连接
+        $this->autoConnect();
+        // 执行命令
+        $value = call_user_func_array([$this->_redis, $name], $arguments);
+        if ($value === false) {
             throw new \RedisException('Redis执行命令出错');
         }
-        return $returnVal;
+        return $value;
     }
 
 }

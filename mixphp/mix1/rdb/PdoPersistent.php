@@ -2,21 +2,19 @@
 
 namespace mix\rdb;
 
-use mix\base\Component;
-
 /**
- * PdoCluster组件
+ * PdoPersistent组件
  * @author 刘健 <coder.liu@qq.com>
  */
-class PdoCluster extends BasePdoCluster
+class PdoPersistent extends BasePdoPersistent
 {
 
-    // 请求结束事件
-    public function onRequestEnd()
+    // 初始化事件
+    public function onInitialize()
     {
-        parent::onRequestEnd();
-        // 关闭连接
-        $this->close();
+        parent::onInitialize();
+        // 初始化
+        $this->initialize();
     }
 
     // 析构事件

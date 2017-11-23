@@ -12,18 +12,25 @@ class BasePdoCluster extends BasePdo
 {
 
     // 主服务器组
-    protected $masters = [];
+    public $masters = [];
     // 配置主服务器
-    protected $masterConfig = [];
+    public $masterConfig = [];
     // 从服务器组
-    protected $slaves = [];
+    public $slaves = [];
     // 配置从服务器
-    protected $slaveConfig = [];
+    public $slaveConfig = [];
     // pdo池
     protected $_pdos;
 
+    // 关闭连接
+    public function close()
+    {
+        parent::close();
+        $this->_pdos = null;
+    }
+
     // 主连接
-    protected function connectMaster()
+    protected function selectMaster()
     {
         if (!isset($this->_pdos['master'])) {
             $this->dsn      = $this->masters[array_rand($this->masters)];
@@ -37,7 +44,7 @@ class BasePdoCluster extends BasePdo
     }
 
     // 从连接
-    protected function connectSlave()
+    protected function selectSlave()
     {
         if (!isset($this->_pdos['slave'])) {
             $this->dsn      = $this->slaves[array_rand($this->slaves)];
@@ -48,20 +55,6 @@ class BasePdoCluster extends BasePdo
         } else {
             $this->_pdo = $this->_pdos['slave'];
         }
-    }
-
-    // 连接
-    public function connect()
-    {
-        $this->connectMaster();
-        $this->connectSlave();
-    }
-
-    // 关闭连接
-    public function close()
-    {
-        parent::close();
-        $this->_pdos = null;
     }
 
     // 检查是否为Select语句
@@ -88,25 +81,16 @@ class BasePdoCluster extends BasePdo
     {
         // 主从选择
         if (self::isSelect($this->_sql) && !$this->inTransaction()) {
-            $this->connectSlave();
+            $this->selectSlave();
         } else {
-            $this->connectMaster();
+            $this->selectMaster();
         }
-    }
-
-    // 执行前准备
-    protected function prepare()
-    {
-        // 根据SQL类型自动连接
-        $this->autoConnect();
-        // 执行前准备
-        parent::prepare();
     }
 
     // 开始事务
     public function beginTransaction()
     {
-        $this->connectMaster();
+        $this->selectMaster();
         parent::beginTransaction();
     }
 

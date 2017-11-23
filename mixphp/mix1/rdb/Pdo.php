@@ -11,12 +11,20 @@ use mix\base\Component;
 class Pdo extends BasePdo
 {
 
-    // 初始化事件
-    public function onInitialize()
+    // 请求结束事件
+    public function onRequestEnd()
     {
-        parent::onInitialize();
-        // 连接
-        $this->connect();
+        parent::onRequestEnd();
+        // 关闭连接
+        $this->close();
+    }
+
+    // 析构事件
+    public function onDestruct()
+    {
+        parent::onDestruct();
+        // 关闭连接
+        $this->close();
     }
 
 }

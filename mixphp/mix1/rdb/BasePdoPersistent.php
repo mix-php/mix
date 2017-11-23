@@ -15,37 +15,41 @@ class BasePdoPersistent extends BasePdo
     protected $_connectTime;
 
     // 初始化
-    public function initialize()
+    protected function initialize()
     {
         // 共用连接对象
         $hash               = md5($this->dsn . $this->username . $this->password);
         $this->_pdo         = &\Mix::$container['pdo_' . $hash];
         $this->_connectTime = &\Mix::$container['pdoConnectTime_' . $hash];
-        // 连接
-        $this->connect();
     }
 
     // 连接
-    public function connect()
+    protected function connect()
     {
-        $this->close();
         $this->_connectTime = time();
         parent::connect();
+    }
+
+    // 重新连接
+    protected function reConnect()
+    {
+        $this->close();
+        $this->connect();
     }
 
     // 执行前准备
     protected function prepare()
     {
         // 主动重新连接
-        if ($this->_connectTime + $this->persistentTime < time()) {
-            $this->connect();
+        if (isset($this->_connectTime) && ($this->_connectTime + $this->persistentTime < time())) {
+            $this->reConnect();
         }
         try {
             // 执行前准备
             parent::prepare();
         } catch (\Exception $e) {
             // 长连接超时处理
-            $this->connect();
+            $this->reConnect();
             throw $e;
         }
     }

@@ -42,16 +42,8 @@ class BasePdo extends Component
         \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
     ];
 
-    // 析构事件
-    public function onDestruct()
-    {
-        parent::onDestruct();
-        // 关闭连接
-        $this->close();
-    }
-
     // 连接
-    public function connect()
+    protected function connect()
     {
         $this->_pdo = new \PDO(
             $this->dsn,
@@ -135,10 +127,20 @@ class BasePdo extends Component
         return [$sql, $params, $values];
     }
 
+    // 自动连接
+    protected function autoConnect()
+    {
+        if (!isset($this->_pdo)) {
+            $this->connect();
+        }
+    }
+
     // 执行前准备
     protected function prepare()
     {
-        // _params 与 _values 不会同时出现
+        // 自动连接
+        $this->autoConnect();
+        // 准备与参数绑定
         if (!empty($this->_params)) {
             list($sql, $params, $values) = $this->sqlRawData = self::usingArray($this->_sql, $this->_params);
             $this->_pdoStatement = $this->_pdo->prepare($sql);
@@ -156,7 +158,7 @@ class BasePdo extends Component
             $this->sqlRawData = [$this->_sql, [], $this->_values];
         } else {
             $this->_pdoStatement = $this->_pdo->prepare($this->_sql);
-            $this->sqlRawData  = [];
+            $this->sqlRawData    = [];
         }
         $this->_sqlCache = [];
         $this->_params   = [];
