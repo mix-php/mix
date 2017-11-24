@@ -23,9 +23,9 @@ class BasePdoCluster extends BasePdo
     protected $_pdos;
 
     // 关闭连接
-    public function close()
+    public function disconnect()
     {
-        parent::close();
+        parent::disconnect();
         $this->_pdos = null;
     }
 

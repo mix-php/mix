@@ -16,7 +16,7 @@ class Redis extends BaseRedis
     {
         parent::onRequestEnd();
         // 关闭连接
-        $this->close();
+        $this->disconnect();
     }
 
     // 析构事件
@@ -24,7 +24,7 @@ class Redis extends BaseRedis
     {
         parent::onDestruct();
         // 关闭连接
-        $this->close();
+        $this->disconnect();
     }
 
 }

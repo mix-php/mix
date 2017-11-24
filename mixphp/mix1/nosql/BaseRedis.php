@@ -36,7 +36,7 @@ class BaseRedis extends Component
     }
 
     // 关闭连接
-    public function close()
+    public function disconnect()
     {
         $this->_redis = null;
     }
@@ -55,11 +55,7 @@ class BaseRedis extends Component
         // 自动连接
         $this->autoConnect();
         // 执行命令
-        $value = call_user_func_array([$this->_redis, $name], $arguments);
-        if ($value === false) {
-            throw new \RedisException('Redis执行命令出错');
-        }
-        return $value;
+        return call_user_func_array([$this->_redis, $name], $arguments);
     }
 
 }

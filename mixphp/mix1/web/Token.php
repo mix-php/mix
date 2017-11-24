@@ -34,10 +34,14 @@ class Token extends Component
     public $name = 'access_token';
     // 处理者
     protected $_handler;
-    // Token在处理者内的key
-    protected $_handlerKey;
+    // TokenKey
+    protected $_tokenKey;
     // TokenID
     protected $_tokenId;
+    // Token前缀
+    protected $_tokenPrefix;
+    // 唯一索引前缀
+    protected $_uniqueIndexPrefix;
 
     // 初始化事件
     public function onInitialize()
@@ -45,6 +49,9 @@ class Token extends Component
         parent::onInitialize();
         // 创建 Handler
         $this->createHandler();
+        // 前缀处理
+        $this->_tokenPrefix       = $this->handlerConfig['prefix'] . 'DATA:';
+        $this->_uniqueIndexPrefix = $this->handlerConfig['prefix'] . 'UNIQUEINDEX:';
     }
 
     // 请求开始事件
@@ -60,7 +67,7 @@ class Token extends Component
     {
         parent::onRequestEnd();
         // 关闭连接
-        $this->_handler->close();
+        $this->_handler->disconnect();
     }
 
     // 创建 Handler
@@ -94,7 +101,7 @@ class Token extends Component
         if (is_null($this->_tokenId)) {
             $this->_tokenId = self::createTokenId();
         }
-        $this->_handlerKey = $this->handlerConfig['prefix'] . $this->_tokenId;
+        $this->_tokenKey = $this->_tokenPrefix . $this->_tokenId;
     }
 
     // 创建TokenID
@@ -102,7 +109,7 @@ class Token extends Component
     {
         $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
         $name  = '';
-        for ($i = 0; $i < 26; $i++) {
+        for ($i = 0; $i < 32; $i++) {
             $name .= $chars{mt_rand(0, 61)};
         }
         return $name;
@@ -112,13 +119,13 @@ class Token extends Component
     public function get($name = null)
     {
         if (is_null($name)) {
-            $array = $this->_handler->hGetAll($this->_handlerKey);
+            $array = $this->_handler->hGetAll($this->_tokenKey);
             foreach ($array as $key => $item) {
                 $array[$key] = unserialize($item);
             }
             return $array ?: [];
         }
-        $reslut = $this->_handler->hmGet($this->_handlerKey, [$name]);
+        $reslut = $this->_handler->hmGet($this->_tokenKey, [$name]);
         $value  = array_shift($reslut);
         return $value === false ? null : unserialize($value);
     }
@@ -126,29 +133,29 @@ class Token extends Component
     // 赋值
     public function set($name, $value)
     {
-        $success = $this->_handler->hMset($this->_handlerKey, [$name => serialize($value)]);
-        $this->_handler->setTimeout($this->_handlerKey, $this->expires);
+        $success = $this->_handler->hMset($this->_tokenKey, [$name => serialize($value)]);
+        $this->_handler->setTimeout($this->_tokenKey, $this->expires);
         return $success ? true : false;
     }
 
     // 判断是否存在
     public function has($name)
     {
-        $exist = $this->_handler->hExists($this->_handlerKey, $name);
+        $exist = $this->_handler->hExists($this->_tokenKey, $name);
         return $exist ? true : false;
     }
 
     // 删除
     public function delete($name)
     {
-        $success = $this->_handler->hDel($this->_handlerKey, $name);
+        $success = $this->_handler->hDel($this->_tokenKey, $name);
         return $success ? true : false;
     }
 
     // 清除session
     public function clear()
     {
-        $success = $this->_handler->del($this->_handlerKey);
+        $success = $this->_handler->del($this->_tokenKey);
         return $success ? true : false;
     }
 
@@ -156,6 +163,20 @@ class Token extends Component
     public function getTokenID()
     {
         return $this->_tokenId;
+    }
+
+    // 设置唯一索引
+    public function setUniqueIndex($uniqueId)
+    {
+        $uniqueKey = $this->_uniqueIndexPrefix . $uniqueId;
+        // 删除旧token数据
+        $beforeTokenId = $this->_handler->get($uniqueKey);
+        if (!empty($beforeTokenId)) {
+            $beforeTokenkey = $this->_tokenPrefix . $beforeTokenId;
+            $this->_handler->del($beforeTokenkey);
+        }
+        // 更新唯一索引
+        $this->_handler->setex($uniqueKey, $this->expires, $this->_tokenId);
     }
 
 }

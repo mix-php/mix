@@ -31,9 +31,9 @@ class BasePdoPersistent extends BasePdo
     }
 
     // 重新连接
-    protected function reConnect()
+    protected function reconnect()
     {
-        $this->close();
+        $this->disconnect();
         $this->connect();
     }
 
@@ -42,14 +42,14 @@ class BasePdoPersistent extends BasePdo
     {
         // 主动重新连接
         if (isset($this->_connectTime) && ($this->_connectTime + $this->persistentTime < time())) {
-            $this->reConnect();
+            $this->reconnect();
         }
         try {
             // 执行前准备
             parent::prepare();
         } catch (\Exception $e) {
             // 长连接超时处理
-            $this->reConnect();
+            $this->reconnect();
             throw $e;
         }
     }

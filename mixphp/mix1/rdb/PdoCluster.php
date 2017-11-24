@@ -14,7 +14,7 @@ class PdoCluster extends BasePdoCluster
     {
         parent::onRequestEnd();
         // 关闭连接
-        $this->close();
+        $this->disconnect();
     }
 
     // 析构事件
@@ -22,7 +22,7 @@ class PdoCluster extends BasePdoCluster
     {
         parent::onDestruct();
         // 关闭连接
-        $this->close();
+        $this->disconnect();
     }
 
 }

@@ -22,7 +22,7 @@ class PdoPersistent extends BasePdoPersistent
     {
         parent::onDestruct();
         // 关闭连接
-        $this->close();
+        $this->disconnect();
     }
 
 }

@@ -24,7 +24,7 @@ class RedisPersistent extends BaseRedisPersistent
     {
         parent::onDestruct();
         // 关闭连接
-        $this->close();
+        $this->disconnect();
     }
 
 }

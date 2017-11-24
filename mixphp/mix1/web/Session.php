@@ -34,8 +34,8 @@ class Session extends Component
     public $name = 'MIXSSID';
     // 处理者
     protected $_handler;
-    // Session在处理者内的key
-    protected $_handlerKey;
+    // SessionKey
+    protected $_sessionKey;
     // SessionID
     protected $_sessionId;
 
@@ -60,7 +60,7 @@ class Session extends Component
     {
         parent::onRequestEnd();
         // 关闭连接
-        $this->_handler->close();
+        $this->_handler->disconnect();
     }
 
     // 创建 Handler
@@ -93,7 +93,7 @@ class Session extends Component
             $this->_sessionId = self::createSessionId();
         }
         \Mix::app()->response->setCookie($this->name, $this->_sessionId, time() + $this->expires);
-        $this->_handlerKey = $this->handlerConfig['prefix'] . $this->_sessionId;
+        $this->_sessionKey = $this->handlerConfig['prefix'] . $this->_sessionId;
     }
 
     // 创建session_id
@@ -111,13 +111,13 @@ class Session extends Component
     public function get($name = null)
     {
         if (is_null($name)) {
-            $array = $this->_handler->hGetAll($this->_handlerKey);
+            $array = $this->_handler->hGetAll($this->_sessionKey);
             foreach ($array as $key => $item) {
                 $array[$key] = unserialize($item);
             }
             return $array ?: [];
         }
-        $reslut = $this->_handler->hmGet($this->_handlerKey, [$name]);
+        $reslut = $this->_handler->hmGet($this->_sessionKey, [$name]);
         $value  = array_shift($reslut);
         return $value === false ? null : unserialize($value);
     }
@@ -125,29 +125,29 @@ class Session extends Component
     // 赋值
     public function set($name, $value)
     {
-        $success = $this->_handler->hMset($this->_handlerKey, [$name => serialize($value)]);
-        $this->_handler->setTimeout($this->_handlerKey, $this->expires);
+        $success = $this->_handler->hMset($this->_sessionKey, [$name => serialize($value)]);
+        $this->_handler->setTimeout($this->_sessionKey, $this->expires);
         return $success ? true : false;
     }
 
     // 判断是否存在
     public function has($name)
     {
-        $exist = $this->_handler->hExists($this->_handlerKey, $name);
+        $exist = $this->_handler->hExists($this->_sessionKey, $name);
         return $exist ? true : false;
     }
 
     // 删除
     public function delete($name)
     {
-        $success = $this->_handler->hDel($this->_handlerKey, $name);
+        $success = $this->_handler->hDel($this->_sessionKey, $name);
         return $success ? true : false;
     }
 
     // 清除session
     public function clear()
     {
-        $success = $this->_handler->del($this->_handlerKey);
+        $success = $this->_handler->del($this->_sessionKey);
         return $success ? true : false;
     }
 

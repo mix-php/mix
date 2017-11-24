@@ -54,7 +54,7 @@ class BasePdo extends Component
     }
 
     // 关闭连接
-    public function close()
+    public function disconnect()
     {
         $this->_pdoStatement = null;
         $this->_pdo          = null;
