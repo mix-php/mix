@@ -19,8 +19,6 @@ class BasePdo extends Component
     public $password = '';
     // 设置PDO属性
     public $attribute = [];
-    // 回滚含有零影响行数的事务
-    public $rollbackZeroAffectedTransaction = false;
     // PDO
     protected $_pdo;
     // PDOStatement
@@ -201,15 +199,11 @@ class BasePdo extends Component
         return $this->_pdoStatement->fetchColumn();
     }
 
-    // 执行SQL语句，并返InsertId或回受影响的行数
+    // 执行SQL语句
     public function execute()
     {
         $this->prepare();
-        $success = $this->_pdoStatement->execute();
-        if ($this->_pdo->inTransaction() && $this->rollbackZeroAffectedTransaction && $this->getRowCount() == 0) {
-            throw new \PDOException('事务中包含受影响行数为零的查询');
-        }
-        return $success;
+        return $this->_pdoStatement->execute();
     }
 
     // 返回最后插入行的ID或序列值

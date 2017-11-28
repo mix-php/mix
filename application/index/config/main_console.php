@@ -79,8 +79,6 @@ return [
                 // 强制列名为指定的大小写
                 \PDO::ATTR_CASE               => \PDO::CASE_NATURAL,
             ],
-            // 回滚含有零影响行数的事务
-            'rollbackZeroAffectedTransaction' => false,
         ],
 
         // redis
