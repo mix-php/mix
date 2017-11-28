@@ -53,7 +53,7 @@ return [
             // 日志记录级别
             'level'       => ['error', 'info', 'debug'],
             // 日志目录
-            'logDir'      => 'log',
+            'logDir'      => 'logs',
             // 日志轮转类型
             'logRotate'   => mix\base\Log::ROTATE_DAY,
             // 最大文件尺寸
@@ -77,7 +77,7 @@ return [
                 // 工作进程数
                 'worker_num'  => 8,
                 // 日志文件路径
-                'log_file'    => __DIR__ . '/../runtime/log/mixhttpd.log',
+                'log_file'    => __DIR__ . '/../runtime/logs/mixhttpd.log',
                 // 子进程运行用户
                 'user'        => 'www',
             ],
