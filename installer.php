@@ -5,8 +5,7 @@
  * @author 刘健 <coder.liu@qq.com>
  */
 
-
-$url     = 'https://github.com/mixstart/mixphp/archive/Beta7.zip';
+$url     = 'https://github.com/mixstart/mixphp/archive/Beta8.zip';
 $zipfile = 'mixphp-' . basename($url);
 
 // 下载
