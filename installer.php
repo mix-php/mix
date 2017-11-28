@@ -22,7 +22,7 @@ if (!extension_loaded('zip')) {
 }
 echo 'Unzip ... ';
 $zip = new ZipArchive;
-$zip->open('mixphp.zip');
+$zip->open($zipfile);
 $dirname = $zip->getNameIndex(0);
 $zip->extractTo(__DIR__ . '/');
 $zip->close();
@@ -30,9 +30,9 @@ echo 'ok' . PHP_EOL;
 
 // 清扫
 echo 'Clean temp files ... ';
-unlink('mixphp.zip');
+unlink($zipfile);
+unlink(__FILE__);
 echo 'ok' . PHP_EOL;
 
 // 成功
 echo 'Successfully installed in "' . __DIR__ . DIRECTORY_SEPARATOR . substr($dirname, 0, strlen($dirname) - 1) . '"' . PHP_EOL;
-unlink(__FILE__);
