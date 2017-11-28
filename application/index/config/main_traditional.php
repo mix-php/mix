@@ -161,10 +161,6 @@ return [
             'attribute'                       => [
                 // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
                 \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-                // 转换 NULL 和空字符串（在所有驱动中都可用，不仅限于Oracle）
-                \PDO::ATTR_ORACLE_NULLS       => \PDO::NULL_NATURAL,
-                // 强制列名为指定的大小写
-                \PDO::ATTR_CASE               => \PDO::CASE_NATURAL,
             ],
         ],
 
