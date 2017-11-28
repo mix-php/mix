@@ -115,6 +115,28 @@ class Token extends Component
         return $name;
     }
 
+    // 设置唯一索引
+    public function setUniqueIndex($uniqueId)
+    {
+        $uniqueKey = $this->_uniqueIndexPrefix . $uniqueId;
+        // 删除旧token数据
+        $beforeTokenId = $this->_handler->get($uniqueKey);
+        if (!empty($beforeTokenId)) {
+            $beforeTokenkey = $this->_tokenPrefix . $beforeTokenId;
+            $this->_handler->del($beforeTokenkey);
+        }
+        // 更新唯一索引
+        $this->_handler->setex($uniqueKey, $this->expires, $this->_tokenId);
+    }
+
+    // 赋值
+    public function set($name, $value)
+    {
+        $success = $this->_handler->hMset($this->_tokenKey, [$name => serialize($value)]);
+        $this->_handler->setTimeout($this->_tokenKey, $this->expires);
+        return $success ? true : false;
+    }
+
     // 取值
     public function get($name = null)
     {
@@ -128,14 +150,6 @@ class Token extends Component
         $reslut = $this->_handler->hmGet($this->_tokenKey, [$name]);
         $value  = array_shift($reslut);
         return $value === false ? null : unserialize($value);
-    }
-
-    // 赋值
-    public function set($name, $value)
-    {
-        $success = $this->_handler->hMset($this->_tokenKey, [$name => serialize($value)]);
-        $this->_handler->setTimeout($this->_tokenKey, $this->expires);
-        return $success ? true : false;
     }
 
     // 判断是否存在
@@ -159,24 +173,10 @@ class Token extends Component
         return $success ? true : false;
     }
 
-    // 获取TokenID
-    public function getTokenID()
+    // 获取TokenId
+    public function getTokenId()
     {
         return $this->_tokenId;
-    }
-
-    // 设置唯一索引
-    public function setUniqueIndex($uniqueId)
-    {
-        $uniqueKey = $this->_uniqueIndexPrefix . $uniqueId;
-        // 删除旧token数据
-        $beforeTokenId = $this->_handler->get($uniqueKey);
-        if (!empty($beforeTokenId)) {
-            $beforeTokenkey = $this->_tokenPrefix . $beforeTokenId;
-            $this->_handler->del($beforeTokenkey);
-        }
-        // 更新唯一索引
-        $this->_handler->setex($uniqueKey, $this->expires, $this->_tokenId);
     }
 
 }

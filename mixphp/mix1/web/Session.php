@@ -107,6 +107,14 @@ class Session extends Component
         return $name;
     }
 
+    // 赋值
+    public function set($name, $value)
+    {
+        $success = $this->_handler->hMset($this->_sessionKey, [$name => serialize($value)]);
+        $this->_handler->setTimeout($this->_sessionKey, $this->expires);
+        return $success ? true : false;
+    }
+
     // 取值
     public function get($name = null)
     {
@@ -120,14 +128,6 @@ class Session extends Component
         $reslut = $this->_handler->hmGet($this->_sessionKey, [$name]);
         $value  = array_shift($reslut);
         return $value === false ? null : unserialize($value);
-    }
-
-    // 赋值
-    public function set($name, $value)
-    {
-        $success = $this->_handler->hMset($this->_sessionKey, [$name => serialize($value)]);
-        $this->_handler->setTimeout($this->_sessionKey, $this->expires);
-        return $success ? true : false;
     }
 
     // 判断是否存在
