@@ -37,8 +37,8 @@ class Error extends Component
     // Exception Handler
     public function appException($e)
     {
-        // debug处理
-        if ($e instanceof \mix\exception\DebugException) {
+        // debug处理 & exit处理
+        if ($e instanceof \mix\exception\DebugException || $e instanceof \mix\exception\ExitException) {
             \Mix::app()->response->setContent($e->getMessage());
             \Mix::app()->response->send();
             return;
