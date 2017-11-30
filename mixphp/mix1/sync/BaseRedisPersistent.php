@@ -1,6 +1,6 @@
 <?php
 
-namespace mix\nosql;
+namespace mix\sync;
 
 /**
  * BaseRedisPersistent组件

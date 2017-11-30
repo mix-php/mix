@@ -1,6 +1,6 @@
 <?php
 
-namespace mix\rdb;
+namespace mix\sync;
 
 /**
  * Pdo组件

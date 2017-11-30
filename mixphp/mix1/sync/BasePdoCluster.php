@@ -1,8 +1,6 @@
 <?php
 
-namespace mix\rdb;
-
-use mix\base\Component;
+namespace mix\sync;
 
 /**
  * BasePdoCluster组件
