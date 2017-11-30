@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Site模型类
+ * Index 表单模型类
  * @author 刘健 <coder.liu@qq.com>
  */
 
@@ -9,7 +9,7 @@ namespace index\model;
 
 use mix\base\Model;
 
-class SiteModel extends Model
+class IndexFrom extends Model
 {
 
     // 规则
@@ -52,7 +52,6 @@ class SiteModel extends Model
     public function attributeMessages()
     {
         return [
-            //'uid' => '只能为无符号整数.',
             //'a' => '只能为数字.',
             //'b' => '只能为小数.',
             //'c' => '只能为字母.',
@@ -65,8 +64,7 @@ class SiteModel extends Model
     public function attributeLabels()
     {
         return [
-            //'uid' => '用户UID',
-            //'uuid' => '用户UUID',
+            //'a' => '参数A',
             //'b' => '参数B',
             //'c' => '参数C',
             //'d' => '参数D',
