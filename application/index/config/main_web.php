@@ -81,6 +81,33 @@ return [
             'maxFileSize' => 2048 * 1024,
         ],
 
+        // Token
+        'token'    => [
+            // 类路径
+            'class'         => 'mix\web\Token',
+            // 处理者
+            'saveHandler'   => mix\web\Token::HANDLER_REDIS,
+            // 处理者配置信息
+            'handlerConfig' => [
+                // 类路径
+                'class'    => 'mix\sync\Redis',
+                // 主机
+                'host'     => '127.0.0.1',
+                // 端口
+                'port'     => 6379,
+                // 数据库
+                'database' => 0,
+                // 密码
+                'password' => '',
+                // Key前缀
+                'prefix'   => 'MIXTKID:',
+            ],
+            // 有效期
+            'expires'       => 604800,
+            // session名
+            'name'          => 'access_token',
+        ],
+
         // Session
         'session'  => [
             // 类路径
@@ -89,6 +116,8 @@ return [
             'saveHandler'   => mix\web\Session::HANDLER_REDIS,
             // 处理者配置信息
             'handlerConfig' => [
+                // 类路径
+                'class'    => 'mix\sync\Redis',
                 // 主机
                 'host'     => '127.0.0.1',
                 // 端口
@@ -101,7 +130,7 @@ return [
                 'prefix'   => 'MIXSSID:',
             ],
             // 生存时间
-            'expires' => 7200,
+            'expires'       => 7200,
             // session名
             'name'          => 'MIXSSID',
         ],
@@ -122,43 +151,18 @@ return [
             'httponly' => false,
         ],
 
-        // Token
-        'token'    => [
-            // 类路径
-            'class'         => 'mix\web\Token',
-            // 处理者
-            'saveHandler'   => mix\web\Token::HANDLER_REDIS,
-            // 处理者配置信息
-            'handlerConfig' => [
-                // 主机
-                'host'     => '127.0.0.1',
-                // 端口
-                'port'     => 6379,
-                // 数据库
-                'database' => 0,
-                // 密码
-                'password' => '',
-                // Key前缀
-                'prefix'   => 'MIXTKID:',
-            ],
-            // 有效期
-            'expires'       => 604800,
-            // session名
-            'name'          => 'access_token',
-        ],
-
         // 数据库
         'rdb'      => [
             // 类路径
-            'class'                           => 'mix\rdb\Pdo',
+            'class'     => 'mix\sync\Pdo',
             // 数据源格式
-            'dsn'                             => 'mysql:host=127.0.0.1;port=3306;charset=utf8;dbname=test',
+            'dsn'       => 'mysql:host=127.0.0.1;port=3306;charset=utf8;dbname=test',
             // 数据库用户名
-            'username'                        => 'root',
+            'username'  => 'root',
             // 数据库密码
-            'password'                        => '',
+            'password'  => '',
             // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
-            'attribute'                       => [
+            'attribute' => [
                 // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
                 \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
             ],
@@ -167,7 +171,7 @@ return [
         // redis
         'redis'    => [
             // 类路径
-            'class'    => 'mix\nosql\Redis',
+            'class'    => 'mix\sync\Redis',
             // 主机
             'host'     => '127.0.0.1',
             // 端口

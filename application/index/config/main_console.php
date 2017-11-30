@@ -63,7 +63,7 @@ return [
         // 数据库
         'rdb'      => [
             // 类路径
-            'class'                           => 'mix\rdb\Pdo',
+            'class'                           => 'mix\sync\Pdo',
             // 数据源格式
             'dsn'                             => 'mysql:host=127.0.0.1;port=3306;charset=utf8;dbname=test',
             // 数据库用户名
@@ -80,7 +80,7 @@ return [
         // redis
         'redis'    => [
             // 类路径
-            'class'    => 'mix\nosql\Redis',
+            'class'    => 'mix\sync\Redis',
             // 主机
             'host'     => '127.0.0.1',
             // 端口

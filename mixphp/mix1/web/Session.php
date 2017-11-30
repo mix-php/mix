@@ -76,7 +76,8 @@ class Session extends Component
     // 创建 Redis Handler
     protected function createRedisHandler()
     {
-        $redis          = new \mix\nosql\Redis([
+        $class          = $this->handlerConfig['class'];
+        $redis          = new $class([
             'host'     => $this->handlerConfig['host'],
             'port'     => $this->handlerConfig['port'],
             'database' => $this->handlerConfig['database'],
