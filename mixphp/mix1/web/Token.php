@@ -11,29 +11,12 @@ use mix\base\Component;
 class Token extends Component
 {
 
-    // 处理者值
-    const HANDLER_REDIS = 'redis';
     // 处理者
-    public $saveHandler = self::HANDLER_REDIS;
-    // 处理者配置信息
-    public $handlerConfig = [
-        // 主机
-        'host'     => '127.0.0.1',
-        // 端口
-        'port'     => 6379,
-        // 数据库
-        'database' => 0,
-        // 密码
-        'password' => '',
-        // Key前缀
-        'prefix'   => 'MIXTKID:',
-    ];
+    public $handler;
     // 有效期
     public $expires = 7200;
     // session名
     public $name = 'access_token';
-    // 处理者
-    protected $_handler;
     // TokenKey
     protected $_tokenKey;
     // TokenID
@@ -47,11 +30,9 @@ class Token extends Component
     public function onInitialize()
     {
         parent::onInitialize();
-        // 创建 Handler
-        $this->createHandler();
         // 前缀处理
-        $this->_tokenPrefix       = $this->handlerConfig['prefix'] . 'DATA:';
-        $this->_uniqueIndexPrefix = $this->handlerConfig['prefix'] . 'UNIQUEINDEX:';
+        $this->_tokenPrefix       = $this->handler->prefix . 'DATA:';
+        $this->_uniqueIndexPrefix = $this->handler->prefix . 'UNIQUEINDEX:';
     }
 
     // 请求开始事件
@@ -67,30 +48,7 @@ class Token extends Component
     {
         parent::onRequestEnd();
         // 关闭连接
-        $this->_handler->disconnect();
-    }
-
-    // 创建 Handler
-    protected function createHandler()
-    {
-        switch ($this->saveHandler) {
-            case self::HANDLER_REDIS:
-                $this->createRedisHandler();
-                break;
-        }
-    }
-
-    // 创建 Redis Handler
-    protected function createRedisHandler()
-    {
-        $class          = $this->handlerConfig['class'];
-        $redis          = new $class([
-            'host'     => $this->handlerConfig['host'],
-            'port'     => $this->handlerConfig['port'],
-            'database' => $this->handlerConfig['database'],
-            'password' => $this->handlerConfig['password'],
-        ]);
-        $this->_handler = $redis;
+        $this->handler->disconnect();
     }
 
     // 载入TokenID
@@ -121,20 +79,20 @@ class Token extends Component
     {
         $uniqueKey = $this->_uniqueIndexPrefix . $uniqueId;
         // 删除旧token数据
-        $beforeTokenId = $this->_handler->get($uniqueKey);
+        $beforeTokenId = $this->handler->get($uniqueKey);
         if (!empty($beforeTokenId)) {
             $beforeTokenkey = $this->_tokenPrefix . $beforeTokenId;
-            $this->_handler->del($beforeTokenkey);
+            $this->handler->del($beforeTokenkey);
         }
         // 更新唯一索引
-        $this->_handler->setex($uniqueKey, $this->expires, $this->_tokenId);
+        $this->handler->setex($uniqueKey, $this->expires, $this->_tokenId);
     }
 
     // 赋值
     public function set($name, $value)
     {
-        $success = $this->_handler->hMset($this->_tokenKey, [$name => serialize($value)]);
-        $this->_handler->setTimeout($this->_tokenKey, $this->expires);
+        $success = $this->handler->hMset($this->_tokenKey, [$name => serialize($value)]);
+        $this->handler->setTimeout($this->_tokenKey, $this->expires);
         return $success ? true : false;
     }
 
@@ -142,13 +100,13 @@ class Token extends Component
     public function get($name = null)
     {
         if (is_null($name)) {
-            $array = $this->_handler->hGetAll($this->_tokenKey);
+            $array = $this->handler->hGetAll($this->_tokenKey);
             foreach ($array as $key => $item) {
                 $array[$key] = unserialize($item);
             }
             return $array ?: [];
         }
-        $reslut = $this->_handler->hmGet($this->_tokenKey, [$name]);
+        $reslut = $this->handler->hmGet($this->_tokenKey, [$name]);
         $value  = array_shift($reslut);
         return $value === false ? null : unserialize($value);
     }
@@ -156,21 +114,21 @@ class Token extends Component
     // 判断是否存在
     public function has($name)
     {
-        $exist = $this->_handler->hExists($this->_tokenKey, $name);
+        $exist = $this->handler->hExists($this->_tokenKey, $name);
         return $exist ? true : false;
     }
 
     // 删除
     public function delete($name)
     {
-        $success = $this->_handler->hDel($this->_tokenKey, $name);
+        $success = $this->handler->hDel($this->_tokenKey, $name);
         return $success ? true : false;
     }
 
     // 清除session
     public function clear()
     {
-        $success = $this->_handler->del($this->_tokenKey);
+        $success = $this->handler->del($this->_tokenKey);
         return $success ? true : false;
     }
 

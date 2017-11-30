@@ -18,7 +18,7 @@ class Application extends \mix\base\Application
     public function run()
     {
         if (PHP_SAPI != 'cli') {
-            throw new \mix\exception\CommandException('请在 CLI 模式下运行');
+            throw new \RuntimeException('请在 CLI 模式下运行');
         }
         \Mix::app()->error->register();
         $method               = 'CLI';

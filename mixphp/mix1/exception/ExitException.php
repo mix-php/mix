@@ -3,10 +3,10 @@
 namespace mix\exception;
 
 /**
- * CommandException类
+ * ExitException类
  * @author 刘健 <coder.liu@qq.com>
  */
-class CommandException extends \RuntimeException
+class ExitException extends \RuntimeException
 {
 
 }

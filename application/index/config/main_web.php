@@ -86,9 +86,7 @@ return [
             // 类路径
             'class'         => 'mix\web\Token',
             // 处理者
-            'saveHandler'   => mix\web\Token::HANDLER_REDIS,
-            // 处理者配置信息
-            'handlerConfig' => [
+            'handler' => [
                 // 类路径
                 'class'    => 'mix\sync\Redis',
                 // 主机
@@ -113,9 +111,7 @@ return [
             // 类路径
             'class'         => 'mix\web\Session',
             // 处理者
-            'saveHandler'   => mix\web\Session::HANDLER_REDIS,
-            // 处理者配置信息
-            'handlerConfig' => [
+            'handler' => [
                 // 类路径
                 'class'    => 'mix\sync\Redis',
                 // 主机

@@ -63,6 +63,12 @@ class Mix
         }
     }
 
+    // 结束执行
+    public static function finish($message = '')
+    {
+        throw new \mix\exception\ExitException($message);
+    }
+
     // 打印变量的相关信息
     public static function varDump($var, $exit = false)
     {
