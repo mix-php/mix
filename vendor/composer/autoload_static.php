@@ -16,6 +16,15 @@ class ComposerStaticInit7b86a9c973b6deb108af8f47275b0dd2
         array (
             'index\\' => 6,
         ),
+        'd' => 
+        array (
+            'daemon\\' => 7,
+        ),
+        'c' => 
+        array (
+            'crontab\\' => 8,
+            'common\\' => 7,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -30,6 +39,18 @@ class ComposerStaticInit7b86a9c973b6deb108af8f47275b0dd2
         'index\\' => 
         array (
             0 => __DIR__ . '/../..' . '/application/index',
+        ),
+        'daemon\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/task/daemon',
+        ),
+        'crontab\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/task/crontab',
+        ),
+        'common\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/application/common',
         ),
     );
 

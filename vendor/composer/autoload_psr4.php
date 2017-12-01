@@ -9,4 +9,7 @@ return array(
     'mixhttpd\\' => array($baseDir . '/server/mixhttpd'),
     'mix\\' => array($baseDir . '/mixphp/mix1'),
     'index\\' => array($baseDir . '/application/index'),
+    'daemon\\' => array($baseDir . '/task/daemon'),
+    'crontab\\' => array($baseDir . '/task/crontab'),
+    'common\\' => array($baseDir . '/application/common'),
 );
