@@ -3,10 +3,8 @@
     "psr-4": {
       "mix\\": "mixphp/mix1/",
       "mixhttpd\\": "server/mixhttpd/",
-      "common\\": "application/common/",
-      "index\\": "application/index/",
-      "crontab\\": "task/crontab/",
-      "daemon\\": "task/daemon/"
+      "app\\": "application/",
+      "task\\": "task/"
     }
   }
 }

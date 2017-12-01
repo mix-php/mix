@@ -6,10 +6,8 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'task\\' => array($baseDir . '/task'),
     'mixhttpd\\' => array($baseDir . '/server/mixhttpd'),
     'mix\\' => array($baseDir . '/mixphp/mix1'),
-    'index\\' => array($baseDir . '/application/index'),
-    'daemon\\' => array($baseDir . '/task/daemon'),
-    'crontab\\' => array($baseDir . '/task/crontab'),
-    'common\\' => array($baseDir . '/application/common'),
+    'app\\' => array($baseDir . '/application'),
 );

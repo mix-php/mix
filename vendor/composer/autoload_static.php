@@ -7,27 +7,26 @@ namespace Composer\Autoload;
 class ComposerStaticInit7b86a9c973b6deb108af8f47275b0dd2
 {
     public static $prefixLengthsPsr4 = array (
+        't' => 
+        array (
+            'task\\' => 5,
+        ),
         'm' => 
         array (
             'mixhttpd\\' => 9,
             'mix\\' => 4,
         ),
-        'i' => 
+        'a' => 
         array (
-            'index\\' => 6,
-        ),
-        'd' => 
-        array (
-            'daemon\\' => 7,
-        ),
-        'c' => 
-        array (
-            'crontab\\' => 8,
-            'common\\' => 7,
+            'app\\' => 4,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'task\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/task',
+        ),
         'mixhttpd\\' => 
         array (
             0 => __DIR__ . '/../..' . '/server/mixhttpd',
@@ -36,21 +35,9 @@ class ComposerStaticInit7b86a9c973b6deb108af8f47275b0dd2
         array (
             0 => __DIR__ . '/../..' . '/mixphp/mix1',
         ),
-        'index\\' => 
+        'app\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/application/index',
-        ),
-        'daemon\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/task/daemon',
-        ),
-        'crontab\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/task/crontab',
-        ),
-        'common\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/application/common',
+            0 => __DIR__ . '/../..' . '/application',
         ),
     );
 
