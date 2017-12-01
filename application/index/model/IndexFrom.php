@@ -5,7 +5,7 @@
  * @author 刘健 <coder.liu@qq.com>
  */
 
-namespace index\model;
+namespace app\index\model;
 
 use mix\base\Model;
 
