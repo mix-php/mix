@@ -11,9 +11,12 @@ class ComposerStaticInit7b86a9c973b6deb108af8f47275b0dd2
         array (
             'task\\' => 5,
         ),
+        's' => 
+        array (
+            'server\\' => 7,
+        ),
         'm' => 
         array (
-            'mixhttpd\\' => 9,
             'mix\\' => 4,
         ),
         'a' => 
@@ -27,9 +30,9 @@ class ComposerStaticInit7b86a9c973b6deb108af8f47275b0dd2
         array (
             0 => __DIR__ . '/../..' . '/task',
         ),
-        'mixhttpd\\' => 
+        'server\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/server/mixhttpd',
+            0 => __DIR__ . '/../..' . '/server',
         ),
         'mix\\' => 
         array (

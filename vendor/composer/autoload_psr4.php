@@ -7,7 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'task\\' => array($baseDir . '/task'),
-    'mixhttpd\\' => array($baseDir . '/server/mixhttpd'),
+    'server\\' => array($baseDir . '/server'),
     'mix\\' => array($baseDir . '/mixphp/mix1'),
     'app\\' => array($baseDir . '/application'),
 );
