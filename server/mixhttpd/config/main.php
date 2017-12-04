@@ -7,7 +7,7 @@ return [
     'basePath'            => dirname(__DIR__) . DIRECTORY_SEPARATOR,
 
     // 控制器命名空间
-    'controllerNamespace' => 'mixhttpd\command',
+    'controllerNamespace' => 'server\mixhttpd\command',
 
     // 组件配置
     'components'            => [
