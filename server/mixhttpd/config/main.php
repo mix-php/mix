@@ -64,7 +64,7 @@ return [
         'server'   => [
 
             // 类路径
-            'class'        => 'mixhttpd\server\HttpServer',
+            'class'        => 'server\mixhttpd\library\HttpServer',
             // 主机
             'host'         => '127.0.0.1',
             // 端口

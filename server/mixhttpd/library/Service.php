@@ -1,12 +1,11 @@
 <?php
 
+namespace server\mixhttpd\library;
+
 /**
  * 服务类
  * @author 刘健 <coder.liu@qq.com>
  */
-
-namespace mixhttpd\library;
-
 class Service
 {
 

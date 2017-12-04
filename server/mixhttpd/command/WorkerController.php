@@ -5,10 +5,10 @@
  * @author 刘健 <coder.liu@qq.com>
  */
 
-namespace mixhttpd\command;
+namespace server\mixhttpd\command;
 
 use mix\console\Controller;
-use mixhttpd\library\Service;
+use server\mixhttpd\library\Service;
 
 class WorkerController extends Controller
 {

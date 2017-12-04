@@ -1,6 +1,6 @@
 <?php
 
-namespace mixhttpd\server;
+namespace server\mixhttpd\library;
 
 use mix\base\Component;
 use mix\swoole\Application;
