@@ -1,6 +1,7 @@
 <?php
 
 // Apache/PHP-FPM 传统环境下运行的Web应用配置
+$database = require __DIR__ . '/../../common/config/database.php';
 return [
 
     // 基础路径
@@ -84,51 +85,41 @@ return [
         // Token
         'token'    => [
             // 类路径
-            'class'         => 'mix\web\Token',
+            'class'   => 'mix\web\Token',
             // 处理者
-            'handler' => [
-                // 类路径
-                'class'    => 'mix\sync\Redis',
-                // 主机
-                'host'     => '127.0.0.1',
-                // 端口
-                'port'     => 6379,
-                // 数据库
-                'database' => 0,
-                // 密码
-                'password' => '',
-                // Key前缀
-                'prefix'   => 'MIXTKID:',
-            ],
+            'handler' => array_merge(
+                $database['redis'],
+                [
+                    // 类路径
+                    'class'  => 'mix\sync\Redis',
+                    // Key前缀
+                    'prefix' => 'MIXTKID:',
+                ]
+            ),
             // 有效期
-            'expires'       => 604800,
+            'expires' => 604800,
             // session名
-            'name'          => 'access_token',
+            'name'    => 'access_token',
         ],
 
         // Session
         'session'  => [
             // 类路径
-            'class'         => 'mix\web\Session',
+            'class'   => 'mix\web\Session',
             // 处理者
-            'handler' => [
-                // 类路径
-                'class'    => 'mix\sync\Redis',
-                // 主机
-                'host'     => '127.0.0.1',
-                // 端口
-                'port'     => 6379,
-                // 数据库
-                'database' => 0,
-                // 密码
-                'password' => '',
-                // Key前缀
-                'prefix'   => 'MIXSSID:',
-            ],
+            'handler' => array_merge(
+                $database['redis'],
+                [
+                    // 类路径
+                    'class'  => 'mix\sync\Redis',
+                    // Key前缀
+                    'prefix' => 'MIXSSID:',
+                ]
+            ),
             // 生存时间
-            'expires'       => 7200,
+            'expires' => 7200,
             // session名
-            'name'          => 'MIXSSID',
+            'name'    => 'MIXSSID',
         ],
 
         // Cookie
@@ -148,43 +139,28 @@ return [
         ],
 
         // 数据库
-        'rdb'      => [
-            // 类路径
-            'class'     => 'mix\sync\Pdo',
-            // 数据源格式
-            'dsn'       => 'mysql:host=127.0.0.1;port=3306;charset=utf8;dbname=test',
-            // 数据库用户名
-            'username'  => 'root',
-            // 数据库密码
-            'password'  => '',
-            // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
-            'attribute' => [
-                // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
-                \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-            ],
-        ],
+        'rdb'      => array_merge(
+            $database['mysql'],
+            [
+                // 类路径
+                'class'     => 'mix\sync\Pdo',
+                // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
+                'attribute' => [
+                    // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
+                    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+                ],
+            ]
+        ),
 
         // redis
-        'redis'    => [
-            // 类路径
-            'class'    => 'mix\sync\Redis',
-            // 主机
-            'host'     => '127.0.0.1',
-            // 端口
-            'port'     => 6379,
-            // 数据库
-            'database' => 0,
-            // 密码
-            'password' => '',
-        ],
+        'redis'    => array_merge(
+            $database['redis'],
+            [
+                // 类路径
+                'class' => 'mix\sync\Redis',
+            ]
+        ),
 
-        // 配置
-        'config'   => [
-            // 类路径
-            'class'    => 'mix\base\Config',
-            // 自动加载
-            'autoload' => ['common', 'local'],
-        ],
 
     ],
 
