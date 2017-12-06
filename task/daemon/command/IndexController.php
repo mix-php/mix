@@ -2,45 +2,26 @@
 
 namespace task\daemon\command;
 
-use mix\console\QueueController;
+use mix\console\Controller;
 
 /**
  * 默认控制器
+ * 这是一个单进程守护进程的范例
  * @author 刘健 <coder.liu@qq.com>
  */
-class IndexController extends QueueController
+class IndexController extends Controller
 {
 
-    // 消费者数量
-    public $consumerNumber = 3;
-    // 服务名称
-    public $serverName = 'task';
-
-    public function actionStart()
+    public function actionIndex()
     {
+        // 脱离终端
         $this->daemon();
-        $this->start();
-    }
-
-    public function onProducerStart(\mix\swoole\QueueProcess $worker)
-    {
-        // 连接Redis等
+        // 连接redis/mysql等，使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
+        // ...
+        // 循环执行任务
         while (true) {
-            $worker->checkMaster();
-            $worker->push(['hahaha', 1, true]);
-            sleep(10);
-        }
-    }
-
-    public function onConsumerStart(\mix\swoole\QueueProcess $worker, $index)
-    {
-        // 连接数据库
-        while (true) {
-            $worker->checkMaster();
-            $msg = $worker->pop();
-            if (!empty($msg)) {
-                var_dump($msg);
-            }
+            // 执行业务代码
+            // ...
         }
     }
 

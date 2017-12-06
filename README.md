@@ -67,10 +67,10 @@ MixPHP开发指南：http://doc.mixphp.cn
 
 ## 快速开始
 
-一键安装
+一键下载
 
 ```
-$> php -r "copy('https://raw.githubusercontent.com/mixstart/mixphp/master/installer.php', 'installer.php');include 'installer.php';"
+$> php -r "copy('https://raw.githubusercontent.com/mixstart/mixphp/master/download.php', 'download.php');include 'download.php';"
 ```
 
 输出如下：
@@ -79,14 +79,21 @@ $> php -r "copy('https://raw.githubusercontent.com/mixstart/mixphp/master/instal
 download mixphp zip ... ok
 unzip ... ok
 clean temp files ... ok
-Successfully installed in "/data/mixphp-master"
+Successful download to "/data/mixphp-master"
+```
+
+入口文件安装至 `/usr/loca/bin`
+
+```
+$> cd /data/mixphp-master
+$> chmod 777 install.sh
+$> ./install.sh
 ```
 
 接下来启动mixhttpd服务器
 
 ```
-$> cd /data/mixphp-master/server/mixhttpd/
-$> php mixhttpd service/start -d
+$> mix-httpd service/start -d
 ```
 
 如果一切顺利，运行到最后你将看到如下的输出：
@@ -99,7 +106,7 @@ _/ / / / / / / /\ \/ / /_/ / / / / /_/ /
 /_/ /_/ /_/_/ /_/\_\/ .___/_/ /_/ .___/
                    /_/         /_/
 
-[2017-11-20 14:41:32] Server    Name: mixhttpd
+[2017-11-20 14:41:32] Server    Name: mix-httpd
 [2017-11-20 14:41:32] PHP    Version: 5.4.45
 [2017-11-20 14:41:32] Swoole Version: 1.9.21
 [2017-11-20 14:41:32] Listen    Addr: 127.0.0.1

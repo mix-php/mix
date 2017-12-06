@@ -125,12 +125,12 @@ class Route extends Component
      * @param  string $name
      * @return string
      */
-    public static function camelToSnake($name)
+    public static function camelToSnake($name, $separator = '_')
     {
-        $name = preg_replace_callback('/([A-Z]{1})/', function ($matches) {
-            return '_' . strtolower($matches[0]);
+        $name = preg_replace_callback('/([A-Z]{1})/', function ($matches) use ($separator) {
+            return $separator . strtolower($matches[0]);
         }, $name);
-        if (substr($name, 0, 1) == '_') {
+        if (substr($name, 0, 1) == $separator) {
             return substr($name, 1);
         }
         return $name;

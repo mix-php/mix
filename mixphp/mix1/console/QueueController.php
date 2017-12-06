@@ -3,6 +3,7 @@
 namespace mix\console;
 
 use mix\swoole\QueueServer;
+use \mix\swoole\QueueProcess;
 
 /**
  * QueueController类
@@ -14,11 +15,15 @@ class QueueController extends Controller
     // 消费者数量
     public $consumerNumber = 3;
     // 服务名称
-    public $serverName = 'task';
+    public $serverName;
 
-    // 启动
+    // 启动服务
     public function start()
     {
+        if (!isset($this->serverName)) {
+            $class            = str_replace('Controller', '', get_class($this));
+            $this->serverName = \mix\base\Route::camelToSnake(\mix\base\Route::basename($class), '-');
+        }
         $queueServer = new QueueServer([
             'consumerNumber' => $this->consumerNumber,
             'serverName'     => $this->serverName,
@@ -29,12 +34,12 @@ class QueueController extends Controller
     }
 
     // 生产者启动事件
-    public function onProducerStart(\mix\swoole\QueueProcess $worker)
+    public function onProducerStart(QueueProcess $worker)
     {
     }
 
     // 消费者启动事件
-    public function onConsumerStart(\mix\swoole\QueueProcess $worker, $index)
+    public function onConsumerStart(QueueProcess $worker, $index)
     {
     }
 

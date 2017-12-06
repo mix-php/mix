@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 一键安装
+ * 一键下载
  * @author 刘健 <coder.liu@qq.com>
  */
 
@@ -9,7 +9,7 @@ $url     = 'https://github.com/mixstart/mixphp/archive/Beta8.zip';
 $zipfile = 'mixphp-' . basename($url);
 
 // 下载
-echo "Download {$url} ... ";
+echo "download {$url} ... ";
 copy($url, $zipfile);
 echo 'ok' . PHP_EOL;
 
@@ -19,7 +19,7 @@ if (!extension_loaded('zip')) {
     echo 'Zip file in "' . __DIR__ . DIRECTORY_SEPARATOR . $zipfile . '"' . PHP_EOL;
     exit;
 }
-echo 'Unzip ... ';
+echo 'unzip ... ';
 $zip = new ZipArchive;
 $zip->open($zipfile);
 $dirname = $zip->getNameIndex(0);
@@ -28,10 +28,10 @@ $zip->close();
 echo 'ok' . PHP_EOL;
 
 // 清扫
-echo 'Clean temp files ... ';
+echo 'clean temp files ... ';
 unlink($zipfile);
 unlink(__FILE__);
 echo 'ok' . PHP_EOL;
 
 // 成功
-echo 'Successfully installed in "' . __DIR__ . DIRECTORY_SEPARATOR . substr($dirname, 0, strlen($dirname) - 1) . '"' . PHP_EOL;
+echo 'Successful download to "' . __DIR__ . DIRECTORY_SEPARATOR . substr($dirname, 0, strlen($dirname) - 1) . '"' . PHP_EOL;

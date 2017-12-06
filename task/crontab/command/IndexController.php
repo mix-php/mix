@@ -13,7 +13,12 @@ class IndexController extends Controller
 
     public function actionIndex()
     {
-        return 'Hello World' . PHP_EOL;
+        // 脱离终端
+        $this->daemon();
+        // 执行业务代码
+        // ...
+        // 响应
+        return 'SUCCESS' . PHP_EOL;
     }
 
 }

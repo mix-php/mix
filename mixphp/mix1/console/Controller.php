@@ -12,11 +12,11 @@ class Controller extends Object
 {
 
     // 使当前进程蜕变为一个守护进程
-    public function daemon()
+    public function daemon($closeInputOutput = false)
     {
-        \swoole_process::daemon(true, true);
+        \swoole_process::daemon(true, !$closeInputOutput);
         $pid = getmypid();
-        return "PID: {$pid}";
+        echo "PID: {$pid}" . PHP_EOL;
     }
 
 }
