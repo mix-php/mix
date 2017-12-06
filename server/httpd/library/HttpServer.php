@@ -1,6 +1,6 @@
 <?php
 
-namespace server\mixhttpd\library;
+namespace server\httpd\library;
 
 use mix\base\Component;
 use mix\swoole\Application;
@@ -46,7 +46,7 @@ class HttpServer extends Component
     {
         $this->server->on('Start', function ($server) {
             // 进程命名
-            swoole_set_process_name("mixhttpd master {$this->host}:{$this->port}");
+            swoole_set_process_name("mix-httpd: master {$this->host}:{$this->port}");
         });
     }
 
@@ -55,7 +55,7 @@ class HttpServer extends Component
     {
         $this->server->on('ManagerStart', function ($server) {
             // 进程命名
-            swoole_set_process_name("mixhttpd manager");
+            swoole_set_process_name("mix-httpd: manager");
         });
     }
 
@@ -65,9 +65,9 @@ class HttpServer extends Component
         $this->server->on('WorkerStart', function ($server, $workerId) {
             // 进程命名
             if ($workerId < $server->setting['worker_num']) {
-                swoole_set_process_name("mixhttpd worker #{$workerId}");
+                swoole_set_process_name("mix-httpd: worker #{$workerId}");
             } else {
-                swoole_set_process_name("mixhttpd task #{$workerId}");
+                swoole_set_process_name("mix-httpd: task #{$workerId}");
             }
             // 实例化Apps
             $apps = [];
@@ -113,7 +113,7 @@ _/ / / / / / / /\ \/ / /_/ / / / / /_/ /
 
 
 EOL;
-        $this->send('Server    Name: mixhttpd');
+        $this->send('Server    Name: mix-httpd');
         $this->send("PHP    Version: {$phpVersion}");
         $this->send("Swoole Version: {$swooleVersion}");
         $this->send("Listen    Addr: {$this->host}");

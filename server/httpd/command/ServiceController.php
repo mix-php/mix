@@ -5,10 +5,10 @@
  * @author 刘健 <coder.liu@qq.com>
  */
 
-namespace server\mixhttpd\command;
+namespace server\httpd\command;
 
 use mix\console\Controller;
-use server\mixhttpd\library\Service;
+use server\httpd\library\Service;
 
 class ServiceController extends Controller
 {

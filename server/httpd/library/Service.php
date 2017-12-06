@@ -1,6 +1,6 @@
 <?php
 
-namespace server\mixhttpd\library;
+namespace server\httpd\library;
 
 /**
  * 服务类

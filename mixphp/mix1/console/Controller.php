@@ -11,4 +11,12 @@ use mix\base\Object;
 class Controller extends Object
 {
 
+    // 使当前进程蜕变为一个守护进程
+    public function daemon()
+    {
+        \swoole_process::daemon(true, true);
+        $pid = getmypid();
+        return "PID: {$pid}";
+    }
+
 }
