@@ -1,12 +1,14 @@
 <?php
 
-namespace mix\sync;
+namespace mix\client;
 
 /**
- * PdoPersistent组件
+ * redis长连接组件
  * @author 刘健 <coder.liu@qq.com>
+ *
+ * @method set($key, $value)
  */
-class PdoPersistent extends BasePdoPersistent
+class RedisPersistent extends BaseRedisPersistent
 {
 
     // 初始化事件

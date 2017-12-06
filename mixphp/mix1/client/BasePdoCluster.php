@@ -1,6 +1,6 @@
 <?php
 
-namespace mix\sync;
+namespace mix\client;
 
 /**
  * BasePdoCluster组件

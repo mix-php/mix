@@ -1,14 +1,12 @@
 <?php
 
-namespace mix\sync;
+namespace mix\client;
 
 /**
- * redis组件
+ * Pdo组件
  * @author 刘健 <coder.liu@qq.com>
- *
- * @method set($key, $value)
  */
-class Redis extends BaseRedis
+class Pdo extends BasePdo
 {
 
     // 请求结束事件
