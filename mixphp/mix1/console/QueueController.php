@@ -12,8 +12,8 @@ use \mix\swoole\QueueProcess;
 class QueueController extends Controller
 {
 
-    // 消费者数量
-    public $consumerNumber = 3;
+    // 消费者进程数
+    public $consumerProcess = 3;
     // 服务名称
     public $serverName;
 
@@ -25,7 +25,7 @@ class QueueController extends Controller
             $this->serverName = \mix\base\Route::camelToSnake(\mix\base\Route::basename($class), '-');
         }
         $queueServer = new QueueServer([
-            'consumerNumber' => $this->consumerNumber,
+            'consumerProcess' => $this->consumerProcess,
             'serverName'     => $this->serverName,
         ]);
         $queueServer->on('ProducerStart', [$this, 'onProducerStart']);

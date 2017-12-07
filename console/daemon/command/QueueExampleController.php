@@ -13,8 +13,8 @@ use \mix\swoole\QueueProcess;
 class QueueExampleController extends QueueController
 {
 
-    // 消费者数量
-    public $consumerNumber = 3;
+    // 消费者进程数
+    public $consumerProcess = 3;
 
     // 启动服务
     public function actionIndex()

@@ -11,8 +11,8 @@ use \mix\base\Object;
 class QueueServer extends Object
 {
 
-    // 消费者数量
-    public $consumerNumber = 3;
+    // 消费者进程数
+    public $consumerProcess = 3;
     // 服务名称
     public $serverName = 'task';
     // 主进程pid
@@ -65,7 +65,7 @@ class QueueServer extends Object
     // 创建全部消费者
     protected function createConsumers()
     {
-        for ($i = 1; $i < $this->consumerNumber; $i++) {
+        for ($i = 1; $i < $this->consumerProcess; $i++) {
             $this->createConsumer($i);
         }
     }
