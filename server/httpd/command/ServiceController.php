@@ -1,15 +1,14 @@
 <?php
 
-/**
- * 控制器
- * @author 刘健 <coder.liu@qq.com>
- */
-
-namespace server\httpd\command;
+namespace httpd\command;
 
 use mix\console\Controller;
-use server\httpd\library\Service;
+use httpd\library\Service;
 
+/**
+ * 服务控制器
+ * @author 刘健 <coder.liu@qq.com>
+ */
 class ServiceController extends Controller
 {
 

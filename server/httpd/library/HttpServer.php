@@ -1,6 +1,6 @@
 <?php
 
-namespace server\httpd\library;
+namespace httpd\library;
 
 use mix\base\Component;
 use mix\swoole\Application;
@@ -38,7 +38,7 @@ class HttpServer extends Component
             is_dir($dir) or mkdir($dir);
         }
         // 设置保留配置项
-        $this->setting['pid_file']  = __DIR__ . '/../runtime/server.pid';
+        $this->setting['pid_file'] = __DIR__ . '/../runtime/server.pid';
     }
 
     // 主进程启动事件

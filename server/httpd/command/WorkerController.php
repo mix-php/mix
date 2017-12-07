@@ -1,15 +1,14 @@
 <?php
 
-/**
- * 控制器
- * @author 刘健 <coder.liu@qq.com>
- */
-
-namespace server\mixhttpd\command;
+namespace httpd\command;
 
 use mix\console\Controller;
-use server\mixhttpd\library\Service;
+use httpd\library\Service;
 
+/**
+ * 工作控制器
+ * @author 刘健 <coder.liu@qq.com>
+ */
 class WorkerController extends Controller
 {
 

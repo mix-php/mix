@@ -7,7 +7,7 @@ return [
     'basePath'            => dirname(__DIR__) . DIRECTORY_SEPARATOR,
 
     // 控制器命名空间
-    'controllerNamespace' => 'server\httpd\command',
+    'controllerNamespace' => 'httpd\command',
 
     // 组件配置
     'components'            => [
@@ -64,7 +64,7 @@ return [
         'server'   => [
 
             // 类路径
-            'class'        => 'server\httpd\library\HttpServer',
+            'class'        => 'httpd\library\HttpServer',
             // 主机
             'host'         => '127.0.0.1',
             // 端口

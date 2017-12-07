@@ -1,6 +1,6 @@
 <?php
 
-namespace server\httpd\library;
+namespace httpd\library;
 
 /**
  * 服务类

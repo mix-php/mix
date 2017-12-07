@@ -7,40 +7,40 @@ namespace Composer\Autoload;
 class ComposerStaticInit7b86a9c973b6deb108af8f47275b0dd2
 {
     public static $prefixLengthsPsr4 = array (
-        't' => 
+        'w' => 
         array (
-            'task\\' => 5,
-        ),
-        's' => 
-        array (
-            'server\\' => 7,
+            'web\\' => 4,
         ),
         'm' => 
         array (
             'mix\\' => 4,
         ),
-        'a' => 
+        'h' => 
         array (
-            'app\\' => 4,
+            'httpd\\' => 6,
+        ),
+        'c' => 
+        array (
+            'console\\' => 8,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'task\\' => 
+        'web\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/task',
-        ),
-        'server\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/server',
+            0 => __DIR__ . '/../..' . '/web',
         ),
         'mix\\' => 
         array (
             0 => __DIR__ . '/../..' . '/mixphp/mix1',
         ),
-        'app\\' => 
+        'httpd\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/application',
+            0 => __DIR__ . '/../..' . '/server/httpd',
+        ),
+        'console\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/console',
         ),
     );
 

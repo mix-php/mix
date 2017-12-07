@@ -8,7 +8,7 @@ return [
     'basePath'            => dirname(__DIR__) . DIRECTORY_SEPARATOR,
 
     // 控制器命名空间
-    'controllerNamespace' => 'task\daemon\command',
+    'controllerNamespace' => 'console\daemon\command',
 
     // 组件配置
     'components'          => [

@@ -1,6 +1,6 @@
 <?php
 
-namespace task\daemon\command;
+namespace console\daemon\command;
 
 use mix\console\QueueController;
 use \mix\swoole\QueueProcess;

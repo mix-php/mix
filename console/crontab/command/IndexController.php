@@ -1,6 +1,6 @@
 <?php
 
-namespace task\crontab\command;
+namespace console\crontab\command;
 
 use mix\console\Controller;
 
