@@ -36,7 +36,7 @@ class ComposerStaticInit7b86a9c973b6deb108af8f47275b0dd2
         ),
         'httpd\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/server/httpd',
+            0 => __DIR__ . '/../..' . '/store/httpd',
         ),
         'console\\' => 
         array (
