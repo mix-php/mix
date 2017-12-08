@@ -18,6 +18,9 @@ class Route extends Component
     // 路由规则
     public $rules = [];
 
+    // URL后缀
+    public $suffix = '';
+
     // 路由数据
     protected $data = [];
 
@@ -74,23 +77,25 @@ class Route extends Component
 
     /**
      * 匹配功能
-     * @param  string $name
+     * @param  string $action
      * @return false or string
      */
-    public function match($name)
+    public function match($action)
     {
         // 清空旧数据
         $urlParams = [];
+        // 去除URL后缀
+        $action = str_replace($this->suffix, '', $action);
         // 匹配
         foreach ($this->data as $rule => $value) {
-            list($action, $names) = $value;
-            if (preg_match($rule, $name, $matches)) {
+            list($ruleAction, $ruleParams) = $value;
+            if (preg_match($rule, $action, $matches)) {
                 // 保存参数
-                foreach ($names as $k => $v) {
+                foreach ($ruleParams as $k => $v) {
                     $urlParams[$v] = $matches[$k + 1];
                 }
                 // 替换参数
-                $fragment = explode('/', $action);
+                $fragment = explode('/', $ruleAction);
                 foreach ($fragment as $k => $v) {
                     $prefix = substr($v, 0, 1);
                     $fname  = substr($v, 1);

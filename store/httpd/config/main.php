@@ -10,7 +10,7 @@ return [
     'controllerNamespace' => 'httpd\command',
 
     // 组件配置
-    'components'            => [
+    'components'          => [
 
         // 路由
         'route'    => [
@@ -24,8 +24,9 @@ return [
             ],
             // 路由规则
             'rules'          => [
-
             ],
+            // URL后缀
+            'suffix'         => '.html',
         ],
 
         // 请求
@@ -66,7 +67,7 @@ return [
     'objects'             => [
 
         // HttpServer
-        'server'   => [
+        'server' => [
 
             // 类路径
             'class'        => 'mix\server\HttpServer',
