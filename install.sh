@@ -7,7 +7,7 @@ crontab_bin="/usr/local/bin/mix-crontab"
 daemon_bin="/usr/local/bin/mix-daemon"
 websocketd_bin="/usr/local/bin/mix-websocketd"
 
-httpd_path="${dirname}/server/httpd/mix-httpd"
+httpd_path="${dirname}/store/httpd/mix-httpd"
 crontab_path="${dirname}/console/crontab/mix-crontab"
 daemon_path="${dirname}/console/daemon/mix-daemon"
 websocketd_path="${dirname}/console/websocketd/mix-websocketd"

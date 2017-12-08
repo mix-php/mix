@@ -14,7 +14,7 @@ class QueueController extends Controller
 {
 
     // 启动服务
-    public function actionIndex()
+    public function actionStart()
     {
         // 脱离终端
         $this->daemon();
@@ -35,10 +35,9 @@ class QueueController extends Controller
         while (true) {
             $worker->checkMaster();
             // 从队列取出一条消息
-            // ...
+            $msg = \Mix::app()->redis->brpop('queue_key');
             // 将消息推送给消费者进程处理
-            $worker->push(['id' => 1008, 'url' => 'http://www.baidu.com']);
-            sleep(10);
+            $worker->push($msg);
         }
     }
 

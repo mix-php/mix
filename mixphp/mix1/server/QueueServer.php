@@ -54,7 +54,7 @@ class QueueServer extends Component
     protected function createLeftProcesses()
     {
         for ($i = 0; $i < $this->leftProcess; $i++) {
-            $this->createProcess($i, $this->onLeftStart);
+            $this->createProcess($i, $this->onLeftStart, 'left');
         }
     }
 
@@ -62,22 +62,22 @@ class QueueServer extends Component
     protected function createRightProcesses()
     {
         for ($i = 0; $i < $this->rightProcess; $i++) {
-            $this->createProcess($i, $this->onRightStart);
+            $this->createProcess($i, $this->onRightStart, 'right');
         }
     }
 
     // 创建进程
-    protected function createProcess($index, $callback)
+    protected function createProcess($index, $callback, $processType)
     {
-        $process = new QueueProcess(function ($worker) use ($index, $callback) {
-            \swoole_set_process_name(sprintf("mix-queued: {$this->name} consumer #%s", $index));
+        $process = new QueueProcess(function ($worker) use ($index, $callback, $processType) {
+            \swoole_set_process_name(sprintf("mix-queued: {$this->name} {$processType} #%s", $index));
             list($object, $method) = $callback;
             $object->$method($worker, $index);
         }, false, false);
         $process->useQueue(ftok(__FILE__, 1), 2);
         $process->mpid       = $this->mpid;
         $pid                 = $process->start();
-        $this->workers[$pid] = [$index, $callback];
+        $this->workers[$pid] = [$index, $callback, $processType];
         return $pid;
     }
 
@@ -86,8 +86,8 @@ class QueueServer extends Component
     {
         $pid = $ret['pid'];
         if (isset($this->workers[$pid])) {
-            list($index, $callback) = $this->workers[$pid];
-            $this->createProcess($index, $callback);
+            list($index, $callback, $processType) = $this->workers[$pid];
+            $this->createProcess($index, $callback, $processType);
             return;
         }
         throw new \Exception('rebootProcess Error: no pid');
