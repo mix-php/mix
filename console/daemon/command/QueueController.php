@@ -35,9 +35,11 @@ class QueueController extends Controller
         while (true) {
             $worker->checkMaster();
             // 从队列取出一条消息
-            $msg = \Mix::app()->redis->brpop('queue_key');
+            //$msg = \Mix::app()->redis->brpop('queue_key');
+            $msg = 'hello';
             // 将消息推送给消费者进程处理
             $worker->push($msg);
+            usleep(1);
         }
     }
 
