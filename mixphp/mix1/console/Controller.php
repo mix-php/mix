@@ -19,4 +19,11 @@ class Controller extends Object
         echo "PID: {$pid}" . PHP_EOL;
     }
 
+    // 获取控制器名称
+    public function getControllerName()
+    {
+        $class = str_replace('Controller', '', get_class($this));
+        return \mix\base\Route::camelToSnake(\mix\base\Route::basename($class), '-');
+    }
+
 }

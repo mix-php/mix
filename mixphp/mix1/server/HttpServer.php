@@ -6,7 +6,7 @@ use mix\base\Component;
 use mix\swoole\Application;
 
 /**
- * HttpServer类
+ * Http服务器类
  * @author 刘健 <coder.liu@qq.com>
  */
 class HttpServer extends Component

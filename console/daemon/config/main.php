@@ -90,6 +90,16 @@ return [
     // 对象配置
     'objects'             => [
 
+        // QueueServer
+        'server' => [
+            // 类路径
+            'class'        => 'mix\server\QueueServer',
+            // 左进程数
+            'leftProcess'  => 1,
+            // 右进程数
+            'rightProcess' => 3,
+        ],
+
     ],
 
 ];
