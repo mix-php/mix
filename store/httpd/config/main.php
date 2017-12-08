@@ -60,11 +60,16 @@ return [
             'maxFileSize' => 2048 * 1024,
         ],
 
+    ],
+
+    // 对象配置
+    'objects'             => [
+
         // HttpServer
         'server'   => [
 
             // 类路径
-            'class'        => 'httpd\library\HttpServer',
+            'class'        => 'mix\server\HttpServer',
             // 主机
             'host'         => '127.0.0.1',
             // 端口
