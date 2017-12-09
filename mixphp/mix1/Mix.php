@@ -64,9 +64,9 @@ class Mix
     }
 
     // 结束执行
-    public static function finish($message = null)
+    public static function finish()
     {
-        throw new \mix\exception\ExitException($message);
+        throw new \mix\exception\ExitException('');
     }
 
     // 打印变量的相关信息

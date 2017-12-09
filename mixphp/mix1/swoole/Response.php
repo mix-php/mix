@@ -52,6 +52,8 @@ class Response extends Component
         parent::onRequestStart();
         $this->format     = $this->defaultFormat;
         $this->statusCode = 200;
+        $this->_content   = null;
+        $this->_headers   = [];
     }
 
     // 设置响应者
@@ -87,6 +89,9 @@ class Response extends Component
     // 输出
     public function send()
     {
+        if (!empty($this->_responder->end)) {
+            return;
+        }
         $content = $this->_content;
         if (is_array($content)) {
             switch ($this->format) {
@@ -116,6 +121,7 @@ class Response extends Component
         } else {
             $this->_responder->end('');
         }
+        $this->_responder->end = true;
     }
 
     // 设置HTTP状态码
