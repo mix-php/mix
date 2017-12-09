@@ -1,16 +1,33 @@
 <?php
 
-/**
- * Index 表单模型类
- * @author 刘健 <coder.liu@qq.com>
- */
-
 namespace web\index\model;
 
 use mix\base\Model;
 
+/**
+ * Index 表单模型类
+ * 这是一个表单模型的范例，一个表单模型对应一个控制器，表单模型内调用数据模型操作数据库
+ * 一个数据模型对应一个数据表，数据表是公用的，所以数据模型应该在公共模块
+ * @author 刘健 <coder.liu@qq.com>
+ */
 class IndexFrom extends Model
 {
+
+    public $a;
+    public $b;
+    public $c;
+    public $d;
+    public $e;
+    public $f;
+    public $g;
+    public $h;
+    public $i;
+    public $j;
+    public $k;
+    public $l;
+    public $m;
+    public $n;
+    public $r;
 
     // 规则
     public function rules()
@@ -70,6 +87,15 @@ class IndexFrom extends Model
             //'d' => '参数D',
             //'e' => '参数E',
         ];
+    }
+
+    // 操作数据库
+    public function save()
+    {
+        $tableModel = new \web\common\model\TableModel();
+        $tableModel->insert([
+            'a' => $this->a,
+        ]);
     }
 
 }
