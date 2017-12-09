@@ -86,41 +86,41 @@ return [
         // Token
         'token'    => [
             // 类路径
-            'class'   => 'mix\web\Token',
+            'class'         => 'mix\web\Token',
             // 处理者
-            'handler' => array_merge(
+            'handler'       => array_merge(
                 $database['redis'],
                 [
                     // 类路径
-                    'class'  => 'mix\client\Redis',
-                    // Key前缀
-                    'prefix' => 'MIXTKID:',
+                    'class' => 'mix\client\Redis',
                 ]
             ),
+            // 保存的Key前缀
+            'saveKeyPrefix' => 'MIXTKID:',
             // 有效期
-            'expires' => 604800,
-            // session名
-            'name'    => 'access_token',
+            'expires'       => 604800,
+            // token键名
+            'name'          => 'access_token',
         ],
 
         // Session
         'session'  => [
             // 类路径
-            'class'   => 'mix\web\Session',
+            'class'         => 'mix\web\Session',
             // 处理者
-            'handler' => array_merge(
+            'handler'       => array_merge(
                 $database['redis'],
                 [
                     // 类路径
-                    'class'  => 'mix\client\Redis',
-                    // Key前缀
-                    'prefix' => 'MIXSSID:',
+                    'class' => 'mix\client\Redis',
                 ]
             ),
+            // 保存的Key前缀
+            'saveKeyPrefix' => 'MIXSSID:',
             // 生存时间
-            'expires' => 7200,
+            'expires'       => 7200,
             // session名
-            'name'    => 'MIXSSID',
+            'name'          => 'MIXSSID',
         ],
 
         // Cookie

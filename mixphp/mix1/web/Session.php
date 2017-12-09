@@ -13,6 +13,8 @@ class Session extends Component
 
     // 处理者
     public $handler;
+    // 保存的Key前缀
+    public $saveKeyPrefix;
     // 有效期
     public $expires = 7200;
     // session名
@@ -46,7 +48,7 @@ class Session extends Component
             $this->_sessionId = self::createSessionId();
         }
         \Mix::app()->response->setCookie($this->name, $this->_sessionId, time() + $this->expires);
-        $this->_sessionKey = $this->handler->prefix . $this->_sessionId;
+        $this->_sessionKey = $this->saveKeyPrefix . $this->_sessionId;
     }
 
     // 创建session_id

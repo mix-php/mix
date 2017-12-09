@@ -13,6 +13,8 @@ class Token extends Component
 
     // 处理者
     public $handler;
+    // 保存的Key前缀
+    public $saveKeyPrefix;
     // 有效期
     public $expires = 7200;
     // session名
@@ -31,8 +33,8 @@ class Token extends Component
     {
         parent::onInitialize();
         // 前缀处理
-        $this->_tokenPrefix       = $this->handler->prefix . 'DATA:';
-        $this->_uniqueIndexPrefix = $this->handler->prefix . 'UNIQUEINDEX:';
+        $this->_tokenPrefix       = $this->saveKeyPrefix . 'DATA:';
+        $this->_uniqueIndexPrefix = $this->saveKeyPrefix . 'UNIQUEINDEX:';
     }
 
     // 请求开始事件
