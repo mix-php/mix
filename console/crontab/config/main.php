@@ -26,8 +26,6 @@ return [
             // 路由规则
             'rules'          => [
             ],
-            // URL后缀
-            'suffix'         => '.html',
         ],
 
         // 请求
