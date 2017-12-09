@@ -11,7 +11,6 @@ use mix\console\Controller;
 class IndexController extends Controller
 {
 
-    // 控制台应用
     public function actionIndex()
     {
         // 脱离终端
