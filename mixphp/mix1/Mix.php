@@ -64,7 +64,7 @@ class Mix
     }
 
     // 结束执行
-    public static function finish($message = '')
+    public static function finish($message = null)
     {
         throw new \mix\exception\ExitException($message);
     }
