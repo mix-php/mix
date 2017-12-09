@@ -84,6 +84,7 @@ class Response extends Component
     public function redirect($url)
     {
         $this->setHeader('Location', $url);
+        $this->statusCode = 302;
     }
 
     // 输出
