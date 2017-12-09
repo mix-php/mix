@@ -39,7 +39,10 @@ class Error extends Component
     {
         // debug处理 & exit处理
         if ($e instanceof \mix\exception\DebugException || $e instanceof \mix\exception\ExitException) {
-            \Mix::app()->response->setContent($e->getMessage());
+            $content = $e->getMessage();
+            if (!is_null($content)) {
+                \Mix::app()->response->setContent($content);
+            }
             \Mix::app()->response->send();
             return;
         }
