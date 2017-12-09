@@ -70,10 +70,13 @@ class Error extends Component
         // 清空系统错误
         ob_get_contents() and ob_clean();
         // 错误响应
-        echo "{$errors['message']}" . PHP_EOL;
-        echo "{$errors['type']} code {$errors['code']}" . PHP_EOL;
-        echo "{$errors['file']} line {$errors['line']}" . PHP_EOL;
-        echo $errors['trace'] . PHP_EOL;
+        $terminal = new Terminal();
+        $terminal->output($errors['message'] . PHP_EOL, Terminal::COLOR_RED . Terminal::STYLE_BOLD);
+        $terminal->output("{$errors['type']} code {$errors['code']}" . PHP_EOL);
+        $terminal->output($errors['file'], Terminal::STYLE_BOLD);
+        $terminal->output(' line ');
+        $terminal->output($errors['line'] . PHP_EOL, Terminal::STYLE_BOLD);
+        $terminal->output($errors['trace'] . PHP_EOL);
     }
 
 }
