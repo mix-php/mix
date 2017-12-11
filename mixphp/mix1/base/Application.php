@@ -50,6 +50,12 @@ class Application
         \Mix::setApp($this);
     }
 
+    // 创建对象
+    public function createObject($name)
+    {
+        return \Mix::createObject($this->objects[$name]);
+    }
+
     // 装载组件
     public function loadComponent($name)
     {

@@ -20,7 +20,7 @@ class QueueController extends Controller
         // 脱离终端
         $this->daemon();
         // 启动服务
-        $server       = \Mix::createObject(\Mix::app()->objects['server']);
+        $server       = \Mix::app()->createObject('server');
         $server->name = $this->getControllerName();
         $server->on('LeftStart', [$this, 'onLeftStart']);
         $server->on('RightStart', [$this, 'onRightStart']);
