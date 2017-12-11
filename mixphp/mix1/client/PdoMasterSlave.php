@@ -3,10 +3,10 @@
 namespace mix\client;
 
 /**
- * PdoCluster组件
+ * PdoMasterSlave组件
  * @author 刘健 <coder.liu@qq.com>
  */
-class PdoCluster extends BasePdoCluster
+class PdoMasterSlave extends BasePdoMasterSlave
 {
 
     // 请求结束事件

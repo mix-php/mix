@@ -3,10 +3,10 @@
 namespace mix\client;
 
 /**
- * BasePdoCluster组件
+ * BasePdoMasterSlave组件
  * @author 刘健 <coder.liu@qq.com>
  */
-class BasePdoCluster extends BasePdo
+class BasePdoMasterSlave extends BasePdo
 {
 
     // 主服务器组
