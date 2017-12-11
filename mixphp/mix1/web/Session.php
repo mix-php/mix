@@ -11,8 +11,8 @@ use mix\base\Component;
 class Session extends Component
 {
 
-    // 处理者
-    public $handler;
+    // 保存处理者
+    public $saveHandler;
     // 保存的Key前缀
     public $saveKeyPrefix;
     // 有效期
@@ -37,7 +37,7 @@ class Session extends Component
     {
         parent::onRequestEnd();
         // 关闭连接
-        $this->handler->disconnect();
+        $this->saveHandler->disconnect();
     }
 
     // 载入session_id
@@ -65,8 +65,8 @@ class Session extends Component
     // 赋值
     public function set($name, $value)
     {
-        $success = $this->handler->hMset($this->_sessionKey, [$name => serialize($value)]);
-        $this->handler->setTimeout($this->_sessionKey, $this->expires);
+        $success = $this->saveHandler->hMset($this->_sessionKey, [$name => serialize($value)]);
+        $this->saveHandler->setTimeout($this->_sessionKey, $this->expires);
         return $success ? true : false;
     }
 
@@ -74,13 +74,13 @@ class Session extends Component
     public function get($name = null)
     {
         if (is_null($name)) {
-            $array = $this->handler->hGetAll($this->_sessionKey);
+            $array = $this->saveHandler->hGetAll($this->_sessionKey);
             foreach ($array as $key => $item) {
                 $array[$key] = unserialize($item);
             }
             return $array ?: [];
         }
-        $reslut = $this->handler->hmGet($this->_sessionKey, [$name]);
+        $reslut = $this->saveHandler->hmGet($this->_sessionKey, [$name]);
         $value  = array_shift($reslut);
         return $value === false ? null : unserialize($value);
     }
@@ -88,21 +88,21 @@ class Session extends Component
     // 判断是否存在
     public function has($name)
     {
-        $exist = $this->handler->hExists($this->_sessionKey, $name);
+        $exist = $this->saveHandler->hExists($this->_sessionKey, $name);
         return $exist ? true : false;
     }
 
     // 删除
     public function delete($name)
     {
-        $success = $this->handler->hDel($this->_sessionKey, $name);
+        $success = $this->saveHandler->hDel($this->_sessionKey, $name);
         return $success ? true : false;
     }
 
     // 清除session
     public function clear()
     {
-        $success = $this->handler->del($this->_sessionKey);
+        $success = $this->saveHandler->del($this->_sessionKey);
         return $success ? true : false;
     }
 

@@ -11,8 +11,8 @@ use mix\base\Component;
 class Token extends Component
 {
 
-    // 处理者
-    public $handler;
+    // 保存处理者
+    public $saveHandler;
     // 保存的Key前缀
     public $saveKeyPrefix;
     // 有效期
@@ -50,7 +50,7 @@ class Token extends Component
     {
         parent::onRequestEnd();
         // 关闭连接
-        $this->handler->disconnect();
+        $this->saveHandler->disconnect();
     }
 
     // 载入TokenID
@@ -81,20 +81,20 @@ class Token extends Component
     {
         $uniqueKey = $this->_uniqueIndexPrefix . $uniqueId;
         // 删除旧token数据
-        $beforeTokenId = $this->handler->get($uniqueKey);
+        $beforeTokenId = $this->saveHandler->get($uniqueKey);
         if (!empty($beforeTokenId)) {
             $beforeTokenkey = $this->_tokenPrefix . $beforeTokenId;
-            $this->handler->del($beforeTokenkey);
+            $this->saveHandler->del($beforeTokenkey);
         }
         // 更新唯一索引
-        $this->handler->setex($uniqueKey, $this->expires, $this->_tokenId);
+        $this->saveHandler->setex($uniqueKey, $this->expires, $this->_tokenId);
     }
 
     // 赋值
     public function set($name, $value)
     {
-        $success = $this->handler->hMset($this->_tokenKey, [$name => serialize($value)]);
-        $this->handler->setTimeout($this->_tokenKey, $this->expires);
+        $success = $this->saveHandler->hMset($this->_tokenKey, [$name => serialize($value)]);
+        $this->saveHandler->setTimeout($this->_tokenKey, $this->expires);
         return $success ? true : false;
     }
 
@@ -102,13 +102,13 @@ class Token extends Component
     public function get($name = null)
     {
         if (is_null($name)) {
-            $array = $this->handler->hGetAll($this->_tokenKey);
+            $array = $this->saveHandler->hGetAll($this->_tokenKey);
             foreach ($array as $key => $item) {
                 $array[$key] = unserialize($item);
             }
             return $array ?: [];
         }
-        $reslut = $this->handler->hmGet($this->_tokenKey, [$name]);
+        $reslut = $this->saveHandler->hmGet($this->_tokenKey, [$name]);
         $value  = array_shift($reslut);
         return $value === false ? null : unserialize($value);
     }
@@ -116,21 +116,21 @@ class Token extends Component
     // 判断是否存在
     public function has($name)
     {
-        $exist = $this->handler->hExists($this->_tokenKey, $name);
+        $exist = $this->saveHandler->hExists($this->_tokenKey, $name);
         return $exist ? true : false;
     }
 
     // 删除
     public function delete($name)
     {
-        $success = $this->handler->hDel($this->_tokenKey, $name);
+        $success = $this->saveHandler->hDel($this->_tokenKey, $name);
         return $success ? true : false;
     }
 
     // 清除session
     public function clear()
     {
-        $success = $this->handler->del($this->_tokenKey);
+        $success = $this->saveHandler->del($this->_tokenKey);
         return $success ? true : false;
     }
 

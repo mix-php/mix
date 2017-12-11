@@ -87,8 +87,8 @@ return [
         'token'    => [
             // 类路径
             'class'         => 'mix\web\Token',
-            // 处理者
-            'handler'       => array_merge(
+            // 保存处理者
+            'saveHandler'   => array_merge(
                 $database['redis'],
                 [
                     // 类路径
@@ -107,8 +107,8 @@ return [
         'session'  => [
             // 类路径
             'class'         => 'mix\web\Session',
-            // 处理者
-            'handler'       => array_merge(
+            // 保存处理者
+            'saveHandler'   => array_merge(
                 $database['redis'],
                 [
                     // 类路径
