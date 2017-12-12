@@ -39,21 +39,13 @@ MixPHP 更像是传统 Web 框架的 [次世代](https://baike.baidu.com/item/%E
 ## 核心特征
 
 * 高性能：极简架构+Swoole引擎，超过 Phalcon 这类C扩展框架的性能；
-
 * 长连接：按进程保持的长连接，支持 Mysql/Redis；
-
 * 服务器：框架自带 MixHttpd 替代 Apache/PHP-FPM 作为高性能HTTP服务器；
-
 * 组件：基于组件的框架结构，可通用的 Web 编程框架；
-
 * 自动加载：完全使用 Composer，统一且高效；
-
 * 路由：底层全正则实现，性能高，配置简单；
-
 * 模型：模型集成了使用简单但功能强大的验证器，支持多场景控制；
-
 * 查询构造器：独创的 SQL 构造方法，可灵活优雅的构造复杂语句；
-
 * 视图：使用 PHP 做模板引擎，支持布局、属性；
 
 ## 文档
@@ -82,7 +74,7 @@ clean temp files ... ok
 Successful download to "/data/mixphp-master"
 ```
 
-入口文件安装至 `/usr/local/bin`
+入口文件安装至：`/usr/local/bin`。
 
 ```
 $> cd /data/mixphp-master
@@ -90,7 +82,7 @@ $> chmod 777 install.sh
 $> ./install.sh
 ```
 
-接下来启动mixhttpd服务器
+接下来启动 mix-httpd 服务器
 
 ```
 $> mix-httpd service/start -d
@@ -131,5 +123,5 @@ Hello World
 
 ## 授权
 
-开源项目的可持续发展离不开资金，MixPHP 希望通过出售授权来获得维持项目运行的资金。
+开源项目的可持续发展离不开资金，MixPHP 希望通过出售授权来获得维持项目运行的资金。      
 授权详情：http://mixphp.cn/wiki/licence 。
