@@ -14,7 +14,7 @@ class IndexController extends Controller
 
     public function actionIndex()
     {
-        // 脱离终端
+        // 蜕变为守护进程
         $this->daemon();
         // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
         $tableModel = new \web\common\model\TableModel();
