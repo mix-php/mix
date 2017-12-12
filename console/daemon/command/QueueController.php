@@ -18,7 +18,7 @@ class QueueController extends Controller
     public function actionStart()
     {
         // 蜕变为守护进程
-        $this->daemon();
+        self::daemon();
         // 启动服务
         $server       = \Mix::app()->createObject('server');
         $server->name = $this->getControllerName();
