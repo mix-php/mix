@@ -1,6 +1,6 @@
 <?php
 
-namespace web\common\model;
+namespace console\common\model;
 
 /**
  * Index 表单模型类

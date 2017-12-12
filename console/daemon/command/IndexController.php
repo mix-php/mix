@@ -12,12 +12,12 @@ use mix\console\Controller;
 class IndexController extends Controller
 {
 
-    public function actionIndex()
+    public function actionStart()
     {
         // 蜕变为守护进程
         self::daemon();
         // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
-        $tableModel = new \web\common\model\TableModel();
+        $tableModel = new \console\common\model\TableModel();
         // 循环执行任务
         while (true) {
             // 执行业务代码

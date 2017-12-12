@@ -31,7 +31,7 @@ class QueueController extends Controller
     public function onLeftStart(QueueProcess $worker)
     {
         // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
-        $queueModel = new \web\common\model\QueueModel();
+        $queueModel = new \console\common\model\QueueModel();
         // 循环执行任务
         while (true) {
             $worker->checkMaster();
@@ -46,7 +46,7 @@ class QueueController extends Controller
     public function onRightStart(QueueProcess $worker, $index)
     {
         // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
-        $tableModel = new \web\common\model\TableModel();
+        $tableModel = new \console\common\model\TableModel();
         // 循环执行任务
         while (true) {
             $worker->checkMaster();
