@@ -3,13 +3,13 @@
 namespace mix\server;
 
 use mix\base\Component;
-use mix\process\QueueProcess;
+use mix\process\TaskProcess;
 
 /**
- * 队列服务器类
+ * 任务服务器类
  * @author 刘健 <coder.liu@qq.com>
  */
-class QueueServer extends Component
+class TaskServer extends Component
 {
 
     // 左进程数
@@ -69,7 +69,7 @@ class QueueServer extends Component
     // 创建进程
     protected function createProcess($index, $callback, $processType)
     {
-        $process = new QueueProcess(function ($worker) use ($index, $callback, $processType) {
+        $process = new TaskProcess(function ($worker) use ($index, $callback, $processType) {
             \swoole_set_process_name(sprintf("mix-queued: {$this->name} {$processType} #%s", $index));
             list($object, $method) = $callback;
             $object->$method($worker, $index);

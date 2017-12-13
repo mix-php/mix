@@ -88,10 +88,10 @@ return [
     // 对象配置
     'objects'             => [
 
-        // QueueServer
+        // TaskServer
         'server' => [
             // 类路径
-            'class'        => 'mix\server\QueueServer',
+            'class'        => 'mix\server\TaskServer',
             // 左进程数
             'leftProcess'  => 1,
             // 右进程数

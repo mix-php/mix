@@ -3,7 +3,7 @@
 namespace console\daemon\command;
 
 use mix\console\Controller;
-use mix\process\QueueProcess;
+use mix\process\TaskProcess;
 
 /**
  * 队列服务控制器
@@ -28,7 +28,7 @@ class QueueController extends Controller
     }
 
     // 左进程启动事件回调函数
-    public function onLeftStart(QueueProcess $worker)
+    public function onLeftStart(TaskProcess $worker)
     {
         // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
         $queueModel = new \console\common\model\QueueModel();
@@ -43,7 +43,7 @@ class QueueController extends Controller
     }
 
     // 右进程启动事件回调函数
-    public function onRightStart(QueueProcess $worker, $index)
+    public function onRightStart(TaskProcess $worker, $index)
     {
         // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
         $tableModel = new \console\common\model\TableModel();

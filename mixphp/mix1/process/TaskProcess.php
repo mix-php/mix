@@ -3,10 +3,10 @@
 namespace mix\process;
 
 /**
- * 队列进程类
+ * 任务进程类
  * @author 刘健 <coder.liu@qq.com>
  */
-class QueueProcess extends \swoole_process
+class TaskProcess extends \swoole_process
 {
 
     // 主进程pid
