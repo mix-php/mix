@@ -30,7 +30,7 @@ class TaskServer extends Component
     // 启动
     public function start()
     {
-        \swoole_set_process_name(sprintf("mix-queued: {$this->name} %s", 'master'));
+        \swoole_set_process_name(sprintf("mix-taskd: {$this->name} %s", 'master'));
         $this->mpid = posix_getpid();
         $this->createLeftProcesses();
         $this->createRightProcesses();
@@ -69,8 +69,11 @@ class TaskServer extends Component
     // 创建进程
     protected function createProcess($index, $callback, $processType)
     {
+        if (!isset($callback)) {
+            throw new \Exception('Create Process Error: no callback.');
+        }
         $process = new TaskProcess(function ($worker) use ($index, $callback, $processType) {
-            \swoole_set_process_name(sprintf("mix-queued: {$this->name} {$processType} #%s", $index));
+            \swoole_set_process_name(sprintf("mix-taskd: {$this->name} {$processType} #%s", $index));
             list($object, $method) = $callback;
             $object->$method($worker, $index);
         }, false, false);
@@ -90,7 +93,7 @@ class TaskServer extends Component
             $this->createProcess($index, $callback, $processType);
             return;
         }
-        throw new \Exception('rebootProcess Error: no pid');
+        throw new \Exception('Reboot Process Error: no pid.');
     }
 
     // 回收结束运行的子进程
