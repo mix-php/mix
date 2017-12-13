@@ -5,11 +5,10 @@ namespace console\daemon\command;
 use mix\console\Controller;
 
 /**
- * 默认控制器
  * 这是一个单进程守护进程的范例
  * @author 刘健 <coder.liu@qq.com>
  */
-class IndexController extends Controller
+class SingleController extends Controller
 {
 
     public function actionStart()

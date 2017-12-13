@@ -6,12 +6,12 @@ use mix\console\Controller;
 use mix\process\TaskProcess;
 
 /**
- * 队列服务控制器
- * 这是一个多进程守护进程的范例，进程模型为：生产者消费者模型
+ * 这是一个多进程守护进程的范例
+ * 进程模型为：生产者消费者模型
  * 你可以自由选择是左进程当生产者还是右进程当生产者，本范例是左进程当生产者
  * @author 刘健 <coder.liu@qq.com>
  */
-class QueueController extends Controller
+class MultiController extends Controller
 {
 
     // 启动服务
