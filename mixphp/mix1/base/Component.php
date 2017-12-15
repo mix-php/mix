@@ -6,7 +6,7 @@ namespace mix\base;
  * 组件基类
  * @author 刘健 <coder.liu@qq.com>
  */
-class Component extends Object
+class Component extends BaseObject
 {
 
     // 状态值
