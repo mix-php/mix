@@ -82,6 +82,8 @@ return [
                 'reactor_num' => 8,
                 // 工作进程数
                 'worker_num'  => 8,
+                // 设置worker进程的最大任务数
+                'max_request' => 10000,
                 // 日志文件路径
                 'log_file'    => __DIR__ . '/../runtime/logs/mixhttpd.log',
                 // 子进程运行用户
