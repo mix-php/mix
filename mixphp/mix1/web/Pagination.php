@@ -2,13 +2,13 @@
 
 namespace mix\web;
 
-use mix\base\Object;
+use mix\base\BaseObject;
 
 /**
  * Pagination类
  * @author 刘健 <coder.liu@qq.com>
  */
-class Pagination extends Object
+class Pagination extends BaseObject
 {
 
     // 内容

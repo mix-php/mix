@@ -2,13 +2,13 @@
 
 namespace mix\web;
 
-use mix\base\Object;
+use mix\base\BaseObject;
 
 /**
  * Captcha类
  * @author 刘健 <coder.liu@qq.com>
  */
-class Captcha extends Object
+class Captcha extends BaseObject
 {
 
     // 宽度

@@ -6,7 +6,7 @@ namespace mix\base;
  * 对象基类
  * @author 刘健 <coder.liu@qq.com>
  */
-class Object
+class BaseObject
 {
 
     // 构造

@@ -2,13 +2,13 @@
 
 namespace mix\console;
 
-use mix\base\Object;
+use mix\base\BaseObject;
 
 /**
  * 终端类
  * @author 刘健 <coder.liu@qq.com>
  */
-class Terminal extends Object
+class Terminal extends BaseObject
 {
 
     const COLOR_DEFAULT = "\033[0m";

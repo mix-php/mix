@@ -2,13 +2,13 @@
 
 namespace mix\web;
 
-use mix\base\Object;
+use mix\base\BaseObject;
 
 /**
  * Xml类
  * @author 刘健 <coder.liu@qq.com>
  */
-class Xml extends Object
+class Xml extends BaseObject
 {
 
     // 输出

@@ -2,13 +2,13 @@
 
 namespace mix\console;
 
-use mix\base\Object;
+use mix\base\BaseObject;
 
 /**
  * Controller类
  * @author 刘健 <coder.liu@qq.com>
  */
-class Controller extends Object
+class Controller extends BaseObject
 {
 
     // 使当前进程蜕变为一个守护进程
