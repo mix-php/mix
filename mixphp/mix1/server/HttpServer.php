@@ -69,6 +69,8 @@ class HttpServer extends Component
             } else {
                 swoole_set_process_name("mix-httpd: task #{$workerId}");
             }
+            // 错误处理注册
+            \mix\web\Error::register();
             // 实例化Apps
             $apps = [];
             foreach ($this->virtualHosts as $host => $configFile) {
@@ -88,7 +90,6 @@ class HttpServer extends Component
             \Mix::setHost($request->header['host']);
             // 执行请求
             try {
-                \Mix::app()->error->register();
                 \Mix::app()->request->setRequester($request);
                 \Mix::app()->response->setResponder($response);
                 \Mix::app()->run();

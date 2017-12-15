@@ -12,22 +12,22 @@ class Error extends Component
 {
 
     // 注册异常处理
-    public function register()
+    public static function register()
     {
         error_reporting(E_ALL);
-        set_error_handler([$this, 'appError']);
-        set_exception_handler([$this, 'appException']);
-        register_shutdown_function([$this, 'appShutdown']);
+        set_error_handler(['mix\console\Error', 'appError']);
+        set_exception_handler(['mix\console\Error', 'appException']);
+        register_shutdown_function(['mix\console\Error', 'appShutdown']);
     }
 
     // Error Handler
-    public function appError($errno, $errstr, $errfile = '', $errline = 0, $errcontext = [])
+    public static function appError($errno, $errstr, $errfile = '', $errline = 0)
     {
         throw new \mix\exception\ErrorException($errno, $errstr, $errfile, $errline);
     }
 
     // Error Handler
-    public function appShutdown()
+    public static function appShutdown()
     {
         if ($error = error_get_last()) {
             self::appException(new \mix\exception\ErrorException($error['type'], $error['message'], $error['file'], $error['line']));
@@ -35,7 +35,7 @@ class Error extends Component
     }
 
     // Exception Handler
-    public function appException($e)
+    public static function appException($e)
     {
         // debug处理 & exit处理
         if ($e instanceof \mix\exception\DebugException || $e instanceof \mix\exception\ExitException) {

@@ -20,7 +20,7 @@ class Application extends \mix\base\Application
         if (PHP_SAPI != 'cli') {
             throw new \RuntimeException('请在 CLI 模式下运行');
         }
-        \Mix::app()->error->register();
+        \mix\console\Error::register();
         $method               = 'CLI';
         $action               = empty($GLOBALS['argv'][1]) ? '' : $GLOBALS['argv'][1];
         $controllerAttributes = \Mix::app()->request->param();

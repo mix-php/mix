@@ -17,7 +17,7 @@ class Application extends \mix\base\Application
     // 执行功能 (Apache/PHP-FPM)
     public function run()
     {
-        \Mix::app()->error->register();
+        \mix\web\Error::register();
         $server  = \Mix::app()->request->server();
         $method  = strtoupper($server['request_method']);
         $action  = empty($server['path_info']) ? '' : substr($server['path_info'], 1);
