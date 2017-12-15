@@ -91,7 +91,7 @@ class HttpServer extends Component
                 \Mix::app()->error->register();
                 \Mix::app()->request->setRequester($request);
                 \Mix::app()->response->setResponder($response);
-                \Mix::app()->run($request);
+                \Mix::app()->run();
             } catch (\Exception $e) {
                 \Mix::app()->error->appException($e);
             }

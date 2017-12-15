@@ -22,7 +22,7 @@ class QueueModel
     // 从队列中取出一条数据，堵塞模式
     public function pop()
     {
-        $value = $this->redis->brpop('KEY', 30);
+        $value = \Mix::app()->redis->brpop('KEY', 30);
         if (empty($value)) {
             return null;
         }
