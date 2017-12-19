@@ -14,11 +14,16 @@ use mix\process\TaskProcess;
 class MultiController extends Controller
 {
 
-    // 启动服务
+    // 是否后台运行
+    protected $d = false;
+
+    // 启动守护进程
     public function actionStart()
     {
         // 蜕变为守护进程
-        self::daemon();
+        if ($this->d) {
+            self::daemon();
+        }
         // 启动服务
         $server       = \Mix::app()->createObject('server');
         $server->name = $this->getControllerName();
@@ -45,18 +50,14 @@ class MultiController extends Controller
     // 右进程启动事件回调函数
     public function onRightStart(TaskProcess $worker, $index)
     {
-        // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
-        $tableModel = new \console\common\model\TableModel();
         // 循环执行任务
         while (true) {
             $worker->checkMaster();
             // 从队列中抢占一条消息
             $msg = $worker->pop();
             if (!empty($msg)) {
-                // 处理消息
+                // 处理消息，比如：发送短信、发送邮件、微信推送
                 // ...
-                // 处理结果入库
-                $tableModel->update($msg);
             }
         }
     }

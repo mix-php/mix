@@ -11,10 +11,16 @@ use mix\console\Controller;
 class IndexController extends Controller
 {
 
+    // 是否后台运行
+    protected $d = false;
+
+    // 执行任务
     public function actionIndex()
     {
         // 蜕变为守护进程
-        self::daemon();
+        if ($this->d) {
+            self::daemon();
+        }
         // 模型内使用短连接版本的数据库组件，计划任务都是一次性执行
         $tableModel = new \console\common\model\TableModel();
         // 执行业务代码
