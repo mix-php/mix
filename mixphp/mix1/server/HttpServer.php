@@ -2,14 +2,14 @@
 
 namespace mix\server;
 
-use mix\base\Component;
+use mix\base\BaseObject;
 use mix\swoole\Application;
 
 /**
  * Http服务器类
  * @author 刘健 <coder.liu@qq.com>
  */
-class HttpServer extends Component
+class HttpServer extends BaseObject
 {
 
     // 主机

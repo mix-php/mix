@@ -2,14 +2,14 @@
 
 namespace mix\server;
 
-use mix\base\Component;
+use mix\base\BaseObject;
 use mix\process\TaskProcess;
 
 /**
  * 任务服务器类
  * @author 刘健 <coder.liu@qq.com>
  */
-class TaskServer extends Component
+class TaskServer extends BaseObject
 {
 
     // 左进程数
