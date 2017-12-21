@@ -10,7 +10,7 @@ use mix\base\Model;
  * 一个数据模型对应一个数据表，数据表是公用的，所以数据模型应该在公共模块
  * @author 刘健 <coder.liu@qq.com>
  */
-class IndexFrom extends Model
+class IndexForm extends Model
 {
 
     public $a;
