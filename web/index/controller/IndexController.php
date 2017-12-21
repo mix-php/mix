@@ -3,7 +3,7 @@
 namespace web\index\controller;
 
 use mix\web\Controller;
-use web\index\model\IndexFrom;
+use web\index\model\IndexForm;
 
 /**
  * 默认控制器
@@ -21,7 +21,7 @@ class IndexController extends Controller
     public function actionApiExample()
     {
         // 使用模型
-        $model             = new IndexFrom();
+        $model             = new IndexForm();
         $model->attributes = \Mix::app()->request->get() + \Mix::app()->request->post();
         $model->setScenario('test');
         if (!$model->validate()) {
@@ -37,7 +37,7 @@ class IndexController extends Controller
     public function actionWebSiteExample()
     {
         // 使用模型
-        $model             = new IndexFrom();
+        $model             = new IndexForm();
         $model->attributes = \Mix::app()->request->get() + \Mix::app()->request->post();
         $model->setScenario('test');
         if (!$model->validate()) {
