@@ -15,8 +15,12 @@ class TableModel
     const TABLE = 'table';
 
     // 操作数据库
-    public function insert($data)
+    public function insert($formModel)
     {
+        $data    = [
+            'a' => $formModel->a,
+            'b' => $formModel->b,
+        ];
         $success = \Mix::app()->rdb->insert(self::TABLE, $data);
         return $success ? \Mix::app()->rdb->getLastInsertId() : false;
     }
