@@ -58,6 +58,8 @@ return [
             'logRotate'   => mix\base\Log::ROTATE_DAY,
             // 最大文件尺寸
             'maxFileSize' => 2048 * 1024,
+            // 换行符
+            'newline'     => PHP_EOL,
         ],
 
         // 数据库

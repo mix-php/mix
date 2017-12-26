@@ -75,7 +75,6 @@ class Error extends Component
             $message .= str_replace('Array', '$_SERVER', print_r($_SERVER, true));
             $message .= str_replace('Array', '$_GET', print_r($_GET, true));
             $message .= str_replace('Array', '$_POST', print_r($_POST, true));
-            $message .= PHP_EOL;
             \Mix::app()->log->error($message);
         }
         // 清空系统错误

@@ -10,8 +10,8 @@ class Log extends Component
 {
 
     // 轮转规则
-    const ROTATE_HOUR   = 0;
-    const ROTATE_DAY    = 1;
+    const ROTATE_HOUR = 0;
+    const ROTATE_DAY = 1;
     const ROTATE_WEEKLY = 2;
 
     // 日志目录
@@ -25,6 +25,9 @@ class Log extends Component
 
     // 最大文件尺寸
     public $maxFileSize = 2097152;
+
+    // 换行符
+    public $newline = PHP_EOL;
 
     // 调试日志
     public function debug($message)
@@ -69,7 +72,7 @@ class Log extends Component
         while (file_exists($file) && filesize($file) >= $this->maxFileSize) {
             $file = $dir . '/' . $filename . '_' . ++$number . '.log';
         }
-        file_put_contents($file, $message, FILE_APPEND);
+        file_put_contents($file, $message . str_repeat($this->newline, 2), FILE_APPEND | LOCK_EX);
     }
 
 }
