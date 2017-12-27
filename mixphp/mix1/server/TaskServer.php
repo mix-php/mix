@@ -14,16 +14,22 @@ class TaskServer extends BaseObject
 
     // 左进程数
     public $leftProcess = 1;
+
     // 右进程数
     public $rightProcess = 3;
+
     // 服务名称
     public $name = '';
+
     // 主进程pid
     protected $mpid = 0;
+
     // 工作进程pid集合
     protected $workers = [];
+
     // 左进程启动事件回调函数
     protected $onLeftStart;
+
     // 右进程启动事件回调函数
     protected $onRightStart;
 
@@ -70,7 +76,7 @@ class TaskServer extends BaseObject
     protected function createProcess($index, $callback, $processType)
     {
         if (!isset($callback)) {
-            throw new \Exception('Create Process Error: no callback.');
+            throw new \Exception('Create Process Error: ' . ($processType == 'left' ? '[LeftStart]' : '[RightStart]') . ' no callback.');
         }
         $process = new TaskProcess(function ($worker) use ($index, $callback, $processType) {
             \swoole_set_process_name(sprintf("mix-taskd: {$this->name} {$processType} #%s", $index));

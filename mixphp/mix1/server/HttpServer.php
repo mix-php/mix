@@ -24,13 +24,14 @@ class HttpServer extends BaseObject
     // 虚拟主机
     public $virtualHosts = [];
 
-    // SwooleHttpServer对象
+    // Server对象
     protected $server;
 
     // 初始化事件
     public function onInitialize()
     {
         parent::onInitialize();
+        // 实例化服务器
         $this->server = new \swoole_http_server($this->host, $this->port);
         // 新建日志目录
         if (isset($this->setting['log_file'])) {
@@ -39,6 +40,18 @@ class HttpServer extends BaseObject
         }
         // 设置保留配置项
         $this->setting['pid_file'] = \Mix::app()->getRuntimePath() . 'mix-httpd.pid';
+    }
+
+    // 启动服务
+    public function start()
+    {
+        $this->welcome();
+        $this->onStart();
+        $this->onManagerStart();
+        $this->onWorkerStart();
+        $this->onRequest();
+        $this->server->set($this->setting);
+        $this->server->start();
     }
 
     // 主进程启动事件
@@ -119,18 +132,6 @@ EOL;
         $this->send("Swoole Version: {$swooleVersion}");
         $this->send("Listen    Addr: {$this->host}");
         $this->send("Listen    Port: {$this->port}");
-    }
-
-    // 启动服务
-    public function start()
-    {
-        $this->welcome();
-        $this->onStart();
-        $this->onManagerStart();
-        $this->onWorkerStart();
-        $this->onRequest();
-        $this->server->set($this->setting);
-        $this->server->start();
     }
 
     // 发送至屏幕

@@ -8,7 +8,7 @@ return [
     'basePath'            => dirname(__DIR__) . DIRECTORY_SEPARATOR,
 
     // 控制器命名空间
-    'controllerNamespace' => 'console\daemon\command',
+    'controllerNamespace' => 'console\websocketd\command',
 
     // 组件配置
     'components'          => [
@@ -89,6 +89,32 @@ return [
 
     // 对象配置
     'objects'             => [
+
+        // WebSocketServer
+        'server' => [
+
+            // 类路径
+            'class'        => 'mix\server\WebSocketServer',
+            // 主机
+            'host'         => 'localhost',
+            // 端口
+            'port'         => 9502,
+
+            // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
+            'setting'      => [
+                // 连接处理线程数
+                'reactor_num' => 8,
+                // 工作进程数
+                'worker_num'  => 8,
+                // 设置worker进程的最大任务数
+                'max_request' => 10000,
+                // 日志文件路径
+                'log_file'    => __DIR__ . '/../runtime/logs/mixhttpd.log',
+                // 子进程运行用户
+                'user'        => 'www',
+            ],
+
+        ],
 
     ],
 
