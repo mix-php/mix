@@ -21,33 +21,50 @@ class ServiceController extends Controller
         if ($this->d) {
             self::daemon();
         }
-        // 启动服务
+        // 创建服务
         $server = \Mix::app()->createObject('server');
+        $server->on('Request', [$this, 'onRequest']);
         $server->on('Open', [$this, 'onOpen']);
         $server->on('Message', [$this, 'onMessage']);
         $server->on('Close', [$this, 'onClose']);
+        // 创建内存表
+        $table = new \swoole_table(1024);
+        $table->column('fd', \swoole_table::TYPE_INT);
+        $table->create();
+        // 附加至服务上
+        $server->attach('table', $table);
+        // 启动服务
         return $server->start();
     }
 
-    // 连接事件回调函数
-    public function onOpen($server, $request)
+    // HTTP请求事件回调函数
+    public function onRequest($webSocket, \mix\swoole\WebSocketRequest $request, \mix\swoole\WebSocketResponse $response)
     {
+        foreach ($webSocket->table as $fd => $item) {
+            $webSocket->push($fd, 'message');
+        }
+        $response->setContent('dfd');
+        $response->send();
+    }
 
-        var_dump($request);
-
-        echo "server: handshake success with fd{$request->fd}\n";
+    // 连接事件回调函数
+    public function onOpen($webSocket, $fd, $request)
+    {
+        $webSocket->table->set($fd, ['fd' => $fd]);
+        echo "server: handshake success with fd{$fd}\n";
     }
 
     // 接收消息事件回调函数
-    public function onMessage($server, $frame)
+    public function onMessage($webSocket, $frame)
     {
         echo "receive from {$frame->fd}:{$frame->data},opcode:{$frame->opcode},fin:{$frame->finish}\n";
-        $server->push($frame->fd, "this is server");
+        $webSocket->push($frame->fd, "this is server");
     }
 
     // 关闭连接事件回调函数
-    public function onClose($server, $fd)
+    public function onClose($webSocket, $fd)
     {
+        $webSocket->table->del($fd);
         echo "client {$fd} closed\n";
     }
 

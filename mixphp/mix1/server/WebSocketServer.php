@@ -66,6 +66,12 @@ class WebSocketServer extends BaseObject
         $this->server->start();
     }
 
+    // 附加属性
+    public function attach($key, $object)
+    {
+        $this->server->$key = $object;
+    }
+
     // 注册Server的事件回调函数
     public function on($event, $callback)
     {
@@ -130,7 +136,11 @@ class WebSocketServer extends BaseObject
         if (isset($this->onRequest)) {
             $this->server->on('request', function ($request, $response) {
                 list($object, $method) = $this->onRequest;
-                $object->$method($request, $response);
+                $webSocketRequest = new \mix\swoole\WebSocketRequest();
+                $webSocketRequest->setRequester($request);
+                $webSocketResponse = new \mix\swoole\WebSocketResponse();
+                $webSocketResponse->setResponder($response);
+                $object->$method($this->server, $webSocketRequest, $webSocketResponse);
             });
         }
     }
@@ -141,7 +151,7 @@ class WebSocketServer extends BaseObject
         if (isset($this->onOpen)) {
             $this->server->on('open', function ($server, $request) {
                 list($object, $method) = $this->onOpen;
-                $object->$method($server, $request);
+                $object->$method($server, $request->fd, $request);
             });
         }
     }
