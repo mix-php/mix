@@ -48,7 +48,7 @@ class ServiceController extends Controller
     }
 
     // 连接事件回调函数
-    public function onOpen($webSocket, $fd, $request)
+    public function onOpen($webSocket, $fd, \mix\swoole\WebSocketRequest $request)
     {
         $webSocket->table->set($fd, ['fd' => $fd]);
         echo "server: handshake success with fd{$fd}\n";
