@@ -32,7 +32,7 @@ class HttpServer extends BaseObject
     {
         parent::onInitialize();
         // 实例化服务器
-        $this->server = new \swoole_http_server($this->host, $this->port);
+        $this->server = new \Swoole\Http\Server($this->host, $this->port);
         // 新建日志目录
         if (isset($this->setting['log_file'])) {
             $dir = dirname($this->setting['log_file']);

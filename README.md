@@ -50,7 +50,7 @@ MixPHP开发指南：http://doc.mixphp.cn
 ## 环境要求
 
 * PHP >= 5.4
-* Swoole >= 1.7.18
+* Swoole >= 1.8.7
 
 ## 快速开始
 

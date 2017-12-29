@@ -6,7 +6,7 @@ namespace mix\process;
  * 任务进程类
  * @author 刘健 <coder.liu@qq.com>
  */
-class TaskProcess extends \swoole_process
+class TaskProcess extends \Swoole\Process
 {
 
     // 主进程pid
@@ -15,7 +15,7 @@ class TaskProcess extends \swoole_process
     // 检查主进程
     public function checkMaster()
     {
-        if (!\swoole_process::kill($this->mpid, 0)) {
+        if (!\Swoole\Process::kill($this->mpid, 0)) {
             while ($this->statQueue()['queue_num'] > 0) {
             }
             $this->freeQueue();

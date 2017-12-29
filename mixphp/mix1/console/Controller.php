@@ -14,7 +14,7 @@ class Controller extends BaseObject
     // 使当前进程蜕变为一个守护进程
     public static function daemon($closeInputOutput = false)
     {
-        \swoole_process::daemon(true, !$closeInputOutput);
+        \Swoole\Process::daemon(true, !$closeInputOutput);
         $pid = getmypid();
         echo "PID: {$pid}" . PHP_EOL;
     }

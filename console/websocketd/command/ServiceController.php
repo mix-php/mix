@@ -28,8 +28,8 @@ class ServiceController extends Controller
         $server->on('Message', [$this, 'onMessage']);
         $server->on('Close', [$this, 'onClose']);
         // 创建内存表
-        $table = new \swoole_table(1024);
-        $table->column('fd', \swoole_table::TYPE_INT);
+        $table = new \Swoole\Table(1024);
+        $table->column('fd', \Swoole\Table::TYPE_INT);
         $table->create();
         // 附加至服务上
         $server->attach('table', $table);

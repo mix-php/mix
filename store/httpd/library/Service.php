@@ -26,19 +26,19 @@ class Service
     // 检查PID是否运行
     public static function isRunning($pid)
     {
-        return \swoole_process::kill($pid, 0);
+        return \Swoole\Process::kill($pid, 0);
     }
 
     // kill主进程
     public static function killMaster($pid)
     {
-        \swoole_process::kill($pid);
+        \Swoole\Process::kill($pid);
     }
 
     // 重启工作进程
     public static function reloadWorker($pid)
     {
-        \swoole_process::kill($pid, SIGUSR1);
+        \Swoole\Process::kill($pid, SIGUSR1);
     }
 
 }
