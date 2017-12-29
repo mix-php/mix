@@ -22,3 +22,6 @@ composer.phar
 phpunit.phar
 # local phpunit config
 /phpunit.xml
+
+# Swoole IDE 自动补全phar包
+swoole-ide-helper.phar
