@@ -46,20 +46,15 @@ class Response extends Component
     // HTTP 响应头
     protected $_headers = [];
 
-    // 请求开始事件
-    public function onRequestStart()
-    {
-        parent::onRequestStart();
-        $this->format     = $this->defaultFormat;
-        $this->statusCode = 200;
-        $this->_content   = null;
-        $this->_headers   = [];
-    }
-
     // 设置响应者
     public function setResponder($responder)
     {
         $this->_responder = $responder;
+        // 重置数据
+        $this->format     = $this->defaultFormat;
+        $this->statusCode = 200;
+        $this->_content   = null;
+        $this->_headers   = [];
     }
 
     // 设置内容
@@ -90,9 +85,12 @@ class Response extends Component
     // 输出
     public function send()
     {
+        // 多次输出兼容处理
         if (!empty($this->_responder->end)) {
             return;
         }
+        $this->_responder->end = true;
+        // 输出
         $content = $this->_content;
         if (is_array($content)) {
             switch ($this->format) {
@@ -122,7 +120,6 @@ class Response extends Component
         } else {
             $this->_responder->end('');
         }
-        $this->_responder->end = true;
     }
 
     // 设置HTTP状态码

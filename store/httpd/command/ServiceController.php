@@ -24,7 +24,7 @@ class ServiceController extends Controller
         if ($pid = Service::getPid()) {
             return "MixHttpd 正在运行, PID : {$pid}." . PHP_EOL;
         }
-        $server = \Mix::app()->createObject('server');
+        $server = \Mix::app()->createObject('httpServer');
         if ($this->u) {
             $server->setting['max_request'] = 1;
         }

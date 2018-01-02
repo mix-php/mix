@@ -39,7 +39,7 @@ class Request extends Component
     public function setRequester($requester)
     {
         $this->_requester = $requester;
-        // 重设请求数据
+        // 重置数据
         $this->setRoute([]);
         $this->_get    = isset($requester->get) ? $requester->get : [];
         $this->_post   = isset($requester->post) ? $requester->post : [];
@@ -47,7 +47,6 @@ class Request extends Component
         $this->_cookie = isset($requester->cookie) ? $requester->cookie : [];
         $this->_server = isset($requester->server) ? $requester->server : [];
         $this->_header = isset($requester->header) ? $requester->header : [];
-        return $this;
     }
 
     // 设置ROUTE值
@@ -98,16 +97,16 @@ class Request extends Component
         return self::fetch($name, $this->_header);
     }
 
-    // 提取数据
-    protected static function fetch($name, $container)
-    {
-        return is_null($name) ? $container : (isset($container[$name]) ? $container[$name] : null);
-    }
-
     // 返回原始的HTTP包体
     public function getRawBody()
     {
         return $this->_requester->rawContent();
+    }
+
+    // 提取数据
+    protected static function fetch($name, $container)
+    {
+        return is_null($name) ? $container : (isset($container[$name]) ? $container[$name] : null);
     }
 
 }

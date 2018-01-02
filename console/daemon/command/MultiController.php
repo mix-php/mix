@@ -3,7 +3,6 @@
 namespace console\daemon\command;
 
 use mix\console\Controller;
-use mix\process\TaskProcess;
 
 /**
  * 这是一个多进程守护进程的范例
@@ -25,7 +24,7 @@ class MultiController extends Controller
             self::daemon();
         }
         // 启动服务
-        $server       = \Mix::app()->createObject('server');
+        $server       = \Mix::app()->createObject('taskServer');
         $server->name = $this->getControllerName();
         $server->on('LeftStart', [$this, 'onLeftStart']);
         $server->on('RightStart', [$this, 'onRightStart']);
@@ -33,7 +32,7 @@ class MultiController extends Controller
     }
 
     // 左进程启动事件回调函数
-    public function onLeftStart(TaskProcess $worker)
+    public function onLeftStart(\mix\process\TaskProcess $worker)
     {
         // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
         $queueModel = new \console\common\model\QueueModel();
@@ -48,7 +47,7 @@ class MultiController extends Controller
     }
 
     // 右进程启动事件回调函数
-    public function onRightStart(TaskProcess $worker, $index)
+    public function onRightStart(\mix\process\TaskProcess $worker, $index)
     {
         // 循环执行任务
         while (true) {

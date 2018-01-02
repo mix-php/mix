@@ -62,6 +62,53 @@ return [
             'newline'     => PHP_EOL,
         ],
 
+        // 请求
+        'webSocketRequest'  => [
+            // 类路径
+            'class' => 'mix\swoole\Request',
+        ],
+
+        // 响应
+        'webSocketResponse' => [
+            // 类路径
+            'class'         => 'mix\swoole\Response',
+            // 默认输出格式
+            'defaultFormat' => mix\swoole\Response::FORMAT_JSON,
+            // json
+            'json'          => [
+                // 类路径
+                'class' => 'mix\web\Json',
+            ],
+            // jsonp
+            'jsonp'         => [
+                // 类路径
+                'class'        => 'mix\web\Jsonp',
+                // callback名称
+                'callbackName' => 'callback',
+            ],
+            // xml
+            'xml'           => [
+                // 类路径
+                'class' => 'mix\web\Xml',
+            ],
+        ],
+
+        // Token
+        'webSocketToken'    => [
+            // 类路径
+            'class'         => 'mix\swoole\WebSocketToken',
+            // 保存处理者
+            'saveHandler'   => array_merge(
+                $database['redis'],
+                [
+                    // 类路径
+                    'class' => 'mix\client\Redis',
+                ]
+            ),
+            // 保存的Key前缀
+            'saveKeyPrefix' => 'MIXTKID:',
+        ],
+
         // 数据库
         'rdb'      => array_merge(
             $database['mysql'],
@@ -91,17 +138,17 @@ return [
     'objects'             => [
 
         // WebSocketServer
-        'server' => [
+        'webSocketServer'   => [
 
             // 类路径
-            'class'        => 'mix\server\WebSocketServer',
+            'class'   => 'mix\server\WebSocketServer',
             // 主机
-            'host'         => 'localhost',
+            'host'    => 'localhost',
             // 端口
-            'port'         => 9502,
+            'port'    => 9502,
 
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
-            'setting'      => [
+            'setting' => [
                 // 连接处理线程数
                 'reactor_num' => 8,
                 // 工作进程数
@@ -109,7 +156,7 @@ return [
                 // 设置worker进程的最大任务数
                 'max_request' => 10000,
                 // 日志文件路径
-                'log_file'    => __DIR__ . '/../runtime/logs/mixhttpd.log',
+                'log_file'    => __DIR__ . '/../runtime/logs/mix-websocketd.log',
                 // 子进程运行用户
                 'user'        => 'www',
             ],

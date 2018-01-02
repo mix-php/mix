@@ -91,7 +91,7 @@ return [
     'objects'             => [
 
         // TaskServer
-        'server' => [
+        'taskServer' => [
             // 类路径
             'class'        => 'mix\server\TaskServer',
             // 左进程数

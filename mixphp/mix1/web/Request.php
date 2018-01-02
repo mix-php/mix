@@ -110,16 +110,16 @@ class Request extends Component
         return self::fetch($name, $this->_header);
     }
 
-    // 提取数据
-    protected static function fetch($name, $container)
-    {
-        return is_null($name) ? $container : (isset($container[$name]) ? $container[$name] : null);
-    }
-
     // 返回原始的HTTP包体
     public function getRawBody()
     {
         return file_get_contents('php://input');
+    }
+
+    // 提取数据
+    protected static function fetch($name, $container)
+    {
+        return is_null($name) ? $container : (isset($container[$name]) ? $container[$name] : null);
     }
 
 }
