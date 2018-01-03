@@ -38,22 +38,34 @@ class ServiceController extends Controller
     }
 
     // HTTP请求事件回调函数
-    public function onRequest(\Swoole\WebSocket\Server $webSocket, \mix\swoole\Request $request, \mix\swoole\Response $response)
+    public function onRequest(\Swoole\WebSocket\Server $webSocket)
     {
-        // 手动路由到控制器
-        $pathInfo = $request->server('path_info');
-        if ($pathInfo == '/send_all') {
-
+        $pathInfo = \Mix::app()->wsRequest->server('path_info');
+        // 路由
+        $rules = [
+            '/broadcast/send' => ["\\console\\websocketd\\controller\\broadcastController", 'actionSend'],
+        ];
+        // 404 Not Found
+        if (!isset($rules[$pathInfo])) {
+            \Mix::app()->wsResponse->format = \mix\swoole\Response::FORMAT_JSON;
+            \Mix::app()->wsResponse->setContent(['errcode' => 404, 'errmsg' => 'Not Found']);
+            \Mix::app()->wsResponse->send();
+            \Mix::finish();
         }
+        // 执行控制器
+        list($controller, $action) = $rules[$pathInfo];
+        $content                        = (new $controller)->$action($webSocket);
+        \Mix::app()->wsResponse->format = \mix\swoole\Response::FORMAT_JSON;
+        \Mix::app()->wsResponse->setContent($content);
+        \Mix::app()->wsResponse->send();
     }
 
     // 连接事件回调函数
-    public function onOpen(\Swoole\WebSocket\Server $webSocket, $fd, \mix\swoole\Request $request)
+    public function onOpen(\Swoole\WebSocket\Server $webSocket, $fd)
     {
         // 效验token
-        $tokenId = $request->get('access_token');
-        \Mix::app()->webSocketToken->setTokenId($tokenId);
-        $userinfo = \Mix::app()->webSocketToken->get('userinfo');
+        \Mix::app()->wsToken->loadTokenId();
+        $userinfo = \Mix::app()->wsToken->get('userinfo');
         if (empty($userinfo)) {
             echo "server: token error fd{$fd}\n";
             $webSocket->close($fd);
@@ -67,7 +79,10 @@ class ServiceController extends Controller
     public function onMessage(\Swoole\WebSocket\Server $webSocket, \Swoole\WebSocket\Frame $frame)
     {
         echo "receive from {$frame->fd}:{$frame->data},opcode:{$frame->opcode},fin:{$frame->finish}\n";
-        $webSocket->push($frame->fd, "this is server");
+
+
+
+        $webSocket->push($frame->fd, 'message invalid');
     }
 
     // 关闭连接事件回调函数

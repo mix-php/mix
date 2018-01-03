@@ -33,11 +33,12 @@ class WebSocketToken extends Component
         $this->_uniqueIndexPrefix = $this->saveKeyPrefix . 'UNIQUEINDEX:';
     }
 
-    // 设置TokenID
-    protected function setTokenId($tokenId)
+    // 载入TokenID
+    public function loadTokenId()
     {
-        // 赋值
-        $this->_tokenId  = $tokenId;
+        // 载入TokenID
+        $this->_tokenId = \Mix::app()->wsRequest->get($this->name) or
+        $this->_tokenId = \Mix::app()->wsRequest->header($this->name);
         $this->_tokenKey = $this->_tokenPrefix . $this->_tokenId;
         // 关闭连接
         $this->saveHandler->disconnect();

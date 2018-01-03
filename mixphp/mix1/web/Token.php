@@ -54,7 +54,7 @@ class Token extends Component
     }
 
     // 载入TokenID
-    protected function loadTokenId()
+    public function loadTokenId()
     {
         $this->_tokenId = \Mix::app()->request->get($this->name) or
         $this->_tokenId = \Mix::app()->request->header($this->name) or

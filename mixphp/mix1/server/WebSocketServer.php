@@ -136,11 +136,9 @@ class WebSocketServer extends BaseObject
         if (isset($this->onRequest)) {
             $this->server->on('request', function ($request, $response) {
                 list($object, $method) = $this->onRequest;
-                $webSocketRequest = \Mix::app()->createObject('webSocketRequest');
-                $webSocketRequest->setRequester($request);
-                $webSocketResponse = \Mix::app()->createObject('webSocketResponse');
-                $webSocketResponse->setResponder($response);
-                $object->$method($this->server, $webSocketRequest, $webSocketResponse);
+                \Mix::app()->wsRequest->setRequester($request);
+                \Mix::app()->wsResponse->setResponder($response);
+                $object->$method($this->server);
             });
         }
     }
@@ -151,9 +149,8 @@ class WebSocketServer extends BaseObject
         if (isset($this->onOpen)) {
             $this->server->on('open', function ($server, $request) {
                 list($object, $method) = $this->onOpen;
-                $webSocketRequest = \Mix::app()->createObject('webSocketRequest');
-                $webSocketRequest->setRequester($request);
-                $object->$method($server, $request->fd, $webSocketRequest);
+                \Mix::app()->wsRequest->setRequester($request);
+                $object->$method($server, $request->fd);
             });
         }
     }

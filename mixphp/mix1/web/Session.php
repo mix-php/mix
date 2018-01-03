@@ -41,7 +41,7 @@ class Session extends Component
     }
 
     // 载入session_id
-    protected function loadSessionId()
+    public function loadSessionId()
     {
         $this->_sessionId = \Mix::app()->request->cookie($this->name);
         if (is_null($this->_sessionId)) {

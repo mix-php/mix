@@ -16,6 +16,9 @@ namespace mix\base;
  * @property \mix\web\Token $token
  * @property \mix\client\Pdo $rdb
  * @property \mix\client\Redis $redis
+ * @property \mix\swoole\Request $wsRequest
+ * @property \mix\swoole\Response $wsResponse
+ * @property \mix\swoole\WebSocketToken $wsToken
  *
  */
 class Application
