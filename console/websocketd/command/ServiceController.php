@@ -69,6 +69,7 @@ class ServiceController extends Controller
         if (empty($userinfo)) {
             echo "server: token error fd{$fd}\n";
             $webSocket->close($fd);
+            return;
         }
         // 保存fd
         $webSocket->table->set($fd, ['fd' => $fd]);
@@ -79,9 +80,6 @@ class ServiceController extends Controller
     public function onMessage(\Swoole\WebSocket\Server $webSocket, \Swoole\WebSocket\Frame $frame)
     {
         echo "receive from {$frame->fd}:{$frame->data},opcode:{$frame->opcode},fin:{$frame->finish}\n";
-
-
-
         $webSocket->push($frame->fd, 'message invalid');
     }
 

@@ -14,7 +14,7 @@ return [
     'components'          => [
 
         // 路由
-        'route'    => [
+        'route'      => [
             // 类路径
             'class'          => 'mix\base\Route',
             // 默认变量规则
@@ -29,25 +29,25 @@ return [
         ],
 
         // 请求
-        'request'  => [
+        'request'    => [
             // 类路径
             'class' => 'mix\console\Request',
         ],
 
         // 响应
-        'response' => [
+        'response'   => [
             // 类路径
             'class' => 'mix\console\Response',
         ],
 
         // 错误
-        'error'    => [
+        'error'      => [
             // 类路径
             'class' => 'mix\console\Error',
         ],
 
         // 日志
-        'log'      => [
+        'log'        => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -63,7 +63,7 @@ return [
         ],
 
         // 数据库
-        'rdb'      => array_merge(
+        'rdb'        => array_merge(
             $database['mysql'],
             [
                 // 类路径
@@ -77,7 +77,7 @@ return [
         ),
 
         // redis
-        'redis'    => array_merge(
+        'redis'      => array_merge(
             $database['redis'],
             [
                 // 类路径
@@ -130,6 +130,8 @@ return [
             ),
             // 保存的Key前缀
             'saveKeyPrefix' => 'MIXTKID:',
+            // token键名
+            'name'          => 'access_token',
         ],
 
     ],
@@ -138,7 +140,7 @@ return [
     'objects'             => [
 
         // WebSocketServer
-        'webSocketServer'   => [
+        'webSocketServer' => [
 
             // 类路径
             'class'   => 'mix\server\WebSocketServer',

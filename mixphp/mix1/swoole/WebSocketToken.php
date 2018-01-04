@@ -15,6 +15,8 @@ class WebSocketToken extends Component
     public $saveHandler;
     // 保存的Key前缀
     public $saveKeyPrefix;
+    // session名
+    public $name = 'access_token';
     // TokenKey
     protected $_tokenKey;
     // TokenID

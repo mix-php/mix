@@ -116,16 +116,20 @@ class WebSocketServer extends BaseObject
     protected function onWorkerStart()
     {
         $this->server->on('WorkerStart', function ($server, $workerId) {
-            // 进程命名
-            if ($workerId < $server->setting['worker_num']) {
-                swoole_set_process_name("mix-websocketd: worker #{$workerId}");
-            } else {
-                swoole_set_process_name("mix-websocketd: task #{$workerId}");
-            }
-            // 执行绑定的回调函数
-            if (isset($this->onWorkerStart)) {
-                list($object, $method) = $this->onWorkerStart;
-                $object->$method($server, $workerId);
+            try {
+                // 进程命名
+                if ($workerId < $server->setting['worker_num']) {
+                    swoole_set_process_name("mix-websocketd: worker #{$workerId}");
+                } else {
+                    swoole_set_process_name("mix-websocketd: task #{$workerId}");
+                }
+                // 执行绑定的回调函数
+                if (isset($this->onWorkerStart)) {
+                    list($object, $method) = $this->onWorkerStart;
+                    $object->$method($server, $workerId);
+                }
+            } catch (\Exception $e) {
+                \Mix::app()->error->appException($e);
             }
         });
     }
@@ -135,10 +139,16 @@ class WebSocketServer extends BaseObject
     {
         if (isset($this->onRequest)) {
             $this->server->on('request', function ($request, $response) {
-                list($object, $method) = $this->onRequest;
-                \Mix::app()->wsRequest->setRequester($request);
-                \Mix::app()->wsResponse->setResponder($response);
-                $object->$method($this->server);
+                try {
+                    // 组件初始化处理
+                    \Mix::app()->wsRequest->setRequester($request);
+                    \Mix::app()->wsResponse->setResponder($response);
+                    // 执行绑定的回调函数
+                    list($object, $method) = $this->onRequest;
+                    $object->$method($this->server);
+                } catch (\Exception $e) {
+                    \Mix::app()->error->appException($e);
+                }
             });
         }
     }
@@ -148,9 +158,15 @@ class WebSocketServer extends BaseObject
     {
         if (isset($this->onOpen)) {
             $this->server->on('open', function ($server, $request) {
-                list($object, $method) = $this->onOpen;
-                \Mix::app()->wsRequest->setRequester($request);
-                $object->$method($server, $request->fd);
+                try {
+                    // 组件初始化处理
+                    \Mix::app()->wsRequest->setRequester($request);
+                    // 执行绑定的回调函数
+                    list($object, $method) = $this->onOpen;
+                    $object->$method($server, $request->fd);
+                } catch (\Exception $e) {
+                    \Mix::app()->error->appException($e);
+                }
             });
         }
     }
@@ -160,8 +176,13 @@ class WebSocketServer extends BaseObject
     {
         if (isset($this->onMessage)) {
             $this->server->on('message', function ($server, $frame) {
-                list($object, $method) = $this->onMessage;
-                $object->$method($server, $frame);
+                try {
+                    // 执行绑定的回调函数
+                    list($object, $method) = $this->onMessage;
+                    $object->$method($server, $frame);
+                } catch (\Exception $e) {
+                    \Mix::app()->error->appException($e);
+                }
             });
         }
     }
@@ -171,8 +192,13 @@ class WebSocketServer extends BaseObject
     {
         if (isset($this->onClose)) {
             $this->server->on('close', function ($server, $fd) {
-                list($object, $method) = $this->onClose;
-                $object->$method($server, $fd);
+                try {
+                    // 执行绑定的回调函数
+                    list($object, $method) = $this->onClose;
+                    $object->$method($server, $fd);
+                } catch (\Exception $e) {
+                    \Mix::app()->error->appException($e);
+                }
             });
         }
     }
