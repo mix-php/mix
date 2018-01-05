@@ -75,8 +75,8 @@ class ServiceController extends Controller
 
         /*
         // 效验token
-        \Mix::app()->wsToken->loadTokenId();
-        $userinfo = \Mix::app()->wsToken->get('userinfo');
+        \Mix::app('webSocket')->token->loadTokenId();
+        $userinfo = \Mix::app('webSocket')->token->get('userinfo');
         if (empty($userinfo)) {
             echo "server: access_token error fd{$fd}\n";
             $webSocket->push($fd, '{"cmd":"auth_failure"}');
