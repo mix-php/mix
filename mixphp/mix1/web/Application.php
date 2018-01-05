@@ -33,6 +33,7 @@ class Application extends \mix\base\Application
     // 获取组件
     public function __get($name)
     {
+        $name = "{$this->_componentNamespace}\\{$name}";
         // 返回单例
         if (isset($this->_components[$name])) {
             // 触发请求开始事件

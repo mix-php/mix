@@ -5,16 +5,19 @@ $database = require __DIR__ . '/../../common/config/database.php';
 return [
 
     // 基础路径
-    'basePath'            => dirname(__DIR__) . DIRECTORY_SEPARATOR,
+    'basePath'                  => dirname(__DIR__) . DIRECTORY_SEPARATOR,
 
     // 控制器命名空间
-    'controllerNamespace' => 'console\daemon\command',
+    'controllerNamespace'       => 'console\daemon\command',
+
+    // 组件默认命名空间
+    'componentDefaultNamespace' => 'console',
 
     // 组件配置
-    'components'          => [
+    'components'                => [
 
         // 路由
-        'route'    => [
+        'console\route'    => [
             // 类路径
             'class'          => 'mix\base\Route',
             // 默认变量规则
@@ -29,25 +32,25 @@ return [
         ],
 
         // 请求
-        'request'  => [
+        'console\request'  => [
             // 类路径
             'class' => 'mix\console\Request',
         ],
 
         // 响应
-        'response' => [
+        'console\response' => [
             // 类路径
             'class' => 'mix\console\Response',
         ],
 
         // 错误
-        'error'    => [
+        'console\error'    => [
             // 类路径
             'class' => 'mix\console\Error',
         ],
 
         // 日志
-        'log'      => [
+        'console\log'      => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -63,7 +66,7 @@ return [
         ],
 
         // 数据库
-        'rdb'      => array_merge(
+        'console\rdb'      => array_merge(
             $database['mysql'],
             [
                 // 类路径
@@ -77,7 +80,7 @@ return [
         ),
 
         // redis
-        'redis'    => array_merge(
+        'console\redis'    => array_merge(
             $database['redis'],
             [
                 // 类路径
@@ -88,7 +91,7 @@ return [
     ],
 
     // 对象配置
-    'objects'             => [
+    'objects'                   => [
 
         // TaskServer
         'taskServer' => [
