@@ -9,12 +9,12 @@ namespace console\websocketd\controller;
 class broadcastController
 {
 
-    // 发送消息
-    public function actionSend(\Swoole\WebSocket\Server $webSocket)
+    // 发出消息
+    public function actionEmit(\Swoole\WebSocket\Server $webSocket)
     {
         // 给全部用户发送消息
         foreach ($webSocket->table as $fd => $item) {
-            $webSocket->push($fd, 'message');
+            $webSocket->push($fd, '{"cmd":"broadcast","data":{"message":"hello"}}');
         }
         // 返回
         return ['errcode' => 0, 'errmsg' => 'ok'];

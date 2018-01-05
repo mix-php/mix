@@ -1,14 +1,14 @@
 <?php
 
-namespace mix\swoole;
+namespace mix\websocket;
 
 use mix\base\Component;
 
 /**
- * WebSocketToken组件
+ * Token组件
  * @author 刘健 <coder.liu@qq.com>
  */
-class WebSocketToken extends Component
+class Token extends Component
 {
 
     // 保存处理者
@@ -23,8 +23,6 @@ class WebSocketToken extends Component
     protected $_tokenId;
     // Token前缀
     protected $_tokenPrefix;
-    // 唯一索引前缀
-    protected $_uniqueIndexPrefix;
 
     // 初始化事件
     public function onInitialize()
@@ -32,7 +30,6 @@ class WebSocketToken extends Component
         parent::onInitialize();
         // 前缀处理
         $this->_tokenPrefix       = $this->saveKeyPrefix . 'DATA:';
-        $this->_uniqueIndexPrefix = $this->saveKeyPrefix . 'UNIQUEINDEX:';
     }
 
     // 载入TokenID

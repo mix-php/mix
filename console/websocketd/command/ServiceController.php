@@ -43,7 +43,7 @@ class ServiceController extends Controller
         $pathInfo = \Mix::app()->wsRequest->server('path_info');
         // 路由
         $rules = [
-            '/broadcast/send' => ["\\console\\websocketd\\controller\\broadcastController", 'actionSend'],
+            '/broadcast/emit' => ["\\console\\websocketd\\controller\\broadcastController", 'actionEmit'],
         ];
         // 404 Not Found
         if (!isset($rules[$pathInfo])) {
@@ -63,14 +63,28 @@ class ServiceController extends Controller
     // 连接事件回调函数
     public function onOpen(\Swoole\WebSocket\Server $webSocket, $fd)
     {
+        // 效验session
+        \Mix::app()->wsSession->loadSessionId();
+        $userinfo = \Mix::app()->wsSession->get('userinfo');
+        if (empty($userinfo)) {
+            echo "server: sessionid error fd{$fd}\n";
+            $webSocket->push($fd, '{"cmd":"auth_failure"}');
+            $webSocket->close($fd);
+            return;
+        }
+
+        /*
         // 效验token
         \Mix::app()->wsToken->loadTokenId();
         $userinfo = \Mix::app()->wsToken->get('userinfo');
         if (empty($userinfo)) {
-            echo "server: token error fd{$fd}\n";
+            echo "server: access_token error fd{$fd}\n";
+            $webSocket->push($fd, '{"cmd":"auth_failure"}');
             $webSocket->close($fd);
             return;
         }
+        */
+
         // 保存fd
         $webSocket->table->set($fd, ['fd' => $fd]);
         echo "server: handshake success with fd{$fd}\n";
@@ -80,7 +94,7 @@ class ServiceController extends Controller
     public function onMessage(\Swoole\WebSocket\Server $webSocket, \Swoole\WebSocket\Frame $frame)
     {
         echo "receive from {$frame->fd}:{$frame->data},opcode:{$frame->opcode},fin:{$frame->finish}\n";
-        $webSocket->push($frame->fd, 'message invalid');
+        $webSocket->push($frame->fd, '{"cmd":"message","data":{"message":"hello"}}');
     }
 
     // 关闭连接事件回调函数

@@ -18,8 +18,8 @@ namespace mix\base;
  * @property \mix\client\Redis $redis
  * @property \mix\swoole\Request $wsRequest
  * @property \mix\swoole\Response $wsResponse
- * @property \mix\swoole\WebSocketToken $wsToken
- *
+ * @property \mix\websocket\Token $wsToken
+ * @property \mix\websocket\Session $wsSession
  */
 class Application
 {

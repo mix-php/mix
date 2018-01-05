@@ -116,10 +116,28 @@ return [
             ],
         ],
 
+        // Session
+        'wsSession'  => [
+            // 类路径
+            'class'         => 'mix\websocket\Session',
+            // 保存处理者
+            'saveHandler'   => array_merge(
+                $database['redis'],
+                [
+                    // 类路径
+                    'class' => 'mix\client\Redis',
+                ]
+            ),
+            // 保存的Key前缀
+            'saveKeyPrefix' => 'MIXSSID:',
+            // session名
+            'name'          => 'mixssid',
+        ],
+
         // Token
         'wsToken'    => [
             // 类路径
-            'class'         => 'mix\swoole\WebSocketToken',
+            'class'         => 'mix\websocket\Token',
             // 保存处理者
             'saveHandler'   => array_merge(
                 $database['redis'],

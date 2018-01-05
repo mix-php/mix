@@ -122,7 +122,7 @@ return [
             // 生存时间
             'expires'       => 7200,
             // session名
-            'name'          => 'MIXSSID',
+            'name'          => 'mixssid',
         ],
 
         // Cookie

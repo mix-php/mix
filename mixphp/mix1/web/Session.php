@@ -18,7 +18,7 @@ class Session extends Component
     // 有效期
     public $expires = 7200;
     // session名
-    public $name = 'MIXSSID';
+    public $name = 'mixssid';
     // SessionKey
     protected $_sessionKey;
     // SessionID
