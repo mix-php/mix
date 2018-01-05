@@ -5,10 +5,10 @@ namespace mix\websocket;
 use mix\base\Component;
 
 /**
- * Token组件
+ * TokenReader组件
  * @author 刘健 <coder.liu@qq.com>
  */
-class Token extends Component
+class TokenReader extends Component
 {
 
     // 保存处理者
@@ -29,15 +29,15 @@ class Token extends Component
     {
         parent::onInitialize();
         // 前缀处理
-        $this->_tokenPrefix       = $this->saveKeyPrefix . 'DATA:';
+        $this->_tokenPrefix = $this->saveKeyPrefix . 'DATA:';
     }
 
     // 载入TokenID
     public function loadTokenId()
     {
         // 载入TokenID
-        $this->_tokenId = \Mix::app()->wsRequest->get($this->name) or
-        $this->_tokenId = \Mix::app()->wsRequest->header($this->name);
+        $this->_tokenId = \Mix::app('webSocket')->request->get($this->name) or
+        $this->_tokenId = \Mix::app('webSocket')->request->header($this->name);
         $this->_tokenKey = $this->_tokenPrefix . $this->_tokenId;
         // 关闭连接
         $this->saveHandler->disconnect();

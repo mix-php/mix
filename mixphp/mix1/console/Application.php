@@ -11,6 +11,9 @@ use mix\base\Component;
 class Application extends \mix\base\Application
 {
 
+    // 组件默认命名空间
+    public $componentDefaultNamespace = 'console';
+
     // NotFound错误消息
     protected $_notFoundMessage = 'Command Not Found';
 
@@ -32,6 +35,7 @@ class Application extends \mix\base\Application
     // 获取组件
     public function __get($name)
     {
+        $name = "{$this->_componentNamespace}\\{$name}";
         // 返回单例
         if (isset($this->_components[$name])) {
             // 返回对象

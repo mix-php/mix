@@ -40,32 +40,32 @@ class ServiceController extends Controller
     // HTTP请求事件回调函数
     public function onRequest(\Swoole\WebSocket\Server $webSocket)
     {
-        $pathInfo = \Mix::app()->wsRequest->server('path_info');
+        $pathInfo = \Mix::app('webSocket')->request->server('path_info');
         // 路由
         $rules = [
             '/broadcast/emit' => ["\\console\\websocketd\\controller\\broadcastController", 'actionEmit'],
         ];
         // 404 Not Found
         if (!isset($rules[$pathInfo])) {
-            \Mix::app()->wsResponse->format = \mix\swoole\Response::FORMAT_JSON;
-            \Mix::app()->wsResponse->setContent(['errcode' => 404, 'errmsg' => 'Not Found']);
-            \Mix::app()->wsResponse->send();
+            \Mix::app('webSocket')->response->format = \mix\swoole\Response::FORMAT_JSON;
+            \Mix::app('webSocket')->response->setContent(['errcode' => 404, 'errmsg' => 'Not Found']);
+            \Mix::app('webSocket')->response->send();
             \Mix::finish();
         }
         // 执行控制器
         list($controller, $action) = $rules[$pathInfo];
         $content                        = (new $controller)->$action($webSocket);
-        \Mix::app()->wsResponse->format = \mix\swoole\Response::FORMAT_JSON;
-        \Mix::app()->wsResponse->setContent($content);
-        \Mix::app()->wsResponse->send();
+        \Mix::app('webSocket')->response->format = \mix\swoole\Response::FORMAT_JSON;
+        \Mix::app('webSocket')->response->setContent($content);
+        \Mix::app('webSocket')->response->send();
     }
 
     // 连接事件回调函数
     public function onOpen(\Swoole\WebSocket\Server $webSocket, $fd)
     {
         // 效验session
-        \Mix::app()->wsSession->loadSessionId();
-        $userinfo = \Mix::app()->wsSession->get('userinfo');
+        \Mix::app('webSocket')->session->loadSessionId();
+        $userinfo = \Mix::app('webSocket')->session->get('userinfo');
         if (empty($userinfo)) {
             echo "server: sessionid error fd{$fd}\n";
             $webSocket->push($fd, '{"cmd":"auth_failure"}');

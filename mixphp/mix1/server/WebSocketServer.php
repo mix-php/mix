@@ -3,7 +3,6 @@
 namespace mix\server;
 
 use mix\base\BaseObject;
-use mix\swoole\Application;
 
 /**
  * Http服务器类
@@ -141,8 +140,8 @@ class WebSocketServer extends BaseObject
             $this->server->on('request', function ($request, $response) {
                 try {
                     // 组件初始化处理
-                    \Mix::app()->wsRequest->setRequester($request);
-                    \Mix::app()->wsResponse->setResponder($response);
+                    \Mix::app('webSocket')->request->setRequester($request);
+                    \Mix::app('webSocket')->response->setResponder($response);
                     // 执行绑定的回调函数
                     list($object, $method) = $this->onRequest;
                     $object->$method($this->server);
@@ -160,7 +159,7 @@ class WebSocketServer extends BaseObject
             $this->server->on('open', function ($server, $request) {
                 try {
                     // 组件初始化处理
-                    \Mix::app()->wsRequest->setRequester($request);
+                    \Mix::app('webSocket')->request->setRequester($request);
                     // 执行绑定的回调函数
                     list($object, $method) = $this->onOpen;
                     $object->$method($server, $request->fd);

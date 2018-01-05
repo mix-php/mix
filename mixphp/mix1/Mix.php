@@ -17,11 +17,26 @@ class Mix
     public static $container;
 
     /**
-     * 返回App
+     * 返回App，并设置组件命名空间
      *
      * @return \mix\swoole\Application|\mix\web\Application|\mix\console\Application
      */
-    public static function app()
+    public static function app($namespace = null)
+    {
+        $app = self::getApp();
+        if (is_null($app)) {
+            return $app;
+        }
+        if (is_null($namespace)) {
+            $app->setComponentNamespace($app->componentDefaultNamespace);
+        } else {
+            $app->setComponentNamespace($namespace);
+        }
+        return $app;
+    }
+
+    // 获取App
+    protected static function getApp()
     {
         if (is_object(self::$_app)) {
             return self::$_app;

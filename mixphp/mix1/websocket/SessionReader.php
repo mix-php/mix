@@ -5,10 +5,10 @@ namespace mix\websocket;
 use mix\base\Component;
 
 /**
- * Session组件
+ * SessionReader组件
  * @author 刘健 <coder.liu@qq.com>
  */
-class Session extends Component
+class SessionReader extends Component
 {
 
     // 保存处理者
@@ -34,8 +34,8 @@ class Session extends Component
     public function loadSessionId()
     {
         // 载入session_id
-        $this->_sessionId = \Mix::app()->wsRequest->get($this->name) or
-        $this->_sessionId = \Mix::app()->wsRequest->cookie($this->name);
+        $this->_sessionId = \Mix::app('webSocket')->request->get($this->name) or
+        $this->_sessionId = \Mix::app('webSocket')->request->cookie($this->name);
         $this->_sessionKey = $this->saveKeyPrefix . $this->_sessionId;
         // 关闭连接
         $this->saveHandler->disconnect();

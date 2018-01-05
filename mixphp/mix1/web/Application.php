@@ -11,6 +11,9 @@ use mix\base\Component;
 class Application extends \mix\base\Application
 {
 
+    // 组件默认命名空间
+    public $componentDefaultNamespace = 'web';
+
     // NotFound错误消息
     protected $_notFoundMessage = 'Not Found (#404)';
 

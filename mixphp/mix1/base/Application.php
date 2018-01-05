@@ -16,10 +16,7 @@ namespace mix\base;
  * @property \mix\web\Token $token
  * @property \mix\client\Pdo $rdb
  * @property \mix\client\Redis $redis
- * @property \mix\swoole\Request $wsRequest
- * @property \mix\swoole\Response $wsResponse
- * @property \mix\websocket\Token $wsToken
- * @property \mix\websocket\Session $wsSession
+ *
  */
 class Application
 {
@@ -27,8 +24,8 @@ class Application
     // 基础路径
     public $basePath = '';
 
-    // 控制器命名空间
-    public $controllerNamespace = 'index\controller';
+    // 组件默认命名空间
+    public $componentDefaultNamespace = '';
 
     // 组件配置
     public $components = [];
@@ -40,7 +37,10 @@ class Application
     protected $_components;
 
     // NotFound错误消息
-    protected $_notFoundMessage = 'Not Found';
+    protected $_notFoundMessage = '';
+
+    // 组件命名空间
+    protected $_componentNamespace = '';
 
     // 构造
     public function __construct($attributes)
@@ -51,6 +51,12 @@ class Application
         }
         // 快捷引用
         \Mix::setApp($this);
+    }
+
+    // 设置组件命名空间
+    public function setComponentNamespace($namespace)
+    {
+        $this->_componentNamespace = $namespace;
     }
 
     // 创建对象
