@@ -12,7 +12,7 @@ class Service
     // 获取PID
     public static function getPid()
     {
-        $pidFile = \Mix::app()->getRuntimePath() . 'mix-httpd.pid';
+        $pidFile = '/var/run/mix-httpd.pid';
         if (!file_exists($pidFile)) {
             return false;
         }
