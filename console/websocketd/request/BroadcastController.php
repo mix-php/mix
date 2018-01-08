@@ -9,8 +9,17 @@ namespace console\websocketd\request;
 class BroadcastController
 {
 
-    // 发出消息
-    public function actionEmit(\Swoole\WebSocket\Server $webSocket)
+    // 发送
+    protected static function emit(\Swoole\WebSocket\Server $webSocket, $message)
+    {
+        // 给全部用户发送消息
+        foreach ($webSocket->table as $fd => $item) {
+            $webSocket->push($fd, '{"cmd":"broadcast","data":{"message":"' . $message . '"}}');
+        }
+    }
+
+    // 广播
+    public function actionEmit($webSocket)
     {
         // 给全部用户发送消息
         foreach ($webSocket->table as $fd => $item) {
@@ -18,6 +27,12 @@ class BroadcastController
         }
         // 返回
         return ['errcode' => 0, 'errmsg' => 'ok'];
+    }
+
+    // 退出房间
+    public static function exitRoom(\Swoole\WebSocket\Server $webSocket)
+    {
+        self::emit($webSocket, 'exit room');
     }
 
 }

@@ -44,7 +44,7 @@ class ServiceController extends Controller
         $userinfo = \Mix::app('webSocket')->session->get('userinfo');
         if (empty($userinfo)) {
             echo "server: sessionid error fd{$fd}\n";
-            $webSocket->push($fd, '{"cmd":"auth_failure"}');
+            $webSocket->push($fd, '{"cmd":"permission_denied"}');
             $webSocket->close($fd);
             return;
         }
@@ -55,7 +55,7 @@ class ServiceController extends Controller
         $userinfo = \Mix::app('webSocket')->token->get('userinfo');
         if (empty($userinfo)) {
             echo "server: access_token error fd{$fd}\n";
-            $webSocket->push($fd, '{"cmd":"auth_failure"}');
+            $webSocket->push($fd, '{"cmd":"permission_denied"}');
             $webSocket->close($fd);
             return;
         }
@@ -79,6 +79,8 @@ class ServiceController extends Controller
         // 删除fd
         $webSocket->table->del($fd);
         echo "client {$fd} closed\n";
+        // 发送退出广播
+        \console\websocketd\request\BroadcastController::exitRoom($webSocket);
     }
 
 }
