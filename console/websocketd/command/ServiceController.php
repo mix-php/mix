@@ -64,6 +64,10 @@ class ServiceController extends Controller
         // 保存fd
         $webSocket->table->set($fd, ['fd' => $fd]);
         echo "server: handshake success with fd{$fd}\n";
+        // 发送加入广播
+        foreach ($webSocket->table as $fd => $item) {
+            $webSocket->push($fd, '{"cmd":"broadcast","data":{"message":"join room"}}');
+        }
     }
 
     // 接收消息事件回调函数
@@ -80,7 +84,9 @@ class ServiceController extends Controller
         $webSocket->table->del($fd);
         echo "client {$fd} closed\n";
         // 发送退出广播
-        \console\websocketd\request\BroadcastController::exitRoom($webSocket);
+        foreach ($webSocket->table as $fd => $item) {
+            $webSocket->push($fd, '{"cmd":"broadcast","data":{"message":"exit room"}}');
+        }
     }
 
 }

@@ -88,23 +88,6 @@ return [
             ]
         ),
 
-        // 路由
-        'webSocket\route'    => [
-            // 类路径
-            'class'          => 'mix\base\Route',
-            // 默认变量规则
-            'defaultPattern' => '[\w-]+',
-            // 路由变量规则
-            'patterns'       => [
-                'id' => '\d+',
-            ],
-            // 路由规则
-            'rules'          => [
-            ],
-            // URL后缀
-            'suffix'         => '.html',
-        ],
-
         // 请求
         'webSocket\request'  => [
             // 类路径
@@ -201,18 +184,16 @@ return [
                 'user'        => 'www',
             ],
 
-            // onRequest 回调配置
-            'onRequest' => [
-                // 控制器命名空间
-                'controllerNamespace' => 'console\websocketd\request',
-                // Not Found 时响应的数据
-                'notFound'            => ['errcode' => 404, 'errmsg' => 'Not Found'],
-            ],
-
             // onMessage 回调配置
             'onMessage' => [
                 // 控制器命名空间
                 'controllerNamespace' => 'console\websocketd\message',
+                // 
+
+                // 路由规则
+                'rules'               => [
+                    'join' => 'join/index',
+                ],
             ],
 
         ],

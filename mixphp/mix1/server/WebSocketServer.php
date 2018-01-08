@@ -20,9 +20,6 @@ class WebSocketServer extends BaseObject
     // 运行时的各项参数
     public $setting = [];
 
-    // onRequest 回调配置
-    public $onRequest = [];
-
     // onMessage 回调配置
     public $onMessage = [];
 
@@ -57,7 +54,6 @@ class WebSocketServer extends BaseObject
         $this->onStart();
         $this->onManagerStart();
         $this->onWorkerStart();
-        $this->onRequest();
         $this->onOpen();
         $this->onMessage();
         $this->onClose();
@@ -109,73 +105,11 @@ class WebSocketServer extends BaseObject
     protected function onWorkerStart()
     {
         $this->_server->on('WorkerStart', function ($server, $workerId) {
-            try {
-                // 进程命名
-                if ($workerId < $server->setting['worker_num']) {
-                    swoole_set_process_name("mix-websocketd: worker #{$workerId}");
-                } else {
-                    swoole_set_process_name("mix-websocketd: task #{$workerId}");
-                }
-            } catch (\Exception $e) {
-                \Mix::app()->error->appException($e);
-            }
-        });
-    }
-
-    // 请求事件
-    protected function onRequest()
-    {
-        $this->_server->on('request', function ($request, $response) {
-            try {
-                // 设置请求响应器
-                \Mix::app('webSocket')->request->setRequester($request);
-                \Mix::app('webSocket')->response->setResponder($response);
-                // 路由处理
-                $server = \Mix::app('webSocket')->request->server();
-                $method = strtoupper($server['request_method']);
-                $action = empty($server['path_info']) ? '' : substr($server['path_info'], 1);
-                $action = "{$method} {$action}";
-                list($action, $queryParams) = \Mix::app('webSocket')->route->match($action);
-                if ($action) {
-                    // 路由参数导入请求类
-                    \Mix::app('webSocket')->request->setRoute($queryParams);
-                    // index处理
-                    if (isset($queryParams['controller']) && strpos($action, ':action') !== false) {
-                        $action = str_replace(':action', 'index', $action);
-                    }
-                    // 实例化控制器
-                    $action    = "{$this->onRequest['controllerNamespace']}\\{$action}";
-                    $classFull = \mix\base\Route::dirname($action);
-                    $classPath = \mix\base\Route::dirname($classFull);
-                    $className = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($classFull), true);
-                    $method    = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($action), true);
-                    $class     = "{$classPath}\\{$className}Controller";
-                    $method    = "action{$method}";
-                    try {
-                        $reflect = new \ReflectionClass($class);
-                    } catch (\ReflectionException $e) {
-                        throw new \mix\exception\NotFoundException('Not Found');
-                    }
-                    $controller = $reflect->newInstanceArgs();
-                    // 判断方法是否存在
-                    if (method_exists($controller, $method)) {
-                        // 执行控制器的方法
-                        $content = $controller->$method($this->_server);
-                        // 响应
-                        \Mix::app('webSocket')->response->format = \mix\swoole\Response::FORMAT_JSON;
-                        \Mix::app('webSocket')->response->setContent($content);
-                        \Mix::app('webSocket')->response->send();
-                    }
-                }
-                throw new \mix\exception\NotFoundException('Not Found');
-            } catch (\Exception $e) {
-                if ($e instanceof \mix\exception\NotFoundException) {
-                    \Mix::app('webSocket')->response->format = \mix\swoole\Response::FORMAT_JSON;
-                    \Mix::app('webSocket')->response->setContent($this->onRequest['notFound']);
-                    \Mix::app('webSocket')->response->send();
-                } else {
-                    \Mix::app()->error->appException($e);
-                }
+            // 进程命名
+            if ($workerId < $server->setting['worker_num']) {
+                swoole_set_process_name("mix-websocketd: worker #{$workerId}");
+            } else {
+                swoole_set_process_name("mix-websocketd: task #{$workerId}");
             }
         });
     }
