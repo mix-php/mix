@@ -5,16 +5,16 @@ $database = require __DIR__ . '/../../common/config/database.php';
 return [
 
     // 基础路径
-    'basePath'            => dirname(__DIR__) . DIRECTORY_SEPARATOR,
+    'basePath'                  => dirname(__DIR__) . DIRECTORY_SEPARATOR,
 
     // 控制器命名空间
-    'controllerNamespace' => 'console\websocketd\command',
+    'controllerNamespace'       => 'console\websocketd\command',
 
     // 组件默认命名空间
-    'componentDefaultNamespace'  => 'console',
+    'componentDefaultNamespace' => 'console',
 
     // 组件配置
-    'components'          => [
+    'components'                => [
 
         // 路由
         'console\route'      => [
@@ -88,6 +88,23 @@ return [
             ]
         ),
 
+        // 路由
+        'webSocket\route'    => [
+            // 类路径
+            'class'          => 'mix\base\Route',
+            // 默认变量规则
+            'defaultPattern' => '[\w-]+',
+            // 路由变量规则
+            'patterns'       => [
+                'id' => '\d+',
+            ],
+            // 路由规则
+            'rules'          => [
+            ],
+            // URL后缀
+            'suffix'         => '.html',
+        ],
+
         // 请求
         'webSocket\request'  => [
             // 类路径
@@ -158,20 +175,20 @@ return [
     ],
 
     // 对象配置
-    'objects'             => [
+    'objects'                   => [
 
         // WebSocketServer
         'webSocketServer' => [
 
             // 类路径
-            'class'   => 'mix\server\WebSocketServer',
+            'class'     => 'mix\server\WebSocketServer',
             // 主机
-            'host'    => 'localhost',
+            'host'      => 'localhost',
             // 端口
-            'port'    => 9502,
+            'port'      => 9502,
 
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
-            'setting' => [
+            'setting'   => [
                 // 连接处理线程数
                 'reactor_num' => 8,
                 // 工作进程数
@@ -182,6 +199,20 @@ return [
                 'log_file'    => __DIR__ . '/../runtime/logs/mix-websocketd.log',
                 // 子进程运行用户
                 'user'        => 'www',
+            ],
+
+            // onRequest 回调配置
+            'onRequest' => [
+                // 控制器命名空间
+                'controllerNamespace' => 'console\websocketd\request',
+                // Not Found 时响应的数据
+                'notFound'            => ['errcode' => 404, 'errmsg' => 'Not Found'],
+            ],
+
+            // onMessage 回调配置
+            'onMessage' => [
+                // 控制器命名空间
+                'controllerNamespace' => 'console\websocketd\message',
             ],
 
         ],

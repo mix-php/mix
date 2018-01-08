@@ -1,12 +1,12 @@
 <?php
 
-namespace console\websocketd\controller;
+namespace console\websocketd\request;
 
 /**
  * 广播控制器
  * @author 刘健 <coder.liu@qq.com>
  */
-class broadcastController
+class BroadcastController
 {
 
     // 发出消息

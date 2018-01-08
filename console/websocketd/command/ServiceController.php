@@ -23,7 +23,6 @@ class ServiceController extends Controller
         }
         // 创建服务
         $server = \Mix::app()->createObject('webSocketServer');
-        $server->on('Request', [$this, 'onRequest']);
         $server->on('Open', [$this, 'onOpen']);
         $server->on('Message', [$this, 'onMessage']);
         $server->on('Close', [$this, 'onClose']);
@@ -35,29 +34,6 @@ class ServiceController extends Controller
         $server->setServerAttribute('table', $table);
         // 启动服务
         return $server->start();
-    }
-
-    // HTTP请求事件回调函数
-    public function onRequest(\Swoole\WebSocket\Server $webSocket)
-    {
-        $pathInfo = \Mix::app('webSocket')->request->server('path_info');
-        // 路由
-        $rules = [
-            '/broadcast/emit' => ["\\console\\websocketd\\controller\\broadcastController", 'actionEmit'],
-        ];
-        // 404 Not Found
-        if (!isset($rules[$pathInfo])) {
-            \Mix::app('webSocket')->response->format = \mix\swoole\Response::FORMAT_JSON;
-            \Mix::app('webSocket')->response->setContent(['errcode' => 404, 'errmsg' => 'Not Found']);
-            \Mix::app('webSocket')->response->send();
-            \Mix::finish();
-        }
-        // 执行控制器
-        list($controller, $action) = $rules[$pathInfo];
-        $content                        = (new $controller)->$action($webSocket);
-        \Mix::app('webSocket')->response->format = \mix\swoole\Response::FORMAT_JSON;
-        \Mix::app('webSocket')->response->setContent($content);
-        \Mix::app('webSocket')->response->send();
     }
 
     // 连接事件回调函数

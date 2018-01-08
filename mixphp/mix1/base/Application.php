@@ -24,6 +24,9 @@ class Application
     // 基础路径
     public $basePath = '';
 
+    // 控制器命名空间
+    public $controllerNamespace = '';
+
     // 组件默认命名空间
     public $componentDefaultNamespace = '';
 
