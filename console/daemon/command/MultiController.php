@@ -37,7 +37,7 @@ class MultiController extends Controller
         // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
         $queueModel = new \console\common\model\QueueModel();
         // 循环执行任务
-        while (true) {
+        for ($j = 0; $j < 16000; $j++) {
             $worker->checkMaster();
             // 从队列取出一条消息
             $msg = $queueModel->pop();
@@ -50,7 +50,7 @@ class MultiController extends Controller
     public function onRightStart(\mix\process\TaskProcess $worker, $index)
     {
         // 循环执行任务
-        while (true) {
+        for ($j = 0; $j < 16000; $j++) {
             $worker->checkMaster();
             // 从队列中抢占一条消息
             $msg = $worker->pop();
