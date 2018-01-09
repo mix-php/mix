@@ -67,7 +67,7 @@ class ServiceController extends Controller
 
         // 获取房间id
         $roomId = (int)\Mix::app('webSocket')->request->get('room_id');
-        // 保存fd与用户信息
+        // 保存用户信息，使用fd做索引
         $webSocket->table->set($fd, [
             'room_id' => $roomId,
             'uid'     => $userinfo['uid'],
@@ -91,7 +91,7 @@ class ServiceController extends Controller
     // 关闭连接事件回调函数
     public function onClose(\Swoole\WebSocket\Server $webSocket, $fd)
     {
-        // 找到用户信息
+        // 通过索引fd找到用户信息
         $userinfo = [];
         foreach ($webSocket->table as $key => $item) {
             if ($key == $fd) {

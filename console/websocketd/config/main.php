@@ -17,7 +17,7 @@ return [
     'components'                => [
 
         // 路由
-        'console\route'     => [
+        'console\route'             => [
             // 类路径
             'class'          => 'mix\base\Route',
             // 默认变量规则
@@ -32,25 +32,25 @@ return [
         ],
 
         // 请求
-        'console\request'   => [
+        'console\request'           => [
             // 类路径
             'class' => 'mix\console\Request',
         ],
 
         // 响应
-        'console\response'  => [
+        'console\response'          => [
             // 类路径
             'class' => 'mix\console\Response',
         ],
 
         // 错误
-        'console\error'     => [
+        'console\error'             => [
             // 类路径
             'class' => 'mix\console\Error',
         ],
 
         // 日志
-        'console\log'       => [
+        'console\log'               => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -66,7 +66,7 @@ return [
         ],
 
         // 数据库
-        'console\rdb'       => array_merge(
+        'console\rdb'               => array_merge(
             $database['mysql'],
             [
                 // 类路径
@@ -80,7 +80,7 @@ return [
         ),
 
         // redis
-        'console\redis'     => array_merge(
+        'console\redis'             => array_merge(
             $database['redis'],
             [
                 // 类路径
@@ -89,13 +89,13 @@ return [
         ),
 
         // 请求
-        'webSocket\request' => [
+        'webSocket\request'         => [
             // 类路径
             'class' => 'mix\swoole\Request',
         ],
 
         // Session
-        'webSocket\sessionReader' => [
+        'webSocket\sessionReader'   => [
             // 类路径
             'class'         => 'mix\websocket\SessionReader',
             // 保存处理者
@@ -113,7 +113,7 @@ return [
         ],
 
         // Token
-        'webSocket\tokenReader'   => [
+        'webSocket\tokenReader'     => [
             // 类路径
             'class'         => 'mix\websocket\TokenReader',
             // 保存处理者
@@ -130,6 +130,18 @@ return [
             'name'          => 'access_token',
         ],
 
+        // 消息执行器
+        'webSocket\messageExecutor' => [
+            // 类路径
+            'class'               => 'mix\websocket\MessageExecutor',
+            // 控制器命名空间
+            'controllerNamespace' => 'console\websocketd\message',
+            // 路由规则
+            'rules'               => [
+                'join' => 'join/index',
+            ],
+        ],
+
     ],
 
     // 对象配置
@@ -139,14 +151,14 @@ return [
         'webSocketServer' => [
 
             // 类路径
-            'class'     => 'mix\server\WebSocketServer',
+            'class'   => 'mix\server\WebSocketServer',
             // 主机
-            'host'      => 'localhost',
+            'host'    => 'localhost',
             // 端口
-            'port'      => 9502,
+            'port'    => 9502,
 
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
-            'setting'   => [
+            'setting' => [
                 // 连接处理线程数
                 'reactor_num' => 8,
                 // 工作进程数
@@ -157,18 +169,6 @@ return [
                 'log_file'    => __DIR__ . '/../runtime/logs/mix-websocketd.log',
                 // 子进程运行用户
                 'user'        => 'www',
-            ],
-
-            // onMessage 回调配置
-            'onMessage' => [
-                // 控制器命名空间
-                'controllerNamespace' => 'console\websocketd\message',
-                // 动作名
-                'action'              => 'cmd',
-                // 路由规则
-                'rules'               => [
-                    'join' => 'join/index',
-                ],
             ],
 
         ],
