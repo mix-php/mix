@@ -28,7 +28,9 @@ class ServiceController extends Controller
         $server->on('Close', [$this, 'onClose']);
         // 创建内存表
         $table = new \Swoole\Table(8192);
-        $table->column('fd', \Swoole\Table::TYPE_INT);
+        $table->column('room_id', \Swoole\Table::TYPE_INT);
+        $table->column('uid', \Swoole\Table::TYPE_INT);
+        $table->column('name', \Swoole\Table::TYPE_STRING, 20);
         $table->create();
         // 添加属性至服务
         $server->setServerAttribute('table', $table);
@@ -40,33 +42,42 @@ class ServiceController extends Controller
     public function onOpen(\Swoole\WebSocket\Server $webSocket, $fd)
     {
         // 效验session
-        \Mix::app('webSocket')->session->loadSessionId();
-        $userinfo = \Mix::app('webSocket')->session->get('userinfo');
+        \Mix::app('webSocket')->sessionReader->loadSessionId();
+        $userinfo = \Mix::app('webSocket')->sessionReader->get('userinfo');
         if (empty($userinfo)) {
-            echo "server: sessionid error fd{$fd}\n";
             $webSocket->push($fd, '{"cmd":"permission_denied"}');
             $webSocket->close($fd);
             return;
         }
 
         /*
+         * 与上面的 session 方案，二选一使用即可
+
         // 效验token
-        \Mix::app('webSocket')->token->loadTokenId();
-        $userinfo = \Mix::app('webSocket')->token->get('userinfo');
+        \Mix::app('webSocket')->tokenReader->loadTokenId();
+        $userinfo = \Mix::app('webSocket')->tokenReader->get('userinfo');
         if (empty($userinfo)) {
             echo "server: access_token error fd{$fd}\n";
             $webSocket->push($fd, '{"cmd":"permission_denied"}');
             $webSocket->close($fd);
             return;
         }
+
         */
 
-        // 保存fd
-        $webSocket->table->set($fd, ['fd' => $fd]);
-        echo "server: handshake success with fd{$fd}\n";
+        // 获取房间id
+        $roomId = (int)\Mix::app('webSocket')->request->get('room_id');
+        // 保存fd与用户信息
+        $webSocket->table->set($fd, [
+            'room_id' => $roomId,
+            'uid'     => $userinfo['uid'],
+            'name'    => $userinfo['name'],
+        ]);
         // 发送加入广播
-        foreach ($webSocket->table as $fd => $item) {
-            $webSocket->push($fd, '{"cmd":"broadcast","data":{"message":"join room"}}');
+        foreach ($webSocket->table as $key => $item) {
+            if ($item['room_id'] == $roomId) {
+                $webSocket->push($key, '{"cmd":"broadcast","data":{"message":"[' . $userinfo['name'] . '] 加入房间"}}');
+            }
         }
     }
 
@@ -80,13 +91,25 @@ class ServiceController extends Controller
     // 关闭连接事件回调函数
     public function onClose(\Swoole\WebSocket\Server $webSocket, $fd)
     {
+        // 找到用户信息
+        $userinfo = [];
+        foreach ($webSocket->table as $key => $item) {
+            if ($key == $fd) {
+                $userinfo = $item;
+                break;
+            }
+        }
+        if (empty($userinfo)) {
+            return;
+        }
+        // 发送退出广播
+        foreach ($webSocket->table as $key => $item) {
+            if ($item['room_id'] == $userinfo['room_id']) {
+                $webSocket->push($key, '{"cmd":"broadcast","data":{"message":"[' . $userinfo['name'] . '] 退出房间"}}');
+            }
+        }
         // 删除fd
         $webSocket->table->del($fd);
-        echo "client {$fd} closed\n";
-        // 发送退出广播
-        foreach ($webSocket->table as $fd => $item) {
-            $webSocket->push($fd, '{"cmd":"broadcast","data":{"message":"exit room"}}');
-        }
     }
 
 }

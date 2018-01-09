@@ -11,11 +11,13 @@ namespace mix\base;
  * @property \mix\web\Request|\mix\swoole\Request|\mix\console\Request $request
  * @property \mix\web\Response|\mix\swoole\Response|\mix\console\Response $response
  * @property \mix\web\Error $error
+ * @property \mix\web\Token $token
  * @property \mix\web\Session $session
  * @property \mix\web\Cookie $cookie
- * @property \mix\web\Token $token
  * @property \mix\client\Pdo $rdb
  * @property \mix\client\Redis $redis
+ * @property \mix\websocket\TokenReader $tokenReader
+ * @property \mix\websocket\SessionReader $sessionReader
  *
  */
 class Application

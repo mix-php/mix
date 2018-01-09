@@ -17,7 +17,7 @@ return [
     'components'                => [
 
         // 路由
-        'console\route'      => [
+        'console\route'     => [
             // 类路径
             'class'          => 'mix\base\Route',
             // 默认变量规则
@@ -32,25 +32,25 @@ return [
         ],
 
         // 请求
-        'console\request'    => [
+        'console\request'   => [
             // 类路径
             'class' => 'mix\console\Request',
         ],
 
         // 响应
-        'console\response'   => [
+        'console\response'  => [
             // 类路径
             'class' => 'mix\console\Response',
         ],
 
         // 错误
-        'console\error'      => [
+        'console\error'     => [
             // 类路径
             'class' => 'mix\console\Error',
         ],
 
         // 日志
-        'console\log'        => [
+        'console\log'       => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -66,7 +66,7 @@ return [
         ],
 
         // 数据库
-        'console\rdb'        => array_merge(
+        'console\rdb'       => array_merge(
             $database['mysql'],
             [
                 // 类路径
@@ -80,7 +80,7 @@ return [
         ),
 
         // redis
-        'console\redis'      => array_merge(
+        'console\redis'     => array_merge(
             $database['redis'],
             [
                 // 类路径
@@ -89,38 +89,13 @@ return [
         ),
 
         // 请求
-        'webSocket\request'  => [
+        'webSocket\request' => [
             // 类路径
             'class' => 'mix\swoole\Request',
         ],
 
-        // 响应
-        'webSocket\response' => [
-            // 类路径
-            'class'         => 'mix\swoole\Response',
-            // 默认输出格式
-            'defaultFormat' => mix\swoole\Response::FORMAT_JSON,
-            // json
-            'json'          => [
-                // 类路径
-                'class' => 'mix\web\Json',
-            ],
-            // jsonp
-            'jsonp'         => [
-                // 类路径
-                'class'        => 'mix\web\Jsonp',
-                // callback名称
-                'callbackName' => 'callback',
-            ],
-            // xml
-            'xml'           => [
-                // 类路径
-                'class' => 'mix\web\Xml',
-            ],
-        ],
-
         // Session
-        'webSocket\session'  => [
+        'webSocket\sessionReader' => [
             // 类路径
             'class'         => 'mix\websocket\SessionReader',
             // 保存处理者
@@ -138,7 +113,7 @@ return [
         ],
 
         // Token
-        'webSocket\token'    => [
+        'webSocket\tokenReader'   => [
             // 类路径
             'class'         => 'mix\websocket\TokenReader',
             // 保存处理者
@@ -188,8 +163,8 @@ return [
             'onMessage' => [
                 // 控制器命名空间
                 'controllerNamespace' => 'console\websocketd\message',
-                // 
-
+                // 动作名
+                'action'              => 'cmd',
                 // 路由规则
                 'rules'               => [
                     'join' => 'join/index',
