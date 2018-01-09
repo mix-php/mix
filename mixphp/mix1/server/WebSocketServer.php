@@ -154,9 +154,13 @@ class WebSocketServer extends BaseObject
         if (isset($this->_onCloseCallback)) {
             $this->_server->on('close', function ($server, $fd) {
                 try {
-                    // 执行绑定的回调函数
-                    list($object, $method) = $this->_onCloseCallback;
-                    $object->$method($server, $fd);
+                    // 判断是否为WebSocket客户端
+                    $websocketStatus = $this->_server->connection_info($fd)['websocket_status'];
+                    if (in_array($websocketStatus, [WEBSOCKET_STATUS_CONNECTION, WEBSOCKET_STATUS_HANDSHAKE, WEBSOCKET_STATUS_FRAME])) {
+                        // 执行绑定的回调函数
+                        list($object, $method) = $this->_onCloseCallback;
+                        $object->$method($server, $fd);
+                    }
                 } catch (\Exception $e) {
                     \Mix::app()->error->appException($e);
                 }
