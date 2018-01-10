@@ -9,14 +9,11 @@ return [
     // 控制器命名空间
     'controllerNamespace' => 'httpd\command',
 
-    // 组件默认命名空间
-    'componentDefaultNamespace'  => 'console',
-
     // 组件配置
     'components'          => [
 
         // 路由
-        'console\route'    => [
+        'route'    => [
             // 类路径
             'class'          => 'mix\base\Route',
             // 默认变量规则
@@ -33,25 +30,25 @@ return [
         ],
 
         // 请求
-        'console\request'  => [
+        'request'  => [
             // 类路径
             'class' => 'mix\console\Request',
         ],
 
         // 响应
-        'console\response' => [
+        'response' => [
             // 类路径
             'class' => 'mix\console\Response',
         ],
 
         // 错误
-        'console\error'    => [
+        'error'    => [
             // 类路径
             'class' => 'mix\console\Error',
         ],
 
         // 日志
-        'console\log'      => [
+        'log'      => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别

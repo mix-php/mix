@@ -18,6 +18,7 @@ namespace mix\base;
  * @property \mix\client\Redis $redis
  * @property \mix\websocket\TokenReader $tokenReader
  * @property \mix\websocket\SessionReader $sessionReader
+ * @property \mix\websocket\MessageHandler $messageHandler
  *
  */
 class Application
@@ -28,9 +29,6 @@ class Application
 
     // 控制器命名空间
     public $controllerNamespace = '';
-
-    // 组件默认命名空间
-    public $componentDefaultNamespace = '';
 
     // 组件配置
     public $components = [];
@@ -45,7 +43,7 @@ class Application
     protected $_notFoundMessage = '';
 
     // 组件命名空间
-    protected $_componentNamespace = '';
+    protected $_componentNamespace;
 
     // 构造
     public function __construct($attributes)

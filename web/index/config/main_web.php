@@ -10,14 +10,11 @@ return [
     // 控制器命名空间
     'controllerNamespace' => 'web\index\controller',
 
-    // 组件默认命名空间
-    'componentDefaultNamespace'  => 'web',
-
     // 组件配置
     'components'          => [
 
         // 路由
-        'web\route'    => [
+        'route'    => [
             // 类路径
             'class'          => 'mix\base\Route',
             // 默认变量规则
@@ -34,13 +31,13 @@ return [
         ],
 
         // 请求
-        'web\request'  => [
+        'request'  => [
             // 类路径
             'class' => 'mix\swoole\Request',
         ],
 
         // 响应
-        'web\response' => [
+        'response' => [
             // 类路径
             'class'         => 'mix\swoole\Response',
             // 默认输出格式
@@ -65,7 +62,7 @@ return [
         ],
 
         // 错误
-        'web\error'    => [
+        'error'    => [
             // 类路径
             'class'  => 'mix\web\Error',
             // 输出格式
@@ -73,7 +70,7 @@ return [
         ],
 
         // 日志
-        'web\log'      => [
+        'log'      => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -89,7 +86,7 @@ return [
         ],
 
         // Token
-        'web\token'    => [
+        'token'    => [
             // 类路径
             'class'         => 'mix\web\Token',
             // 保存处理者
@@ -109,7 +106,7 @@ return [
         ],
 
         // Session
-        'web\session'  => [
+        'session'  => [
             // 类路径
             'class'         => 'mix\web\Session',
             // 保存处理者
@@ -129,7 +126,7 @@ return [
         ],
 
         // Cookie
-        'web\cookie'   => [
+        'cookie'   => [
             // 类路径
             'class'    => 'mix\web\Cookie',
             // 过期时间
@@ -145,7 +142,7 @@ return [
         ],
 
         // 数据库
-        'web\rdb'      => array_merge(
+        'rdb'      => array_merge(
             $database['mysql'],
             [
                 // 类路径
@@ -159,7 +156,7 @@ return [
         ),
 
         // redis
-        'web\redis'    => array_merge(
+        'redis'    => array_merge(
             $database['redis'],
             [
                 // 类路径

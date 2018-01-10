@@ -23,19 +23,22 @@ class Mix
      */
     public static function app($namespace = null)
     {
+        // 获取App
         $app = self::getApp();
         if (is_null($app)) {
             return $app;
         }
-        if (is_null($namespace)) {
-            $app->setComponentNamespace($app->componentDefaultNamespace);
-        } else {
-            $app->setComponentNamespace($namespace);
-        }
+        // 设置组件命名空间
+        $app->setComponentNamespace($namespace);
+        // 返回App
         return $app;
     }
 
-    // 获取App
+    /**
+     * 获取App
+     *
+     * @return \mix\swoole\Application|\mix\web\Application|\mix\console\Application
+     */
     protected static function getApp()
     {
         if (is_object(self::$_app)) {
