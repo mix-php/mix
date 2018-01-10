@@ -39,10 +39,10 @@ class ServiceController extends Controller
     }
 
     // 连接事件回调函数
-    public function onOpen(\Swoole\WebSocket\Server $webSocket, $fd)
+    public function onOpen(\Swoole\WebSocket\Server $webSocket, $fd, \mix\swoole\Request $request)
     {
         // 效验session
-        \Mix::app('webSocket')->sessionReader->loadSessionId();
+        \Mix::app('webSocket')->sessionReader->loadSessionId($request);
         $userinfo = \Mix::app('webSocket')->sessionReader->get('userinfo');
         if (empty($userinfo)) {
             $webSocket->push($fd, '{"cmd":"permission_denied"}');
@@ -54,7 +54,7 @@ class ServiceController extends Controller
          * 与上面的 session 方案，二选一使用即可
 
         // 效验token
-        \Mix::app('webSocket')->tokenReader->loadTokenId();
+        \Mix::app('webSocket')->tokenReader->loadTokenId($request);
         $userinfo = \Mix::app('webSocket')->tokenReader->get('userinfo');
         if (empty($userinfo)) {
             echo "server: access_token error fd{$fd}\n";
@@ -66,7 +66,7 @@ class ServiceController extends Controller
         */
 
         // 获取房间id
-        $roomId = (int)\Mix::app('webSocket')->request->get('room_id');
+        $roomId = (int)$request->get('room_id');
         // 保存用户信息，使用fd做索引
         $webSocket->table->set($fd, [
             'room_id' => $roomId,
@@ -86,6 +86,7 @@ class ServiceController extends Controller
     {
         echo "receive from {$frame->fd}:{$frame->data},opcode:{$frame->opcode},fin:{$frame->finish}\n";
         $webSocket->push($frame->fd, '{"cmd":"message","data":{"message":"hello"}}');
+        \Mix::app('webSocket')->messageHandler->runAction();
     }
 
     // 关闭连接事件回调函数

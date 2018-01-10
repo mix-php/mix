@@ -8,9 +8,9 @@ use mix\base\Component;
  * SessionReader组件
  * @author 刘健 <coder.liu@qq.com>
  */
-class MessageExecutor extends Component
+class MessageHandler extends Component
 {
 
-    
+
 
 }

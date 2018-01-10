@@ -121,10 +121,11 @@ class WebSocketServer extends BaseObject
             $this->_server->on('open', function ($server, $request) {
                 try {
                     // 组件初始化处理
-                    \Mix::app('webSocket')->request->setRequester($request);
+                    $swooleRequest = new \mix\swoole\Request();
+                    $swooleRequest->setRequester($request);
                     // 执行绑定的回调函数
                     list($object, $method) = $this->_onOpenCallback;
-                    $object->$method($server, $request->fd);
+                    $object->$method($server, $request->fd, $swooleRequest);
                 } catch (\Exception $e) {
                     \Mix::app()->error->appException($e);
                 }

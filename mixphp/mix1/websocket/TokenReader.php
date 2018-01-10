@@ -33,11 +33,11 @@ class TokenReader extends Component
     }
 
     // 载入TokenID
-    public function loadTokenId()
+    public function loadTokenId($request)
     {
         // 载入TokenID
-        $this->_tokenId = \Mix::app('webSocket')->request->get($this->name) or
-        $this->_tokenId = \Mix::app('webSocket')->request->header($this->name);
+        $this->_tokenId = $request->get($this->name) or
+        $this->_tokenId = $request->header($this->name);
         $this->_tokenKey = $this->_tokenPrefix . $this->_tokenId;
         // 关闭连接
         $this->saveHandler->disconnect();

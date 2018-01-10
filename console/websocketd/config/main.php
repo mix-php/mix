@@ -85,12 +85,6 @@ return [
             ]
         ),
 
-        // 请求
-        'webSocket.request'         => [
-            // 类路径
-            'class' => 'mix\swoole\Request',
-        ],
-
         // Session
         'webSocket.sessionReader'   => [
             // 类路径

@@ -22,20 +22,12 @@ class SessionReader extends Component
     // SessionID
     protected $_sessionId;
 
-    // 初始化事件
-    public function onInitialize()
-    {
-        parent::onInitialize();
-        // 载入session_id
-        $this->loadSessionId();
-    }
-
     // 载入session_id
-    public function loadSessionId()
+    public function loadSessionId($request)
     {
         // 载入session_id
-        $this->_sessionId = \Mix::app('webSocket')->request->get($this->name) or
-        $this->_sessionId = \Mix::app('webSocket')->request->cookie($this->name);
+        $this->_sessionId = $request->get($this->name) or
+        $this->_sessionId = $request->cookie($this->name);
         $this->_sessionKey = $this->saveKeyPrefix . $this->_sessionId;
         // 关闭连接
         $this->saveHandler->disconnect();
