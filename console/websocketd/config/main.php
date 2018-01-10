@@ -5,16 +5,16 @@ $database = require __DIR__ . '/../../common/config/database.php';
 return [
 
     // 基础路径
-    'basePath'                  => dirname(__DIR__) . DIRECTORY_SEPARATOR,
+    'basePath'            => dirname(__DIR__) . DIRECTORY_SEPARATOR,
 
     // 控制器命名空间
-    'controllerNamespace'       => 'console\websocketd\command',
+    'controllerNamespace' => 'console\websocketd\command',
 
     // 组件配置
-    'components'                => [
+    'components'          => [
 
         // 路由
-        'route'             => [
+        'route'                     => [
             // 类路径
             'class'          => 'mix\base\Route',
             // 默认变量规则
@@ -29,25 +29,25 @@ return [
         ],
 
         // 请求
-        'request'           => [
+        'request'                   => [
             // 类路径
             'class' => 'mix\console\Request',
         ],
 
         // 响应
-        'response'          => [
+        'response'                  => [
             // 类路径
             'class' => 'mix\console\Response',
         ],
 
         // 错误
-        'error'             => [
+        'error'                     => [
             // 类路径
             'class' => 'mix\console\Error',
         ],
 
         // 日志
-        'log'               => [
+        'log'                       => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -63,7 +63,7 @@ return [
         ],
 
         // 数据库
-        'rdb'               => array_merge(
+        'rdb'                       => array_merge(
             $database['mysql'],
             [
                 // 类路径
@@ -77,7 +77,7 @@ return [
         ),
 
         // redis
-        'redis'             => array_merge(
+        'redis'                     => array_merge(
             $database['redis'],
             [
                 // 类路径
@@ -122,21 +122,21 @@ return [
         ],
 
         // 消息执行器
-        'webSocket.messageExecutor' => [
+        'webSocket.MessageHandler' => [
             // 类路径
-            'class'               => 'mix\websocket\MessageExecutor',
+            'class'               => 'mix\websocket\MessageHandler',
             // 控制器命名空间
-            'controllerNamespace' => 'console\websocketd\message',
+            'controllerNamespace' => 'console\websocketd\controller',
             // 路由规则
             'rules'               => [
-                'join' => 'join/index',
+                'join' => 'join/room',
             ],
         ],
 
     ],
 
     // 对象配置
-    'objects'                   => [
+    'objects'             => [
 
         // WebSocketServer
         'webSocketServer' => [

@@ -27,8 +27,7 @@ class ServiceController extends Controller
         $server->on('Message', [$this, 'onMessage']);
         $server->on('Close', [$this, 'onClose']);
         // 创建内存表
-        $table = new \Swoole\Table(8192);
-        $table->column('room_id', \Swoole\Table::TYPE_INT);
+        $table = new \Swoole\Table(65536);
         $table->column('uid', \Swoole\Table::TYPE_INT);
         $table->column('name', \Swoole\Table::TYPE_STRING, 20);
         $table->create();
@@ -57,7 +56,6 @@ class ServiceController extends Controller
         \Mix::app('webSocket')->tokenReader->loadTokenId($request);
         $userinfo = \Mix::app('webSocket')->tokenReader->get('userinfo');
         if (empty($userinfo)) {
-            echo "server: access_token error fd{$fd}\n";
             $webSocket->push($fd, '{"cmd":"permission_denied"}');
             $webSocket->close($fd);
             return;
@@ -65,51 +63,36 @@ class ServiceController extends Controller
 
         */
 
-        // 获取房间id
-        $roomId = (int)$request->get('room_id');
-        // 保存用户信息，使用fd做索引
+        // 保存会话信息
         $webSocket->table->set($fd, [
-            'room_id' => $roomId,
-            'uid'     => $userinfo['uid'],
-            'name'    => $userinfo['name'],
+            'uid'  => $userinfo['uid'],
+            'name' => $userinfo['name'],
         ]);
-        // 发送加入广播
-        foreach ($webSocket->table as $key => $item) {
-            if ($item['room_id'] == $roomId) {
-                $webSocket->push($key, '{"cmd":"broadcast","data":{"message":"[' . $userinfo['name'] . '] 加入房间"}}');
-            }
-        }
     }
 
     // 接收消息事件回调函数
     public function onMessage(\Swoole\WebSocket\Server $webSocket, \Swoole\WebSocket\Frame $frame)
     {
-        echo "receive from {$frame->fd}:{$frame->data},opcode:{$frame->opcode},fin:{$frame->finish}\n";
-        $webSocket->push($frame->fd, '{"cmd":"message","data":{"message":"hello"}}');
-        \Mix::app('webSocket')->messageHandler->runAction();
+        // 取出会话信息
+        $userinfo = $webSocket->table->get($frame->fd);
+        // 解析数据
+        $data = json_decode($frame->data);
+        if (!isset($data->cmd) || !isset($data->data)) {
+            return;
+        }
+        $action = $data->cmd;
+        // 执行功能
+        \Mix::app('webSocket')->messageHandler
+            ->setServer($webSocket)
+            ->setFd($frame->fd)
+            ->setData($data->data)
+            ->runAction($action, [$userinfo]);
     }
 
     // 关闭连接事件回调函数
     public function onClose(\Swoole\WebSocket\Server $webSocket, $fd)
     {
-        // 通过索引fd找到用户信息
-        $userinfo = [];
-        foreach ($webSocket->table as $key => $item) {
-            if ($key == $fd) {
-                $userinfo = $item;
-                break;
-            }
-        }
-        if (empty($userinfo)) {
-            return;
-        }
-        // 发送退出广播
-        foreach ($webSocket->table as $key => $item) {
-            if ($item['room_id'] == $userinfo['room_id']) {
-                $webSocket->push($key, '{"cmd":"broadcast","data":{"message":"[' . $userinfo['name'] . '] 退出房间"}}');
-            }
-        }
-        // 删除fd
+        // 删除会话信息
         $webSocket->table->del($fd);
     }
 
