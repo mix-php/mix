@@ -55,10 +55,9 @@ class Error extends Component
         // 日志处理
         if (isset(\Mix::app()->components['log']) && !($e instanceof \mix\exception\NotFoundException)) {
             $time    = date('Y-m-d H:i:s');
-            $message = "[time] {$time}" . PHP_EOL;
-            $message .= "[code] {$errors['code']}" . PHP_EOL;
-            $message .= "[message] {$errors['message']}" . PHP_EOL;
-            $message .= "[type] {$errors['type']}" . PHP_EOL;
+            $message = "[message] {$errors['message']}" . PHP_EOL;
+            $message .= "[time] {$time}" . PHP_EOL;
+            $message .= "[type] {$errors['type']} code {$errors['code']}" . PHP_EOL;
             $message .= "[file] {$errors['file']} line {$errors['line']}" . PHP_EOL;
             $message .= "[trace] {$errors['trace']}" . PHP_EOL;
             $message .= str_replace('Array', '$_SERVER', print_r($_SERVER, true));
