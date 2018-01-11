@@ -72,7 +72,7 @@ class Log extends Component
         while (file_exists($file) && filesize($file) >= $this->maxFileSize) {
             $file = $dir . '/' . $filename . '_' . ++$number . '.log';
         }
-        file_put_contents($file, $message . str_repeat($this->newline, 2), FILE_APPEND | LOCK_EX);
+        file_put_contents($file, $message . $this->newline, FILE_APPEND | LOCK_EX);
     }
 
 }
