@@ -2,19 +2,20 @@
 
 namespace console\websocketd\controller;
 
-use mix\websocket\Controller;
-
 /**
  * 加入控制器
  * @author 刘健 <coder.liu@qq.com>
  */
-class JoinController extends Controller
+class JoinController
 {
 
     // 加入房间
-    public function actionRoom()
+    public function actionRoom($data, $userinfo)
     {
-        return 'Hello World' . PHP_EOL;
+        // 处理业务
+        // ...
+        // 响应
+        return json_encode(['error_code' => 0, 'data' => $userinfo]);
     }
 
 }

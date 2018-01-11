@@ -40,11 +40,15 @@ class ServiceController extends Controller
     // 连接事件回调函数
     public function onOpen(\Swoole\WebSocket\Server $webSocket, $fd, \mix\swoole\Request $request)
     {
+        echo "onOpen {$fd}\n";
+
+
         // 效验session
         \Mix::app('webSocket')->sessionReader->loadSessionId($request);
         $userinfo = \Mix::app('webSocket')->sessionReader->get('userinfo');
         if (empty($userinfo)) {
-            $webSocket->push($fd, '{"cmd":"permission_denied"}');
+            // 鉴权失败处理
+            $webSocket->push($fd, json_encode(['error_code' => 300001]));
             $webSocket->close($fd);
             return;
         }
@@ -56,7 +60,8 @@ class ServiceController extends Controller
         \Mix::app('webSocket')->tokenReader->loadTokenId($request);
         $userinfo = \Mix::app('webSocket')->tokenReader->get('userinfo');
         if (empty($userinfo)) {
-            $webSocket->push($fd, '{"cmd":"permission_denied"}');
+            // 鉴权失败处理
+            $webSocket->push($fd, json_encode(['error_code' => 300001]));
             $webSocket->close($fd);
             return;
         }
@@ -68,11 +73,15 @@ class ServiceController extends Controller
             'uid'  => $userinfo['uid'],
             'name' => $userinfo['name'],
         ]);
+
+        echo "onOpen ok {$fd}\n";
     }
 
     // 接收消息事件回调函数
     public function onMessage(\Swoole\WebSocket\Server $webSocket, \Swoole\WebSocket\Frame $frame)
     {
+        echo "onMessage {$frame->fd}, {$frame->data}\n";
+
         // 取出会话信息
         $userinfo = $webSocket->table->get($frame->fd);
         // 解析数据
@@ -85,8 +94,7 @@ class ServiceController extends Controller
         \Mix::app('webSocket')->messageHandler
             ->setServer($webSocket)
             ->setFd($frame->fd)
-            ->setData($data->data)
-            ->runAction($action, [$userinfo]);
+            ->runAction($action, [$data->data, $userinfo]);
     }
 
     // 关闭连接事件回调函数

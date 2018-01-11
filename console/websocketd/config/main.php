@@ -121,8 +121,8 @@ return [
             'name'          => 'access_token',
         ],
 
-        // 消息执行器
-        'webSocket.MessageHandler' => [
+        // 消息处理器
+        'webSocket.messageHandler' => [
             // 类路径
             'class'               => 'mix\websocket\MessageHandler',
             // 控制器命名空间
@@ -159,7 +159,7 @@ return [
                 // 日志文件路径
                 'log_file'    => __DIR__ . '/../runtime/logs/mix-websocketd.log',
                 // 子进程运行用户
-                'user'        => 'www',
+                //'user'        => 'www',
             ],
 
         ],
