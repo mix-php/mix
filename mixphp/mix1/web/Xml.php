@@ -12,7 +12,7 @@ class Xml extends BaseObject
 {
 
     // 输出
-    public function encode($array)
+    public static function encode($array)
     {
         // 输出
         $xmlString = '<?xml version="1.0" encoding="utf-8"?>';
