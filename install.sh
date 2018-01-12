@@ -7,10 +7,10 @@ crontab_bin="/usr/local/bin/mix-crontab"
 daemon_bin="/usr/local/bin/mix-daemon"
 websocketd_bin="/usr/local/bin/mix-websocketd"
 
-httpd_path="${dirname}/store/httpd/mix-httpd"
-crontab_path="${dirname}/console/crontab/mix-crontab"
-daemon_path="${dirname}/console/daemon/mix-daemon"
-websocketd_path="${dirname}/console/websocketd/mix-websocketd"
+httpd_path="${dirname}/bin/mix-httpd"
+crontab_path="${dirname}/bin/mix-crontab"
+daemon_path="${dirname}/bin/mix-daemon"
+websocketd_path="${dirname}/bin/mix-websocketd"
 
 echo "rm -rf $httpd_bin"
 rm -rf $httpd_bin
