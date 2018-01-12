@@ -18,13 +18,13 @@ class MessageHandler extends Component
     public $rules = [];
 
     // 服务
-    public $_server;
+    protected $_server;
 
     // 文件描述符
-    public $_fd;
+    protected $_fd;
 
     // NotFound错误消息
-    public $_notFoundMessage = 'MessageHandler: Action Not Found';
+    protected $_notFoundMessage = 'MessageHandler: Action Not Found';
 
     // 设置服务
     public function setServer($server)
@@ -60,7 +60,10 @@ class MessageHandler extends Component
                 $this->clean();
                 throw new \mix\exception\NotFoundException($this->_notFoundMessage);
             }
-            $controller = $reflect->newInstanceArgs();
+            $controller = $reflect->newInstanceArgs([[
+                '_server' => $this->_server,
+                '_fd'     => $this->_fd,
+            ]]);
             // 判断方法是否存在
             if (method_exists($controller, $method)) {
                 // 执行控制器的方法
