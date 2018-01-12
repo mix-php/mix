@@ -59,7 +59,7 @@ class HttpServer extends BaseObject
     {
         $this->server->on('Start', function ($server) {
             // 进程命名
-            swoole_set_process_name("mix-httpd: master {$this->host}:{$this->port}");
+            stristr(PHP_OS, 'DAR') === false and swoole_set_process_name("mix-httpd: master {$this->host}:{$this->port}");
         });
     }
 
@@ -68,7 +68,7 @@ class HttpServer extends BaseObject
     {
         $this->server->on('ManagerStart', function ($server) {
             // 进程命名
-            swoole_set_process_name("mix-httpd: manager");
+            stristr(PHP_OS, 'DAR') === false and swoole_set_process_name("mix-httpd: manager");
         });
     }
 
@@ -78,9 +78,9 @@ class HttpServer extends BaseObject
         $this->server->on('WorkerStart', function ($server, $workerId) {
             // 进程命名
             if ($workerId < $server->setting['worker_num']) {
-                swoole_set_process_name("mix-httpd: worker #{$workerId}");
+                stristr(PHP_OS, 'DAR') === false and swoole_set_process_name("mix-httpd: worker #{$workerId}");
             } else {
-                swoole_set_process_name("mix-httpd: task #{$workerId}");
+                stristr(PHP_OS, 'DAR') === false and swoole_set_process_name("mix-httpd: task #{$workerId}");
             }
             // 错误处理注册
             \mix\web\Error::register();
