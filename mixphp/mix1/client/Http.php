@@ -27,13 +27,6 @@ class Http extends BaseObject
     protected $_error;
 
     // 设置请求头
-    public function setHeaders($headers)
-    {
-        $this->headers = $headers;
-        return $this;
-    }
-
-    // 设置请求头
     public function setHeader($key, $value)
     {
         $this->headers[$key] = $value;
