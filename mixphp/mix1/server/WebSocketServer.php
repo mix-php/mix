@@ -14,7 +14,7 @@ class WebSocketServer extends BaseObject
     // 主机
     public $host;
 
-    // 主机
+    // 端口
     public $port;
 
     // 运行时的各项参数
