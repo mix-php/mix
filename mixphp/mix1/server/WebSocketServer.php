@@ -41,11 +41,6 @@ class WebSocketServer extends BaseObject
         parent::onInitialize();
         // 实例化服务器
         $this->_server = new \Swoole\WebSocket\Server($this->host, $this->port);
-        // 新建日志目录
-        if (isset($this->setting['log_file'])) {
-            $dir = dirname($this->setting['log_file']);
-            is_dir($dir) or mkdir($dir);
-        }
     }
 
     // 启动服务

@@ -87,7 +87,7 @@ return [
                 // 设置worker进程的最大任务数
                 'max_request' => 10000,
                 // 日志文件路径
-                'log_file'    => __DIR__ . '/../runtime/logs/mix-httpd.log',
+                'log_file'    => '/tmp/mix-httpd.log',
                 // 子进程运行用户
                 'user'        => 'www',
             ],
