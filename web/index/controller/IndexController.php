@@ -41,11 +41,11 @@ class IndexController extends Controller
         $model->attributes = \Mix::app()->request->get() + \Mix::app()->request->post();
         $model->setScenario('test');
         if (!$model->validate()) {
-            return $this->render('web-site-example', ['message' => '参数格式效验失败', 'errors' => $model->errors]);
+            return $this->render('web_site_example', ['message' => '参数格式效验失败', 'errors' => $model->errors]);
         }
         $model->save();
         // 响应
-        return $this->render('web-site-example', ['message' => '新增成功']);
+        return $this->render('web_site_example', ['message' => '新增成功']);
     }
 
 }
