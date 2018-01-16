@@ -32,18 +32,22 @@ class Route extends Component
         ':controller/:action' => ':controller/:action',
     ];
 
-    /**
-     * 初始化
-     * 生成路由数据，将路由规则转换为正则表达式，并提取路由参数名
-     */
+    // 初始化事件
     public function onInitialize()
     {
         parent::onInitialize();
+        // 初始化
+        $this->initialize();
+    }
+
+    // 初始化，生成路由数据，将路由规则转换为正则表达式，并提取路由参数名
+    public function initialize()
+    {
         $this->rules += $this->defaultRules;
-        // index处理
+        // url目录index处理
         foreach ($this->rules as $rule => $action) {
             if (strpos($rule, ':controller') !== false && strpos($rule, ':action') !== false) {
-                $this->rules[dirname($rule)] = $action;
+                $this->rules[dirname($rule)] = str_replace(':action', 'index', $action);
             }
         }
         // 转正则
@@ -75,11 +79,7 @@ class Route extends Component
         }
     }
 
-    /**
-     * 匹配功能
-     * @param  string $action
-     * @return false or string
-     */
+    // 匹配功能
     public function match($action)
     {
         // 清空旧数据
@@ -105,6 +105,16 @@ class Route extends Component
                         }
                     }
                 }
+                // url目录index处理
+                if (isset($urlParams['controller']) && !isset($urlParams['action'])) {
+                    $urlParams['action'] = 'index';
+                }
+                // 无controller,action参数路由处理
+                if (!isset($urlParams['controller']) && !isset($urlParams['action'])) {
+                    $tmp                     = $fragment;
+                    $urlParams['action']     = array_pop($tmp);
+                    $urlParams['controller'] = array_pop($tmp);
+                }
                 // 返回action
                 return [implode('\\', $fragment), $urlParams];
             }
@@ -112,12 +122,7 @@ class Route extends Component
         return false;
     }
 
-    /**
-     * 蛇形命名转换为驼峰命名
-     * @param  string $name
-     * @param  boolean $ucfirst
-     * @return string
-     */
+    // 蛇形命名转换为驼峰命名
     public static function snakeToCamel($name, $ucfirst = false)
     {
         $name = ucwords(str_replace(['_', '-'], ' ', $name));
@@ -125,11 +130,7 @@ class Route extends Component
         return $ucfirst ? ucfirst($name) : $name;
     }
 
-    /**
-     * 驼峰命名转换为蛇形命名
-     * @param  string $name
-     * @return string
-     */
+    // 驼峰命名转换为蛇形命名
     public static function camelToSnake($name, $separator = '_')
     {
         $name = preg_replace_callback('/([A-Z]{1})/', function ($matches) use ($separator) {
@@ -141,10 +142,7 @@ class Route extends Component
         return $name;
     }
 
-    /**
-     * 返回路径中的目录部分
-     * 正反斜杠linux兼容处理
-     */
+    // 返回路径中的目录部分，正反斜杠linux兼容处理
     public static function dirname($path)
     {
         if (strpos($path, '\\') === false) {
@@ -153,10 +151,7 @@ class Route extends Component
         return str_replace('/', '\\', dirname(str_replace('\\', '/', $path)));
     }
 
-    /**
-     * 返回路径中的文件名部分
-     * 正反斜杠linux兼容处理
-     */
+    // 返回路径中的文件名部分，正反斜杠linux兼容处理
     public static function basename($path)
     {
         if (strpos($path, '\\') === false) {

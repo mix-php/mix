@@ -95,10 +95,6 @@ class Application
         if ($action) {
             // 路由参数导入请求类
             \Mix::app()->request->setRoute($queryParams);
-            // index处理
-            if (isset($queryParams['controller']) && strpos($action, ':action') !== false) {
-                $action = str_replace(':action', 'index', $action);
-            }
             // 实例化控制器
             $action    = "{$this->controllerNamespace}\\{$action}";
             $classFull = \mix\base\Route::dirname($action);
