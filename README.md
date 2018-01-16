@@ -119,4 +119,4 @@ Hello World
 ## 授权
 
 开源项目的可持续发展离不开资金，MixPHP 希望通过出售授权来获得维持项目运行的资金。      
-授权详情：http://www.mixphp.cn/wiki/licence 。
+授权详情：http://www.mixphp.cn/about/licence 。
