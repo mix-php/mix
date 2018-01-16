@@ -26,13 +26,6 @@ class Http extends BaseObject
     // 上次请求的错误信息
     protected $_error;
 
-    // 设置请求头
-    public function setHeader($key, $value)
-    {
-        $this->headers[$key] = $value;
-        return $this;
-    }
-
     // GET请求
     public function get($url)
     {
@@ -59,15 +52,12 @@ class Http extends BaseObject
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $requestType);
-        // 设置数据
         isset($this->timeout) and curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
         curl_setopt($ch, CURLOPT_HTTPHEADER, isset($this->headers) ? $this->headers : []);
         isset($requestBody) and curl_setopt($ch, CURLOPT_POSTFIELDS, $requestBody);
         // 忽略SSL
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        // 设置UserAgent
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36');
         // 返回数据
         $this->_body       = curl_exec($ch);
         $this->_error      = curl_error($ch);
