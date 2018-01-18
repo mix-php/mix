@@ -1,22 +1,21 @@
 <?php
 
+namespace mix\validator;
+
 /**
  * DateValidator类
  * @author 刘健 <coder.liu@qq.com>
  */
-
-namespace mix\validator;
-
 class DateValidator extends BaseValidator
 {
 
     // 允许的功能集合
-    protected $allowActions = ['format'];
+    protected $_allowActions = ['format'];
 
     // 格式验证
     protected function format($param)
     {
-        $value = $this->attributeValue;
+        $value = $this->_attributeValue;
         $date = date_create($value);
         if (!$date || $value != date_format($date, $param)) {
             if (is_null($this->attributeMessage)) {

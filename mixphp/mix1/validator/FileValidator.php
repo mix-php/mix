@@ -1,17 +1,16 @@
 <?php
 
+namespace mix\validator;
+
 /**
  * FileValidator类
  * @author 刘健 <coder.liu@qq.com>
  */
-
-namespace mix\validator;
-
 class FileValidator extends BaseValidator
 {
 
     // 允许的功能集合
-    protected $allowActions = ['type', 'mimes', 'maxSize'];
+    protected $_allowActions = ['type', 'mimes', 'maxSize'];
 
     // 文件类型描述
     protected $typeLabel = '文件';
@@ -37,7 +36,7 @@ class FileValidator extends BaseValidator
     // 上传错误效验
     protected function uploadError()
     {
-        $value = $this->attributeValue;
+        $value = $this->_attributeValue;
         if ($value['error'] > 0) {
             switch ($value['error']) {
                 case UPLOAD_ERR_INI_SIZE:
@@ -74,7 +73,7 @@ class FileValidator extends BaseValidator
     // MIME类型验证
     protected function mimes($param)
     {
-        $value = $this->attributeValue;
+        $value = $this->_attributeValue;
         if (!in_array($value['type'], $param)) {
             if (is_null($this->attributeMessage)) {
                 $error = "{$this->attributeLabel}类型不在%s范围内.";
@@ -90,7 +89,7 @@ class FileValidator extends BaseValidator
     // 最大文件大小效验
     protected function maxSize($param)
     {
-        $value = $this->attributeValue;
+        $value = $this->_attributeValue;
         if ($value['size'] > $param * 1024) {
             if (is_null($this->attributeMessage)) {
                 $error = "{$this->attributeLabel}不能大于%sKB.";

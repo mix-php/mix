@@ -1,17 +1,16 @@
 <?php
 
+namespace mix\validator;
+
 /**
  * StringValidator类
  * @author 刘健 <coder.liu@qq.com>
  */
-
-namespace mix\validator;
-
 class StringValidator extends BaseValidator
 {
 
     // 允许的功能集合
-    protected $allowActions = ['length', 'minLength', 'maxLength', 'filter'];
+    protected $_allowActions = ['length', 'minLength', 'maxLength', 'filter'];
 
     // 过滤处理
     protected function filter($param)

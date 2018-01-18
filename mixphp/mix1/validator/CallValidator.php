@@ -1,17 +1,16 @@
 <?php
 
+namespace mix\validator;
+
 /**
  * CallValidator类
  * @author 刘健 <coder.liu@qq.com>
  */
-
-namespace mix\validator;
-
 class CallValidator extends BaseValidator
 {
 
     // 允许的功能集合
-    protected $allowActions = ['callback'];
+    protected $_allowActions = ['callback'];
 
     // 回调验证
     protected function callback($param)

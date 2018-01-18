@@ -1,22 +1,21 @@
 <?php
 
+namespace mix\validator;
+
 /**
  * CompareValidator类
  * @author 刘健 <coder.liu@qq.com>
  */
-
-namespace mix\validator;
-
 class CompareValidator extends BaseValidator
 {
 
     // 允许的功能集合
-    protected $allowActions = ['compareAttribute'];
+    protected $_allowActions = ['compareAttribute'];
 
     // 比较属性
     protected function compareAttribute($param)
     {
-        $value = $this->attributeValue;
+        $value = $this->_attributeValue;
         if (!isset($this->attributes[$param]) || $value != $this->attributes[$param]) {
             if (is_null($this->attributeMessage)) {
                 $error = "{$this->attributeLabel}不等于%s.";

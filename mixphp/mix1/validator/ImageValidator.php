@@ -1,12 +1,11 @@
 <?php
 
+namespace mix\validator;
+
 /**
  * ImageValidator类
  * @author 刘健 <coder.liu@qq.com>
  */
-
-namespace mix\validator;
-
 class ImageValidator extends FileValidator
 {
 

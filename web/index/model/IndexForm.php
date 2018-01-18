@@ -41,7 +41,7 @@ class IndexForm extends Model
             ['f', 'email', 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
             ['g', 'phone'],
             ['h', 'url', 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
-            ['i', 'in', 'range' => ['A', 'B']],
+            ['i', 'in', 'range' => ['A', 'B'], 'strict' => true],
             ['j', 'date', 'format' => 'Y-m-d'],
             ['k', 'compare', 'compareAttribute' => 'a'],
             ['l', 'match', 'pattern' => '/^[\w]{1,30}$/'],

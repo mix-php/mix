@@ -83,7 +83,7 @@ class Model extends BaseObject
         if (!isset($this->_scenario)) {
             throw new \mix\exception\ModelException("场景未设置");
         }
-        $this->errors = null;
+        $this->errors = [];
         $scenario = $this->_scenario;
         $scenarioAttributes = array_merge($scenario['required'], $scenario['optional']);
         $rules = $this->rules();
@@ -101,16 +101,19 @@ class Model extends BaseObject
             }
             $validatorClass = $this->_validators[$validatorType];
             $validator = new $validatorClass();
+            // 必需验证
             if (in_array($attribute, $scenario['required'])) {
                 array_unshift($rule, true);
             } else {
                 array_unshift($rule, false);
             }
+            // 传入属性
             $validator->actions = $rule;
             $validator->attributes = &$this->attributes;
             $validator->attributeMessages = $attributeMessages;
             $validator->attributeLabels = $attributeLabels;
             $validator->attribute = $attribute;
+            // 验证
             if (!$validator->validate()) {
                 // 累计汇总错误信息
                 if (!isset($this->errors[$attribute])) {
@@ -130,7 +133,7 @@ class Model extends BaseObject
                 $this->$scenarioAttribute = null;
             }
         }
-        return is_null($this->errors);
+        return empty($this->errors);
     }
 
 }
