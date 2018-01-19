@@ -16,6 +16,15 @@ class MultiController extends Controller
     // 是否后台运行
     protected $d = false;
 
+    /**
+     * 获取服务
+     * @return \mix\server\TaskServer
+     */
+    public function getServer()
+    {
+        return \Mix::app()->createObject('taskServer');
+    }
+
     // 启动守护进程
     public function actionStart()
     {
@@ -24,7 +33,7 @@ class MultiController extends Controller
             self::daemon();
         }
         // 启动服务
-        $server       = \Mix::app()->createObject('taskServer');
+        $server       = $this->getServer();
         $server->name = $this->getControllerName();
         $server->on('LeftStart', [$this, 'onLeftStart']);
         $server->on('RightStart', [$this, 'onRightStart']);

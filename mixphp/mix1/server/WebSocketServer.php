@@ -20,9 +20,6 @@ class WebSocketServer extends BaseObject
     // 运行时的各项参数
     public $setting = [];
 
-    // onMessage 回调配置
-    public $onMessage = [];
-
     // Server对象
     protected $_server;
 

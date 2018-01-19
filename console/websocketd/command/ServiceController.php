@@ -14,6 +14,15 @@ class ServiceController extends Controller
     // 是否后台运行
     protected $d = false;
 
+    /**
+     * 获取服务
+     * @return \mix\server\WebSocketServer
+     */
+    public function getServer()
+    {
+        return \Mix::app()->createObject('webSocketServer');
+    }
+
     // 启动服务
     public function actionStart()
     {
@@ -22,7 +31,7 @@ class ServiceController extends Controller
             self::daemon();
         }
         // 创建服务
-        $server = \Mix::app()->createObject('webSocketServer');
+        $server = $this->getServer();
         $server->on('Open', [$this, 'onOpen']);
         $server->on('Message', [$this, 'onMessage']);
         $server->on('Close', [$this, 'onClose']);
@@ -34,7 +43,7 @@ class ServiceController extends Controller
         // 添加属性至服务
         $server->setServerAttribute('table', $table);
         // 启动服务
-        return $server->start();
+        $server->start();
     }
 
     // 连接事件回调函数
