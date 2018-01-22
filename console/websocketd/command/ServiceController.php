@@ -23,6 +23,15 @@ class ServiceController extends Controller
         return \Mix::app()->createObject('webSocketServer');
     }
 
+    /**
+     * 获取异步redis
+     * @return \mix\async\Redis
+     */
+    public function getAsyncRedis()
+    {
+        return \Mix::app()->createObject('asyncRedis');
+    }
+
     // 启动服务
     public function actionStart()
     {
@@ -77,6 +86,19 @@ class ServiceController extends Controller
             'uid'  => $userinfo['uid'],
             'name' => $userinfo['name'],
         ]);
+        // 异步订阅
+        $redis = $this->getAsyncRedis();
+        $redis->on('Message', function (\Swoole\Redis $client, $result) use ($webSocket, $fd) {
+            list($type, , $message) = $result;
+            if ($type == 'message') {
+                $webSocket->push($fd, $message);
+            }
+        });
+        $redis->connect(function (\Swoole\Redis $client, $result) use ($userinfo) {
+            $client->subscribe('emit_to_' . $userinfo['uid']);
+        });
+        // 保存连接
+        $webSocket->redisConnections[$fd] = $redis;
     }
 
     // 接收消息事件回调函数
@@ -102,6 +124,9 @@ class ServiceController extends Controller
     {
         // 删除会话信息
         $webSocket->table->del($fd);
+        // 删除redis连接
+        $webSocket->redisConnections[$fd]->close();
+        unset($webSocket->redisConnections[$fd]);
     }
 
 }

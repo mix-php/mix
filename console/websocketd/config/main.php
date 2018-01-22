@@ -164,6 +164,15 @@ return [
 
         ],
 
+        // 异步redis
+        'asyncRedis'      => array_merge(
+            $database['redis'],
+            [
+                // 类路径
+                'class'    => 'mix\async\Redis',
+            ]
+        ),
+
     ],
 
 ];
