@@ -49,8 +49,8 @@ class ServiceController extends Controller
         $table->column('uid', \Swoole\Table::TYPE_INT);
         $table->column('name', \Swoole\Table::TYPE_STRING, 20);
         $table->create();
-        // 添加属性至服务
-        $server->setServerAttribute('table', $table);
+        // 添加至服务属性
+        $server->table = $table;
         // 启动服务
         $server->start();
     }
