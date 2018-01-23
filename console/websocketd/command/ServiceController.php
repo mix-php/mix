@@ -61,6 +61,7 @@ class ServiceController extends Controller
         // 效验session
         \Mix::app('webSocket')->sessionReader->loadSessionId($request);
         $userinfo = \Mix::app('webSocket')->sessionReader->get('userinfo');
+        \Mix::app('webSocket')->sessionReader->close();
         if (empty($userinfo)) {
             // 鉴权失败处理
             $webSocket->close($fd);
@@ -73,6 +74,7 @@ class ServiceController extends Controller
         // 效验token
         \Mix::app('webSocket')->tokenReader->loadTokenId($request);
         $userinfo = \Mix::app('webSocket')->tokenReader->get('userinfo');
+        \Mix::app('webSocket')->tokenReader->close();
         if (empty($userinfo)) {
             // 鉴权失败处理
             $webSocket->close($fd);

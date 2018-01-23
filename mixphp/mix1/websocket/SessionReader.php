@@ -25,10 +25,17 @@ class SessionReader extends Component
     // 载入session_id
     public function loadSessionId($request)
     {
+        // 关闭
+        $this->close();
         // 载入session_id
         $this->_sessionId = $request->get($this->name) or
         $this->_sessionId = $request->cookie($this->name);
         $this->_sessionKey = $this->saveKeyPrefix . $this->_sessionId;
+    }
+
+    // 关闭
+    public function close()
+    {
         // 关闭连接
         $this->saveHandler->disconnect();
     }
