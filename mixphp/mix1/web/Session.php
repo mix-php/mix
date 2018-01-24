@@ -47,8 +47,8 @@ class Session extends Component
         if (is_null($this->_sessionId)) {
             $this->_sessionId = self::createSessionId();
         }
-        \Mix::app()->response->setCookie($this->name, $this->_sessionId, time() + $this->expires);
         $this->_sessionKey = $this->saveKeyPrefix . $this->_sessionId;
+        $this->saveHandler->setTimeout($this->_sessionKey, $this->expires);
     }
 
     // 创建session_id
@@ -67,6 +67,7 @@ class Session extends Component
     {
         $success = $this->saveHandler->hMset($this->_sessionKey, [$name => serialize($value)]);
         $this->saveHandler->setTimeout($this->_sessionKey, $this->expires);
+        \Mix::app()->response->setCookie($this->name, $this->_sessionId);
         return $success ? true : false;
     }
 
