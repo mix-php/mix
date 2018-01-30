@@ -129,7 +129,10 @@ return [
             'controllerNamespace' => 'console\websocketd\controller',
             // 路由规则
             'rules'               => [
-                'join' => 'join/room',
+
+                'join'    => 'join/room',
+                'message' => 'message/to',
+
             ],
         ],
 
@@ -169,7 +172,7 @@ return [
             $database['redis'],
             [
                 // 类路径
-                'class'    => 'mix\async\Redis',
+                'class' => 'mix\async\Redis',
             ]
         ),
 

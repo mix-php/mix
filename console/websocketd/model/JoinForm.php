@@ -17,7 +17,7 @@ class JoinForm extends Model
     public function rules()
     {
         return [
-            ['room_id', 'integer', 'unsigned' => true, 'min' => 1, 'max' => 1000000000],
+            ['room_id', 'integer', 'unsigned' => true, 'minLength' => 1, 'maxLength' => 10],
         ];
     }
 

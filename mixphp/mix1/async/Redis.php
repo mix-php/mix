@@ -36,7 +36,6 @@ class Redis extends BaseObject
         $database = $this->database;
         $password = $this->password;
         $this->_redis->connect($this->host, $this->port, function (\Swoole\Redis $client, $result) use ($closure, $database, $password) {
-
             $client->select($database, function (\Swoole\Redis $client, $result) use ($closure, $password) {
                 if ($result) {
                     if ($password == '') {
