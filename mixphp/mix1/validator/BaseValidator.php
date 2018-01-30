@@ -60,6 +60,9 @@ class BaseValidator
     // 获取属性值
     protected function getAttributeValue()
     {
+        if (!is_scalar($this->attributes[$this->attribute])) {
+            throw new \mix\exception\ModelException("属性`{$this->attribute}`的不是标量类型");
+        }
         if (!isset($this->attributes[$this->attribute])) {
             return null;
         }
