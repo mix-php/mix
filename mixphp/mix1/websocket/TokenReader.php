@@ -41,6 +41,8 @@ class TokenReader extends Component
         $this->_tokenId = $request->get($this->name) or
         $this->_tokenId = $request->header($this->name);
         $this->_tokenKey = $this->_tokenPrefix . $this->_tokenId;
+        // 返回
+        return $this;
     }
 
     // 关闭

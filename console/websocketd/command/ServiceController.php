@@ -59,8 +59,7 @@ class ServiceController extends Controller
     public function onOpen(\Swoole\WebSocket\Server $webSocket, $fd, \mix\swoole\Request $request)
     {
         // 效验session
-        \Mix::app('webSocket')->sessionReader->loadSessionId($request);
-        $userinfo = \Mix::app('webSocket')->sessionReader->get('userinfo');
+        $userinfo = \Mix::app('webSocket')->sessionReader->loadSessionId($request)->get('userinfo');
         \Mix::app('webSocket')->sessionReader->close();
         if (empty($userinfo)) {
             // 鉴权失败处理
@@ -72,8 +71,7 @@ class ServiceController extends Controller
          * 与上面的 session 方案，二选一使用即可
 
         // 效验token
-        \Mix::app('webSocket')->tokenReader->loadTokenId($request);
-        $userinfo = \Mix::app('webSocket')->tokenReader->get('userinfo');
+        $userinfo = \Mix::app('webSocket')->tokenReader->loadTokenId($request)->get('userinfo');
         \Mix::app('webSocket')->tokenReader->close();
         if (empty($userinfo)) {
             // 鉴权失败处理
