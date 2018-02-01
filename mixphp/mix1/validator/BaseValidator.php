@@ -60,9 +60,6 @@ class BaseValidator
     // 获取属性值
     protected function getAttributeValue()
     {
-        if (!is_scalar($this->attributes[$this->attribute])) {
-            throw new \mix\exception\ModelException("属性`{$this->attribute}`的不是标量类型");
-        }
         if (!isset($this->attributes[$this->attribute])) {
             return null;
         }
@@ -79,8 +76,8 @@ class BaseValidator
         $this->attributeMessage = $this->getAttributeMessage();
         $this->attributeLabel   = $this->getAttributeLabel();
         $this->_attributeValue  = $this->getAttributeValue();
-        // 必需验证
-        $this->required(array_shift($this->actions));
+        // 必需验证 and 标量类型验证
+        $this->scalar() and $this->required(array_shift($this->actions));
         // 加入类型验证
         if (in_array('type', $this->_allowActions)) {
             $this->actions = ['type' => null] + $this->actions;
@@ -104,6 +101,26 @@ class BaseValidator
             }
         }
         return empty($this->errors);
+    }
+
+    // 标量类型验证
+    protected function scalar()
+    {
+        $value = $this->_attributeValue;
+        if (!is_null($value) && !is_scalar($value)) {
+            // 增加错误消息
+            if (is_null($this->attributeMessage)) {
+                $error = "{$this->attributeLabel}不是标量类型.";
+            } else {
+                $error = $this->attributeMessage;
+            }
+            $this->errors[] = $error;
+            // 将非标量值置空
+            $this->_attributeValue = null;
+            // 返回
+            return false;
+        }
+        return true;
     }
 
     // 必需验证
