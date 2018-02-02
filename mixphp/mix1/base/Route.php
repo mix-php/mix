@@ -87,6 +87,7 @@ class Route extends Component
         // 去除URL后缀
         $action = str_replace($this->suffix, '', $action);
         // 匹配
+        $result = [];
         foreach ($this->data as $rule => $value) {
             list($ruleAction, $ruleParams) = $value;
             if (preg_match($rule, $action, $matches)) {
@@ -115,11 +116,11 @@ class Route extends Component
                     $urlParams['action']     = array_pop($tmp);
                     $urlParams['controller'] = array_pop($tmp);
                 }
-                // 返回action
-                return [implode('\\', $fragment), $urlParams];
+                // 记录action与params，由于路由歧义，会存在多条路由规则都可匹配的情况
+                $result[] = [implode('\\', $fragment), $urlParams];
             }
         }
-        return false;
+        return $result;
     }
 
     // 蛇形命名转换为驼峰命名

@@ -90,29 +90,29 @@ class Application
     {
         $action = "{$method} {$action}";
         // 路由匹配
-        list($action, $queryParams) = \Mix::app()->route->match($action);
-        // 执行功能
-        if ($action) {
-            // 路由参数导入请求类
-            \Mix::app()->request->setRoute($queryParams);
-            // 实例化控制器
-            $action    = "{$this->controllerNamespace}\\{$action}";
-            $classFull = \mix\base\Route::dirname($action);
-            $classPath = \mix\base\Route::dirname($classFull);
-            $className = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($classFull), true);
-            $method    = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($action), true);
-            $class     = "{$classPath}\\{$className}Controller";
-            $method    = "action{$method}";
-            try {
-                $reflect = new \ReflectionClass($class);
-            } catch (\ReflectionException $e) {
-                throw new \mix\exception\NotFoundException($this->_notFoundMessage);
-            }
-            $controller = $reflect->newInstanceArgs([$controllerAttributes]);
-            // 判断方法是否存在
-            if (method_exists($controller, $method)) {
-                // 执行控制器的方法
-                return $controller->$method();
+        $items = \Mix::app()->route->match($action);
+        foreach ($items as $item) {
+            list($action, $queryParams) = $item;
+            // 执行功能
+            if ($action) {
+                // 路由参数导入请求类
+                \Mix::app()->request->setRoute($queryParams);
+                // 实例化控制器
+                $action    = "{$this->controllerNamespace}\\{$action}";
+                $classFull = \mix\base\Route::dirname($action);
+                $classPath = \mix\base\Route::dirname($classFull);
+                $className = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($classFull), true);
+                $method    = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($action), true);
+                $class     = "{$classPath}\\{$className}Controller";
+                $method    = "action{$method}";
+                if (class_exists($class)) {
+                    $controller = new $class($controllerAttributes);
+                    // 判断方法是否存在
+                    if (method_exists($controller, $method)) {
+                        // 执行控制器的方法
+                        return $controller->$method();
+                    }
+                }
             }
         }
         throw new \mix\exception\NotFoundException($this->_notFoundMessage);
