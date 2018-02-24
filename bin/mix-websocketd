@@ -9,5 +9,5 @@ define('MIX_ENV', 'dev');
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../mixphp/mix1/Mix.php';
 
-$config = require __DIR__ . '/../console/websocketd/config/main.php';
+$config = require __DIR__ . '/../apps/websocketd/config/main.php';
 (new mix\console\Application($config))->run();
