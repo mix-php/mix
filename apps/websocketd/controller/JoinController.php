@@ -1,10 +1,10 @@
 <?php
 
-namespace console\websocketd\controller;
+namespace apps\websocketd\controller;
 
 use mix\websocket\Controller;
-use console\websocketd\model\JoinForm;
 use mix\web\Json;
+use apps\websocketd\model\JoinForm;
 
 /**
  * 加入控制器

@@ -8,7 +8,7 @@ return [
     'basePath'            => dirname(__DIR__) . DIRECTORY_SEPARATOR,
 
     // 控制器命名空间
-    'controllerNamespace' => 'console\websocketd\command',
+    'controllerNamespace' => 'apps\websocketd\command',
 
     // 组件配置
     'components'          => [
@@ -126,7 +126,7 @@ return [
             // 类路径
             'class'               => 'mix\websocket\MessageHandler',
             // 控制器命名空间
-            'controllerNamespace' => 'console\websocketd\controller',
+            'controllerNamespace' => 'apps\websocketd\controller',
             // 路由规则
             'rules'               => [
 

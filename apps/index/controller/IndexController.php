@@ -1,9 +1,9 @@
 <?php
 
-namespace web\index\controller;
+namespace apps\index\controller;
 
 use mix\web\Controller;
-use web\index\model\IndexForm;
+use apps\index\model\IndexForm;
 
 /**
  * 默认控制器

@@ -1,6 +1,6 @@
 <?php
 
-namespace console\websocketd\model;
+namespace apps\websocketd\model;
 
 use mix\base\Model;
 

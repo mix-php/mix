@@ -8,7 +8,7 @@ return [
     'basePath'            => dirname(__DIR__) . DIRECTORY_SEPARATOR,
 
     // 控制器命名空间
-    'controllerNamespace' => 'console\crontab\command',
+    'controllerNamespace' => 'apps\crontab\command',
 
     // 组件配置
     'components'          => [

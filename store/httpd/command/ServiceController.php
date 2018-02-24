@@ -1,9 +1,9 @@
 <?php
 
-namespace httpd\command;
+namespace store\httpd\command;
 
 use mix\console\Controller;
-use httpd\library\Service;
+use store\httpd\library\Service;
 
 /**
  * 服务控制器
@@ -22,7 +22,7 @@ class ServiceController extends Controller
     public function actionStart()
     {
         if ($pid = Service::getPid()) {
-            return "MixHttpd 正在运行, PID : {$pid}." . PHP_EOL;
+            return "mix-httpd 正在运行, PID : {$pid}." . PHP_EOL;
         }
         $server = \Mix::app()->createObject('httpServer');
         if ($this->u) {
@@ -39,9 +39,9 @@ class ServiceController extends Controller
             Service::killMaster($pid);
             while (Service::isRunning($pid)) {
             }
-            return 'MixHttpd 停止完成.' . PHP_EOL;
+            return 'mix-httpd 停止完成.' . PHP_EOL;
         } else {
-            return 'MixHttpd 没有运行.' . PHP_EOL;
+            return 'mix-httpd 没有运行.' . PHP_EOL;
         }
     }
 

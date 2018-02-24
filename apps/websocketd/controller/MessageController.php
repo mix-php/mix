@@ -1,10 +1,9 @@
 <?php
 
-namespace console\websocketd\controller;
+namespace apps\websocketd\controller;
 
 use mix\websocket\Controller;
-use console\websocketd\model\MessageForm;
-use mix\web\Json;
+use apps\websocketd\model\MessageForm;
 
 /**
  * 消息控制器

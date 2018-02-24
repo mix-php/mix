@@ -1,6 +1,6 @@
 <?php
 
-namespace console\websocketd\command;
+namespace apps\websocketd\command;
 
 use mix\console\Controller;
 

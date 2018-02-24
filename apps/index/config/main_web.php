@@ -8,7 +8,7 @@ return [
     'basePath'            => dirname(__DIR__) . DIRECTORY_SEPARATOR,
 
     // 控制器命名空间
-    'controllerNamespace' => 'web\index\controller',
+    'controllerNamespace' => 'apps\index\controller',
 
     // 组件配置
     'components'          => [

@@ -1,6 +1,6 @@
 <?php
 
-namespace web\index\model;
+namespace apps\index\model;
 
 use mix\base\Model;
 
@@ -92,7 +92,7 @@ class IndexForm extends Model
     // 操作数据库
     public function save()
     {
-        $tableModel = new \web\common\model\TableModel();
+        $tableModel = new \apps\common\model\TableModel();
         $tableModel->insert($this);
     }
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace httpd\command;
+namespace store\httpd\command;
 
 use mix\console\Controller;
-use httpd\library\Service;
+use store\httpd\library\Service;
 
 /**
  * 工作控制器
@@ -18,7 +18,7 @@ class WorkerController extends Controller
         if ($pid = Service::getPid()) {
             Service::reloadWorker($pid);
         }
-        echo 'MixHttpd Worker 进程重新加载完成.' . PHP_EOL;
+        echo 'mix-httpd Worker 进程重新加载完成.' . PHP_EOL;
     }
 
 }

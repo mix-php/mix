@@ -1,6 +1,6 @@
 <?php
 
-namespace console\crontab\command;
+namespace apps\crontab\command;
 
 use mix\console\Controller;
 
@@ -22,7 +22,7 @@ class IndexController extends Controller
             self::daemon();
         }
         // 模型内使用短连接版本的数据库组件，计划任务都是一次性执行
-        $tableModel = new \console\common\model\TableModel();
+        $tableModel = new \apps\common\model\TableModel();
         // 执行业务代码
         // ...
         // 响应
