@@ -22,7 +22,7 @@ class ServiceController extends Controller
     public function actionStart()
     {
         if ($pid = Service::getPid()) {
-            return "mix-httpd 正在运行, PID : {$pid}." . PHP_EOL;
+            return "mix-httpd is running, PID : {$pid}." . PHP_EOL;
         }
         $server = \Mix::app()->createObject('httpServer');
         if ($this->u) {
@@ -39,9 +39,9 @@ class ServiceController extends Controller
             Service::killMaster($pid);
             while (Service::isRunning($pid)) {
             }
-            return 'mix-httpd 停止完成.' . PHP_EOL;
+            return 'mix-httpd stop completed.' . PHP_EOL;
         } else {
-            return 'mix-httpd 没有运行.' . PHP_EOL;
+            return 'mix-httpd is not running.' . PHP_EOL;
         }
     }
 

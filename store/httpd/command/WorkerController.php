@@ -18,7 +18,10 @@ class WorkerController extends Controller
         if ($pid = Service::getPid()) {
             Service::reloadWorker($pid);
         }
-        echo 'mix-httpd Worker 进程重新加载完成.' . PHP_EOL;
+        if (!$pid) {
+            return 'mix-httpd is not running.' . PHP_EOL;
+        }
+        return 'mix-httpd worker process restart completed.' . PHP_EOL;
     }
 
 }
