@@ -3,7 +3,7 @@
 namespace apps\index\controller;
 
 use mix\web\Controller;
-use apps\index\model\IndexForm;
+use apps\index\models\IndexForm;
 
 /**
  * 默认控制器

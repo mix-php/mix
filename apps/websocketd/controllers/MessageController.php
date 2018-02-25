@@ -3,7 +3,7 @@
 namespace apps\websocketd\controller;
 
 use mix\websocket\Controller;
-use apps\websocketd\model\MessageForm;
+use apps\websocketd\models\MessageForm;
 
 /**
  * 消息控制器

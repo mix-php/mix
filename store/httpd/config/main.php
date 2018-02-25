@@ -7,7 +7,7 @@ return [
     'basePath'            => dirname(__DIR__) . DIRECTORY_SEPARATOR,
 
     // 控制器命名空间
-    'controllerNamespace' => 'store\httpd\command',
+    'controllerNamespace' => 'store\httpd\commands',
 
     // 组件配置
     'components'          => [

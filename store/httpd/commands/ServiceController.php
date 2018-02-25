@@ -1,9 +1,9 @@
 <?php
 
-namespace store\httpd\command;
+namespace store\httpd\commands;
 
 use mix\console\Controller;
-use store\httpd\library\Service;
+use store\httpd\libraries\Service;
 
 /**
  * 服务控制器

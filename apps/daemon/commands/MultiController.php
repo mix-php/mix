@@ -1,6 +1,6 @@
 <?php
 
-namespace apps\daemon\command;
+namespace apps\daemon\commands;
 
 use mix\console\Controller;
 
@@ -44,7 +44,7 @@ class MultiController extends Controller
     public function onLeftStart(\mix\process\TaskProcess $worker)
     {
         // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
-        $queueModel = new \apps\common\model\QueueModel();
+        $queueModel = new \apps\common\models\QueueModel();
         // 循环执行任务
         for ($j = 0; $j < 16000; $j++) {
             $worker->checkMaster();

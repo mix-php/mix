@@ -5,7 +5,7 @@ namespace mix\web;
 use mix\base\BaseObject;
 
 /**
- * View类
+ * JSON 类
  * @author 刘健 <coder.liu@qq.com>
  */
 class Json extends BaseObject

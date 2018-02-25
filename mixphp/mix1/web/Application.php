@@ -77,7 +77,7 @@ class Application extends \mix\base\Application
     // 获取视图目录路径
     public function getViewPath()
     {
-        return $this->basePath . 'view' . DIRECTORY_SEPARATOR;
+        return $this->basePath . 'views' . DIRECTORY_SEPARATOR;
     }
 
 }

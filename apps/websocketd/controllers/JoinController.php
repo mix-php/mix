@@ -4,7 +4,7 @@ namespace apps\websocketd\controller;
 
 use mix\websocket\Controller;
 use mix\web\Json;
-use apps\websocketd\model\JoinForm;
+use apps\websocketd\models\JoinForm;
 
 /**
  * 加入控制器
