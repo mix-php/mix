@@ -122,4 +122,46 @@ class Request extends Component
         return is_null($name) ? $container : (isset($container[$name]) ? $container[$name] : null);
     }
 
+    // 是否为 GET 请求
+    public function isGet()
+    {
+        return $this->server('request_method') == 'GET';
+    }
+
+    // 是否为 POST 请求
+    public function isPost()
+    {
+        return $this->server('request_method') == 'POST';
+    }
+
+    // 是否为 PUT 请求
+    public function isPut()
+    {
+        return $this->server('request_method') == 'PUT';
+    }
+
+    // 是否为 PATCH 请求
+    public function isPatch()
+    {
+        return $this->server('request_method') == 'PATCH';
+    }
+
+    // 是否为 DELETE 请求
+    public function isDelete()
+    {
+        return $this->server('request_method') == 'DELETE';
+    }
+
+    // 是否为 HEAD 请求
+    public function isHead()
+    {
+        return $this->server('request_method') == 'HEAD';
+    }
+
+    // 是否为 OPTIONS 请求
+    public function isOptions()
+    {
+        return $this->server('request_method') == 'OPTIONS';
+    }
+
 }

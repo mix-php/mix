@@ -58,7 +58,7 @@ class Route extends Component
                 $method = "(?:{$method}) ";
                 $rule   = substr($rule, $blank + 1);
             } else {
-                $method = '(?:CLI|GET|POST|PUT|PATCH|DELETE|OPTIONS|HEAD|TRACE) ';
+                $method = '(?:CLI|GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS) ';
             }
             // path
             $fragment = explode('/', $rule);
