@@ -1,6 +1,6 @@
 <?php
 
-namespace apps\index\controller;
+namespace apps\index\controllers;
 
 use mix\web\Controller;
 use apps\index\models\IndexForm;

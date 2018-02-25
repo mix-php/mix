@@ -1,6 +1,6 @@
 <?php
 
-namespace apps\websocketd\controller;
+namespace apps\websocketd\controllers;
 
 use mix\websocket\Controller;
 use apps\websocketd\models\MessageForm;
