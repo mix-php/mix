@@ -15,7 +15,7 @@ class QueueModel
     // 推送数据至队列
     public function push($data)
     {
-        $success = \Mix::app()->redis->lpush(serialize($data));
+        $success = \Mix::app()->redis->lpush('KEY', serialize($data));
         return $success;
     }
 

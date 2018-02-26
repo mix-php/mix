@@ -5,8 +5,6 @@ namespace mix\client;
 /**
  * redis长连接组件
  * @author 刘健 <coder.liu@qq.com>
- *
- * @method set($key, $value)
  */
 class RedisPersistent extends BaseRedisPersistent
 {
