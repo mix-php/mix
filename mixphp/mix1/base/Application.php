@@ -109,8 +109,14 @@ class Application
                     $controller = new $class($controllerAttributes);
                     // 判断方法是否存在
                     if (method_exists($controller, $method)) {
+                        // 执行前置动作
+                        $controller->beforeAction();
                         // 执行控制器的方法
-                        return $controller->$method();
+                        $result = $controller->$method();
+                        // 执行后置动作
+                        $controller->afterAction();
+                        // 返回执行结果
+                        return $result;
                     }
                 }
             }

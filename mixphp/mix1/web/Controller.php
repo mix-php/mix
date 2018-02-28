@@ -2,14 +2,13 @@
 
 namespace mix\web;
 
-use mix\base\BaseObject;
 use mix\web\View;
 
 /**
  * Controller类
  * @author 刘健 <coder.liu@qq.com>
  */
-class Controller extends BaseObject
+class Controller extends \mix\base\Controller
 {
 
     // 默认布局

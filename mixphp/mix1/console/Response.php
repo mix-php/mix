@@ -24,7 +24,6 @@ class Response extends Component
     public function setContent($content)
     {
         $this->_content = $content;
-        return $this;
     }
 
     // 输出
