@@ -48,7 +48,7 @@ class Error extends Component
     {
         // debug处理 & exit处理
         if ($e instanceof \mix\exception\DebugException || $e instanceof \mix\exception\ExitException) {
-            \Mix::app()->response->setContent($e->getMessage());
+            \Mix::app()->response->content = $e->getMessage();
             \Mix::app()->response->send();
             \Mix::app()->cleanComponents();
             return;
@@ -101,7 +101,7 @@ class Error extends Component
         ];
         $content                          = (new View())->render($tpl[$statusCode], $errors);
         \Mix::app()->response->statusCode = $statusCode;
-        \Mix::app()->response->setContent($content);
+        \Mix::app()->response->content    = $content;
         switch ($format) {
             case self::FORMAT_HTML:
                 \Mix::app()->response->setHeader('Content-Type', 'text/html;charset=utf-8');

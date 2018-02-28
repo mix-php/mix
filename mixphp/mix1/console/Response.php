@@ -18,18 +18,12 @@ class Response extends Component
     public $format = self::FORMAT_RAW;
 
     // 内容
-    protected $_content;
-
-    // 设置内容
-    public function setContent($content)
-    {
-        $this->_content = $content;
-    }
+    public $content;
 
     // 输出
     public function send()
     {
-        $content = $this->_content;
+        $content = $this->content;
         if (is_array($content)) {
             switch ($this->format) {
                 case self::FORMAT_RAW:

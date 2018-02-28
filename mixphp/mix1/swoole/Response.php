@@ -37,36 +37,35 @@ class Response extends Component
     // 状态码
     public $statusCode;
 
-    // 响应对象
-    protected $_responder;
-
     // 内容
-    protected $_content;
+    public $content;
 
     // HTTP 响应头
-    protected $_headers = [];
+    public $headers = [];
+
+    // 是否已经发送
+    protected $_isSent = false;
+
+    // 响应对象
+    protected $_responder;
 
     // 设置响应者
     public function setResponder($responder)
     {
+        // 设置响应者
         $this->_responder = $responder;
-        // 重置数据
+        // 重置其他数据
         $this->format     = $this->defaultFormat;
         $this->statusCode = 200;
-        $this->_content   = null;
-        $this->_headers   = [];
-    }
-
-    // 设置内容
-    public function setContent($content)
-    {
-        $this->_content = $content;
+        $this->content    = null;
+        $this->headers    = [];
+        $this->_isSent    = false;
     }
 
     // 设置Header信息
     public function setHeader($key, $value)
     {
-        $this->_headers[$key] = $value;
+        $this->headers[$key] = $value;
     }
 
     // 设置Cookie
@@ -82,16 +81,16 @@ class Response extends Component
         $this->statusCode = 302;
     }
 
-    // 输出
+    // 发送
     public function send()
     {
-        // 多次输出兼容处理
-        if (!empty($this->_responder->end)) {
+        // 多次发送处理
+        if ($this->_isSent) {
             return;
         }
-        $this->_responder->end = true;
-        // 输出
-        $content = $this->_content;
+        $this->_isSent = true;
+        // 发送
+        $content = $this->content;
         if (is_array($content)) {
             switch ($this->format) {
                 case self::FORMAT_JSON:
@@ -113,25 +112,25 @@ class Response extends Component
             }
         }
         if (is_scalar($content)) {
-            $this->setStatusCode();
-            isset($this->_headers['Content-Type']) or $this->_headers['Content-Type'] = $this->defaultContentType;
-            $this->setHeaders();
+            $this->sendStatusCode();
+            isset($this->headers['Content-Type']) or $this->headers['Content-Type'] = $this->defaultContentType;
+            $this->sendHeaders();
             $this->_responder->end($content);
         } else {
             $this->_responder->end('');
         }
     }
 
-    // 设置HTTP状态码
-    protected function setStatusCode()
+    // 发送HTTP状态码
+    protected function sendStatusCode()
     {
         $this->_responder->status($this->statusCode);
     }
 
-    // 设置Header信息
-    protected function setHeaders()
+    // 发送Header信息
+    protected function sendHeaders()
     {
-        foreach ($this->_headers as $key => $value) {
+        foreach ($this->headers as $key => $value) {
             $this->_responder->header($key, $value);
         }
     }
