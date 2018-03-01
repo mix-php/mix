@@ -81,34 +81,6 @@ class Mix
         }
     }
 
-    // 结束执行
-    public static function finish()
-    {
-        throw new \mix\exception\ExitException('');
-    }
-
-    // 打印变量的相关信息
-    public static function varDump($var, $exit = false)
-    {
-        ob_start();
-        var_dump($var);
-        if ($exit) {
-            $content = ob_get_clean();
-            throw new \mix\exception\DebugException($content);
-        }
-    }
-
-    // 打印关于变量的易于理解的信息
-    public static function varPrint($var, $exit = false)
-    {
-        ob_start();
-        print_r($var);
-        if ($exit) {
-            $content = ob_get_clean();
-            throw new \mix\exception\DebugException($content);
-        }
-    }
-
     // 使用配置创建新对象
     public static function createObject($config)
     {

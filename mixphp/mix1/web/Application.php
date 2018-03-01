@@ -18,10 +18,10 @@ class Application extends \mix\base\Application
     public function run()
     {
         \mix\web\Error::register();
-        $server                        = \Mix::app()->request->server();
-        $method                        = strtoupper($server['request_method']);
-        $action                        = empty($server['path_info']) ? '' : substr($server['path_info'], 1);
-        \Mix::app()->response->content = $this->runAction($method, $action);
+        $server = \Mix::app()->request->server();
+        $method = strtoupper($server['request_method']);
+        $action = empty($server['path_info']) ? '' : substr($server['path_info'], 1);
+        \Mix::app()->response->content .= $this->runAction($method, $action);
         \Mix::app()->response->send();
         $this->cleanComponents();
     }

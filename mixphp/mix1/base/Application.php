@@ -136,4 +136,34 @@ class Application
         return $this->basePath . 'runtime' . DIRECTORY_SEPARATOR;
     }
 
+    // 打印变量的相关信息
+    public function varDump($var, $exit = false)
+    {
+        ob_start();
+        var_dump($var);
+        $content = ob_get_clean();
+        \Mix::app()->response->content .= $content;
+        if ($exit) {
+            throw new \mix\exception\DebugException(\Mix::app()->response->content);
+        }
+    }
+
+    // 打印关于变量的易于理解的信息
+    public function varPrint($var, $exit = false)
+    {
+        ob_start();
+        print_r($var);
+        $content = ob_get_clean();
+        \Mix::app()->response->content .= $content;
+        if ($exit) {
+            throw new \mix\exception\DebugException(\Mix::app()->response->content);
+        }
+    }
+
+    // 终止程序
+    public function end($response = null)
+    {
+        throw new \mix\exception\EndException($response);
+    }
+
 }
