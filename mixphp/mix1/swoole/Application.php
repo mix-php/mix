@@ -9,9 +9,10 @@ namespace mix\swoole;
 class Application extends \mix\web\Application
 {
 
-    // 执行功能 (MixHttpd)
+    // 执行功能 (mix-httpd)
     public function run()
     {
+        \mix\web\Error::register();
         $server = \Mix::app()->request->server();
         $method = strtoupper($server['request_method']);
         $action = empty($server['path_info']) ? '' : substr($server['path_info'], 1);
