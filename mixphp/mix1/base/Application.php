@@ -142,9 +142,10 @@ class Application
         ob_start();
         var_dump($var);
         $content = ob_get_clean();
-        \Mix::app()->response->content .= $content;
         if ($exit) {
-            throw new \mix\exception\DebugException(\Mix::app()->response->content);
+            throw new \mix\exception\DebugException($content);
+        } else {
+            \Mix::app()->response->content .= $content;
         }
     }
 
@@ -154,9 +155,10 @@ class Application
         ob_start();
         print_r($var);
         $content = ob_get_clean();
-        \Mix::app()->response->content .= $content;
         if ($exit) {
-            throw new \mix\exception\DebugException(\Mix::app()->response->content);
+            throw new \mix\exception\DebugException($content);
+        } else {
+            \Mix::app()->response->content .= $content;
         }
     }
 
