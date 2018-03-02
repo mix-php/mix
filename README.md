@@ -8,8 +8,8 @@
 
 <p align="center">
 <img src="https://img.shields.io/badge/downloads-3.8k-green.svg">
-<img src="https://img.shields.io/badge/platform-linux%20%7C%20win%20-lightgrey.svg">
-<img src="https://img.shields.io/badge/size-172%20KB-green.svg">
+<img src="https://img.shields.io/badge/platform-linux%20%7C%20win%20%7C%20osx-lightgrey.svg">
+<img src="https://img.shields.io/badge/size-238%20KB-green.svg">
 </p>
 
 ## MixPHP是什么
@@ -20,7 +20,7 @@ MixPHP 是秉承 **"普及 PHP 常驻内存型解决方案，促进 PHP 往更�
 
 ## 与其他框架的比较
 
-MixPHP 与传统 PHP 的 Web 框架非常不同，MixPHP 可以不需要 Web 服务器(Apache/PHP-FPM)，框架自带 MixHttpd 高性能HTTP服务器，传统的 PHP 应用程序中脚本结束后，所有的对象在请求后都将销毁，而 MixHttpd 不同，框架组件对象常驻于内存，减少对象反复创建销毁的性能损失，具有传统框架无法比拟的性能优势。
+MixPHP 与传统 PHP 的 Web 框架非常不同，MixPHP 可以不需要 Web 服务器(Apache/PHP-FPM)，框架自带 mix-httpd 高性能HTTP服务器，传统的 PHP 应用程序中脚本结束后，所有的对象在请求后都将销毁，而 mix-httpd 不同，框架组件对象常驻于内存，减少对象反复创建销毁的性能损失，具有传统框架无法比拟的性能优势。
 
 MixPHP 也不同于其他基于 Swoole 的微服务框架，只聚焦于微服务治理，MixPHP 定位于 Web 开发的更多领域，覆盖从初创到亿元级体量的技术诉求。
 
@@ -32,7 +32,7 @@ MixPHP 更像是传统 Web 框架的 [次世代](https://baike.baidu.com/item/%E
 
 * 高性能：极简架构 + Swoole引擎，超过 Phalcon 这类 C 扩展框架的性能；
 * 长连接：按进程保持的长连接，支持 Mysql/Redis；
-* 服务器：框架自带 MixHttpd 替代 Apache/PHP-FPM 作为高性能HTTP服务器；
+* 服务器：框架自带 mix-httpd 替代 Apache/PHP-FPM 作为高性能HTTP服务器；
 * 组件：基于组件的框架结构，可通用的 Web 编程框架；
 * 自动加载：完全使用 Composer，统一且高效；
 * 路由：底层全正则实现，性能高，配置简单；

@@ -1,6 +1,6 @@
 <?php
 
-// MixHttpd 下运行的Web应用配置
+// mix-httpd 下运行的Web应用配置
 $database = require __DIR__ . '/../../common/config/database.php';
 return [
 
