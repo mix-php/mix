@@ -22,7 +22,7 @@ class Controller extends \mix\base\Controller
         }
         $view            = new View();
         $data['content'] = $view->render($name, $data);
-        return $view->render("layout.{$this->layout}", $data);
+        return $view->render("layouts.{$this->layout}", $data);
     }
 
     // 渲染视图 (不包含布局)
