@@ -162,7 +162,7 @@ return [
                 // 日志文件路径
                 'log_file'    => '/tmp/mix-websocketd.log',
                 // 子进程运行用户
-                'user'        => 'www',
+                /* 'user'        => 'www', */
             ],
 
         ],
