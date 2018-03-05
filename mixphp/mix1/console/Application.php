@@ -24,7 +24,7 @@ class Application extends \mix\base\Application
         $method               = 'CLI';
         $action               = empty($GLOBALS['argv'][1]) ? '' : $GLOBALS['argv'][1];
         $controllerAttributes = \Mix::app()->request->param();
-        \Mix::app()->response->content .= $this->runAction($method, $action, $controllerAttributes);
+        \Mix::app()->response->content = $this->runAction($method, $action, $controllerAttributes);
         \Mix::app()->response->send();
     }
 

@@ -137,28 +137,26 @@ class Application
     }
 
     // 打印变量的相关信息
-    public function varDump($var, $exit = false)
+    public function varDump($var, $send = false)
     {
         ob_start();
         var_dump($var);
         $content = ob_get_clean();
-        if ($exit) {
-            throw new \mix\exception\DebugException($content);
-        } else {
-            \Mix::app()->response->content .= $content;
+        \Mix::app()->response->content .= $content;
+        if ($send) {
+            throw new \mix\exception\DebugException(\Mix::app()->response->content);
         }
     }
 
     // 打印关于变量的易于理解的信息
-    public function varPrint($var, $exit = false)
+    public function varPrint($var, $send = false)
     {
         ob_start();
         print_r($var);
         $content = ob_get_clean();
-        if ($exit) {
-            throw new \mix\exception\DebugException($content);
-        } else {
-            \Mix::app()->response->content .= $content;
+        \Mix::app()->response->content .= $content;
+        if ($send) {
+            throw new \mix\exception\DebugException(\Mix::app()->response->content);
         }
     }
 
