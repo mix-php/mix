@@ -1,6 +1,6 @@
 <?php
 
-// Apache/PHP-FPM 传统环境下运行的Web应用配置
+// Apache/PHP-FPM 传统环境下运行的 Web 应用配置
 $database = require __DIR__ . '/../../common/config/database.php';
 return [
 
