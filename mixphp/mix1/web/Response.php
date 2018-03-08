@@ -35,10 +35,10 @@ class Response extends Component
     public $format;
 
     // 状态码
-    public $statusCode;
+    public $statusCode = 200;
 
     // 内容
-    public $content;
+    public $content = '';
 
     // HTTP 响应头
     public $headers = [];
@@ -53,6 +53,8 @@ class Response extends Component
         // 重置数据
         $this->format     = $this->defaultFormat;
         $this->statusCode = 200;
+        $this->content    = '';
+        $this->headers    = [];
         $this->_isSent    = false;
     }
 
@@ -84,6 +86,7 @@ class Response extends Component
         $this->_isSent = true;
         // 发送
         $content = $this->content;
+        is_null($content) and $content = '';
         if (is_array($content)) {
             switch ($this->format) {
                 case self::FORMAT_JSON:
