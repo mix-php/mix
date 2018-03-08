@@ -7,12 +7,14 @@
 <p align="center">高性能 • 轻量级 • 命令行</p>
 
 <p align="center">
-<img src="https://img.shields.io/badge/downloads-3.8k-green.svg">
+<img src="https://img.shields.io/badge/downloads-6.9k-green.svg">
 <img src="https://img.shields.io/badge/platform-linux%20%7C%20win%20%7C%20osx-lightgrey.svg">
 <img src="https://img.shields.io/badge/size-238%20KB-green.svg">
 </p>
 
 ## MixPHP是什么
+
+MixPHP 是一款最接近传统 MVC 框架的 Swoole 框架，无需了解 Swoole 即可快速开发高性能应用。
 
 MixPHP 是秉承 **"普及 PHP 常驻内存型解决方案，促进 PHP 往更后端发展"** 的理念而创造，采用 Swoole 扩展作为底层引擎，围绕常驻内存的方式而设计，架构设计简洁而有扩展性，开发可以很灵活，提供了 Web 开发 / 命令行开发所需的众多组件，参考了 Yii2 框架的设计思想，如果你使用过 Yii2 基本上可以立即上手。
 
