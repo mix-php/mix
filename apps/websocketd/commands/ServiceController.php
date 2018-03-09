@@ -131,8 +131,10 @@ class ServiceController extends Controller
         // 删除会话信息
         $webSocket->table->del($fd);
         // 删除redis连接
-        $webSocket->redisConnections[$fd]->close();
-        unset($webSocket->redisConnections[$fd]);
+        if (isset($webSocket->redisConnections[$fd])) {
+            $webSocket->redisConnections[$fd]->close();
+            unset($webSocket->redisConnections[$fd]);
+        }
     }
 
 }
