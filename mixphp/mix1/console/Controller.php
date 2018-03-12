@@ -12,9 +12,9 @@ class Controller extends \mix\base\Controller
     // 使当前进程蜕变为一个守护进程
     public static function daemon($closeInputOutput = false)
     {
-        \Swoole\Process::daemon(true, !$closeInputOutput);
         $pid = getmypid();
         echo "PID: {$pid}" . PHP_EOL;
+        \Swoole\Process::daemon(true, !$closeInputOutput);
     }
 
     // 获取控制器名称
