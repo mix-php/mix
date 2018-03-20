@@ -54,7 +54,7 @@ class HttpServer extends BaseObject
     {
         $this->server->on('Start', function ($server) {
             // 进程命名
-            stristr(PHP_OS, 'DAR') === false and swoole_set_process_name("mix-httpd: master {$this->host}:{$this->port}");
+            self::setProcessName("mix-httpd: master {$this->host}:{$this->port}");
         });
     }
 
@@ -63,7 +63,7 @@ class HttpServer extends BaseObject
     {
         $this->server->on('ManagerStart', function ($server) {
             // 进程命名
-            stristr(PHP_OS, 'DAR') === false and swoole_set_process_name("mix-httpd: manager");
+            self::setProcessName("mix-httpd: manager");
         });
     }
 
@@ -73,9 +73,9 @@ class HttpServer extends BaseObject
         $this->server->on('WorkerStart', function ($server, $workerId) {
             // 进程命名
             if ($workerId < $server->setting['worker_num']) {
-                stristr(PHP_OS, 'DAR') === false and swoole_set_process_name("mix-httpd: worker #{$workerId}");
+                self::setProcessName("mix-httpd: worker #{$workerId}");
             } else {
-                stristr(PHP_OS, 'DAR') === false and swoole_set_process_name("mix-httpd: task #{$workerId}");
+                self::setProcessName("mix-httpd: task #{$workerId}");
             }
             // 错误处理注册
             \mix\web\Error::register();
@@ -83,7 +83,7 @@ class HttpServer extends BaseObject
             $apps = [];
             foreach ($this->virtualHosts as $host => $configFile) {
                 $config = require $configFile;
-                $app    = new Application($config);
+                $app = new Application($config);
                 $app->loadAllComponent();
                 $apps[$host] = $app;
             }
@@ -111,7 +111,7 @@ class HttpServer extends BaseObject
     protected function welcome()
     {
         $swooleVersion = swoole_version();
-        $phpVersion    = PHP_VERSION;
+        $phpVersion = PHP_VERSION;
         echo <<<EOL
                            _____
 _______ ___ _____ ___ _____  / /_  ____
@@ -122,18 +122,24 @@ _/ / / / / / / /\ \/ / /_/ / / / / /_/ /
 
 
 EOL;
-        $this->send('Server    Name: mix-httpd');
-        $this->send("PHP    Version: {$phpVersion}");
-        $this->send("Swoole Version: {$swooleVersion}");
-        $this->send("Listen    Addr: {$this->host}");
-        $this->send("Listen    Port: {$this->port}");
+        self::send('Server    Name: mix-httpd');
+        self::send("PHP    Version: {$phpVersion}");
+        self::send("Swoole Version: {$swooleVersion}");
+        self::send("Listen    Addr: {$this->host}");
+        self::send("Listen    Port: {$this->port}");
     }
 
     // 发送至屏幕
-    public function send($msg)
+    protected static function send($msg)
     {
         $time = date('Y-m-d H:i:s');
         echo "[{$time}] " . $msg . PHP_EOL;
+    }
+
+    // 设置进程名称
+    protected static function setProcessName($name)
+    {
+        stristr(PHP_OS, 'DAR') === false and swoole_set_process_name($name);
     }
 
 }

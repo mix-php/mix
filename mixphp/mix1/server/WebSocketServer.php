@@ -92,7 +92,7 @@ class WebSocketServer extends BaseObject
     {
         $this->_server->on('Start', function ($server) {
             // 进程命名
-            swoole_set_process_name("mix-websocketd: master {$this->host}:{$this->port}");
+            self::setProcessName("mix-websocketd: master {$this->host}:{$this->port}");
         });
     }
 
@@ -101,7 +101,7 @@ class WebSocketServer extends BaseObject
     {
         $this->_server->on('ManagerStart', function ($server) {
             // 进程命名
-            swoole_set_process_name("mix-websocketd: manager");
+            self::setProcessName("mix-websocketd: manager");
         });
     }
 
@@ -111,9 +111,9 @@ class WebSocketServer extends BaseObject
         $this->_server->on('WorkerStart', function ($server, $workerId) {
             // 进程命名
             if ($workerId < $server->setting['worker_num']) {
-                swoole_set_process_name("mix-websocketd: worker #{$workerId}");
+                self::setProcessName("mix-websocketd: worker #{$workerId}");
             } else {
-                swoole_set_process_name("mix-websocketd: task #{$workerId}");
+                self::setProcessName("mix-websocketd: task #{$workerId}");
             }
         });
     }
@@ -171,6 +171,12 @@ class WebSocketServer extends BaseObject
                 }
             });
         }
+    }
+
+    // 设置进程名称
+    protected static function setProcessName($name)
+    {
+        stristr(PHP_OS, 'DAR') === false and swoole_set_process_name($name);
     }
 
 }
