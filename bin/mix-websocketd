@@ -1,0 +1,13 @@
+#!/usr/bin/env php
+<?php
+
+// console入口文件
+
+define('MIX_DEBUG', true);
+define('MIX_ENV', 'dev');
+
+require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../mixphp/mix1/Mix.php';
+
+$config = require __DIR__ . '/../apps/websocketd/config/main.php';
+(new mix\console\Application($config))->run();
