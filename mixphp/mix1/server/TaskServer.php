@@ -84,8 +84,8 @@ class TaskServer extends BaseObject
             $object->$method($worker, $index);
         }, false, false);
         $process->useQueue(ftok(__FILE__, 1), 2);
-        $process->mpid       = $this->mpid;
-        $pid                 = $process->start();
+        $process->mpid = $this->mpid;
+        $pid = $process->start();
         $this->workers[$pid] = [$index, $callback, $processType];
         return $pid;
     }
@@ -116,7 +116,11 @@ class TaskServer extends BaseObject
     // 设置进程名称
     protected static function setProcessName($name)
     {
-        stristr(PHP_OS, 'DAR') === false and swoole_set_process_name($name);
+        if (function_exists('cli_set_process_title')) {
+            cli_set_process_title($name);
+        } else if (function_exists('swoole_set_process_name')) {
+            swoole_set_process_name($name);
+        }
     }
 
 }
