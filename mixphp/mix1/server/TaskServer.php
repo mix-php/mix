@@ -116,6 +116,9 @@ class TaskServer extends BaseObject
     // 设置进程名称
     protected static function setProcessName($name)
     {
+        if (stristr(PHP_OS, 'DAR')) {
+            return;
+        }
         if (function_exists('cli_set_process_title')) {
             cli_set_process_title($name);
         } else if (function_exists('swoole_set_process_name')) {

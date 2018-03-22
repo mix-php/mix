@@ -83,7 +83,7 @@ class HttpServer extends BaseObject
             $apps = [];
             foreach ($this->virtualHosts as $host => $configFile) {
                 $config = require $configFile;
-                $app = new Application($config);
+                $app    = new Application($config);
                 $app->loadAllComponent();
                 $apps[$host] = $app;
             }
@@ -111,7 +111,7 @@ class HttpServer extends BaseObject
     protected function welcome()
     {
         $swooleVersion = swoole_version();
-        $phpVersion = PHP_VERSION;
+        $phpVersion    = PHP_VERSION;
         echo <<<EOL
                            _____
 _______ ___ _____ ___ _____  / /_  ____
@@ -139,6 +139,9 @@ EOL;
     // 设置进程名称
     protected static function setProcessName($name)
     {
+        if (stristr(PHP_OS, 'DAR')) {
+            return;
+        }
         if (function_exists('cli_set_process_title')) {
             cli_set_process_title($name);
         } else if (function_exists('swoole_set_process_name')) {
