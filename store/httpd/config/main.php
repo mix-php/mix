@@ -84,15 +84,17 @@ return [
                 'reactor_num' => 8,
                 // 工作进程数
                 'worker_num'  => 8,
-                // 设置worker进程的最大任务数
+                // 设置 worker 进程的最大任务数
                 'max_request' => 10000,
+                // PID 文件
+                'pid_file'    => '/var/run/mix-httpd.pid',
                 // 日志文件路径
                 'log_file'    => '/tmp/mix-httpd.log',
                 // 子进程运行用户
                 /* 'user'        => 'www', */
             ],
 
-            // 虚拟主机：运行在Server内的Web应用
+            // 虚拟主机：运行在 Server 内的 Web 应用
             'virtualHosts' => [
                 // 默认主机
                 '*' => __DIR__ . '/../../../apps/index/config/main_httpd.php',

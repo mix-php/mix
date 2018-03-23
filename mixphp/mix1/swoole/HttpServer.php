@@ -34,8 +34,6 @@ class HttpServer extends BaseObject
         parent::onInitialize();
         // 实例化服务器
         $this->server = new \Swoole\Http\Server($this->host, $this->port);
-        // 设置保留配置项
-        $this->setting['pid_file'] = '/var/run/mix-httpd.pid';
     }
 
     // 启动服务
@@ -84,7 +82,7 @@ class HttpServer extends BaseObject
             $apps = [];
             foreach ($this->virtualHosts as $host => $configFile) {
                 $config = require $configFile;
-                $app = new Application($config);
+                $app    = new Application($config);
                 $app->loadAllComponent();
                 $apps[$host] = $app;
             }
@@ -112,7 +110,7 @@ class HttpServer extends BaseObject
     protected function welcome()
     {
         $swooleVersion = swoole_version();
-        $phpVersion = PHP_VERSION;
+        $phpVersion    = PHP_VERSION;
         echo <<<EOL
                            _____
 _______ ___ _____ ___ _____  / /_  ____

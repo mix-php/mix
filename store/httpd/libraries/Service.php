@@ -14,7 +14,10 @@ class Service
     // 获取主进程PID
     public static function getMasterPid()
     {
-        $pidFile = '/var/run/mix-httpd.pid';
+        $pidFile = empty(\Mix::app()->objects['httpServer']['setting']['pid_file']) ? false : \Mix::app()->objects['httpServer']['setting']['pid_file'];
+        if (!$pidFile) {
+            die('main.php: [objects.httpServer.setting.pid_file] config item cannot be empty.' . PHP_EOL);
+        }
         if (!file_exists($pidFile)) {
             return false;
         }
