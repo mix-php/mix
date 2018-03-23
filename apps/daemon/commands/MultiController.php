@@ -3,6 +3,7 @@
 namespace apps\daemon\commands;
 
 use mix\console\Controller;
+use mix\swoole\Process;
 
 /**
  * 这是一个多进程守护进程的范例
@@ -30,7 +31,7 @@ class MultiController extends Controller
     {
         // 蜕变为守护进程
         if ($this->d) {
-            self::daemon();
+            Process::daemon();
         }
         // 启动服务
         $server       = $this->getServer();

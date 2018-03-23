@@ -9,6 +9,14 @@ namespace mix\swoole;
 class Process
 {
 
+    // 使当前进程蜕变为一个守护进程
+    public static function daemon($closeInputOutput = false)
+    {
+        $pid = getmypid();
+        echo "PID: {$pid}" . PHP_EOL;
+        \Swoole\Process::daemon(true, !$closeInputOutput);
+    }
+
     // 设置进程名称
     public static function setName($name)
     {

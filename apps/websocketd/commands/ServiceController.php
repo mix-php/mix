@@ -3,6 +3,7 @@
 namespace apps\websocketd\commands;
 
 use mix\console\Controller;
+use mix\swoole\Process;
 
 /**
  * 服务控制器
@@ -37,7 +38,7 @@ class ServiceController extends Controller
     {
         // 蜕变为守护进程
         if ($this->d) {
-            self::daemon();
+            Process::daemon();
         }
         // 创建服务
         $server = $this->getServer();

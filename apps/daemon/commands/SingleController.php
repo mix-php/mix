@@ -3,6 +3,7 @@
 namespace apps\daemon\commands;
 
 use mix\console\Controller;
+use mix\swoole\Process;
 
 /**
  * 这是一个单进程守护进程的范例
@@ -19,7 +20,7 @@ class SingleController extends Controller
     {
         // 蜕变为守护进程
         if ($this->d) {
-            self::daemon();
+            Process::daemon();
         }
         // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
         $tableModel = new \apps\common\models\TableModel();

@@ -3,6 +3,7 @@
 namespace apps\crontab\commands;
 
 use mix\console\Controller;
+use mix\swoole\Process;
 
 /**
  * 默认控制器
@@ -19,7 +20,7 @@ class IndexController extends Controller
     {
         // 蜕变为守护进程
         if ($this->d) {
-            self::daemon();
+            Process::daemon();
         }
         // 模型内使用短连接版本的数据库组件，计划任务都是一次性执行
         $tableModel = new \apps\common\models\TableModel();
