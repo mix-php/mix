@@ -3,6 +3,7 @@
 namespace mix\swoole;
 
 use mix\base\BaseObject;
+use mix\swoole\Process;
 
 /**
  * Http服务器类
@@ -92,7 +93,7 @@ class WebSocketServer extends BaseObject
     {
         $this->_server->on('Start', function ($server) {
             // 进程命名
-            self::setProcessName("mix-websocketd: master {$this->host}:{$this->port}");
+            Process::setName("mix-websocketd: master {$this->host}:{$this->port}");
         });
     }
 
@@ -101,7 +102,7 @@ class WebSocketServer extends BaseObject
     {
         $this->_server->on('ManagerStart', function ($server) {
             // 进程命名
-            self::setProcessName("mix-websocketd: manager");
+            Process::setName("mix-websocketd: manager");
         });
     }
 
@@ -111,9 +112,9 @@ class WebSocketServer extends BaseObject
         $this->_server->on('WorkerStart', function ($server, $workerId) {
             // 进程命名
             if ($workerId < $server->setting['worker_num']) {
-                self::setProcessName("mix-websocketd: worker #{$workerId}");
+                Process::setName("mix-websocketd: worker #{$workerId}");
             } else {
-                self::setProcessName("mix-websocketd: task #{$workerId}");
+                Process::setName("mix-websocketd: task #{$workerId}");
             }
         });
     }
@@ -170,19 +171,6 @@ class WebSocketServer extends BaseObject
                     \Mix::app()->error->appException($e);
                 }
             });
-        }
-    }
-
-    // 设置进程名称
-    protected static function setProcessName($name)
-    {
-        if (stristr(PHP_OS, 'DAR')) {
-            return;
-        }
-        if (function_exists('cli_set_process_title')) {
-            cli_set_process_title($name);
-        } else if (function_exists('swoole_set_process_name')) {
-            swoole_set_process_name($name);
         }
     }
 

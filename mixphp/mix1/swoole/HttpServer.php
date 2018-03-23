@@ -4,6 +4,7 @@ namespace mix\swoole;
 
 use mix\base\BaseObject;
 use mix\swoole\Application;
+use mix\swoole\Process;
 
 /**
  * Http服务器类
@@ -54,7 +55,7 @@ class HttpServer extends BaseObject
     {
         $this->server->on('Start', function ($server) {
             // 进程命名
-            self::setProcessName("mix-httpd: master {$this->host}:{$this->port}");
+            Process::setName("mix-httpd: master {$this->host}:{$this->port}");
         });
     }
 
@@ -63,7 +64,7 @@ class HttpServer extends BaseObject
     {
         $this->server->on('ManagerStart', function ($server) {
             // 进程命名
-            self::setProcessName("mix-httpd: manager");
+            Process::setName("mix-httpd: manager");
         });
     }
 
@@ -73,9 +74,9 @@ class HttpServer extends BaseObject
         $this->server->on('WorkerStart', function ($server, $workerId) {
             // 进程命名
             if ($workerId < $server->setting['worker_num']) {
-                self::setProcessName("mix-httpd: worker #{$workerId}");
+                Process::setName("mix-httpd: worker #{$workerId}");
             } else {
-                self::setProcessName("mix-httpd: task #{$workerId}");
+                Process::setName("mix-httpd: task #{$workerId}");
             }
             // 错误处理注册
             \mix\web\Error::register();
@@ -83,7 +84,7 @@ class HttpServer extends BaseObject
             $apps = [];
             foreach ($this->virtualHosts as $host => $configFile) {
                 $config = require $configFile;
-                $app    = new Application($config);
+                $app = new Application($config);
                 $app->loadAllComponent();
                 $apps[$host] = $app;
             }
@@ -111,7 +112,7 @@ class HttpServer extends BaseObject
     protected function welcome()
     {
         $swooleVersion = swoole_version();
-        $phpVersion    = PHP_VERSION;
+        $phpVersion = PHP_VERSION;
         echo <<<EOL
                            _____
 _______ ___ _____ ___ _____  / /_  ____
@@ -134,19 +135,6 @@ EOL;
     {
         $time = date('Y-m-d H:i:s');
         echo "[{$time}] " . $msg . PHP_EOL;
-    }
-
-    // 设置进程名称
-    protected static function setProcessName($name)
-    {
-        if (stristr(PHP_OS, 'DAR')) {
-            return;
-        }
-        if (function_exists('cli_set_process_title')) {
-            cli_set_process_title($name);
-        } else if (function_exists('swoole_set_process_name')) {
-            swoole_set_process_name($name);
-        }
     }
 
 }

@@ -4,6 +4,7 @@ namespace mix\swoole;
 
 use mix\base\BaseObject;
 use mix\swoole\TaskProcess;
+use mix\swoole\Process;
 
 /**
  * 任务服务器类
@@ -36,7 +37,7 @@ class TaskServer extends BaseObject
     // 启动
     public function start()
     {
-        self::setProcessName(sprintf("mix-taskd: {$this->name} %s", 'master'));
+        Process::setName(sprintf("mix-taskd: {$this->name} %s", 'master'));
         $this->mpid = posix_getpid();
         $this->createLeftProcesses();
         $this->createRightProcesses();
@@ -79,7 +80,7 @@ class TaskServer extends BaseObject
             throw new \Exception('Create Process Error: ' . ($processType == 'left' ? '[LeftStart]' : '[RightStart]') . ' no callback.');
         }
         $process = new TaskProcess(function ($worker) use ($index, $callback, $processType) {
-            self::setProcessName(sprintf("mix-taskd: {$this->name} {$processType} #%s", $index));
+            Process::setName(sprintf("mix-taskd: {$this->name} {$processType} #%s", $index));
             list($object, $method) = $callback;
             $object->$method($worker, $index);
         }, false, false);
@@ -110,19 +111,6 @@ class TaskServer extends BaseObject
             if ($ret) {
                 $this->rebootProcess($ret);
             }
-        }
-    }
-
-    // 设置进程名称
-    protected static function setProcessName($name)
-    {
-        if (stristr(PHP_OS, 'DAR')) {
-            return;
-        }
-        if (function_exists('cli_set_process_title')) {
-            cli_set_process_title($name);
-        } else if (function_exists('swoole_set_process_name')) {
-            swoole_set_process_name($name);
         }
     }
 

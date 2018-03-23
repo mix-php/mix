@@ -38,6 +38,7 @@ class ServiceController extends Controller
         if ($pid = Service::getPid()) {
             Service::killMaster($pid);
             while (Service::isRunning($pid)) {
+                // 等待进程退出
             }
             return 'mix-httpd stop completed.' . PHP_EOL;
         } else {
