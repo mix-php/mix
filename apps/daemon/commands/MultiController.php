@@ -18,7 +18,7 @@ class MultiController extends Controller
 
     /**
      * 获取服务
-     * @return \mix\server\TaskServer
+     * @return \mix\swoole\TaskServer
      */
     public function getServer()
     {

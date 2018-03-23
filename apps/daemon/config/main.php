@@ -93,7 +93,7 @@ return [
         // TaskServer
         'taskServer' => [
             // 类路径
-            'class'        => 'mix\server\TaskServer',
+            'class'        => 'mix\swoole\TaskServer',
             // 左进程数
             'leftProcess'  => 1,
             // 右进程数

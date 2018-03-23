@@ -145,7 +145,7 @@ return [
         'webSocketServer' => [
 
             // 类路径
-            'class'   => 'mix\server\WebSocketServer',
+            'class'   => 'mix\swoole\WebSocketServer',
             // 主机
             'host'    => 'localhost',
             // 端口

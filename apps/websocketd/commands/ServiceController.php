@@ -16,7 +16,7 @@ class ServiceController extends Controller
 
     /**
      * 获取服务
-     * @return \mix\server\WebSocketServer
+     * @return \mix\swoole\WebSocketServer
      */
     public function getServer()
     {

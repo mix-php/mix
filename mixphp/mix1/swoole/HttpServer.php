@@ -1,6 +1,6 @@
 <?php
 
-namespace mix\server;
+namespace mix\swoole;
 
 use mix\base\BaseObject;
 use mix\swoole\Application;
