@@ -1,6 +1,6 @@
 <?php
 
-namespace mix\validator;
+namespace mix\validators;
 
 /**
  * 基础验证器类

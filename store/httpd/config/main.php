@@ -72,7 +72,7 @@ return [
         'httpServer' => [
 
             // 类路径
-            'class'        => 'mix\server\HttpServer',
+            'class'        => 'mix\swoole\HttpServer',
             // 主机
             'host'         => '127.0.0.1',
             // 端口

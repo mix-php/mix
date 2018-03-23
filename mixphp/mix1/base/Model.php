@@ -20,21 +20,21 @@ class Model extends BaseObject
 
     // 验证器类路径
     private $_validators = [
-        'integer'      => '\mix\validator\IntegerValidator',
-        'double'       => '\mix\validator\DoubleValidator',
-        'alpha'        => '\mix\validator\AlphaValidator',
-        'alphaNumeric' => '\mix\validator\AlphaNumericValidator',
-        'string'       => '\mix\validator\StringValidator',
-        'in'           => '\mix\validator\InValidator',
-        'date'         => '\mix\validator\DateValidator',
-        'email'        => '\mix\validator\EmailValidator',
-        'phone'        => '\mix\validator\PhoneValidator',
-        'url'          => '\mix\validator\UrlValidator',
-        'compare'      => '\mix\validator\CompareValidator',
-        'match'        => '\mix\validator\MatchValidator',
-        'call'         => '\mix\validator\CallValidator',
-        'file'         => '\mix\validator\FileValidator',
-        'image'        => '\mix\validator\ImageValidator',
+        'integer'      => '\mix\validators\IntegerValidator',
+        'double'       => '\mix\validators\DoubleValidator',
+        'alpha'        => '\mix\validators\AlphaValidator',
+        'alphaNumeric' => '\mix\validators\AlphaNumericValidator',
+        'string'       => '\mix\validators\StringValidator',
+        'in'           => '\mix\validators\InValidator',
+        'date'         => '\mix\validators\DateValidator',
+        'email'        => '\mix\validators\EmailValidator',
+        'phone'        => '\mix\validators\PhoneValidator',
+        'url'          => '\mix\validators\UrlValidator',
+        'compare'      => '\mix\validators\CompareValidator',
+        'match'        => '\mix\validators\MatchValidator',
+        'call'         => '\mix\validators\CallValidator',
+        'file'         => '\mix\validators\FileValidator',
+        'image'        => '\mix\validators\ImageValidator',
     ];
 
     // 规则
@@ -121,7 +121,7 @@ class Model extends BaseObject
                 } else {
                     $this->errors[$attribute] = array_merge($this->errors[$attribute], $validator->errors);
                 }
-            } else if ($validator instanceof \mix\validator\FileValidator) {
+            } else if ($validator instanceof \mix\validators\FileValidator) {
                 $validator->createInstance();
             }
         }

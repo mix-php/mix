@@ -1,24 +1,24 @@
 <?php
 
-namespace mix\validator;
+namespace mix\validators;
 
 /**
- * PhoneValidator类
+ * IntegerValidator类
  * @author 刘健 <coder.liu@qq.com>
  */
-class PhoneValidator extends BaseValidator
+class IntegerValidator extends BaseValidator
 {
 
     // 允许的功能集合
-    protected $_allowActions = ['type'];
+    protected $_allowActions = ['type', 'unsigned', 'min', 'max', 'length', 'minLength', 'maxLength'];
 
     // 类型验证
     protected function type()
     {
         $value = $this->_attributeValue;
-        if (!preg_match('/^1[34578]\d{9}$/i', $value)) {
+        if (!preg_match('/^[-]{0,1}[0-9]+$/i', $value)) {
             if (is_null($this->attributeMessage)) {
-                $error = "{$this->attributeLabel}不符合手机号格式.";
+                $error = "{$this->attributeLabel}只能为整数.";
             } else {
                 $error = $this->attributeMessage;
             }

@@ -1,22 +1,21 @@
 <?php
 
-namespace mix\validator;
+namespace mix\validators;
 
 /**
- * MatchValidator类
+ * CallValidator类
  * @author 刘健 <coder.liu@qq.com>
  */
-class MatchValidator extends BaseValidator
+class CallValidator extends BaseValidator
 {
 
     // 允许的功能集合
-    protected $_allowActions = ['pattern'];
+    protected $_allowActions = ['callback'];
 
-    // 正则验证
-    protected function pattern($param)
+    // 回调验证
+    protected function callback($param)
     {
-        $value = $this->_attributeValue;
-        if (!preg_match($param, $value)) {
+        if (!call_user_func_array($param, [$this->attributes[$this->attribute]])) {
             if (is_null($this->attributeMessage)) {
                 $error = "{$this->attributeLabel}是无效的值.";
             } else {

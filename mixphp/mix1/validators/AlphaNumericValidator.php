@@ -1,12 +1,12 @@
 <?php
 
-namespace mix\validator;
+namespace mix\validators;
 
 /**
- * AlphaValidator类
+ * AlphaNumericValidator类
  * @author 刘健 <coder.liu@qq.com>
  */
-class AlphaValidator extends BaseValidator
+class AlphaNumericValidator extends BaseValidator
 {
 
     // 允许的功能集合
@@ -16,9 +16,9 @@ class AlphaValidator extends BaseValidator
     protected function type()
     {
         $value = $this->_attributeValue;
-        if (!preg_match('/^[a-zA-Z]+$/i', $value)) {
+        if (!preg_match('/^[a-zA-Z0-9]+$/i', $value)) {
             if (is_null($this->attributeMessage)) {
-                $error = "{$this->attributeLabel}只能为字母.";
+                $error = "{$this->attributeLabel}只能为字母和数字.";
             } else {
                 $error = $this->attributeMessage;
             }
