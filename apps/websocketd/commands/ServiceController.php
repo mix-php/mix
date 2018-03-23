@@ -112,6 +112,9 @@ class ServiceController extends Controller
     {
         // 取出会话信息
         $userinfo = $webSocket->table->get($frame->fd);
+        if (!$userinfo) {
+            return;
+        }
         // 解析数据
         $data = json_decode($frame->data, true);
         if (!isset($data['cmd']) || !isset($data['data'])) {

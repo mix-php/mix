@@ -22,7 +22,7 @@ class JoinController extends Controller
         $model->setScenario('room');
         // 验证失败
         if (!$model->validate()) {
-            return null;
+            return;
         }
 
         // 给全部人发广播

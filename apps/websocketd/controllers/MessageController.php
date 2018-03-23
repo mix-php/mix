@@ -21,7 +21,7 @@ class MessageController extends Controller
         $model->setScenario('to');
         // 验证失败
         if (!$model->validate()) {
-            return null;
+            return;
         }
 
         // 通过消息队列给其他用户发消息
