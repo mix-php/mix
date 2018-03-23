@@ -4,6 +4,7 @@ namespace store\httpd\commands;
 
 use mix\console\Controller;
 use store\httpd\libraries\Service;
+use mix\swoole\Process;
 
 /**
  * 工作控制器
@@ -15,8 +16,8 @@ class WorkerController extends Controller
     // 重启工作进程
     public function actionReload()
     {
-        if ($pid = Service::getPid()) {
-            Service::reloadWorker($pid);
+        if ($pid = Service::getMasterPid()) {
+            Process::kill($pid, SIGUSR1);
         }
         if (!$pid) {
             return 'mix-httpd is not running.' . PHP_EOL;
