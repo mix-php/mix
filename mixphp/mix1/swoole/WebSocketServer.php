@@ -3,7 +3,6 @@
 namespace mix\swoole;
 
 use mix\base\BaseObject;
-use mix\swoole\Process;
 
 /**
  * Http服务器类

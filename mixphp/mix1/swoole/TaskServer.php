@@ -3,8 +3,6 @@
 namespace mix\swoole;
 
 use mix\base\BaseObject;
-use mix\swoole\TaskProcess;
-use mix\swoole\Process;
 
 /**
  * 任务服务器类
