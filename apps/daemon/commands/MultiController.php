@@ -41,7 +41,7 @@ class MultiController extends Controller
     }
 
     // 左进程启动事件回调函数
-    public function onLeftStart(\mix\process\TaskProcess $worker)
+    public function onLeftStart(\mix\swoole\TaskProcess $worker)
     {
         // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
         $queueModel = new \apps\common\models\QueueModel();
@@ -56,7 +56,7 @@ class MultiController extends Controller
     }
 
     // 右进程启动事件回调函数
-    public function onRightStart(\mix\process\TaskProcess $worker, $index)
+    public function onRightStart(\mix\swoole\TaskProcess $worker, $index)
     {
         // 循环执行任务
         for ($j = 0; $j < 16000; $j++) {
