@@ -73,13 +73,13 @@ class Application
     {
         // 未注册
         if (!isset($this->components[$name])) {
-            throw new \mix\exception\ComponentException("组件不存在：{$name}");
+            throw new \mix\exceptions\ComponentException("组件不存在：{$name}");
         }
         // 使用配置创建新对象
         $object = \Mix::createObject($this->components[$name]);
         // 组件效验
         if (!($object instanceof Component)) {
-            throw new \mix\exception\ComponentException("不是组件类型：{$this->components[$name]['class']}");
+            throw new \mix\exceptions\ComponentException("不是组件类型：{$this->components[$name]['class']}");
         }
         // 装入容器
         $this->_components[$name] = $object;
@@ -121,7 +121,7 @@ class Application
                 }
             }
         }
-        throw new \mix\exception\NotFoundException($this->_notFoundMessage);
+        throw new \mix\exceptions\NotFoundException($this->_notFoundMessage);
     }
 
     // 获取配置目录路径
@@ -144,7 +144,7 @@ class Application
         $content = ob_get_clean();
         \Mix::app()->response->content .= $content;
         if ($send) {
-            throw new \mix\exception\DebugException(\Mix::app()->response->content);
+            throw new \mix\exceptions\DebugException(\Mix::app()->response->content);
         }
     }
 
@@ -156,14 +156,14 @@ class Application
         $content = ob_get_clean();
         \Mix::app()->response->content .= $content;
         if ($send) {
-            throw new \mix\exception\DebugException(\Mix::app()->response->content);
+            throw new \mix\exceptions\DebugException(\Mix::app()->response->content);
         }
     }
 
     // 终止程序
     public function end($response = null)
     {
-        throw new \mix\exception\EndException($response);
+        throw new \mix\exceptions\EndException($response);
     }
 
 }

@@ -23,14 +23,14 @@ class Error extends Component
     // Error Handler
     public static function appError($errno, $errstr, $errfile = '', $errline = 0)
     {
-        throw new \mix\exception\ErrorException($errno, $errstr, $errfile, $errline);
+        throw new \mix\exceptions\ErrorException($errno, $errstr, $errfile, $errline);
     }
 
     // Error Handler
     public static function appShutdown()
     {
         if ($error = error_get_last()) {
-            self::appException(new \mix\exception\ErrorException($error['type'], $error['message'], $error['file'], $error['line']));
+            self::appException(new \mix\exceptions\ErrorException($error['type'], $error['message'], $error['file'], $error['line']));
         }
     }
 
@@ -38,7 +38,7 @@ class Error extends Component
     public static function appException($e)
     {
         // debug处理 & exit处理
-        if ($e instanceof \mix\exception\DebugException || $e instanceof \mix\exception\EndException) {
+        if ($e instanceof \mix\exceptions\DebugException || $e instanceof \mix\exceptions\EndException) {
             \Mix::app()->response->content = $e->getMessage();
             \Mix::app()->response->send();
             return;
@@ -53,7 +53,7 @@ class Error extends Component
             'trace'   => $e->getTraceAsString(),
         ];
         // 日志处理
-        if (isset(\Mix::app()->components['log']) && !($e instanceof \mix\exception\NotFoundException)) {
+        if (isset(\Mix::app()->components['log']) && !($e instanceof \mix\exceptions\NotFoundException)) {
             $time    = date('Y-m-d H:i:s');
             $message = "[message] {$errors['message']}" . PHP_EOL;
             $message .= "[time] {$time}" . PHP_EOL;

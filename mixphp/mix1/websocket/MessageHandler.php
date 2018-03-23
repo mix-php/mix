@@ -58,7 +58,7 @@ class MessageHandler extends Component
                 $reflect = new \ReflectionClass($class);
             } catch (\ReflectionException $e) {
                 $this->clean();
-                throw new \mix\exception\NotFoundException($this->_notFoundMessage);
+                throw new \mix\exceptions\NotFoundException($this->_notFoundMessage);
             }
             $controller = $reflect->newInstanceArgs([[
                 '_server' => $this->_server,
@@ -78,7 +78,7 @@ class MessageHandler extends Component
             }
         }
         $this->clean();
-        throw new \mix\exception\NotFoundException($this->_notFoundMessage);
+        throw new \mix\exceptions\NotFoundException($this->_notFoundMessage);
     }
 
     // 清扫

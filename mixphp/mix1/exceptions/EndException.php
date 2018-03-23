@@ -1,6 +1,6 @@
 <?php
 
-namespace mix\exception;
+namespace mix\exceptions;
 
 /**
  * EndException类

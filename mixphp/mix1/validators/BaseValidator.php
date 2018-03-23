@@ -87,7 +87,7 @@ class BaseValidator
             // 预处理
             foreach ($this->actions as $action => $param) {
                 if (!in_array($action, $this->_allowActions)) {
-                    throw new \mix\exception\ModelException("属性`{$this->attribute}`的验证方法`{$action}`不存在");
+                    throw new \mix\exceptions\ModelException("属性`{$this->attribute}`的验证方法`{$action}`不存在");
                 }
                 // actions拆分
                 if (!method_exists($this, $action)) {

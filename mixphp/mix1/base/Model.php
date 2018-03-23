@@ -66,10 +66,10 @@ class Model extends BaseObject
     {
         $scenarios = $this->scenarios();
         if (!isset($scenarios[$scenario])) {
-            throw new \mix\exception\ModelException("场景不存在：{$scenario}");
+            throw new \mix\exceptions\ModelException("场景不存在：{$scenario}");
         }
         if (!isset($scenarios[$scenario]['required'])) {
-            throw new \mix\exception\ModelException("场景`{$scenario}`缺少`required`键名");
+            throw new \mix\exceptions\ModelException("场景`{$scenario}`缺少`required`键名");
         }
         if (!isset($scenarios[$scenario]['optional'])) {
             $scenarios[$scenario]['optional'] = [];
@@ -81,7 +81,7 @@ class Model extends BaseObject
     public function validate()
     {
         if (!isset($this->_scenario)) {
-            throw new \mix\exception\ModelException("场景未设置");
+            throw new \mix\exceptions\ModelException("场景未设置");
         }
         $this->errors = [];
         $scenario = $this->_scenario;
@@ -97,7 +97,7 @@ class Model extends BaseObject
             }
             $validatorType = array_shift($rule);
             if (!isset($this->_validators[$validatorType])) {
-                throw new \mix\exception\ModelException("属性`{$attribute}`的验证类型`{$validatorType}`不存在");
+                throw new \mix\exceptions\ModelException("属性`{$attribute}`的验证类型`{$validatorType}`不存在");
             }
             $validatorClass = $this->_validators[$validatorType];
             $validator = new $validatorClass();
