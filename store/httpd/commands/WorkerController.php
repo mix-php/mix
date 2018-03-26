@@ -3,7 +3,6 @@
 namespace store\httpd\commands;
 
 use mix\console\Controller;
-use store\httpd\libraries\Service;
 use mix\swoole\Process;
 
 /**
@@ -16,7 +15,7 @@ class WorkerController extends Controller
     // 重启工作进程
     public function actionReload()
     {
-        if ($pid = Service::getMasterPid()) {
+        if ($pid = Process::getMasterPid(\Mix::app()->objects['httpServer']['setting']['pid_file'])) {
             Process::kill($pid, SIGUSR1);
         }
         if (!$pid) {

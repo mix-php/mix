@@ -3,7 +3,6 @@
 namespace store\httpd\commands;
 
 use mix\console\Controller;
-use store\httpd\libraries\Service;
 use mix\swoole\Process;
 
 /**
@@ -22,7 +21,7 @@ class ServiceController extends Controller
     // 启动服务
     public function actionStart()
     {
-        if ($pid = Service::getMasterPid()) {
+        if ($pid = Process::getMasterPid(\Mix::app()->objects['httpServer']['setting']['pid_file'])) {
             return "mix-httpd is running, PID : {$pid}." . PHP_EOL;
         }
         $server = \Mix::app()->createObject('httpServer');
@@ -36,7 +35,7 @@ class ServiceController extends Controller
     // 停止服务
     public function actionStop()
     {
-        if ($pid = Service::getMasterPid()) {
+        if ($pid = Process::getMasterPid(\Mix::app()->objects['httpServer']['setting']['pid_file'])) {
             Process::kill($pid);
             while (Process::isRunning($pid)) {
                 // 等待进程退出

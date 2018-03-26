@@ -12,11 +12,11 @@ class Process
     // 使当前进程蜕变为一个守护进程
     public static function daemon($closeInputOutput = false)
     {
+        \Swoole\Process::daemon(true, !$closeInputOutput);
         $pid = getmypid();
         echo "PID: {$pid}" . PHP_EOL;
-        \Swoole\Process::daemon(true, !$closeInputOutput);
     }
-
+    
     // 设置进程名称
     public static function setName($name)
     {
@@ -44,6 +44,25 @@ class Process
         } else {
             \Swoole\Process::kill($pid, $signal);
         }
+    }
+
+    // 返回当前进程 id
+    public static function getPid()
+    {
+        return posix_getpid();
+    }
+
+    // 返回主进程 id
+    public static function getMasterPid($pidFile)
+    {
+        if (!file_exists($pidFile)) {
+            return false;
+        }
+        $pid = file_get_contents($pidFile);
+        if (self::isRunning($pid)) {
+            return $pid;
+        }
+        return false;
     }
 
 }

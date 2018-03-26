@@ -36,7 +36,7 @@ class TaskServer extends BaseObject
     public function start()
     {
         Process::setName(sprintf("mix-taskd: {$this->name} %s", 'master'));
-        $this->mpid = posix_getpid();
+        $this->mpid = Process::getPid();
         $this->createLeftProcesses();
         $this->createRightProcesses();
         $this->subProcessWait();
@@ -83,8 +83,8 @@ class TaskServer extends BaseObject
             $object->$method($worker, $index);
         }, false, false);
         $process->useQueue(ftok(__FILE__, 1), 2);
-        $process->mpid = $this->mpid;
-        $pid = $process->start();
+        $process->mpid       = $this->mpid;
+        $pid                 = $process->start();
         $this->workers[$pid] = [$index, $callback, $processType];
         return $pid;
     }

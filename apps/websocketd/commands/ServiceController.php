@@ -36,6 +36,10 @@ class ServiceController extends Controller
     // 启动服务
     public function actionStart()
     {
+        if ($pid = Process::getMasterPid(\Mix::app()->objects['webSocketServer']['setting']['pid_file'])) {
+            return "mix-websocketd is running, PID : {$pid}." . PHP_EOL;
+        }
+        echo 'mix-websocketd start success.' . PHP_EOL;
         // 蜕变为守护进程
         if ($this->d) {
             Process::daemon();
