@@ -49,13 +49,6 @@ class ServiceController extends Controller
         $server->on('Open', [$this, 'onOpen']);
         $server->on('Message', [$this, 'onMessage']);
         $server->on('Close', [$this, 'onClose']);
-        // 创建内存表
-        $table = new \Swoole\Table(65536);
-        $table->column('uid', \Swoole\Table::TYPE_INT);
-        $table->column('name', \Swoole\Table::TYPE_STRING, 20);
-        $table->create();
-        // 添加至服务属性
-        $server->table = $table;
         // 启动服务
         $server->start();
     }
@@ -73,7 +66,7 @@ class ServiceController extends Controller
         }
 
         /*
-         * 与上面的 session 方案，二选一使用即可
+         * token 方案，与上面的 session 方案，二选一使用即可
 
         // 效验token
         $userinfo = \Mix::app('webSocket')->tokenReader->loadTokenId($request)->get('userinfo');
@@ -87,10 +80,11 @@ class ServiceController extends Controller
         */
 
         // 保存会话信息
-        $webSocket->table->set($fd, [
+        $webSocket->fds[$fd]['session'] = [
             'uid'  => $userinfo['uid'],
             'name' => $userinfo['name'],
-        ]);
+        ];
+
         // 异步订阅
         $redis = $this->getAsyncRedis();
         $redis->on('Message', function (\Swoole\Redis $client, $result) use ($webSocket, $fd) {
@@ -108,15 +102,15 @@ class ServiceController extends Controller
             // 订阅该用户id的消息队列
             $client->subscribe('emit_to_' . $userinfo['uid']);
         });
-        // 保存连接
-        $webSocket->redisConnections[$fd] = $redis;
+        // 保存数据库连接
+        $webSocket->fds[$fd]['redis'] = $redis;
     }
 
     // 接收消息事件回调函数
     public function onMessage(\Swoole\WebSocket\Server $webSocket, \Swoole\WebSocket\Frame $frame)
     {
         // 取出会话信息
-        $userinfo = $webSocket->table->get($frame->fd);
+        $userinfo = $webSocket->fds[$frame->fd]['session'];
         if (!$userinfo) {
             return;
         }
@@ -137,11 +131,13 @@ class ServiceController extends Controller
     public function onClose(\Swoole\WebSocket\Server $webSocket, $fd)
     {
         // 删除会话信息
-        $webSocket->table->del($fd);
-        // 删除redis连接
-        if (isset($webSocket->redisConnections[$fd])) {
-            $webSocket->redisConnections[$fd]->close();
-            unset($webSocket->redisConnections[$fd]);
+        if (isset($webSocket->fds[$fd]['session'])) {
+            unset($webSocket->fds[$fd]['session']);
+        }
+        // 关闭数据库连接
+        if (isset($webSocket->fds[$fd]['redis'])) {
+            $webSocket->fds[$fd]['redis']->close();
+            unset($webSocket->fds[$fd]['redis']);
         }
     }
 
