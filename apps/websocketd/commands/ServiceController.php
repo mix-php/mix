@@ -87,7 +87,21 @@ class ServiceController extends Controller
 
         // 异步订阅
         $redis = $this->getAsyncRedis();
+        $redis->connect(function (\Swoole\Redis $client, $result) use ($userinfo) {
+            // 错误处理
+            if (!$result) {
+                echo 'async redis error: [' . $client->errCode . '] ' . $client->errMsg . PHP_EOL;
+                return;
+            }
+            // 订阅该用户id的消息队列
+            $client->subscribe('emit_to_' . $userinfo['uid']);
+        });
         $redis->on('Message', function (\Swoole\Redis $client, $result) use ($webSocket, $fd) {
+            // 错误处理
+            if (!$result) {
+                echo 'async redis error: [' . $client->errCode . '] ' . $client->errMsg . PHP_EOL;
+                return;
+            }
             // 将消息队列的消息发送至客户端
             list($type, , $message) = $result;
             if ($type == 'message') {
@@ -97,10 +111,6 @@ class ServiceController extends Controller
         $redis->on('Close', function (\Swoole\Redis $client) use ($webSocket, $fd) {
             // 关闭WS连接
             $webSocket->close($fd);
-        });
-        $redis->connect(function (\Swoole\Redis $client, $result) use ($userinfo) {
-            // 订阅该用户id的消息队列
-            $client->subscribe('emit_to_' . $userinfo['uid']);
         });
         // 保存数据库连接
         $webSocket->fds[$fd]['redis'] = $redis;
