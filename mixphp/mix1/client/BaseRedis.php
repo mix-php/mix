@@ -28,7 +28,7 @@ class BaseRedis extends Component
         $redis = new \Redis();
         // connect 这里如果设置timeout，是全局有效的，执行brPop时会受影响
         if (!$redis->connect($this->host, $this->port)) {
-            throw new \RedisException('Redis连接失败');
+            throw new \RedisException('redis connection failed');
         }
         $redis->auth($this->password);
         $redis->select($this->database);

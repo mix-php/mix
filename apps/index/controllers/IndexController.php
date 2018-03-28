@@ -19,7 +19,7 @@ class IndexController extends Controller
     }
 
     // API 范例
-    public function actionApiExample()
+    public function actionApi()
     {
         // 使用模型
         $model             = new IndexForm();
@@ -35,7 +35,7 @@ class IndexController extends Controller
     }
 
     // WebSite 范例
-    public function actionWebSiteExample()
+    public function actionWebsite()
     {
         // 使用模型
         $model             = new IndexForm();
