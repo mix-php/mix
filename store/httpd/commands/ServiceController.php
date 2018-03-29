@@ -53,4 +53,14 @@ class ServiceController extends Controller
         $this->actionStart();
     }
 
+    // 查看服务状态
+    public function actionStatus()
+    {
+        if ($pid = Process::getMasterPid(\Mix::app()->objects['httpServer']['setting']['pid_file'])) {
+            return "mix-httpd is running, PID : {$pid}." . PHP_EOL;
+        } else {
+            return 'mix-httpd is not running.' . PHP_EOL;
+        }
+    }
+
 }

@@ -15,6 +15,57 @@ class ServiceController extends Controller
     // 是否后台运行
     protected $d = false;
 
+    // 启动服务
+    public function actionStart()
+    {
+        if ($pid = Process::getMasterPid(\Mix::app()->objects['webSocketServer']['setting']['pid_file'])) {
+            return "mix-websocketd is running, PID : {$pid}." . PHP_EOL;
+        }
+        echo 'mix-websocketd start successed.' . PHP_EOL;
+        // 蜕变为守护进程
+        if ($this->d) {
+            Process::daemon();
+        }
+        // 创建服务
+        $server = $this->getServer();
+        $server->on('Open', [$this, 'onOpen']);
+        $server->on('Message', [$this, 'onMessage']);
+        $server->on('Close', [$this, 'onClose']);
+        // 启动服务
+        $server->start();
+    }
+
+    // 停止服务
+    public function actionStop()
+    {
+        if ($pid = Process::getMasterPid(\Mix::app()->objects['webSocketServer']['setting']['pid_file'])) {
+            Process::kill($pid);
+            while (Process::isRunning($pid)) {
+                // 等待进程退出
+            }
+            return 'mix-websocketd stop completed.' . PHP_EOL;
+        } else {
+            return 'mix-websocketd is not running.' . PHP_EOL;
+        }
+    }
+
+    // 重启服务
+    public function actionRestart()
+    {
+        $this->actionStop();
+        $this->actionStart();
+    }
+
+    // 查看服务状态
+    public function actionStatus()
+    {
+        if ($pid = Process::getMasterPid(\Mix::app()->objects['webSocketServer']['setting']['pid_file'])) {
+            return "mix-websocketd is running, PID : {$pid}." . PHP_EOL;
+        } else {
+            return 'mix-websocketd is not running.' . PHP_EOL;
+        }
+    }
+
     /**
      * 获取服务
      * @return \mix\swoole\WebSocketServer
@@ -31,26 +82,6 @@ class ServiceController extends Controller
     public function getAsyncRedis()
     {
         return \Mix::app()->createObject('asyncRedis');
-    }
-
-    // 启动服务
-    public function actionStart()
-    {
-        if ($pid = Process::getMasterPid(\Mix::app()->objects['webSocketServer']['setting']['pid_file'])) {
-            return "mix-websocketd is running, PID : {$pid}." . PHP_EOL;
-        }
-        echo 'mix-websocketd start success.' . PHP_EOL;
-        // 蜕变为守护进程
-        if ($this->d) {
-            Process::daemon();
-        }
-        // 创建服务
-        $server = $this->getServer();
-        $server->on('Open', [$this, 'onOpen']);
-        $server->on('Message', [$this, 'onMessage']);
-        $server->on('Close', [$this, 'onClose']);
-        // 启动服务
-        $server->start();
     }
 
     // 连接事件回调函数
