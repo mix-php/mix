@@ -9,6 +9,7 @@ namespace mix\swoole;
 class TaskProcess extends \Swoole\Process
 {
 
+    // 进程类型
     const PRODUCER = 0;
     const CONSUMER = 1;
 
