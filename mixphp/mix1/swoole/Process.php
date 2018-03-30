@@ -13,8 +13,6 @@ class Process
     public static function daemon($closeInputOutput = false)
     {
         \Swoole\Process::daemon(true, !$closeInputOutput);
-        $pid = self::getPid();
-        echo "PID: {$pid}" . PHP_EOL;
     }
 
     // 设置进程名称
