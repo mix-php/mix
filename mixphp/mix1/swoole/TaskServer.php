@@ -20,12 +20,8 @@ class TaskServer extends BaseObject
     // 服务名称
     public $name = '';
 
-    // 队列模式常量
-    const QUEUE_MODE_STATIC = 0;
-    const QUEUE_MODE_DYNAMIC = 1;
-
-    // 队列模式
-    public $queueMode = self::QUEUE_MODE_STATIC;
+    // 进程队列的key，int类型
+    public $queueKey = '';
 
     // 主进程pid
     protected $mpid = 0;
@@ -84,7 +80,7 @@ class TaskServer extends BaseObject
         if (!isset($callback)) {
             throw new \Exception('Create Process Error: ' . ($processType == 'left' ? '[LeftStart]' : '[RightStart]') . ' no callback.');
         }
-        $process  = new TaskProcess(function ($worker) use ($index, $callback, $processType) {
+        $process = new TaskProcess(function ($worker) use ($index, $callback, $processType) {
             try {
                 Process::setName(sprintf("mix-daemon: taskd: '{$this->name}' {$processType} #%s", $index));
                 list($object, $method) = $callback;
@@ -93,11 +89,7 @@ class TaskServer extends BaseObject
                 \Mix::app()->error->exception($e);
             }
         }, false, false);
-        $queueKey = ftok(__FILE__, 1);
-        if ($this->queueMode == self::QUEUE_MODE_CHANGE) {
-            $queueKey += $this->mpid;
-        }
-        $process->useQueue($queueKey, 2);
+        $process->useQueue($this->queueKey, 2);
         $process->mpid       = $this->mpid;
         $pid                 = $process->start();
         $this->workers[$pid] = [$index, $callback, $processType];

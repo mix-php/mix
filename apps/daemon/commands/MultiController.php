@@ -36,8 +36,8 @@ class MultiController extends Controller
                 'leftProcess'  => 1,
                 // 右进程数
                 'rightProcess' => 3,
-                // 队列模式
-                'queueMode'    => TaskServer::QUEUE_MODE_STATIC,
+                // 进程队列的key，int类型
+                'queueKey'     => ftok(__FILE__, 1),
             ]
         );
     }
@@ -108,9 +108,9 @@ class MultiController extends Controller
         // 循环执行任务
         for ($j = 0; $j < 16000; $j++) {
             $worker->checkMaster(TaskProcess::PRODUCER);
-            // 从队列取出一条消息
+            // 从消息队列中间件取出一条消息
             $msg = $queueModel->pop();
-            // 将消息推送给消费者进程处理
+            // 将消息推送给消费者进程去处理
             $worker->push($msg);
         }
     }
@@ -121,7 +121,7 @@ class MultiController extends Controller
         // 循环执行任务
         for ($j = 0; $j < 16000; $j++) {
             $worker->checkMaster();
-            // 从队列中抢占一条消息
+            // 从进程队列中抢占一条消息
             $msg = $worker->pop();
             if (!empty($msg)) {
                 // 处理消息，比如：发送短信、发送邮件、微信推送
