@@ -18,14 +18,19 @@ class IndexController extends Controller
     // 执行任务
     public function actionIndex()
     {
+        $name = \Mix::app()->request->route('controller') . '/' . \Mix::app()->request->route('action');
         // 蜕变为守护进程
         if ($this->d) {
             Process::daemon();
         }
+        // 修改进程名称
+        Process::setName('mix-crontab: ' . $name);
+
         // 模型内使用短连接版本的数据库组件，计划任务都是一次性执行
         $tableModel = new \apps\common\models\TableModel();
         // 执行业务代码
         // ...
+
         // 响应
         return 'SUCCESS' . PHP_EOL;
     }
