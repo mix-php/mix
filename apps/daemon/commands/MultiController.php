@@ -37,7 +37,7 @@ class MultiController extends Controller
                 // 右进程数
                 'rightProcess' => 3,
                 // 队列模式
-                'queueMode'    => TaskServer::QUEUE_MODE_CONSTANT,
+                'queueMode'    => TaskServer::QUEUE_MODE_STATIC,
             ]
         );
     }

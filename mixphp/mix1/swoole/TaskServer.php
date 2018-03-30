@@ -21,11 +21,11 @@ class TaskServer extends BaseObject
     public $name = '';
 
     // 队列模式常量
-    const QUEUE_MODE_CONSTANT = 0;
-    const QUEUE_MODE_CHANGE = 1;
+    const QUEUE_MODE_STATIC = 0;
+    const QUEUE_MODE_DYNAMIC = 1;
 
     // 队列模式
-    public $queueMode = self::QUEUE_MODE_CONSTANT;
+    public $queueMode = self::QUEUE_MODE_STATIC;
 
     // 主进程pid
     protected $mpid = 0;
