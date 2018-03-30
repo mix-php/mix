@@ -75,4 +75,10 @@ class Error extends Component
         $terminal->output($errors['trace'] . PHP_EOL);
     }
 
+    // 手动处理异常
+    public function exception($e)
+    {
+        self::appException($e);
+    }
+
 }

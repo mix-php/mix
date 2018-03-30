@@ -90,16 +90,6 @@ return [
     // 对象配置
     'objects'                   => [
 
-        // TaskServer
-        'taskServer' => [
-            // 类路径
-            'class'        => 'mix\swoole\TaskServer',
-            // 左进程数
-            'leftProcess'  => 1,
-            // 右进程数
-            'rightProcess' => 3,
-        ],
-
     ],
 
 ];

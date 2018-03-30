@@ -9,17 +9,25 @@ namespace mix\swoole;
 class TaskProcess extends \Swoole\Process
 {
 
+    const PRODUCER = 0;
+    const CONSUMER = 1;
+
     // 主进程pid
     public $mpid = 0;
 
     // 检查主进程
-    public function checkMaster()
+    public function checkMaster($processType = self::CONSUMER)
     {
         if (!\Swoole\Process::kill($this->mpid, 0)) {
-            while ($this->statQueue()['queue_num'] > 0) {
+            if ($processType == self::PRODUCER) {
+                $this->exit();
             }
-            $this->freeQueue();
-            $this->exit();
+            if ($processType == self::CONSUMER) {
+                if ($this->statQueue()['queue_num'] == 0) {
+                    $this->freeQueue();
+                    $this->exit();
+                }
+            }
         }
     }
 

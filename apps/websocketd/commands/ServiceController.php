@@ -18,9 +18,12 @@ class ServiceController extends Controller
     // 启动服务
     public function actionStart()
     {
-        if ($pid = Process::getMasterPid(\Mix::app()->objects['webSocketServer']['setting']['pid_file'])) {
+        // 重复启动处理
+        $pidFile = \Mix::app()->objects['webSocketServer']['setting']['pid_file'];
+        if ($pid = Process::getMasterPid($pidFile)) {
             return "mix-websocketd is running, PID : {$pid}." . PHP_EOL;
         }
+        // 启动提示
         echo 'mix-websocketd start successed.' . PHP_EOL;
         // 蜕变为守护进程
         if ($this->d) {
@@ -38,10 +41,12 @@ class ServiceController extends Controller
     // 停止服务
     public function actionStop()
     {
-        if ($pid = Process::getMasterPid(\Mix::app()->objects['webSocketServer']['setting']['pid_file'])) {
+        $pidFile = \Mix::app()->objects['webSocketServer']['setting']['pid_file'];
+        if ($pid = Process::getMasterPid($pidFile)) {
             Process::kill($pid);
             while (Process::isRunning($pid)) {
                 // 等待进程退出
+                usleep(100000);
             }
             return 'mix-websocketd stop completed.' . PHP_EOL;
         } else {
@@ -59,7 +64,8 @@ class ServiceController extends Controller
     // 查看服务状态
     public function actionStatus()
     {
-        if ($pid = Process::getMasterPid(\Mix::app()->objects['webSocketServer']['setting']['pid_file'])) {
+        $pidFile = \Mix::app()->objects['webSocketServer']['setting']['pid_file'];
+        if ($pid = Process::getMasterPid($pidFile)) {
             return "mix-websocketd is running, PID : {$pid}." . PHP_EOL;
         } else {
             return 'mix-websocketd is not running.' . PHP_EOL;
@@ -131,7 +137,7 @@ class ServiceController extends Controller
                     $webSocket->push($fd, $message);
                 }
             } catch (\Exception $e) {
-                \Mix::app()->error->appException($e);
+                \Mix::app()->error->exception($e);
             }
         });
         $redis->on('Close', function (\Swoole\Redis $client) use ($webSocket, $fd) {
@@ -148,7 +154,7 @@ class ServiceController extends Controller
                 // 订阅该用户id的消息队列
                 $client->subscribe('emit_to_' . $userinfo['uid']);
             } catch (\Exception $e) {
-                \Mix::app()->error->appException($e);
+                \Mix::app()->error->exception($e);
             }
         });
         // 保存数据库连接

@@ -131,7 +131,7 @@ class WebSocketServer extends BaseObject
                     list($object, $method) = $this->_onOpenCallback;
                     $object->$method($server, $request->fd, $swooleRequest);
                 } catch (\Exception $e) {
-                    \Mix::app()->error->appException($e);
+                    \Mix::app()->error->exception($e);
                 }
             });
         }
@@ -147,7 +147,7 @@ class WebSocketServer extends BaseObject
                     list($object, $method) = $this->_onMessageCallback;
                     $object->$method($server, $frame);
                 } catch (\Exception $e) {
-                    \Mix::app()->error->appException($e);
+                    \Mix::app()->error->exception($e);
                 }
             });
         }
@@ -167,7 +167,7 @@ class WebSocketServer extends BaseObject
                         $object->$method($server, $fd);
                     }
                 } catch (\Exception $e) {
-                    \Mix::app()->error->appException($e);
+                    \Mix::app()->error->exception($e);
                 }
             });
         }

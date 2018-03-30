@@ -39,6 +39,7 @@ class ServiceController extends Controller
             Process::kill($pid);
             while (Process::isRunning($pid)) {
                 // 等待进程退出
+                usleep(100000);
             }
             return 'mix-httpd stop completed.' . PHP_EOL;
         } else {

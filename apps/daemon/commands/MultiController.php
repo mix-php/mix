@@ -4,6 +4,8 @@ namespace apps\daemon\commands;
 
 use mix\console\Controller;
 use mix\swoole\Process;
+use mix\swoole\TaskProcess;
+use mix\swoole\TaskServer;
 
 /**
  * 这是一个多进程守护进程的范例
@@ -14,41 +16,98 @@ use mix\swoole\Process;
 class MultiController extends Controller
 {
 
+    // PID 文件
+    const PID_FILE = '/var/run/multi.pid';
+
     // 是否后台运行
     protected $d = false;
 
     /**
      * 获取服务
-     * @return \mix\swoole\TaskServer
+     * @return TaskServer
      */
     public function getServer()
     {
-        return \Mix::app()->createObject('taskServer');
+        return \Mix::createObject(
+            [
+                // 类路径
+                'class'        => 'mix\swoole\TaskServer',
+                // 左进程数
+                'leftProcess'  => 1,
+                // 右进程数
+                'rightProcess' => 3,
+                // 队列模式
+                'queueMode'    => TaskServer::QUEUE_MODE_CONSTANT,
+            ]
+        );
     }
 
-    // 启动守护进程
+    // 启动
     public function actionStart()
     {
+        $controllerName = \Mix::app()->request->route('controller');
+        // 重复启动处理
+        if ($pid = Process::getMasterPid(self::PID_FILE)) {
+            return "mix-daemon '{$controllerName}' is running, PID : {$pid}." . PHP_EOL;
+        }
+        // 启动提示
+        echo "mix-daemon '{$controllerName}' start successed." . PHP_EOL;
         // 蜕变为守护进程
         if ($this->d) {
             Process::daemon();
         }
+        // 写入 PID 文件
+        Process::writePid(self::PID_FILE);
         // 启动服务
         $server       = $this->getServer();
-        $server->name = $this->getControllerName();
+        $server->name = $controllerName;
         $server->on('LeftStart', [$this, 'onLeftStart']);
         $server->on('RightStart', [$this, 'onRightStart']);
         $server->start();
     }
 
+    // 停止
+    public function actionStop()
+    {
+        $controllerName = \Mix::app()->request->route('controller');
+        if ($pid = Process::getMasterPid(self::PID_FILE)) {
+            Process::kill($pid);
+            while (Process::isRunning($pid)) {
+                // 等待进程退出
+                usleep(100000);
+            }
+            return "mix-daemon '{$controllerName}' stop completed." . PHP_EOL;
+        } else {
+            return "mix-daemon '{$controllerName}' is not running." . PHP_EOL;
+        }
+    }
+
+    // 重启
+    public function actionRestart()
+    {
+        $this->actionStop();
+        $this->actionStart();
+    }
+
+    // 查看状态
+    public function actionStatus()
+    {
+        $controllerName = \Mix::app()->request->route('controller');
+        if ($pid = Process::getMasterPid(self::PID_FILE)) {
+            return "mix-daemon '{$controllerName}' is running, PID : {$pid}." . PHP_EOL;
+        } else {
+            return "mix-daemon '{$controllerName}' is not running." . PHP_EOL;
+        }
+    }
+
     // 左进程启动事件回调函数
-    public function onLeftStart(\mix\swoole\TaskProcess $worker)
+    public function onLeftStart(TaskProcess $worker, $index)
     {
         // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
         $queueModel = new \apps\common\models\QueueModel();
         // 循环执行任务
         for ($j = 0; $j < 16000; $j++) {
-            $worker->checkMaster();
+            $worker->checkMaster(TaskProcess::PRODUCER);
             // 从队列取出一条消息
             $msg = $queueModel->pop();
             // 将消息推送给消费者进程处理
@@ -57,7 +116,7 @@ class MultiController extends Controller
     }
 
     // 右进程启动事件回调函数
-    public function onRightStart(\mix\swoole\TaskProcess $worker, $index)
+    public function onRightStart(TaskProcess $worker, $index)
     {
         // 循环执行任务
         for ($j = 0; $j < 16000; $j++) {

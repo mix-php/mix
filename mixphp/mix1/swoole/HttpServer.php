@@ -99,7 +99,7 @@ class HttpServer extends BaseObject
                 \Mix::app()->response->setResponder($response);
                 \Mix::app()->run();
             } catch (\Exception $e) {
-                \Mix::app()->error->appException($e);
+                \Mix::app()->error->exception($e);
             }
         });
     }

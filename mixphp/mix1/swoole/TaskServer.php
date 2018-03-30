@@ -20,6 +20,13 @@ class TaskServer extends BaseObject
     // 服务名称
     public $name = '';
 
+    // 队列模式常量
+    const QUEUE_MODE_CONSTANT = 0;
+    const QUEUE_MODE_CHANGE = 1;
+
+    // 队列模式
+    public $queueMode = self::QUEUE_MODE_CONSTANT;
+
     // 主进程pid
     protected $mpid = 0;
 
@@ -35,7 +42,7 @@ class TaskServer extends BaseObject
     // 启动
     public function start()
     {
-        Process::setName(sprintf("mix-taskd: {$this->name} %s", 'master'));
+        Process::setName(sprintf("mix-daemon: taskd: '{$this->name}' %s", 'master'));
         $this->mpid = Process::getPid();
         $this->createLeftProcesses();
         $this->createRightProcesses();
@@ -77,12 +84,20 @@ class TaskServer extends BaseObject
         if (!isset($callback)) {
             throw new \Exception('Create Process Error: ' . ($processType == 'left' ? '[LeftStart]' : '[RightStart]') . ' no callback.');
         }
-        $process = new TaskProcess(function ($worker) use ($index, $callback, $processType) {
-            Process::setName(sprintf("mix-taskd: {$this->name} {$processType} #%s", $index));
-            list($object, $method) = $callback;
-            $object->$method($worker, $index);
+        $process  = new TaskProcess(function ($worker) use ($index, $callback, $processType) {
+            try {
+                Process::setName(sprintf("mix-daemon: taskd: '{$this->name}' {$processType} #%s", $index));
+                list($object, $method) = $callback;
+                $object->$method($worker, $index);
+            } catch (\Exception $e) {
+                \Mix::app()->error->exception($e);
+            }
         }, false, false);
-        $process->useQueue(ftok(__FILE__, 1), 2);
+        $queueKey = ftok(__FILE__, 1);
+        if ($this->queueMode == self::QUEUE_MODE_CHANGE) {
+            $queueKey += $this->mpid;
+        }
+        $process->useQueue($queueKey, 2);
         $process->mpid       = $this->mpid;
         $pid                 = $process->start();
         $this->workers[$pid] = [$index, $callback, $processType];

@@ -13,10 +13,10 @@ class Process
     public static function daemon($closeInputOutput = false)
     {
         \Swoole\Process::daemon(true, !$closeInputOutput);
-        $pid = getmypid();
+        $pid = self::getPid();
         echo "PID: {$pid}" . PHP_EOL;
     }
-    
+
     // 设置进程名称
     public static function setName($name)
     {
@@ -46,10 +46,24 @@ class Process
         }
     }
 
+    // 写入 PID 文件
+    public static function writePid($pidFile)
+    {
+        $pid  = Process::getPid();
+        $file = fopen($pidFile, "w+");
+        if (flock($file, LOCK_EX)) {
+            fwrite($file, $pid);
+            flock($file, LOCK_UN);
+        } else {
+            die("Error writing file '{$pidFile}'" . PHP_EOL);
+        }
+        fclose($file);
+    }
+
     // 返回当前进程 id
     public static function getPid()
     {
-        return posix_getpid();
+        return getmypid();
     }
 
     // 返回主进程 id
