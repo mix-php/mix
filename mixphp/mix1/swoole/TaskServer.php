@@ -20,7 +20,7 @@ class TaskServer extends BaseObject
     // 服务名称
     public $name = '';
 
-    // 进程队列的key，int类型
+    // 进程队列的key
     public $queueKey = '';
 
     // 主进程pid
@@ -89,7 +89,7 @@ class TaskServer extends BaseObject
                 \Mix::app()->error->exception($e);
             }
         }, false, false);
-        $process->useQueue($this->queueKey, 2);
+        $process->useQueue($this->getQueueKey(), 2);
         $process->mpid       = $this->mpid;
         $pid                 = $process->start();
         $this->workers[$pid] = [$index, $callback, $processType];
@@ -108,7 +108,7 @@ class TaskServer extends BaseObject
         throw new \Exception('Reboot Process Error: no pid.');
     }
 
-    // 回收结束运行的子进程
+    // 回收结束运行的子进程，并重启子进程
     protected function subProcessWait()
     {
         while (true) {
@@ -117,6 +117,20 @@ class TaskServer extends BaseObject
                 $this->rebootProcess($ret);
             }
         }
+    }
+
+    // 获取进程队列的key
+    protected function getQueueKey()
+    {
+        $key = $this->queueKey;
+        // 将 key 由 string 类型转换为 int 类型
+        $mdv  = md5($key);
+        $mdv1 = substr($mdv, 0, 16);
+        $mdv2 = substr($mdv, 16, 16);
+        $crc1 = abs(crc32($mdv1));
+        $crc2 = abs(crc32($mdv2));
+        // 返回
+        return bcmul($crc1, $crc2);
     }
 
 }

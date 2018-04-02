@@ -47,8 +47,8 @@ class MultiController extends Controller
                 'leftProcess'  => 1,
                 // 右进程数
                 'rightProcess' => 3,
-                // 进程队列的key，int类型
-                'queueKey'     => ftok(__FILE__, 1),
+                // 进程队列的key
+                'queueKey'     => __FILE__ . time(),
             ]
         );
     }
