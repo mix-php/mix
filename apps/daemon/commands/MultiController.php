@@ -48,7 +48,7 @@ class MultiController extends Controller
                 // 右进程数
                 'rightProcess' => 3,
                 // 进程队列的key
-                'queueKey'     => __FILE__ . time(),
+                'queueKey'     => __FILE__ . uniqid(),
             ]
         );
     }
