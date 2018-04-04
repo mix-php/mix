@@ -337,13 +337,15 @@ class BasePdo extends Component
     {
         if (!empty($this->sqlRawData)) {
             list($sql, $params, $values) = $this->sqlRawData;
-            $params = self::quotes($params);
             $values = self::quotes($values);
+            $params = self::quotes($params);
+            // 先处理 values，避免 params 中包含 ? 号污染结果
+            $sql = vsprintf(str_replace('?', '%s', $sql), $values);
+            // 处理 params
             foreach ($params as $key => $value) {
                 $key = substr($key, 0, 1) == ':' ? $key : ":{$key}";
                 $sql = str_replace($key, $value, $sql);
             }
-            $sql = vsprintf(str_replace('?', '%s', $sql), $values);
             return $sql;
         }
         return $this->_sql;
