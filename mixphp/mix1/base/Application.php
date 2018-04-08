@@ -98,23 +98,23 @@ class Application
                 // 路由参数导入请求类
                 \Mix::app()->request->setRoute($queryParams);
                 // 实例化控制器
-                $action    = "{$this->controllerNamespace}\\{$action}";
-                $classFull = \mix\base\Route::dirname($action);
-                $classPath = \mix\base\Route::dirname($classFull);
-                $className = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($classFull), true);
-                $method    = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($action), true);
-                $class     = "{$classPath}\\{$className}Controller";
-                $method    = "action{$method}";
-                if (class_exists($class)) {
-                    $controller = new $class($controllerAttributes);
+                $controllerAction = "{$this->controllerNamespace}\\{$action}";
+                $controllerFull   = \mix\base\Route::dirname($controllerAction);
+                $controllerPath   = \mix\base\Route::dirname($controllerFull);
+                $controllerName   = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($controllerFull), true);
+                $controllerMethod = \mix\base\Route::snakeToCamel(\mix\base\Route::basename($controllerAction), true);
+                $controllerClass  = "{$controllerPath}\\{$controllerName}Controller";
+                $controllerAction = "action{$controllerMethod}";
+                if (class_exists($controllerClass)) {
+                    $controller = new $controllerClass($controllerAttributes);
                     // 判断方法是否存在
-                    if (method_exists($controller, $method)) {
+                    if (method_exists($controller, $controllerAction)) {
                         // 执行前置动作
-                        $controller->beforeAction();
+                        $controller->beforeAction($controllerAction);
                         // 执行控制器的方法
-                        $result = $controller->$method();
+                        $result = $controller->$controllerAction();
                         // 执行后置动作
-                        $controller->afterAction();
+                        $controller->afterAction($controllerAction);
                         // 返回执行结果
                         return $result;
                     }
@@ -141,7 +141,7 @@ class Application
     {
         ob_start();
         var_dump($var);
-        $content = ob_get_clean();
+        $content                       = ob_get_clean();
         \Mix::app()->response->content .= $content;
         if ($send) {
             throw new \mix\exceptions\DebugException(\Mix::app()->response->content);
@@ -153,7 +153,7 @@ class Application
     {
         ob_start();
         print_r($var);
-        $content = ob_get_clean();
+        $content                       = ob_get_clean();
         \Mix::app()->response->content .= $content;
         if ($send) {
             throw new \mix\exceptions\DebugException(\Mix::app()->response->content);

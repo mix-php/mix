@@ -10,12 +10,12 @@ class Controller extends BaseObject
 {
 
     // 前置动作
-    public function beforeAction()
+    public function beforeAction($action)
     {
     }
 
     // 后置动作
-    public function afterAction()
+    public function afterAction($action)
     {
     }
 
