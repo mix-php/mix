@@ -12,16 +12,21 @@ class BaseRedisPersistent extends BaseRedis
     // 连接持续时间
     public $persistentTime = 7200;
 
+    // 重用连接(相同配置)
+    public $reusableConnection = false;
+
     // 最后活动时间
     protected $_lastActiveTime;
 
     // 初始化
     public function initialize()
     {
-        // 共用连接对象
-        $hash                  = md5($this->host . $this->port . $this->database . $this->password);
-        $this->_redis          = &\Mix::$container['redis_' . $hash];
-        $this->_lastActiveTime = &\Mix::$container['redisLastActiveTime_' . $hash];
+        // 重用连接(相同配置)
+        if ($this->reusableConnection) {
+            $hash                  = md5($this->host . $this->port . $this->database . $this->password);
+            $this->_redis          = &\Mix::$container['redis_' . $hash];
+            $this->_lastActiveTime = &\Mix::$container['redisLastActiveTime_' . $hash];
+        }
     }
 
     // 连接

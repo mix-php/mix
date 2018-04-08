@@ -12,16 +12,21 @@ class BasePdoPersistent extends BasePdo
     // 连接持续时间
     public $persistentTime = 7200;
 
+    // 重用连接(相同配置)
+    public $reusableConnection = false;
+
     // 最后活动时间
     protected $_lastActiveTime;
 
     // 初始化
     protected function initialize()
     {
-        // 共用连接对象
-        $hash                  = md5($this->dsn . $this->username . $this->password);
-        $this->_pdo            = &\Mix::$container['pdo_' . $hash];
-        $this->_lastActiveTime = &\Mix::$container['pdoLastActiveTime_' . $hash];
+        // 重用连接(相同配置)
+        if ($this->reusableConnection) {
+            $hash                  = md5($this->dsn . $this->username . $this->password);
+            $this->_pdo            = &\Mix::$container['pdo_' . $hash];
+            $this->_lastActiveTime = &\Mix::$container['pdoLastActiveTime_' . $hash];
+        }
     }
 
     // 连接
