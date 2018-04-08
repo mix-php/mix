@@ -73,8 +73,8 @@ class Error extends Component
             $message .= "[file] {$errors['file']} line {$errors['line']}" . PHP_EOL;
             $message .= "[trace] {$errors['trace']}" . PHP_EOL;
             $message .= str_replace('Array', '$_SERVER', print_r($_SERVER, true));
-            $message .= str_replace('Array', '$_GET', print_r($_GET, true));
-            $message .= str_replace('Array', '$_POST', print_r($_POST, true));
+            $message .= str_replace('Array', '$_GET', print_r(\Mix::app()->request->get(), true));
+            $message .= str_replace('Array', '$_POST', print_r(\Mix::app()->request->post(), true));
             \Mix::app()->log->error($message);
         }
         // 清空系统错误
@@ -101,7 +101,7 @@ class Error extends Component
         ];
         $content                          = (new View())->render($tpl[$statusCode], $errors);
         \Mix::app()->response->statusCode = $statusCode;
-        \Mix::app()->response->content = $content;
+        \Mix::app()->response->content    = $content;
         switch ($format) {
             case self::FORMAT_HTML:
                 \Mix::app()->response->setHeader('Content-Type', 'text/html;charset=utf-8');
