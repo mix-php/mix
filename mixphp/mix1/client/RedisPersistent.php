@@ -17,6 +17,15 @@ class RedisPersistent extends BaseRedisPersistent
         $this->initialize();
     }
 
+    public function onRequestStart()
+    {
+        parent::onRequestStart();
+        // 切换回默认数据库
+        if (isset($this->_redis)) {
+            $this->_redis->select($this->database);
+        }
+    }
+
     // 析构事件
     public function onDestruct()
     {
