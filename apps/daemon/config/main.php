@@ -5,13 +5,13 @@ $database = require __DIR__ . '/../../common/config/database.php';
 return [
 
     // 基础路径
-    'basePath'                  => dirname(__DIR__) . DIRECTORY_SEPARATOR,
+    'basePath'            => dirname(__DIR__) . DIRECTORY_SEPARATOR,
 
     // 控制器命名空间
-    'controllerNamespace'       => 'apps\daemon\commands',
+    'controllerNamespace' => 'apps\daemon\commands',
 
     // 组件配置
-    'components'                => [
+    'components'          => [
 
         // 路由
         'route'    => [
@@ -67,12 +67,14 @@ return [
             $database['mysql'],
             [
                 // 类路径
-                'class'     => 'mix\client\PdoPersistent',
+                'class'          => 'mix\client\PdoPersistent',
                 // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
-                'attribute' => [
+                'attribute'      => [
                     // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
                     \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
                 ],
+                // 连接持续时间(秒)
+                'persistentTime' => 7200,
             ]
         ),
 
@@ -81,14 +83,16 @@ return [
             $database['redis'],
             [
                 // 类路径
-                'class' => 'mix\client\RedisPersistent',
+                'class'          => 'mix\client\RedisPersistent',
+                // 连接持续时间(秒)
+                'persistentTime' => 7200,
             ]
         ),
 
     ],
 
     // 对象配置
-    'objects'                   => [
+    'objects'             => [
 
     ],
 
