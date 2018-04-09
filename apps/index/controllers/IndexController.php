@@ -18,7 +18,7 @@ class IndexController extends Controller
         return 'Hello World' . PHP_EOL;
     }
 
-    // API 范例
+    // API 范例，访问路径：/index/api
     public function actionApi()
     {
         // 使用模型
@@ -34,7 +34,7 @@ class IndexController extends Controller
         return ['code' => 0, 'message' => 'OK'];
     }
 
-    // WebSite 范例
+    // WebSite 范例，访问路径：/index/website
     public function actionWebsite()
     {
         // 使用模型
