@@ -8,15 +8,5 @@ namespace mix\base;
  */
 class Controller extends BaseObject
 {
-
-    // 前置动作
-    public function beforeAction($action)
-    {
-    }
-
-    // 后置动作
-    public function afterAction($action)
-    {
-    }
-
+    
 }

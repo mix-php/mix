@@ -12,7 +12,7 @@ class Controller extends \mix\base\Controller
 {
 
     // 默认布局
-    protected $layout = 'main';
+    public $layout = 'main';
 
     // 渲染视图 (包含布局)
     public function render($name, $data = [])
@@ -39,6 +39,16 @@ class Controller extends \mix\base\Controller
     protected function viewPrefix()
     {
         return \mix\base\Route::camelToSnake(str_replace([\Mix::app()->controllerNamespace . '\\', '\\', 'Controller'], ['', '.', ''], get_class($this)));
+    }
+
+    // 前置动作
+    public function beforeAction($action)
+    {
+    }
+
+    // 后置动作
+    public function afterAction($action)
+    {
     }
 
 }

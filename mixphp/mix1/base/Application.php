@@ -109,14 +109,19 @@ class Application
                     $controller = new $controllerClass($controllerAttributes);
                     // 判断方法是否存在
                     if (method_exists($controller, $controllerAction)) {
-                        // 执行前置动作
-                        $controller->beforeAction($controllerAction);
-                        // 执行控制器的方法
-                        $result = $controller->$controllerAction();
-                        // 执行后置动作
-                        $controller->afterAction($controllerAction);
-                        // 返回执行结果
-                        return $result;
+                        // Web 应用
+                        if ($this instanceof \mix\web\Application) {
+                            // 执行前置动作
+                            $controller->beforeAction($controllerAction);
+                            // 执行控制器的方法
+                            $result = $controller->$controllerAction();
+                            // 执行后置动作
+                            $controller->afterAction($controllerAction);
+                            // 返回执行结果
+                            return $result;
+                        }
+                        // 非 Web 应用
+                        return $controller->$controllerAction();
                     }
                 }
             }
