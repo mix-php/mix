@@ -17,26 +17,27 @@ class Request extends BaseRequest
         $this->_post   = $_POST;
         $this->_files  = $_FILES;
         $this->_cookie = $_COOKIE;
-        $this->setServer();
         $this->setHeader();
+        $this->setServer();
     }
 
-    // 设置SERVER值
-    protected function setServer()
-    {
-        $this->_server = array_change_key_case($_SERVER, CASE_LOWER);
-    }
-
-    // 设置HEADER值
+    // 设置 HEADER 值
     protected function setHeader()
     {
         $header = [];
         foreach ($_SERVER as $name => $value) {
             if (substr($name, 0, 5) == 'HTTP_') {
                 $header[str_replace(' ', '-', strtolower(str_replace('_', ' ', substr($name, 5))))] = $value;
+                unset($_SERVER[$name]);
             }
         }
         $this->_header = $header;
+    }
+
+    // 设置 SERVER 值
+    protected function setServer()
+    {
+        $this->_server = array_change_key_case($_SERVER, CASE_LOWER);
     }
 
     // 返回原始的HTTP包体

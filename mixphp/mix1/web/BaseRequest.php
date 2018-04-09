@@ -10,7 +10,7 @@ use mix\base\Component;
  */
 class BaseRequest extends Component
 {
-    
+
     // ROUTE 参数
     protected $_route = [];
 
@@ -137,31 +137,19 @@ class BaseRequest extends Component
     // 返回请求的路径
     public function path()
     {
-        return parse_url($this->server('request_uri'))['path'];
+        return $this->server('path_info');
     }
 
     // 返回请求的URL
     public function url()
     {
-        $port = $this->server('server_port');
-        if ($port == 80) {
-            $port = '';
-        } else {
-            $port = ':' . $port;
-        }
-        return $this->server('server_name') . $port . $this->path();
+        return $this->header('host') . $this->path();
     }
 
     // 返回请求的完整URL
     public function fullUrl()
     {
-        $port = $this->server('server_port');
-        if ($port == 80) {
-            $port = '';
-        } else {
-            $port = ':' . $port;
-        }
-        return $this->server('server_name') . $port . $this->server('request_uri');
+        return $this->header('host') . $this->server('request_uri');
     }
 
 }
