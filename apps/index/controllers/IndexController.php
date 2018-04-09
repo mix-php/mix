@@ -15,9 +15,6 @@ class IndexController extends Controller
     // 默认动作
     public function actionIndex()
     {
-
-        return \Mix::app()->request->fullUrl();
-
         return 'Hello World' . PHP_EOL;
     }
 
