@@ -72,10 +72,4 @@ class Request extends Component
         return is_null($name) ? $container : (isset($container[$name]) ? $container[$name] : null);
     }
 
-    // 是否为命令行请求
-    public function isCli()
-    {
-        return PHP_SAPI == 'cli';
-    }
-
 }
