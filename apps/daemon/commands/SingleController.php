@@ -45,7 +45,7 @@ class SingleController extends Controller
         // 写入 PID 文件
         Process::writePid(self::PID_FILE);
         // 修改进程名称
-        Process::setName("mix-daemon: '{$this->processName}'");
+        Process::setName("mix-daemon: {$this->processName}");
         // 开始工作
         $this->startWork();
     }
