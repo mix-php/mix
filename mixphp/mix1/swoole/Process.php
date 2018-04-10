@@ -10,9 +10,9 @@ class Process
 {
 
     // 使当前进程蜕变为一个守护进程
-    public static function daemon($closeInputOutput = false)
+    public static function daemon($closeStandardInputOutput = true)
     {
-        \Swoole\Process::daemon(true, !$closeInputOutput);
+        \Swoole\Process::daemon(true, !$closeStandardInputOutput);
     }
 
     // 设置进程名称
