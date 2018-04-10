@@ -21,9 +21,15 @@ class TaskProcess extends \Swoole\Process
     {
         if (!\Swoole\Process::kill($this->mpid, 0)) {
             if ($processType == self::PRODUCER) {
+                // 如果队列没有数据，就删除队列，释放堵塞的消费者进程
+                if ($this->statQueue()['queue_num'] == 0) {
+                    $this->freeQueue();
+                }
                 $this->exit();
             }
             if ($processType == self::CONSUMER) {
+                // 如果队列没有数据，就删除队列，释放其他堵塞的消费者进程
+                // 如果队列有数据，继续执行
                 if ($this->statQueue()['queue_num'] == 0) {
                     $this->freeQueue();
                     $this->exit();
