@@ -105,24 +105,17 @@ class BasePdo extends Component
         return $this;
     }
 
-    // 扩展数组参数的支持
-    protected static function usingArray($sql, $data)
+    // 绑定数组参数
+    protected static function bindArrayParams($sql, $params)
     {
-        $params = $values = [];
-        foreach ($data as $key => $value) {
-            if (is_array($value)) {
-                $tmp = [];
-                foreach ($value as $k => $v) {
-                    $tmp[]    = '?';
-                    $values[] = $v;
-                }
+        foreach ($params as $key => $item) {
+            if (is_array($item)) {
+                unset($params[$key]);
                 $key = substr($key, 0, 1) == ':' ? $key : ":{$key}";
-                $sql = str_replace($key, implode(', ', $tmp), $sql);
-            } else {
-                $params[$key] = $value;
+                $sql = str_replace($key, implode(', ', self::quotes($item)), $sql);
             }
         }
-        return [$sql, $params, $values];
+        return [$sql, $params];
     }
 
     // 自动连接
@@ -140,21 +133,21 @@ class BasePdo extends Component
         $this->autoConnect();
         // 准备与参数绑定
         if (!empty($this->_params)) {
-            list($sql, $params, $values) = $this->sqlRawData = self::usingArray($this->_sql, $this->_params);
+            // 有参数
+            list($sql, $params) = $this->sqlRawData = self::bindArrayParams($this->_sql, $this->_params);
             $this->_pdoStatement = $this->_pdo->prepare($sql);
             foreach ($params as $key => &$value) {
                 $this->_pdoStatement->bindParam($key, $value);
             }
-            foreach ($values as $key => $value) {
-                $this->_pdoStatement->bindValue($key + 1, $value);
-            }
         } elseif (!empty($this->_values)) {
+            // 批量插入
             $this->_pdoStatement = $this->_pdo->prepare($this->_sql);
             foreach ($this->_values as $key => $value) {
                 $this->_pdoStatement->bindValue($key + 1, $value);
             }
             $this->sqlRawData = [$this->_sql, [], $this->_values];
         } else {
+            // 无参数
             $this->_pdoStatement = $this->_pdo->prepare($this->_sql);
             $this->sqlRawData    = [];
         }
@@ -320,7 +313,7 @@ class BasePdo extends Component
         $this->_pdo->rollBack();
     }
 
-    // 给字符串加引号
+    // 给字符串加单引号
     protected static function quotes($var)
     {
         if (is_array($var)) {
@@ -329,7 +322,7 @@ class BasePdo extends Component
             }
             return $var;
         }
-        return is_numeric($var) ? $var : "'{$var}'";
+        return is_string($var) ? "'{$var}'" : $var;
     }
 
     // 返回原生SQL语句
