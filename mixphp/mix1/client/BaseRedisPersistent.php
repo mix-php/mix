@@ -58,8 +58,8 @@ class BaseRedisPersistent extends BaseRedis
             // 执行命令
             return parent::__call($name, $arguments);
         } catch (\Exception $e) {
-            // 长连接超时处理
-            $this->reconnect();
+            // 长连接异常处理
+            $this->disconnect();
             throw $e;
         }
     }

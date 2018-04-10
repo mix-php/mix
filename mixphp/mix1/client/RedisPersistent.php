@@ -22,7 +22,7 @@ class RedisPersistent extends BaseRedisPersistent
         parent::onRequestStart();
         // 切换回默认数据库
         if (isset($this->_redis)) {
-            $this->_redis->select($this->database);
+            $this->select($this->database);
         }
     }
 
