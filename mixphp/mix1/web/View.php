@@ -18,7 +18,7 @@ class View
         // 传入变量
         extract($__data__);
         // 生成视图
-        $__filepath__ = \Mix::app()->getViewPath() . str_replace('.', '/', $__template__) . '.php';
+        $__filepath__ = \Mix::app()->getViewPath() . str_replace('.', DIRECTORY_SEPARATOR, $__template__) . '.php';
         if (!is_file($__filepath__)) {
             throw new \mix\exceptions\ViewException("视图文件不存在：{$__filepath__}");
         }

@@ -38,7 +38,12 @@ class Controller extends \mix\base\Controller
     // 视图前缀
     protected function viewPrefix()
     {
-        return \mix\base\Route::camelToSnake(str_replace([\Mix::app()->controllerNamespace . '\\', '\\', 'Controller'], ['', '.', ''], get_class($this)));
+        $prefix = str_replace([\Mix::app()->controllerNamespace . '\\', '\\', 'Controller'], ['', '.', ''], get_class($this));
+        $items  = [];
+        foreach (explode('.', $prefix) as $item) {
+            $items[] = \mix\base\Route::camelToSnake($item);
+        }
+        return implode('.', $items);
     }
 
     // 前置动作
