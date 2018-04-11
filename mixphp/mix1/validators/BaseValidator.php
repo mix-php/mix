@@ -108,6 +108,10 @@ class BaseValidator
     {
         $value = $this->_attributeValue;
         if (!is_null($value) && !is_scalar($value)) {
+            // 文件与图片验证器忽略该类型的验证
+            if ($this instanceof \mix\validators\FileValidator) {
+                return true;
+            }
             // 增加错误消息
             if (is_null($this->attributeMessage)) {
                 $error = "{$this->attributeLabel}不是标量类型.";
