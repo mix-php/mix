@@ -28,12 +28,12 @@ class JoinController extends Controller
         // 给全部人发广播
         $server = $this->getServer();
         foreach ($server->fds as $fd => $item) {
-            $message = Json::encode(['error_code' => 0, 'error_message' => "{$userinfo['name']} 加入房间"]);
+            $message = Json::encode(['action' => 'JOIN_BROADCAST', 'data' => ['message' => "{$userinfo['name']} 加入房间"]]);
             $server->push($fd, $message);
         }
 
-        // 如果只需给当前fd回复消息，只需 return 消息即可
-        return Json::encode(['error_code' => 0, 'error_message' => "我 加入房间"]);
+        // 如果只需给当前 fd 回复消息，只需 return 消息即可
+        return Json::encode(['action' => 'JOIN', 'data' => ['message' => "我 加入房间"]]);
     }
 
 }

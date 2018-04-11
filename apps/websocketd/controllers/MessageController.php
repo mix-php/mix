@@ -13,7 +13,7 @@ class MessageController extends Controller
 {
 
     // 加入房间
-    public function actionTo($data, $userinfo)
+    public function actionEmit($data, $userinfo)
     {
         // 使用模型
         $model             = new MessageForm();

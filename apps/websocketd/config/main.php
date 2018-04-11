@@ -130,8 +130,8 @@ return [
             // 路由规则
             'rules'               => [
 
-                'join'    => 'join/room',
-                'message' => 'message/to',
+                'JOIN'    => 'join/room',
+                'MESSAGE' => 'message/emit',
 
             ],
         ],

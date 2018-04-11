@@ -32,13 +32,13 @@ class WebSocketServer extends BaseObject
     // 关闭连接事件回调函数
     protected $_onCloseCallback;
 
-    // 给不可访问属性赋值
+    // 设置服务的属性
     public function __set($name, $value)
     {
         $this->_server->$name = $value;
     }
 
-    // 读取不可访问属性的值
+    // 获取服务的属性
     public function __get($name)
     {
         return $this->_server->$name;
@@ -63,12 +63,6 @@ class WebSocketServer extends BaseObject
         $this->onClose();
         $this->_server->set($this->setting);
         $this->_server->start();
-    }
-
-    // 添加属性至服务
-    public function setServerAttribute($key, $object)
-    {
-        $this->_server->$key = $object;
     }
 
     // 注册Server的事件回调函数

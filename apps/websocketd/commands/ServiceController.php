@@ -161,10 +161,10 @@ class ServiceController extends Controller
         }
         // 解析数据
         $data = json_decode($frame->data, true);
-        if (!isset($data['cmd']) || !isset($data['data'])) {
+        if (!isset($data['action']) || !isset($data['data'])) {
             return;
         }
-        $action = $data['cmd'];
+        $action = $data['action'];
         // 执行功能
         \Mix::app('webSocket')->messageHandler
             ->setServer($webSocket)
@@ -184,6 +184,8 @@ class ServiceController extends Controller
             $webSocket->fds[$fd]['redis']->close();
             unset($webSocket->fds[$fd]['redis']);
         }
+        // 删除整个 fd 的数据
+        unset($webSocket->fds[$fd]);
     }
 
 }
