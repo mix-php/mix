@@ -21,13 +21,11 @@ class Route extends Component
     // URL后缀
     public $suffix = '';
 
-    // 路由数据
-    protected $data = [];
+    // 转化后的路由规则
+    protected $_rules = [];
 
     // 默认路由规则
     protected $defaultRules = [
-        // 首页
-        ''                    => 'index/index',
         // 一级目录
         ':controller/:action' => ':controller/:action',
     ];
@@ -44,10 +42,17 @@ class Route extends Component
     public function initialize()
     {
         $this->rules += $this->defaultRules;
-        // url目录index处理
+        // URL 目录处理
         foreach ($this->rules as $rule => $action) {
             if (strpos($rule, ':controller') !== false && strpos($rule, ':action') !== false) {
-                $this->rules[dirname($rule)] = str_replace(':action', 'index', $action);
+                $controller = dirname($rule);
+                $prefix     = dirname($controller);
+                $prefix     = $prefix == '.' ? '' : $prefix;
+                // 增加上两级的路由
+                $this->rules += [
+                    $controller => "{$controller}/index",
+                    $prefix     => ($prefix == '' ? '' : "{$prefix}/") . 'index/index'
+                ];
             }
         }
         // 转正则
@@ -75,7 +80,7 @@ class Route extends Component
                     $names[] = $fname;
                 }
             }
-            $this->data['/^' . $method . implode('\/', $fragment) . '\/*$/i'] = [$action, $names];
+            $this->_rules['/^' . $method . implode('\/', $fragment) . '\/*$/i'] = [$action, $names];
         }
     }
 
@@ -88,7 +93,7 @@ class Route extends Component
         $action = str_replace($this->suffix, '', $action);
         // 匹配
         $result = [];
-        foreach ($this->data as $rule => $value) {
+        foreach ($this->_rules as $rule => $value) {
             list($ruleAction, $ruleParams) = $value;
             if (preg_match($rule, $action, $matches)) {
                 // 保存参数
