@@ -25,6 +25,8 @@ return [
             ],
             // 路由规则
             'rules'          => [
+                // 一级目录
+                ':controller/:action' => ':controller/:action',
             ],
         ],
 
