@@ -21,7 +21,6 @@
   },
   "autoload": {
     "psr-4": {
-      "store\\": "store/",
       "apps\\": "apps/"
     }
   }
