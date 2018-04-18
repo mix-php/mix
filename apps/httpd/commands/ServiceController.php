@@ -1,6 +1,6 @@
 <?php
 
-namespace store\httpd\commands;
+namespace apps\httpd\commands;
 
 use mix\console\Controller;
 use mix\swoole\Process;
