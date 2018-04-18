@@ -61,22 +61,19 @@ MixPHP开发指南：http://doc.mixphp.cn
 
 ## 快速开始
 
-一键下载
+使用一键安装。
 
 ```
 $> php -r "copy('https://raw.githubusercontent.com/mixstart/mixphp/master/download.php', 'download.php');include 'download.php';"
 ```
 
-输出如下：
+也可以选择使用 [composer](https://www.phpcomposer.com/) 安装。
 
 ```
-download mixphp zip ... ok
-unzip ... ok
-clean temp files ... ok
-Successful download to "/data/mixphp-master"
+composer create-project mixstart/mixphp --prefer-dist
 ```
 
-入口文件安装至：`/usr/local/bin`。
+入口文件安装至：`/usr/local/bin`，可选。
 
 ```
 $> cd /data/mixphp-master
