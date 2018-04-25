@@ -46,7 +46,7 @@ class ClearCommand extends Command
         // ...
 
         // 响应
-        Output::getInstance()->writeln('SUCCESS');
+        $this->output->writeln('SUCCESS');
         // 返回退出码
         return ExitCode::OK;
     }

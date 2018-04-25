@@ -3,6 +3,7 @@
 namespace apps\websocketd\commands;
 
 use mix\console\Command;
+use mix\console\ExitCode;
 use mix\swoole\Process;
 
 /**
@@ -43,10 +44,11 @@ class ServiceCommand extends Command
     {
         // 重复启动处理
         if ($pid = Process::getMasterPid($this->pidFile)) {
-            return "mix-websocketd is running, PID : {$pid}." . PHP_EOL;
+            $this->output->writeln("mix-websocketd is running, PID : {$pid}.");
+            return ExitCode::UNSPECIFIED_ERROR;
         }
         // 启动提示
-        echo 'mix-websocketd start successed.' . PHP_EOL;
+        $this->output->writeln('mix-websocketd start successed.');
         // 蜕变为守护进程
         if ($this->daemon) {
             Process::daemon();
@@ -58,6 +60,8 @@ class ServiceCommand extends Command
         $server->on('Close', [$this, 'onClose']);
         // 启动服务
         $server->start();
+        // 返回退出码
+        return ExitCode::OK;
     }
 
     // 停止服务
@@ -69,10 +73,12 @@ class ServiceCommand extends Command
                 // 等待进程退出
                 usleep(100000);
             }
-            return 'mix-websocketd stop completed.' . PHP_EOL;
+            $this->output->writeln('mix-websocketd stop completed.');
         } else {
-            return 'mix-websocketd is not running.' . PHP_EOL;
+            $this->output->writeln('mix-websocketd is not running.');
         }
+        // 返回退出码
+        return ExitCode::OK;
     }
 
     // 重启服务
@@ -80,16 +86,20 @@ class ServiceCommand extends Command
     {
         $this->actionStop();
         $this->actionStart();
+        // 返回退出码
+        return ExitCode::OK;
     }
 
     // 查看服务状态
     public function actionStatus()
     {
         if ($pid = Process::getMasterPid($this->pidFile)) {
-            return "mix-websocketd is running, PID : {$pid}." . PHP_EOL;
+            $this->output->writeln("mix-websocketd is running, PID : {$pid}.");
         } else {
-            return 'mix-websocketd is not running.' . PHP_EOL;
+            $this->output->writeln('mix-websocketd is not running.');
         }
+        // 返回退出码
+        return ExitCode::OK;
     }
 
     // 连接事件回调函数

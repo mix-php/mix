@@ -3,6 +3,7 @@
 namespace apps\httpd\commands;
 
 use mix\console\Command;
+use mix\console\ExitCode;
 use mix\swoole\Process;
 
 /**
@@ -45,14 +46,17 @@ class ServiceCommand extends Command
     public function actionStart()
     {
         if ($pid = Process::getMasterPid($this->pidFile)) {
-            return "mix-httpd is running, PID : {$pid}." . PHP_EOL;
+            $this->output->writeln("mix-httpd is running, PID : {$pid}.");
+            return ExitCode::UNSPECIFIED_ERROR;
         }
         $server = \Mix::app()->createObject('httpServer');
         if ($this->update) {
             $server->setting['max_request'] = 1;
         }
         $server->setting['daemonize'] = $this->daemon;
-        return $server->start();
+        $server->start();
+        // 返回退出码
+        return ExitCode::OK;
     }
 
     // 停止服务
@@ -64,10 +68,12 @@ class ServiceCommand extends Command
                 // 等待进程退出
                 usleep(100000);
             }
-            return 'mix-httpd stop completed.' . PHP_EOL;
+            $this->output->writeln('mix-httpd stop completed.');
         } else {
-            return 'mix-httpd is not running.' . PHP_EOL;
+            $this->output->writeln('mix-httpd is not running.');
         }
+        // 返回退出码
+        return ExitCode::OK;
     }
 
     // 重启服务
@@ -75,6 +81,8 @@ class ServiceCommand extends Command
     {
         $this->actionStop();
         $this->actionStart();
+        // 返回退出码
+        return ExitCode::OK;
     }
 
     // 重启工作进程
@@ -84,19 +92,24 @@ class ServiceCommand extends Command
             Process::kill($pid, SIGUSR1);
         }
         if (!$pid) {
-            return 'mix-httpd is not running.' . PHP_EOL;
+            $this->output->writeln('mix-httpd is not running.');
+            return ExitCode::UNSPECIFIED_ERROR;
         }
-        return 'mix-httpd worker process restart completed.' . PHP_EOL;
+        $this->output->writeln('mix-httpd worker process restart completed.');
+        // 返回退出码
+        return ExitCode::OK;
     }
 
     // 查看服务状态
     public function actionStatus()
     {
         if ($pid = Process::getMasterPid($this->pidFile)) {
-            return "mix-httpd is running, PID : {$pid}." . PHP_EOL;
+            $this->output->writeln("mix-httpd is running, PID : {$pid}.");
         } else {
-            return 'mix-httpd is not running.' . PHP_EOL;
+            $this->output->writeln('mix-httpd is not running.');
         }
+        // 返回退出码
+        return ExitCode::OK;
     }
 
 }
