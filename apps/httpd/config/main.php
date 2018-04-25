@@ -4,53 +4,33 @@
 return [
 
     // 基础路径
-    'basePath'            => dirname(__DIR__) . DIRECTORY_SEPARATOR,
+    'basePath'         => dirname(__DIR__) . DIRECTORY_SEPARATOR,
 
-    // 控制器命名空间
-    'controllerNamespace' => 'apps\httpd\commands',
+    // 命令命名空间
+    'commandNamespace' => 'apps\httpd\commands',
+
+    // 命令
+    'commands'         => [
+
+        'service start'   => ['Service', 'Start', 'description' => 'Start the mix-httpd service.'],
+        'service stop'    => ['Service', 'Stop', 'description' => 'Stop the mix-httpd service.'],
+        'service restart' => ['Service', 'Restart', 'description' => 'Restart the mix-httpd service.'],
+        'service reload'  => ['Service', 'Reload', 'description' => 'Reload the worker process of the mix-httpd service.'],
+        'service status'  => ['Service', 'Status', 'description' => 'Check the status of the mix-httpd service.'],
+
+    ],
 
     // 组件配置
-    'components'          => [
-
-        // 路由
-        'route'    => [
-            // 类路径
-            'class'          => 'mix\base\Route',
-            // 默认变量规则
-            'defaultPattern' => '[\w-]+',
-            // 路由变量规则
-            'patterns'       => [
-                'id' => '\d+',
-            ],
-            // 路由规则
-            'rules'          => [
-                // 一级目录
-                ':controller/:action' => ':controller/:action',
-            ],
-            // URL后缀
-            'suffix'         => '.html',
-        ],
-
-        // 请求
-        'request'  => [
-            // 类路径
-            'class' => 'mix\console\Request',
-        ],
-
-        // 响应
-        'response' => [
-            // 类路径
-            'class' => 'mix\console\Response',
-        ],
+    'components'       => [
 
         // 错误
-        'error'    => [
+        'error' => [
             // 类路径
             'class' => 'mix\console\Error',
         ],
 
         // 日志
-        'log'      => [
+        'log'   => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -68,7 +48,7 @@ return [
     ],
 
     // 对象配置
-    'objects'             => [
+    'objects'          => [
 
         // HttpServer
         'httpServer' => [

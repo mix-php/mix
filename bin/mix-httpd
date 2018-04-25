@@ -9,5 +9,6 @@ define('MIX_ENV', 'dev');
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../vendor/mixstart/framework/Mix.php';
 
-$config = require __DIR__ . '/../apps/httpd/config/main.php';
-(new mix\console\Application($config))->run();
+$config   = require __DIR__ . '/../apps/httpd/config/main.php';
+$exitCode = (new mix\console\Application($config))->run();
+exit($exitCode);

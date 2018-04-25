@@ -5,51 +5,29 @@ $database = require __DIR__ . '/../../common/config/database.php';
 return [
 
     // 基础路径
-    'basePath'            => dirname(__DIR__) . DIRECTORY_SEPARATOR,
+    'basePath'         => dirname(__DIR__) . DIRECTORY_SEPARATOR,
 
-    // 控制器命名空间
-    'controllerNamespace' => 'apps\crontab\commands',
+    // 命令命名空间
+    'commandNamespace' => 'apps\crontab\commands',
+
+    // 命令
+    'commands'         => [
+
+        'clear exec' => ['Clear', 'Exec'],
+
+    ],
 
     // 组件配置
-    'components'          => [
-
-        // 路由
-        'route'    => [
-            // 类路径
-            'class'          => 'mix\base\Route',
-            // 默认变量规则
-            'defaultPattern' => '[\w-]+',
-            // 路由变量规则
-            'patterns'       => [
-                'id' => '\d+',
-            ],
-            // 路由规则
-            'rules'          => [
-                // 一级目录
-                ':controller/:action' => ':controller/:action',
-            ],
-        ],
-
-        // 请求
-        'request'  => [
-            // 类路径
-            'class' => 'mix\console\Request',
-        ],
-
-        // 响应
-        'response' => [
-            // 类路径
-            'class' => 'mix\console\Response',
-        ],
+    'components'       => [
 
         // 错误
-        'error'    => [
+        'error' => [
             // 类路径
             'class' => 'mix\console\Error',
         ],
 
         // 日志
-        'log'      => [
+        'log'   => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -65,7 +43,7 @@ return [
         ],
 
         // 数据库
-        'rdb'      => array_merge(
+        'rdb'   => array_merge(
             $database['mysql'],
             [
                 // 类路径
@@ -79,7 +57,7 @@ return [
         ),
 
         // redis
-        'redis'    => array_merge(
+        'redis' => array_merge(
             $database['redis'],
             [
                 // 类路径
@@ -90,7 +68,7 @@ return [
     ],
 
     // 对象配置
-    'objects'             => [
+    'objects'          => [
 
     ],
 

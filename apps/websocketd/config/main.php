@@ -5,42 +5,23 @@ $database = require __DIR__ . '/../../common/config/database.php';
 return [
 
     // 基础路径
-    'basePath'            => dirname(__DIR__) . DIRECTORY_SEPARATOR,
+    'basePath'         => dirname(__DIR__) . DIRECTORY_SEPARATOR,
 
-    // 控制器命名空间
-    'controllerNamespace' => 'apps\websocketd\commands',
+    // 命令命名空间
+    'commandNamespace' => 'apps\websocketd\commands',
+
+    // 命令
+    'commands'         => [
+
+        'service start'   => ['Service', 'Start'],
+        'service stop'    => ['Service', 'Stop'],
+        'service restart' => ['Service', 'Restart'],
+        'service status'  => ['Service', 'Status'],
+
+    ],
 
     // 组件配置
-    'components'          => [
-
-        // 路由
-        'route'                    => [
-            // 类路径
-            'class'          => 'mix\base\Route',
-            // 默认变量规则
-            'defaultPattern' => '[\w-]+',
-            // 路由变量规则
-            'patterns'       => [
-                'id' => '\d+',
-            ],
-            // 路由规则
-            'rules'          => [
-                // 一级目录
-                ':controller/:action' => ':controller/:action',
-            ],
-        ],
-
-        // 请求
-        'request'                  => [
-            // 类路径
-            'class' => 'mix\console\Request',
-        ],
-
-        // 响应
-        'response'                 => [
-            // 类路径
-            'class' => 'mix\console\Response',
-        ],
+    'components'       => [
 
         // 错误
         'error'                    => [
@@ -141,7 +122,7 @@ return [
     ],
 
     // 对象配置
-    'objects'             => [
+    'objects'          => [
 
         // WebSocketServer
         'webSocketServer' => [

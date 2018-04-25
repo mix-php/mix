@@ -2,21 +2,33 @@
 
 namespace apps\websocketd\commands;
 
-use mix\console\Controller;
+use mix\console\Command;
 use mix\swoole\Process;
 
 /**
- * 服务控制器
+ * Service 命令
  * @author 刘健 <coder.liu@qq.com>
  */
-class ServiceController extends Controller
+class ServiceCommand extends Command
 {
 
     // 是否后台运行
-    protected $d = false;
+    public $daemon = false;
 
     // PID 文件
     protected $pidFile;
+
+    // 选项配置
+    public function options()
+    {
+        return ['daemon'];
+    }
+
+    // 选项别名配置
+    public function optionAliases()
+    {
+        return ['d' => 'daemon'];
+    }
 
     // 初始化事件
     public function onInitialize()
@@ -36,7 +48,7 @@ class ServiceController extends Controller
         // 启动提示
         echo 'mix-websocketd start successed.' . PHP_EOL;
         // 蜕变为守护进程
-        if ($this->d) {
+        if ($this->daemon) {
             Process::daemon();
         }
         // 创建服务

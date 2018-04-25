@@ -2,24 +2,36 @@
 
 namespace apps\httpd\commands;
 
-use mix\console\Controller;
+use mix\console\Command;
 use mix\swoole\Process;
 
 /**
- * 服务控制器
+ * Service 命令
  * @author 刘健 <coder.liu@qq.com>
  */
-class ServiceController extends Controller
+class ServiceCommand extends Command
 {
 
     // 是否后台运行
-    protected $d = false;
+    public $daemon = false;
 
     // 是否热更新
-    protected $u = false;
+    public $update = false;
 
     // PID 文件
     protected $pidFile;
+
+    // 选项配置
+    public function options()
+    {
+        return ['daemon', 'update'];
+    }
+
+    // 选项别名配置
+    public function optionAliases()
+    {
+        return ['d' => 'daemon', 'u' => 'update'];
+    }
 
     // 初始化事件
     public function onInitialize()
@@ -36,10 +48,10 @@ class ServiceController extends Controller
             return "mix-httpd is running, PID : {$pid}." . PHP_EOL;
         }
         $server = \Mix::app()->createObject('httpServer');
-        if ($this->u) {
+        if ($this->update) {
             $server->setting['max_request'] = 1;
         }
-        $server->setting['daemonize'] = $this->d;
+        $server->setting['daemonize'] = $this->daemon;
         return $server->start();
     }
 
