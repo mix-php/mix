@@ -84,7 +84,7 @@ $> ./install.sh
 接下来启动 mix-httpd 服务器
 
 ```
-$> mix-httpd service/start -d
+$> mix-httpd service start -d
 ```
 
 如果一切顺利，运行到最后你将看到如下的输出：
