@@ -38,7 +38,7 @@ class ClearCommand extends Command
             Process::daemon();
         }
         // 修改进程名称
-        Process::setName('mix-crontab: ' . Input::getInstance()->getCommandName());
+        Process::setName('mix-crontab: ' . $this->input->getCommandName());
 
         // 模型内使用短连接版本的数据库组件，计划任务都是一次性执行
         $tableModel = new \apps\common\models\TableModel();

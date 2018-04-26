@@ -23,6 +23,18 @@ return [
     // 组件配置
     'components'       => [
 
+        // 输入
+        'input'  => [
+            // 类路径
+            'class' => 'mix\console\Input',
+        ],
+
+        // 输出
+        'output' => [
+            // 类路径
+            'class' => 'mix\console\Output',
+        ],
+
         // 错误
         'error'                    => [
             // 类路径

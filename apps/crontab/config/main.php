@@ -20,14 +20,26 @@ return [
     // 组件配置
     'components'       => [
 
+        // 输入
+        'input'  => [
+            // 类路径
+            'class' => 'mix\console\Input',
+        ],
+
+        // 输出
+        'output' => [
+            // 类路径
+            'class' => 'mix\console\Output',
+        ],
+
         // 错误
-        'error' => [
+        'error'  => [
             // 类路径
             'class' => 'mix\console\Error',
         ],
 
         // 日志
-        'log'   => [
+        'log'    => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -43,7 +55,7 @@ return [
         ],
 
         // 数据库
-        'rdb'   => array_merge(
+        'rdb'    => array_merge(
             $database['mysql'],
             [
                 // 类路径
@@ -57,7 +69,7 @@ return [
         ),
 
         // redis
-        'redis' => array_merge(
+        'redis'  => array_merge(
             $database['redis'],
             [
                 // 类路径
