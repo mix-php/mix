@@ -4,8 +4,6 @@ namespace apps\crontab\commands;
 
 use mix\console\Command;
 use mix\console\ExitCode;
-use mix\console\Input;
-use mix\console\Output;
 use mix\swoole\Process;
 
 /**
