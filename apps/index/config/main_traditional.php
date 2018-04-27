@@ -16,7 +16,7 @@ return [
         // 路由
         'route'    => [
             // 类路径
-            'class'          => 'mix\base\Route',
+            'class'          => 'mix\web\Route',
             // 默认变量规则
             'defaultPattern' => '[\w-]+',
             // 路由变量规则
