@@ -24,7 +24,7 @@ class MessageController extends Controller
             return;
         }
 
-        // 通过消息队列给其他用户发消息
+        // 通过消息队列给指定用户id发消息
         \Mix::app()->redis->publish('emit_to_' . $model->uid, $model->message);
     }
 

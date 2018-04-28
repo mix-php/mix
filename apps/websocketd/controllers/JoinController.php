@@ -26,7 +26,7 @@ class JoinController extends Controller
         }
 
         // 给全部人发广播
-        $server = $this->getServer();
+        $server = $this->server;
         foreach ($server->fds as $fd => $item) {
             $message = Json::encode(['action' => 'JOIN_BROADCAST', 'data' => ['message' => "{$userinfo['name']} 加入房间"]]);
             $server->push($fd, $message);

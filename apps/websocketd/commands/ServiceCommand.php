@@ -153,18 +153,22 @@ class ServiceCommand extends Command
             }
         });
         $redis->on('Close', function (\Swoole\Redis $client) use ($webSocket, $fd) {
-            // 关闭WS连接
+            // 关闭 WS 连接
             $webSocket->close($fd);
         });
-        $redis->connect(function (\Swoole\Redis $client, $result) use ($userinfo) {
+        $redis->connect(function (\Swoole\Redis $client, $result) use ($userinfo, $webSocket, $fd) {
             try {
                 // 错误处理
                 if (!$result) {
+                    // 关闭 WS 连接
+                    $webSocket->close($fd);
+                    // 抛出错误
                     $message = 'async redis error: [' . $client->errCode . '] ' . $client->errMsg . PHP_EOL;
                     throw new \Exception($message);
                 }
                 // 订阅该用户id的消息队列
-                $client->subscribe('emit_to_' . $userinfo['uid']);
+                $channels[] = 'emit_to_' . $userinfo['uid'];
+                call_user_func_array([$client, 'subscribe'], $channels);
             } catch (\Exception $e) {
                 \Mix::app()->error->exception($e);
             }

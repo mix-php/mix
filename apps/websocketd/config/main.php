@@ -24,13 +24,13 @@ return [
     'components'       => [
 
         // 输入
-        'input'  => [
+        'input'                    => [
             // 类路径
             'class' => 'mix\console\Input',
         ],
 
         // 输出
-        'output' => [
+        'output'                   => [
             // 类路径
             'class' => 'mix\console\Output',
         ],
@@ -125,8 +125,8 @@ return [
             // 路由规则
             'rules'               => [
 
-                'JOIN'    => 'join/room',
-                'MESSAGE' => 'message/emit',
+                'JOIN'    => ['Join', 'Room'],
+                'MESSAGE' => ['Message', 'Emit'],
 
             ],
         ],
