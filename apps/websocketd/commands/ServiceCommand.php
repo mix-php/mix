@@ -149,6 +149,7 @@ class ServiceCommand extends Command
                     $webSocket->push($fd, $message);
                 }
             } catch (\Exception $e) {
+                // 记录异常
                 \Mix::app()->error->exception($e);
             }
         });
@@ -160,8 +161,6 @@ class ServiceCommand extends Command
             try {
                 // 错误处理
                 if (!$result) {
-                    // 关闭 WS 连接
-                    $webSocket->close($fd);
                     // 抛出错误
                     $message = 'async redis error: [' . $client->errCode . '] ' . $client->errMsg . PHP_EOL;
                     throw new \Exception($message);
@@ -170,7 +169,10 @@ class ServiceCommand extends Command
                 $channels[] = 'emit_to_' . $userinfo['uid'];
                 call_user_func_array([$client, 'subscribe'], $channels);
             } catch (\Exception $e) {
+                // 记录异常
                 \Mix::app()->error->exception($e);
+                // 关闭 WS 连接
+                $webSocket->close($fd);
             }
         });
         // 保存数据库连接
