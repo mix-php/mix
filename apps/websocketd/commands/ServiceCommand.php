@@ -183,6 +183,9 @@ class ServiceCommand extends Command
     public function onMessage(\Swoole\WebSocket\Server $webSocket, \Swoole\WebSocket\Frame $frame)
     {
         // 取出会话信息
+        if (!isset($webSocket->fds[$frame->fd]['session'])) {
+            return;
+        }
         $userinfo = $webSocket->fds[$frame->fd]['session'];
         if (!$userinfo) {
             return;
