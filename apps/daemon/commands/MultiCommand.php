@@ -141,7 +141,7 @@ class MultiCommand extends Command
             // 从消息队列中间件取出一条消息
             $msg = $queueModel->pop();
             // 将消息推送给消费者进程去处理
-            $worker->push($msg);
+            $worker->push(serialize($msg));
         }
     }
 
@@ -153,6 +153,7 @@ class MultiCommand extends Command
             $worker->checkMaster();
             // 从进程队列中抢占一条消息
             $msg = $worker->pop();
+            $msg = unserialize($msg);
             if (!empty($msg)) {
                 // 处理消息，比如：发送短信、发送邮件、微信推送
                 // ...
