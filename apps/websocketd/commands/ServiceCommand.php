@@ -187,9 +187,6 @@ class ServiceCommand extends Command
             return;
         }
         $userinfo = $webSocket->fds[$frame->fd]['session'];
-        if (!$userinfo) {
-            return;
-        }
         // 解析数据
         $data = json_decode($frame->data, true);
         if (!isset($data['action']) || !isset($data['data'])) {
