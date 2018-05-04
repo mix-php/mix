@@ -21,4 +21,10 @@ class TableModel
         return $success ? \Mix::app()->rdb->getLastInsertId() : false;
     }
 
+    // 获取全部记录
+    public function getAll()
+    {
+        return \Mix::app()->rdb->createCommand("SELECT * FROM `" . self::TABLE . "`")->queryAll();
+    }
+
 }
