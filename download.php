@@ -5,8 +5,8 @@
  * @author 刘健 <coder.liu@qq.com>
  */
 
-$url     = 'https://github.com/mixstart/mixphp/releases/download/v1.0.5/mixphp-v1.0.5.zip';
-$zipfile = 'mixphp-' . basename($url);
+$url     = 'https://github.com/mixstart/mixphp/releases/download/v1.0.6/mixphp-v1.0.6.zip';
+$zipfile = basename($url);
 
 // 下载
 echo "download {$url} ... ";
