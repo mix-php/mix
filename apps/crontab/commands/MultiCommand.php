@@ -65,8 +65,8 @@ class MultiCommand extends Command
         );
     }
 
-    // 启动
-    public function actionStart()
+    // 执行任务
+    public function actionExec()
     {
         // 启动提示
         $this->output->writeln("mix-crontab '{$this->processName}' start successed.");
