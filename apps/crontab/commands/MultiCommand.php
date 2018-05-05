@@ -21,7 +21,7 @@ class MultiCommand extends Command
     public $daemon = false;
 
     // 进程名称
-    protected $processName;
+    protected $processName = '';
 
     // 选项配置
     public function options()
@@ -57,6 +57,8 @@ class MultiCommand extends Command
                 'leftProcess'  => 1,
                 // 右进程数
                 'rightProcess' => 3,
+                // 服务名称
+                'name'         => "mix-crontab: {$this->processName}",
                 // 进程队列的key
                 'queueKey'     => __FILE__ . uniqid(),
             ]
@@ -73,8 +75,7 @@ class MultiCommand extends Command
             Process::daemon();
         }
         // 启动服务
-        $server       = $this->getServer();
-        $server->name = $this->processName;
+        $server = $this->getServer();
         $server->on('LeftStart', [$this, 'onLeftStart']);
         $server->on('RightStart', [$this, 'onRightStart']);
         $server->start();
@@ -92,7 +93,7 @@ class MultiCommand extends Command
             // 将消息推送给消费者进程去处理
             $worker->push(serialize($item));
         }
-        // 发送完后杀死主进程
+        // 发送完后杀死主进程，这样消费者进程处理完进程队列里的数据就会自动退出
         $worker->killMaster();
     }
 

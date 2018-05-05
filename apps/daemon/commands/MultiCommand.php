@@ -24,7 +24,7 @@ class MultiCommand extends Command
     const PID_FILE = '/var/run/multi.pid';
 
     // 进程名称
-    protected $processName;
+    protected $processName = '';
 
     // 选项配置
     public function options()
@@ -60,6 +60,8 @@ class MultiCommand extends Command
                 'leftProcess'  => 1,
                 // 右进程数
                 'rightProcess' => 3,
+                // 服务名称
+                'name'         => "mix-daemon: {$this->processName}",
                 // 进程队列的key
                 'queueKey'     => __FILE__ . uniqid(),
             ]
@@ -83,8 +85,7 @@ class MultiCommand extends Command
         // 写入 PID 文件
         Process::writePid(self::PID_FILE);
         // 启动服务
-        $server       = $this->getServer();
-        $server->name = $this->processName;
+        $server = $this->getServer();
         $server->on('LeftStart', [$this, 'onLeftStart']);
         $server->on('RightStart', [$this, 'onRightStart']);
         $server->start();
