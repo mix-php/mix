@@ -36,13 +36,13 @@ return [
         ],
 
         // 错误
-        'error' => [
+        'error'  => [
             // 类路径
             'class' => 'mix\console\Error',
         ],
 
         // 日志
-        'log'   => [
+        'log'    => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -52,7 +52,7 @@ return [
             // 日志轮转类型
             'logRotate'   => mix\base\Log::ROTATE_DAY,
             // 最大文件尺寸
-            'maxFileSize' => 2048 * 1024,
+            'maxFileSize' => 0,
             // 换行符
             'newline'     => PHP_EOL,
         ],

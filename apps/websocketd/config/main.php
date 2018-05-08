@@ -52,7 +52,7 @@ return [
             // 日志轮转类型
             'logRotate'   => mix\base\Log::ROTATE_DAY,
             // 最大文件尺寸
-            'maxFileSize' => 2048 * 1024,
+            'maxFileSize' => 0,
             // 换行符
             'newline'     => PHP_EOL,
         ],
