@@ -2,13 +2,13 @@
 
 namespace apps\websocketd\models;
 
-use mix\base\Model;
+use mix\base\Validator;
 
 /**
  * Join 表单模型类
  * @author 刘健 <coder.liu@qq.com>
  */
-class JoinForm extends Model
+class JoinForm extends Validator
 {
 
     public $room_id;

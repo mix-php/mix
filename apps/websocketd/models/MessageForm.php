@@ -2,13 +2,13 @@
 
 namespace apps\websocketd\models;
 
-use mix\base\Model;
+use mix\base\Validator;
 
 /**
  * Message 表单模型类
  * @author 刘健 <coder.liu@qq.com>
  */
-class MessageForm extends Model
+class MessageForm extends Validator
 {
 
     public $uid;
