@@ -2,6 +2,7 @@
 
 namespace apps\index\controllers;
 
+use mix\facades\Request;
 use mix\web\Controller;
 use apps\index\models\IndexForm;
 
@@ -23,14 +24,14 @@ class IndexController extends Controller
     {
         // 使用模型
         $model             = new IndexForm();
-        $model->attributes = \Mix::app()->request->get() + \Mix::app()->request->post();
+        $model->attributes = Request::get() + Request::post();
         $model->setScenario('test');
         if (!$model->validate()) {
             return ['code' => 1, 'message' => '参数格式效验失败', 'data' => $model->getErrors()];
         }
         $model->save();
         // 响应
-        \Mix::app()->response->format = \mix\web\Response::FORMAT_JSON;
+        app()->response->format = \mix\web\Response::FORMAT_JSON;
         return ['code' => 0, 'message' => 'OK'];
     }
 
@@ -39,10 +40,10 @@ class IndexController extends Controller
     {
         // 使用模型
         $model             = new IndexForm();
-        $model->attributes = \Mix::app()->request->get() + \Mix::app()->request->post();
+        $model->attributes = Request::get() + Request::post();
         $model->setScenario('test');
         if (!$model->validate()) {
-            return $this->render('web_site_example', ['message' => '参数格式效验失败', 'errors' => $model->errors]);
+            return $this->render('web_site_example', ['message' => '参数格式效验失败', 'errors' => $model->getErrors()]);
         }
         $model->save();
         // 响应

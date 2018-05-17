@@ -2,6 +2,8 @@
 
 namespace apps\common\models;
 
+use mix\facades\Redis;
+
 /**
  * Index 表单模型类
  * 这是一个是关于缓存操作的数据模型范例 (nosql数据库)
@@ -16,7 +18,7 @@ class CacheModel
     public function setUserinfo($value)
     {
         $key     = 'KEY';
-        $success = \Mix::app()->redis->setex($key, 7200, $value);
+        $success = Redis::setex($key, 7200, $value);
         return $success;
     }
 
@@ -24,7 +26,7 @@ class CacheModel
     public function getUserinfo()
     {
         $key   = 'KEY';
-        $value = \Mix::app()->redis->get($key);
+        $value = Redis::get($key);
         return empty($value) ? null : $value;
     }
 

@@ -110,7 +110,7 @@ class SingleCommand extends Command
         try {
             $this->work();
         } catch (\Exception $e) {
-            \Mix::app()->error->exception($e);
+            app()->error->exception($e);
             sleep(10); // 休息一会，避免 cpu 出现 100%
             $this->startWork();
         }

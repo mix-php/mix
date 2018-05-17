@@ -2,6 +2,8 @@
 
 namespace apps\common\models;
 
+use mix\facades\RDB;
+
 /**
  * Index 表单模型类
  * 这是一个数据模型范例 (关系型数据库)
@@ -17,14 +19,14 @@ class TableModel
     // 操作数据库
     public function insert($data)
     {
-        $success = \Mix::app()->rdb->insert(self::TABLE, $data);
-        return $success ? \Mix::app()->rdb->getLastInsertId() : false;
+        $success = RDB::insert(self::TABLE, $data);
+        return $success ? RDB::getLastInsertId() : false;
     }
 
     // 获取全部记录
     public function getAll()
     {
-        return \Mix::app()->rdb->createCommand("SELECT * FROM `" . self::TABLE . "`")->queryAll();
+        return RDB::createCommand("SELECT * FROM `" . self::TABLE . "`")->queryAll();
     }
 
 }
