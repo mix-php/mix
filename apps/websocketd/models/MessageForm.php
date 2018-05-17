@@ -2,7 +2,7 @@
 
 namespace apps\websocketd\models;
 
-use mix\base\Validator;
+use mix\validators\Validator;
 
 /**
  * Message 表单模型类
@@ -18,8 +18,8 @@ class MessageForm extends Validator
     public function rules()
     {
         return [
-            ['uid', 'integer', 'unsigned' => true, 'minLength' => 1, 'maxLength' => 10],
-            ['message', 'string', 'minLength' => 1, 'maxLength' => 300],
+            'uid'     => ['integer', 'unsigned' => true, 'minLength' => 1, 'maxLength' => 10],
+            'message' => ['string', 'minLength' => 1, 'maxLength' => 300],
         ];
     }
 

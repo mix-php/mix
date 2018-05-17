@@ -2,7 +2,7 @@
 
 namespace apps\websocketd\models;
 
-use mix\base\Validator;
+use mix\validators\Validator;
 
 /**
  * Join 表单模型类
@@ -17,7 +17,7 @@ class JoinForm extends Validator
     public function rules()
     {
         return [
-            ['room_id', 'integer', 'unsigned' => true, 'minLength' => 1, 'maxLength' => 10],
+            'room_id' => ['integer', 'unsigned' => true, 'minLength' => 1, 'maxLength' => 10],
         ];
     }
 

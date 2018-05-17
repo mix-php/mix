@@ -2,7 +2,7 @@
 
 namespace apps\index\models;
 
-use mix\base\Validator;
+use mix\validators\Validator;
 
 /**
  * Index 表单模型类
@@ -70,8 +70,8 @@ class IndexForm extends Validator
     {
         return [
             'a' => 'A 只能为数字.',
-            'b' => 'B 只能为小数.',
-            'c' => 'C 只能为字母.',
+            'b.type' => 'B 只能为小数.',
+            'c.length' => 'C 长度只能为10位.',
             'd' => 'D 只能为字母与数字.',
             'e' => 'E 长度只能为1~15位.',
         ];

@@ -26,7 +26,7 @@ class IndexController extends Controller
         $model->attributes = \Mix::app()->request->get() + \Mix::app()->request->post();
         $model->setScenario('test');
         if (!$model->validate()) {
-            return ['code' => 1, 'message' => '参数格式效验失败', 'data' => $model->errors];
+            return ['code' => 1, 'message' => '参数格式效验失败', 'data' => $model->getErrors()];
         }
         $model->save();
         // 响应
