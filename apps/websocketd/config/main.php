@@ -62,14 +62,12 @@ return [
             $database['mysql'],
             [
                 // 类路径
-                'class'        => 'mix\client\PdoPersistent',
+                'class'     => 'mix\client\PdoPersistent',
                 // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
-                'attribute'    => [
+                'attribute' => [
                     // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
                     \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
                 ],
-                // 连接休眠超时(超时会重连)
-                'sleepTimeout' => 7200,
             ]
         ),
 
@@ -78,9 +76,7 @@ return [
             $database['redis'],
             [
                 // 类路径
-                'class'        => 'mix\client\RedisPersistent',
-                // 连接休眠超时(超时会重连)
-                'sleepTimeout' => 7200,
+                'class' => 'mix\client\RedisPersistent',
             ]
         ),
 
