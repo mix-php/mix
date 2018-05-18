@@ -4,6 +4,7 @@ namespace apps\websocketd\commands;
 
 use mix\console\Command;
 use mix\console\ExitCode;
+use mix\facades\Error;
 use mix\facades\Output;
 use mix\swoole\Process;
 
@@ -151,7 +152,7 @@ class ServiceCommand extends Command
                 }
             } catch (\Exception $e) {
                 // 记录异常
-                app()->error->exception($e);
+                Error::write($e);
             }
         });
         $redis->on('Close', function (\Swoole\Redis $client) use ($webSocket, $fd) {
@@ -171,7 +172,7 @@ class ServiceCommand extends Command
                 call_user_func_array([$client, 'subscribe'], $channels);
             } catch (\Exception $e) {
                 // 记录异常
-                app()->error->exception($e);
+                Error::write($e);
                 // 关闭 WS 连接
                 $webSocket->close($fd);
             }

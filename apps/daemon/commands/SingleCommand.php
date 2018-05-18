@@ -4,6 +4,7 @@ namespace apps\daemon\commands;
 
 use mix\console\Command;
 use mix\console\ExitCode;
+use mix\facades\Error;
 use mix\facades\Input;
 use mix\facades\Output;
 use mix\swoole\Process;
@@ -112,8 +113,11 @@ class SingleCommand extends Command
         try {
             $this->work();
         } catch (\Exception $e) {
-            app()->error->exception($e);
-            sleep(10); // 休息一会，避免 cpu 出现 100%
+            // 记录异常
+            Error::write($e);
+            // 休息一会，避免 cpu 出现 100%
+            sleep(10);
+            // 重建流程
             $this->startWork();
         }
     }
