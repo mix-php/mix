@@ -148,7 +148,7 @@ return [
             $database['mysql'],
             [
                 // 类路径
-                'class'     => 'mix\client\Pdo',
+                'class'     => 'mix\client\PDO',
                 // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
                 'attribute' => [
                     // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
