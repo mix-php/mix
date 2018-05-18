@@ -4,6 +4,8 @@ namespace apps\crontab\commands;
 
 use mix\console\Command;
 use mix\console\ExitCode;
+use mix\facades\Input;
+use mix\facades\Output;
 use mix\swoole\Process;
 
 /**
@@ -36,7 +38,7 @@ class ClearCommand extends Command
             Process::daemon();
         }
         // 修改进程名称
-        Process::setName('mix-crontab: ' . $this->input->getCommandName());
+        Process::setName('mix-crontab: ' . Input::getCommandName());
 
         // 模型内使用短连接版本的数据库组件，计划任务都是一次性执行
         $tableModel = new \apps\common\models\TableModel();
@@ -44,7 +46,7 @@ class ClearCommand extends Command
         // ...
 
         // 响应
-        $this->output->writeln('SUCCESS');
+        Output::writeln('SUCCESS');
         // 返回退出码
         return ExitCode::OK;
     }

@@ -4,6 +4,7 @@ namespace apps\httpd\commands;
 
 use mix\console\Command;
 use mix\console\ExitCode;
+use mix\facades\Output;
 use mix\swoole\Process;
 
 /**
@@ -46,7 +47,7 @@ class ServiceCommand extends Command
     public function actionStart()
     {
         if ($pid = Process::getMasterPid($this->pidFile)) {
-            $this->output->writeln("mix-httpd is running, PID : {$pid}.");
+            Output::writeln("mix-httpd is running, PID : {$pid}.");
             return ExitCode::UNSPECIFIED_ERROR;
         }
         $server = app()->createObject('httpServer');
@@ -68,9 +69,9 @@ class ServiceCommand extends Command
                 // 等待进程退出
                 usleep(100000);
             }
-            $this->output->writeln('mix-httpd stop completed.');
+            Output::writeln('mix-httpd stop completed.');
         } else {
-            $this->output->writeln('mix-httpd is not running.');
+            Output::writeln('mix-httpd is not running.');
         }
         // 返回退出码
         return ExitCode::OK;
@@ -92,10 +93,10 @@ class ServiceCommand extends Command
             Process::kill($pid, SIGUSR1);
         }
         if (!$pid) {
-            $this->output->writeln('mix-httpd is not running.');
+            Output::writeln('mix-httpd is not running.');
             return ExitCode::UNSPECIFIED_ERROR;
         }
-        $this->output->writeln('mix-httpd worker process restart completed.');
+        Output::writeln('mix-httpd worker process restart completed.');
         // 返回退出码
         return ExitCode::OK;
     }
@@ -104,9 +105,9 @@ class ServiceCommand extends Command
     public function actionStatus()
     {
         if ($pid = Process::getMasterPid($this->pidFile)) {
-            $this->output->writeln("mix-httpd is running, PID : {$pid}.");
+            Output::writeln("mix-httpd is running, PID : {$pid}.");
         } else {
-            $this->output->writeln('mix-httpd is not running.');
+            Output::writeln('mix-httpd is not running.');
         }
         // 返回退出码
         return ExitCode::OK;

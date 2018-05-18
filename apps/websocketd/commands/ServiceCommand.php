@@ -4,6 +4,7 @@ namespace apps\websocketd\commands;
 
 use mix\console\Command;
 use mix\console\ExitCode;
+use mix\facades\Output;
 use mix\swoole\Process;
 
 /**
@@ -44,11 +45,11 @@ class ServiceCommand extends Command
     {
         // 重复启动处理
         if ($pid = Process::getMasterPid($this->pidFile)) {
-            $this->output->writeln("mix-websocketd is running, PID : {$pid}.");
+            Output::writeln("mix-websocketd is running, PID : {$pid}.");
             return ExitCode::UNSPECIFIED_ERROR;
         }
         // 启动提示
-        $this->output->writeln('mix-websocketd start successed.');
+        Output::writeln('mix-websocketd start successed.');
         // 蜕变为守护进程
         if ($this->daemon) {
             Process::daemon();
@@ -73,9 +74,9 @@ class ServiceCommand extends Command
                 // 等待进程退出
                 usleep(100000);
             }
-            $this->output->writeln('mix-websocketd stop completed.');
+            Output::writeln('mix-websocketd stop completed.');
         } else {
-            $this->output->writeln('mix-websocketd is not running.');
+            Output::writeln('mix-websocketd is not running.');
         }
         // 返回退出码
         return ExitCode::OK;
@@ -94,9 +95,9 @@ class ServiceCommand extends Command
     public function actionStatus()
     {
         if ($pid = Process::getMasterPid($this->pidFile)) {
-            $this->output->writeln("mix-websocketd is running, PID : {$pid}.");
+            Output::writeln("mix-websocketd is running, PID : {$pid}.");
         } else {
-            $this->output->writeln('mix-websocketd is not running.');
+            Output::writeln('mix-websocketd is not running.');
         }
         // 返回退出码
         return ExitCode::OK;
