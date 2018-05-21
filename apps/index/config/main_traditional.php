@@ -10,6 +10,12 @@ return [
     // 控制器命名空间
     'controllerNamespace' => 'apps\index\controllers',
 
+    // 中间件命名空间
+    'middlewareNamespace' => 'apps\index\middleware',
+
+    // 全局中间件
+    'middleware'          => ['After'],
+
     // 组件配置
     'components'          => [
 
@@ -25,11 +31,8 @@ return [
             ],
             // 路由规则
             'rules'          => [
-
-                'index'                    => ['index1', 'index1'],
-
                 // 一级目录
-                ':controller/:action' => [':controller', ':action'],
+                ':controller/:action' => [':controller', ':action', 'middleware' => ['Before']],
             ],
             // URL后缀
             'suffix'         => '.html',
