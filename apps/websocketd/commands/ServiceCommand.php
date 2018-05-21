@@ -151,8 +151,8 @@ class ServiceCommand extends Command
                     $webSocket->push($fd, $message);
                 }
             } catch (\Exception $e) {
-                // 记录异常
-                Error::write($e);
+                // 处理异常
+                Error::handleException($e);
             }
         });
         $redis->on('Close', function (\Swoole\Redis $client) use ($webSocket, $fd) {
@@ -171,8 +171,8 @@ class ServiceCommand extends Command
                 $channels[] = 'emit_to_' . $userinfo['uid'];
                 call_user_func_array([$client, 'subscribe'], $channels);
             } catch (\Exception $e) {
-                // 记录异常
-                Error::write($e);
+                // 处理异常
+                Error::handleException($e);
                 // 关闭 WS 连接
                 $webSocket->close($fd);
             }

@@ -113,8 +113,8 @@ class SingleCommand extends Command
         try {
             $this->work();
         } catch (\Exception $e) {
-            // 记录异常
-            Error::write($e);
+            // 处理异常
+            Error::handleException($e);
             // 休息一会，避免 cpu 出现 100%
             sleep(10);
             // 重建流程
