@@ -6,7 +6,7 @@ namespace apps\index\middleware;
  * 前置中间件
  * @author 刘健 <coder.liu@qq.com>
  */
-class Before
+class BeforeMiddleware
 {
 
     public function handle($callable, \Closure $next)

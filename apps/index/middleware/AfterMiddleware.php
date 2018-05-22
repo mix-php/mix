@@ -6,7 +6,7 @@ namespace apps\index\middleware;
  * 后置中间件
  * @author 刘健 <coder.liu@qq.com>
  */
-class After
+class AfterMiddleware
 {
 
     public function handle($callable, \Closure $next)
