@@ -14,7 +14,7 @@ return [
     'middlewareNamespace' => 'apps\index\middleware',
 
     // 全局中间件
-    'middleware'          => ['After'],
+    'middleware'          => [],
 
     // 组件配置
     'components'          => [
