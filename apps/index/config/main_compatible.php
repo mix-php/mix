@@ -22,7 +22,7 @@ return [
         // 路由
         'route'    => [
             // 类路径
-            'class'          => 'mix\web\Route',
+            'class'          => 'mix\http\Route',
             // 默认变量规则
             'defaultPattern' => '[\w-]+',
             // 路由变量规则
@@ -41,40 +41,40 @@ return [
         // 请求
         'request'  => [
             // 类路径
-            'class' => 'mix\web\Request',
+            'class' => 'mix\http\compatible\Request',
         ],
 
         // 响应
         'response' => [
             // 类路径
-            'class'         => 'mix\web\Response',
+            'class'         => 'mix\http\compatible\Response',
             // 默认输出格式
-            'defaultFormat' => mix\swoole\Response::FORMAT_JSON,
+            'defaultFormat' => mix\http\compatible\Response::FORMAT_JSON,
             // json
             'json'          => [
                 // 类路径
-                'class' => 'mix\web\Json',
+                'class' => 'mix\http\Json',
             ],
             // jsonp
             'jsonp'         => [
                 // 类路径
-                'class'        => 'mix\web\Jsonp',
+                'class'        => 'mix\http\Jsonp',
                 // callback名称
                 'callbackName' => 'callback',
             ],
             // xml
             'xml'           => [
                 // 类路径
-                'class' => 'mix\web\Xml',
+                'class' => 'mix\http\Xml',
             ],
         ],
 
         // 错误
         'error'    => [
             // 类路径
-            'class'  => 'mix\web\Error',
+            'class'  => 'mix\http\Error',
             // 输出格式
-            'format' => mix\web\Error::FORMAT_HTML,
+            'format' => mix\http\Error::FORMAT_HTML,
         ],
 
         // 日志
@@ -96,7 +96,7 @@ return [
         // Token
         'token'    => [
             // 类路径
-            'class'         => 'mix\web\Token',
+            'class'         => 'mix\http\Token',
             // 保存处理者
             'saveHandler'   => array_merge(
                 $database['redis'],
@@ -116,7 +116,7 @@ return [
         // Session
         'session'  => [
             // 类路径
-            'class'         => 'mix\web\Session',
+            'class'         => 'mix\http\Session',
             // 保存处理者
             'saveHandler'   => array_merge(
                 $database['redis'],
@@ -136,7 +136,7 @@ return [
         // Cookie
         'cookie'   => [
             // 类路径
-            'class'    => 'mix\web\Cookie',
+            'class'    => 'mix\http\Cookie',
             // 过期时间
             'expire'   => 31536000,
             // 有效的服务器路径

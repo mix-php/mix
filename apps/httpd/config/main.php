@@ -66,7 +66,7 @@ return [
         'httpServer' => [
 
             // 类路径
-            'class'        => 'mix\swoole\HttpServer',
+            'class'        => 'mix\http\HttpServer',
             // 主机
             'host'         => '127.0.0.1',
             // 端口
@@ -91,7 +91,7 @@ return [
             // 虚拟主机：运行在 Server 内的 Web 应用
             'virtualHosts' => [
                 // 默认主机
-                '*' => __DIR__ . '/../../index/config/main_httpd.php',
+                '*' => __DIR__ . '/../../index/config/main.php',
             ],
 
         ],

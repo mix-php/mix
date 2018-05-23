@@ -6,9 +6,9 @@ use mix\console\Command;
 use mix\console\ExitCode;
 use mix\facades\Input;
 use mix\facades\Output;
-use mix\swoole\Process;
-use mix\swoole\TaskProcess;
-use mix\swoole\TaskExecutor;
+use mix\process\Process;
+use mix\task\TaskProcess;
+use mix\task\TaskExecutor;
 
 /**
  * 这是一个多进程守护进程的范例
@@ -57,7 +57,7 @@ class MultiCommand extends Command
         return \Mix::createObject(
             [
                 // 类路径
-                'class'        => 'mix\swoole\TaskExecutor',
+                'class'        => 'mix\task\TaskExecutor',
                 // 左进程数
                 'leftProcess'  => 1,
                 // 右进程数
@@ -87,10 +87,10 @@ class MultiCommand extends Command
         // 写入 PID 文件
         Process::writePid(self::PID_FILE);
         // 启动服务
-        $server = $this->getTaskService();
-        $server->on('LeftStart', [$this, 'onLeftStart']);
-        $server->on('RightStart', [$this, 'onRightStart']);
-        $server->start();
+        $service = $this->getTaskService();
+        $service->on('LeftStart', [$this, 'onLeftStart']);
+        $service->on('RightStart', [$this, 'onRightStart']);
+        $service->start();
         // 返回退出码
         return ExitCode::OK;
     }

@@ -6,9 +6,9 @@ use mix\console\Command;
 use mix\console\ExitCode;
 use mix\facades\Input;
 use mix\facades\Output;
-use mix\swoole\Process;
-use mix\swoole\TaskProcess;
-use mix\swoole\TaskExecutor;
+use mix\process\Process;
+use mix\task\TaskProcess;
+use mix\task\TaskExecutor;
 
 /**
  * 这是一个多进程定时任务的范例，任务执行完成就会自动结束进程
@@ -54,7 +54,7 @@ class MultiCommand extends Command
         return \Mix::createObject(
             [
                 // 类路径
-                'class'        => 'mix\swoole\TaskExecutor',
+                'class'        => 'mix\task\TaskExecutor',
                 // 左进程数
                 'leftProcess'  => 1,
                 // 右进程数
@@ -77,10 +77,10 @@ class MultiCommand extends Command
             Process::daemon();
         }
         // 启动服务
-        $server = $this->getTaskService();
-        $server->on('LeftStart', [$this, 'onLeftStart']);
-        $server->on('RightStart', [$this, 'onRightStart']);
-        $server->start();
+        $service = $this->getTaskService();
+        $service->on('LeftStart', [$this, 'onLeftStart']);
+        $service->on('RightStart', [$this, 'onRightStart']);
+        $service->start();
         // 返回退出码
         return ExitCode::OK;
     }

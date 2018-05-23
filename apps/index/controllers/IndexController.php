@@ -3,7 +3,7 @@
 namespace apps\index\controllers;
 
 use mix\facades\Request;
-use mix\web\Controller;
+use mix\http\Controller;
 use apps\index\models\IndexForm;
 
 /**
