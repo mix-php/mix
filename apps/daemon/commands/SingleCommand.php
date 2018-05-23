@@ -7,7 +7,7 @@ use mix\console\ExitCode;
 use mix\facades\Error;
 use mix\facades\Input;
 use mix\facades\Output;
-use mix\swoole\Process;
+use mix\process\Process;
 
 /**
  * 这是一个单进程守护进程的范例

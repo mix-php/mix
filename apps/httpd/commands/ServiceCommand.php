@@ -5,7 +5,7 @@ namespace apps\httpd\commands;
 use mix\console\Command;
 use mix\console\ExitCode;
 use mix\facades\Output;
-use mix\swoole\Process;
+use mix\process\Process;
 
 /**
  * Service 命令

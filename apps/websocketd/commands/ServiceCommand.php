@@ -6,7 +6,7 @@ use mix\console\Command;
 use mix\console\ExitCode;
 use mix\facades\Error;
 use mix\facades\Output;
-use mix\swoole\Process;
+use mix\process\Process;
 
 /**
  * Service 命令
@@ -105,7 +105,7 @@ class ServiceCommand extends Command
     }
 
     // 连接事件回调函数
-    public function onOpen(\Swoole\WebSocket\Server $webSocket, $fd, \mix\swoole\Request $request)
+    public function onOpen(\Swoole\WebSocket\Server $webSocket, $fd, \mix\http\Request $request)
     {
         // 效验session
         $userinfo = app('webSocket')->sessionReader->loadSessionId($request)->get('userinfo');
