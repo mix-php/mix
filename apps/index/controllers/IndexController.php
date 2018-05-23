@@ -31,7 +31,7 @@ class IndexController extends Controller
         }
         $model->save();
         // 响应
-        app()->response->format = \mix\web\Response::FORMAT_JSON;
+        app()->response->format = \mix\http\Response::FORMAT_JSON;
         return ['code' => 0, 'message' => 'OK'];
     }
 
@@ -43,7 +43,7 @@ class IndexController extends Controller
         $model->attributes = Request::get() + Request::post();
         $model->setScenario('test');
         if (!$model->validate()) {
-            return $this->render('web_site_example', ['message' => '参数格式效验失败', 'errors' => $model->getErrors()]);
+            return $this->render('web_site_example', ['message' => $model->getError()]);
         }
         $model->save();
         // 响应

@@ -49,7 +49,7 @@ return [
             // 类路径
             'class'         => 'mix\http\compatible\Response',
             // 默认输出格式
-            'defaultFormat' => mix\http\compatible\Response::FORMAT_JSON,
+            'defaultFormat' => mix\http\Response::FORMAT_JSON,
             // json
             'json'          => [
                 // 类路径

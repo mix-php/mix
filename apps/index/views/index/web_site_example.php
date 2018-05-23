@@ -2,4 +2,4 @@
 $this->title = 'MixPHP View';
 ?>
 
-<p>message: <?= $message ?></p>
+<p>Error: <?= $message ?></p>
