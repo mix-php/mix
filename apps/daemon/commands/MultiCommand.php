@@ -8,7 +8,7 @@ use mix\facades\Input;
 use mix\facades\Output;
 use mix\swoole\Process;
 use mix\swoole\TaskProcess;
-use mix\swoole\TaskServer;
+use mix\swoole\TaskExecutor;
 
 /**
  * 这是一个多进程守护进程的范例
@@ -50,14 +50,14 @@ class MultiCommand extends Command
 
     /**
      * 获取服务
-     * @return TaskServer
+     * @return TaskExecutor
      */
-    public function getServer()
+    public function getTaskService()
     {
         return \Mix::createObject(
             [
                 // 类路径
-                'class'        => 'mix\swoole\TaskServer',
+                'class'        => 'mix\swoole\TaskExecutor',
                 // 左进程数
                 'leftProcess'  => 1,
                 // 右进程数
@@ -87,7 +87,7 @@ class MultiCommand extends Command
         // 写入 PID 文件
         Process::writePid(self::PID_FILE);
         // 启动服务
-        $server = $this->getServer();
+        $server = $this->getTaskService();
         $server->on('LeftStart', [$this, 'onLeftStart']);
         $server->on('RightStart', [$this, 'onRightStart']);
         $server->start();

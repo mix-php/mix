@@ -8,7 +8,7 @@ use mix\facades\Input;
 use mix\facades\Output;
 use mix\swoole\Process;
 use mix\swoole\TaskProcess;
-use mix\swoole\TaskServer;
+use mix\swoole\TaskExecutor;
 
 /**
  * 这是一个多进程定时任务的范例，任务执行完成就会自动结束进程
@@ -47,14 +47,14 @@ class MultiCommand extends Command
 
     /**
      * 获取服务
-     * @return TaskServer
+     * @return TaskExecutor
      */
-    public function getServer()
+    public function getTaskService()
     {
         return \Mix::createObject(
             [
                 // 类路径
-                'class'        => 'mix\swoole\TaskServer',
+                'class'        => 'mix\swoole\TaskExecutor',
                 // 左进程数
                 'leftProcess'  => 1,
                 // 右进程数
@@ -77,7 +77,7 @@ class MultiCommand extends Command
             Process::daemon();
         }
         // 启动服务
-        $server = $this->getServer();
+        $server = $this->getTaskService();
         $server->on('LeftStart', [$this, 'onLeftStart']);
         $server->on('RightStart', [$this, 'onRightStart']);
         $server->start();
