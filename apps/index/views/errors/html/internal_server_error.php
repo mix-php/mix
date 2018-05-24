@@ -8,42 +8,39 @@
             font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
             margin: 20px;
         }
-        h1 {
-            font-family: Consolas, "Liberation Mono", Courier, Verdana, "微软雅黑";
-            font-size: 28px;
-            font-weight: 500;
-            line-height: 32px;
-            color: #333;
-        }
-        p {
-            font-size: 18px;
-            color: #868686;
-        }
         h1, p {
-            border-bottom: 1px solid #CCC;
-            padding: 10px;
+            font-family: Consolas, "Liberation Mono", Courier, Verdana, "微软雅黑";
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+            padding: 5px;
             margin: 0px;
         }
         a {
             color: #4183c4;
-            text-decoration: none;
+            text-decoration: underline;
         }
         a:hover {
             text-decoration: underline;
+        }
+        span, a {
+            background-color: red;
+            color: white;
+            padding: 3px;
         }
     </style>
 </head>
 <body>
 
-<h1><?= $message ?></h1>
+<h1><span><?= $message ?></span></h1>
 
 <?php if (!empty($file)): ?>
 <p><?= $type ?> code <?= $code ?></p>
-<p><?= $file ?> line <?= $line ?></p>
+    <p><span><?= $file ?></span> line <span><?= $line ?></span></p>
 <p><?= str_replace("\n", '<br>', $trace); ?></p>
 <?php endif; ?>
 
-<p><a href="http://mixphp.cn" target="_blank">MixPHP V1</a></p>
+<p style="margin-top: 20px;"><a href="http://mixphp.cn" target="_blank">MixPHP</a></p>
 
 </body>
 </html>
