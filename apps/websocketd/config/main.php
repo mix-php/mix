@@ -81,7 +81,7 @@ return [
         ),
 
         // Session
-        'webSocket.sessionReader'  => [
+        'websocket.sessionReader'  => [
             // 类路径
             'class'         => 'mix\websocket\SessionReader',
             // 保存处理者
@@ -99,7 +99,7 @@ return [
         ],
 
         // Token
-        'webSocket.tokenReader'    => [
+        'websocket.tokenReader'    => [
             // 类路径
             'class'         => 'mix\websocket\TokenReader',
             // 保存处理者
@@ -117,7 +117,7 @@ return [
         ],
 
         // 消息处理器
-        'webSocket.messageHandler' => [
+        'websocket.messageHandler' => [
             // 类路径
             'class'               => 'mix\websocket\MessageHandler',
             // 控制器命名空间
@@ -125,8 +125,8 @@ return [
             // 路由规则
             'rules'               => [
 
-                'JOIN'    => ['Join', 'Room'],
-                'MESSAGE' => ['Message', 'Emit'],
+                'joinRoom'    => ['Join', 'Room'],
+                'messageEmit' => ['Message', 'Emit'],
 
             ],
         ],

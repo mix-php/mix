@@ -19,14 +19,14 @@ class MessageController extends Controller
         // 使用模型
         $model             = new MessageForm();
         $model->attributes = $data;
-        $model->setScenario('to');
+        $model->setScenario('actionEmit');
         // 验证失败
         if (!$model->validate()) {
             return;
         }
 
         // 通过消息队列给指定用户id发消息
-        Redis::publish('emit_to_' . $model->uid, $model->message);
+        Redis::publish('emit_to_' . $model->to_uid, $model->message);
     }
 
 }

@@ -108,8 +108,8 @@ class ServiceCommand extends Command
     public function onOpen(\Swoole\WebSocket\Server $webSocket, $fd, \mix\http\Request $request)
     {
         // 效验session
-        $userinfo = app('webSocket')->sessionReader->loadSessionId($request)->get('userinfo');
-        app('webSocket')->sessionReader->close();
+        $userinfo = app('websocket')->sessionReader->loadSessionId($request)->get('userinfo');
+        app('websocket')->sessionReader->close();
         if (empty($userinfo)) {
             // 鉴权失败处理
             $webSocket->close($fd);
@@ -120,8 +120,8 @@ class ServiceCommand extends Command
          * token 方案，与上面的 session 方案，二选一使用即可
 
         // 效验token
-        $userinfo = app('webSocket')->tokenReader->loadTokenId($request)->get('userinfo');
-        app('webSocket')->tokenReader->close();
+        $userinfo = app('websocket')->tokenReader->loadTokenId($request)->get('userinfo');
+        app('websocket')->tokenReader->close();
         if (empty($userinfo)) {
             // 鉴权失败处理
             $webSocket->close($fd);
@@ -191,15 +191,15 @@ class ServiceCommand extends Command
         $userinfo = $webSocket->fds[$frame->fd]['session'];
         // 解析数据
         $data = json_decode($frame->data, true);
-        if (!isset($data['action']) || !isset($data['data'])) {
+        if (!isset($data['event']) || !isset($data['params'])) {
             return;
         }
-        $action = $data['action'];
+        $event = $data['event'];
         // 执行功能
-        app('webSocket')->messageHandler
+        app('websocket')->messageHandler
             ->setServer($webSocket)
             ->setFd($frame->fd)
-            ->runAction($action, [$data['data'], $userinfo]);
+            ->runAction($event, [$data['params'], $userinfo]);
     }
 
     // 关闭连接事件回调函数
