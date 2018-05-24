@@ -143,7 +143,7 @@ class MultiCommand extends Command
             $worker->checkMaster(TaskProcess::PRODUCER);
             // 从消息队列中间件取出一条消息
             $msg = $queueModel->pop();
-            // 将消息推送给消费者进程去处理
+            // 将消息推送给消费者进程去处理，push有长度限制：https://wiki.swoole.com/wiki/page/290.html
             $worker->push(serialize($msg));
         }
     }

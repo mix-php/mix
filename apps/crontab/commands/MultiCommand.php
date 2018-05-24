@@ -92,7 +92,7 @@ class MultiCommand extends Command
         $tableModel = new \apps\common\models\TableModel();
         // 将结果集一行一行发送给消费者进程
         foreach ($tableModel->getAll() as $item) {
-            // 将消息推送给消费者进程去处理
+            // 将消息推送给消费者进程去处理，push有长度限制：https://wiki.swoole.com/wiki/page/290.html
             $worker->push(serialize($item));
         }
         // 发送完后杀死主进程，这样消费者进程处理完进程队列里的数据就会自动退出
