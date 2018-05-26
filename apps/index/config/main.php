@@ -49,7 +49,7 @@ return [
             // 类路径
             'class'         => 'mix\http\Response',
             // 默认输出格式
-            'defaultFormat' => mix\http\Response::FORMAT_JSON,
+            'defaultFormat' => mix\http\Response::FORMAT_HTML,
             // json
             'json'          => [
                 // 类路径
@@ -58,9 +58,9 @@ return [
             // jsonp
             'jsonp'         => [
                 // 类路径
-                'class'        => 'mix\http\Jsonp',
-                // callback名称
-                'callbackName' => 'callback',
+                'class' => 'mix\http\Jsonp',
+                // callback键名
+                'name'  => 'callback',
             ],
             // xml
             'xml'           => [
@@ -129,7 +129,7 @@ return [
             'saveKeyPrefix' => 'MIXSSID:',
             // 生存时间
             'expires'       => 7200,
-            // session名
+            // session键名
             'name'          => 'mixssid',
         ],
 
