@@ -1,3 +1,3 @@
 <?php
 
-echo \mix\http\Xml::encode(compact('code', 'message', 'type', 'file', 'line', 'trace'));
+echo \mix\helpers\XmlHelper::encode(compact('code', 'message', 'type', 'file', 'line', 'trace'));
