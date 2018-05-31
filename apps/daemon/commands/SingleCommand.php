@@ -2,11 +2,9 @@
 
 namespace apps\daemon\commands;
 
-use mix\console\Command;
 use mix\console\ExitCode;
 use mix\facades\Error;
 use mix\facades\Input;
-use mix\facades\Output;
 use mix\process\Process;
 
 /**
