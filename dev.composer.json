@@ -16,8 +16,11 @@
     }
   ],
   "require": {
-    "php": ">=5.4.0",
+    "php": ">=5.5.0",
     "mixstart/framework": "dev-master"
+  },
+  "require-dev": {
+    "eaglewu/swoole-ide-helper": "dev-master"
   },
   "autoload": {
     "psr-4": {
