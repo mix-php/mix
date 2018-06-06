@@ -13,10 +13,20 @@ return [
     // 命令
     'commands'         => [
 
-        'multi start'   => ['Multi', 'Start'],
-        'multi stop'    => ['Multi', 'Stop'],
-        'multi restart' => ['Multi', 'Restart'],
-        'multi status'  => ['Multi', 'Status'],
+        'push start'   => ['Push', 'Start'],
+        'push stop'    => ['Push', 'Stop'],
+        'push restart' => ['Push', 'Restart'],
+        'push status'  => ['Push', 'Status'],
+
+        'acquisition start'   => ['Acquisition', 'Start'],
+        'acquisition stop'    => ['Acquisition', 'Stop'],
+        'acquisition restart' => ['Acquisition', 'Restart'],
+        'acquisition status'  => ['Acquisition', 'Status'],
+
+        'assemblyline start'   => ['AssemblyLine', 'Start'],
+        'assemblyline stop'    => ['AssemblyLine', 'Stop'],
+        'assemblyline restart' => ['AssemblyLine', 'Restart'],
+        'assemblyline status'  => ['AssemblyLine', 'Status'],
 
         'single start'   => ['Single', 'Start'],
         'single stop'    => ['Single', 'Stop'],

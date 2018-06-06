@@ -4,16 +4,15 @@ namespace apps\daemon\commands;
 
 use mix\console\ExitCode;
 use mix\facades\Input;
-use mix\task\TaskProcess;
+use mix\task\CenterProcess;
+use mix\task\LeftProcess;
 use mix\task\TaskExecutor;
 
 /**
- * 这是一个多进程守护进程的范例
- * 进程模型为：生产者消费者模型
- * 你可以自由选择是左进程当生产者还是右进程当生产者，本范例是左进程当生产者
+ * 推送模式范例
  * @author 刘健 <coder.liu@qq.com>
  */
-class MultiCommand extends BaseCommand
+class PushCommand extends BaseCommand
 {
 
     // 初始化事件
@@ -35,15 +34,17 @@ class MultiCommand extends BaseCommand
         return \Mix::createObject(
             [
                 // 类路径
-                'class'        => 'mix\task\TaskExecutor',
-                // 左进程数
-                'leftProcess'  => 1,
-                // 右进程数
-                'rightProcess' => 3,
+                'class'         => 'mix\task\TaskExecutor',
                 // 服务名称
-                'name'         => "mix-daemon: {$this->programName}",
-                // 进程队列的key
-                'queueKey'     => __FILE__ . uniqid(),
+                'name'          => "mix-daemon: {$this->programName}",
+                // 执行模式
+                'mode'          => \mix\task\TaskExecutor::MODE_PUSH,
+                // 左进程数
+                'leftProcess'   => 1,
+                // 中进程数
+                'centerProcess' => 5,
+                // POP退出等待时间 (秒)
+                'popExitWait'   => 3,
             ]
         );
     }
@@ -58,39 +59,47 @@ class MultiCommand extends BaseCommand
         // 启动服务
         $service = $this->getTaskService();
         $service->on('LeftStart', [$this, 'onLeftStart']);
-        $service->on('RightStart', [$this, 'onRightStart']);
+        $service->on('CenterStart', [$this, 'onCenterStart']);
         $service->start();
         // 返回退出码
         return ExitCode::OK;
     }
 
     // 左进程启动事件回调函数
-    public function onLeftStart(TaskProcess $worker, $index)
+    public function onLeftStart(LeftProcess $worker)
     {
         // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
         $queueModel = new \apps\common\models\QueueModel();
         // 循环执行任务
         for ($j = 0; $j < 16000; $j++) {
-            $worker->checkMaster(TaskProcess::PRODUCER);
-            // 从消息队列中间件取出一条消息
-            $msg = $queueModel->pop();
-            // 将消息推送给消费者进程去处理，push有长度限制：https://wiki.swoole.com/wiki/page/290.html
-            $worker->push(serialize($msg));
+            // 从消息队列中间件阻塞获取一条消息
+            $data = $queueModel->pop();
+            // 将消息推送给中进程去处理，push有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
+            $worker->push($data);
         }
     }
 
-    // 右进程启动事件回调函数
-    public function onRightStart(TaskProcess $worker, $index)
+    // 中进程启动事件回调函数
+    public function onCenterStart(CenterProcess $worker)
     {
         // 循环执行任务
         for ($j = 0; $j < 16000; $j++) {
-            $worker->checkMaster();
-            // 从进程队列中抢占一条消息
-            $msg = $worker->pop();
-            $msg = unserialize($msg);
-            if (!empty($msg)) {
+            // 从进程消息队列中抢占一条消息
+            $data = $worker->pop();
+            if (empty($data)) {
+                continue;
+            }
+            // 处理消息
+            try {
                 // 处理消息，比如：发送短信、发送邮件、微信推送
                 // ...
+            } catch (\Exception $e) {
+                // 回退数据到消息队列
+                $worker->fallback($data);
+                // 休息一会，避免 CPU 出现 100%
+                sleep(1);
+                // 抛出错误
+                throw $e;
             }
         }
     }

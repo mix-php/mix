@@ -8,7 +8,7 @@ use mix\facades\Input;
 use mix\process\Process;
 
 /**
- * 这是一个单进程守护进程的范例
+ * 单进程范例
  * @author 刘健 <coder.liu@qq.com>
  */
 class SingleCommand extends BaseCommand

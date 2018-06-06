@@ -21,7 +21,7 @@ class QueueModel
         return $success;
     }
 
-    // 从队列中取出一条数据，堵塞模式
+    // 从队列中取出一条数据，阻塞模式
     public function pop()
     {
         $value = Redis::brpop('KEY', 30);
