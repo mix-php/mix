@@ -14,7 +14,8 @@ return [
     'commands'         => [
 
         'clear exec' => ['Clear', 'Exec'],
-        'multi exec' => ['Multi', 'Exec'],
+
+        'assemblyline exec' => ['AssemblyLine', 'Exec'],
 
     ],
 

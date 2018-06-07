@@ -70,7 +70,7 @@ class AssemblyLineCommand extends BaseCommand
     {
         // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
         $tableModel = new \apps\common\models\TableModel();
-        // 取出数据一行一行推送给中进程
+        // 从数据库取出数据后一行一行推送给中进程
         foreach ($tableModel->getAll() as $item) {
             // 将消息推送给中进程去处理，push有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
             $worker->push($item);
