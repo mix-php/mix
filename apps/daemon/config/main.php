@@ -23,11 +23,6 @@ return [
         'push restart' => ['Push', 'Restart'],
         'push status'  => ['Push', 'Status'],
 
-        'acquisition start'   => ['Acquisition', 'Start'],
-        'acquisition stop'    => ['Acquisition', 'Stop'],
-        'acquisition restart' => ['Acquisition', 'Restart'],
-        'acquisition status'  => ['Acquisition', 'Status'],
-
         'single start'   => ['Single', 'Start'],
         'single stop'    => ['Single', 'Stop'],
         'single restart' => ['Single', 'Restart'],
