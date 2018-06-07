@@ -7,7 +7,7 @@ use mix\facades\Input;
 use mix\facades\Output;
 
 /**
- * Clear 命令
+ * 单进程范例
  * @author 刘健 <coder.liu@qq.com>
  */
 class ClearCommand extends BaseCommand

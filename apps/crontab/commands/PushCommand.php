@@ -78,7 +78,7 @@ class PushCommand extends BaseCommand
     // 中进程启动事件回调函数
     public function onCenterStart(CenterProcess $worker)
     {
-        // 循环执行任务
+        // 保持任务执行状态，循环结束后当前进程会退出，主进程会重启一个新进程继续执行任务，这样做是为了避免长时间执行内存溢出
         for ($j = 0; $j < 16000; $j++) {
             // 从进程消息队列中抢占一条消息
             $data = $worker->pop();

@@ -41,7 +41,7 @@ class AssemblyLineCommand extends BaseCommand
                 // 左进程数
                 'leftProcess'   => 1, // 一次性执行，只能为1
                 // 中进程数
-                'centerProcess' => 100,
+                'centerProcess' => 5,
                 // 右进程数
                 'rightProcess'  => 1,
                 // POP退出等待时间 (秒)
@@ -82,7 +82,7 @@ class AssemblyLineCommand extends BaseCommand
     // 中进程启动事件回调函数
     public function onCenterStart(CenterProcess $worker)
     {
-        // 循环执行任务
+        // 保持任务执行状态，循环结束后当前进程会退出，主进程会重启一个新进程继续执行任务，这样做是为了避免长时间执行内存溢出
         for ($j = 0; $j < 16000; $j++) {
             $data = $worker->pop();
             if (empty($data)) {
@@ -109,7 +109,7 @@ class AssemblyLineCommand extends BaseCommand
     {
         // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
         $tableModel = new \apps\common\models\TableModel();
-        // 循环执行任务
+        // 保持任务执行状态，循环结束后当前进程会退出，主进程会重启一个新进程继续执行任务，这样做是为了避免长时间执行内存溢出
         for ($j = 0; $j < 16000; $j++) {
             // 从进程队列中抢占一条消息
             $data = $worker->pop();
