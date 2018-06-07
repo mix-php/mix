@@ -5,7 +5,7 @@ namespace apps\daemon\commands;
 use mix\console\ExitCode;
 use mix\facades\Error;
 use mix\facades\Input;
-use mix\process\Process;
+use mix\helpers\ProcessHelper;
 
 /**
  * 单进程范例
@@ -31,8 +31,6 @@ class SingleCommand extends BaseCommand
         if (!parent::actionStart()) {
             return ExitCode::UNSPECIFIED_ERROR;
         }
-        // 修改进程名称
-        Process::setName("mix-daemon: {$this->programName}");
         // 开始工作
         $this->startWork();
         // 返回退出码

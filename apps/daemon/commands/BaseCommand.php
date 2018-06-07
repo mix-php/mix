@@ -52,6 +52,8 @@ class BaseCommand extends Command
         }
         // 写入 PID 文件
         ProcessHelper::writePidFile($this->pidFile);
+        // 修改进程标题
+        ProcessHelper::setTitle("mix-daemon: {$this->programName}");
         // 返回
         return true;
     }
