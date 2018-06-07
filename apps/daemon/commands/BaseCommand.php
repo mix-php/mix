@@ -8,7 +8,7 @@ use mix\facades\Output;
 use mix\helpers\ProcessHelper;
 
 /**
- * 命令基类，统一处理 [start/stop/restart/status] 方法的公共逻辑部分
+ * 命令基类，处理公共逻辑部分
  * @author 刘健 <coder.liu@qq.com>
  */
 class BaseCommand extends Command
