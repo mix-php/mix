@@ -13,9 +13,9 @@ return [
     // 命令
     'commands'         => [
 
-        'clear exec' => ['Clear', 'Exec'],
-
+        'clear exec'        => ['Clear', 'Exec'],
         'assemblyline exec' => ['AssemblyLine', 'Exec'],
+        'push exec'         => ['Push', 'Exec'],
 
     ],
 

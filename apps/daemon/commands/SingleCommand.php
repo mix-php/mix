@@ -5,7 +5,6 @@ namespace apps\daemon\commands;
 use mix\console\ExitCode;
 use mix\facades\Error;
 use mix\facades\Input;
-use mix\helpers\ProcessHelper;
 
 /**
  * 单进程范例
