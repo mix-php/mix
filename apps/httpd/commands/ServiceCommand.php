@@ -5,7 +5,7 @@ namespace apps\httpd\commands;
 use mix\console\Command;
 use mix\console\ExitCode;
 use mix\facades\Output;
-use mix\process\Process;
+use mix\helpers\ProcessHelper;
 
 /**
  * Service 命令
@@ -46,7 +46,7 @@ class ServiceCommand extends Command
     // 启动服务
     public function actionStart()
     {
-        if ($pid = Process::getMasterPid($this->pidFile)) {
+        if ($pid = ProcessHelper::readPidFile($this->pidFile)) {
             Output::writeln("mix-httpd is running, PID : {$pid}.");
             return ExitCode::UNSPECIFIED_ERROR;
         }
@@ -63,9 +63,9 @@ class ServiceCommand extends Command
     // 停止服务
     public function actionStop()
     {
-        if ($pid = Process::getMasterPid($this->pidFile)) {
-            Process::kill($pid);
-            while (Process::isRunning($pid)) {
+        if ($pid = ProcessHelper::readPidFile($this->pidFile)) {
+            ProcessHelper::kill($pid);
+            while (ProcessHelper::isRunning($pid)) {
                 // 等待进程退出
                 usleep(100000);
             }
@@ -89,8 +89,8 @@ class ServiceCommand extends Command
     // 重启工作进程
     public function actionReload()
     {
-        if ($pid = Process::getMasterPid($this->pidFile)) {
-            Process::kill($pid, SIGUSR1);
+        if ($pid = ProcessHelper::readPidFile($this->pidFile)) {
+            ProcessHelper::kill($pid, SIGUSR1);
         }
         if (!$pid) {
             Output::writeln('mix-httpd is not running.');
@@ -104,7 +104,7 @@ class ServiceCommand extends Command
     // 查看服务状态
     public function actionStatus()
     {
-        if ($pid = Process::getMasterPid($this->pidFile)) {
+        if ($pid = ProcessHelper::readPidFile($this->pidFile)) {
             Output::writeln("mix-httpd is running, PID : {$pid}.");
         } else {
             Output::writeln('mix-httpd is not running.');

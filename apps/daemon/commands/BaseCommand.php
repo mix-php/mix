@@ -5,7 +5,7 @@ namespace apps\daemon\commands;
 use mix\console\Command;
 use mix\console\ExitCode;
 use mix\facades\Output;
-use mix\process\Process;
+use mix\helpers\ProcessHelper;
 
 /**
  * 命令基类，统一处理 [start/stop/restart/status] 方法的公共逻辑部分
@@ -39,7 +39,7 @@ class BaseCommand extends Command
     public function actionStart()
     {
         // 重复启动处理
-        if ($pid = Process::getMasterPid($this->pidFile)) {
+        if ($pid = ProcessHelper::readPidFile($this->pidFile)) {
             Output::writeln("mix-daemon '{$this->programName}' is running, PID : {$pid}.");
             // 返回
             return false;
@@ -48,10 +48,10 @@ class BaseCommand extends Command
         Output::writeln("mix-daemon '{$this->programName}' start successed.");
         // 蜕变为守护进程
         if ($this->daemon) {
-            Process::daemon();
+            ProcessHelper::daemon();
         }
         // 写入 PID 文件
-        Process::writePid($this->pidFile);
+        ProcessHelper::writePidFile($this->pidFile);
         // 返回
         return true;
     }
@@ -59,9 +59,9 @@ class BaseCommand extends Command
     // 停止
     public function actionStop()
     {
-        if ($pid = Process::getMasterPid($this->pidFile)) {
-            Process::kill($pid);
-            while (Process::isRunning($pid)) {
+        if ($pid = ProcessHelper::readPidFile($this->pidFile)) {
+            ProcessHelper::kill($pid);
+            while (ProcessHelper::isRunning($pid)) {
                 // 等待进程退出
                 usleep(100000);
             }
@@ -85,7 +85,7 @@ class BaseCommand extends Command
     // 查看状态
     public function actionStatus()
     {
-        if ($pid = Process::getMasterPid($this->pidFile)) {
+        if ($pid = ProcessHelper::readPidFile($this->pidFile)) {
             Output::writeln("mix-daemon '{$this->programName}' is running, PID : {$pid}.");
         } else {
             Output::writeln("mix-daemon '{$this->programName}' is not running.");

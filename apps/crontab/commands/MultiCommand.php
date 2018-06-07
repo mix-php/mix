@@ -6,8 +6,6 @@ use mix\console\Command;
 use mix\console\ExitCode;
 use mix\facades\Input;
 use mix\facades\Output;
-use mix\process\Process;
-use mix\task\TaskProcess;
 use mix\task\TaskExecutor;
 
 /**

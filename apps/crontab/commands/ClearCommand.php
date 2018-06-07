@@ -6,7 +6,7 @@ use mix\console\Command;
 use mix\console\ExitCode;
 use mix\facades\Input;
 use mix\facades\Output;
-use mix\process\Process;
+use mix\helpers\ProcessHelper;
 
 /**
  * Clear 命令
@@ -35,10 +35,10 @@ class ClearCommand extends Command
     {
         // 蜕变为守护进程
         if ($this->daemon) {
-            Process::daemon();
+            ProcessHelper::daemon();
         }
-        // 修改进程名称
-        Process::setName('mix-crontab: ' . Input::getCommandName());
+        // 修改进程标题
+        ProcessHelper::setTitle('mix-crontab: ' . Input::getCommandName());
 
         // 模型内使用短连接版本的数据库组件，计划任务都是一次性执行
         $tableModel = new \apps\common\models\TableModel();
