@@ -39,7 +39,7 @@ class AssemblyLineCommand extends BaseCommand
                 // 执行模式
                 'mode'          => \mix\task\TaskExecutor::MODE_ASSEMBLY_LINE,
                 // 左进程数
-                'leftProcess'   => 1,
+                'leftProcess'   => 1, // 一次性执行，只能为1
                 // 中进程数
                 'centerProcess' => 100,
                 // 右进程数

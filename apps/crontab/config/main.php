@@ -16,6 +16,7 @@ return [
         'clear exec'        => ['Clear', 'Exec'],
         'assemblyline exec' => ['AssemblyLine', 'Exec'],
         'push exec'         => ['Push', 'Exec'],
+        'acquisition exec'  => ['Acquisition', 'Exec'],
 
     ],
 

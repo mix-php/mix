@@ -68,12 +68,14 @@ class AcquisitionCommand extends BaseCommand
     // 中进程启动事件回调函数
     public function onCenterStart(CenterProcess $worker)
     {
+        // 进程编号，可根据该编号为进程设置不同的任务
+        $number = $worker->number;
         // 循环执行任务
         for ($j = 0; $j < 16000; $j++) {
             // 采集消息
             // ...
             $data = '';
-            // 将消息推送给中进程去入库，push有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
+            // 将消息推送给右进程去入库，push有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
             $worker->push($data);
         }
     }
