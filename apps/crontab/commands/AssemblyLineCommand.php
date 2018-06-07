@@ -30,7 +30,7 @@ class AssemblyLineCommand extends BaseCommand
      */
     public function getTaskService()
     {
-        return \Mix::createObject(
+        return create_object(
             [
                 // 类路径
                 'class'         => 'mix\task\TaskExecutor',
