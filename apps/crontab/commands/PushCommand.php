@@ -71,15 +71,15 @@ class PushCommand extends BaseCommand
             // 将消息推送给中进程去处理，push有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
             $worker->push($item);
         }
-        // 结束任务
+        // 完成任务
         $worker->finish();
     }
 
     // 中进程启动事件回调函数
     public function onCenterStart(CenterProcess $worker)
     {
-        // 保持任务执行状态，循环结束后当前进程会退出，主进程会重启一个新进程继续执行任务，这样做是为了避免长时间执行内存溢出
-        for ($j = 0; $j < 16000; $j++) {
+        // 保持任务执行状态，定时任务只能使用 while (true) 保持执行状态
+        while (true) {
             // 从进程消息队列中抢占一条消息
             $data = $worker->pop();
             if (empty($data)) {
@@ -91,7 +91,7 @@ class PushCommand extends BaseCommand
                 // ...
             } catch (\Exception $e) {
                 // 回退数据到消息队列
-                $worker->fallback($data);
+                $worker->rollback($data);
                 // 休息一会，避免 CPU 出现 100%
                 sleep(1);
                 // 抛出错误

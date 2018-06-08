@@ -99,7 +99,7 @@ class AssemblyLineCommand extends BaseCommand
                 $worker->push($data);
             } catch (\Exception $e) {
                 // 回退数据到消息队列
-                $worker->fallback($data);
+                $worker->rollback($data);
                 // 休息一会，避免 cpu 出现 100%
                 sleep(1);
                 // 抛出错误
@@ -125,7 +125,7 @@ class AssemblyLineCommand extends BaseCommand
                 // ...
             } catch (\Exception $e) {
                 // 回退数据到消息队列
-                $worker->fallback($data);
+                $worker->rollback($data);
                 // 休息一会，避免 cpu 出现 100%
                 sleep(1);
                 // 抛出错误
