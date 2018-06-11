@@ -40,7 +40,7 @@ class PushCommand extends BaseCommand
                 // 执行模式
                 'mode'          => \mix\task\TaskExecutor::MODE_PUSH,
                 // 左进程数
-                'leftProcess'   => 1, // 一次性执行，只能为1
+                'leftProcess'   => 1, // 定时任务类型，如果不为1，底层为自动调整为1
                 // 中进程数
                 'centerProcess' => 5,
                 // POP退出等待时间 (秒)
@@ -77,7 +77,7 @@ class PushCommand extends BaseCommand
             // 完成任务
             $worker->finish();
         } catch (\Exception $e) {
-            // 休息一会，避免 cpu 出现 100%
+            // 休息一会，避免 CPU 出现 100%
             sleep(1);
             // 抛出错误
             throw $e;

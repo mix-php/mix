@@ -44,7 +44,7 @@ class SingleCommand extends BaseCommand
         } catch (\Exception $e) {
             // 处理异常
             Error::handleException($e);
-            // 休息一会，避免 cpu 出现 100%
+            // 休息一会，避免 CPU 出现 100%
             sleep(1);
             // 重建流程
             $this->startWork();
