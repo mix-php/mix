@@ -35,6 +35,8 @@ class PushCommand extends BaseCommand
                 'class'         => 'mix\task\TaskExecutor',
                 // 服务名称
                 'name'          => "mix-crontab: {$this->programName}",
+                // 执行类型
+                'type'          => \mix\task\TaskExecutor::TYPE_CRONTAB,
                 // 执行模式
                 'mode'          => \mix\task\TaskExecutor::MODE_PUSH,
                 // 左进程数
@@ -64,15 +66,22 @@ class PushCommand extends BaseCommand
     // 左进程启动事件回调函数
     public function onLeftStart(LeftProcess $worker)
     {
-        // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
-        $tableModel = new \apps\common\models\TableModel();
-        // 取出数据一行一行推送给中进程
-        foreach ($tableModel->getAll() as $item) {
-            // 将消息推送给中进程去处理，push有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
-            $worker->push($item);
+        try {
+            // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
+            $tableModel = new \apps\common\models\TableModel();
+            // 取出数据一行一行推送给中进程
+            foreach ($tableModel->getAll() as $item) {
+                // 将消息推送给中进程去处理，push有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
+                $worker->push($item);
+            }
+            // 完成任务
+            $worker->finish();
+        } catch (\Exception $e) {
+            // 休息一会，避免 cpu 出现 100%
+            sleep(1);
+            // 抛出错误
+            throw $e;
         }
-        // 完成任务
-        $worker->finish();
     }
 
     // 中进程启动事件回调函数
