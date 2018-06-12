@@ -44,7 +44,7 @@ class PushCommand extends BaseCommand
                 // 中进程数
                 'centerProcess' => 5,
                 // POP退出等待时间 (秒)
-                'popExitWait'   => 3,
+                'popExitWait'   => 5,
             ]
         );
     }
@@ -74,8 +74,6 @@ class PushCommand extends BaseCommand
                 // 将消息推送给中进程去处理，push有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
                 $worker->push($item);
             }
-            // 完成任务
-            $worker->finish();
         } catch (\Exception $e) {
             // 休息一会，避免 CPU 出现 100%
             sleep(1);
