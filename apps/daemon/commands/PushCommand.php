@@ -45,8 +45,8 @@ class PushCommand extends BaseCommand
                 'leftProcess'   => 1,
                 // 中进程数
                 'centerProcess' => 5,
-                // POP退出等待时间 (秒)
-                'popExitWait'   => 5,
+                // 任务超时时间 (秒)
+                'timeout'       => 5,
             ]
         );
     }

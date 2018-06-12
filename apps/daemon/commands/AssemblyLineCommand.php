@@ -48,8 +48,8 @@ class AssemblyLineCommand extends BaseCommand
                 'centerProcess' => 5,
                 // 右进程数
                 'rightProcess'  => 1,
-                // POP退出等待时间 (秒)
-                'popExitWait'   => 5,
+                // 任务超时时间 (秒)
+                'timeout'       => 5,
             ]
         );
     }
