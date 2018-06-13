@@ -75,6 +75,8 @@ return [
             'class'  => 'mix\http\Error',
             // 输出格式
             'format' => mix\http\Error::FORMAT_HTML,
+            // 错误级别
+            'level'  => E_ALL,
         ],
 
         // 日志

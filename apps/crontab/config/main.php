@@ -38,6 +38,8 @@ return [
         'error'  => [
             // 类路径
             'class' => 'mix\console\Error',
+            // 错误级别
+            'level' => E_ALL,
         ],
 
         // 日志
