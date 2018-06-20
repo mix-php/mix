@@ -40,7 +40,7 @@ class PushCommand extends BaseCommand
                 // 执行模式
                 'mode'          => \mix\task\TaskExecutor::MODE_PUSH,
                 // 左进程数
-                'leftProcess'   => 1, // 定时任务类型，如果不为1，底层为自动调整为1
+                'leftProcess'   => 1, // 定时任务类型，如果不为1，底层将自动调整为1
                 // 中进程数
                 'centerProcess' => 5,
                 // 任务超时时间 (秒)
