@@ -7,9 +7,9 @@
 <p align="center">高性能 • 轻量级 • 命令行</p>
 
 <p align="center">
-<img src="https://img.shields.io/badge/downloads-6.9k-green.svg">
+<img src="https://img.shields.io/badge/downloads-18.6k-green.svg">
 <img src="https://img.shields.io/badge/platform-linux%20%7C%20win%20%7C%20osx-lightgrey.svg">
-<img src="https://img.shields.io/badge/size-238%20KB-green.svg">
+<img src="https://img.shields.io/badge/size-160%20KB-green.svg">
 </p>
 
 ## MixPHP 是什么
