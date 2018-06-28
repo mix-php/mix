@@ -59,10 +59,14 @@ class BaseCommand extends Command
     }
 
     // 停止
-    public function actionStop()
+    public function actionStop($restart = false)
     {
         if ($pid = ProcessHelper::readPidFile($this->pidFile)) {
-            ProcessHelper::kill($pid);
+            if (!$restart) {
+                ProcessHelper::kill($pid);
+            } else {
+                ProcessHelper::kill($pid, SIGUSR1);
+            }
             while (ProcessHelper::isRunning($pid)) {
                 // 等待进程退出
                 usleep(100000);
@@ -78,7 +82,7 @@ class BaseCommand extends Command
     // 重启
     public function actionRestart()
     {
-        $this->actionStop();
+        $this->actionStop(true);
         $this->actionStart();
         // 返回退出码
         return ExitCode::OK;
