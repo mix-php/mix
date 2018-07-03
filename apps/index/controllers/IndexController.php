@@ -15,7 +15,7 @@ class IndexController extends Controller
     // 默认动作
     public function actionIndex()
     {
-        return Env::get();
+        return 'Hello, World!';
     }
 
 }
