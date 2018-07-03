@@ -1,7 +1,8 @@
 <?php
 
+use mix\base\Env;
+
 // Console应用配置
-$database = require __DIR__ . '/../../common/config/database.php';
 return [
 
     // 基础路径
@@ -59,27 +60,35 @@ return [
         ],
 
         // 数据库
-        'rdb'    => array_merge(
-            $database['mysql'],
-            [
-                // 类路径
-                'class'     => 'mix\client\PDO',
-                // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
-                'attribute' => [
-                    // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
-                    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-                ],
-            ]
-        ),
+        'rdb'    => [
+            // 类路径
+            'class'     => 'mix\client\PDO',
+            // 数据源格式
+            'dsn'       => Env::get('RDB_DNS'),
+            // 数据库用户名
+            'username'  => Env::get('RDB_USERNAME'),
+            // 数据库密码
+            'password'  => Env::get('RDB_PASSWORD'),
+            // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
+            'attribute' => [
+                // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
+                \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+            ],
+        ],
 
         // redis
-        'redis'  => array_merge(
-            $database['redis'],
-            [
-                // 类路径
-                'class' => 'mix\client\Redis',
-            ]
-        ),
+        'redis'  => [
+            // 类路径
+            'class'    => 'mix\client\Redis',
+            // 主机
+            'host'     => Env::get('REDIS_HOST'),
+            // 端口
+            'port'     => Env::get('REDIS_PORT'),
+            // 数据库
+            'database' => Env::get('REDIS_DATABASE'),
+            // 密码
+            'password' => Env::get('REDIS_PASSWORD'),
+        ],
 
     ],
 

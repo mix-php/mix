@@ -2,6 +2,7 @@
 
 namespace apps\index\controllers;
 
+use mix\base\Env;
 use mix\http\Controller;
 
 /**
@@ -14,7 +15,7 @@ class IndexController extends Controller
     // 默认动作
     public function actionIndex()
     {
-        return 'Hello World' . PHP_EOL;
+        return Env::get();
     }
 
 }

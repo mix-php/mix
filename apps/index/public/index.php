@@ -2,10 +2,9 @@
 
 // web入口文件
 
-define('MIX_DEBUG', true);
-define('MIX_ENV', 'dev');
-
 require __DIR__ . '/../../../vendor/autoload.php';
+
+mix\base\Env::load(__DIR__ . '/../../../.env');
 
 $config = require __DIR__ . '/../config/main_compatible.php';
 (new mix\http\Application($config))->run();

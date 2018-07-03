@@ -3,10 +3,9 @@
 
 // console入口文件
 
-define('MIX_DEBUG', true);
-define('MIX_ENV', 'dev');
-
 require __DIR__ . '/../vendor/autoload.php';
+
+mix\base\Env::load(__DIR__ . '/../.env');
 
 $config   = require __DIR__ . '/../apps/httpd/config/main.php';
 $exitCode = (new mix\console\Application($config))->run();
