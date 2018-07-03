@@ -2,7 +2,6 @@
 
 namespace apps\index\controllers;
 
-use mix\base\Env;
 use mix\http\Controller;
 
 /**

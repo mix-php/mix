@@ -68,6 +68,8 @@ return [
             'maxFileSize' => 0,
             // 换行符
             'newline'     => PHP_EOL,
+            // 在写入时加独占锁
+            'writeLock'   => false,
         ],
 
         // 数据库
