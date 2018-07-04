@@ -101,13 +101,18 @@ return [
             // 类路径
             'class'         => 'mix\http\Token',
             // 保存处理者
-            'saveHandler'   => array_merge(
-                $database['redis'],
-                [
-                    // 类路径
-                    'class' => 'mix\client\Redis',
-                ]
-            ),
+            'saveHandler'   => [
+                // 类路径
+                'class'    => 'mix\client\Redis',
+                // 主机
+                'host'     => Env::get('REDIS_HOST'),
+                // 端口
+                'port'     => Env::get('REDIS_PORT'),
+                // 数据库
+                'database' => Env::get('REDIS_DATABASE'),
+                // 密码
+                'password' => Env::get('REDIS_PASSWORD'),
+            ],
             // 保存的Key前缀
             'saveKeyPrefix' => 'MIXTKID:',
             // 有效期
@@ -121,13 +126,18 @@ return [
             // 类路径
             'class'         => 'mix\http\Session',
             // 保存处理者
-            'saveHandler'   => array_merge(
-                $database['redis'],
-                [
-                    // 类路径
-                    'class' => 'mix\client\Redis',
-                ]
-            ),
+            'saveHandler'   => [
+                // 类路径
+                'class'    => 'mix\client\Redis',
+                // 主机
+                'host'     => Env::get('REDIS_HOST'),
+                // 端口
+                'port'     => Env::get('REDIS_PORT'),
+                // 数据库
+                'database' => Env::get('REDIS_DATABASE'),
+                // 密码
+                'password' => Env::get('REDIS_PASSWORD'),
+            ],
             // 保存的Key前缀
             'saveKeyPrefix' => 'MIXSSID:',
             // 生存时间
