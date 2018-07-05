@@ -1,7 +1,5 @@
 <?php
 
-use mix\base\Env;
-
 // mix-httpd 下运行的 Web 应用配置
 return [
 
@@ -105,13 +103,13 @@ return [
                 // 类路径
                 'class'    => 'mix\client\Redis',
                 // 主机
-                'host'     => Env::get('REDIS_HOST'),
+                'host'     => env('REDIS_HOST'),
                 // 端口
-                'port'     => Env::get('REDIS_PORT'),
+                'port'     => env('REDIS_PORT'),
                 // 数据库
-                'database' => Env::get('REDIS_DATABASE'),
+                'database' => env('REDIS_DATABASE'),
                 // 密码
-                'password' => Env::get('REDIS_PASSWORD'),
+                'password' => env('REDIS_PASSWORD'),
             ],
             // 保存的Key前缀
             'saveKeyPrefix' => 'MIXTKID:',
@@ -130,13 +128,13 @@ return [
                 // 类路径
                 'class'    => 'mix\client\Redis',
                 // 主机
-                'host'     => Env::get('REDIS_HOST'),
+                'host'     => env('REDIS_HOST'),
                 // 端口
-                'port'     => Env::get('REDIS_PORT'),
+                'port'     => env('REDIS_PORT'),
                 // 数据库
-                'database' => Env::get('REDIS_DATABASE'),
+                'database' => env('REDIS_DATABASE'),
                 // 密码
-                'password' => Env::get('REDIS_PASSWORD'),
+                'password' => env('REDIS_PASSWORD'),
             ],
             // 保存的Key前缀
             'saveKeyPrefix' => 'MIXSSID:',
@@ -167,11 +165,11 @@ return [
             // 类路径
             'class'     => 'mix\client\PDO',
             // 数据源格式
-            'dsn'       => Env::get('RDB_DNS'),
+            'dsn'       => env('RDB_DNS'),
             // 数据库用户名
-            'username'  => Env::get('RDB_USERNAME'),
+            'username'  => env('RDB_USERNAME'),
             // 数据库密码
-            'password'  => Env::get('RDB_PASSWORD'),
+            'password'  => env('RDB_PASSWORD'),
             // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
             'attribute' => [
                 // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
@@ -184,13 +182,13 @@ return [
             // 类路径
             'class'    => 'mix\client\Redis',
             // 主机
-            'host'     => Env::get('REDIS_HOST'),
+            'host'     => env('REDIS_HOST'),
             // 端口
-            'port'     => Env::get('REDIS_PORT'),
+            'port'     => env('REDIS_PORT'),
             // 数据库
-            'database' => Env::get('REDIS_DATABASE'),
+            'database' => env('REDIS_DATABASE'),
             // 密码
-            'password' => Env::get('REDIS_PASSWORD'),
+            'password' => env('REDIS_PASSWORD'),
         ],
 
     ],
