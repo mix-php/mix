@@ -77,7 +77,7 @@ return [
             'port'         => 9501,
 
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
-            'setting'      => [
+            'settings'      => [
                 // 连接处理线程数
                 'reactor_num' => 8,
                 // 工作进程数
