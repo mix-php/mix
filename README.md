@@ -120,7 +120,7 @@ Hello World
 ## 技术交流
 
 作者微博：http://weibo.com/onanying ，关注最新进展     
-官方QQ群：284806582，敲门暗号：phper
+官方QQ群：[284806582](http://shang.qq.com/wpa/qunwpa?idkey=b3a8618d3977cda4fed2363a666b081a31d89e3d31ab164497f53b72cf49968a)，敲门暗号：phper
 
 ## License
 
