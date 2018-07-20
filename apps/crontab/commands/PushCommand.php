@@ -6,7 +6,7 @@ use mix\console\ExitCode;
 use mix\facades\Input;
 use mix\task\CenterProcess;
 use mix\task\LeftProcess;
-use mix\task\TaskExecutor;
+use mix\task\ProcessPoolTaskExecutor;
 
 /**
  * 推送模式范例
@@ -25,20 +25,20 @@ class PushCommand extends BaseCommand
 
     /**
      * 获取服务
-     * @return TaskExecutor
+     * @return ProcessPoolTaskExecutor
      */
     public function getTaskService()
     {
         return create_object(
             [
                 // 类路径
-                'class'         => 'mix\task\TaskExecutor',
+                'class'         => 'mix\task\ProcessPoolTaskExecutor',
                 // 服务名称
                 'name'          => "mix-crontab: {$this->programName}",
                 // 执行类型
-                'type'          => \mix\task\TaskExecutor::TYPE_CRONTAB,
+                'type'          => \mix\task\ProcessPoolTaskExecutor::TYPE_CRONTAB,
                 // 执行模式
-                'mode'          => \mix\task\TaskExecutor::MODE_PUSH,
+                'mode'          => \mix\task\ProcessPoolTaskExecutor::MODE_PUSH,
                 // 左进程数
                 'leftProcess'   => 1, // 定时任务类型，如果不为1，底层将自动调整为1
                 // 中进程数

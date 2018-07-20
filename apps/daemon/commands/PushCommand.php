@@ -6,7 +6,7 @@ use mix\console\ExitCode;
 use mix\facades\Input;
 use mix\task\CenterProcess;
 use mix\task\LeftProcess;
-use mix\task\TaskExecutor;
+use mix\task\ProcessPoolTaskExecutor;
 
 /**
  * 推送模式范例
@@ -27,20 +27,20 @@ class PushCommand extends BaseCommand
 
     /**
      * 获取服务
-     * @return TaskExecutor
+     * @return ProcessPoolTaskExecutor
      */
     public function getTaskService()
     {
         return create_object(
             [
                 // 类路径
-                'class'         => 'mix\task\TaskExecutor',
+                'class'         => 'mix\task\ProcessPoolTaskExecutor',
                 // 服务名称
                 'name'          => "mix-daemon: {$this->programName}",
                 // 执行类型
-                'type'          => \mix\task\TaskExecutor::TYPE_DAEMON,
+                'type'          => \mix\task\ProcessPoolTaskExecutor::TYPE_DAEMON,
                 // 执行模式
-                'mode'          => \mix\task\TaskExecutor::MODE_PUSH,
+                'mode'          => \mix\task\ProcessPoolTaskExecutor::MODE_PUSH,
                 // 左进程数
                 'leftProcess'   => 1,
                 // 中进程数
@@ -78,7 +78,8 @@ class PushCommand extends BaseCommand
                 // 从消息队列中间件阻塞获取一条消息
                 $data = $queueModel->pop();
                 // 将消息推送给中进程去处理，push有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
-                $worker->push($data);
+                $worker->push($j+1);
+                sleep(10);
             }
         } catch (\Exception $e) {
             // 休息一会，避免 CPU 出现 100%
@@ -102,6 +103,7 @@ class PushCommand extends BaseCommand
             try {
                 // 处理消息，比如：发送短信、发送邮件、微信推送
                 // ...
+                var_dump($data);
             } catch (\Exception $e) {
                 // 回退数据到消息队列
                 $worker->rollback($data);
