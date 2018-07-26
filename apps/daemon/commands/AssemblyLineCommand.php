@@ -5,9 +5,7 @@ namespace apps\daemon\commands;
 use mix\console\ExitCode;
 use mix\facades\Input;
 use mix\task\CenterWorker;
-use mix\task\InputQueue;
 use mix\task\LeftWorker;
-use mix\task\OutputQueue;
 use mix\task\RightWorker;
 use mix\task\ProcessPoolTaskExecutor;
 
@@ -40,16 +38,16 @@ class AssemblyLineCommand extends BaseCommand
                 'class'         => 'mix\task\ProcessPoolTaskExecutor',
                 // 服务名称
                 'name'          => "mix-daemon: {$this->programName}",
-                // 执行类型
-                'type'          => \mix\task\ProcessPoolTaskExecutor::TYPE_DAEMON,
                 // 执行模式
-                'mode'          => \mix\task\ProcessPoolTaskExecutor::MODE_ASSEMBLY_LINE,
+                'mode'          => ProcessPoolTaskExecutor::MODE_ASSEMBLY_LINE | ProcessPoolTaskExecutor::MODE_DAEMON,
                 // 左进程数
                 'leftProcess'   => 1,
                 // 中进程数
                 'centerProcess' => 5,
                 // 右进程数
                 'rightProcess'  => 1,
+                // 最大执行次数
+                'maxExecutions' => 16000,
                 // 队列名称
                 'queueName'     => __FILE__,
             ]
@@ -78,12 +76,13 @@ class AssemblyLineCommand extends BaseCommand
     {
         // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
         $queueModel = new \apps\common\models\QueueModel();
-        // 保持任务执行状态，循环结束后当前进程会退出，主进程会重启一个新进程继续执行任务，这样做是为了避免长时间执行内存溢出
-        for ($j = 1; $j < 16000; $j++) {
+        // 通过循环保持任务执行状态
+        while (true) {
+            static $i = 1;
             // 从消息队列中间件阻塞获取一条消息
             //$data = $queueModel->pop();
             // 将消息推送给中进程去处理，push有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
-            $worker->send($j);
+            $worker->send($i++);
             usleep(1000);
         }
     }
