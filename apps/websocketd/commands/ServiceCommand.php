@@ -150,7 +150,7 @@ class ServiceCommand extends Command
                 if ($type == 'message') {
                     $webSocket->push($fd, $message);
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 // 处理异常
                 Error::handleException($e);
             }
@@ -170,7 +170,7 @@ class ServiceCommand extends Command
                 // 订阅该用户id的消息队列
                 $channels[] = 'emit_to_' . $userinfo['uid'];
                 call_user_func_array([$client, 'subscribe'], $channels);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 // 处理异常
                 Error::handleException($e);
                 // 关闭 WS 连接

@@ -41,7 +41,7 @@ class SingleCommand extends BaseCommand
     {
         try {
             $this->work();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // 处理异常
             Error::handleException($e);
             // 休息一会，避免 CPU 出现 100%
