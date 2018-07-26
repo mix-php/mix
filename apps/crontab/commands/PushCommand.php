@@ -68,18 +68,11 @@ class PushCommand extends BaseCommand
     {
         // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
         $tableModel = new \apps\common\models\TableModel();
-        // 取出数据一行一行推送给中进程
-        /*
+        // 取出全量数据一行一行推送给中进程去处理
         foreach ($tableModel->getAll() as $item) {
-            // 将消息推送给中进程去处理，push有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
+            // 将消息发送给中进程去处理，消息有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
             $worker->send($item);
         }
-        */
-
-        for ($i = 1; $i < 16000; $i++) {
-            $worker->send($i);
-        }
-
     }
 
     // 中进程消息事件回调函数
@@ -87,8 +80,6 @@ class PushCommand extends BaseCommand
     {
         // 处理消息，比如：发送短信、发送邮件、微信推送
         // ...
-        var_dump($data);
-        usleep(1000);
     }
 
 }

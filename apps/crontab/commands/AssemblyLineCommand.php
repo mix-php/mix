@@ -72,18 +72,11 @@ class AssemblyLineCommand extends BaseCommand
     {
         // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
         $tableModel = new \apps\common\models\TableModel();
-        // 取出数据一行一行推送给中进程
-        /*
+        // 取出全量数据一行一行推送给中进程去处理
         foreach ($tableModel->getAll() as $item) {
-            // 将消息推送给中进程去处理，push有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
+            // 将消息发送给中进程去处理，消息有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
             $worker->send($item);
         }
-        */
-        
-        for ($i = 1; $i < 16000; $i++) {
-            $worker->send($i);
-        }
-
     }
 
     // 中进程消息事件回调函数
@@ -91,18 +84,17 @@ class AssemblyLineCommand extends BaseCommand
     {
         // 对消息进行处理，比如：IP转换，经纬度转换等
         // ...
-        // 将处理完成的消息推送给右进程去处理，push有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
+        // 将处理完成的消息发送给右进程去处理，消息有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
         $worker->send($data);
-        usleep(10000);
     }
 
     // 右进程启动事件回调函数
     public function onRightMessage(RightWorker $worker, $data)
     {
+        // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
+        $tableModel = new \apps\common\models\TableModel();
         // 将处理完成的消息存入数据库
-        // ...
-        var_dump($data);
-        usleep(1000);
+        $tableModel->insert($data);
     }
 
 }

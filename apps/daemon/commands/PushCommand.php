@@ -74,12 +74,14 @@ class PushCommand extends BaseCommand
         $queueModel = new \apps\common\models\QueueModel();
         // 通过循环保持任务执行状态
         while (true) {
-            static $i = 1;
             // 从消息队列中间件阻塞获取一条消息
-            //$data = $queueModel->pop();
-            // 将消息推送给中进程去处理，push有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
-            $worker->send($i++);
-            usleep(1000);
+            $data = $queueModel->pop();
+            /**
+             * 将消息发送给中进程去处理，消息有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
+             * 发送方法内有信号判断处理，当接收到重启、停止信号会立即退出左进程
+             * 当发送的数据为空时，并不会触发 onCenterMessage，但可以触发信号判断处理，所以当 pop 为空时，请照常 send 给中进程。
+             */
+            $worker->send($data);
         }
     }
 
@@ -88,8 +90,6 @@ class PushCommand extends BaseCommand
     {
         // 处理消息，比如：发送短信、发送邮件、微信推送
         // ...
-        var_dump($data);
-        usleep(10000);
     }
 
 }
