@@ -77,17 +77,19 @@ return [
             'port'         => 9501,
 
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
-            'settings'      => [
+            'settings'     => [
+                // 开启协程
+                'enable_coroutine' => true,
                 // 连接处理线程数
-                'reactor_num' => 8,
+                'reactor_num'      => 1,
                 // 工作进程数
-                'worker_num'  => 8,
+                'worker_num'       => 1,
                 // 设置 worker 进程的最大任务数
-                'max_request' => 10000,
+                'max_request'      => 10000,
                 // PID 文件
-                'pid_file'    => '/var/run/mix-httpd.pid',
+                'pid_file'         => '/var/run/mix-httpd.pid',
                 // 日志文件路径
-                'log_file'    => '/tmp/mix-httpd.log',
+                'log_file'         => '/tmp/mix-httpd.log',
                 // 子进程运行用户
                 /* 'user'        => 'www', */
             ],

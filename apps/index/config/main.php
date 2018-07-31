@@ -4,19 +4,22 @@
 return [
 
     // 基础路径
-    'basePath'            => dirname(__DIR__) . DIRECTORY_SEPARATOR,
+    'basePath'                 => dirname(__DIR__) . DIRECTORY_SEPARATOR,
 
     // 控制器命名空间
-    'controllerNamespace' => 'apps\index\controllers',
+    'controllerNamespace'      => 'apps\index\controllers',
 
     // 中间件命名空间
-    'middlewareNamespace' => 'apps\index\middleware',
+    'middlewareNamespace'      => 'apps\index\middleware',
 
     // 全局中间件
-    'middleware'          => [],
+    'middleware'               => [],
+
+    // 协程间共享组件
+    'coroutineShareComponents' => ['route', 'error'],
 
     // 组件配置
-    'components'          => [
+    'components'               => [
 
         // 路由
         'route'    => [
@@ -194,7 +197,7 @@ return [
     ],
 
     // 对象配置
-    'objects'             => [
+    'objects'                  => [
 
     ],
 
