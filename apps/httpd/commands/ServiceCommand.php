@@ -52,9 +52,10 @@ class ServiceCommand extends Command
         }
         $server = app()->createObject('httpServer');
         if ($this->update) {
-            $server->settings['max_request'] = 1;
+            $server->setting['max_request'] = 1;
         }
-        $server->settings['daemonize'] = $this->daemon;
+        $server->setting['daemonize'] = $this->daemon;
+        $server->setting['worker_num'] = env('WORKER_NUM');
         $server->start();
         // 返回退出码
         return ExitCode::OK;
