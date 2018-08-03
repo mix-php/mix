@@ -8,6 +8,7 @@ use mix\task\CenterWorker;
 use mix\task\LeftWorker;
 use mix\task\ProcessPoolTaskExecutor;
 use mix\task\RightWorker;
+use mix\task\TaskExecutor;
 
 /**
  * 流水线模式范例
@@ -37,7 +38,7 @@ class AssemblyLineCommand extends BaseCommand
                 // 服务名称
                 'name'          => "mix-daemon: {$this->programName}",
                 // 执行模式
-                'mode'          => ProcessPoolTaskExecutor::MODE_ASSEMBLY_LINE,
+                'mode'          => TaskExecutor::MODE_ASSEMBLY_LINE,
                 // 左进程数
                 'leftProcess'   => 1,
                 // 中进程数
