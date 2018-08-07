@@ -1,6 +1,6 @@
 <?php
 
-// mix-httpd 下运行的 Web 应用配置
+// mix-httpd 下运行的 Web 应用配置（协程模式）
 return [
 
     // 基础路径

@@ -97,7 +97,7 @@ return [
             // 虚拟主机：运行在 Server 内的 Web 应用
             'virtualHosts' => [
                 // 默认主机
-                '*' => __DIR__ . '/../../index/config/main.php',
+                '*' => __DIR__ . '/../../index/config/main_coroutine.php',
             ],
 
         ],

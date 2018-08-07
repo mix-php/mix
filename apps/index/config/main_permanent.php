@@ -1,6 +1,6 @@
 <?php
 
-// Apache/PHP-FPM 传统环境下运行的 Web 应用配置（传统模式）
+// mix-httpd 下运行的 Web 应用配置（常驻内存模式）
 return [
 
     // 基础路径
@@ -40,13 +40,13 @@ return [
         // 请求
         'request'  => [
             // 类路径
-            'class' => 'mix\http\compatible\Request',
+            'class' => 'mix\http\Request',
         ],
 
         // 响应
         'response' => [
             // 类路径
-            'class'         => 'mix\http\compatible\Response',
+            'class'         => 'mix\http\Response',
             // 默认输出格式
             'defaultFormat' => mix\http\Response::FORMAT_HTML,
             // json
@@ -74,8 +74,6 @@ return [
             'class'  => 'mix\http\Error',
             // 输出格式
             'format' => mix\http\Error::FORMAT_HTML,
-            // 错误级别
-            'level'  => E_ALL,
         ],
 
         // 日志
