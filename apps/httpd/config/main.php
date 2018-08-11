@@ -63,8 +63,8 @@ return [
 
     ],
 
-    // 对象配置
-    'objects'          => [
+    // 类库配置
+    'libraries'          => [
 
         // HttpServer
         'httpServer' => [
