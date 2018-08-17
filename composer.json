@@ -23,11 +23,5 @@
     "psr-4": {
       "apps\\": "apps/"
     }
-  },
-  "repositories": {
-    "packagist": {
-      "type": "composer",
-      "url": "https://packagist.phpcomposer.com"
-    }
   }
 }
