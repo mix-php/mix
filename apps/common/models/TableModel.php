@@ -2,7 +2,7 @@
 
 namespace apps\common\models;
 
-use mix\facades\RDB;
+use mix\facades\PDO;
 
 /**
  * Index 表单模型类
@@ -19,14 +19,14 @@ class TableModel
     // 操作数据库
     public function insert($data)
     {
-        $success = RDB::insert(self::TABLE, $data);
-        return $success ? RDB::getLastInsertId() : false;
+        $success = PDO::insert(self::TABLE, $data);
+        return $success ? PDO::getLastInsertId() : false;
     }
 
     // 获取全部记录
     public function getAll()
     {
-        return RDB::createCommand("SELECT * FROM `" . self::TABLE . "`")->queryAll();
+        return PDO::createCommand("SELECT * FROM `" . self::TABLE . "`")->queryAll();
     }
 
 }
