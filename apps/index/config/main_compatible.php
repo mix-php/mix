@@ -1,6 +1,6 @@
 <?php
 
-// Apache/PHP-FPM 传统环境下运行的 Web 应用配置（传统模式）
+// Apache/PHP-FPM 传统环境下运行的 HTTP 服务配置（传统模式）
 return [
 
     // 基础路径

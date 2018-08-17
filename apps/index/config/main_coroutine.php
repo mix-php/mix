@@ -1,6 +1,6 @@
 <?php
 
-// mix-httpd 下运行的 Web 应用配置（协程模式）
+// mix-httpd 下运行的 HTTP 服务配置（协程模式）
 return [
 
     // 基础路径
@@ -19,7 +19,7 @@ return [
     'components'          => [
 
         // 路由
-        'route'           => [
+        'route'      => [
             // 类路径
             'class'          => 'mix\http\Route',
             // 默认变量规则
@@ -38,13 +38,13 @@ return [
         ],
 
         // 请求
-        'request'         => [
+        'request'    => [
             // 类路径
             'class' => 'mix\http\Request',
         ],
 
         // 响应
-        'response'        => [
+        'response'   => [
             // 类路径
             'class'         => 'mix\http\Response',
             // 默认输出格式
@@ -69,7 +69,7 @@ return [
         ],
 
         // 错误
-        'error'           => [
+        'error'      => [
             // 类路径
             'class'  => 'mix\http\Error',
             // 输出格式
@@ -77,7 +77,7 @@ return [
         ],
 
         // 日志
-        'log'             => [
+        'log'        => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -203,10 +203,11 @@ return [
 
          */
 
-  /*      // redis
-        'redis'           => [
+
+        // redis
+        'mysql'      => [
             // 类路径
-            'class'    => 'mix\coroutine\Redis',
+            'class'    => 'mix\coroutine\MySQL',
             // 主机
             'host'     => env('REDIS_HOST'),
             // 端口
@@ -218,24 +219,26 @@ return [
             // 连接池
             'pool'     => [
                 // 组件路径
-                'component' => 'redis.container',
+                'component' => 'redis.pool',
             ],
         ],
 
         // 连接池
-        'redis.container' => [
+        'redis.pool' => [
             // 类路径
-            'class' => 'mix\coroutine\PoolManager',
+            'class'       => 'mix\coroutine\PoolManager',
             // 最小连接数
-            'min'   => 5,
+            'min'         => 5,
             // 最大连接数
-            'max'   => 20,
-        ],*/
+            'max'         => 15,
+            // 生存时间
+            'maxLifetime' => 3600,
+        ],
 
     ],
 
     // 类库配置
-    'libraries'             => [
+    'libraries'           => [
 
     ],
 

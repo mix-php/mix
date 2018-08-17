@@ -1,6 +1,6 @@
 <?php
 
-// mix-httpd 下运行的 Web 应用配置（常驻内存模式）
+// mix-httpd 下运行的 HTTP 服务配置（常驻模式）
 return [
 
     // 基础路径
@@ -161,7 +161,7 @@ return [
         ],
 
         // 数据库
-        'rdb'      => [
+        'pdo'      => [
             // 类路径
             'class'     => 'mix\client\PDO',
             // 数据源格式
