@@ -155,20 +155,20 @@ return [
     ],
 
     // 类库配置
-    'libraries'          => [
+    'libraries'        => [
 
         // WebSocketServer
         'webSocketServer' => [
 
             // 类路径
-            'class'   => 'mix\websocket\WebSocketServer',
+            'class'    => 'mix\websocket\WebSocketServer',
             // 主机
-            'host'    => 'localhost',
+            'host'     => 'localhost',
             // 端口
-            'port'    => 9502,
+            'port'     => 9502,
 
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
-            'setting' => [
+            'settings' => [
                 // 连接处理线程数
                 'reactor_num'   => 8,
                 // 工作进程数
