@@ -4,7 +4,7 @@
 return [
 
     // 基础路径
-    'basePath'         => dirname(__DIR__) . DIRECTORY_SEPARATOR,
+    'basePath'         => dirname(__DIR__),
 
     // 命令命名空间
     'commandNamespace' => 'apps\daemon\commands',
@@ -104,7 +104,7 @@ return [
     ],
 
     // 类库配置
-    'libraries'          => [
+    'libraries'        => [
 
     ],
 

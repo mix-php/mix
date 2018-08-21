@@ -4,7 +4,7 @@
 return [
 
     // 基础路径
-    'basePath'            => dirname(__DIR__) . DIRECTORY_SEPARATOR,
+    'basePath'            => dirname(__DIR__),
 
     // 控制器命名空间
     'controllerNamespace' => 'apps\index\controllers',
@@ -196,7 +196,7 @@ return [
     ],
 
     // 类库配置
-    'libraries'             => [
+    'libraries'           => [
 
     ],
 

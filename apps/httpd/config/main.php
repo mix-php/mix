@@ -4,7 +4,7 @@
 return [
 
     // 基础路径
-    'basePath'         => dirname(__DIR__) . DIRECTORY_SEPARATOR,
+    'basePath'         => dirname(__DIR__),
 
     // 命令命名空间
     'commandNamespace' => 'apps\httpd\commands',
@@ -64,7 +64,7 @@ return [
     ],
 
     // 类库配置
-    'libraries'          => [
+    'libraries'        => [
 
         // HttpServer
         'httpServer' => [
@@ -79,7 +79,7 @@ return [
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
             'settings'     => [
                 // 开启协程
-                'enable_coroutine' => true,
+                'enable_coroutine' => false,
                 // 连接处理线程数
                 'reactor_num'      => 1,
                 // 工作进程数
@@ -97,7 +97,7 @@ return [
             // 虚拟主机：运行在 Server 内的 Web 应用
             'virtualHosts' => [
                 // 默认主机
-                '*' => __DIR__ . '/../../index/config/main_coroutine.php',
+                '*' => __DIR__ . '/../../index/config/main_permanent.php',
             ],
 
         ],
