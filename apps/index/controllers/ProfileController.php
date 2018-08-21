@@ -7,8 +7,10 @@ use mix\http\Controller;
 class ProfileController extends Controller
 {
 
+    // 布局
     public $layout = 'main';
 
+    // 默认动作
     public function actionIndex()
     {
         $data = [

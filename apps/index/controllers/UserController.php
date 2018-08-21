@@ -9,6 +9,7 @@ use mix\http\Controller;
 class UserController extends Controller
 {
 
+    // 新增用户
     public function actionCreate()
     {
         app()->response->format = \mix\http\Response::FORMAT_JSON;
