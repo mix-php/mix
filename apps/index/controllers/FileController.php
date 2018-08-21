@@ -23,7 +23,7 @@ class FileController extends Controller
         }
 
         // 保存文件
-        $filename = app()->getPublicPath() . '/uploads/' . date('Ymd') . '/' . $model->file->getRandomName();
+        $filename = app()->getPublicPath() . '/uploads/' . date('Ymd') . '/' . $model->file->getRandomFileName();
         $model->file->saveAs($filename);
 
         // 响应
