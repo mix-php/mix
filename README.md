@@ -65,6 +65,8 @@ MixPHP开发指南：http://doc.mixphp.cn
 
 推荐使用 [composer](https://www.phpcomposer.com/) 安装。
 
+> 最近国内 composer 镜像不更新了，导致框架与核心版本不匹配的问题，请使用一键下载脚本安装。
+
 ```shell
 composer create-project mixstart/mixphp --prefer-dist
 ```
