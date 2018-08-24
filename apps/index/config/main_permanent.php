@@ -88,10 +88,6 @@ return [
             'logRotate'   => mix\base\Log::ROTATE_DAY,
             // 最大文件尺寸
             'maxFileSize' => 0,
-            // 换行符
-            'newline'     => PHP_EOL,
-            // 在写入时加独占锁
-            'writeLock'   => false,
         ],
 
         // Token
