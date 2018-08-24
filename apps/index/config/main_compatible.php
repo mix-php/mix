@@ -163,11 +163,11 @@ return [
         ],
 
         // 数据库
-        'rdb'      => [
+        'pdo'      => [
             // 类路径
             'class'     => 'mix\client\PDO',
             // 数据源格式
-            'dsn'       => env('RDB_DNS'),
+            'dsn'       => env('RDB_DSN'),
             // 数据库用户名
             'username'  => env('RDB_USERNAME'),
             // 数据库密码
