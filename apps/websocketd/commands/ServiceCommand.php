@@ -2,11 +2,13 @@
 
 namespace apps\websocketd\commands;
 
+use mix\async\Redis;
 use mix\console\Command;
 use mix\console\ExitCode;
 use mix\facades\Error;
 use mix\facades\Output;
 use mix\helpers\ProcessHelper;
+use mix\websocket\WebSocketServer;
 
 /**
  * Service 命令
@@ -56,7 +58,7 @@ class ServiceCommand extends Command
             ProcessHelper::daemon();
         }
         // 创建服务
-        $server = app()->createObject('webSocketServer');
+        $server = WebSocketServer::newInstance('webSocketServer');
         $server->on('Open', [$this, 'onOpen']);
         $server->on('Message', [$this, 'onMessage']);
         $server->on('Close', [$this, 'onClose']);
@@ -137,7 +139,7 @@ class ServiceCommand extends Command
         ];
 
         // 异步订阅
-        $redis = app()->createObject('asyncRedis');
+        $redis = Redis::newInstance('asyncRedis');
         $redis->on('Message', function (\Swoole\Redis $client, $result) use ($webSocket, $fd) {
             try {
                 // 错误处理
