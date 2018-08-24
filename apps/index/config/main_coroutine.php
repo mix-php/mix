@@ -19,7 +19,7 @@ return [
     'components'          => [
 
         // 路由
-        'route'      => [
+        'route'                => [
             // 类路径
             'class'          => 'mix\http\Route',
             // 默认变量规则
@@ -38,13 +38,13 @@ return [
         ],
 
         // 请求
-        'request'    => [
+        'request'              => [
             // 类路径
             'class' => 'mix\http\Request',
         ],
 
         // 响应
-        'response'   => [
+        'response'             => [
             // 类路径
             'class'         => 'mix\http\Response',
             // 默认输出格式
@@ -69,7 +69,7 @@ return [
         ],
 
         // 错误
-        'error'      => [
+        'error'                => [
             // 类路径
             'class'  => 'mix\http\Error',
             // 输出格式
@@ -77,7 +77,7 @@ return [
         ],
 
         // 日志
-        'log'        => [
+        'log'                  => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -201,28 +201,28 @@ return [
 
 
         // redis
-        'mysql'      => [
+        'redis'                => [
             // 类路径
-            'class'    => 'mix\coroutine\MySQL',
+            'class'          => 'mix\coroutine\Redis',
             // 主机
-            'host'     => env('REDIS_HOST'),
+            'host'           => env('REDIS_HOST'),
             // 端口
-            'port'     => env('REDIS_PORT'),
+            'port'           => env('REDIS_PORT'),
             // 数据库
-            'database' => env('REDIS_DATABASE'),
+            'database'       => env('REDIS_DATABASE'),
             // 密码
-            'password' => env('REDIS_PASSWORD'),
+            'password'       => env('REDIS_PASSWORD'),
             // 连接池
-            'pool'     => [
+            'connectionPool' => [
                 // 组件路径
-                'component' => 'redis.pool',
+                'component' => 'redis.connectionPool',
             ],
         ],
 
         // 连接池
-        'redis.pool' => [
+        'redis.connectionPool' => [
             // 类路径
-            'class'       => 'mix\coroutine\PoolManager',
+            'class'       => 'mix\coroutine\ConnectionPool',
             // 最小连接数
             'min'         => 5,
             // 最大连接数
