@@ -6,7 +6,6 @@ use mix\console\Command;
 use mix\console\ExitCode;
 use mix\facades\Output;
 use mix\helpers\ProcessHelper;
-use mix\http\HttpServer;
 
 /**
  * Service 命令
@@ -51,7 +50,7 @@ class ServiceCommand extends Command
             Output::writeln("mix-httpd is running, PID : {$pid}.");
             return ExitCode::UNSPECIFIED_ERROR;
         }
-        $server = HttpServer::newInstance('httpServer');
+        $server = \mix\http\HttpServer::newInstanceByConfig('httpServer');
         if ($this->update) {
             $server->settings['max_request'] = 1;
         }
