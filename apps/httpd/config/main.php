@@ -90,7 +90,7 @@ return [
                 /* 'user'        => 'www', */
             ],
 
-            // 虚拟主机：运行在 Server 内的 Web 应用
+            // 虚拟主机：运行在服务器内的 HTTP 服务
             'virtualHosts' => [
                 // 默认主机
                 '*' => __DIR__ . '/../../index/config/main_permanent.php',

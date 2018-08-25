@@ -176,10 +176,12 @@ return [
             'httponly'      => false,
         ],
 
+         */
+
         // 数据库
-        'rdb'       => [
+        'pdo'                  => [
             // 类路径
-            'class'          => 'mix\coroutine\Mysql',
+            'class'          => 'mix\coroutine\PDO',
             // 数据源格式
             'dsn'            => env('RDB_DSN'),
             // 数据库用户名
@@ -188,17 +190,22 @@ return [
             'password'       => env('RDB_PASSWORD'),
             // 连接池
             'connectionPool' => [
-                // 类路径
-                'class' => 'mix\coroutine\PoolManager',
-                // 最小连接数
-                'min'   => 5,
-                // 最大连接数
-                'max'   => 20,
+                // 组件路径
+                'component' => 'pdo.connectionPool',
             ],
         ],
 
-         */
-
+        // 连接池
+        'pdo.connectionPool'   => [
+            // 类路径
+            'class'       => 'mix\coroutine\ConnectionPool',
+            // 最小连接数
+            'min'         => 5,
+            // 最大连接数
+            'max'         => 2000,
+            // 生存时间
+            'maxLifetime' => 59,
+        ],
 
         // redis
         'redis'                => [
@@ -226,9 +233,9 @@ return [
             // 最小连接数
             'min'         => 5,
             // 最大连接数
-            'max'         => 15,
+            'max'         => 2000,
             // 生存时间
-            'maxLifetime' => 3600,
+            'maxLifetime' => 59,
         ],
 
     ],
