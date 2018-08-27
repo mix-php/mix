@@ -27,8 +27,6 @@ return [
         'single restart' => ['Single', 'Restart'],
         'single status'  => ['Single', 'Status'],
 
-        'coroutine start' => ['Coroutine', 'Start'],
-
     ],
 
     // 组件配置

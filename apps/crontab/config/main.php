@@ -15,6 +15,7 @@ return [
         'assemblyline exec' => ['AssemblyLine', 'Exec'],
         'push exec'         => ['Push', 'Exec'],
         'clear exec'        => ['Clear', 'Exec'],
+        'coroutine start'   => ['Coroutine', 'Start'],
 
     ],
 
