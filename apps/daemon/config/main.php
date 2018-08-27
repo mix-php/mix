@@ -33,19 +33,19 @@ return [
     'components'       => [
 
         // 输入
-        'input'              => [
+        'input'                => [
             // 类路径
             'class' => 'mix\console\Input',
         ],
 
         // 输出
-        'output'             => [
+        'output'               => [
             // 类路径
             'class' => 'mix\console\Output',
         ],
 
         // 错误
-        'error'              => [
+        'error'                => [
             // 类路径
             'class' => 'mix\console\Error',
             // 错误级别
@@ -53,7 +53,7 @@ return [
         ],
 
         // 日志
-        'log'                => [
+        'log'                  => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -67,7 +67,7 @@ return [
         ],
 
         // 数据库
-        'rdb'                => [
+        'rdb'                  => [
             // 类路径
             'class'     => 'mix\client\PDOPersistent',
             // 数据源格式
@@ -84,7 +84,7 @@ return [
         ],
 
         // redis
-        'redis'              => [
+        'redis'                => [
             // 类路径
             'class'    => 'mix\client\RedisPersistent',
             // 主机
@@ -98,15 +98,27 @@ return [
         ],
 
         // 连接池
-        'pdo.connectionPool' => [
+        'pdo.connectionPool'   => [
             // 类路径
             'class'       => 'mix\coroutine\ConnectionPool',
             // 最小连接数
             'min'         => 5,
             // 最大连接数
-            'max'         => 2000,
+            'max'         => 500,
             // 生存时间
-            'maxLifetime' => 59,
+            'maxLifetime' => 3600,
+        ],
+
+        // 连接池
+        'redis.connectionPool' => [
+            // 类路径
+            'class'       => 'mix\coroutine\ConnectionPool',
+            // 最小连接数
+            'min'         => 5,
+            // 最大连接数
+            'max'         => 500,
+            // 生存时间
+            'maxLifetime' => 3600,
         ],
 
     ],
@@ -115,7 +127,7 @@ return [
     'libraries'        => [
 
         // 数据库
-        'pdo' => [
+        'pdo'   => [
             // 类路径
             'class'          => 'mix\coroutine\PDO',
             // 数据源格式
@@ -128,6 +140,25 @@ return [
             'connectionPool' => [
                 // 组件路径
                 'component' => 'pdo.connectionPool',
+            ],
+        ],
+
+        // redis
+        'redis' => [
+            // 类路径
+            'class'          => 'mix\coroutine\Redis',
+            // 主机
+            'host'           => env('REDIS_HOST'),
+            // 端口
+            'port'           => env('REDIS_PORT'),
+            // 数据库
+            'database'       => env('REDIS_DATABASE'),
+            // 密码
+            'password'       => env('REDIS_PASSWORD'),
+            // 连接池
+            'connectionPool' => [
+                // 组件路径
+                'component' => 'redis.connectionPool',
             ],
         ],
 

@@ -39,6 +39,7 @@ class CoroutineCommand extends BaseCommand
     // 执行
     public function exec()
     {
+        // 并行查询数据
         tgo(function () {
             $time = time();
 
@@ -47,10 +48,12 @@ class CoroutineCommand extends BaseCommand
             var_dump($chan->pop());
             var_dump($chan2->pop());
 
+            // 输出 time: 2，说明两次查询是并行执行的
             Output::writeln('time: ' . (time() - $time));
         });
     }
 
+    // 查询数据
     public function foo()
     {
         $chan = new Channel();
@@ -62,6 +65,7 @@ class CoroutineCommand extends BaseCommand
         return $chan;
     }
 
+    // 查询数据
     public function foo2()
     {
         $chan = new Channel();

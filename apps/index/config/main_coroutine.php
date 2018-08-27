@@ -202,9 +202,9 @@ return [
             // 最小连接数
             'min'         => 5,
             // 最大连接数
-            'max'         => 2000,
+            'max'         => 500,
             // 生存时间
-            'maxLifetime' => 59,
+            'maxLifetime' => 3600,
         ],
 
         // redis
@@ -233,9 +233,9 @@ return [
             // 最小连接数
             'min'         => 5,
             // 最大连接数
-            'max'         => 2000,
+            'max'         => 500,
             // 生存时间
-            'maxLifetime' => 59,
+            'maxLifetime' => 3600,
         ],
 
     ],

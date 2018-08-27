@@ -15,7 +15,7 @@ return [
         'assemblyline exec' => ['AssemblyLine', 'Exec'],
         'push exec'         => ['Push', 'Exec'],
         'clear exec'        => ['Clear', 'Exec'],
-        'coroutine start'   => ['Coroutine', 'Start'],
+        'coroutine start'   => ['Coroutine', 'Exec'],
 
     ],
 
@@ -23,19 +23,19 @@ return [
     'components'       => [
 
         // 输入
-        'input'  => [
+        'input'                => [
             // 类路径
             'class' => 'mix\console\Input',
         ],
 
         // 输出
-        'output' => [
+        'output'               => [
             // 类路径
             'class' => 'mix\console\Output',
         ],
 
         // 错误
-        'error'  => [
+        'error'                => [
             // 类路径
             'class' => 'mix\console\Error',
             // 错误级别
@@ -43,7 +43,7 @@ return [
         ],
 
         // 日志
-        'log'    => [
+        'log'                  => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -57,7 +57,7 @@ return [
         ],
 
         // 数据库
-        'rdb'    => [
+        'rdb'                  => [
             // 类路径
             'class'     => 'mix\client\PDO',
             // 数据源格式
@@ -74,7 +74,7 @@ return [
         ],
 
         // redis
-        'redis'  => [
+        'redis'                => [
             // 类路径
             'class'    => 'mix\client\Redis',
             // 主机
@@ -87,10 +87,70 @@ return [
             'password' => env('REDIS_PASSWORD'),
         ],
 
+        // 连接池
+        'pdo.connectionPool'   => [
+            // 类路径
+            'class'       => 'mix\coroutine\ConnectionPool',
+            // 最小连接数
+            'min'         => 5,
+            // 最大连接数
+            'max'         => 500,
+            // 生存时间
+            'maxLifetime' => 3600,
+        ],
+
+        // 连接池
+        'redis.connectionPool' => [
+            // 类路径
+            'class'       => 'mix\coroutine\ConnectionPool',
+            // 最小连接数
+            'min'         => 5,
+            // 最大连接数
+            'max'         => 500,
+            // 生存时间
+            'maxLifetime' => 3600,
+        ],
+
     ],
 
     // 类库配置
     'libraries'        => [
+
+        // 数据库
+        'pdo'   => [
+            // 类路径
+            'class'          => 'mix\coroutine\PDO',
+            // 数据源格式
+            'dsn'            => env('RDB_DSN'),
+            // 数据库用户名
+            'username'       => env('RDB_USERNAME'),
+            // 数据库密码
+            'password'       => env('RDB_PASSWORD'),
+            // 连接池
+            'connectionPool' => [
+                // 组件路径
+                'component' => 'pdo.connectionPool',
+            ],
+        ],
+
+        // redis
+        'redis' => [
+            // 类路径
+            'class'          => 'mix\coroutine\Redis',
+            // 主机
+            'host'           => env('REDIS_HOST'),
+            // 端口
+            'port'           => env('REDIS_PORT'),
+            // 数据库
+            'database'       => env('REDIS_DATABASE'),
+            // 密码
+            'password'       => env('REDIS_PASSWORD'),
+            // 连接池
+            'connectionPool' => [
+                // 组件路径
+                'component' => 'redis.connectionPool',
+            ],
+        ],
 
     ],
 
