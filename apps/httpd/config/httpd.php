@@ -75,7 +75,7 @@ return [
                 // 端口
                 'port'   => 9501,
                 // 配置文件
-                'config' => __DIR__ . '/../../httpd/config/http_permanent.php',
+                'config' => __DIR__ . '/http_permanent.php',
             ],
 
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
