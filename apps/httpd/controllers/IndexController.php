@@ -1,6 +1,6 @@
 <?php
 
-namespace apps\index\controllers;
+namespace apps\httpd\controllers;
 
 use mix\http\Controller;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace apps\index\middleware;
+namespace apps\httpd\middleware;
 
 /**
  * 前置中间件

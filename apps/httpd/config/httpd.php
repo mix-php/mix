@@ -66,14 +66,20 @@ return [
         'httpServer' => [
 
             // 类路径
-            'class'        => 'mix\http\HttpServer',
-            // 主机
-            'host'         => '127.0.0.1',
-            // 端口
-            'port'         => 9501,
+            'class'       => 'mix\http\HttpServer',
+
+            // 虚拟主机：运行在服务器内的 HTTP 服务
+            'virtualHost' => [
+                // 主机
+                'host'   => '127.0.0.1',
+                // 端口
+                'port'   => 9501,
+                // 配置文件
+                'config' => __DIR__ . '/../../httpd/config/http_permanent.php',
+            ],
 
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
-            'settings'     => [
+            'settings'    => [
                 // 开启协程
                 'enable_coroutine' => false,
                 // 连接处理线程数
@@ -88,12 +94,6 @@ return [
                 'log_file'         => '/tmp/mix-httpd.log',
                 // 子进程运行用户
                 /* 'user'        => 'www', */
-            ],
-
-            // 虚拟主机：运行在服务器内的 HTTP 服务
-            'virtualHosts' => [
-                // 默认主机
-                '*' => __DIR__ . '/../../index/config/main_permanent.php',
             ],
 
         ],

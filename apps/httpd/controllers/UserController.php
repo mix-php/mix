@@ -1,8 +1,8 @@
 <?php
 
-namespace apps\index\controllers;
+namespace apps\httpd\controllers;
 
-use apps\index\models\UserForm;
+use apps\httpd\models\UserForm;
 use mix\facades\Request;
 use mix\http\Controller;
 

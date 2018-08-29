@@ -1,16 +1,16 @@
 <?php
 
-// mix-httpd 下运行的 HTTP 服务配置（协程模式）
+// Apache/PHP-FPM 传统环境下运行的 HTTP 服务配置（传统模式）
 return [
 
     // 基础路径
     'basePath'            => dirname(__DIR__),
 
     // 控制器命名空间
-    'controllerNamespace' => 'apps\index\controllers',
+    'controllerNamespace' => 'apps\httpd\controllers',
 
     // 中间件命名空间
-    'middlewareNamespace' => 'apps\index\middleware',
+    'middlewareNamespace' => 'apps\httpd\middleware',
 
     // 全局中间件
     'middleware'          => [],
@@ -19,7 +19,7 @@ return [
     'components'          => [
 
         // 路由
-        'route'                => [
+        'route'    => [
             // 类路径
             'class'          => 'mix\http\Route',
             // 默认变量规则
@@ -38,15 +38,15 @@ return [
         ],
 
         // 请求
-        'request'              => [
+        'request'  => [
             // 类路径
-            'class' => 'mix\http\Request',
+            'class' => 'mix\http\compatible\Request',
         ],
 
         // 响应
-        'response'             => [
+        'response' => [
             // 类路径
-            'class'         => 'mix\http\Response',
+            'class'         => 'mix\http\compatible\Response',
             // 默认输出格式
             'defaultFormat' => mix\http\Response::FORMAT_HTML,
             // json
@@ -69,15 +69,17 @@ return [
         ],
 
         // 错误
-        'error'                => [
+        'error'    => [
             // 类路径
             'class'  => 'mix\http\Error',
             // 输出格式
             'format' => mix\http\Error::FORMAT_HTML,
+            // 错误级别
+            'level'  => E_ALL,
         ],
 
         // 日志
-        'log'                  => [
+        'log'      => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -90,33 +92,22 @@ return [
             'maxFileSize' => 0,
         ],
 
-        /*
-
         // Token
-        'token'     => [
+        'token'    => [
             // 类路径
             'class'         => 'mix\http\Token',
             // 保存处理者
             'saveHandler'   => [
                 // 类路径
-                'class'          => 'mix\coroutine\Redis',
+                'class'    => 'mix\client\Redis',
                 // 主机
-                'host'           => env('REDIS_HOST'),
+                'host'     => env('REDIS_HOST'),
                 // 端口
-                'port'           => env('REDIS_PORT'),
+                'port'     => env('REDIS_PORT'),
                 // 数据库
-                'database'       => env('REDIS_DATABASE'),
+                'database' => env('REDIS_DATABASE'),
                 // 密码
-                'password'       => env('REDIS_PASSWORD'),
-                // 连接池
-                'connectionPool' => [
-                    // 类路径
-                    'class' => 'mix\coroutine\PoolManager',
-                    // 最小连接数
-                    'min'   => 5,
-                    // 最大连接数
-                    'max'   => 20,
-                ],
+                'password' => env('REDIS_PASSWORD'),
             ],
             // 保存的Key前缀
             'saveKeyPrefix' => 'MIXTKID:',
@@ -127,30 +118,21 @@ return [
         ],
 
         // Session
-        'session'   => [
+        'session'  => [
             // 类路径
             'class'         => 'mix\http\Session',
             // 保存处理者
             'saveHandler'   => [
                 // 类路径
-                'class'          => 'mix\coroutine\Redis',
+                'class'    => 'mix\client\Redis',
                 // 主机
-                'host'           => env('REDIS_HOST'),
+                'host'     => env('REDIS_HOST'),
                 // 端口
-                'port'           => env('REDIS_PORT'),
+                'port'     => env('REDIS_PORT'),
                 // 数据库
-                'database'       => env('REDIS_DATABASE'),
+                'database' => env('REDIS_DATABASE'),
                 // 密码
-                'password'       => env('REDIS_PASSWORD'),
-                // 连接池
-                'connectionPool' => [
-                    // 类路径
-                    'class' => 'mix\coroutine\PoolManager',
-                    // 最小连接数
-                    'min'   => 5,
-                    // 最大连接数
-                    'max'   => 20,
-                ],
+                'password' => env('REDIS_PASSWORD'),
             ],
             // 保存的Key前缀
             'saveKeyPrefix' => 'MIXSSID:',
@@ -161,81 +143,50 @@ return [
         ],
 
         // Cookie
-        'cookie'    => [
+        'cookie'   => [
             // 类路径
-            'class'         => 'mix\http\Cookie',
+            'class'    => 'mix\http\Cookie',
             // 过期时间
-            'expire'        => 31536000,
+            'expire'   => 31536000,
             // 有效的服务器路径
-            'path'          => '/',
+            'path'     => '/',
             // 有效域名/子域名
-            'domain'        => '',
+            'domain'   => '',
             // 仅通过安全的 HTTPS 连接传给客户端
-            'secure'        => false,
+            'secure'   => false,
             // 仅可通过 HTTP 协议访问
-            'httponly'      => false,
+            'httponly' => false,
         ],
-
-         */
 
         // 数据库
-        'pdo'                  => [
+        'pdo'      => [
             // 类路径
-            'class'          => 'mix\coroutine\PDO',
+            'class'     => 'mix\client\PDO',
             // 数据源格式
-            'dsn'            => env('RDB_DSN'),
+            'dsn'       => env('RDB_DSN'),
             // 数据库用户名
-            'username'       => env('RDB_USERNAME'),
+            'username'  => env('RDB_USERNAME'),
             // 数据库密码
-            'password'       => env('RDB_PASSWORD'),
-            // 连接池
-            'connectionPool' => [
-                // 组件路径
-                'component' => 'pdo.connectionPool',
+            'password'  => env('RDB_PASSWORD'),
+            // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
+            'attribute' => [
+                // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
+                \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
             ],
-        ],
-
-        // 连接池
-        'pdo.connectionPool'   => [
-            // 类路径
-            'class'       => 'mix\coroutine\ConnectionPool',
-            // 最小连接数
-            'min'         => 5,
-            // 最大连接数
-            'max'         => 500,
-            // 生存时间
-            'maxLifetime' => 3600,
         ],
 
         // redis
-        'redis'                => [
+        'redis'    => [
             // 类路径
-            'class'          => 'mix\coroutine\Redis',
+            'class'    => 'mix\client\Redis',
             // 主机
-            'host'           => env('REDIS_HOST'),
+            'host'     => env('REDIS_HOST'),
             // 端口
-            'port'           => env('REDIS_PORT'),
+            'port'     => env('REDIS_PORT'),
             // 数据库
-            'database'       => env('REDIS_DATABASE'),
+            'database' => env('REDIS_DATABASE'),
             // 密码
-            'password'       => env('REDIS_PASSWORD'),
-            // 连接池
-            'connectionPool' => [
-                // 组件路径
-                'component' => 'redis.connectionPool',
-            ],
-        ],
-
-        // 连接池
-        'redis.connectionPool' => [
-            // 类路径
-            'class'       => 'mix\coroutine\ConnectionPool',
-            // 最小连接数
-            'min'         => 5,
-            // 最大连接数
-            'max'         => 500,
-            // 生存时间
-            'maxLifetime' => 3600,
+            'password' => env('REDIS_PASSWORD'),
         ],
 
     ],

@@ -7,6 +7,6 @@ require __DIR__ . '/../vendor/autoload.php';
 
 mix\base\Env::load(__DIR__ . '/../.env');
 
-$config   = require __DIR__ . '/../apps/httpd/config/main.php';
+$config   = require __DIR__ . '/../apps/httpd/config/httpd.php';
 $exitCode = (new mix\console\Application($config))->run();
 exit($exitCode);

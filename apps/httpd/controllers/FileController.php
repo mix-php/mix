@@ -1,8 +1,8 @@
 <?php
 
-namespace apps\index\controllers;
+namespace apps\httpd\controllers;
 
-use apps\index\models\FileForm;
+use apps\httpd\models\FileForm;
 use mix\facades\Request;
 use mix\http\Controller;
 
