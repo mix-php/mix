@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function getdir() {
+function lndir() {
     for element in `ls $1`
     do
         file=$1"/"$element
@@ -19,6 +19,6 @@ function getdir() {
 }
 
 dirname=$(cd `dirname $0`; pwd)
-getdir "$dirname/bin"
+lndir "$dirname/bin"
 
 echo "Successful install to \"/usr/local/bin\""
