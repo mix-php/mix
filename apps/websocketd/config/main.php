@@ -61,11 +61,11 @@ return [
             // 类路径
             'class'     => 'mix\client\PDOPersistent',
             // 数据源格式
-            'dsn'       => env('RDB_DSN'),
+            'dsn'       => env('DB_DSN'),
             // 数据库用户名
-            'username'  => env('RDB_USERNAME'),
+            'username'  => env('DB_USERNAME'),
             // 数据库密码
-            'password'  => env('RDB_PASSWORD'),
+            'password'  => env('DB_PASSWORD'),
             // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
             'attribute' => [
                 // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC

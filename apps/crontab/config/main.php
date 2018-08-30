@@ -23,19 +23,19 @@ return [
     'components'       => [
 
         // 输入
-        'input'                => [
+        'input'                              => [
             // 类路径
             'class' => 'mix\console\Input',
         ],
 
         // 输出
-        'output'               => [
+        'output'                             => [
             // 类路径
             'class' => 'mix\console\Output',
         ],
 
         // 错误
-        'error'                => [
+        'error'                              => [
             // 类路径
             'class' => 'mix\console\Error',
             // 错误级别
@@ -43,7 +43,7 @@ return [
         ],
 
         // 日志
-        'log'                  => [
+        'log'                                => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -56,41 +56,10 @@ return [
             'maxFileSize' => 0,
         ],
 
-        // 数据库
-        'rdb'                  => [
-            // 类路径
-            'class'     => 'mix\client\PDO',
-            // 数据源格式
-            'dsn'       => env('RDB_DSN'),
-            // 数据库用户名
-            'username'  => env('RDB_USERNAME'),
-            // 数据库密码
-            'password'  => env('RDB_PASSWORD'),
-            // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
-            'attribute' => [
-                // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
-                \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-            ],
-        ],
-
-        // redis
-        'redis'                => [
-            // 类路径
-            'class'    => 'mix\client\Redis',
-            // 主机
-            'host'     => env('REDIS_HOST'),
-            // 端口
-            'port'     => env('REDIS_PORT'),
-            // 数据库
-            'database' => env('REDIS_DATABASE'),
-            // 密码
-            'password' => env('REDIS_PASSWORD'),
-        ],
-
         // 连接池
-        'pdo.connectionPool'   => [
+        'db1.coroutine.pdo.connectionPool'   => [
             // 类路径
-            'class'       => 'mix\coroutine\ConnectionPool',
+            'class'       => 'mix\pool\ConnectionPool',
             // 最小连接数
             'min'         => 5,
             // 最大连接数
@@ -100,9 +69,9 @@ return [
         ],
 
         // 连接池
-        'redis.connectionPool' => [
+        'db1.coroutine.redis.connectionPool' => [
             // 类路径
-            'class'       => 'mix\coroutine\ConnectionPool',
+            'class'       => 'mix\pool\ConnectionPool',
             // 最小连接数
             'min'         => 5,
             // 最大连接数
@@ -117,26 +86,26 @@ return [
     'libraries'        => [
 
         // 数据库
-        'pdo'   => [
+        'db1.coroutine.pdo'    => [
             // 类路径
-            'class'          => 'mix\coroutine\PDO',
+            'class'          => 'mix\client\PDOCoroutine',
             // 数据源格式
-            'dsn'            => env('RDB_DSN'),
+            'dsn'            => env('DB_DSN'),
             // 数据库用户名
-            'username'       => env('RDB_USERNAME'),
+            'username'       => env('DB_USERNAME'),
             // 数据库密码
-            'password'       => env('RDB_PASSWORD'),
+            'password'       => env('DB_PASSWORD'),
             // 连接池
             'connectionPool' => [
                 // 组件路径
-                'component' => 'pdo.connectionPool',
+                'component' => 'db1.coroutine.pdo.connectionPool',
             ],
         ],
 
         // redis
-        'redis' => [
+        'db1.coroutine.redis'  => [
             // 类路径
-            'class'          => 'mix\coroutine\Redis',
+            'class'          => 'mix\client\RedisCoroutine',
             // 主机
             'host'           => env('REDIS_HOST'),
             // 端口
@@ -148,8 +117,39 @@ return [
             // 连接池
             'connectionPool' => [
                 // 组件路径
-                'component' => 'redis.connectionPool',
+                'component' => 'db1.coroutine.redis.connectionPool',
             ],
+        ],
+
+        // 数据库
+        'db1.persistent.pdo'   => [
+            // 类路径
+            'class'     => 'mix\client\PDOPersistent',
+            // 数据源格式
+            'dsn'       => env('DB_DSN'),
+            // 数据库用户名
+            'username'  => env('DB_USERNAME'),
+            // 数据库密码
+            'password'  => env('DB_PASSWORD'),
+            // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
+            'attribute' => [
+                // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
+                \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+            ],
+        ],
+
+        // redis
+        'db1.persistent.redis' => [
+            // 类路径
+            'class'    => 'mix\client\RedisPersistent',
+            // 主机
+            'host'     => env('REDIS_HOST'),
+            // 端口
+            'port'     => env('REDIS_PORT'),
+            // 数据库
+            'database' => env('REDIS_DATABASE'),
+            // 密码
+            'password' => env('REDIS_PASSWORD'),
         ],
 
     ],

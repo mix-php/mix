@@ -19,7 +19,7 @@ return [
     'components'          => [
 
         // 路由
-        'route'                => [
+        'route'                    => [
             // 类路径
             'class'          => 'mix\http\Route',
             // 默认变量规则
@@ -38,13 +38,13 @@ return [
         ],
 
         // 请求
-        'request'              => [
+        'request'                  => [
             // 类路径
             'class' => 'mix\http\Request',
         ],
 
         // 响应
-        'response'             => [
+        'response'                 => [
             // 类路径
             'class'         => 'mix\http\Response',
             // 默认输出格式
@@ -69,7 +69,7 @@ return [
         ],
 
         // 错误
-        'error'                => [
+        'error'                    => [
             // 类路径
             'class'  => 'mix\http\Error',
             // 输出格式
@@ -77,7 +77,7 @@ return [
         ],
 
         // 日志
-        'log'                  => [
+        'log'                      => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -179,26 +179,26 @@ return [
          */
 
         // 数据库
-        'pdo'                  => [
+        'db1.pdo'                  => [
             // 类路径
-            'class'          => 'mix\coroutine\PDO',
+            'class'          => 'mix\client\PDOCoroutine',
             // 数据源格式
-            'dsn'            => env('RDB_DSN'),
+            'dsn'            => env('DB_DSN'),
             // 数据库用户名
-            'username'       => env('RDB_USERNAME'),
+            'username'       => env('DB_USERNAME'),
             // 数据库密码
-            'password'       => env('RDB_PASSWORD'),
+            'password'       => env('DB_PASSWORD'),
             // 连接池
             'connectionPool' => [
                 // 组件路径
-                'component' => 'pdo.connectionPool',
+                'component' => 'db1.pdo.connectionPool',
             ],
         ],
 
         // 连接池
-        'pdo.connectionPool'   => [
+        'db1.pdo.connectionPool'   => [
             // 类路径
-            'class'       => 'mix\coroutine\ConnectionPool',
+            'class'       => 'mix\pool\ConnectionPool',
             // 最小连接数
             'min'         => 5,
             // 最大连接数
@@ -208,9 +208,9 @@ return [
         ],
 
         // redis
-        'redis'                => [
+        'db1.redis'                => [
             // 类路径
-            'class'          => 'mix\coroutine\Redis',
+            'class'          => 'mix\client\RedisCoroutine',
             // 主机
             'host'           => env('REDIS_HOST'),
             // 端口
@@ -222,14 +222,14 @@ return [
             // 连接池
             'connectionPool' => [
                 // 组件路径
-                'component' => 'redis.connectionPool',
+                'component' => 'db1.redis.connectionPool',
             ],
         ],
 
         // 连接池
-        'redis.connectionPool' => [
+        'db1.redis.connectionPool' => [
             // 类路径
-            'class'       => 'mix\coroutine\ConnectionPool',
+            'class'       => 'mix\pool\ConnectionPool',
             // 最小连接数
             'min'         => 5,
             // 最大连接数

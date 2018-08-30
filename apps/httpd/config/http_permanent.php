@@ -19,7 +19,7 @@ return [
     'components'          => [
 
         // 路由
-        'route'    => [
+        'route'     => [
             // 类路径
             'class'          => 'mix\http\Route',
             // 默认变量规则
@@ -38,13 +38,13 @@ return [
         ],
 
         // 请求
-        'request'  => [
+        'request'   => [
             // 类路径
             'class' => 'mix\http\Request',
         ],
 
         // 响应
-        'response' => [
+        'response'  => [
             // 类路径
             'class'         => 'mix\http\Response',
             // 默认输出格式
@@ -69,7 +69,7 @@ return [
         ],
 
         // 错误
-        'error'    => [
+        'error'     => [
             // 类路径
             'class'  => 'mix\http\Error',
             // 输出格式
@@ -77,7 +77,7 @@ return [
         ],
 
         // 日志
-        'log'      => [
+        'log'       => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -91,7 +91,7 @@ return [
         ],
 
         // Token
-        'token'    => [
+        'token'     => [
             // 类路径
             'class'         => 'mix\http\Token',
             // 保存处理者
@@ -116,7 +116,7 @@ return [
         ],
 
         // Session
-        'session'  => [
+        'session'   => [
             // 类路径
             'class'         => 'mix\http\Session',
             // 保存处理者
@@ -141,7 +141,7 @@ return [
         ],
 
         // Cookie
-        'cookie'   => [
+        'cookie'    => [
             // 类路径
             'class'    => 'mix\http\Cookie',
             // 过期时间
@@ -157,15 +157,15 @@ return [
         ],
 
         // 数据库
-        'pdo'      => [
+        'db1.pdo'   => [
             // 类路径
             'class'     => 'mix\client\PDO',
             // 数据源格式
-            'dsn'       => env('RDB_DSN'),
+            'dsn'       => env('DB_DSN'),
             // 数据库用户名
-            'username'  => env('RDB_USERNAME'),
+            'username'  => env('DB_USERNAME'),
             // 数据库密码
-            'password'  => env('RDB_PASSWORD'),
+            'password'  => env('DB_PASSWORD'),
             // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
             'attribute' => [
                 // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
@@ -174,7 +174,7 @@ return [
         ],
 
         // redis
-        'redis'    => [
+        'db1.redis' => [
             // 类路径
             'class'    => 'mix\client\Redis',
             // 主机
