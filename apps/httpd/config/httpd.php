@@ -75,13 +75,13 @@ return [
                 // 端口
                 'port'   => 9501,
                 // 配置文件
-                'config' => __DIR__ . '/http_permanent.php',
+                'config' => __DIR__ . '/http_coroutine.php',
             ],
 
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
             'settings'    => [
                 // 开启协程
-                'enable_coroutine' => false,
+                'enable_coroutine' => true,
                 // 连接处理线程数
                 'reactor_num'      => 1,
                 // 工作进程数

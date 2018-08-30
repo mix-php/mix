@@ -1,6 +1,6 @@
 <?php
 
-namespace apps\common;
+namespace apps\common\facades;
 
 /**
  * RDB 门面类
