@@ -128,8 +128,6 @@ return [
             'min'         => 5,
             // 最大连接数
             'max'         => 50,
-            // 生存时间
-            'maxLifetime' => 3600,
         ],
 
         // Session
@@ -170,8 +168,6 @@ return [
             'min'         => 5,
             // 最大连接数
             'max'         => 50,
-            // 生存时间
-            'maxLifetime' => 3600,
         ],
 
         // Cookie
@@ -215,8 +211,6 @@ return [
             'min'         => 5,
             // 最大连接数
             'max'         => 50,
-            // 生存时间
-            'maxLifetime' => 3600,
         ],
 
         // redis
@@ -246,8 +240,6 @@ return [
             'min'         => 5,
             // 最大连接数
             'max'         => 50,
-            // 生存时间
-            'maxLifetime' => 3600,
         ],
 
     ],
