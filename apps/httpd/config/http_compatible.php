@@ -159,7 +159,7 @@ return [
         ],
 
         // 数据库
-        'db1.pdo'   => [
+        'config1.pdo'   => [
             // 类路径
             'class'     => 'mix\client\PDO',
             // 数据源格式
@@ -176,7 +176,7 @@ return [
         ],
 
         // redis
-        'db1.redis' => [
+        'config1.redis' => [
             // 类路径
             'class'    => 'mix\client\Redis',
             // 主机

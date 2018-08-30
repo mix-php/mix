@@ -16,7 +16,7 @@ class PDO extends \mix\facades\PDO
     public static function getInstances()
     {
         return [
-            'db1' => app('db1')->pdo,
+            'config1' => app('config1')->pdo,
         ];
     }
 
