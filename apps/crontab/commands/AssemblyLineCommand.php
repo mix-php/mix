@@ -2,6 +2,7 @@
 
 namespace apps\crontab\commands;
 
+use mix\client\PDOPersistent;
 use mix\console\ExitCode;
 use mix\facades\Input;
 use mix\task\CenterWorker;
@@ -15,6 +16,11 @@ use mix\task\RightWorker;
  */
 class AssemblyLineCommand extends BaseCommand
 {
+
+    /**
+     * @var \mix\client\PDOPersistent
+     */
+    public $pdo;
 
     // 初始化事件
     public function onInitialize()
@@ -60,7 +66,9 @@ class AssemblyLineCommand extends BaseCommand
         // 启动服务
         $service = $this->getTaskService();
         $service->on('LeftStart', [$this, 'onLeftStart']);
+        $service->on('CenterStart', [$this, 'onCenterStart']);
         $service->on('CenterMessage', [$this, 'onCenterMessage']);
+        $service->on('RightStart', [$this, 'onRightStart']);
         $service->on('RightMessage', [$this, 'onRightMessage']);
         $service->start();
         // 返回退出码
@@ -70,13 +78,20 @@ class AssemblyLineCommand extends BaseCommand
     // 左进程启动事件回调函数
     public function onLeftStart(LeftWorker $worker)
     {
-        // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
-        $tableModel = new \apps\common\models\TableModel();
+        // 模型内使用长连接客户端，这样会自动帮你维护连接不断线
+        $pdo    = PDOPersistent::newInstanceByConfig('config1.persistent.pdo');
+        $result = $pdo->createCommand("SELECT * FROM `table`")->queryAll();
         // 取出全量数据一行一行推送给中进程去处理
-        foreach ($tableModel->getAll() as $item) {
+        foreach ($result as $item) {
             // 将消息发送给中进程去处理，消息有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
             $worker->send($item);
         }
+    }
+
+    // 中进程启动事件回调函数
+    public function onCenterStart()
+    {
+        // 可以在这里实例化一些对象，供 onCenterMessage 中使用，这样就不需要重复实例化。
     }
 
     // 中进程消息事件回调函数
@@ -89,12 +104,17 @@ class AssemblyLineCommand extends BaseCommand
     }
 
     // 右进程启动事件回调函数
+    public function onRightStart()
+    {
+        // 可以在这里实例化一些对象，供 onRightMessage 中使用，这样就不需要重复实例化。
+        $this->pdo = PDOPersistent::newInstanceByConfig('config1.persistent.pdo');
+    }
+
+    // 右进程启动事件回调函数
     public function onRightMessage(RightWorker $worker, $data)
     {
-        // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
-        $tableModel = new \apps\common\models\TableModel();
         // 将处理完成的消息存入数据库
-        $tableModel->insert($data);
+        $this->pdo->insert('table', $data);
     }
 
 }
