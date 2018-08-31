@@ -187,7 +187,7 @@ return [
         ],
 
         // 数据库
-        'config1.pdo'                  => [
+        'pdo'                  => [
             // 类路径
             'class'          => 'mix\client\PDOCoroutine',
             // 数据源格式
@@ -199,12 +199,12 @@ return [
             // 连接池
             'connectionPool' => [
                 // 组件路径
-                'component' => 'config1.pdo.connectionPool',
+                'component' => 'pdo.connectionPool',
             ],
         ],
 
         // 连接池
-        'config1.pdo.connectionPool'   => [
+        'pdo.connectionPool'   => [
             // 类路径
             'class'       => 'mix\pool\ConnectionPool',
             // 最小连接数
@@ -214,7 +214,7 @@ return [
         ],
 
         // redis
-        'config1.redis'                => [
+        'redis'                => [
             // 类路径
             'class'          => 'mix\client\RedisCoroutine',
             // 主机
@@ -228,12 +228,12 @@ return [
             // 连接池
             'connectionPool' => [
                 // 组件路径
-                'component' => 'config1.redis.connectionPool',
+                'component' => 'redis.connectionPool',
             ],
         ],
 
         // 连接池
-        'config1.redis.connectionPool' => [
+        'redis.connectionPool' => [
             // 类路径
             'class'       => 'mix\pool\ConnectionPool',
             // 最小连接数

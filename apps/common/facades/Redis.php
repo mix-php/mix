@@ -16,7 +16,7 @@ class Redis extends \mix\facades\Redis
     public static function getInstances()
     {
         return [
-            'config1' => app('config1')->redis,
+            'default' => app()->redis,
         ];
     }
 
