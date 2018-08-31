@@ -154,12 +154,12 @@ return [
             ],
             // 保存的Key前缀
             'saveKeyPrefix'  => 'MIXSSID:',
-            // session键名
-            'name'           => 'mixssid',
             // 生存时间
             'maxLifetime'    => 7200,
+            // session键名
+            'name'           => 'mixssid',
             // 过期时间
-            'cookieExpires'  => 31536000,
+            'cookieExpires'  => 0,
             // 有效的服务器路径
             'cookiePath'     => '/',
             // 有效域名/子域名

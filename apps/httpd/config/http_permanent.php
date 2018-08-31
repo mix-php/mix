@@ -118,9 +118,9 @@ return [
         // Session
         'session'  => [
             // 类路径
-            'class'         => 'mix\http\Session',
+            'class'          => 'mix\http\Session',
             // 保存处理者
-            'saveHandler'   => [
+            'saveHandler'    => [
                 // 类路径
                 'class'    => 'mix\client\Redis',
                 // 主机
@@ -133,11 +133,21 @@ return [
                 'password' => env('REDIS_PASSWORD'),
             ],
             // 保存的Key前缀
-            'saveKeyPrefix' => 'MIXSSID:',
+            'saveKeyPrefix'  => 'MIXSSID:',
             // 生存时间
-            'expires'       => 7200,
+            'maxLifetime'    => 7200,
             // session键名
-            'name'          => 'mixssid',
+            'name'           => 'mixssid',
+            // 过期时间
+            'cookieExpires'  => 0,
+            // 有效的服务器路径
+            'cookiePath'     => '/',
+            // 有效域名/子域名
+            'cookieDomain'   => '',
+            // 仅通过安全的 HTTPS 连接传给客户端
+            'cookieSecure'   => false,
+            // 仅可通过 HTTP 协议访问
+            'cookieHttpOnly' => false,
         ],
 
         // Cookie
