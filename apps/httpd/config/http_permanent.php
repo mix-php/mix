@@ -19,7 +19,7 @@ return [
     'components'          => [
 
         // 路由
-        'route'     => [
+        'route'    => [
             // 类路径
             'class'          => 'mix\http\Route',
             // 默认变量规则
@@ -38,13 +38,13 @@ return [
         ],
 
         // 请求
-        'request'   => [
+        'request'  => [
             // 类路径
             'class' => 'mix\http\Request',
         ],
 
         // 响应
-        'response'  => [
+        'response' => [
             // 类路径
             'class'         => 'mix\http\Response',
             // 默认输出格式
@@ -69,7 +69,7 @@ return [
         ],
 
         // 错误
-        'error'     => [
+        'error'    => [
             // 类路径
             'class'  => 'mix\http\Error',
             // 输出格式
@@ -77,7 +77,7 @@ return [
         ],
 
         // 日志
-        'log'       => [
+        'log'      => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -91,7 +91,7 @@ return [
         ],
 
         // Token
-        'token'     => [
+        'token'    => [
             // 类路径
             'class'         => 'mix\http\Token',
             // 保存处理者
@@ -116,7 +116,7 @@ return [
         ],
 
         // Session
-        'session'   => [
+        'session'  => [
             // 类路径
             'class'         => 'mix\http\Session',
             // 保存处理者
@@ -141,11 +141,11 @@ return [
         ],
 
         // Cookie
-        'cookie'    => [
+        'cookie'   => [
             // 类路径
             'class'    => 'mix\http\Cookie',
             // 过期时间
-            'expire'   => 31536000,
+            'expires'  => 31536000,
             // 有效的服务器路径
             'path'     => '/',
             // 有效域名/子域名
@@ -153,11 +153,11 @@ return [
             // 仅通过安全的 HTTPS 连接传给客户端
             'secure'   => false,
             // 仅可通过 HTTP 协议访问
-            'httponly' => false,
+            'httpOnly' => false,
         ],
 
         // 数据库
-        'pdo'   => [
+        'pdo'      => [
             // 类路径
             'class'     => 'mix\client\PDO',
             // 数据源格式
@@ -174,7 +174,7 @@ return [
         ],
 
         // redis
-        'redis' => [
+        'redis'    => [
             // 类路径
             'class'    => 'mix\client\Redis',
             // 主机

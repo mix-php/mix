@@ -19,7 +19,7 @@ return [
     'components'          => [
 
         // 路由
-        'route'                        => [
+        'route'                  => [
             // 类路径
             'class'          => 'mix\http\Route',
             // 默认变量规则
@@ -38,13 +38,13 @@ return [
         ],
 
         // 请求
-        'request'                      => [
+        'request'                => [
             // 类路径
             'class' => 'mix\http\Request',
         ],
 
         // 响应
-        'response'                     => [
+        'response'               => [
             // 类路径
             'class'         => 'mix\http\Response',
             // 默认输出格式
@@ -69,7 +69,7 @@ return [
         ],
 
         // 错误
-        'error'                        => [
+        'error'                  => [
             // 类路径
             'class'  => 'mix\http\Error',
             // 输出格式
@@ -77,7 +77,7 @@ return [
         ],
 
         // 日志
-        'log'                          => [
+        'log'                    => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -91,7 +91,7 @@ return [
         ],
 
         // Token
-        'token'                        => [
+        'token'                  => [
             // 类路径
             'class'         => 'mix\http\Token',
             // 保存处理者
@@ -115,27 +115,27 @@ return [
             // 保存的Key前缀
             'saveKeyPrefix' => 'MIXTKID:',
             // 有效期
-            'expires'       => 604800,
+            'expiresIn'     => 604800,
             // token键名
             'name'          => 'access_token',
         ],
 
         // 连接池
-        'token.connectionPool'         => [
+        'token.connectionPool'   => [
             // 类路径
-            'class'       => 'mix\pool\ConnectionPool',
+            'class' => 'mix\pool\ConnectionPool',
             // 最小连接数
-            'min'         => 5,
+            'min'   => 5,
             // 最大连接数
-            'max'         => 50,
+            'max'   => 50,
         ],
 
         // Session
-        'session'                      => [
+        'session'                => [
             // 类路径
-            'class'         => 'mix\http\Session',
+            'class'          => 'mix\http\Session',
             // 保存处理者
-            'saveHandler'   => [
+            'saveHandler'    => [
                 // 类路径
                 'class'          => 'mix\client\RedisCoroutine',
                 // 主机
@@ -153,29 +153,39 @@ return [
                 ],
             ],
             // 保存的Key前缀
-            'saveKeyPrefix' => 'MIXSSID:',
-            // 生存时间
-            'expires'       => 7200,
+            'saveKeyPrefix'  => 'MIXSSID:',
             // session键名
-            'name'          => 'mixssid',
+            'name'           => 'mixssid',
+            // 生存时间
+            'maxLifetime'    => 7200,
+            // 过期时间
+            'cookieExpires'  => 31536000,
+            // 有效的服务器路径
+            'cookiePath'     => '/',
+            // 有效域名/子域名
+            'cookieDomain'   => '',
+            // 仅通过安全的 HTTPS 连接传给客户端
+            'cookieSecure'   => false,
+            // 仅可通过 HTTP 协议访问
+            'cookieHttpOnly' => false,
         ],
 
         // 连接池
-        'session.connectionPool'       => [
+        'session.connectionPool' => [
             // 类路径
-            'class'       => 'mix\pool\ConnectionPool',
+            'class' => 'mix\pool\ConnectionPool',
             // 最小连接数
-            'min'         => 5,
+            'min'   => 5,
             // 最大连接数
-            'max'         => 50,
+            'max'   => 50,
         ],
 
         // Cookie
-        'cookie'                       => [
+        'cookie'                 => [
             // 类路径
             'class'    => 'mix\http\Cookie',
             // 过期时间
-            'expire'   => 31536000,
+            'expires'  => 31536000,
             // 有效的服务器路径
             'path'     => '/',
             // 有效域名/子域名
@@ -183,11 +193,11 @@ return [
             // 仅通过安全的 HTTPS 连接传给客户端
             'secure'   => false,
             // 仅可通过 HTTP 协议访问
-            'httponly' => false,
+            'httpOnly' => false,
         ],
 
         // 数据库
-        'pdo'                  => [
+        'pdo'                    => [
             // 类路径
             'class'          => 'mix\client\PDOCoroutine',
             // 数据源格式
@@ -204,17 +214,17 @@ return [
         ],
 
         // 连接池
-        'pdo.connectionPool'   => [
+        'pdo.connectionPool'     => [
             // 类路径
-            'class'       => 'mix\pool\ConnectionPool',
+            'class' => 'mix\pool\ConnectionPool',
             // 最小连接数
-            'min'         => 5,
+            'min'   => 5,
             // 最大连接数
-            'max'         => 50,
+            'max'   => 50,
         ],
 
         // redis
-        'redis'                => [
+        'redis'                  => [
             // 类路径
             'class'          => 'mix\client\RedisCoroutine',
             // 主机
@@ -233,13 +243,13 @@ return [
         ],
 
         // 连接池
-        'redis.connectionPool' => [
+        'redis.connectionPool'   => [
             // 类路径
-            'class'       => 'mix\pool\ConnectionPool',
+            'class' => 'mix\pool\ConnectionPool',
             // 最小连接数
-            'min'         => 5,
+            'min'   => 5,
             // 最大连接数
-            'max'         => 50,
+            'max'   => 50,
         ],
 
     ],
