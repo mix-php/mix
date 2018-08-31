@@ -112,7 +112,7 @@ return [
             // 保存的Key前缀
             'saveKeyPrefix' => 'MIXTKID:',
             // 有效期
-            'expires'       => 604800,
+            'expiresIn'     => 604800,
             // token键名
             'name'          => 'access_token',
         ],
