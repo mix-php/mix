@@ -165,20 +165,26 @@ return [
 
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
             'settings' => [
+                // 开启协程
+                'enable_coroutine' => false,
                 // 连接处理线程数
-                'reactor_num'   => 8,
+                'reactor_num'      => 8,
                 // 工作进程数
-                'worker_num'    => 8,
-                // 设置 worker 进程的最大任务数
-                'max_request'   => 10000,
+                'worker_num'       => 8,
                 // 数据包分发策略
-                'dispatch_mode' => 2,
+                'dispatch_mode'    => 2,
                 // PID 文件
-                'pid_file'      => '/var/run/mix-websocketd.pid',
+                'pid_file'         => '/var/run/mix-websocketd.pid',
                 // 日志文件路径
-                'log_file'      => '/tmp/mix-websocketd.log',
+                'log_file'         => '/tmp/mix-websocketd.log',
                 // 子进程运行用户
                 /* 'user'        => 'www', */
+                // Worker进程的最大任务数
+                'max_request'      => 10000,
+                // 退出等待时间
+                'max_wait_time'    => 60,
+                // 异步安全重启
+                'reload_async'     => true,
             ],
 
         ],
