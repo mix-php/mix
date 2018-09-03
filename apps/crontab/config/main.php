@@ -15,7 +15,7 @@ return [
         'assemblyline exec' => ['AssemblyLine', 'Exec'],
         'push exec'         => ['Push', 'Exec'],
         'clear exec'        => ['Clear', 'Exec'],
-        'coroutine start'   => ['Coroutine', 'Exec'],
+        'coroutine exec'    => ['Coroutine', 'Exec'],
 
     ],
 
@@ -23,19 +23,19 @@ return [
     'components'       => [
 
         // 输入
-        'input'                              => [
+        'input'                          => [
             // 类路径
             'class' => 'mix\console\Input',
         ],
 
         // 输出
-        'output'                             => [
+        'output'                         => [
             // 类路径
             'class' => 'mix\console\Output',
         ],
 
         // 错误
-        'error'                              => [
+        'error'                          => [
             // 类路径
             'class' => 'mix\console\Error',
             // 错误级别
@@ -43,7 +43,7 @@ return [
         ],
 
         // 日志
-        'log'                                => [
+        'log'                            => [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
@@ -59,21 +59,21 @@ return [
         // 连接池
         'coroutine.pdo.connectionPool'   => [
             // 类路径
-            'class'       => 'mix\pool\ConnectionPool',
+            'class' => 'mix\pool\ConnectionPool',
             // 最小连接数
-            'min'         => 5,
+            'min'   => 5,
             // 最大连接数
-            'max'         => 50,
+            'max'   => 50,
         ],
 
         // 连接池
         'coroutine.redis.connectionPool' => [
             // 类路径
-            'class'       => 'mix\pool\ConnectionPool',
+            'class' => 'mix\pool\ConnectionPool',
             // 最小连接数
-            'min'         => 5,
+            'min'   => 5,
             // 最大连接数
-            'max'         => 50,
+            'max'   => 50,
         ],
 
     ],

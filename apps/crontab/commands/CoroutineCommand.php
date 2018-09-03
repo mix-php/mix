@@ -3,7 +3,7 @@
 namespace apps\crontab\commands;
 
 use mix\console\ExitCode;
-use mix\coroutine\PDO;
+use mix\client\PDOCoroutine;
 use mix\facades\Input;
 use mix\facades\Output;
 use Swoole\Coroutine\Channel;
@@ -58,7 +58,7 @@ class CoroutineCommand extends BaseCommand
     {
         $chan = new Channel();
         tgo(function () use ($chan) {
-            $pdo    = PDO::newInstanceByConfig('pdo');
+            $pdo    = PDOCoroutine::newInstanceByConfig('coroutine.pdo');
             $result = $pdo->createCommand('select sleep(2)')->queryAll();
             $chan->push($result);
         });
@@ -70,7 +70,7 @@ class CoroutineCommand extends BaseCommand
     {
         $chan = new Channel();
         tgo(function () use ($chan) {
-            $pdo    = PDO::newInstanceByConfig('pdo');
+            $pdo    = PDOCoroutine::newInstanceByConfig('coroutine.pdo');
             $result = $pdo->createCommand('select sleep(1)')->queryAll();
             $chan->push($result);
         });
