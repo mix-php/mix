@@ -108,7 +108,7 @@ return [
                 'password' => env('REDIS_PASSWORD'),
             ],
             // 保存的Key前缀
-            'saveKeyPrefix' => 'MIXTKID:',
+            'saveKeyPrefix' => 'TOKEN:',
             // 有效期
             'expiresIn'     => 604800,
             // token键名
@@ -133,11 +133,11 @@ return [
                 'password' => env('REDIS_PASSWORD'),
             ],
             // 保存的Key前缀
-            'saveKeyPrefix'  => 'MIXSSID:',
+            'saveKeyPrefix'  => 'SESSION:',
             // 生存时间
             'maxLifetime'    => 7200,
             // session键名
-            'name'           => 'mixssid',
+            'name'           => 'SessionID',
             // 过期时间
             'cookieExpires'  => 0,
             // 有效的服务器路径
