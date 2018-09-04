@@ -68,6 +68,15 @@ class PushCommand extends BaseCommand
         return ExitCode::OK;
     }
 
+    // 平滑重启
+    public function actionRestart()
+    {
+        $this->actionStop(true);
+        $this->actionStart();
+        // 返回退出码
+        return ExitCode::OK;
+    }
+
     // 左进程启动事件回调函数
     public function onLeftStart(LeftWorker $worker)
     {
