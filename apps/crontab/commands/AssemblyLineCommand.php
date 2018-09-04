@@ -75,7 +75,7 @@ class AssemblyLineCommand extends BaseCommand
         return ExitCode::OK;
     }
 
-    // 左进程启动事件回调函数
+    // 左进程启动事件
     public function onLeftStart(LeftWorker $worker)
     {
         // 模型内使用长连接客户端，这样会自动帮你维护连接不断线
@@ -88,13 +88,13 @@ class AssemblyLineCommand extends BaseCommand
         }
     }
 
-    // 中进程启动事件回调函数
-    public function onCenterStart()
+    // 中进程启动事件
+    public function onCenterStart(CenterWorker $worker)
     {
         // 可以在这里实例化一些对象，供 onCenterMessage 中使用，这样就不需要重复实例化。
     }
 
-    // 中进程消息事件回调函数
+    // 中进程消息事件
     public function onCenterMessage(CenterWorker $worker, $data)
     {
         // 对消息进行处理，比如：IP转换，经纬度转换等
@@ -103,14 +103,14 @@ class AssemblyLineCommand extends BaseCommand
         $worker->send($data);
     }
 
-    // 右进程启动事件回调函数
-    public function onRightStart()
+    // 右进程启动事件
+    public function onRightStart(RightWorker $worker)
     {
         // 可以在这里实例化一些对象，供 onRightMessage 中使用，这样就不需要重复实例化。
         $this->pdo = PDOPersistent::newInstanceByConfig('persistent.pdo');
     }
 
-    // 右进程启动事件回调函数
+    // 右进程消息事件
     public function onRightMessage(RightWorker $worker, $data)
     {
         // 将处理完成的消息存入数据库
