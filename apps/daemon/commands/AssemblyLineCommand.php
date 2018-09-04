@@ -2,6 +2,8 @@
 
 namespace apps\daemon\commands;
 
+use mix\client\PDOPersistent;
+use mix\client\RedisPersistent;
 use mix\console\ExitCode;
 use mix\facades\Input;
 use mix\task\CenterWorker;
@@ -15,6 +17,11 @@ use mix\task\ProcessPoolTaskExecutor;
  */
 class AssemblyLineCommand extends BaseCommand
 {
+
+    /**
+     * @var \mix\client\PDOPersistent
+     */
+    public $pdo;
 
     // 初始化事件
     public function onInitialize()
@@ -64,22 +71,27 @@ class AssemblyLineCommand extends BaseCommand
         // 启动服务
         $service = $this->getTaskService();
         $service->on('LeftStart', [$this, 'onLeftStart']);
+        $service->on('CenterStart', [$this, 'onCenterStart']);
         $service->on('CenterMessage', [$this, 'onCenterMessage']);
+        $service->on('RightStart', [$this, 'onRightStart']);
         $service->on('RightMessage', [$this, 'onRightMessage']);
         $service->start();
         // 返回退出码
         return ExitCode::OK;
     }
 
-    // 左进程启动事件回调函数
+    // 左进程启动事件
     public function onLeftStart(LeftWorker $worker)
     {
-        // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
-        $queueModel = new \apps\common\models\QueueModel();
+        // 使用长连接客户端，这样会自动帮你维护连接不断线
+        $redis = RedisPersistent::newInstanceByConfig('persistent.redis');
         // 通过循环保持任务执行状态
         while (true) {
             // 从消息队列中间件阻塞获取一条消息
-            $data = $queueModel->pop();
+            $data = $redis->brpop('KEY', 30);
+            if (!empty($value)) {
+                $data = unserialize(array_pop($data));
+            }
             /**
              * 将消息发送给中进程去处理，消息有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
              * 发送方法内有信号判断处理，当接收到重启、停止信号会立即退出左进程
@@ -89,7 +101,13 @@ class AssemblyLineCommand extends BaseCommand
         }
     }
 
-    // 中进程消息事件回调函数
+    // 中进程启动事件
+    public function onCenterStart(CenterWorker $worker)
+    {
+        // 可以在这里实例化一些对象，供 onCenterMessage 中使用，这样就不需要重复实例化。
+    }
+
+    // 中进程消息事件
     public function onCenterMessage(CenterWorker $worker, $data)
     {
         // 对消息进行处理，比如：IP转换，经纬度转换等
@@ -98,13 +116,18 @@ class AssemblyLineCommand extends BaseCommand
         $worker->send($data);
     }
 
-    // 右进程启动事件回调函数
+    // 右进程启动事件
+    public function onRightStart(RightWorker $worker)
+    {
+        // 可以在这里实例化一些对象，供 onRightMessage 中使用，这样就不需要重复实例化。
+        $this->pdo = PDOPersistent::newInstanceByConfig('persistent.pdo');
+    }
+
+    // 右进程启动事件
     public function onRightMessage(RightWorker $worker, $data)
     {
-        // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
-        $tableModel = new \apps\common\models\TableModel();
         // 将处理完成的消息存入数据库
-        $tableModel->insert($data);
+        $this->pdo->insert('table', $data);
     }
 
 }

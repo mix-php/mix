@@ -78,7 +78,7 @@ class AssemblyLineCommand extends BaseCommand
     // 左进程启动事件
     public function onLeftStart(LeftWorker $worker)
     {
-        // 模型内使用长连接客户端，这样会自动帮你维护连接不断线
+        // 使用长连接客户端，这样会自动帮你维护连接不断线
         $pdo    = PDOPersistent::newInstanceByConfig('persistent.pdo');
         $result = $pdo->createCommand("SELECT * FROM `table`")->queryAll();
         // 取出全量数据一行一行推送给中进程去处理

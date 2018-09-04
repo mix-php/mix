@@ -2,6 +2,7 @@
 
 namespace apps\daemon\commands;
 
+use mix\client\RedisPersistent;
 use mix\console\ExitCode;
 use mix\facades\Input;
 use mix\task\CenterWorker;
@@ -70,12 +71,15 @@ class PushCommand extends BaseCommand
     // 左进程启动事件回调函数
     public function onLeftStart(LeftWorker $worker)
     {
-        // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
-        $queueModel = new \apps\common\models\QueueModel();
+        // 使用长连接客户端，这样会自动帮你维护连接不断线
+        $redis = RedisPersistent::newInstanceByConfig('persistent.redis');
         // 通过循环保持任务执行状态
         while (true) {
             // 从消息队列中间件阻塞获取一条消息
-            $data = $queueModel->pop();
+            $data = $redis->brpop('KEY', 30);
+            if (!empty($value)) {
+                $data = unserialize(array_pop($data));
+            }
             /**
              * 将消息发送给中进程去处理，消息有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
              * 发送方法内有信号判断处理，当接收到重启、停止信号会立即退出左进程
@@ -83,6 +87,12 @@ class PushCommand extends BaseCommand
              */
             $worker->send($data);
         }
+    }
+
+    // 中进程启动事件
+    public function onCenterStart(CenterWorker $worker)
+    {
+        // 可以在这里实例化一些对象，供 onCenterMessage 中使用，这样就不需要重复实例化。
     }
 
     // 中进程消息事件回调函数

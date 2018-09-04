@@ -57,13 +57,14 @@ class PushCommand extends BaseCommand
         // 启动服务
         $service = $this->getTaskService();
         $service->on('LeftStart', [$this, 'onLeftStart']);
+        $service->on('CenterStart', [$this, 'onCenterStart']);
         $service->on('CenterMessage', [$this, 'onCenterMessage']);
         $service->start();
         // 返回退出码
         return ExitCode::OK;
     }
 
-    // 左进程启动事件回调函数
+    // 左进程启动事件
     public function onLeftStart(LeftWorker $worker)
     {
         // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
@@ -75,7 +76,13 @@ class PushCommand extends BaseCommand
         }
     }
 
-    // 中进程消息事件回调函数
+    // 中进程启动事件
+    public function onCenterStart(CenterWorker $worker)
+    {
+        // 可以在这里实例化一些对象，供 onCenterMessage 中使用，这样就不需要重复实例化。
+    }
+
+    // 中进程消息事件
     public function onCenterMessage(CenterWorker $worker, $data)
     {
         // 处理消息，比如：发送短信、发送邮件、微信推送
