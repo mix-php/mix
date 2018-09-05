@@ -83,11 +83,11 @@ return [
             // 类路径
             'class'       => 'mix\base\Log',
             // 日志记录级别
-            'level'       => ['error', 'info', 'debug'],
+            'level'       => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
             // 日志目录
-            'logDir'      => 'logs',
+            'dir'         => 'logs',
             // 日志轮转类型
-            'logRotate'   => mix\base\Log::ROTATE_DAY,
+            'rotate'      => mix\base\Log::ROTATE_DAY,
             // 最大文件尺寸
             'maxFileSize' => 0,
         ],
