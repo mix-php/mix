@@ -190,7 +190,7 @@ return [
         ],
 
         // 异步redis
-        'asyncRedis'      => [
+        'async.redis'      => [
             // 类路径
             'class'    => 'mix\async\Redis',
             // 主机
