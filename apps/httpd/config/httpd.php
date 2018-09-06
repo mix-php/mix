@@ -71,11 +71,11 @@ return [
             // 虚拟主机：运行在服务器内的 HTTP 服务
             'virtualHost' => [
                 // 主机
-                'host'   => '127.0.0.1',
+                'host'       => '127.0.0.1',
                 // 端口
-                'port'   => 9501,
+                'port'       => 9501,
                 // 配置文件
-                'config' => __DIR__ . '/http_permanent.php',
+                'configFile' => __DIR__ . '/http_permanent.php',
             ],
 
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
