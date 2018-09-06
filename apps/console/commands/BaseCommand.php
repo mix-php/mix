@@ -1,6 +1,6 @@
 <?php
 
-namespace apps\crontab\commands;
+namespace apps\console\commands;
 
 use mix\console\Command;
 use mix\helpers\ProcessHelper;
@@ -38,7 +38,7 @@ class BaseCommand extends Command
             ProcessHelper::daemon();
         }
         // 修改进程标题
-        ProcessHelper::setTitle("mix-crontab: {$this->programName}");
+        ProcessHelper::setTitle("mix-console: {$this->programName}");
     }
 
 }

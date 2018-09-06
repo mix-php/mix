@@ -1,6 +1,6 @@
 <?php
 
-namespace apps\crontab\commands;
+namespace apps\console\commands;
 
 use mix\console\ExitCode;
 use mix\client\PDOCoroutine;

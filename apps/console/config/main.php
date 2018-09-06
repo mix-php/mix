@@ -7,7 +7,7 @@ return [
     'basePath'         => dirname(__DIR__),
 
     // 命令命名空间
-    'commandNamespace' => 'apps\crontab\commands',
+    'commandNamespace' => 'apps\console\commands',
 
     // 命令
     'commands'         => [
