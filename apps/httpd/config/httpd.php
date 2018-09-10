@@ -78,7 +78,7 @@ return [
                 'configFile' => __DIR__ . '/http_permanent.php',
             ],
 
-            // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
+            // 运行参数：https://wiki.swoole.com/wiki/page/274.html
             'settings'    => [
                 // 开启协程
                 'enable_coroutine' => false,
