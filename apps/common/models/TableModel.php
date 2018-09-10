@@ -19,7 +19,7 @@ class TableModel
     // 操作数据库
     public function insert($data)
     {
-        $success = PDO::insert(self::TABLE, $data);
+        $success = PDO::insert(self::TABLE, $data)->execute();
         return $success ? PDO::getLastInsertId() : false;
     }
 
