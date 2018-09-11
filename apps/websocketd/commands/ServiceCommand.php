@@ -56,7 +56,7 @@ class ServiceCommand extends Command
             ProcessHelper::daemon();
         }
         // 创建服务
-        $server = \mix\websocket\WebSocketServer::newInstanceByConfig('webSocketServer');
+        $server = \mix\websocket\WebSocketServer::newInstanceByConfig('libraries.webSocketServer');
         $server->on('Open', [$this, 'onOpen']);
         $server->on('Message', [$this, 'onMessage']);
         $server->on('Close', [$this, 'onClose']);
@@ -137,7 +137,7 @@ class ServiceCommand extends Command
         ];
 
         // 异步订阅
-        $redis = \mix\client\RedisAsync::newInstanceByConfig('async.redis');
+        $redis = \mix\client\RedisAsync::newInstanceByConfig('libraries.[async.redis]');
         $redis->on('Message', function (\Swoole\Redis $client, $result) use ($webSocket, $fd) {
             try {
                 // 错误处理

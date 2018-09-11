@@ -81,7 +81,7 @@ class PushCommand extends BaseCommand
     public function onLeftStart(LeftWorker $worker)
     {
         // 使用长连接客户端，这样会自动帮你维护连接不断线
-        $redis = RedisPersistent::newInstanceByConfig('persistent.redis');
+        $redis = RedisPersistent::newInstanceByConfig('libraries.[persistent.redis]');
         // 通过循环保持任务执行状态
         while (true) {
             // 从消息队列中间件阻塞获取一条消息

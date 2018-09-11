@@ -58,7 +58,7 @@ class CoroutineCommand extends BaseCommand
     {
         $chan = new Channel();
         tgo(function () use ($chan) {
-            $pdo    = PDOCoroutine::newInstanceByConfig('coroutine.pdo');
+            $pdo    = PDOCoroutine::newInstanceByConfig('libraries.[coroutine.pdo]');
             $result = $pdo->createCommand('select sleep(2)')->queryAll();
             $chan->push($result);
         });
@@ -70,7 +70,7 @@ class CoroutineCommand extends BaseCommand
     {
         $chan = new Channel();
         tgo(function () use ($chan) {
-            $pdo    = PDOCoroutine::newInstanceByConfig('coroutine.pdo');
+            $pdo    = PDOCoroutine::newInstanceByConfig('libraries.[coroutine.pdo]');
             $result = $pdo->createCommand('select sleep(1)')->queryAll();
             $chan->push($result);
         });

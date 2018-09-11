@@ -79,7 +79,7 @@ class AssemblyLineCommand extends BaseCommand
     public function onLeftStart(LeftWorker $worker)
     {
         // 使用长连接客户端，这样会自动帮你维护连接不断线
-        $pdo    = PDOPersistent::newInstanceByConfig('persistent.pdo');
+        $pdo    = PDOPersistent::newInstanceByConfig('libraries.[persistent.pdo]');
         $result = $pdo->createCommand("SELECT * FROM `table`")->queryAll();
         // 取出全量数据一行一行推送给中进程去处理
         foreach ($result as $item) {
@@ -107,7 +107,7 @@ class AssemblyLineCommand extends BaseCommand
     public function onRightStart(RightWorker $worker)
     {
         // 可以在这里实例化一些对象，供 onRightMessage 中使用，这样就不需要重复实例化。
-        $this->pdo = PDOPersistent::newInstanceByConfig('persistent.pdo');
+        $this->pdo = PDOPersistent::newInstanceByConfig('libraries.[persistent.pdo]');
     }
 
     // 右进程消息事件

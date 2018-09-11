@@ -93,7 +93,7 @@ class AssemblyLineCommand extends BaseCommand
     public function onLeftStart(LeftWorker $worker)
     {
         // 使用长连接客户端，这样会自动帮你维护连接不断线
-        $redis = RedisPersistent::newInstanceByConfig('persistent.redis');
+        $redis = RedisPersistent::newInstanceByConfig('libraries.[persistent.redis]');
         // 通过循环保持任务执行状态
         while (true) {
             // 从消息队列中间件阻塞获取一条消息
@@ -129,7 +129,7 @@ class AssemblyLineCommand extends BaseCommand
     public function onRightStart(RightWorker $worker)
     {
         // 可以在这里实例化一些对象，供 onRightMessage 中使用，这样就不需要重复实例化。
-        $this->pdo = PDOPersistent::newInstanceByConfig('persistent.pdo');
+        $this->pdo = PDOPersistent::newInstanceByConfig('libraries.[persistent.pdo]');
     }
 
     // 右进程启动事件

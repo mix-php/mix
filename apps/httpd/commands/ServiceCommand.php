@@ -50,7 +50,7 @@ class ServiceCommand extends Command
             Output::writeln("mix-httpd is running, PID : {$pid}.");
             return ExitCode::UNSPECIFIED_ERROR;
         }
-        $server = \mix\http\HttpServer::newInstanceByConfig('httpServer');
+        $server = \mix\http\HttpServer::newInstanceByConfig('libraries.httpServer');
         if ($this->update) {
             $server->settings['max_request'] = 1;
         }
