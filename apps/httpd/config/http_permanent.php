@@ -1,6 +1,6 @@
 <?php
 
-// mix-httpd 下运行的 HTTP 服务配置（常驻模式）
+// mix-httpd 下运行的 HTTP 服务配置（常驻同步模式）
 return [
 
     // 基础路径
@@ -169,15 +169,15 @@ return [
         // 数据库
         'pdo'      => [
             // 类路径
-            'class'     => 'mix\client\PDO',
+            'class'         => 'mix\client\PDO',
             // 数据源格式
-            'dsn'       => env('DB_DSN'),
+            'dsn'           => env('DB_DSN'),
             // 数据库用户名
-            'username'  => env('DB_USERNAME'),
+            'username'      => env('DB_USERNAME'),
             // 数据库密码
-            'password'  => env('DB_PASSWORD'),
-            // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
-            'attribute' => [
+            'password'      => env('DB_PASSWORD'),
+            // 驱动连接选项: http://php.net/manual/zh/pdo.setattribute.php
+            'driverOptions' => [
                 // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
                 \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
             ],

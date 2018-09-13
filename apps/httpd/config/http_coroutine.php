@@ -1,6 +1,6 @@
 <?php
 
-// mix-httpd 下运行的 HTTP 服务配置（协程模式）
+// mix-httpd 下运行的 HTTP 服务配置（常驻协程模式）
 return [
 
     // 基础路径
