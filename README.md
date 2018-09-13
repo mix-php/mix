@@ -73,8 +73,8 @@ MixPHP开发指南：http://doc.mixphp.cn
 ## 环境要求
 
 * PHP >= 7.0
-* Swoole >= 1.9.5 （常驻模式）
-* Swoole >= 4.1.0 （协程模式）
+* Swoole >= 1.9.5 （常驻同步模式）
+* Swoole >= 4.1.0 （常驻协程模式）
 
 ## 快速开始
 
