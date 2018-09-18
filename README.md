@@ -88,7 +88,7 @@ composer create-project mixstart/mixphp --prefer-dist
 如果你需要安装实时更新的版本：
 
 ```shell
-composer create-project mixstart/mixphp=v1.1.0-RC --prefer-dist
+composer create-project mixstart/mixphp=v1.1.0-RC2 --prefer-dist
 ```
 
 然后在 composer.json 增加 `"minimum-stability": "RC"` 配置项，再执行：
