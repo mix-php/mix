@@ -57,7 +57,7 @@ return [
         ],
 
         // 数据库
-        'rdb'                      => [
+        'pdo'                      => [
             // 类路径
             'class'     => 'mix\client\PDOPersistent',
             // 数据源格式
@@ -190,7 +190,7 @@ return [
         ],
 
         // 异步redis
-        'async.redis'      => [
+        'async.redis'     => [
             // 类路径
             'class'    => 'mix\async\Redis',
             // 主机

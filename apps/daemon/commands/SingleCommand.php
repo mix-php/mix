@@ -2,6 +2,7 @@
 
 namespace apps\daemon\commands;
 
+use mix\client\PDOPersistent;
 use mix\console\ExitCode;
 use mix\facades\Error;
 use mix\facades\Input;
@@ -54,8 +55,8 @@ class SingleCommand extends BaseCommand
     // 执行工作
     public function work()
     {
-        // 模型内使用长连接版本的数据库组件，这样组件会自动帮你维护连接不断线
-        $tableModel = new \apps\common\models\TableModel();
+        // 使用长连接客户端，这样会自动帮你维护连接不断线
+        $pdo = PDOPersistent::newInstanceByConfig('libraries.[persistent.pdo]');
         // 循环执行任务
         while (true) {
             // 执行业务代码

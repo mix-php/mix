@@ -2,6 +2,7 @@
 
 namespace apps\console\commands;
 
+use mix\client\PDOPersistent;
 use mix\console\ExitCode;
 use mix\facades\Input;
 use mix\facades\Output;
@@ -27,8 +28,9 @@ class ClearCommand extends BaseCommand
         // 预处理
         parent::actionExec();
 
-        // 模型内使用短连接版本的数据库组件，计划任务都是一次性执行
-        $tableModel = new \apps\common\models\TableModel();
+        // 使用长连接客户端，这样会自动帮你维护连接不断线
+        $pdo = PDOPersistent::newInstanceByConfig('libraries.[persistent.pdo]');
+
         // 执行业务代码
         // ...
 
