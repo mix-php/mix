@@ -54,6 +54,8 @@ class AssemblyLineCommand extends BaseCommand
                 'maxExecutions' => 16000,
                 // 队列名称
                 'queueName'     => __FILE__,
+                // 临时文件目录，当消息长度超过8K时会启用临时文件来保存，建议使用tmpfs文件系统提升性能
+                'tempDir'       => '/dev/shm',
             ]
         );
     }
@@ -83,7 +85,7 @@ class AssemblyLineCommand extends BaseCommand
         $result = $pdo->createCommand("SELECT * FROM `table`")->queryAll();
         // 取出全量数据一行一行推送给中进程去处理
         foreach ($result as $item) {
-            // 将消息发送给中进程去处理，消息有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
+            // 将消息发送给中进程去处理
             $worker->send($item);
         }
     }
@@ -99,7 +101,7 @@ class AssemblyLineCommand extends BaseCommand
     {
         // 对消息进行处理，比如：IP转换，经纬度转换等
         // ...
-        // 将处理完成的消息发送给右进程去处理，消息有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
+        // 将处理完成的消息发送给右进程去处理
         $worker->send($data);
     }
 

@@ -48,6 +48,8 @@ class PushCommand extends BaseCommand
                 'maxExecutions' => 16000,
                 // 队列名称
                 'queueName'     => __FILE__,
+                // 临时文件目录，当消息长度超过8K时会启用临时文件来保存，建议使用tmpfs文件系统提升性能
+                'tempDir'       => '/dev/shm',
             ]
         );
     }
@@ -90,7 +92,7 @@ class PushCommand extends BaseCommand
                 $data = unserialize(array_pop($data));
             }
             /**
-             * 将消息发送给中进程去处理，消息有长度限制 (https://wiki.swoole.com/wiki/page/290.html)
+             * 将消息发送给中进程去处理
              * 发送方法内有信号判断处理，当接收到重启、停止信号会立即退出左进程
              * 当发送的数据为空时，并不会触发 onCenterMessage，但可以触发信号判断处理，所以当 pop 为空时，请照常 send 给中进程。
              */
