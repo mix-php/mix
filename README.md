@@ -74,7 +74,7 @@ MixPHP开发指南：http://doc.mixphp.cn
 
 * PHP >= 7.0
 * Swoole >= 1.9.5 （常驻同步模式）
-* Swoole >= 4.1.0 （常驻协程模式）
+* Swoole >= 4.2.1 （常驻协程模式）
 
 ## 快速开始
 
@@ -134,13 +134,13 @@ _/ / / / / / / /\ \/ / /_/ / / / / /_/ /
                    /_/         /_/
 
 Server      Name:      mix-httpd
-Framework   Version:   1.1.0-beta
+Framework   Version:   1.1.0-RC2
 PHP         Version:   7.2.9
-Swoole      Version:   4.1.0
+Swoole      Version:   4.2.1
 Listen      Addr:      127.0.0.1
 Listen      Port:      9501
-Hot         Update:    disable
-Coroutine   Mode:      disable
+Hot         Update:    disabled
+Coroutine   Mode:      disabled
 Config      File:      /data/apps/httpd/config/http_permanent.php
 ```
 
