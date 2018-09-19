@@ -192,7 +192,7 @@ return [
         // 异步redis
         'async.redis'     => [
             // 类路径
-            'class'    => 'mix\async\Redis',
+            'class'    => 'mix\client\RedisAsync',
             // 主机
             'host'     => env('REDIS_HOST'),
             // 端口
