@@ -29,7 +29,7 @@ class BaseCommand extends Command
     // 选项配置
     public function options()
     {
-        return ['daemon'];
+        return ['daemon', 'force'];
     }
 
     // 选项别名配置
