@@ -64,6 +64,7 @@ class PushCommand extends BaseCommand
         // 启动服务
         $service = $this->getTaskService();
         $service->on('LeftStart', [$this, 'onLeftStart']);
+        $service->on('CenterStart', [$this, 'onCenterStart']);
         $service->on('CenterMessage', [$this, 'onCenterMessage']);
         $service->start();
         // 返回退出码
