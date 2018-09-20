@@ -100,7 +100,7 @@ class AssemblyLineCommand extends BaseCommand
         while (true) {
             // 从消息队列中间件阻塞获取一条消息
             $data = $redis->brpop('KEY', 30);
-            if (!empty($value)) {
+            if (!empty($data)) {
                 $data = unserialize(array_pop($data));
             }
             /**
@@ -138,7 +138,7 @@ class AssemblyLineCommand extends BaseCommand
     public function onRightMessage(RightWorker $worker, $data)
     {
         // 将处理完成的消息存入数据库
-        $this->pdo->insert('table', $data);
+        $this->pdo->insert('table', $data)->execute();
     }
 
 }

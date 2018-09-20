@@ -116,7 +116,7 @@ class AssemblyLineCommand extends BaseCommand
     public function onRightMessage(RightWorker $worker, $data)
     {
         // 将处理完成的消息存入数据库
-        $this->pdo->insert('table', $data);
+        $this->pdo->insert('table', $data)->execute();
     }
 
 }

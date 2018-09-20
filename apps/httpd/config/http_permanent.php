@@ -169,7 +169,7 @@ return [
         // 数据库
         'pdo'      => [
             // 类路径
-            'class'         => 'mix\client\PDO',
+            'class'         => 'mix\client\PDOPersistent',
             // 数据源格式
             'dsn'           => env('DB_DSN'),
             // 数据库用户名
@@ -186,7 +186,7 @@ return [
         // redis
         'redis'    => [
             // 类路径
-            'class'    => 'mix\client\Redis',
+            'class'    => 'mix\client\RedisPersistent',
             // 主机
             'host'     => env('REDIS_HOST'),
             // 端口
