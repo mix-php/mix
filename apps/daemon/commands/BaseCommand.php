@@ -17,6 +17,9 @@ class BaseCommand extends Command
     // 是否后台运行
     public $daemon = false;
 
+    // 是否强制退出
+    public $force = false;
+
     // PID 文件
     protected $pidFile = '';
 
@@ -32,7 +35,10 @@ class BaseCommand extends Command
     // 选项别名配置
     public function optionAliases()
     {
-        return ['d' => 'daemon'];
+        return [
+            'd' => 'daemon',
+            'f' => 'force',
+        ];
     }
 
     // 启动
@@ -62,7 +68,7 @@ class BaseCommand extends Command
     public function actionStop($gracefulRestart = false)
     {
         if ($pid = ProcessHelper::readPidFile($this->pidFile)) {
-            if ($gracefulRestart) {
+            if ($gracefulRestart || $this->force) {
                 ProcessHelper::kill($pid, SIGUSR1);
             } else {
                 ProcessHelper::kill($pid);
