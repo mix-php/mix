@@ -96,11 +96,11 @@ return [
             // 类路径
             'class'          => 'mix\client\PDOCoroutine',
             // 数据源格式
-            'dsn'            => env('DB_DSN'),
+            'dsn'            => env('DB.DSN'),
             // 数据库用户名
-            'username'       => env('DB_USERNAME'),
+            'username'       => env('DB.USERNAME'),
             // 数据库密码
-            'password'       => env('DB_PASSWORD'),
+            'password'       => env('DB.PASSWORD'),
             // 连接池
             'connectionPool' => [
                 // 组件路径
@@ -113,13 +113,13 @@ return [
             // 类路径
             'class'          => 'mix\client\RedisCoroutine',
             // 主机
-            'host'           => env('REDIS_HOST'),
+            'host'           => env('REDIS.HOST'),
             // 端口
-            'port'           => env('REDIS_PORT'),
+            'port'           => env('REDIS.PORT'),
             // 数据库
-            'database'       => env('REDIS_DATABASE'),
+            'database'       => env('REDIS.DATABASE'),
             // 密码
-            'password'       => env('REDIS_PASSWORD'),
+            'password'       => env('REDIS.PASSWORD'),
             // 连接池
             'connectionPool' => [
                 // 组件路径
@@ -132,11 +132,11 @@ return [
             // 类路径
             'class'         => 'mix\client\PDOPersistent',
             // 数据源格式
-            'dsn'           => env('DB_DSN'),
+            'dsn'           => env('DB.DSN'),
             // 数据库用户名
-            'username'      => env('DB_USERNAME'),
+            'username'      => env('DB.USERNAME'),
             // 数据库密码
-            'password'      => env('DB_PASSWORD'),
+            'password'      => env('DB.PASSWORD'),
             // 驱动连接选项: http://php.net/manual/zh/pdo.setattribute.php
             'driverOptions' => [
                 // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
@@ -149,13 +149,13 @@ return [
             // 类路径
             'class'    => 'mix\client\RedisPersistent',
             // 主机
-            'host'     => env('REDIS_HOST'),
+            'host'     => env('REDIS.HOST'),
             // 端口
-            'port'     => env('REDIS_PORT'),
+            'port'     => env('REDIS.PORT'),
             // 数据库
-            'database' => env('REDIS_DATABASE'),
+            'database' => env('REDIS.DATABASE'),
             // 密码
-            'password' => env('REDIS_PASSWORD'),
+            'password' => env('REDIS.PASSWORD'),
         ],
 
     ],
