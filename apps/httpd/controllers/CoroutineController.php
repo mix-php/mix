@@ -19,7 +19,7 @@ class CoroutineController extends Controller
     {
         // 输出 time: 2，说明是并行执行
         $time = $this->execute()->pop();
-        return 'Hello, World! Time: ' . $time;
+        return "Hello, World! [Time: {$time}]";
     }
 
     // 执行
