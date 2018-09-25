@@ -51,7 +51,7 @@ class CoroutineController extends Controller
             // 安装钩子
             $hook->install($chan);
             // 子协程内只可使用局部变量，因组件为全局变量是不可在子协程内使用的，会导致内存溢出
-            $pdo    = PDOCoroutine::newInstanceByConfig('components.[coroutine.pdo]');
+            $pdo    = PDOCoroutine::newInstanceByConfig('components.pdo');
             $result = $pdo->createCommand('select sleep(2)')->queryAll();
             $chan->push($result);
         });
@@ -66,7 +66,7 @@ class CoroutineController extends Controller
             // 安装钩子
             $hook->install($chan);
             // 子协程内只可使用局部变量，因组件为全局变量是不可在子协程内使用的，会导致内存溢出
-            $pdo    = PDOCoroutine::newInstanceByConfig('components.[coroutine.pdo]');
+            $pdo    = PDOCoroutine::newInstanceByConfig('components.pdo');
             $result = $pdo->createCommand('select sleep(1)')->queryAll();
             $chan->push($result);
         });
