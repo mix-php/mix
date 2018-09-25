@@ -105,9 +105,9 @@ return [
                 'password' => env('REDIS.PASSWORD'),
             ],
             // 保存的Key前缀
-            'saveKeyPrefix' => 'MIXSSID:',
+            'saveKeyPrefix' => 'SESSION:',
             // session名
-            'name'          => 'mixssid',
+            'name'          => 'session_id',
         ],
 
         // Token
@@ -128,7 +128,7 @@ return [
                 'password' => env('REDIS.PASSWORD'),
             ],
             // 保存的Key前缀
-            'saveKeyPrefix' => 'MIXTKID:',
+            'saveKeyPrefix' => 'TOKEN:',
             // token键名
             'name'          => 'access_token',
         ],

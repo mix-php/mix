@@ -139,7 +139,7 @@ return [
             // 生存时间
             'maxLifetime'    => 7200,
             // session键名
-            'name'           => 'SessionID',
+            'name'           => 'session_id',
             // 过期时间
             'cookieExpires'  => 0,
             // 有效的服务器路径
