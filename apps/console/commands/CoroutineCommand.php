@@ -2,11 +2,12 @@
 
 namespace apps\console\commands;
 
+use mix\base\Channel;
+use mix\base\ChannelHook;
 use mix\console\ExitCode;
 use mix\client\PDOCoroutine;
 use mix\facades\Input;
 use mix\facades\Output;
-use Swoole\Coroutine\Channel;
 
 /**
  * 协程范例
@@ -43,10 +44,10 @@ class CoroutineCommand extends BaseCommand
         tgo(function () {
             $time = time();
             // 查询数据
-            $foo = $this->foo()->pop();
-            $bar = $this->bar()->pop();
-            var_dump($foo);
-            var_dump($bar);
+            $foo    = $this->foo();
+            $bar    = $this->bar();
+            $fooRet = $foo->pop();
+            $barRet = $bar->pop();
             // 输出 time: 2，说明是并行执行
             Output::writeln('Time: ' . (time() - $time));
         });
@@ -56,7 +57,9 @@ class CoroutineCommand extends BaseCommand
     public function foo()
     {
         $chan = new Channel();
-        tgo(function () use ($chan) {
+        tgo(function (ChannelHook $hook) use ($chan) {
+            // 安装钩子
+            $hook->install($chan);
             // 子协程内只可使用局部变量，因组件为全局变量是不可在子协程内使用的，会导致内存溢出
             $pdo    = PDOCoroutine::newInstanceByConfig('libraries.[coroutine.pdo]');
             $result = $pdo->createCommand('select sleep(2)')->queryAll();
@@ -69,7 +72,9 @@ class CoroutineCommand extends BaseCommand
     public function bar()
     {
         $chan = new Channel();
-        tgo(function () use ($chan) {
+        tgo(function (ChannelHook $hook) use ($chan) {
+            // 安装钩子
+            $hook->install($chan);
             // 子协程内只可使用局部变量，因组件为全局变量是不可在子协程内使用的，会导致内存溢出
             $pdo    = PDOCoroutine::newInstanceByConfig('libraries.[coroutine.pdo]');
             $result = $pdo->createCommand('select sleep(1)')->queryAll();
