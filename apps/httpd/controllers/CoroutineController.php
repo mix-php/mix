@@ -6,6 +6,10 @@ use mix\client\PDOCoroutine;
 use mix\http\Controller;
 use Swoole\Coroutine\Channel;
 
+/**
+ * 协程范例
+ * @author 刘健 <coder.liu@qq.com>
+ */
 class CoroutineController extends Controller
 {
 

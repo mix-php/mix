@@ -6,6 +6,10 @@ use apps\httpd\models\UserForm;
 use mix\facades\Request;
 use mix\http\Controller;
 
+/**
+ * API接口范例
+ * @author 刘健 <coder.liu@qq.com>
+ */
 class UserController extends Controller
 {
 

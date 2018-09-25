@@ -6,6 +6,10 @@ use apps\httpd\models\FileForm;
 use mix\facades\Request;
 use mix\http\Controller;
 
+/**
+ * 文件上传范例
+ * @author 刘健 <coder.liu@qq.com>
+ */
 class FileController extends Controller
 {
 
