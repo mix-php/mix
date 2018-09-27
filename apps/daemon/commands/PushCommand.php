@@ -32,26 +32,22 @@ class PushCommand extends BaseCommand
      */
     public function getTaskService()
     {
-        return create_object(
-            [
-                // 类路径
-                'class'         => 'mix\task\ProcessPoolTaskExecutor',
-                // 服务名称
-                'name'          => "mix-daemon: {$this->programName}",
-                // 执行模式
-                'mode'          => ProcessPoolTaskExecutor::MODE_PUSH | ProcessPoolTaskExecutor::MODE_DAEMON,
-                // 左进程数
-                'leftProcess'   => 1,
-                // 中进程数
-                'centerProcess' => 5,
-                // 最大执行次数
-                'maxExecutions' => 16000,
-                // 队列名称
-                'queueName'     => __FILE__,
-                // 临时文件目录，当消息长度超过8K时会启用临时文件来保存，建议使用tmpfs文件系统提升性能
-                'tempDir'       => '/dev/shm',
-            ]
-        );
+        return new ProcessPoolTaskExecutor([
+            // 服务名称
+            'name'          => "mix-daemon: {$this->programName}",
+            // 执行模式
+            'mode'          => ProcessPoolTaskExecutor::MODE_PUSH | ProcessPoolTaskExecutor::MODE_DAEMON,
+            // 左进程数
+            'leftProcess'   => 1,
+            // 中进程数
+            'centerProcess' => 5,
+            // 最大执行次数
+            'maxExecutions' => 16000,
+            // 队列名称
+            'queueName'     => __FILE__,
+            // 临时文件目录，当消息长度超过8K时会启用临时文件来保存，建议使用tmpfs文件系统提升性能
+            'tempDir'       => '/dev/shm',
+        ]);
     }
 
     // 启动
