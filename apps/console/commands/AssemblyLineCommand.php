@@ -22,6 +22,11 @@ class AssemblyLineCommand extends BaseCommand
      */
     public $pdo;
 
+    /**
+     * @var \apps\common\models\TableModel
+     */
+    public $model;
+
     // 初始化事件
     public function onInitialize()
     {
@@ -104,15 +109,25 @@ class AssemblyLineCommand extends BaseCommand
     // 右进程启动事件
     public function onRightStart(RightWorker $worker)
     {
-        // 可以在这里实例化一些对象，供 onRightMessage 中使用，这样就不需要重复实例化。
+        /* 可以在这里实例化一些对象，供 onRightMessage 中使用，这样就不需要重复实例化。 */
+
+        // 通过配置实例化数据库客户端
         $this->pdo = PDOPersistent::newInstanceByConfig('libraries.[persistent.pdo]');
+
+        // 实例化模型 (与上面的方法二选一)
+        $this->model = new \apps\common\models\TableModel();
     }
 
     // 右进程消息事件
     public function onRightMessage(RightWorker $worker, $data)
     {
-        // 将处理完成的消息存入数据库
+        /* 将处理完成的消息存入数据库 */
+
+        // 直接通过客户端对象操作
         $this->pdo->insert('table', $data)->execute();
+
+        // 当然也可以使用组件的方式，通过模型操作 (与上面的方法二选一)
+        $this->model->insert($data);
     }
 
 }
