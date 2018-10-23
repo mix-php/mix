@@ -74,7 +74,7 @@ MixPHP开发指南：http://doc.mixphp.cn
 
 * PHP >= 7.0
 * Swoole >= 1.9.5 （常驻同步模式）
-* Swoole >= 4.2.1 （常驻协程模式）
+* Swoole >= 4.2.2 （常驻协程模式）
 
 ## 快速开始
 
