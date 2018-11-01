@@ -31,10 +31,8 @@ return [
             // 路由规则
             'rules'          => [
                 // 一级路由
-                ':controller/:action' => [':controller', ':action', 'middleware' => ['Before']],
+                '{controller}/{action}' => ['{controller}', '{action}', 'middleware' => ['Before']],
             ],
-            // URL后缀
-            'suffix'         => '.html',
         ],
 
         // 请求
