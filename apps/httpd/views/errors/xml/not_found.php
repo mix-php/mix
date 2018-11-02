@@ -1,3 +1,3 @@
 <?php
 
-echo \mix\helpers\XmlHelper::encode(compact('status', 'message'));
+echo \Mix\Helpers\XmlHelper::encode(compact('status', 'message'));

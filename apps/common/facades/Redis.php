@@ -1,12 +1,12 @@
 <?php
 
-namespace apps\common\facades;
+namespace Apps\Common\Facades;
 
 /**
  * Redis 门面类
  * @author 刘健 <coder.liu@qq.com>
  */
-class Redis extends \mix\facades\Redis
+class Redis extends \Mix\Facades\Redis
 {
 
     /**

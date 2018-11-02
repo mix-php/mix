@@ -21,7 +21,11 @@
   },
   "autoload": {
     "psr-4": {
-      "apps\\": "apps/"
+      "Apps\\Common\\": "apps/common/",
+      "Apps\\Console\\": "apps/console/app/",
+      "Apps\\Daemon\\": "apps/daemon/app/",
+      "Apps\\Httpd\\": "apps/httpd/app/",
+      "Apps\\WebSocketd\\": "apps/websocketd/app/"
     }
   }
 }

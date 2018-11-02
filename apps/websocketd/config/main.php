@@ -7,7 +7,7 @@ return [
     'basePath'         => dirname(__DIR__),
 
     // 命令命名空间
-    'commandNamespace' => 'apps\websocketd\commands',
+    'commandNamespace' => 'Apps\WebSocketd\Commands',
 
     // 命令
     'commands'         => [
@@ -25,19 +25,19 @@ return [
         // 输入
         'input'                    => [
             // 类路径
-            'class' => 'mix\console\Input',
+            'class' => 'Mix\Console\Input',
         ],
 
         // 输出
         'output'                   => [
             // 类路径
-            'class' => 'mix\console\Output',
+            'class' => 'Mix\Console\Output',
         ],
 
         // 错误
         'error'                    => [
             // 类路径
-            'class' => 'mix\console\Error',
+            'class' => 'Mix\Console\Error',
             // 错误级别
             'level' => E_ALL,
         ],
@@ -45,13 +45,13 @@ return [
         // 日志
         'log'                      => [
             // 类路径
-            'class'       => 'mix\base\Log',
+            'class'       => 'Mix\Base\Log',
             // 日志记录级别
             'level'       => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
             // 日志目录
             'dir'         => 'logs',
             // 日志轮转类型
-            'rotate'      => mix\base\Log::ROTATE_DAY,
+            'rotate'      => Mix\Base\Log::ROTATE_DAY,
             // 最大文件尺寸
             'maxFileSize' => 0,
         ],
@@ -59,7 +59,7 @@ return [
         // 数据库
         'pdo'                      => [
             // 类路径
-            'class'     => 'mix\client\PDOPersistent',
+            'class'     => 'Mix\Client\PDOPersistent',
             // 数据源格式
             'dsn'       => env('DB.DSN'),
             // 数据库用户名
@@ -76,7 +76,7 @@ return [
         // redis
         'redis'                    => [
             // 类路径
-            'class'    => 'mix\client\RedisPersistent',
+            'class'    => 'Mix\Client\RedisPersistent',
             // 主机
             'host'     => env('REDIS.HOST'),
             // 端口
@@ -90,11 +90,11 @@ return [
         // Session
         'websocket.sessionReader'  => [
             // 类路径
-            'class'         => 'mix\websocket\SessionReader',
+            'class'         => 'Mix\WebSocket\SessionReader',
             // 保存处理者
             'saveHandler'   => [
                 // 类路径
-                'class'    => 'mix\client\Redis',
+                'class'    => 'Mix\Client\Redis',
                 // 主机
                 'host'     => env('REDIS.HOST'),
                 // 端口
@@ -113,11 +113,11 @@ return [
         // Token
         'websocket.tokenReader'    => [
             // 类路径
-            'class'         => 'mix\websocket\TokenReader',
+            'class'         => 'Mix\WebSocket\TokenReader',
             // 保存处理者
             'saveHandler'   => [
                 // 类路径
-                'class'    => 'mix\client\Redis',
+                'class'    => 'Mix\Client\Redis',
                 // 主机
                 'host'     => env('REDIS.HOST'),
                 // 端口
@@ -136,9 +136,9 @@ return [
         // 消息处理器
         'websocket.messageHandler' => [
             // 类路径
-            'class'               => 'mix\websocket\MessageHandler',
+            'class'               => 'Mix\WebSocket\MessageHandler',
             // 控制器命名空间
-            'controllerNamespace' => 'apps\websocketd\controllers',
+            'controllerNamespace' => 'Apps\WebSocketd\Controllers',
             // 路由规则
             'rules'               => [
 
@@ -157,7 +157,7 @@ return [
         'webSocketServer' => [
 
             // 类路径
-            'class'    => 'mix\websocket\WebSocketServer',
+            'class'    => 'Mix\WebSocket\WebSocketServer',
             // 主机
             'host'     => 'localhost',
             // 端口
@@ -192,7 +192,7 @@ return [
         // 异步redis
         'async.redis'     => [
             // 类路径
-            'class'    => 'mix\client\RedisAsync',
+            'class'    => 'Mix\Client\RedisAsync',
             // 主机
             'host'     => env('REDIS.HOST'),
             // 端口

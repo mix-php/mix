@@ -1,12 +1,12 @@
 <?php
 
-namespace apps\common\facades;
+namespace Apps\Common\Facades;
 
 /**
  * RDB 门面类
  * @author 刘健 <coder.liu@qq.com>
  */
-class PDO extends \mix\facades\PDO
+class PDO extends \Mix\Facades\PDO
 {
 
     /**

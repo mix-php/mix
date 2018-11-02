@@ -1,8 +1,8 @@
 <?php
 
-namespace apps\common\models;
+namespace Apps\Common\Models;
 
-use mix\facades\PDO;
+use Mix\Facades\PDO;
 
 /**
  * 数据表模型类

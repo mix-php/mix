@@ -7,10 +7,10 @@ return [
     'basePath'            => dirname(__DIR__),
 
     // 控制器命名空间
-    'controllerNamespace' => 'apps\httpd\controllers',
+    'controllerNamespace' => 'Apps\Httpd\Controllers',
 
     // 中间件命名空间
-    'middlewareNamespace' => 'apps\httpd\middleware',
+    'middlewareNamespace' => 'Apps\Httpd\Middleware',
 
     // 全局中间件
     'middleware'          => [],
@@ -21,7 +21,7 @@ return [
         // 路由
         'route'    => [
             // 类路径
-            'class'          => 'mix\http\Route',
+            'class'          => 'Mix\Http\Route',
             // 默认变量规则
             'defaultPattern' => '[\w-]+',
             // 路由变量规则
@@ -38,52 +38,52 @@ return [
         // 请求
         'request'  => [
             // 类路径
-            'class' => 'mix\http\Request',
+            'class' => 'Mix\Http\Request',
         ],
 
         // 响应
         'response' => [
             // 类路径
-            'class'         => 'mix\http\Response',
+            'class'         => 'Mix\Http\Response',
             // 默认输出格式
-            'defaultFormat' => mix\http\Response::FORMAT_HTML,
+            'defaultFormat' => Mix\Http\Response::FORMAT_HTML,
             // json
             'json'          => [
                 // 类路径
-                'class' => 'mix\http\Json',
+                'class' => 'Mix\Http\Json',
             ],
             // jsonp
             'jsonp'         => [
                 // 类路径
-                'class' => 'mix\http\Jsonp',
+                'class' => 'Mix\Http\Jsonp',
                 // callback键名
                 'name'  => 'callback',
             ],
             // xml
             'xml'           => [
                 // 类路径
-                'class' => 'mix\http\Xml',
+                'class' => 'Mix\Http\Xml',
             ],
         ],
 
         // 错误
         'error'    => [
             // 类路径
-            'class'  => 'mix\http\Error',
+            'class'  => 'Mix\Http\Error',
             // 输出格式
-            'format' => mix\http\Error::FORMAT_HTML,
+            'format' => Mix\Http\Error::FORMAT_HTML,
         ],
 
         // 日志
         'log'      => [
             // 类路径
-            'class'       => 'mix\base\Log',
+            'class'       => 'Mix\Base\Log',
             // 日志记录级别
             'level'       => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
             // 日志目录
             'dir'         => 'logs',
             // 日志轮转类型
-            'rotate'      => mix\base\Log::ROTATE_DAY,
+            'rotate'      => Mix\Base\Log::ROTATE_DAY,
             // 最大文件尺寸
             'maxFileSize' => 0,
         ],
@@ -91,11 +91,11 @@ return [
         // Token
         'token'    => [
             // 类路径
-            'class'         => 'mix\http\Token',
+            'class'         => 'Mix\Http\Token',
             // 保存处理者
             'saveHandler'   => [
                 // 类路径
-                'class'    => 'mix\client\Redis',
+                'class'    => 'Mix\Client\Redis',
                 // 主机
                 'host'     => env('REDIS.HOST'),
                 // 端口
@@ -116,11 +116,11 @@ return [
         // Session
         'session'  => [
             // 类路径
-            'class'          => 'mix\http\Session',
+            'class'          => 'Mix\Http\Session',
             // 保存处理者
             'saveHandler'    => [
                 // 类路径
-                'class'    => 'mix\client\Redis',
+                'class'    => 'Mix\Client\Redis',
                 // 主机
                 'host'     => env('REDIS.HOST'),
                 // 端口
@@ -151,7 +151,7 @@ return [
         // Cookie
         'cookie'   => [
             // 类路径
-            'class'    => 'mix\http\Cookie',
+            'class'    => 'Mix\Http\Cookie',
             // 过期时间
             'expires'  => 31536000,
             // 有效的服务器路径
@@ -167,7 +167,7 @@ return [
         // 数据库
         'pdo'      => [
             // 类路径
-            'class'         => 'mix\client\PDOPersistent',
+            'class'         => 'Mix\Client\PDOPersistent',
             // 数据源格式
             'dsn'           => env('DB.DSN'),
             // 数据库用户名
@@ -184,7 +184,7 @@ return [
         // redis
         'redis'    => [
             // 类路径
-            'class'    => 'mix\client\RedisPersistent',
+            'class'    => 'Mix\Client\RedisPersistent',
             // 主机
             'host'     => env('REDIS.HOST'),
             // 端口

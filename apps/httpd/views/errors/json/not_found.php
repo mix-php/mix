@@ -1,3 +1,3 @@
 <?php
 
-echo \mix\helpers\JsonHelper::encode(compact('status', 'message'));
+echo \Mix\Helpers\JsonHelper::encode(compact('status', 'message'));

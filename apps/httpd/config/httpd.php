@@ -7,7 +7,7 @@ return [
     'basePath'         => dirname(__DIR__),
 
     // 命令命名空间
-    'commandNamespace' => 'apps\httpd\commands',
+    'commandNamespace' => 'Apps\Httpd\Commands',
 
     // 命令
     'commands'         => [
@@ -26,19 +26,19 @@ return [
         // 输入
         'input'  => [
             // 类路径
-            'class' => 'mix\console\Input',
+            'class' => 'Mix\Console\Input',
         ],
 
         // 输出
         'output' => [
             // 类路径
-            'class' => 'mix\console\Output',
+            'class' => 'Mix\Console\Output',
         ],
 
         // 错误
         'error'  => [
             // 类路径
-            'class' => 'mix\console\Error',
+            'class' => 'Mix\Console\Error',
             // 错误级别
             'level' => E_ALL,
         ],
@@ -46,13 +46,13 @@ return [
         // 日志
         'log'    => [
             // 类路径
-            'class'       => 'mix\base\Log',
+            'class'       => 'Mix\Base\Log',
             // 日志记录级别
             'level'       => ['error', 'info', 'debug'],
             // 日志目录
             'logDir'      => 'logs',
             // 日志轮转类型
-            'logRotate'   => mix\base\Log::ROTATE_DAY,
+            'logRotate'   => Mix\Base\Log::ROTATE_DAY,
             // 最大文件尺寸
             'maxFileSize' => 0,
         ],
@@ -66,7 +66,7 @@ return [
         'httpServer' => [
 
             // 类路径
-            'class'       => 'mix\http\HttpServer',
+            'class'       => 'Mix\Http\HttpServer',
 
             // 虚拟主机：运行在服务器内的 HTTP 服务
             'virtualHost' => [

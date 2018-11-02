@@ -1,8 +1,8 @@
 <?php
 
-namespace apps\common\models;
+namespace Apps\Common\Models;
 
-use mix\facades\Redis;
+use Mix\Facades\Redis;
 
 /**
  * 缓存模型类
