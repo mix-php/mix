@@ -17,7 +17,7 @@
   ],
   "require": {
     "php": ">=7.0.0",
-    "mixstart/mixphp-framework": "1.1.1"
+    "mixstart/mixphp-framework": "dev-dev"
   },
   "autoload": {
     "psr-4": {
@@ -26,6 +26,9 @@
       "Apps\\Daemon\\": "apps/daemon/app/",
       "Apps\\Httpd\\": "apps/httpd/app/",
       "Apps\\WebSocketd\\": "apps/websocketd/app/"
-    }
+    },
+    "files": [
+      "apps/common/Helpers/functions.php"
+    ]
   }
 }
