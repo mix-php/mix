@@ -137,7 +137,7 @@ class ServiceCommand extends Command
         ];
 
         // 异步订阅
-        $redis = \Mix\Client\RedisAsync::newInstanceByConfig('libraries.[async.redis]');
+        $redis = \Mix\Redis\Async\Redis::newInstanceByConfig('libraries.[async.redis]');
         $redis->on('Message', function (\Swoole\Redis $client, $result) use ($webSocket, $fd) {
             try {
                 // 错误处理

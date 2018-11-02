@@ -2,7 +2,7 @@
 
 namespace Apps\Console\Commands;
 
-use Mix\Client\PDOPersistent;
+use Mix\Db\Persistent\PDO;
 use Mix\Console\ExitCode;
 use Mix\Facades\Input;
 use Mix\Task\CenterWorker;
@@ -18,7 +18,7 @@ class AssemblyLineCommand extends BaseCommand
 {
 
     /**
-     * @var \Mix\Client\PDOPersistent
+     * @var \Mix\Db\Persistent\PDO
      */
     public $pdo;
 

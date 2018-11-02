@@ -97,7 +97,7 @@ return [
             // 保存处理者
             'saveHandler'   => [
                 // 类路径
-                'class'    => 'Mix\Client\Redis',
+                'class'    => 'Mix\Redis\Redis',
                 // 主机
                 'host'     => env('REDIS.HOST'),
                 // 端口
@@ -122,7 +122,7 @@ return [
             // 保存处理者
             'saveHandler'    => [
                 // 类路径
-                'class'    => 'Mix\Client\Redis',
+                'class'    => 'Mix\Redis\Redis',
                 // 主机
                 'host'     => env('REDIS.HOST'),
                 // 端口
@@ -169,7 +169,7 @@ return [
         // 数据库
         'pdo'      => [
             // 类路径
-            'class'         => 'Mix\Client\PDO',
+            'class'         => 'Mix\Db\PDO',
             // 数据源格式
             'dsn'           => env('DB.DSN'),
             // 数据库用户名
@@ -186,7 +186,7 @@ return [
         // redis
         'redis'    => [
             // 类路径
-            'class'    => 'Mix\Client\Redis',
+            'class'    => 'Mix\Redis\Redis',
             // 主机
             'host'     => env('REDIS.HOST'),
             // 端口

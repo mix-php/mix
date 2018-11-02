@@ -59,7 +59,7 @@ return [
         // 数据库
         'pdo'                            => [
             // 类路径
-            'class'         => 'Mix\Client\PDOPersistent',
+            'class'         => 'Mix\Db\Persistent\PDO',
             // 数据源格式
             'dsn'           => env('DB.DSN'),
             // 数据库用户名
@@ -76,7 +76,7 @@ return [
         // redis
         'redis'                          => [
             // 类路径
-            'class'    => 'Mix\Client\RedisPersistent',
+            'class'    => 'Mix\Redis\Persistent\Redis',
             // 主机
             'host'     => env('REDIS.HOST'),
             // 端口
@@ -115,7 +115,7 @@ return [
         // 数据库
         'coroutine.pdo'    => [
             // 类路径
-            'class'          => 'Mix\Client\PDOCoroutine',
+            'class'          => 'Mix\Db\Coroutine\PDO',
             // 数据源格式
             'dsn'            => env('DB.DSN'),
             // 数据库用户名
@@ -132,7 +132,7 @@ return [
         // redis
         'coroutine.redis'  => [
             // 类路径
-            'class'          => 'Mix\Client\RedisCoroutine',
+            'class'          => 'Mix\Redis\Coroutine\Redis',
             // 主机
             'host'           => env('REDIS.HOST'),
             // 端口
@@ -151,7 +151,7 @@ return [
         // 数据库
         'persistent.pdo'   => [
             // 类路径
-            'class'         => 'Mix\Client\PDOPersistent',
+            'class'         => 'Mix\Db\Persistent\PDO',
             // 数据源格式
             'dsn'           => env('DB.DSN'),
             // 数据库用户名
@@ -168,7 +168,7 @@ return [
         // redis
         'persistent.redis' => [
             // 类路径
-            'class'    => 'Mix\Client\RedisPersistent',
+            'class'    => 'Mix\Redis\Persistent\Redis',
             // 主机
             'host'     => env('REDIS.HOST'),
             // 端口

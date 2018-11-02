@@ -2,7 +2,7 @@
 
 namespace Apps\Daemon\Commands;
 
-use Mix\Client\PDOPersistent;
+use Mix\Db\Persistent\PDO;
 use Mix\Console\ExitCode;
 use Mix\Facades\Error;
 use Mix\Facades\Input;
