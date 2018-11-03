@@ -1,18 +1,50 @@
 #!/bin/bash
 
-for element in `find ./ -name mix-*`
-do
-    element=${element:2}
-    dirname=$(cd `dirname $0`; pwd)
-    file=$(basename $element)
-    bin_path="$dirname/$element"
-    sysbin_path="/usr/local/bin/"$file
-    echo "chmod 777 $bin_path"
-    chmod 777 $bin_path
-    echo "rm -rf $sysbin_path"
-    rm -rf $sysbin_path
-    echo "ln -s $bin_path $sysbin_path"
-    ln -s $bin_path $sysbin_path
-done
+install_sys() {
+    for element in `find ./ -type f -name mix-*`
+    do
+        element=${element:2}
+        dirname=$(cd `dirname $0`; pwd)
+        file=$(basename $element)
+        bin_path="$dirname/$element"
+        ln_bin_path="/usr/local/bin/"$file
+        echo "chmod 777 $bin_path"
+        chmod 777 $bin_path
+        echo "rm -rf $ln_bin_path"
+        rm -rf $ln_bin_path
+        echo "ln -s $bin_path $ln_bin_path"
+        ln -s $bin_path $ln_bin_path
+    done
+    echo "Successful install to \"/usr/local/bin\""
+}
 
-echo "Successful install to \"/usr/local/bin\""
+install_work() {
+    mkdir bin
+    for element in `find ./ -type f -name mix-*`
+    do
+        element=${element:2}
+        dirname=$(cd `dirname $0`; pwd)
+        file=$(basename $element)
+        bin_path="$dirname/$element"
+        ln_bin_path="./bin/"$file
+        echo "chmod 777 $bin_path"
+        chmod 777 $bin_path
+        echo "rm -rf $ln_bin_path"
+        rm -rf $ln_bin_path
+        echo "ln -s $bin_path $ln_bin_path"
+        ln -s $bin_path $ln_bin_path
+    done
+    echo "Successful install to \"./bin\""
+}
+
+case "$1" in
+    work)
+        install_work
+        ;;
+    sys)
+        install_sys
+        ;;
+    *)
+        install_work
+        ;;
+esac
