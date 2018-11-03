@@ -59,13 +59,13 @@ return [
         // 数据库
         'pdo'                      => [
             // 类路径
-            'class'     => 'Mix\Db\Persistent\PDO',
+            'class'     => 'Mix\Database\Persistent\PDOConnection',
             // 数据源格式
-            'dsn'       => env('DB.DSN'),
+            'dsn'       => env('DATABASE.DSN'),
             // 数据库用户名
-            'username'  => env('DB.USERNAME'),
+            'username'  => env('DATABASE.USERNAME'),
             // 数据库密码
-            'password'  => env('DB.PASSWORD'),
+            'password'  => env('DATABASE.PASSWORD'),
             // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
             'attribute' => [
                 // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
@@ -76,7 +76,7 @@ return [
         // redis
         'redis'                    => [
             // 类路径
-            'class'    => 'Mix\Redis\Persistent\Redis',
+            'class'    => 'Mix\Redis\Persistent\RedisConnection',
             // 主机
             'host'     => env('REDIS.HOST'),
             // 端口
@@ -94,7 +94,7 @@ return [
             // 保存处理者
             'saveHandler'   => [
                 // 类路径
-                'class'    => 'Mix\Redis\Redis',
+                'class'    => 'Mix\Redis\RedisConnection',
                 // 主机
                 'host'     => env('REDIS.HOST'),
                 // 端口
@@ -117,7 +117,7 @@ return [
             // 保存处理者
             'saveHandler'   => [
                 // 类路径
-                'class'    => 'Mix\Redis\Redis',
+                'class'    => 'Mix\Redis\RedisConnection',
                 // 主机
                 'host'     => env('REDIS.HOST'),
                 // 端口
@@ -192,7 +192,7 @@ return [
         // 异步redis
         'async.redis'     => [
             // 类路径
-            'class'    => 'Mix\Redis\Async\Redis',
+            'class'    => 'Mix\Redis\Async\RedisConnection',
             // 主机
             'host'     => env('REDIS.HOST'),
             // 端口

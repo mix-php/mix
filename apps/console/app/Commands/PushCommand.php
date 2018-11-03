@@ -2,7 +2,7 @@
 
 namespace Apps\Console\Commands;
 
-use Mix\Db\Persistent\PDO;
+use Mix\Database\Persistent\PDOConnection;
 use Mix\Console\ExitCode;
 use Mix\Facades\Input;
 use Mix\Task\CenterWorker;
@@ -67,7 +67,7 @@ class PushCommand extends BaseCommand
     public function onLeftStart(LeftWorker $worker)
     {
         // 使用长连接客户端，这样会自动帮你维护连接不断线
-        $pdo    = PDOPersistent::newInstanceByConfig('libraries.[persistent.pdo]');
+        $pdo    = PDOConnection::newInstanceByConfig('libraries.[persistent.pdo]');
         $result = $pdo->createCommand("SELECT * FROM `table`")->queryAll();
         // 取出全量数据一行一行推送给中进程去处理
         foreach ($result as $item) {

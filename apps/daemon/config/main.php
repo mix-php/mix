@@ -69,13 +69,13 @@ return [
         // 数据库
         'pdo'                            => [
             // 类路径
-            'class'         => 'Mix\Db\Persistent\PDO',
+            'class'         => 'Mix\Database\Persistent\PDOConnection',
             // 数据源格式
-            'dsn'           => env('DB.DSN'),
+            'dsn'           => env('DATABASE.DSN'),
             // 数据库用户名
-            'username'      => env('DB.USERNAME'),
+            'username'      => env('DATABASE.USERNAME'),
             // 数据库密码
-            'password'      => env('DB.PASSWORD'),
+            'password'      => env('DATABASE.PASSWORD'),
             // 驱动连接选项: http://php.net/manual/zh/pdo.setattribute.php
             'driverOptions' => [
                 // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
@@ -86,7 +86,7 @@ return [
         // redis
         'redis'                          => [
             // 类路径
-            'class'    => 'Mix\Redis\Persistent\Redis',
+            'class'    => 'Mix\Redis\Persistent\RedisConnection',
             // 主机
             'host'     => env('REDIS.HOST'),
             // 端口
@@ -125,13 +125,13 @@ return [
         // 数据库
         'coroutine.pdo'    => [
             // 类路径
-            'class'          => 'Mix\Db\Coroutine\PDO',
+            'class'          => 'Mix\Database\Coroutine\PDOConnection',
             // 数据源格式
-            'dsn'            => env('DB.DSN'),
+            'dsn'            => env('DATABASE.DSN'),
             // 数据库用户名
-            'username'       => env('DB.USERNAME'),
+            'username'       => env('DATABASE.USERNAME'),
             // 数据库密码
-            'password'       => env('DB.PASSWORD'),
+            'password'       => env('DATABASE.PASSWORD'),
             // 连接池
             'connectionPool' => [
                 // 组件路径
@@ -142,7 +142,7 @@ return [
         // redis
         'coroutine.redis'  => [
             // 类路径
-            'class'          => 'Mix\Redis\Coroutine\Redis',
+            'class'          => 'Mix\Redis\Coroutine\RedisConnection',
             // 主机
             'host'           => env('REDIS.HOST'),
             // 端口
@@ -161,13 +161,13 @@ return [
         // 数据库
         'persistent.pdo'   => [
             // 类路径
-            'class'         => 'Mix\Db\Persistent\PDO',
+            'class'         => 'Mix\Database\Persistent\PDOConnection',
             // 数据源格式
-            'dsn'           => env('DB.DSN'),
+            'dsn'           => env('DATABASE.DSN'),
             // 数据库用户名
-            'username'      => env('DB.USERNAME'),
+            'username'      => env('DATABASE.USERNAME'),
             // 数据库密码
-            'password'      => env('DB.PASSWORD'),
+            'password'      => env('DATABASE.PASSWORD'),
             // 驱动连接选项: http://php.net/manual/zh/pdo.setattribute.php
             'driverOptions' => [
                 // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
@@ -178,7 +178,7 @@ return [
         // redis
         'persistent.redis' => [
             // 类路径
-            'class'    => 'Mix\Redis\Persistent\Redis',
+            'class'    => 'Mix\Redis\Persistent\RedisConnection',
             // 主机
             'host'     => env('REDIS.HOST'),
             // 端口

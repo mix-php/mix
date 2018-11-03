@@ -2,7 +2,7 @@
 
 namespace Apps\Console\Commands;
 
-use Mix\Db\Persistent\PDO;
+use Mix\Database\Persistent\PDOConnection;
 use Mix\Console\ExitCode;
 use Mix\Facades\Input;
 use Mix\Facades\Output;
@@ -29,7 +29,7 @@ class ClearCommand extends BaseCommand
         parent::actionExec();
 
         // 使用长连接客户端，这样会自动帮你维护连接不断线
-        $pdo = PDOPersistent::newInstanceByConfig('libraries.[persistent.pdo]');
+        $pdo = PDOConnection::newInstanceByConfig('libraries.[persistent.pdo]');
 
         // 执行业务代码
         // ...

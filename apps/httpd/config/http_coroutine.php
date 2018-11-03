@@ -95,7 +95,7 @@ return [
             // 保存处理者
             'saveHandler'   => [
                 // 类路径
-                'class'          => 'Mix\Redis\Coroutine\Redis',
+                'class'          => 'Mix\Redis\Coroutine\RedisConnection',
                 // 主机
                 'host'           => env('REDIS.HOST'),
                 // 端口
@@ -135,7 +135,7 @@ return [
             // 保存处理者
             'saveHandler'    => [
                 // 类路径
-                'class'          => 'Mix\Redis\Coroutine\Redis',
+                'class'          => 'Mix\Redis\Coroutine\RedisConnection',
                 // 主机
                 'host'           => env('REDIS.HOST'),
                 // 端口
@@ -197,13 +197,13 @@ return [
         // 数据库
         'pdo'                    => [
             // 类路径
-            'class'          => 'Mix\Db\Coroutine\PDO',
+            'class'          => 'Mix\Database\Coroutine\PDOConnection',
             // 数据源格式
-            'dsn'            => env('DB.DSN'),
+            'dsn'            => env('DATABASE.DSN'),
             // 数据库用户名
-            'username'       => env('DB.USERNAME'),
+            'username'       => env('DATABASE.USERNAME'),
             // 数据库密码
-            'password'       => env('DB.PASSWORD'),
+            'password'       => env('DATABASE.PASSWORD'),
             // 连接池
             'connectionPool' => [
                 // 组件路径
@@ -224,7 +224,7 @@ return [
         // redis
         'redis'                  => [
             // 类路径
-            'class'          => 'Mix\Redis\Coroutine\Redis',
+            'class'          => 'Mix\Redis\Coroutine\RedisConnection',
             // 主机
             'host'           => env('REDIS.HOST'),
             // 端口

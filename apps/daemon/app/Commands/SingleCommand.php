@@ -2,7 +2,7 @@
 
 namespace Apps\Daemon\Commands;
 
-use Mix\Db\Persistent\PDO;
+use Mix\Database\Persistent\PDOConnection;
 use Mix\Console\ExitCode;
 use Mix\Facades\Error;
 use Mix\Facades\Input;
@@ -56,7 +56,7 @@ class SingleCommand extends BaseCommand
     public function work()
     {
         // 使用长连接客户端，这样会自动帮你维护连接不断线
-        $pdo = PDOPersistent::newInstanceByConfig('libraries.[persistent.pdo]');
+        $pdo = PDOConnection::newInstanceByConfig('libraries.[persistent.pdo]');
         // 循环执行任务
         while (true) {
             // 执行业务代码

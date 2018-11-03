@@ -2,8 +2,8 @@
 
 namespace Apps\Console\Commands;
 
-use Mix\Db\Persistent\PDO;
 use Mix\Console\ExitCode;
+use Mix\Database\Persistent\PDOConnection;
 use Mix\Facades\Input;
 use Mix\Task\CenterWorker;
 use Mix\Task\LeftWorker;
@@ -18,7 +18,7 @@ class AssemblyLineCommand extends BaseCommand
 {
 
     /**
-     * @var \Mix\Db\Persistent\PDO
+     * @var \Mix\Database\Persistent\PDOConnection
      */
     public $pdo;
 
@@ -82,7 +82,7 @@ class AssemblyLineCommand extends BaseCommand
     public function onLeftStart(LeftWorker $worker)
     {
         // 使用长连接客户端，这样会自动帮你维护连接不断线
-        $pdo    = PDOPersistent::newInstanceByConfig('libraries.[persistent.pdo]');
+        $pdo    = PDOConnection::newInstanceByConfig('libraries.[persistent.pdo]');
         $result = $pdo->createCommand("SELECT * FROM `table`")->queryAll();
         // 取出全量数据一行一行推送给中进程去处理
         foreach ($result as $item) {
@@ -112,7 +112,7 @@ class AssemblyLineCommand extends BaseCommand
         /* 可以在这里实例化一些对象，供 onRightMessage 中使用，这样就不需要重复实例化。 */
 
         // 通过配置实例化数据库客户端
-        $this->pdo = PDOPersistent::newInstanceByConfig('libraries.[persistent.pdo]');
+        $this->pdo = PDOConnection::newInstanceByConfig('libraries.[persistent.pdo]');
 
         // 实例化模型 (与上面的方法二选一)
         $this->model = new \Apps\Common\Models\TableModel();
