@@ -19,7 +19,10 @@ install_sys() {
 }
 
 install_work() {
-    mkdir bin
+    if [ ! -d "./bin/" ]
+    then
+        mkdir ./bin
+    fi
     for element in `find ./ -type f -name mix-*`
     do
         element=${element:2}
