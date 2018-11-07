@@ -46,13 +46,13 @@ return [
         // 日志
         'log'    => [
             // 类路径
-            'class'       => 'Mix\Log\Log',
+            'class'       => 'Mix\Log\FileHandler',
             // 日志记录级别
             'level'       => ['error', 'info', 'debug'],
             // 日志目录
             'logDir'      => 'logs',
             // 日志轮转类型
-            'logRotate'   => Mix\Log\Log::ROTATE_DAY,
+            'logRotate'   => Mix\Log\FileHandler::ROTATE_DAY,
             // 最大文件尺寸
             'maxFileSize' => 0,
         ],
@@ -62,12 +62,12 @@ return [
     // 类库配置
     'libraries'        => [
 
-        // HttpServer
-        'httpServer' => [
-
+        // 服务器
+        [
             // 类路径
             'class'       => 'Mix\Http\Server',
-
+            // 名称
+            'name'        => 'default',
             // 虚拟主机：运行在服务器内的 HTTP 服务
             'virtualHost' => [
                 // 主机
@@ -77,7 +77,6 @@ return [
                 // 配置文件
                 'configFile' => __DIR__ . '/http_permanent.php',
             ],
-
             // 运行参数：https://wiki.swoole.com/wiki/page/274.html
             'settings'    => [
                 // 开启协程
@@ -99,7 +98,6 @@ return [
                 // 子进程运行用户
                 /* 'user'        => 'www', */
             ],
-
         ],
 
     ],

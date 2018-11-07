@@ -23,19 +23,19 @@ return [
     'components'       => [
 
         // 输入
-        'input'                    => [
+        'input'          => [
             // 类路径
             'class' => 'Mix\Console\Input',
         ],
 
         // 输出
-        'output'                   => [
+        'output'         => [
             // 类路径
             'class' => 'Mix\Console\Output',
         ],
 
         // 错误
-        'error'                    => [
+        'error'          => [
             // 类路径
             'class' => 'Mix\Console\Error',
             // 错误级别
@@ -43,21 +43,21 @@ return [
         ],
 
         // 日志
-        'log'                      => [
+        'log'            => [
             // 类路径
-            'class'       => 'Mix\Log\Log',
+            'class'       => 'Mix\Log\FileHandler',
             // 日志记录级别
             'level'       => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
             // 日志目录
             'dir'         => 'logs',
             // 日志轮转类型
-            'rotate'      => Mix\Log\Log::ROTATE_DAY,
+            'rotate'      => Mix\Log\FileHandler::ROTATE_DAY,
             // 最大文件尺寸
             'maxFileSize' => 0,
         ],
 
         // 数据库
-        'pdo'                      => [
+        'pdo'            => [
             // 类路径
             'class'     => 'Mix\Database\Persistent\PDOConnection',
             // 数据源格式
@@ -74,7 +74,7 @@ return [
         ],
 
         // redis
-        'redis'                    => [
+        'redis'          => [
             // 类路径
             'class'    => 'Mix\Redis\Persistent\RedisConnection',
             // 主机
@@ -88,7 +88,7 @@ return [
         ],
 
         // Session
-        'websocket.sessionReader'  => [
+        'sessionReader'  => [
             // 类路径
             'class'         => 'Mix\WebSocket\SessionReader',
             // 保存处理者
@@ -111,7 +111,7 @@ return [
         ],
 
         // Token
-        'websocket.tokenReader'    => [
+        'tokenReader'    => [
             // 类路径
             'class'         => 'Mix\WebSocket\TokenReader',
             // 保存处理者
@@ -134,7 +134,7 @@ return [
         ],
 
         // 消息处理器
-        'websocket.messageHandler' => [
+        'messageHandler' => [
             // 类路径
             'class'               => 'Mix\WebSocket\MessageHandler',
             // 控制器命名空间
@@ -153,16 +153,16 @@ return [
     // 类库配置
     'libraries'        => [
 
-        // WebSocketServer
-        'webSocketServer' => [
-
+        // 服务器
+        [
             // 类路径
-            'class'    => 'Mix\WebSocket\WebSocketServer',
+            'class'    => 'Mix\WebSocket\Server',
+            // 名称
+            'name'     => 'default',
             // 主机
             'host'     => 'localhost',
             // 端口
             'port'     => 9502,
-
             // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
             'settings' => [
                 // 开启协程
@@ -186,13 +186,14 @@ return [
                 // 子进程运行用户
                 /* 'user'        => 'www', */
             ],
-
         ],
 
         // 异步redis
-        'async.redis'     => [
+        [
             // 类路径
             'class'    => 'Mix\Redis\Async\RedisConnection',
+            // 名称
+            'name'     => 'default',
             // 主机
             'host'     => env('REDIS.HOST'),
             // 端口

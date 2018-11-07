@@ -48,13 +48,13 @@ return [
         // 日志
         'log'       => [
             // 类路径
-            'class'       => 'Mix\Log\Log',
+            'class'       => 'Mix\Log\FileHandler',
             // 日志记录级别
             'level'       => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
             // 日志目录
             'dir'         => 'logs',
             // 日志轮转类型
-            'rotate'      => Mix\Log\Log::ROTATE_DAY,
+            'rotate'      => Mix\Log\FileHandler::ROTATE_DAY,
             // 最大文件尺寸
             'maxFileSize' => 0,
         ],
