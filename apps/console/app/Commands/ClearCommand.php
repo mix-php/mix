@@ -29,7 +29,7 @@ class ClearCommand extends BaseCommand
         parent::actionExec();
 
         // 使用长连接客户端，这样会自动帮你维护连接不断线
-        $pdo = PDOConnection::newInstanceByConfig('libraries.[persistent.pdo]');
+        $pdo = PDOConnection::newInstanceByConfig();
 
         // 执行业务代码
         // ...

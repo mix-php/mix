@@ -56,7 +56,7 @@ class SingleCommand extends BaseCommand
     public function work()
     {
         // 使用长连接客户端，这样会自动帮你维护连接不断线
-        $pdo = PDOConnection::newInstanceByConfig('libraries.[persistent.pdo]');
+        $pdo = PDOConnection::newInstanceByConfig();
         // 循环执行任务
         while (true) {
             // 执行业务代码
