@@ -2,8 +2,8 @@
 
 namespace Apps\Console\Commands;
 
-use Mix\Base\Channel;
-use Mix\Base\ChannelHook;
+use Mix\Core\Channel;
+use Mix\Core\ChannelHook;
 use Mix\Console\ExitCode;
 use Mix\Database\Coroutine\PDOConnection;
 use Mix\Facades\Input;
@@ -50,6 +50,7 @@ class CoroutineCommand extends BaseCommand
             // 输出 time: 2，说明是并行执行
             Output::writeln('Time: ' . (time() - $time));
         });
+        swoole_event_wait();
     }
 
     // 查询数据

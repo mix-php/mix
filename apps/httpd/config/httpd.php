@@ -46,13 +46,13 @@ return [
         // 日志
         'log'    => [
             // 类路径
-            'class'       => 'Mix\Base\Log',
+            'class'       => 'Mix\Log\Log',
             // 日志记录级别
             'level'       => ['error', 'info', 'debug'],
             // 日志目录
             'logDir'      => 'logs',
             // 日志轮转类型
-            'logRotate'   => Mix\Base\Log::ROTATE_DAY,
+            'logRotate'   => Mix\Log\Log::ROTATE_DAY,
             // 最大文件尺寸
             'maxFileSize' => 0,
         ],
@@ -66,7 +66,7 @@ return [
         'httpServer' => [
 
             // 类路径
-            'class'       => 'Mix\Http\HttpServer',
+            'class'       => 'Mix\Http\Server',
 
             // 虚拟主机：运行在服务器内的 HTTP 服务
             'virtualHost' => [
