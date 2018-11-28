@@ -204,11 +204,6 @@ return [
             'username'       => env('DATABASE.USERNAME'),
             // 数据库密码
             'password'       => env('DATABASE.PASSWORD'),
-            // 连接池
-            'connectionPool' => [
-                // 组件路径
-                'component' => 'pdo.connectionPool',
-            ],
         ],
 
         // 连接池
