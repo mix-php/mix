@@ -77,15 +77,20 @@ return [
         // 日志
         'log'                    => [
             // 类路径
-            'class'       => 'Mix\Log\FileHandler',
+            'class'   => 'Mix\Log\Logger',
             // 日志记录级别
-            'level'       => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
-            // 日志目录
-            'dir'         => 'logs',
-            // 日志轮转类型
-            'rotate'      => Mix\Log\FileHandler::ROTATE_DAY,
-            // 最大文件尺寸
-            'maxFileSize' => 0,
+            'levels'   => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
+            // 处理者
+            'handler' => [
+                // 类路径
+                'class'       => 'Mix\Log\FileHandler',
+                // 日志目录
+                'dir'         => 'logs',
+                // 日志轮转类型
+                'rotate'      => Mix\Log\FileHandler::ROTATE_DAY,
+                // 最大文件尺寸
+                'maxFileSize' => 0,
+            ],
         ],
 
         // Token
@@ -197,13 +202,13 @@ return [
         // 数据库
         'pdo'                    => [
             // 类路径
-            'class'          => 'Mix\Database\Coroutine\PDOConnection',
+            'class'    => 'Mix\Database\Coroutine\PDOConnection',
             // 数据源格式
-            'dsn'            => env('DATABASE.DSN'),
+            'dsn'      => env('DATABASE.DSN'),
             // 数据库用户名
-            'username'       => env('DATABASE.USERNAME'),
+            'username' => env('DATABASE.USERNAME'),
             // 数据库密码
-            'password'       => env('DATABASE.PASSWORD'),
+            'password' => env('DATABASE.PASSWORD'),
         ],
 
         // 连接池
