@@ -23,14 +23,14 @@
   },
   "autoload": {
     "psr-4": {
-      "Apps\\Common\\": "apps/common/",
-      "Apps\\Console\\": "apps/console/app/",
-      "Apps\\Daemon\\": "apps/daemon/app/",
-      "Apps\\Httpd\\": "apps/httpd/app/",
-      "Apps\\WebSocketd\\": "apps/websocketd/app/"
+      "Apps\\Common\\": "apps/common/src/",
+      "Apps\\Console\\": "apps/console/src/",
+      "Apps\\Daemon\\": "apps/daemon/src/",
+      "Apps\\Httpd\\": "apps/httpd/src/",
+      "Apps\\WebSocketd\\": "apps/websocketd/src/"
     },
     "files": [
-      "apps/common/Helpers/functions.php"
+      "apps/common/src/Helpers/functions.php"
     ]
   }
 }
