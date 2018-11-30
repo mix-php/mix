@@ -46,11 +46,11 @@ return [
         ],
 
         // 日志
-        'log'                    => [
+        'log'       => [
             // 类路径
             'class'   => 'Mix\Log\Logger',
             // 日志记录级别
-            'levels'   => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
+            'levels'  => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
             // 处理者
             'handler' => [
                 // 类路径
@@ -96,23 +96,21 @@ return [
         ],
 
         // 连接池
-        'pdoPool'   => [
-            // 类路径
-            'class' => 'Mix\Pool\ConnectionPool',
-            // 最小连接数
-            'min'   => 5,
-            // 最大连接数
-            'max'   => 50,
-        ],
-
-        // 连接池
         'redisPool' => [
             // 类路径
-            'class' => 'Mix\Pool\ConnectionPool',
+            'class'    => 'Mix\Redis\Coroutine\RedisPool',
             // 最小连接数
-            'min'   => 5,
+            'min'      => 5,
             // 最大连接数
-            'max'   => 50,
+            'max'      => 50,
+            // 主机
+            'host'     => env('REDIS.HOST'),
+            // 端口
+            'port'     => env('REDIS.PORT'),
+            // 数据库
+            'database' => env('REDIS.DATABASE'),
+            // 密码
+            'password' => env('REDIS.PASSWORD'),
         ],
 
     ],

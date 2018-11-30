@@ -3,9 +3,9 @@
 namespace Apps\Common\Core;
 
 /**
- * App类Interface
+ * App接口
  * @author 刘健 <coder.liu@qq.com>
- * 
+ *
  * @property \Mix\Log\Logger $log
  * @property \Mix\Console\Input $input
  * @property \Mix\Console\Output $output
@@ -21,7 +21,7 @@ namespace Apps\Common\Core;
  * @property \Mix\WebSocket\TokenReader $tokenReader
  * @property \Mix\WebSocket\SessionReader $sessionReader
  * @property \Mix\WebSocket\MessageHandler $messageHandler
- * @property \Mix\Pool\ConnectionPool $connectionPool
+ * @property \Mix\Redis\Coroutine\RedisPool $redisPool
  */
 interface ApplicationInterface
 {
