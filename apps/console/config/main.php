@@ -98,19 +98,19 @@ return [
         // 连接池
         'redisPool' => [
             // 类路径
-            'class'    => 'Mix\Redis\Coroutine\RedisPool',
-            // 最小连接数
-            'min'      => 5,
+            'class'     => 'Mix\Redis\Coroutine\RedisPool',
+            // 最多可空闲连接数
+            'maxIdle'   => 5,
             // 最大连接数
-            'max'      => 50,
+            'maxActive' => 50,
             // 主机
-            'host'     => env('REDIS.HOST'),
+            'host'      => env('REDIS.HOST'),
             // 端口
-            'port'     => env('REDIS.PORT'),
+            'port'      => env('REDIS.PORT'),
             // 数据库
-            'database' => env('REDIS.DATABASE'),
+            'database'  => env('REDIS.DATABASE'),
             // 密码
-            'password' => env('REDIS.PASSWORD'),
+            'password'  => env('REDIS.PASSWORD'),
         ],
 
     ],
