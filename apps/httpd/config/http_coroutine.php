@@ -19,7 +19,7 @@ return [
     'components'          => [
 
         // 路由
-        'route'                  => [
+        'route'     => [
             // 类路径
             'class'          => 'Mix\Http\Route',
             // 默认变量规则
@@ -36,13 +36,13 @@ return [
         ],
 
         // 请求
-        'request'                => [
+        'request'   => [
             // 类路径
             'class' => 'Mix\Http\Request',
         ],
 
         // 响应
-        'response'               => [
+        'response'  => [
             // 类路径
             'class'         => 'Mix\Http\Response',
             // 默认输出格式
@@ -67,7 +67,7 @@ return [
         ],
 
         // 错误
-        'error'                  => [
+        'error'     => [
             // 类路径
             'class'  => 'Mix\Http\Error',
             // 输出格式
@@ -75,11 +75,11 @@ return [
         ],
 
         // 日志
-        'log'                    => [
+        'log'       => [
             // 类路径
             'class'   => 'Mix\Log\Logger',
             // 日志记录级别
-            'levels'   => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
+            'levels'  => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
             // 处理者
             'handler' => [
                 // 类路径
@@ -94,47 +94,24 @@ return [
         ],
 
         // Token
-        'token'                  => [
+        'token'     => [
             // 类路径
-            'class'         => 'Mix\Http\Token',
-            // 保存处理者
-            'saveHandler'   => [
-                // 类路径
-                'class'          => 'Mix\Redis\Coroutine\RedisConnection',
-                // 主机
-                'host'           => env('REDIS.HOST'),
-                // 端口
-                'port'           => env('REDIS.PORT'),
-                // 数据库
-                'database'       => env('REDIS.DATABASE'),
-                // 密码
-                'password'       => env('REDIS.PASSWORD'),
-                // 连接池
-                'connectionPool' => [
-                    // 组件路径
-                    'component' => 'token.connectionPool',
-                ],
+            'class'     => 'Mix\Http\Token',
+            // 处理者
+            'pool'      => [
+                // 组件路径
+                'component' => 'redisPool',
             ],
-            // 保存的Key前缀
-            'saveKeyPrefix' => 'TOKEN:',
+            // Key前缀
+            'keyPrefix' => 'TOKEN:',
             // 有效期
-            'expiresIn'     => 604800,
+            'expiresIn' => 604800,
             // token键名
-            'name'          => 'access_token',
-        ],
-
-        // 连接池
-        'token.connectionPool'   => [
-            // 类路径
-            'class' => 'Mix\Pool\ConnectionPool',
-            // 最小连接数
-            'min'   => 5,
-            // 最大连接数
-            'max'   => 50,
+            'name'      => 'access_token',
         ],
 
         // Session
-        'session'                => [
+        'session'   => [
             // 类路径
             'class'          => 'Mix\Http\Session',
             // 保存处理者
@@ -173,18 +150,8 @@ return [
             'cookieHttpOnly' => false,
         ],
 
-        // 连接池
-        'session.connectionPool' => [
-            // 类路径
-            'class' => 'Mix\Pool\ConnectionPool',
-            // 最小连接数
-            'min'   => 5,
-            // 最大连接数
-            'max'   => 50,
-        ],
-
         // Cookie
-        'cookie'                 => [
+        'cookie'    => [
             // 类路径
             'class'    => 'Mix\Http\Cookie',
             // 过期时间
@@ -199,55 +166,38 @@ return [
             'httpOnly' => false,
         ],
 
-        // 数据库
-        'pdo'                    => [
-            // 类路径
-            'class'    => 'Mix\Database\Coroutine\PDOConnection',
-            // 数据源格式
-            'dsn'      => env('DATABASE.DSN'),
-            // 数据库用户名
-            'username' => env('DATABASE.USERNAME'),
-            // 数据库密码
-            'password' => env('DATABASE.PASSWORD'),
-        ],
-
         // 连接池
-        'pdo.connectionPool'     => [
+        'redisPool' => [
             // 类路径
-            'class' => 'Mix\Pool\ConnectionPool',
-            // 最小连接数
-            'min'   => 5,
+            'class'     => 'Mix\Redis\Coroutine\RedisPool',
+            // 最多可空闲连接数
+            'maxIdle'   => 5,
             // 最大连接数
-            'max'   => 50,
-        ],
-
-        // redis
-        'redis'                  => [
-            // 类路径
-            'class'          => 'Mix\Redis\Coroutine\RedisConnection',
+            'maxActive' => 50,
             // 主机
-            'host'           => env('REDIS.HOST'),
+            'host'      => env('REDIS.HOST'),
             // 端口
-            'port'           => env('REDIS.PORT'),
+            'port'      => env('REDIS.PORT'),
             // 数据库
-            'database'       => env('REDIS.DATABASE'),
+            'database'  => env('REDIS.DATABASE'),
             // 密码
-            'password'       => env('REDIS.PASSWORD'),
-            // 连接池
-            'connectionPool' => [
-                // 组件路径
-                'component' => 'redis.connectionPool',
-            ],
+            'password'  => env('REDIS.PASSWORD'),
         ],
 
         // 连接池
-        'redis.connectionPool'   => [
+        'pdoPool'   => [
             // 类路径
-            'class' => 'Mix\Pool\ConnectionPool',
-            // 最小连接数
-            'min'   => 5,
+            'class'     => 'Mix\Database\Coroutine\PDOPool',
+            // 最多可空闲连接数
+            'maxIdle'   => 5,
             // 最大连接数
-            'max'   => 50,
+            'maxActive' => 50,
+            // 数据源格式
+            'dsn'       => env('DATABASE.DSN'),
+            // 数据库用户名
+            'username'  => env('DATABASE.USERNAME'),
+            // 数据库密码
+            'password'  => env('DATABASE.PASSWORD'),
         ],
 
     ],
