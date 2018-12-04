@@ -5,7 +5,6 @@ namespace Apps\Console\Commands;
 use Mix\Core\Channel;
 use Mix\Core\ChannelHook;
 use Mix\Console\ExitCode;
-use Mix\Database\Coroutine\PDOConnection;
 use Mix\Facades\Input;
 use Mix\Facades\Output;
 
@@ -46,7 +45,7 @@ class CoroutineCommand extends BaseCommand
             // 并行查询数据
             list($foo, $bar) = [$this->foo(), $this->bar()];
             // 取出查询结果
-            list($fooResult, $barResult) = [$foo->pop(), $bar->pop()];
+            list($res1, $res2) = [$foo->pop(), $bar->pop()];
             // 输出 time: 2，说明是并行执行
             Output::writeln('Time: ' . (time() - $time));
         });
@@ -61,7 +60,7 @@ class CoroutineCommand extends BaseCommand
             // 安装钩子
             $hook->install($chan);
             // 子协程内只可使用局部变量，而组件为全局变量是不可以在子协程内使用的，会导致内存溢出，所以使用组件配置动态实例化
-            $pdo    = PDOConnection::newInstanceByConfig();
+            $pdo    = app()->pdoPool->getConnection();
             $result = $pdo->createCommand('select sleep(2)')->queryAll();
             $chan->push($result);
         });
@@ -76,7 +75,7 @@ class CoroutineCommand extends BaseCommand
             // 安装钩子
             $hook->install($chan);
             // 子协程内只可使用局部变量，而组件为全局变量是不可以在子协程内使用的，会导致内存溢出，所以使用组件配置动态实例化
-            $pdo    = PDOConnection::newInstanceByConfig();
+            $pdo    = app()->pdoPool->getConnection();
             $result = $pdo->createCommand('select sleep(1)')->queryAll();
             $chan->push($result);
         });

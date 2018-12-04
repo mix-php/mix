@@ -20,11 +20,12 @@ namespace Apps\Common\Core;
  * @property \Mix\WebSocket\TokenReader $tokenReader
  * @property \Mix\WebSocket\SessionReader $sessionReader
  * @property \Mix\WebSocket\MessageHandler $messageHandler
- * 
+ *
  * 用户自定义组件
- * @property \Mix\Redis\Coroutine\RedisPool $redisPool
  * @property \Mix\Database\PDOConnection $pdo
  * @property \Mix\Redis\RedisConnection $redis
+ * @property \Mix\Database\Coroutine\PDOPool $pdoPool
+ * @property \Mix\Redis\Coroutine\RedisPool $redisPool
  */
 interface ApplicationInterface
 {

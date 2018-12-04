@@ -113,6 +113,22 @@ return [
             'password'  => env('REDIS.PASSWORD'),
         ],
 
+        // 连接池
+        'pdoPool'   => [
+            // 类路径
+            'class'     => 'Mix\Database\Coroutine\PDOPool',
+            // 最多可空闲连接数
+            'maxIdle'   => 5,
+            // 最大连接数
+            'maxActive' => 50,
+            // 数据源格式
+            'dsn'       => env('DATABASE.DSN'),
+            // 数据库用户名
+            'username'  => env('DATABASE.USERNAME'),
+            // 数据库密码
+            'password'  => env('DATABASE.PASSWORD'),
+        ],
+
     ],
 
     // 类库配置
