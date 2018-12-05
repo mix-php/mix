@@ -97,8 +97,8 @@ return [
         'token'    => [
             // 类路径
             'class'         => 'Mix\Http\Token',
-            // 保存处理者
-            'saveHandler'   => [
+            // 处理者
+            'handler'   => [
                 // 类路径
                 'class'    => 'Mix\Redis\RedisConnection',
                 // 主机
@@ -110,8 +110,8 @@ return [
                 // 密码
                 'password' => env('REDIS.PASSWORD'),
             ],
-            // 保存的Key前缀
-            'saveKeyPrefix' => 'TOKEN:',
+            // Key前缀
+            'keyPrefix' => 'TOKEN:',
             // 有效期
             'expiresIn'     => 604800,
             // token键名

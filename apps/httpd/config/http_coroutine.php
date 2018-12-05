@@ -97,7 +97,7 @@ return [
         'token'     => [
             // 类路径
             'class'     => 'Mix\Http\Token',
-            // 处理者
+            // 连接池
             'pool'      => [
                 // 组件路径
                 'component' => 'redisPool',
@@ -114,26 +114,13 @@ return [
         'session'   => [
             // 类路径
             'class'          => 'Mix\Http\Session',
-            // 保存处理者
-            'saveHandler'    => [
-                // 类路径
-                'class'          => 'Mix\Redis\Coroutine\RedisConnection',
-                // 主机
-                'host'           => env('REDIS.HOST'),
-                // 端口
-                'port'           => env('REDIS.PORT'),
-                // 数据库
-                'database'       => env('REDIS.DATABASE'),
-                // 密码
-                'password'       => env('REDIS.PASSWORD'),
-                // 连接池
-                'connectionPool' => [
-                    // 组件路径
-                    'component' => 'session.connectionPool',
-                ],
+            // 连接池
+            'pool'           => [
+                // 组件路径
+                'component' => 'redisPool',
             ],
-            // 保存的Key前缀
-            'saveKeyPrefix'  => 'SESSION:',
+            // Key前缀
+            'keyPrefix'      => 'SESSION:',
             // 生存时间
             'maxLifetime'    => 7200,
             // session键名

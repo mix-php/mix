@@ -124,8 +124,8 @@ return [
         'session'  => [
             // 类路径
             'class'          => 'Mix\Http\Session',
-            // 保存处理者
-            'saveHandler'    => [
+            // 处理者
+            'handler'    => [
                 // 类路径
                 'class'    => 'Mix\Redis\RedisConnection',
                 // 主机
@@ -137,8 +137,8 @@ return [
                 // 密码
                 'password' => env('REDIS.PASSWORD'),
             ],
-            // 保存的Key前缀
-            'saveKeyPrefix'  => 'SESSION:',
+            // Key前缀
+            'keyPrefix'  => 'SESSION:',
             // 生存时间
             'maxLifetime'    => 7200,
             // session键名
