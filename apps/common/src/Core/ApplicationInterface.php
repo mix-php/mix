@@ -16,7 +16,6 @@ namespace Apps\Common\Core;
  * @property \Mix\Http\Error|\Mix\Console\Error $error
  * @property \Mix\Http\Token $token
  * @property \Mix\Http\Session $session
- * @property \Mix\Http\Cookie $cookie
  * @property \Mix\WebSocket\TokenReader $tokenReader
  * @property \Mix\WebSocket\SessionReader $sessionReader
  * @property \Mix\WebSocket\MessageHandler $messageHandler
