@@ -33,7 +33,7 @@ class ServiceCommand extends Command
     // 启动服务
     public function actionStart()
     {
-        $server = \Mix\WebSocket\Server::newInstanceByConfig();
+        $server = \Mix\WebSocket\Server::newInstance();
         $pid    = ProcessHelper::readPidFile($server->settings['pid_file']);
         // 重复启动处理
         if ($pid) {
@@ -58,7 +58,7 @@ class ServiceCommand extends Command
     // 停止服务
     public function actionStop()
     {
-        $server = \Mix\WebSocket\Server::newInstanceByConfig();
+        $server = \Mix\WebSocket\Server::newInstance();
         $pid    = ProcessHelper::readPidFile($server->settings['pid_file']);
         if ($pid) {
             ProcessHelper::kill($pid);
@@ -86,7 +86,7 @@ class ServiceCommand extends Command
     // 查看服务状态
     public function actionStatus()
     {
-        $server = \Mix\WebSocket\Server::newInstanceByConfig();
+        $server = \Mix\WebSocket\Server::newInstance();
         $pid    = ProcessHelper::readPidFile($server->settings['pid_file']);
         if ($pid) {
             Output::writeln("mix-websocketd is running, PID : {$pid}.");
@@ -130,7 +130,7 @@ class ServiceCommand extends Command
         ];
 
         // 异步订阅
-        $redis = \Mix\Redis\Async\RedisConnection::newInstanceByConfig('libraries.[async.redis]');
+        $redis = \Mix\Redis\Async\RedisConnection::newInstanceByName('libraries.[async.redis]');
         $redis->on('Message', function (\Swoole\Redis $client, $result) use ($webSocket, $fd) {
             try {
                 // 错误处理

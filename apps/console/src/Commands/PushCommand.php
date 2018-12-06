@@ -67,7 +67,7 @@ class PushCommand extends BaseCommand
     public function onLeftStart(LeftWorker $worker)
     {
         // 使用长连接客户端，这样会自动帮你维护连接不断线
-        $pdo    = PDOConnection::newInstanceByConfig();
+        $pdo    = PDOConnection::newInstance();
         $result = $pdo->createCommand("SELECT * FROM `table`")->queryAll();
         // 取出全量数据一行一行推送给中进程去处理
         foreach ($result as $item) {

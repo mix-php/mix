@@ -40,7 +40,7 @@ class ServiceCommand extends Command
     // 启动服务
     public function actionStart()
     {
-        $server = \Mix\Http\Server::newInstanceByConfig();
+        $server = \Mix\Http\Server::newInstance();
         $pid    = ProcessHelper::readPidFile($server->settings['pid_file']);
         if ($pid) {
             Output::writeln(sprintf(self::IS_RUN, $pid));
@@ -58,7 +58,7 @@ class ServiceCommand extends Command
     // 停止服务
     public function actionStop($restart = false)
     {
-        $server = \Mix\Http\Server::newInstanceByConfig();
+        $server = \Mix\Http\Server::newInstance();
         $pid    = ProcessHelper::readPidFile($server->settings['pid_file']);
         if (!$pid) {
             $restart or Output::writeln(self::NOT_RUN);
@@ -86,7 +86,7 @@ class ServiceCommand extends Command
     // 重启工作进程
     public function actionReload()
     {
-        $server = \Mix\Http\Server::newInstanceByConfig();
+        $server = \Mix\Http\Server::newInstance();
         $pid    = ProcessHelper::readPidFile($server->settings['pid_file']);
         if (!$pid) {
             Output::writeln(self::NOT_RUN);
@@ -101,7 +101,7 @@ class ServiceCommand extends Command
     // 查看服务状态
     public function actionStatus()
     {
-        $server = \Mix\Http\Server::newInstanceByConfig();
+        $server = \Mix\Http\Server::newInstance();
         $pid    = ProcessHelper::readPidFile($server->settings['pid_file']);
         if (!$pid) {
             Output::writeln(self::NOT_RUN);
