@@ -14,13 +14,13 @@ namespace Apps\Common\Core;
  * @property \Mix\Http\Request|\Mix\Http\Compatible\Request $request
  * @property \Mix\Http\Response|\Mix\Http\Compatible\Response $response
  * @property \Mix\Http\Error|\Mix\Console\Error $error
+ *
+ * 自定义组件
  * @property \Mix\Http\Token $token
  * @property \Mix\Http\Session $session
  * @property \Mix\WebSocket\TokenReader $tokenReader
  * @property \Mix\WebSocket\SessionReader $sessionReader
  * @property \Mix\WebSocket\MessageHandler $messageHandler
- *
- * 用户自定义组件
  * @property \Mix\Database\PDOConnection $pdo
  * @property \Mix\Redis\RedisConnection $redis
  * @property \Mix\Database\Coroutine\PDOPool $pdoPool
