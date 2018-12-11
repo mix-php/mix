@@ -9,6 +9,9 @@ return [
     // 应用版本
     'appVersion'       => '0.0.0',
 
+    // 应用调试
+    'appDebug'         => env('APP_DEBUG'),
+
     // 初始化回调
     'initialize'       => [],
 
