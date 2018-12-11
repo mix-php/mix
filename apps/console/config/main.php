@@ -3,6 +3,12 @@
 // Console应用配置
 return [
 
+    // 应用名称
+    'appName'          => 'mix-console',
+
+    // 应用版本
+    'appVersion'       => '0.0.0',
+
     // 初始化回调
     'initialize'       => [],
 

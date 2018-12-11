@@ -3,6 +3,12 @@
 // Console应用配置
 return [
 
+    // 应用名称
+    'appName'          => 'mix-websocketd',
+
+    // 应用版本
+    'appVersion'       => '1.0.0',
+
     // 基础路径
     'basePath'         => dirname(__DIR__),
 
@@ -43,11 +49,11 @@ return [
         ],
 
         // 日志
-        'log'                    => [
+        'log'            => [
             // 类路径
             'class'   => 'Mix\Log\Logger',
             // 日志记录级别
-            'levels'   => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
+            'levels'  => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
             // 处理者
             'handler' => [
                 // 类路径
