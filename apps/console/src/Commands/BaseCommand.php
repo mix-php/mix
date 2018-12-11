@@ -38,7 +38,7 @@ class BaseCommand extends Command
             ProcessHelper::daemon();
         }
         // 修改进程标题
-        ProcessHelper::setTitle("mix-console: {$this->programName}");
+        ProcessHelper::setProcessTitle("mix-console: {$this->programName}");
     }
 
 }
