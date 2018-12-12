@@ -4,7 +4,6 @@ namespace Apps\Console\Commands;
 
 use Mix\Core\Channel;
 use Mix\Core\ChannelHook;
-use Mix\Console\ExitCode;
 use Mix\Facades\Input;
 use Mix\Facades\Output;
 
@@ -32,8 +31,6 @@ class CoroutineCommand extends BaseCommand
         parent::actionExec();
         // 执行
         $this->execute();
-        // 返回退出码
-        return ExitCode::OK;
     }
 
     // 执行

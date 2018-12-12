@@ -3,7 +3,6 @@
 namespace Apps\Daemon\Commands;
 
 use Mix\Console\Command;
-use Mix\Console\ExitCode;
 use Mix\Facades\Output;
 use Mix\Helpers\ProcessHelper;
 
@@ -81,8 +80,6 @@ class BaseCommand extends Command
         } else {
             Output::writeln("mix-daemon '{$this->programName}' is not running.");
         }
-        // 返回退出码
-        return ExitCode::OK;
     }
 
     // 重启
@@ -90,8 +87,6 @@ class BaseCommand extends Command
     {
         $this->actionStop();
         $this->actionStart();
-        // 返回退出码
-        return ExitCode::OK;
     }
 
     // 查看状态
@@ -102,8 +97,6 @@ class BaseCommand extends Command
         } else {
             Output::writeln("mix-daemon '{$this->programName}' is not running.");
         }
-        // 返回退出码
-        return ExitCode::OK;
     }
 
 }

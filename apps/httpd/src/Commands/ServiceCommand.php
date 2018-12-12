@@ -3,7 +3,6 @@
 namespace Apps\Httpd\Commands;
 
 use Mix\Console\Command;
-use Mix\Console\ExitCode;
 use Mix\Facades\Output;
 use Mix\Helpers\ProcessHelper;
 
@@ -44,15 +43,13 @@ class ServiceCommand extends Command
         $pid    = ProcessHelper::readPidFile($server->settings['pid_file']);
         if ($pid) {
             Output::writeln(sprintf(self::IS_RUN, $pid));
-            return ExitCode::UNSPECIFIED_ERROR;
+            return;
         }
         if ($this->update) {
             $server->settings['max_request'] = 1;
         }
         $server->settings['daemonize'] = $this->daemon;
         $server->start();
-        // 返回退出码
-        return ExitCode::OK;
     }
 
     // 停止服务
@@ -62,7 +59,7 @@ class ServiceCommand extends Command
         $pid    = ProcessHelper::readPidFile($server->settings['pid_file']);
         if (!$pid) {
             $restart or Output::writeln(self::NOT_RUN);
-            return ExitCode::UNSPECIFIED_ERROR;
+            return;
         }
         ProcessHelper::kill($pid);
         while (ProcessHelper::isRunning($pid)) {
@@ -70,8 +67,6 @@ class ServiceCommand extends Command
             usleep(100000);
         }
         $restart or Output::writeln(self::EXEC_SUCCESS);
-        // 返回退出码
-        return ExitCode::OK;
     }
 
     // 重启服务
@@ -80,7 +75,7 @@ class ServiceCommand extends Command
         $this->actionStop(true);
         $this->actionStart();
         // 返回退出码
-        return ExitCode::OK;
+        return;
     }
 
     // 重启工作进程
@@ -90,12 +85,10 @@ class ServiceCommand extends Command
         $pid    = ProcessHelper::readPidFile($server->settings['pid_file']);
         if (!$pid) {
             Output::writeln(self::NOT_RUN);
-            return ExitCode::UNSPECIFIED_ERROR;
+            return;
         }
         ProcessHelper::kill($pid, SIGUSR1);
         Output::writeln(self::EXEC_SUCCESS);
-        // 返回退出码
-        return ExitCode::OK;
     }
 
     // 查看服务状态
@@ -105,11 +98,9 @@ class ServiceCommand extends Command
         $pid    = ProcessHelper::readPidFile($server->settings['pid_file']);
         if (!$pid) {
             Output::writeln(self::NOT_RUN);
-            return ExitCode::OK;
+            return;
         }
         Output::writeln(sprintf(self::IS_RUN, $pid));
-        // 返回退出码
-        return ExitCode::OK;
     }
 
 }

@@ -3,7 +3,6 @@
 namespace Apps\WebSocketd\Commands;
 
 use Mix\Console\Command;
-use Mix\Console\ExitCode;
 use Mix\Facades\Error;
 use Mix\Facades\Output;
 use Mix\Helpers\ProcessHelper;
@@ -38,7 +37,7 @@ class ServiceCommand extends Command
         // 重复启动处理
         if ($pid) {
             Output::writeln("mix-websocketd is running, PID : {$pid}.");
-            return ExitCode::UNSPECIFIED_ERROR;
+            return;
         }
         // 启动提示
         Output::writeln('mix-websocketd start successed.');
@@ -51,8 +50,6 @@ class ServiceCommand extends Command
         $server->on('Message', [$this, 'onMessage']);
         $server->on('Close', [$this, 'onClose']);
         $server->start();
-        // 返回退出码
-        return ExitCode::OK;
     }
 
     // 停止服务
@@ -70,8 +67,6 @@ class ServiceCommand extends Command
         } else {
             Output::writeln('mix-websocketd is not running.');
         }
-        // 返回退出码
-        return ExitCode::OK;
     }
 
     // 重启服务
@@ -80,7 +75,7 @@ class ServiceCommand extends Command
         $this->actionStop();
         $this->actionStart();
         // 返回退出码
-        return ExitCode::OK;
+        return;
     }
 
     // 查看服务状态
@@ -93,8 +88,6 @@ class ServiceCommand extends Command
         } else {
             Output::writeln('mix-websocketd is not running.');
         }
-        // 返回退出码
-        return ExitCode::OK;
     }
 
     // 连接事件回调函数

@@ -2,7 +2,6 @@
 
 namespace Apps\Daemon\Commands;
 
-use Mix\Console\ExitCode;
 use Mix\Facades\Input;
 use Mix\Redis\Persistent\RedisConnection;
 use Mix\Task\CenterWorker;
@@ -68,7 +67,7 @@ class AssemblyLineCommand extends BaseCommand
     {
         // 预处理
         if (!parent::actionStart()) {
-            return ExitCode::UNSPECIFIED_ERROR;
+            return;
         }
         // 启动服务
         $service = $this->getTaskService();
@@ -78,8 +77,6 @@ class AssemblyLineCommand extends BaseCommand
         $service->on('RightStart', [$this, 'onRightStart']);
         $service->on('RightMessage', [$this, 'onRightMessage']);
         $service->start();
-        // 返回退出码
-        return ExitCode::OK;
     }
 
     // 平滑重启
@@ -87,8 +84,6 @@ class AssemblyLineCommand extends BaseCommand
     {
         $this->actionStop(true);
         $this->actionStart();
-        // 返回退出码
-        return ExitCode::OK;
     }
 
     // 左进程启动事件

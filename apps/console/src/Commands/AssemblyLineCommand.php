@@ -2,7 +2,6 @@
 
 namespace Apps\Console\Commands;
 
-use Mix\Console\ExitCode;
 use Mix\Database\Persistent\PDOConnection;
 use Mix\Facades\Input;
 use Mix\Task\CenterWorker;
@@ -74,8 +73,6 @@ class AssemblyLineCommand extends BaseCommand
         $service->on('RightStart', [$this, 'onRightStart']);
         $service->on('RightMessage', [$this, 'onRightMessage']);
         $service->start();
-        // 返回退出码
-        return ExitCode::OK;
     }
 
     // 左进程启动事件

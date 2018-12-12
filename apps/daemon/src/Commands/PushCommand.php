@@ -3,7 +3,6 @@
 namespace Apps\Daemon\Commands;
 
 use Mix\Redis\Persistent\RedisConnection;
-use Mix\Console\ExitCode;
 use Mix\Facades\Input;
 use Mix\Task\CenterWorker;
 use Mix\Task\LeftWorker;
@@ -55,7 +54,7 @@ class PushCommand extends BaseCommand
     {
         // 预处理
         if (!parent::actionStart()) {
-            return ExitCode::UNSPECIFIED_ERROR;
+            return;
         }
         // 启动服务
         $service = $this->getTaskService();
@@ -63,8 +62,6 @@ class PushCommand extends BaseCommand
         $service->on('CenterStart', [$this, 'onCenterStart']);
         $service->on('CenterMessage', [$this, 'onCenterMessage']);
         $service->start();
-        // 返回退出码
-        return ExitCode::OK;
     }
 
     // 平滑重启
@@ -72,8 +69,6 @@ class PushCommand extends BaseCommand
     {
         $this->actionStop(true);
         $this->actionStart();
-        // 返回退出码
-        return ExitCode::OK;
     }
 
     // 左进程启动事件回调函数

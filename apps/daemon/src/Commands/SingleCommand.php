@@ -3,7 +3,6 @@
 namespace Apps\Daemon\Commands;
 
 use Mix\Database\Persistent\PDOConnection;
-use Mix\Console\ExitCode;
 use Mix\Facades\Error;
 use Mix\Facades\Input;
 
@@ -29,12 +28,10 @@ class SingleCommand extends BaseCommand
     {
         // 预处理
         if (!parent::actionStart()) {
-            return ExitCode::UNSPECIFIED_ERROR;
+            return;
         }
         // 开始工作
         $this->startWork();
-        // 返回退出码
-        return ExitCode::OK;
     }
 
     // 开始工作

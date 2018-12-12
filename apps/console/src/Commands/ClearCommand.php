@@ -3,7 +3,6 @@
 namespace Apps\Console\Commands;
 
 use Mix\Database\Persistent\PDOConnection;
-use Mix\Console\ExitCode;
 use Mix\Facades\Input;
 use Mix\Facades\Output;
 
@@ -36,8 +35,6 @@ class ClearCommand extends BaseCommand
 
         // 响应
         Output::writeln('SUCCESS');
-        // 返回退出码
-        return ExitCode::OK;
     }
 
 }
