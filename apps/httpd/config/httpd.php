@@ -18,31 +18,19 @@ return [
     // 命令
     'commands'         => [
 
-        'service start'   => ['Service', 'Start', 'description' => 'Start the mix-httpd service.'],
-        'service stop'    => ['Service', 'Stop', 'description' => 'Stop the mix-httpd service.'],
-        'service restart' => ['Service', 'Restart', 'description' => 'Restart the mix-httpd service.'],
-        'service reload'  => ['Service', 'Reload', 'description' => 'Reload the worker process of the mix-httpd service.'],
-        'service status'  => ['Service', 'Status', 'description' => 'Check the status of the mix-httpd service.'],
+        'service start'   => ['Service\Start', 'description' => 'Start the mix-httpd service.'],
+        'service stop'    => ['Service\Stop', 'description' => 'Stop the mix-httpd service.'],
+        'service restart' => ['Service\Restart', 'description' => 'Restart the mix-httpd service.'],
+        'service reload'  => ['Service\Reload', 'description' => 'Reload the worker process of the mix-httpd service.'],
+        'service status'  => ['Service\Status', 'description' => 'Check the status of the mix-httpd service.'],
 
     ],
 
     // 组件配置
     'components'       => [
 
-        // 输入
-        'input'  => [
-            // 类路径
-            'class' => 'Mix\Console\Input',
-        ],
-
-        // 输出
-        'output' => [
-            // 类路径
-            'class' => 'Mix\Console\Output',
-        ],
-
         // 错误
-        'error'  => [
+        'error' => [
             // 类路径
             'class' => 'Mix\Console\Error',
             // 错误级别
@@ -50,7 +38,7 @@ return [
         ],
 
         // 日志
-        'log'    => [
+        'log'   => [
             // 类路径
             'class'   => 'Mix\Log\Logger',
             // 日志记录级别
