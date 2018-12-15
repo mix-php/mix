@@ -7,10 +7,10 @@ return [
     'basePath'            => dirname(__DIR__),
 
     // 控制器命名空间
-    'controllerNamespace' => 'Apps\Httpd\Controllers',
+    'controllerNamespace' => 'Httpd\Controllers',
 
     // 中间件命名空间
-    'middlewareNamespace' => 'Apps\Httpd\Middleware',
+    'middlewareNamespace' => 'Httpd\Middleware',
 
     // 全局中间件
     'middleware'          => [],

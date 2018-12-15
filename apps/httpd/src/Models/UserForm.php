@@ -1,6 +1,6 @@
 <?php
 
-namespace Apps\Httpd\Models;
+namespace Httpd\Models;
 
 use Mix\Validators\Validator;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Apps\Console\Commands;
+namespace Console\Commands;
 
 use Mix\Database\Persistent\PDOConnection;
 use Mix\Facades\Input;
@@ -34,7 +34,7 @@ class ClearCommand extends BaseCommand
         // ...
 
         // 响应
-        Output::writeln('SUCCESS');
+        println('SUCCESS');
     }
 
 }

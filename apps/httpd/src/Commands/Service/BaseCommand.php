@@ -1,13 +1,13 @@
 <?php
 
-namespace Apps\Httpd\Commands\Service;
+namespace Httpd\Commands\Service;
 
 use Mix\Console\Command;
 use Mix\Console\PidFileHandler;
 
 /**
  * Class BaseCommand
- * @package Apps\Httpd\Commands\Service
+ * @package Httpd\Commands\Service
  */
 class BaseCommand extends Command
 {

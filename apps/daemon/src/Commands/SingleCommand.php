@@ -1,6 +1,6 @@
 <?php
 
-namespace Apps\Daemon\Commands;
+namespace Daemon\Commands;
 
 use Mix\Database\Persistent\PDOConnection;
 use Mix\Facades\Error;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Apps\Common\Models;
+namespace Common\Models;
 
 use Mix\Facades\PDO;
 

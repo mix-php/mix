@@ -1,6 +1,6 @@
 <?php
 
-namespace Apps\Httpd\Controllers;
+namespace Httpd\Controllers;
 
 use Mix\Http\Controller;
 

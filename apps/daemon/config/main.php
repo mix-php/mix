@@ -16,7 +16,7 @@ return [
     'basePath'         => dirname(__DIR__),
 
     // 命令命名空间
-    'commandNamespace' => 'Apps\Daemon\Commands',
+    'commandNamespace' => 'Daemon\Commands',
 
     // 命令
     'commands'         => [
@@ -40,18 +40,6 @@ return [
 
     // 组件配置
     'components'       => [
-
-        // 输入
-        'input'     => [
-            // 类路径
-            'class' => 'Mix\Console\Input',
-        ],
-
-        // 输出
-        'output'    => [
-            // 类路径
-            'class' => 'Mix\Console\Output',
-        ],
 
         // 错误
         'error'     => [

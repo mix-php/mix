@@ -1,6 +1,6 @@
 <?php
 
-namespace Apps\Common\Core;
+namespace Common\Core;
 
 /**
  * App接口

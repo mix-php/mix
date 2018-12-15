@@ -1,6 +1,6 @@
 <?php
 
-namespace Apps\Console\Commands;
+namespace Console\Commands;
 
 use Mix\Database\Persistent\PDOConnection;
 use Mix\Facades\Input;

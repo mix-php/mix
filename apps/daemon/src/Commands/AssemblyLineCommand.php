@@ -1,6 +1,6 @@
 <?php
 
-namespace Apps\Daemon\Commands;
+namespace Daemon\Commands;
 
 use Mix\Facades\Input;
 use Mix\Redis\Persistent\RedisConnection;
@@ -22,7 +22,7 @@ class AssemblyLineCommand extends BaseCommand
     public $pdo;
 
     /**
-     * @var \Apps\Common\Models\TableModel
+     * @var \Common\Models\TableModel
      */
     public $model;
 
@@ -131,7 +131,7 @@ class AssemblyLineCommand extends BaseCommand
         $this->pdo = RedisConnection::newInstanceByName('libraries.[persistent.pdo]');
 
         // 实例化模型 (与上面的方法二选一)
-        $this->model = new \Apps\Common\Models\TableModel();
+        $this->model = new \Common\Models\TableModel();
     }
 
     // 右进程启动事件

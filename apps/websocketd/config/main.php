@@ -13,7 +13,7 @@ return [
     'basePath'         => dirname(__DIR__),
 
     // 命令命名空间
-    'commandNamespace' => 'Apps\WebSocketd\Commands',
+    'commandNamespace' => 'WebSocketd\Commands',
 
     // 命令
     'commands'         => [
@@ -27,18 +27,6 @@ return [
 
     // 组件配置
     'components'       => [
-
-        // 输入
-        'input'          => [
-            // 类路径
-            'class' => 'Mix\Console\Input',
-        ],
-
-        // 输出
-        'output'         => [
-            // 类路径
-            'class' => 'Mix\Console\Output',
-        ],
 
         // 错误
         'error'          => [
@@ -149,7 +137,7 @@ return [
             // 类路径
             'class'               => 'Mix\WebSocket\MessageHandler',
             // 控制器命名空间
-            'controllerNamespace' => 'Apps\WebSocketd\Controllers',
+            'controllerNamespace' => 'WebSocketd\Controllers',
             // 路由规则
             'rules'               => [
 

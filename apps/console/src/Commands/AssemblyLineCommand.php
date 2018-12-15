@@ -1,6 +1,6 @@
 <?php
 
-namespace Apps\Console\Commands;
+namespace Console\Commands;
 
 use Mix\Database\Persistent\PDOConnection;
 use Mix\Facades\Input;
@@ -22,7 +22,7 @@ class AssemblyLineCommand extends BaseCommand
     public $pdo;
 
     /**
-     * @var \Apps\Common\Models\TableModel
+     * @var \Common\Models\TableModel
      */
     public $model;
 
@@ -112,7 +112,7 @@ class AssemblyLineCommand extends BaseCommand
         $this->pdo = PDOConnection::newInstance();
 
         // 实例化模型 (与上面的方法二选一)
-        $this->model = new \Apps\Common\Models\TableModel();
+        $this->model = new \Common\Models\TableModel();
     }
 
     // 右进程消息事件

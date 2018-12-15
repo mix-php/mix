@@ -13,7 +13,7 @@ return [
     'basePath'         => dirname(__DIR__),
 
     // 命令命名空间
-    'commandNamespace' => 'Apps\Httpd\Commands',
+    'commandNamespace' => 'Httpd\Commands',
 
     // 命令
     'commands'         => [

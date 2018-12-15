@@ -1,6 +1,6 @@
 <?php
 
-namespace Apps\Httpd\Commands\Service;
+namespace Httpd\Commands\Service;
 
 use Mix\Helpers\ProcessHelper;
 

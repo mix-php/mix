@@ -1,6 +1,6 @@
 <?php
 
-namespace Apps\WebSocketd\Models;
+namespace WebSocketd\Models;
 
 use Mix\Validators\Validator;
 

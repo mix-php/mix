@@ -1,6 +1,6 @@
 <?php
 
-namespace Apps\Daemon\Commands;
+namespace Daemon\Commands;
 
 use Mix\Console\Command;
 use Mix\Facades\Output;
@@ -45,12 +45,12 @@ class BaseCommand extends Command
     {
         // 重复启动处理
         if ($pid = ProcessHelper::readPidFile($this->pidFile)) {
-            Output::writeln("mix-daemon '{$this->programName}' is running, PID : {$pid}.");
+            println("mix-daemon '{$this->programName}' is running, PID : {$pid}.");
             // 返回
             return false;
         }
         // 启动提示
-        Output::writeln("mix-daemon '{$this->programName}' start successed.");
+        println("mix-daemon '{$this->programName}' start successed.");
         // 蜕变为守护进程
         if ($this->daemon) {
             ProcessHelper::daemon();
@@ -76,9 +76,9 @@ class BaseCommand extends Command
                 // 等待进程退出
                 usleep(100000);
             }
-            Output::writeln("mix-daemon '{$this->programName}' stop completed.");
+            println("mix-daemon '{$this->programName}' stop completed.");
         } else {
-            Output::writeln("mix-daemon '{$this->programName}' is not running.");
+            println("mix-daemon '{$this->programName}' is not running.");
         }
     }
 
@@ -93,9 +93,9 @@ class BaseCommand extends Command
     public function actionStatus()
     {
         if ($pid = ProcessHelper::readPidFile($this->pidFile)) {
-            Output::writeln("mix-daemon '{$this->programName}' is running, PID : {$pid}.");
+            println("mix-daemon '{$this->programName}' is running, PID : {$pid}.");
         } else {
-            Output::writeln("mix-daemon '{$this->programName}' is not running.");
+            println("mix-daemon '{$this->programName}' is not running.");
         }
     }
 

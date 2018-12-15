@@ -1,6 +1,6 @@
 <?php
 
-namespace Apps\Daemon\Commands;
+namespace Daemon\Commands;
 
 use Mix\Redis\Persistent\RedisConnection;
 use Mix\Facades\Input;

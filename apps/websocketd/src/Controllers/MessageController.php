@@ -1,10 +1,10 @@
 <?php
 
-namespace Apps\WebSocketd\Controllers;
+namespace WebSocketd\Controllers;
 
 use Mix\Facades\Redis;
 use Mix\WebSocket\Controller;
-use Apps\WebSocketd\Models\MessageForm;
+use WebSocketd\Models\MessageForm;
 
 /**
  * 消息控制器

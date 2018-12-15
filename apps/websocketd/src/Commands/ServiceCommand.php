@@ -1,6 +1,6 @@
 <?php
 
-namespace Apps\WebSocketd\Commands;
+namespace WebSocketd\Commands;
 
 use Mix\Console\Command;
 use Mix\Facades\Error;
@@ -36,11 +36,11 @@ class ServiceCommand extends Command
         $pid    = ProcessHelper::readPidFile($server->settings['pid_file']);
         // 重复启动处理
         if ($pid) {
-            Output::writeln("mix-websocketd is running, PID : {$pid}.");
+            println("mix-websocketd is running, PID : {$pid}.");
             return;
         }
         // 启动提示
-        Output::writeln('mix-websocketd start successed.');
+        println('mix-websocketd start successed.');
         // 蜕变为守护进程
         if ($this->daemon) {
             ProcessHelper::daemon();
@@ -63,9 +63,9 @@ class ServiceCommand extends Command
                 // 等待进程退出
                 usleep(100000);
             }
-            Output::writeln('mix-websocketd stop completed.');
+            println('mix-websocketd stop completed.');
         } else {
-            Output::writeln('mix-websocketd is not running.');
+            println('mix-websocketd is not running.');
         }
     }
 
@@ -84,9 +84,9 @@ class ServiceCommand extends Command
         $server = \Mix\WebSocket\Server::newInstance();
         $pid    = ProcessHelper::readPidFile($server->settings['pid_file']);
         if ($pid) {
-            Output::writeln("mix-websocketd is running, PID : {$pid}.");
+            println("mix-websocketd is running, PID : {$pid}.");
         } else {
-            Output::writeln('mix-websocketd is not running.');
+            println('mix-websocketd is not running.');
         }
     }
 

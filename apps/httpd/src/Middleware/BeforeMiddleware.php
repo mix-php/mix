@@ -1,6 +1,6 @@
 <?php
 
-namespace Apps\Httpd\Middleware;
+namespace Httpd\Middleware;
 
 /**
  * 前置中间件

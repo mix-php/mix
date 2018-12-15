@@ -19,32 +19,20 @@ return [
     'basePath'         => dirname(__DIR__),
 
     // 命令命名空间
-    'commandNamespace' => 'Apps\Console\Commands',
+    'commandNamespace' => 'Console\Commands',
 
     // 命令
     'commands'         => [
 
-        'assemblyline exec' => ['AssemblyLine', 'Exec'],
-        'push exec'         => ['Push', 'Exec'],
-        'clear exec'        => ['Clear', 'Exec'],
-        'coroutine exec'    => ['Coroutine', 'Exec'],
+        'assemblyline'   => ['AssemblyLine', 'description' => ''],
+        'push'           => ['Push', 'description' => ''],
+        'clear exec'     => ['Clear', 'description' => ''],
+        'coroutine exec' => ['Coroutine', 'description' => ''],
 
     ],
 
     // 组件配置
     'components'       => [
-
-        // 输入
-        'input'     => [
-            // 类路径
-            'class' => 'Mix\Console\Input',
-        ],
-
-        // 输出
-        'output'    => [
-            // 类路径
-            'class' => 'Mix\Console\Output',
-        ],
 
         // 错误
         'error'     => [

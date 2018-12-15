@@ -1,6 +1,6 @@
 <?php
 
-namespace Apps\Console\Commands;
+namespace Console\Commands;
 
 use Mix\Console\Command;
 use Mix\Helpers\ProcessHelper;

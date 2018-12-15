@@ -1,8 +1,8 @@
 <?php
 
-namespace Apps\Httpd\Controllers;
+namespace Httpd\Controllers;
 
-use Apps\Httpd\Models\FileForm;
+use Httpd\Models\FileForm;
 use Mix\Facades\Request;
 use Mix\Http\Controller;
 
