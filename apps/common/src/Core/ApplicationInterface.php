@@ -8,8 +8,6 @@ namespace Apps\Common\Core;
  *
  * 系统组件
  * @property \Mix\Log\Logger $log
- * @property \Mix\Console\Input $input
- * @property \Mix\Console\Output $output
  * @property \Mix\Http\Route $route
  * @property \Mix\Http\Request|\Mix\Http\Compatible\Request $request
  * @property \Mix\Http\Response|\Mix\Http\Compatible\Response $response
