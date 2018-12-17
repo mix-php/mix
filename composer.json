@@ -28,8 +28,8 @@
       "WebSocketd\\": "apps/websocketd/src/"
     },
     "files": [
-      "apps/common/src/functions.php",
-      "apps/common/src/ApplicationInterface.php"
+      "apps/common/src/ApplicationInterface.php",
+      "apps/common/src/functions.php"
     ]
   }
 }
