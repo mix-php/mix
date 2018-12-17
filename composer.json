@@ -17,8 +17,6 @@
   ],
   "require": {
     "php": ">=7.0.0",
-    "psr/log": "~1.0",
-    "psr/container": "~1.0",
     "mixstart/mixphp-framework": "dev-dev"
   },
   "autoload": {
@@ -30,7 +28,8 @@
       "WebSocketd\\": "apps/websocketd/src/"
     },
     "files": [
-      "apps/common/src/Helpers/functions.php"
+      "apps/common/src/functions.php",
+      "apps/common/src/ApplicationInterface.php"
     ]
   }
 }

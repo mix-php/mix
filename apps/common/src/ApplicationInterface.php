@@ -1,9 +1,7 @@
 <?php
 
-namespace Common\Core;
-
 /**
- * App接口
+ * Interface ApplicationInterface
  * @author 刘健 <coder.liu@qq.com>
  *
  * 系统组件
