@@ -69,7 +69,7 @@ class StartCommand extends BaseCommand
         ];
 
         // 异步订阅
-        $redis = \Mix\Redis\Async\RedisConnection::newInstanceByName('libraries.[async.redis]');
+        $redis = \Mix\Redis\Async\RedisConnection::newInstance();
         $redis->on('Message', function (\Swoole\Redis $client, $result) use ($webSocket, $fd) {
             try {
                 // 错误处理

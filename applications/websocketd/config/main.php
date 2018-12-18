@@ -89,9 +89,9 @@ return [
         // Session
         'sessionReader'  => [
             // 类路径
-            'class'         => 'Mix\WebSocket\SessionReader',
-            // 保存处理者
-            'saveHandler'   => [
+            'class'     => 'Mix\WebSocket\SessionReader',
+            // 处理者
+            'handler'   => [
                 // 类路径
                 'class'    => 'Mix\Redis\RedisConnection',
                 // 主机
@@ -104,17 +104,17 @@ return [
                 'password' => env('REDIS.PASSWORD'),
             ],
             // 保存的Key前缀
-            'saveKeyPrefix' => 'SESSION:',
+            'keyPrefix' => 'SESSION:',
             // session名
-            'name'          => 'session_id',
+            'name'      => 'session_id',
         ],
 
         // Token
         'tokenReader'    => [
             // 类路径
-            'class'         => 'Mix\WebSocket\TokenReader',
-            // 保存处理者
-            'saveHandler'   => [
+            'class'     => 'Mix\WebSocket\TokenReader',
+            // 处理者
+            'handler'   => [
                 // 类路径
                 'class'    => 'Mix\Redis\RedisConnection',
                 // 主机
@@ -127,9 +127,9 @@ return [
                 'password' => env('REDIS.PASSWORD'),
             ],
             // 保存的Key前缀
-            'saveKeyPrefix' => 'TOKEN:',
+            'keyPrefix' => 'TOKEN:',
             // token键名
-            'name'          => 'access_token',
+            'name'      => 'access_token',
         ],
 
         // 消息处理器

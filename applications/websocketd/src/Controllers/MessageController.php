@@ -2,7 +2,6 @@
 
 namespace WebSocketd\Controllers;
 
-use Mix\Facades\Redis;
 use Mix\WebSocket\Controller;
 use WebSocketd\Models\MessageForm;
 
@@ -26,7 +25,7 @@ class MessageController extends Controller
         }
 
         // 通过消息队列给指定用户id发消息
-        Redis::publish('emit_to_' . $model->to_uid, $model->message);
+        app()->redis->publish('emit_to_' . $model->to_uid, $model->message);
     }
 
 }
