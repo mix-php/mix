@@ -1,14 +1,15 @@
 <?php
 
-namespace Httpd\Commands\Service;
+namespace WebSocketd\Commands\Service;
 
+use Mix\Console\CommandLine\Flag;
 use Mix\Helpers\ProcessHelper;
 
 /**
- * Stop 子命令
+ * Restart 子命令
  * @author 刘健 <coder.liu@qq.com>
  */
-class StopCommand extends BaseCommand
+class RestartCommand extends StartCommand
 {
 
     // 主函数
@@ -28,7 +29,8 @@ class StopCommand extends BaseCommand
             // 等待进程退出
             usleep(100000);
         }
-        println(self::EXEC_SUCCESS);
+        // 启动服务
+        parent::main();
     }
 
 }

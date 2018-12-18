@@ -2,8 +2,6 @@
 
 namespace Httpd\Commands\Service;
 
-use Mix\Helpers\ProcessHelper;
-
 /**
  * Status 子命令
  * @author 刘健 <coder.liu@qq.com>
@@ -18,10 +16,10 @@ class StatusCommand extends BaseCommand
         $pidFile = $server->settings['pid_file'];
         $pid     = $this->getServicePid($pidFile);
         if (!$pid) {
-            echo self::NOT_RUNNING;
+            println(self::NOT_RUNNING);
             return;
         }
-        printf(self::IS_RUNNING, $pid);
+        println(sprintf(self::IS_RUNNING, $pid));
     }
 
 }

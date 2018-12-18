@@ -1,6 +1,6 @@
 <?php
 
-namespace Httpd\Commands\Service;
+namespace WebSocketd\Commands\Service;
 
 use Mix\Helpers\ProcessHelper;
 

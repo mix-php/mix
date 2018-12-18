@@ -18,10 +18,10 @@ return [
     // 命令
     'commands'         => [
 
-        'service start'   => ['Service', 'Start'],
-        'service stop'    => ['Service', 'Stop'],
-        'service restart' => ['Service', 'Restart'],
-        'service status'  => ['Service', 'Status'],
+        'service start'   => ['Service/Start', 'description' => ''],
+        'service stop'    => ['Service/Stop', 'description' => ''],
+        'service restart' => ['Service/Restart', 'description' => ''],
+        'service status'  => ['Service/Status', 'description' => ''],
 
     ],
 
@@ -156,8 +156,6 @@ return [
         [
             // 类路径
             'class'    => 'Mix\WebSocket\Server',
-            // 名称
-            'name'     => 'default',
             // 主机
             'host'     => 'localhost',
             // 端口
@@ -191,8 +189,6 @@ return [
         [
             // 类路径
             'class'    => 'Mix\Redis\Async\RedisConnection',
-            // 名称
-            'name'     => 'default',
             // 主机
             'host'     => env('REDIS.HOST'),
             // 端口

@@ -1,101 +1,47 @@
 <?php
 
-namespace WebSocketd\Commands;
+namespace WebSocketd\Commands\Service;
 
-use Mix\Console\Command;
-use Mix\Facades\Error;
-use Mix\Facades\Output;
+use Mix\Console\CommandLine\Flag;
 use Mix\Helpers\ProcessHelper;
 
 /**
- * Service 命令
+ * Start 子命令
  * @author 刘健 <coder.liu@qq.com>
  */
-class ServiceCommand extends Command
+class StartCommand extends BaseCommand
 {
 
-    // 是否后台运行
-    public $daemon = false;
-
-    // 选项配置
-    public function options()
+    // 主函数
+    public function main()
     {
-        return ['daemon'];
-    }
-
-    // 选项别名配置
-    public function optionAliases()
-    {
-        return ['d' => 'daemon'];
-    }
-
-    // 启动服务
-    public function actionStart()
-    {
-        $server = \Mix\WebSocket\Server::newInstance();
-        $pid    = ProcessHelper::readPidFile($server->settings['pid_file']);
-        // 重复启动处理
+        // 获取参数
+        $daemon = Flag::bool(['d', 'daemon'], false);
+        // 获取服务信息
+        $server  = \Mix\WebSocket\Server::newInstance();
+        $pidFile = $server->settings['pid_file'];
+        $pid     = $this->getServicePid($pidFile);
         if ($pid) {
-            println("mix-websocketd is running, PID : {$pid}.");
+            println(sprintf(self::IS_RUNNING, $pid));
             return;
         }
-        // 启动提示
-        println('mix-websocketd start successed.');
-        // 蜕变为守护进程
-        if ($this->daemon) {
+        // 启动服务
+        println(self::START_WELCOME);
+        if ($daemon) {
             ProcessHelper::daemon();
         }
-        // 启动服务
         $server->on('Open', [$this, 'onOpen']);
         $server->on('Message', [$this, 'onMessage']);
         $server->on('Close', [$this, 'onClose']);
         $server->start();
     }
 
-    // 停止服务
-    public function actionStop()
-    {
-        $server = \Mix\WebSocket\Server::newInstance();
-        $pid    = ProcessHelper::readPidFile($server->settings['pid_file']);
-        if ($pid) {
-            ProcessHelper::kill($pid);
-            while (ProcessHelper::isRunning($pid)) {
-                // 等待进程退出
-                usleep(100000);
-            }
-            println('mix-websocketd stop completed.');
-        } else {
-            println('mix-websocketd is not running.');
-        }
-    }
-
-    // 重启服务
-    public function actionRestart()
-    {
-        $this->actionStop();
-        $this->actionStart();
-        // 返回退出码
-        return;
-    }
-
-    // 查看服务状态
-    public function actionStatus()
-    {
-        $server = \Mix\WebSocket\Server::newInstance();
-        $pid    = ProcessHelper::readPidFile($server->settings['pid_file']);
-        if ($pid) {
-            println("mix-websocketd is running, PID : {$pid}.");
-        } else {
-            println('mix-websocketd is not running.');
-        }
-    }
-
     // 连接事件回调函数
     public function onOpen(\Swoole\WebSocket\Server $webSocket, $fd, \Mix\Http\Request $request)
     {
         // 效验session
-        $userinfo = app('websocket')->sessionReader->loadSessionId($request)->get('userinfo');
-        app('websocket')->sessionReader->close();
+        $userinfo = app()->sessionReader->loadSessionId($request)->get('userinfo');
+        app()->sessionReader->close();
         if (empty($userinfo)) {
             // 鉴权失败处理
             $webSocket->close($fd);
@@ -106,8 +52,8 @@ class ServiceCommand extends Command
          * token 方案，与上面的 session 方案，二选一使用即可
 
         // 效验token
-        $userinfo = app('websocket')->tokenReader->loadTokenId($request)->get('userinfo');
-        app('websocket')->tokenReader->close();
+        $userinfo = app()->tokenReader->loadTokenId($request)->get('userinfo');
+        app()->tokenReader->close();
         if (empty($userinfo)) {
             // 鉴权失败处理
             $webSocket->close($fd);
@@ -138,7 +84,7 @@ class ServiceCommand extends Command
                 }
             } catch (\Throwable $e) {
                 // 处理异常
-                Error::handleException($e);
+                app()->error->handleException($e);
             }
         });
         $redis->on('Close', function (\Swoole\Redis $client) use ($webSocket, $fd) {
@@ -158,7 +104,7 @@ class ServiceCommand extends Command
                 call_user_func_array([$client, 'subscribe'], $channels);
             } catch (\Throwable $e) {
                 // 处理异常
-                Error::handleException($e);
+                app()->error->handleException($e);
                 // 关闭 WS 连接
                 $webSocket->close($fd);
             }
@@ -182,7 +128,7 @@ class ServiceCommand extends Command
         }
         $event = $data['event'];
         // 执行功能
-        app('websocket')->messageHandler
+        app()->messageHandler
             ->setServer($webSocket)
             ->setFd($frame->fd)
             ->runAction($event, [$data['params'], $userinfo]);

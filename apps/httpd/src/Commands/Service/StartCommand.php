@@ -3,7 +3,6 @@
 namespace Httpd\Commands\Service;
 
 use Mix\Console\CommandLine\Flag;
-use Mix\Helpers\ProcessHelper;
 
 /**
  * Start 子命令
@@ -23,7 +22,7 @@ class StartCommand extends BaseCommand
         $pidFile = $server->settings['pid_file'];
         $pid     = $this->getServicePid($pidFile);
         if ($pid) {
-            printf(self::IS_RUNNING, $pid);
+            println(sprintf(self::IS_RUNNING, $pid));
             return;
         }
         // 启动服务

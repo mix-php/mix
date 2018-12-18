@@ -9,21 +9,18 @@ use Mix\Helpers\ProcessHelper;
  * Restart 子命令
  * @author 刘健 <coder.liu@qq.com>
  */
-class RestartCommand extends BaseCommand
+class RestartCommand extends StartCommand
 {
 
     // 主函数
     public function main()
     {
-        // 获取参数
-        $update = Flag::bool(['u', 'update'], false);
-        $daemon = Flag::bool(['d', 'daemon'], false);
         // 获取服务信息
         $server  = \Mix\Http\Server::newInstance();
         $pidFile = $server->settings['pid_file'];
         $pid     = $this->getServicePid($pidFile);
         if (!$pid) {
-            echo self::NOT_RUNNING;
+            println(self::NOT_RUNNING);
             return;
         }
         // 停止服务
@@ -33,11 +30,7 @@ class RestartCommand extends BaseCommand
             usleep(100000);
         }
         // 启动服务
-        if ($update) {
-            $server->settings['max_request'] = 1;
-        }
-        $server->settings['daemonize'] = $daemon;
-        $server->start();
+        parent::main();
     }
 
 }

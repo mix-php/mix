@@ -65,8 +65,6 @@ return [
         [
             // 类路径
             'class'       => 'Mix\Http\Server',
-            // 名称
-            'name'        => 'default',
             // 虚拟主机：运行在服务器内的 HTTP 服务
             'virtualHost' => [
                 // 主机

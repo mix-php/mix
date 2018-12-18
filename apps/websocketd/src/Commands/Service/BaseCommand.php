@@ -1,6 +1,6 @@
 <?php
 
-namespace Httpd\Commands\Service;
+namespace WebSocketd\Commands\Service;
 
 use Mix\Console\Command;
 use Mix\Console\PidFileHandler;
@@ -13,6 +13,7 @@ class BaseCommand extends Command
 {
 
     // 提示
+    const START_WELCOME = 'Service start successed.';
     const IS_RUNNING = 'Service is running, PID : %d';
     const NOT_RUNNING = 'Service is not running.';
     const EXEC_SUCCESS = 'Command executed successfully.';
