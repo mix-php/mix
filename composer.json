@@ -21,15 +21,15 @@
   },
   "autoload": {
     "psr-4": {
-      "Common\\": "apps/common/src/",
-      "Console\\": "apps/console/src/",
-      "Daemon\\": "apps/daemon/src/",
-      "Httpd\\": "apps/httpd/src/",
-      "WebSocketd\\": "apps/websocketd/src/"
+      "Common\\": "applications/common/src/",
+      "Console\\": "applications/console/src/",
+      "Daemon\\": "applications/daemon/src/",
+      "Httpd\\": "applications/httpd/src/",
+      "WebSocketd\\": "applications/websocketd/src/"
     },
     "files": [
-      "apps/common/src/ApplicationInterface.php",
-      "apps/common/src/functions.php"
+      "applications/common/src/ApplicationInterface.php",
+      "applications/common/src/functions.php"
     ]
   }
 }
