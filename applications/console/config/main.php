@@ -24,10 +24,7 @@ return [
     // 命令
     'commands'         => [
 
-        'assemblyline'   => ['AssemblyLine', 'description' => ''],
-        'push'           => ['Push', 'description' => ''],
-        'clear exec'     => ['Clear', 'description' => ''],
-        'coroutine exec' => ['Coroutine', 'description' => ''],
+        'coroutine' => ['Coroutine', 'description' => 'Coroutine demo.'],
 
     ],
 
