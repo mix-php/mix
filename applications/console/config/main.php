@@ -24,7 +24,8 @@ return [
     // 命令
     'commands'         => [
 
-        'coroutine' => ['Coroutine', 'description' => 'Coroutine demo.'],
+        'co'  => ['Coroutine', 'description' => "Coroutine demo."],
+        'cop' => ['CoroutinePool', 'description' => 'Coroutine pool demo.'],
 
     ],
 

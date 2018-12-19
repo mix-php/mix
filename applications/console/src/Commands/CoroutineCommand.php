@@ -20,9 +20,11 @@ class CoroutineCommand extends Command
     {
         tgo(function () {
             $time = time();
+            
             list($foo, $bar) = [$this->foo(), $this->bar()];
             list($fooResult, $barResult) = [$foo->pop(), $bar->pop()];
-            println('Time: ' . (time() - $time));
+            
+            println('Total time: ' . (time() - $time));
             var_dump($fooResult);
             var_dump($barResult);
         });
