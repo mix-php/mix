@@ -6,7 +6,6 @@ use Mix\Concurrent\Dispatcher;
 use Mix\Console\Command;
 use Mix\Core\Channel;
 use Mix\Helpers\ProcessHelper;
-use Mix\Redis\Coroutine\RedisPool;
 
 /**
  * 协程池范例
@@ -16,9 +15,10 @@ class CoroutinePoolCommand extends Command
 {
 
     /**
-     * @var RedisPool
+     * 退出
+     * @var bool
      */
-    public $redisPool;
+    public $quit = false;
 
     /**
      * 主函数
@@ -35,14 +35,13 @@ class CoroutinePoolCommand extends Command
             ]);
             $dispatch->start();
             // 投放任务
-            $this->redisPool = app()->redisPool;
+            $redis = \Mix\Redis\Coroutine\RedisConnection::newInstance();
             while (true) {
-                if (!isset($this->redisPool)) {
+                if ($this->quit) {
                     $dispatch->stop();
                     return;
                 }
-                $redis = $this->redisPool->getConnection();
-                $data  = $redis->brpop('test', 10);
+                $data = $redis->brpop('test', 10);
                 if (!$data) {
                     continue;
                 }
@@ -51,13 +50,7 @@ class CoroutinePoolCommand extends Command
             }
         });
         ProcessHelper::signal([SIGHUP, SIGINT, SIGTERM, SIGQUIT], function ($signal) {
-            $this->redisPool = null;
-            swoole_timer_tick(1000, function () {
-                $stats = \Swoole\Coroutine::stats();
-                if ($stats['coroutine_num'] == 1) {
-                    exit;
-                }
-            });
+            $this->quit = true;
             ProcessHelper::signal([SIGHUP, SIGINT, SIGTERM, SIGQUIT], null);
         });
         swoole_event_wait();
@@ -70,7 +63,7 @@ class CoroutinePoolCommand extends Command
      */
     public function call($data)
     {
-        println($data);
+        var_dump($data);
     }
 
 }

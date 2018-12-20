@@ -45,7 +45,7 @@ class CoroutinePoolCommand extends Command
      */
     public function call($i)
     {
-        println($i);
+        var_dump($i);
     }
 
 }
