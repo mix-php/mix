@@ -27,7 +27,7 @@ class CoroutinePoolCommand extends Command
     {
         tgo(function () {
             $maxWorkers = 20;
-            $maxQueue   = 10;
+            $maxQueue   = 20;
             $jobQueue   = new Channel($maxQueue);
             $dispatch   = new Dispatcher([
                 'jobQueue'   => $jobQueue,
@@ -49,6 +49,7 @@ class CoroutinePoolCommand extends Command
                 $jobQueue->push($job);
             }
         });
+        // 捕获信号
         ProcessHelper::signal([SIGHUP, SIGINT, SIGTERM, SIGQUIT], function ($signal) {
             $this->quit = true;
             ProcessHelper::signal([SIGHUP, SIGINT, SIGTERM, SIGQUIT], null);
