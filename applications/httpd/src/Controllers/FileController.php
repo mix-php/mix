@@ -3,7 +3,6 @@
 namespace Httpd\Controllers;
 
 use Httpd\Models\FileForm;
-use Mix\Facades\Request;
 use Mix\Http\Controller;
 
 /**
@@ -20,7 +19,7 @@ class FileController extends Controller
 
         // 使用模型
         $model             = new FileForm();
-        $model->attributes = Request::post();
+        $model->attributes = app()->request->post();
         $model->setScenario('upload');
         if (!$model->validate()) {
             return ['code' => 1, 'message' => 'FAILED', 'data' => $model->getErrors()];

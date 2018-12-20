@@ -3,7 +3,6 @@
 namespace Httpd\Controllers;
 
 use Httpd\Models\UserForm;
-use Mix\Facades\Request;
 use Mix\Http\Controller;
 
 /**
@@ -20,7 +19,7 @@ class UserController extends Controller
 
         // 使用模型
         $model             = new UserForm();
-        $model->attributes = Request::get() + Request::post();
+        $model->attributes = app()->request->get() + app()->request->post();
         $model->setScenario('create');
         if (!$model->validate()) {
             return ['code' => 1, 'message' => 'FAILED', 'data' => $model->getErrors()];
