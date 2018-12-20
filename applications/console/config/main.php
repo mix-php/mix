@@ -59,37 +59,6 @@ return [
             ],
         ],
 
-        // 数据库
-        'pdo'       => [
-            // 类路径
-            'class'         => 'Mix\Database\Persistent\PDOConnection',
-            // 数据源格式
-            'dsn'           => env('DATABASE.DSN'),
-            // 数据库用户名
-            'username'      => env('DATABASE.USERNAME'),
-            // 数据库密码
-            'password'      => env('DATABASE.PASSWORD'),
-            // 驱动连接选项: http://php.net/manual/zh/pdo.setattribute.php
-            'driverOptions' => [
-                // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
-                \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-            ],
-        ],
-
-        // redis
-        'redis'     => [
-            // 类路径
-            'class'    => 'Mix\Redis\Persistent\RedisConnection',
-            // 主机
-            'host'     => env('REDIS.HOST'),
-            // 端口
-            'port'     => env('REDIS.PORT'),
-            // 数据库
-            'database' => env('REDIS.DATABASE'),
-            // 密码
-            'password' => env('REDIS.PASSWORD'),
-        ],
-
         // 连接池
         'redisPool' => [
             // 类路径
