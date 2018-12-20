@@ -2,7 +2,7 @@
 
 /**
  * 一键下载
- * @author 刘健 <coder.liu@qq.com>
+ * @author LIUJIAN <coder.keda@gmail.com>
  */
 
 $url     = 'https://github.com/mixstart/mixphp/releases/download/v1.1.1/mixphp-full-v1.1.1.zip';

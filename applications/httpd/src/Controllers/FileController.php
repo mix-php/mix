@@ -7,7 +7,7 @@ use Mix\Http\Controller;
 
 /**
  * 文件上传范例
- * @author 刘健 <coder.liu@qq.com>
+ * @author LIUJIAN <coder.keda@gmail.com>
  */
 class FileController extends Controller
 {

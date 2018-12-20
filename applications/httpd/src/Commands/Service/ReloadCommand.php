@@ -6,7 +6,7 @@ use Mix\Helpers\ProcessHelper;
 
 /**
  * Reload 子命令
- * @author 刘健 <coder.liu@qq.com>
+ * @author LIUJIAN <coder.keda@gmail.com>
  */
 class ReloadCommand extends BaseCommand
 {

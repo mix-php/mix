@@ -4,7 +4,7 @@ namespace Httpd\Middleware;
 
 /**
  * 后置中间件
- * @author 刘健 <coder.liu@qq.com>
+ * @author LIUJIAN <coder.keda@gmail.com>
  */
 class AfterMiddleware
 {

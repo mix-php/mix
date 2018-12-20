@@ -9,7 +9,7 @@ use Mix\Helpers\ProcessHelper;
 
 /**
  * 协程池范例
- * @author 刘健 <coder.liu@qq.com>
+ * @author LIUJIAN <coder.keda@gmail.com>
  */
 class CoroutinePoolCommand extends Command
 {

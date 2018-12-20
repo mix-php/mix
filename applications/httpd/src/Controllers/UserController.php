@@ -7,7 +7,7 @@ use Mix\Http\Controller;
 
 /**
  * API接口范例
- * @author 刘健 <coder.liu@qq.com>
+ * @author LIUJIAN <coder.keda@gmail.com>
  */
 class UserController extends Controller
 {

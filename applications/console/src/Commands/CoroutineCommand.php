@@ -8,7 +8,7 @@ use Mix\Core\ChannelHook;
 
 /**
  * 协程范例
- * @author 刘健 <coder.liu@qq.com>
+ * @author LIUJIAN <coder.keda@gmail.com>
  */
 class CoroutineCommand extends Command
 {

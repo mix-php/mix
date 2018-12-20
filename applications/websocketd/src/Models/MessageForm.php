@@ -6,7 +6,7 @@ use Mix\Validators\Validator;
 
 /**
  * Message 表单模型类
- * @author 刘健 <coder.liu@qq.com>
+ * @author LIUJIAN <coder.keda@gmail.com>
  */
 class MessageForm extends Validator
 {

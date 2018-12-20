@@ -6,7 +6,7 @@ use Mix\Validators\Validator;
 
 /**
  * Join 表单模型类
- * @author 刘健 <coder.liu@qq.com>
+ * @author LIUJIAN <coder.keda@gmail.com>
  */
 class JoinForm extends Validator
 {
