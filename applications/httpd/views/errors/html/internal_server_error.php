@@ -18,7 +18,7 @@
         }
         a {
             color: #4183c4;
-            text-decoration: underline;
+            text-decoration: none;
         }
         a:hover {
             text-decoration: underline;
