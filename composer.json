@@ -17,7 +17,15 @@
   ],
   "require": {
     "php": ">=7.0.0",
-    "mixstart/mixphp-framework": "dev-dev"
+    "mixstart/mix-framework": "dev-master",
+    "mixstart/mix-console": "dev-master",
+    "mixstart/mix-http": "dev-master",
+    "mixstart/mix-websocket": "dev-master",
+    "mixstart/mix-log": "dev-master",
+    "mixstart/mix-concurrent": "dev-master",
+    "mixstart/mix-validators": "dev-master",
+    "mixstart/mix-database": "dev-master",
+    "mixstart/mix-redis": "dev-master"
   },
   "autoload": {
     "psr-4": {
