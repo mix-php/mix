@@ -78,20 +78,16 @@ return [
             'settings'    => [
                 // 开启协程
                 'enable_coroutine' => false,
-                // 连接处理线程数
+                // 主进程事件处理线程数
                 'reactor_num'      => 8,
                 // 工作进程数
                 'worker_num'       => 8,
+                // 进程的最大任务数
+                'max_request'      => 10000,
                 // PID 文件
                 'pid_file'         => '/var/run/mix-httpd.pid',
                 // 日志文件路径
                 'log_file'         => '/tmp/mix-httpd.log',
-                // 进程的最大任务数
-                'max_request'      => 10000,
-                // 退出等待时间
-                'max_wait_time'    => 60,
-                // 异步安全重启
-                'reload_async'     => true,
                 // 子进程运行用户
                 /* 'user'        => 'www', */
             ],

@@ -41,7 +41,7 @@ class CoroutinePoolCommand extends Command
                     $dispatch->stop();
                     return;
                 }
-                $data = $redis->brpop('test', 3);
+                $data = $redis->brPop('test', 3);
                 if (!$data) {
                     continue;
                 }
