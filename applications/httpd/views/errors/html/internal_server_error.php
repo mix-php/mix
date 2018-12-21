@@ -18,7 +18,7 @@
         }
         a {
             color: #4183c4;
-            text-decoration: none;
+            text-decoration: underline;
         }
         a:hover {
             text-decoration: underline;
@@ -40,7 +40,7 @@
 <p><?= str_replace("\n", '<br>', $trace); ?></p>
 <?php endif; ?>
 
-<p style="margin-top: 20px;"><a href="http://mixphp.cn" target="_blank">MixPHP：基于 Swoole 的FPM、常驻内存、协程三模 PHP 高性能框架</a></p>
+<p style="margin-top: 20px;"><span><a href="http://mixphp.cn" target="_blank">MixPHP</a> —— 基于 Swoole 的FPM、常驻内存、协程三模 PHP 高性能框架</span></p>
 
 </body>
 </html>
