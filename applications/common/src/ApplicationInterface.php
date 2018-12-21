@@ -17,7 +17,7 @@
  * @property \Mix\WebSocket\TokenReader $tokenReader
  * @property \Mix\WebSocket\SessionReader $sessionReader
  * @property \Mix\WebSocket\MessageHandler $messageHandler
- * @property \Mix\Database\PDOConnection $pdo
+ * @property \Mix\Database\PDOConnection|Mix\Database\MasterSlave\PDOConnection $pdo
  * @property \Mix\Redis\RedisConnection $redis
  * @property \Mix\Database\Coroutine\PDOPool $pdoPool
  * @property \Mix\Redis\Coroutine\RedisPool $redisPool
