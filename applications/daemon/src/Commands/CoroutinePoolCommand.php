@@ -25,6 +25,12 @@ class CoroutinePoolCommand extends Command
      */
     public function main()
     {
+        // 捕获信号
+        ProcessHelper::signal([SIGHUP, SIGINT, SIGTERM, SIGQUIT], function ($signal) {
+            $this->quit = true;
+            ProcessHelper::signal([SIGHUP, SIGINT, SIGTERM, SIGQUIT], null);
+        });
+        // 协程池执行任务
         tgo(function () {
             $maxWorkers = 20;
             $maxQueue   = 20;
@@ -35,7 +41,7 @@ class CoroutinePoolCommand extends Command
             ]);
             $dispatch->start();
             // 投放任务
-            $redis = \Mix\Redis\Coroutine\RedisConnection::newInstance();
+            $redis = app()->redisPool->getConnection();
             while (true) {
                 if ($this->quit) {
                     $dispatch->stop();
@@ -53,11 +59,6 @@ class CoroutinePoolCommand extends Command
                 $job = [[$this, 'call'], [array_pop($data)]];
                 $jobQueue->push($job);
             }
-        });
-        // 捕获信号
-        ProcessHelper::signal([SIGHUP, SIGINT, SIGTERM, SIGQUIT], function ($signal) {
-            $this->quit = true;
-            ProcessHelper::signal([SIGHUP, SIGINT, SIGTERM, SIGQUIT], null);
         });
         swoole_event_wait();
     }
