@@ -41,7 +41,12 @@ class CoroutinePoolCommand extends Command
                     $dispatch->stop();
                     return;
                 }
-                $data = $redis->brPop('test', 3);
+                try {
+                    $data = $redis->brPop('test', 3);
+                } catch (\Throwable $e) {
+                    $dispatch->stop();
+                    return;
+                }
                 if (!$data) {
                     continue;
                 }
