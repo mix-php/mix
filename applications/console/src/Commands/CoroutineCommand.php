@@ -4,7 +4,6 @@ namespace Console\Commands;
 
 use Mix\Console\Command;
 use Mix\Core\Channel;
-use Mix\Core\ChannelHook;
 
 /**
  * 协程范例
@@ -20,10 +19,10 @@ class CoroutineCommand extends Command
     {
         tgo(function () {
             $time = time();
-            
+
             list($foo, $bar) = [$this->foo(), $this->bar()];
             list($fooResult, $barResult) = [$foo->pop(), $bar->pop()];
-            
+
             println('Total time: ' . (time() - $time));
             var_dump($fooResult);
             var_dump($barResult);
@@ -37,8 +36,7 @@ class CoroutineCommand extends Command
     public function foo()
     {
         $chan = new Channel();
-        tgo(function (ChannelHook $hook) use ($chan) {
-            $hook->install($chan);
+        tgo(function () use ($chan) {
             $pdo    = app()->pdoPool->getConnection();
             $result = $pdo->createCommand('select sleep(5)')->queryAll();
             $chan->push($result);
@@ -53,8 +51,7 @@ class CoroutineCommand extends Command
     public function bar()
     {
         $chan = new Channel();
-        tgo(function (ChannelHook $hook) use ($chan) {
-            $hook->install($chan);
+        tgo(function () use ($chan) {
             $pdo    = app()->pdoPool->getConnection();
             $result = $pdo->createCommand('select sleep(2)')->queryAll();
             $chan->push($result);
