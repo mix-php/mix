@@ -18,7 +18,7 @@ class CoroutinePoolCommand extends Command
      */
     public function main()
     {
-        tgo(function () {
+        xgo(function () {
             $maxWorkers = 20;
             $maxQueue   = 10;
             $jobQueue   = new Channel($maxQueue);
@@ -35,7 +35,6 @@ class CoroutinePoolCommand extends Command
             // 停止
             $dispatch->stop();
         });
-        swoole_event_wait();
     }
 
     /**

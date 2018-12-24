@@ -31,7 +31,7 @@ class CoroutinePoolCommand extends Command
             ProcessHelper::signal([SIGHUP, SIGINT, SIGTERM, SIGQUIT], null);
         });
         // 协程池执行任务
-        tgo(function () {
+        xgo(function () {
             $maxWorkers = 20;
             $maxQueue   = 20;
             $jobQueue   = new Channel($maxQueue);
@@ -60,7 +60,6 @@ class CoroutinePoolCommand extends Command
                 $jobQueue->push($job);
             }
         });
-        swoole_event_wait();
     }
 
     /**

@@ -17,7 +17,7 @@ class CoroutineCommand extends Command
      */
     public function main()
     {
-        tgo(function () {
+        xgo(function () {
             $time = time();
 
             list($foo, $bar) = [$this->foo(), $this->bar()];
@@ -36,7 +36,7 @@ class CoroutineCommand extends Command
     public function foo()
     {
         $chan = new Channel();
-        tgo(function () use ($chan) {
+        xgo(function () use ($chan) {
             $pdo    = app()->pdoPool->getConnection();
             $result = $pdo->createCommand('select sleep(5)')->queryAll();
             $chan->push($result);
@@ -51,7 +51,7 @@ class CoroutineCommand extends Command
     public function bar()
     {
         $chan = new Channel();
-        tgo(function () use ($chan) {
+        xgo(function () use ($chan) {
             $pdo    = app()->pdoPool->getConnection();
             $result = $pdo->createCommand('select sleep(2)')->queryAll();
             $chan->push($result);
