@@ -26,6 +26,7 @@ return [
 
         'co'  => ['Coroutine', 'description' => "Coroutine demo."],
         'cop' => ['CoroutinePool', 'description' => 'Coroutine pool demo.'],
+        'tr'  => ['Timer', 'description' => 'Timer demo.'],
 
     ],
 
