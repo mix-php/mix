@@ -8,5 +8,4 @@ require __DIR__ . '/../../../vendor/autoload.php';
 Mix\Config\Environment::load(__DIR__ . '/../../../.env');
 
 $config   = require __DIR__ . '/../config/httpd.php';
-$exitCode = (new Mix\Console\Application($config))->run();
-exit($exitCode);
+(new Mix\Console\Application($config))->run();
