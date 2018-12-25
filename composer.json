@@ -27,6 +27,7 @@
     "mixstart/mix-database": "2.0.*",
     "mixstart/mix-redis": "2.0.*"
   },
+  "minimum-stability": "beta",
   "autoload": {
     "psr-4": {
       "Common\\": "applications/common/src/",
