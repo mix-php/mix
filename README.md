@@ -54,7 +54,6 @@ MixPHP 支持三种执行方式：传统模式(Apache/FPM)、常驻模式、协�
 * 命令行：封装了命令行开发基础设施，可快速开发定时任务、守护进程；
 * 组件：基于组件的框架结构，并集成了大量开箱即用的组件；
 * 中间件：AOP (面向切面编程)，注册方便，能更好的对请求进行过滤和处理；
-* 门面：核心组件全部内置门面类，助力快速开发；
 * 路由：底层全正则实现，性能高，配置简单；
 * 验证器：集成了使用简单但功能强大的验证器，支持多场景控制；
 * 视图：使用 PHP 做模板引擎，支持布局、属性；
@@ -129,14 +128,17 @@ _/ / / / / / / /\ \/ / /_/ / / / / /_/ /
                    /_/         /_/
 
 Server      Name:      mix-httpd
-Framework   Version:   1.1.0-RC2
+System      Name:      linux
+Framework   Version:   1.1.1
 PHP         Version:   7.2.9
-Swoole      Version:   4.2.1
+Swoole      Version:   4.2.9
 Listen      Addr:      127.0.0.1
 Listen      Port:      9501
+Reactor     Num:       8
+Worker      Num:       8
 Hot         Update:    disabled
 Coroutine   Mode:      disabled
-Config      File:      /data/apps/httpd/config/http_permanent.php
+Config      File:      /data/applications/httpd/config/http_permanent.php
 ```
 
 访问测试：
