@@ -78,8 +78,6 @@ MixPHP开发指南：http://doc.mixphp.cn
 
 ## 快速开始
 
-方法一：
-
 推荐使用 [composer](https://www.phpcomposer.com/) 安装。
 
 安装稳定版本 `V1`：
