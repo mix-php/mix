@@ -91,13 +91,7 @@ composer create-project mixstart/mixphp=v1.1.1 --prefer-dist
 安装最新版本 `V2`：
 
 ```shell
-composer create-project mixstart/mix=v2.0.* --prefer-dist
-```
-
-如果提示错误，在 composer.json 增加 `"minimum-stability": "**"` 配置项，可用值为：`dev`、`alpha`、`beta`、`RC`、`stable`，再执行：
-
-```shell
-composer update
+composer create-project mixstart/mix=v2.0.1-Beta1 --prefer-dist
 ```
 
 安装入口：
