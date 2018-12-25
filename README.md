@@ -47,7 +47,8 @@ MixPHP 支持三种执行方式：传统模式(Apache/FPM)、常驻模式、协�
 * 高性能：极简架构 + Swoole引擎，超过 Phalcon 这类 C 扩展框架的性能；
 * 服务器：框架自带 mix-httpd 替代 Apache/PHP-FPM 作为高性能 HTTP 服务器；
 * 协程：采用 Swoole 原生协程与最新的 PHP Stream 一键协程化技术。
-* 连接池：通用的连接池组件，PDO/Redis 等组件默认接入连接池。
+* 连接池：redisPool、PDOPool 连接池支持。
+* 协程池：Dispatcher、Worker 协程池支持。
 * WebSocket：具备长连接开发能力，扩展了 PHP 开发领域；
 * 多进程：简易的多进程命令行开发，充分利用多核性能，可处理大量数据；
 * 长连接：按进程保持的长连接，支持 Mysql/Redis；
@@ -129,7 +130,7 @@ _/ / / / / / / /\ \/ / /_/ / / / / /_/ /
 
 Server      Name:      mix-httpd
 System      Name:      linux
-Framework   Version:   1.1.1
+Framework   Version:   2.0.1-Beta1
 PHP         Version:   7.2.9
 Swoole      Version:   4.2.9
 Listen      Addr:      127.0.0.1
