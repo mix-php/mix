@@ -80,29 +80,24 @@ MixPHP开发指南：http://doc.mixphp.cn
 
 方法一：
 
-推荐使用 [composer](https://www.phpcomposer.com/) 安装，但是一般情况下，`composer` 安装的是最新的稳定版本，不一定是最新版本。
+推荐使用 [composer](https://www.phpcomposer.com/) 安装。
 
-```shell
-composer create-project mixstart/mixphp --prefer-dist
-```
-如果你需要安装实时更新的版本：
+安装稳定版本：
 
 ```shell
 composer create-project mixstart/mixphp=v1.1.1 --prefer-dist
+```
+
+安装最新版本 `V2`:
+
+```shell
+composer create-project mixstart/mix=v2.0.* --prefer-dist
 ```
 
 如果提示错误，在 composer.json 增加 `"minimum-stability": "**"` 配置项，可用值为：`dev`、`alpha`、`beta`、`RC`、`stable`，再执行：
 
 ```shell
 composer update
-```
-
-方法二：
-
-也可使用一键下载脚本，GitHub 有时下载很慢，命令行会报错，多试几次即可。
-
-```shell
-$> php -r "copy('https://raw.githubusercontent.com/mixstart/mixphp/master/download.php', 'download.php');include 'download.php';"
 ```
 
 安装入口：
@@ -153,7 +148,7 @@ Hello World
 
 ## 下载
 
-[MixPHP 发行版本](https://github.com/mixstart/mixphp/releases)
+[MixPHP 发行版本](https://github.com/mixstart/mix/releases)
 
 ## 技术交流
 
