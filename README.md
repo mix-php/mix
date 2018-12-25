@@ -82,13 +82,13 @@ MixPHP开发指南：http://doc.mixphp.cn
 
 推荐使用 [composer](https://www.phpcomposer.com/) 安装。
 
-安装稳定版本：
+安装稳定版本 `V1`：
 
 ```shell
 composer create-project mixstart/mixphp=v1.1.1 --prefer-dist
 ```
 
-安装最新版本 `V2`:
+安装最新版本 `V2`：
 
 ```shell
 composer create-project mixstart/mix=v2.0.* --prefer-dist
