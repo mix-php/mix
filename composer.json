@@ -1,5 +1,5 @@
 {
-  "name": "mixstart/mix",
+  "name": "mixstart/mix-php",
   "description": "基于 Swoole 的FPM、常驻内存、协程三模 PHP 高性能框架 http://www.mixphp.cn",
   "type": "project",
   "keywords": [
