@@ -2,6 +2,7 @@
 
 namespace Console\Commands;
 
+use Mix\Concurrent\WaitGroup;
 use Mix\Console\Command;
 use Mix\Core\Channel;
 
@@ -17,16 +18,18 @@ class CoroutineCommand extends Command
      */
     public function main()
     {
-        xgo(function () {
+        $ws = WaitGroup::new();
+        xgo(function () use ($ws) {
+            $ws->add();
             $time = time();
-
             list($foo, $bar) = [$this->foo(), $this->bar()];
             list($fooResult, $barResult) = [$foo->pop(), $bar->pop()];
-
             println('Total time: ' . (time() - $time));
             var_dump($fooResult);
             var_dump($barResult);
         });
+        $ws->wait();
+        println('finish');
     }
 
     /**
