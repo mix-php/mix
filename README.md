@@ -89,7 +89,7 @@ composer create-project mixstart/mixphp=v1.1.1 --prefer-dist
 安装最新版本 `V2`：
 
 ```shell
-composer create-project mixstart/mix-php=v2.0.1-Beta1 --prefer-dist
+composer create-project mix/mix=v2.0.1-Beta2 --prefer-dist
 ```
 
 安装入口：
