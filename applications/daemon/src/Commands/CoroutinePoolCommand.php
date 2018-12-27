@@ -2,7 +2,7 @@
 
 namespace Daemon\Commands;
 
-use Mix\Concurrent\Dispatcher;
+use Mix\Concurrent\CoroutinePool\Dispatcher;
 use Mix\Console\Command;
 use Mix\Core\Channel;
 use Mix\Helpers\ProcessHelper;

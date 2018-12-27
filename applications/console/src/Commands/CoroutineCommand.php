@@ -2,7 +2,7 @@
 
 namespace Console\Commands;
 
-use Mix\Concurrent\WaitGroup;
+use Mix\Concurrent\Sync\WaitGroup;
 use Mix\Console\Command;
 use Mix\Core\Channel;
 
