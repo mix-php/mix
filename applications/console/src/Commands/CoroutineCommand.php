@@ -18,18 +18,20 @@ class CoroutineCommand extends Command
      */
     public function main()
     {
-        $ws = WaitGroup::new();
-        xgo(function () use ($ws) {
-            $ws->add();
-            $time = time();
-            list($foo, $bar) = [$this->foo(), $this->bar()];
-            list($fooResult, $barResult) = [$foo->pop(), $bar->pop()];
-            println('Total time: ' . (time() - $time));
-            var_dump($fooResult);
-            var_dump($barResult);
+        xgo(function () {
+            $ws = WaitGroup::new();
+            xgo(function () use ($ws) {
+                $ws->add();
+                $time = time();
+                list($foo, $bar) = [$this->foo(), $this->bar()];
+                list($fooResult, $barResult) = [$foo->pop(), $bar->pop()];
+                println('Total time: ' . (time() - $time));
+                var_dump($fooResult);
+                var_dump($barResult);
+            });
+            $ws->wait();
+            println('finish');
         });
-        $ws->wait();
-        println('finish');
     }
 
     /**
