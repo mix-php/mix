@@ -1,5 +1,5 @@
 {
-  "name": "mixstart/mix-php",
+  "name": "mix/mix",
   "description": "基于 Swoole 的FPM、常驻内存、协程三模 PHP 高性能框架 http://www.mixphp.cn",
   "type": "project",
   "keywords": [
@@ -17,15 +17,15 @@
   ],
   "require": {
     "php": ">=7.0.0",
-    "mixstart/mix-framework": "2.0.*",
-    "mixstart/mix-console": "2.0.*",
-    "mixstart/mix-http": "2.0.*",
-    "mixstart/mix-websocket": "2.0.*",
-    "mixstart/mix-log": "2.0.*",
-    "mixstart/mix-concurrent": "2.0.*",
-    "mixstart/mix-validators": "2.0.*",
-    "mixstart/mix-database": "2.0.*",
-    "mixstart/mix-redis": "2.0.*"
+    "mix/framework": "2.0.*",
+    "mix/console": "2.0.*",
+    "mix/http": "2.0.*",
+    "mix/websocket": "2.0.*",
+    "mix/log": "2.0.*",
+    "mix/concurrent": "2.0.*",
+    "mix/validators": "2.0.*",
+    "mix/database": "2.0.*",
+    "mix/redis": "2.0.*"
   },
   "minimum-stability": "beta",
   "autoload": {
