@@ -31,7 +31,7 @@ return [
         // 错误
         'error'     => [
             // 类路径
-            'class' => 'Mix\Console\Error',
+            'class' => Mix\Console\Error::class,
             // 错误级别
             'level' => E_ALL,
         ],
@@ -39,13 +39,13 @@ return [
         // 日志
         'log'       => [
             // 类路径
-            'class'   => 'Mix\Log\Logger',
+            'class'   => Mix\Log\Logger::class,
             // 日志记录级别
             'levels'  => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
             // 处理者
             'handler' => [
                 // 类路径
-                'class'       => 'Mix\Log\FileHandler',
+                'class'       => Mix\Log\FileHandler::class,
                 // 日志目录
                 'dir'         => 'logs',
                 // 日志轮转类型
@@ -58,7 +58,7 @@ return [
         // 连接池
         'redisPool' => [
             // 类路径
-            'class'     => 'Mix\Redis\Coroutine\RedisPool',
+            'class'     => Mix\Redis\Coroutine\RedisPool::class,
             // 最多可空闲连接数
             'maxIdle'   => 5,
             // 最大连接数
@@ -76,7 +76,7 @@ return [
         // 连接池
         'pdoPool'   => [
             // 类路径
-            'class'     => 'Mix\Database\Coroutine\PDOPool',
+            'class'     => Mix\Database\Coroutine\PDOPool::class,
             // 最多可空闲连接数
             'maxIdle'   => 5,
             // 最大连接数
@@ -97,7 +97,7 @@ return [
         // 数据库
         [
             // 类路径
-            'class'         => ['Mix\Database\Coroutine\PDOConnection', 'name' => 'default'],
+            'class'         => [Mix\Database\Coroutine\PDOConnection::class, 'name' => 'default'],
             // 数据源格式
             'dsn'           => env('DATABASE.DSN'),
             // 数据库用户名
@@ -114,7 +114,7 @@ return [
         // redis
         [
             // 类路径
-            'class'    => 'Mix\Redis\Coroutine\RedisConnection',
+            'class'    => Mix\Redis\Coroutine\RedisConnection::class,
             // 主机
             'host'     => env('REDIS.HOST'),
             // 端口
@@ -128,7 +128,7 @@ return [
         // 数据库
         [
             // 类路径
-            'class'         => 'Mix\Database\Persistent\PDOConnection',
+            'class'         => Mix\Database\Persistent\PDOConnection::class,
             // 数据源格式
             'dsn'           => env('DATABASE.DSN'),
             // 数据库用户名
@@ -145,7 +145,7 @@ return [
         // redis
         [
             // 类路径
-            'class'    => 'Mix\Redis\Persistent\RedisConnection',
+            'class'    => Mix\Redis\Persistent\RedisConnection::class,
             // 主机
             'host'     => env('REDIS.HOST'),
             // 端口

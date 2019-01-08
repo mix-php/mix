@@ -21,7 +21,7 @@ return [
         // 路由
         'route'    => [
             // 类路径
-            'class'          => 'Mix\Http\Route',
+            'class'          => Mix\Http\Route::class,
             // 默认变量规则
             'defaultPattern' => '[\w-]+',
             // 路由变量规则
@@ -38,38 +38,38 @@ return [
         // 请求
         'request'  => [
             // 类路径
-            'class' => 'Mix\Http\Compatible\Request',
+            'class' => Mix\Http\Compatible\Request::class,
         ],
 
         // 响应
         'response' => [
             // 类路径
-            'class'         => 'Mix\Http\Compatible\Response',
+            'class'         => Mix\Http\Compatible\Response::class,
             // 默认输出格式
             'defaultFormat' => Mix\Http\Response::FORMAT_HTML,
             // json
             'json'          => [
                 // 类路径
-                'class' => 'Mix\Http\Json',
+                'class' => Mix\Http\Json::class,
             ],
             // jsonp
             'jsonp'         => [
                 // 类路径
-                'class' => 'Mix\Http\Jsonp',
+                'class' => Mix\Http\Jsonp::class,
                 // callback键名
                 'name'  => 'callback',
             ],
             // xml
             'xml'           => [
                 // 类路径
-                'class' => 'Mix\Http\Xml',
+                'class' => Mix\Http\Xml::class,
             ],
         ],
 
         // 错误
         'error'    => [
             // 类路径
-            'class'  => 'Mix\Http\Error',
+            'class'  => Mix\Http\Error::class,
             // 输出格式
             'format' => Mix\Http\Error::FORMAT_HTML,
             // 错误级别
@@ -77,15 +77,15 @@ return [
         ],
 
         // 日志
-        'log'                    => [
+        'log'      => [
             // 类路径
-            'class'   => 'Mix\Log\Logger',
+            'class'   => Mix\Log\Logger::class,
             // 日志记录级别
-            'levels'   => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
+            'levels'  => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
             // 处理者
             'handler' => [
                 // 类路径
-                'class'       => 'Mix\Log\FileHandler',
+                'class'       => Mix\Log\FileHandler::class,
                 // 日志目录
                 'dir'         => 'logs',
                 // 日志轮转类型
@@ -98,11 +98,11 @@ return [
         // Token
         'token'    => [
             // 类路径
-            'class'         => 'Mix\Http\Token',
+            'class'     => Mix\Http\Token::class,
             // 处理者
             'handler'   => [
                 // 类路径
-                'class'    => 'Mix\Redis\RedisConnection',
+                'class'    => Mix\Redis\RedisConnection::class,
                 // 主机
                 'host'     => env('REDIS.HOST'),
                 // 端口
@@ -115,19 +115,19 @@ return [
             // Key前缀
             'keyPrefix' => 'TOKEN:',
             // 有效期
-            'expiresIn'     => 604800,
+            'expiresIn' => 604800,
             // token键名
-            'name'          => 'access_token',
+            'name'      => 'access_token',
         ],
 
         // Session
         'session'  => [
             // 类路径
-            'class'          => 'Mix\Http\Session',
+            'class'          => Mix\Http\Session::class,
             // 处理者
-            'handler'    => [
+            'handler'        => [
                 // 类路径
-                'class'    => 'Mix\Redis\RedisConnection',
+                'class'    => Mix\Redis\RedisConnection::class,
                 // 主机
                 'host'     => env('REDIS.HOST'),
                 // 端口
@@ -138,7 +138,7 @@ return [
                 'password' => env('REDIS.PASSWORD'),
             ],
             // Key前缀
-            'keyPrefix'  => 'SESSION:',
+            'keyPrefix'      => 'SESSION:',
             // 生存时间
             'maxLifetime'    => 7200,
             // session键名
@@ -158,7 +158,7 @@ return [
         // 数据库
         'pdo'      => [
             // 类路径
-            'class'         => 'Mix\Database\PDOConnection',
+            'class'         => Mix\Database\PDOConnection::class,
             // 数据源格式
             'dsn'           => env('DATABASE.DSN'),
             // 数据库用户名
@@ -175,7 +175,7 @@ return [
         // redis
         'redis'    => [
             // 类路径
-            'class'    => 'Mix\Redis\RedisConnection',
+            'class'    => Mix\Redis\RedisConnection::class,
             // 主机
             'host'     => env('REDIS.HOST'),
             // 端口

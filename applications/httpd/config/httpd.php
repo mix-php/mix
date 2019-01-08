@@ -32,7 +32,7 @@ return [
         // 错误
         'error' => [
             // 类路径
-            'class' => 'Mix\Console\Error',
+            'class' => Mix\Console\Error::class,
             // 错误级别
             'level' => E_ALL,
         ],
@@ -40,13 +40,13 @@ return [
         // 日志
         'log'   => [
             // 类路径
-            'class'   => 'Mix\Log\Logger',
+            'class'   => Mix\Log\Logger::class,
             // 日志记录级别
             'levels'  => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
             // 处理者
             'handler' => [
                 // 类路径
-                'class'       => 'Mix\Log\FileHandler',
+                'class'       => Mix\Log\FileHandler::class,
                 // 日志目录
                 'dir'         => 'logs',
                 // 日志轮转类型
@@ -64,7 +64,7 @@ return [
         // 服务器
         [
             // 类路径
-            'class'       => 'Mix\Http\Server',
+            'class'       => Mix\Http\Server::class,
             // 虚拟主机：运行在服务器内的 HTTP 服务
             'virtualHost' => [
                 // 主机

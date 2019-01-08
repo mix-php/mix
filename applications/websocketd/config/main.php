@@ -31,7 +31,7 @@ return [
         // 错误
         'error'          => [
             // 类路径
-            'class' => 'Mix\Console\Error',
+            'class' => Mix\Console\Error::class,
             // 错误级别
             'level' => E_ALL,
         ],
@@ -39,13 +39,13 @@ return [
         // 日志
         'log'            => [
             // 类路径
-            'class'   => 'Mix\Log\Logger',
+            'class'   => Mix\Log\Logger::class,
             // 日志记录级别
             'levels'  => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
             // 处理者
             'handler' => [
                 // 类路径
-                'class'       => 'Mix\Log\FileHandler',
+                'class'       => Mix\Log\FileHandler::class,
                 // 日志目录
                 'dir'         => 'logs',
                 // 日志轮转类型
@@ -58,7 +58,7 @@ return [
         // 数据库
         'pdo'            => [
             // 类路径
-            'class'     => 'Mix\Database\Persistent\PDOConnection',
+            'class'     => Mix\Database\Persistent\PDOConnection::class,
             // 数据源格式
             'dsn'       => env('DATABASE.DSN'),
             // 数据库用户名
@@ -75,7 +75,7 @@ return [
         // redis
         'redis'          => [
             // 类路径
-            'class'    => 'Mix\Redis\Persistent\RedisConnection',
+            'class'    => Mix\Redis\Persistent\RedisConnection::class,
             // 主机
             'host'     => env('REDIS.HOST'),
             // 端口
@@ -89,11 +89,11 @@ return [
         // Session
         'sessionReader'  => [
             // 类路径
-            'class'     => 'Mix\WebSocket\SessionReader',
+            'class'     => Mix\WebSocket\SessionReader::class,
             // 处理者
             'handler'   => [
                 // 类路径
-                'class'    => 'Mix\Redis\RedisConnection',
+                'class'    => Mix\Redis\RedisConnection::class,
                 // 主机
                 'host'     => env('REDIS.HOST'),
                 // 端口
@@ -112,11 +112,11 @@ return [
         // Token
         'tokenReader'    => [
             // 类路径
-            'class'     => 'Mix\WebSocket\TokenReader',
+            'class'     => Mix\WebSocket\TokenReader::class,
             // 处理者
             'handler'   => [
                 // 类路径
-                'class'    => 'Mix\Redis\RedisConnection',
+                'class'    => Mix\Redis\RedisConnection::class,
                 // 主机
                 'host'     => env('REDIS.HOST'),
                 // 端口
@@ -135,7 +135,7 @@ return [
         // 消息处理器
         'messageHandler' => [
             // 类路径
-            'class'               => 'Mix\WebSocket\MessageHandler',
+            'class'               => Mix\WebSocket\MessageHandler::class,
             // 控制器命名空间
             'controllerNamespace' => 'WebSocketd\Controllers',
             // 路由规则
@@ -155,7 +155,7 @@ return [
         // 服务器
         [
             // 类路径
-            'class'    => 'Mix\WebSocket\Server',
+            'class'    => Mix\WebSocket\Server::class,
             // 主机
             'host'     => 'localhost',
             // 端口
@@ -188,7 +188,7 @@ return [
         // 异步redis
         [
             // 类路径
-            'class'    => 'Mix\Redis\Async\RedisConnection',
+            'class'    => Mix\Redis\Async\RedisConnection::class,
             // 主机
             'host'     => env('REDIS.HOST'),
             // 端口
