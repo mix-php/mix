@@ -1,6 +1,6 @@
 #!/bin/bash
 
-install_sys() {
+install_local() {
     for element in `find ./ -type f -name mix-*`
     do
         element=${element:2}
@@ -44,8 +44,8 @@ case "$1" in
     work)
         install_work
         ;;
-    sys)
-        install_sys
+    local)
+        install_local
         ;;
     *)
         install_work
