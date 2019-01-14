@@ -48,13 +48,13 @@ return [
         // 连接池
         'pdoPool'   => [
             // 依赖引用
-            'ref' => 'pdoConnPool',
+            'ref' => 'pdoPool',
         ],
 
         // 连接池
         'redisPool' => [
             // 依赖引用
-            'ref' => 'redisConnPool',
+            'ref' => 'redisPool',
         ],
 
     ],
@@ -107,7 +107,7 @@ return [
         // 连接池
         [
             // 依赖名称
-            'name'       => 'pdoConnPool',
+            'name'       => 'pdoPool',
             // 类路径
             'class'      => Mix\Pool\ConnectionPool::class,
             // 属性
@@ -116,15 +116,24 @@ return [
                 'maxIdle'   => 5,
                 // 最大连接数
                 'maxActive' => 50,
-                // 拨号依赖引用
-                'dialRef'   => beanname(Mix\Database\Coroutine\PDOConnection::class),
+                // 拨号
+                'dial'      => [
+                    // 依赖引用
+                    'ref' => beanname(Common\Libraries\PDOPoolDial::class),
+                ],
             ],
+        ],
+
+        // 连接池拨号
+        [
+            // 类路径
+            'class' => Common\Libraries\PDOPoolDial::class,
         ],
 
         // 连接池
         [
             // 依赖名称
-            'name'       => 'redisConnPool',
+            'name'       => 'redisPool',
             // 类路径
             'class'      => Mix\Pool\ConnectionPool::class,
             // 属性
@@ -133,9 +142,18 @@ return [
                 'maxIdle'   => 5,
                 // 最大连接数
                 'maxActive' => 50,
-                // 拨号依赖引用
-                'dialRef'   => beanname(Mix\Redis\Coroutine\RedisConnection::class),
+                // 拨号
+                'dial'      => [
+                    // 依赖引用
+                    'ref' => beanname(Common\Libraries\RedisPoolDial::class),
+                ],
             ],
+        ],
+
+        // 连接池拨号
+        [
+            // 类路径
+            'class' => Common\Libraries\RedisPoolDial::class,
         ],
 
         // 数据库
