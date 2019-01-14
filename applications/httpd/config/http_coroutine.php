@@ -63,13 +63,13 @@ return [
         // 连接池
         'pdoPool'   => [
             // 依赖引用
-            'ref' => 'pdoConnectionPool',
+            'ref' => 'pdoConnPool',
         ],
 
         // 连接池
         'redisPool' => [
             // 依赖引用
-            'ref' => 'redisConnectionPool',
+            'ref' => 'redisConnPool',
         ],
 
     ],
@@ -247,7 +247,7 @@ return [
         // 连接池
         [
             // 依赖名称
-            'name'       => 'pdoConnectionPool',
+            'name'       => 'pdoConnPool',
             // 类路径
             'class'      => Mix\Pool\ConnectionPool::class,
             // 属性
@@ -264,7 +264,7 @@ return [
         // 连接池
         [
             // 依赖名称
-            'name'       => 'redisConnectionPool',
+            'name'       => 'redisConnPool',
             // 类路径
             'class'      => Mix\Pool\ConnectionPool::class,
             // 属性
