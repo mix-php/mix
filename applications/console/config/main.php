@@ -119,7 +119,7 @@ return [
                 // 拨号
                 'dial'      => [
                     // 依赖引用
-                    'ref' => beanname(Common\Libraries\PDOPoolDial::class),
+                    'ref' => beanname(Common\Libraries\PDODial::class),
                 ],
             ],
         ],
@@ -127,7 +127,7 @@ return [
         // 连接池拨号
         [
             // 类路径
-            'class' => Common\Libraries\PDOPoolDial::class,
+            'class' => Common\Libraries\PDODial::class,
         ],
 
         // 连接池
@@ -145,7 +145,7 @@ return [
                 // 拨号
                 'dial'      => [
                     // 依赖引用
-                    'ref' => beanname(Common\Libraries\RedisPoolDial::class),
+                    'ref' => beanname(Common\Libraries\RedisDial::class),
                 ],
             ],
         ],
@@ -153,7 +153,7 @@ return [
         // 连接池拨号
         [
             // 类路径
-            'class' => Common\Libraries\RedisPoolDial::class,
+            'class' => Common\Libraries\RedisDial::class,
         ],
 
         // 数据库

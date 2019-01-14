@@ -8,7 +8,7 @@ use Mix\Pool\DialInterface;
  * Class RedisDial
  * @package Common\Libraries
  */
-class RedisPoolDial implements DialInterface
+class RedisDial implements DialInterface
 {
     
     /**

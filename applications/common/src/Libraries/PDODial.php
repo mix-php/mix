@@ -8,7 +8,7 @@ use Mix\Pool\DialInterface;
  * Class PDODial
  * @package Common\Libraries
  */
-class PDOPoolDial implements DialInterface
+class PDODial implements DialInterface
 {
 
     /**
