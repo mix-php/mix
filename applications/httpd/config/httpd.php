@@ -94,17 +94,14 @@ return [
             'class'      => Mix\Http\Server::class,
             // 属性
             'properties' => [
-                // 虚拟主机：运行在服务器内的 HTTP 服务
-                'virtualHost' => [
-                    // 主机
-                    'host'       => '127.0.0.1',
-                    // 端口
-                    'port'       => 9501,
-                    // 配置文件
-                    'configFile' => __DIR__ . '/http_permanent.php',
-                ],
+                // 主机
+                'host'       => '127.0.0.1',
+                // 端口
+                'port'       => 9501,
+                // 配置文件
+                'configFile' => __DIR__ . '/http_permanent.php',
                 // 运行参数：https://wiki.swoole.com/wiki/page/274.html
-                'settings'    => [
+                'settings'   => [
                     // 开启协程
                     'enable_coroutine' => false,
                     // 主进程事件处理线程数
