@@ -43,13 +43,13 @@ return [
         // 连接池
         'pdoPool'   => [
             // 依赖引用
-            'ref' => 'pdoPool',
+            'ref' => beanname(Mix\Database\Pool\ConnectionPool::class),
         ],
 
         // 连接池
         'redisPool' => [
             // 依赖引用
-            'ref' => 'redisPool',
+            'ref' => beanname(Mix\Redis\Pool\ConnectionPool::class),
         ],
 
     ],
@@ -101,10 +101,8 @@ return [
 
         // 连接池
         [
-            // 依赖名称
-            'name'       => 'pdoPool',
             // 类路径
-            'class'      => Mix\Pool\ConnectionPool::class,
+            'class'      => Mix\Database\Pool\ConnectionPool::class,
             // 属性
             'properties' => [
                 // 最多可空闲连接数
@@ -114,7 +112,7 @@ return [
                 // 拨号
                 'dial'      => [
                     // 依赖引用
-                    'ref' => beanname(Common\Libraries\PDODial::class),
+                    'ref' => beanname(Mix\Database\Pool\Dial::class),
                 ],
             ],
         ],
@@ -122,15 +120,13 @@ return [
         // 连接池拨号
         [
             // 类路径
-            'class' => Common\Libraries\PDODial::class,
+            'class' => Mix\Database\Pool\Dial::class,
         ],
 
         // 连接池
         [
-            // 依赖名称
-            'name'       => 'redisPool',
             // 类路径
-            'class'      => Mix\Pool\ConnectionPool::class,
+            'class'      => Mix\Redis\Pool\ConnectionPool::class,
             // 属性
             'properties' => [
                 // 最多可空闲连接数
@@ -140,7 +136,7 @@ return [
                 // 拨号
                 'dial'      => [
                     // 依赖引用
-                    'ref' => beanname(Common\Libraries\RedisDial::class),
+                    'ref' => beanname(Mix\Redis\Pool\Dial::class),
                 ],
             ],
         ],
@@ -148,7 +144,7 @@ return [
         // 连接池拨号
         [
             // 类路径
-            'class' => Common\Libraries\RedisDial::class,
+            'class' => Mix\Redis\Pool\Dial::class,
         ],
 
         // 数据库
