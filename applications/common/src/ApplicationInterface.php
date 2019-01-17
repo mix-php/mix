@@ -1,5 +1,9 @@
 <?php
 
+if (interface_exists('ApplicationInterface')) {
+    return;
+}
+
 /**
  * Interface ApplicationInterface
  * @author LIUJIAN <coder.keda@gmail.com>
@@ -25,3 +29,4 @@
 interface ApplicationInterface
 {
 }
+
