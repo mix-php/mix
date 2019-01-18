@@ -160,6 +160,8 @@ return [
             'properties' => [
                 // 输出格式
                 'format' => Mix\Http\Error::FORMAT_HTML,
+                // 错误级别
+                'level'  => E_ALL,
             ],
         ],
 
