@@ -17,16 +17,16 @@
   ],
   "require": {
     "php": ">=7.0.0",
-    "mix/framework": "2.0.*",
-    "mix/console": "2.0.*",
-    "mix/http": "2.0.*",
-    "mix/websocket": "2.0.*",
-    "mix/log": "2.0.*",
-    "mix/concurrent": "2.0.*",
-    "mix/validators": "2.0.*",
-    "mix/database": "2.0.*",
-    "mix/redis": "2.0.*",
-    "mix/cache": "2.0.*"
+    "mix/framework": "dev-master",
+    "mix/console": "dev-master",
+    "mix/http": "dev-master",
+    "mix/websocket": "dev-master",
+    "mix/log": "dev-master",
+    "mix/concurrent": "dev-master",
+    "mix/validators": "dev-master",
+    "mix/database": "dev-master",
+    "mix/redis": "dev-master",
+    "mix/cache": "dev-master"
   },
   "minimum-stability": "beta",
   "autoload": {
@@ -37,8 +37,10 @@
       "Httpd\\": "applications/httpd/src/",
       "WebSocketd\\": "applications/websocketd/src/"
     },
+    "classmap": [
+      "applications/common/src/ApplicationInterface.php"
+    ],
     "files": [
-      "applications/common/src/ApplicationInterface.php",
       "applications/common/src/functions.php"
     ]
   }
