@@ -5,7 +5,7 @@
 
 require __DIR__ . '/../../../vendor/autoload.php';
 
-Mix\Config\Environment::load(__DIR__ . '/../../../.env');
+Mix::loadEnvironmentFrom(__DIR__ . '/../../../.env');
 
-$config   = require __DIR__ . '/../config/main.php';
+$config = require __DIR__ . '/../config/main.php';
 (new Mix\Console\Application($config))->run();
