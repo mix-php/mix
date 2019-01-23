@@ -86,7 +86,11 @@ MixPHP开发指南：http://doc.mixphp.cn
 composer create-project mixstart/mixphp=v1.1.1 --prefer-dist
 ```
 
-安装最新版本 `V2` (注意：V2 还未进入正式版本，只能体验，不可使用在线上)：
+安装最新版本 `V2`：
+
+注意：V2 还未进入正式版本，只能体验，不可使用在线上。
+
+开发文档（未完成）：https://www.kancloud.cn/onanying/mixphp2/content
 
 ```shell
 composer create-project mix/mix=v2.0.1-RC --prefer-dist
