@@ -49,13 +49,13 @@ return [
         ],
 
         // Auth
-        'auth'     => [
+        'auth'      => [
             // 依赖引用
             'ref' => beanname(Mix\Auth\Authorization::class),
         ],
 
         // Session
-        'session'  => [
+        'session'   => [
             // 依赖引用
             'ref' => beanname(Mix\Session\RedisSession::class),
         ],
@@ -205,12 +205,12 @@ return [
                 // BearerToken
                 'bearerToken' => [
                     // 依赖引用
-                    'ref' => Mix\Auth\BearerToken::class,
+                    'ref' => beanname(Mix\Auth\BearerToken::class),
                 ],
                 // jwt
                 'jwt'         => [
                     // 依赖引用
-                    'ref' => Mix\Auth\JWT::class,
+                    'ref' => beanname(Mix\Auth\JWT::class),
                 ],
             ],
         ],
