@@ -48,16 +48,16 @@ return [
             'ref' => beanname(Mix\Log\Logger::class),
         ],
 
-        // Token
-        'token'     => [
+        // Auth
+        'auth'     => [
             // 依赖引用
-            'ref' => beanname(Mix\Http\Token::class),
+            'ref' => beanname(Mix\Auth\Authorization::class),
         ],
 
         // Session
-        'session'   => [
+        'session'  => [
             // 依赖引用
-            'ref' => beanname(Mix\Http\Session::class),
+            'ref' => beanname(Mix\Session\RedisSession::class),
         ],
 
         // 连接池
@@ -196,30 +196,48 @@ return [
             ],
         ],
 
-        // Token
+        // Auth
         [
             // 类路径
-            'class'      => Mix\Http\Token::class,
+            'class'      => Mix\Auth\Authorization::class,
             // 属性
             'properties' => [
-                // 连接池
-                'pool'      => [
-                    // 组件路径
-                    'component' => 'redisPool',
+                // BearerToken
+                'bearerToken' => [
+                    // 依赖引用
+                    'ref' => Mix\Auth\BearerToken::class,
                 ],
-                // Key前缀
-                'keyPrefix' => 'TOKEN:',
-                // 有效期
-                'expiresIn' => 604800,
-                // token键名
-                'name'      => 'access_token',
+                // jwt
+                'jwt'         => [
+                    // 依赖引用
+                    'ref' => Mix\Auth\JWT::class,
+                ],
+            ],
+        ],
+
+        // BearerToken
+        [
+            // 类路径
+            'class' => Mix\Auth\BearerToken::class,
+        ],
+
+        // jwt
+        [
+            // 类路径
+            'class'      => Mix\Auth\JWT::class,
+            // 属性
+            'properties' => [
+                // 钥匙
+                'key'       => 'example_key',
+                // 签名算法
+                'algorithm' => Mix\Auth\JWT::ALGORITHM_HS256,
             ],
         ],
 
         // Session
         [
             // 类路径
-            'class'      => Mix\Http\Session::class,
+            'class'      => Mix\Session\RedisSession::class,
             // 属性
             'properties' => [
                 // 连接池

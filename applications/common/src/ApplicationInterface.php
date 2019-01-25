@@ -12,8 +12,8 @@
  * @property \Mix\Http\Error|\Mix\Console\Error $error
  *
  * 自定义组件
- * @property \Mix\Http\Token $token
- * @property \Mix\Http\Session $session
+ * @property \Mix\Auth\Authorization $auth
+ * @property \Mix\Session\RedisSession $session
  * @property \Mix\WebSocket\TokenReader $tokenReader
  * @property \Mix\WebSocket\SessionReader $sessionReader
  * @property \Mix\WebSocket\MessageHandler $messageHandler
