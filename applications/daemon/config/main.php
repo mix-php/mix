@@ -9,8 +9,8 @@ return [
     // 应用版本
     'appVersion'       => '0.0.0',
 
-    // 初始化回调
-    'initialize'       => [],
+    // 初始化
+    'initialization'       => [],
 
     // 基础路径
     'basePath'         => dirname(__DIR__),
