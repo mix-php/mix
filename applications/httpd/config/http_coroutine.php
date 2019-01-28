@@ -57,7 +57,7 @@ return [
         // Session
         'session'   => [
             // 依赖引用
-            'ref' => beanname(Mix\Session\RedisSession::class),
+            'ref' => beanname(Mix\Session\RedisHttpSession::class),
         ],
 
         // 连接池
@@ -237,7 +237,7 @@ return [
         // Session
         [
             // 类路径
-            'class'      => Mix\Session\RedisSession::class,
+            'class'      => Mix\Session\RedisHttpSession::class,
             // 属性
             'properties' => [
                 // 连接池

@@ -13,7 +13,7 @@
  *
  * 自定义组件
  * @property \Mix\Auth\Authorization $auth
- * @property \Mix\Session\RedisSession $session
+ * @property \Mix\Session\RedisHttpSession $session
  * @property \Mix\WebSocket\TokenReader $tokenReader
  * @property \Mix\WebSocket\SessionReader $sessionReader
  * @property \Mix\WebSocket\MessageHandler $messageHandler
