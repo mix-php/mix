@@ -27,7 +27,7 @@
     "mix/database": "dev-master",
     "mix/redis": "dev-master",
     "mix/cache": "dev-master",
-    "mix/session": "dev-master",
+    "mix/http-session": "dev-master",
     "mix/auth": "dev-master"
   },
   "minimum-stability": "RC",

@@ -57,7 +57,7 @@ return [
         // Session
         'session'  => [
             // 依赖引用
-            'ref' => beanname(Mix\Session\RedisHttpSession::class),
+            'ref' => beanname(Mix\Http\Session\HttpSession::class),
         ],
 
         // 数据库
@@ -237,20 +237,18 @@ return [
         // Session
         [
             // 类路径
-            'class'      => Mix\Session\RedisHttpSession::class,
+            'class'      => Mix\Http\Session\HttpSession::class,
             // 属性
             'properties' => [
                 // 处理者
                 'handler'        => [
                     // 依赖引用
-                    'ref' => 'sessionHandler',
+                    'ref' => beanname(Mix\Http\Session\RedisHandler::class),
                 ],
-                // Key前缀
-                'keyPrefix'      => 'SESSION:',
-                // 生存时间
-                'maxLifetime'    => 7200,
                 // session键名
                 'name'           => 'session_id',
+                // 生存时间
+                'maxLifetime'    => 7200,
                 // 过期时间
                 'cookieExpires'  => 0,
                 // 有效的服务器路径
@@ -266,20 +264,17 @@ return [
 
         // Session处理者
         [
-            // 依赖名称
-            'name'       => 'sessionHandler',
             // 类路径
-            'class'      => Mix\Redis\RedisConnection::class,
+            'class'      => Mix\Http\Session\RedisHandler::class,
             // 属性
             'properties' => [
-                // 主机
-                'host'     => env('REDIS.HOST'),
-                // 端口
-                'port'     => env('REDIS.PORT'),
-                // 数据库
-                'database' => env('REDIS.DATABASE'),
-                // 密码
-                'password' => env('REDIS.PASSWORD'),
+                // 连接
+                'connection' => [
+                    // 组件引用
+                    'component' => 'redis',
+                ],
+                // Key前缀
+                'keyPrefix'  => 'SESSION:',
             ],
         ],
 

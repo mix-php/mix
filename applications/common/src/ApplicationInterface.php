@@ -13,10 +13,7 @@
  *
  * 自定义组件
  * @property \Mix\Auth\Authorization $auth
- * @property \Mix\Session\RedisHttpSession $session
- * @property \Mix\WebSocket\TokenReader $tokenReader
- * @property \Mix\WebSocket\SessionReader $sessionReader
- * @property \Mix\WebSocket\MessageHandler $messageHandler
+ * @property \Mix\Http\Session\HttpSession $session
  * @property \Mix\Database\PDOConnection|Mix\Database\MasterSlave\PDOConnection $pdo
  * @property \Mix\Redis\RedisConnection $redis
  * @property \Mix\Database\Pool\ConnectionPool $pdoPool
