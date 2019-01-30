@@ -8,7 +8,7 @@ class FileForm extends Validator
 {
 
     /**
-     * @var \Mix\Http\UploadFile
+     * @var \Mix\Http\Message\UploadFile
      */
     public $file;
 

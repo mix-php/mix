@@ -28,7 +28,9 @@
     "mix/redis": "dev-master",
     "mix/cache": "dev-master",
     "mix/http-session": "dev-master",
-    "mix/auth": "dev-master"
+    "mix/auth": "dev-master",
+    "mix/http-server": "dev-master",
+    "mix/http-message": "dev-master"
   },
   "minimum-stability": "RC",
   "autoload": {

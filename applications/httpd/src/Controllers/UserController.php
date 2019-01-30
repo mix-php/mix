@@ -15,7 +15,7 @@ class UserController extends Controller
     // 新增用户
     public function actionCreate()
     {
-        app()->response->format = \Mix\Http\Response::FORMAT_JSON;
+        app()->response->format = \Mix\Http\Message\Response::FORMAT_JSON;
 
         // 使用模型
         $model             = new UserForm();

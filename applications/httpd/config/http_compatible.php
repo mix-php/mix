@@ -27,13 +27,13 @@ return [
         // 请求
         'request'  => [
             // 依赖引用
-            'ref' => beanname(Mix\Http\Compatible\Request::class),
+            'ref' => beanname(Mix\Http\Message\Compatible\Request::class),
         ],
 
         // 响应
         'response' => [
             // 依赖引用
-            'ref' => beanname(Mix\Http\Compatible\Response::class),
+            'ref' => beanname(Mix\Http\Message\Compatible\Response::class),
         ],
 
         // 错误
@@ -100,31 +100,31 @@ return [
         // 请求
         [
             // 类路径
-            'class' => Mix\Http\Compatible\Request::class,
+            'class' => Mix\Http\Message\Compatible\Request::class,
         ],
 
         // 响应
         [
             // 类路径
-            'class'      => Mix\Http\Compatible\Response::class,
+            'class'      => Mix\Http\Message\Compatible\Response::class,
             // 属性
             'properties' => [
                 // 默认输出格式
-                'defaultFormat' => Mix\Http\Response::FORMAT_HTML,
+                'defaultFormat' => Mix\Http\Message\Response::FORMAT_HTML,
                 // json
                 'json'          => [
                     // 依赖引用
-                    'ref' => beanname(Mix\Http\Json::class),
+                    'ref' => beanname(Mix\Http\Message\Json::class),
                 ],
                 // jsonp
                 'jsonp'         => [
                     // 依赖引用
-                    'ref' => beanname(Mix\Http\Jsonp::class),
+                    'ref' => beanname(Mix\Http\Message\Jsonp::class),
                 ],
                 // xml
                 'xml'           => [
                     // 依赖引用
-                    'ref' => beanname(Mix\Http\Xml::class),
+                    'ref' => beanname(Mix\Http\Message\Xml::class),
                 ],
             ],
         ],
@@ -132,13 +132,13 @@ return [
         // json
         [
             // 类路径
-            'class' => Mix\Http\Json::class,
+            'class' => Mix\Http\Message\Json::class,
         ],
 
         // jsonp
         [
             // 类路径
-            'class'      => Mix\Http\Jsonp::class,
+            'class'      => Mix\Http\Message\Jsonp::class,
             // 属性
             'properties' => [
                 // callback键名
@@ -149,7 +149,7 @@ return [
         // xml
         [
             // 类路径
-            'class' => Mix\Http\Xml::class,
+            'class' => Mix\Http\Message\Xml::class,
         ],
 
         // 错误

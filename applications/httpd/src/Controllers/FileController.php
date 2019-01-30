@@ -15,7 +15,7 @@ class FileController extends Controller
     // 文件上传
     public function actionUpload()
     {
-        app()->response->format = \Mix\Http\Response::FORMAT_JSON;
+        app()->response->format = \Mix\Http\Message\Response::FORMAT_JSON;
 
         // 使用模型
         $model             = new FileForm();
