@@ -23,6 +23,7 @@
     "mix/websocket": "dev-master",
     "mix/log": "dev-master",
     "mix/concurrent": "dev-master",
+    "mix/pool": "dev-master",
     "mix/validators": "dev-master",
     "mix/database": "dev-master",
     "mix/redis": "dev-master",
