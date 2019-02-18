@@ -2,7 +2,7 @@
 
 namespace Httpd\Middleware;
 
-use Mix\Http\MiddlewareInterface;
+use Mix\Http\Middleware\MiddlewareInterface;
 
 /**
  * 后置中间件
