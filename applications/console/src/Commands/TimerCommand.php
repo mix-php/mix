@@ -3,7 +3,7 @@
 namespace Console\Commands;
 
 use Mix\Console\Command;
-use Mix\Core\Timer;
+use Mix\Core\Coroutine\Timer;
 
 /**
  * 定时器范例

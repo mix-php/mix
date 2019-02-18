@@ -4,7 +4,7 @@ namespace Daemon\Commands;
 
 use Mix\Concurrent\CoroutinePool\Dispatcher;
 use Mix\Console\Command;
-use Mix\Core\Channel;
+use Mix\Core\Coroutine\Channel;
 use Mix\Helpers\ProcessHelper;
 
 /**
