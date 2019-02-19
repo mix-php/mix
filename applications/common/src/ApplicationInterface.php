@@ -7,8 +7,8 @@
  * 系统组件
  * @property \Mix\Log\Logger $log
  * @property \Mix\Http\Route $route
- * @property \Mix\Http\Request|\Mix\Http\Compatible\Request $request
- * @property \Mix\Http\Response|\Mix\Http\Compatible\Response $response
+ * @property \Mix\Http\Message\Request|\Mix\Http\Message\Compatible\Request $request
+ * @property \Mix\Http\Message\Response|\Mix\Http\Message\Compatible\Response $response
  * @property \Mix\Http\Error|\Mix\Console\Error $error
  *
  * 自定义组件
