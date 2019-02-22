@@ -3,14 +3,13 @@
 namespace Console\Commands;
 
 use Mix\Concurrent\Sync\WaitGroup;
-use Mix\Console\Command\AbstractCommand;
 use Mix\Core\Coroutine\Channel;
 
 /**
  * 协程范例
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class CoroutineCommand extends AbstractCommand
+class CoroutineCommand
 {
 
     /**

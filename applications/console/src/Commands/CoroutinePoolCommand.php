@@ -3,14 +3,13 @@
 namespace Console\Commands;
 
 use Mix\Concurrent\CoroutinePool\Dispatcher;
-use Mix\Console\Command\AbstractCommand;
 use Mix\Core\Coroutine\Channel;
 
 /**
  * 协程池范例
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class CoroutinePoolCommand extends AbstractCommand
+class CoroutinePoolCommand
 {
 
     /**
