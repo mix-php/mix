@@ -2,13 +2,13 @@
 
 namespace Httpd\Controllers;
 
-use Mix\Http\Controller;
+use Mix\Http\AbstractController;
 
 /**
  * 视图范例
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class ProfileController extends Controller
+class ProfileController extends AbstractController
 {
 
     // 布局

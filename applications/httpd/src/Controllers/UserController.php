@@ -3,13 +3,13 @@
 namespace Httpd\Controllers;
 
 use Httpd\Models\UserForm;
-use Mix\Http\Controller;
+use Mix\Http\AbstractController;
 
 /**
  * API接口范例
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class UserController extends Controller
+class UserController extends AbstractController
 {
 
     // 新增用户
