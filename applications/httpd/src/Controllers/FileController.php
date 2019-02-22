@@ -3,13 +3,12 @@
 namespace Httpd\Controllers;
 
 use Httpd\Models\FileForm;
-use Mix\Http\AbstractController;
 
 /**
  * 文件上传范例
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class FileController extends AbstractController
+class FileController
 {
 
     // 文件上传

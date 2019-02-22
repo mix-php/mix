@@ -2,13 +2,11 @@
 
 namespace Httpd\Controllers;
 
-use Mix\Http\AbstractController;
-
 /**
  * 默认控制器
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class IndexController extends AbstractController
+class IndexController
 {
 
     // 默认动作

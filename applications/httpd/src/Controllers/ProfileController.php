@@ -2,14 +2,17 @@
 
 namespace Httpd\Controllers;
 
-use Mix\Http\AbstractController;
+use Mix\Http\View\ViewTrait;
 
 /**
  * 视图范例
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class ProfileController extends AbstractController
+class ProfileController
 {
+
+    // 引用视图特性
+    use ViewTrait;
 
     // 布局
     public $layout = 'main';
