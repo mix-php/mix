@@ -2,14 +2,14 @@
 
 namespace Console\Commands;
 
-use Mix\Console\Command;
+use Mix\Console\Command\AbstractCommand;
 use Mix\Core\Coroutine\Timer;
 
 /**
  * 定时器范例
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class TimerCommand extends Command
+class TimerCommand extends AbstractCommand
 {
 
     /**

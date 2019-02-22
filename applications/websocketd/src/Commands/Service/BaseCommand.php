@@ -2,14 +2,14 @@
 
 namespace WebSocketd\Commands\Service;
 
-use Mix\Console\Command;
+use Mix\Console\Command\AbstractCommand;
 use Mix\Console\PidFileHandler;
 
 /**
  * Class BaseCommand
  * @package Httpd\Commands\Service
  */
-class BaseCommand extends Command
+class BaseCommand extends AbstractCommand
 {
 
     // 提示
