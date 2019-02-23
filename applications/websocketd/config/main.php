@@ -1,88 +1,112 @@
 <?php
 
-// Console应用配置
+// mix-websocketd 下运行的 WebSocket 服务配置（常驻协程模式）
 return [
 
-    // 应用名称
-    'appName'          => 'mix-websocketd',
-
-    // 应用版本
-    'appVersion'       => '1.0.0',
-
     // 基础路径
-    'basePath'         => dirname(__DIR__),
-
-    // 命令命名空间
-    'commandNamespace' => 'WebSocketd\Commands',
-
-    // 命令
-    'commands'         => [
-
-        'service start'   => ['Service/Start', 'description' => ''],
-        'service stop'    => ['Service/Stop', 'description' => ''],
-        'service restart' => ['Service/Restart', 'description' => ''],
-        'service status'  => ['Service/Status', 'description' => ''],
-
-    ],
+    'basePath'   => dirname(__DIR__),
 
     // 组件配置
-    'components'       => [
+    'components' => [
+
+        // 注册器
+        'registry'  => [
+            // 依赖引用
+            'ref' => beanname(Mix\WebSocket\HandlerRegistry::class),
+        ],
+
+        // 请求
+        'request'   => [
+            // 依赖引用
+            'ref' => beanname(Mix\Http\Message\Request::class),
+        ],
+
+        // 响应
+        'response'  => [
+            // 依赖引用
+            'ref' => beanname(Mix\Http\Message\Response::class),
+        ],
 
         // 错误
-        'error'          => [
+        'error'     => [
             // 依赖引用
-            'ref' => beanname(Mix\Console\Error::class),
+            'ref' => beanname(Mix\Http\Error::class),
         ],
 
         // 日志
-        'log'            => [
+        'log'       => [
             // 依赖引用
             'ref' => beanname(Mix\Log\Logger::class),
         ],
 
-        // 数据库
-        'pdo'            => [
+        // Auth
+        'auth'      => [
             // 依赖引用
-            'ref' => beanname(Mix\Database\Persistent\PDOConnection::class),
-        ],
-
-        // redis
-        'redis'          => [
-            // 依赖引用
-            'ref' => beanname(Mix\Redis\Persistent\RedisConnection::class),
+            'ref' => beanname(Mix\Auth\Authorization::class),
         ],
 
         // Session
-        'sessionReader'  => [
+        'session'   => [
             // 依赖引用
-            'ref' => beanname(Mix\WebSocket\SessionReader::class),
+            'ref' => beanname(Mix\Http\Session\HttpSession::class),
         ],
 
-        // Token
-        'tokenReader'    => [
+        // 连接池
+        'pdoPool'   => [
             // 依赖引用
-            'ref' => beanname(Mix\WebSocket\TokenReader::class),
+            'ref' => beanname(Mix\Database\Pool\ConnectionPool::class),
         ],
 
-        // 消息处理器
-        'messageHandler' => [
+        // 连接池
+        'redisPool' => [
             // 依赖引用
-            'ref' => beanname(Mix\WebSocket\MessageHandler::class),
+            'ref' => beanname(Mix\Redis\Pool\ConnectionPool::class),
         ],
 
     ],
 
     // 依赖配置
-    'beans'            => [
+    'beans'      => [
+
+        // 注册器
+        [
+            // 类路径
+            'class'      => Mix\WebSocket\HandlerRegistry::class,
+            // 属性
+            'properties' => [
+                // 处理者命名空间
+                'handlerNamespace'     => 'WebSocketd\Handlers',
+                // 拦截器命名空间
+                'interceptorNamespace' => 'WebSocketd\Interceptors',
+                // 注册规则
+                'rules'                => [
+                    '/websocket' => ['WebSocket', 'interceptor' => 'WebSocketHandler'],
+                ],
+            ],
+        ],
+
+        // 请求
+        [
+            // 类路径
+            'class' => Mix\Http\Message\Request::class,
+        ],
+
+        // 响应
+        [
+            // 类路径
+            'class' => Mix\Http\Message\Response::class,
+        ],
 
         // 错误
         [
             // 类路径
-            'class'      => Mix\Console\Error::class,
+            'class'      => Mix\Http\Error::class,
             // 属性
             'properties' => [
+                // 输出格式
+                'format' => Mix\Http\Error::FORMAT_HTML,
                 // 错误级别
-                'level' => E_ALL,
+                'level'  => E_ALL,
             ],
         ],
 
@@ -117,20 +141,150 @@ return [
             ],
         ],
 
+        // Auth
+        [
+            // 类路径
+            'class'      => Mix\Auth\Authorization::class,
+            // 属性
+            'properties' => [
+                // BearerToken
+                'bearerToken' => [
+                    // 依赖引用
+                    'ref' => beanname(Mix\Auth\BearerToken::class),
+                ],
+                // jwt
+                'jwt'         => [
+                    // 依赖引用
+                    'ref' => beanname(Mix\Auth\JWT::class),
+                ],
+            ],
+        ],
+
+        // BearerToken
+        [
+            // 类路径
+            'class' => Mix\Auth\BearerToken::class,
+        ],
+
+        // jwt
+        [
+            // 类路径
+            'class'      => Mix\Auth\JWT::class,
+            // 属性
+            'properties' => [
+                // 钥匙
+                'key'       => 'example_key',
+                // 签名算法
+                'algorithm' => Mix\Auth\JWT::ALGORITHM_HS256,
+            ],
+        ],
+
+        // Session
+        [
+            // 类路径
+            'class'      => Mix\Http\Session\HttpSession::class,
+            // 属性
+            'properties' => [
+                // 处理者
+                'handler'        => [
+                    // 依赖引用
+                    'ref' => beanname(Mix\Http\Session\RedisHandler::class),
+                ],
+                // session键名
+                'name'           => 'session_id',
+                // 生存时间
+                'maxLifetime'    => 7200,
+                // 过期时间
+                'cookieExpires'  => 0,
+                // 有效的服务器路径
+                'cookiePath'     => '/',
+                // 有效域名/子域名
+                'cookieDomain'   => '',
+                // 仅通过安全的 HTTPS 连接传给客户端
+                'cookieSecure'   => false,
+                // 仅可通过 HTTP 协议访问
+                'cookieHttpOnly' => false,
+            ],
+        ],
+
+        // Session处理者
+        [
+            // 类路径
+            'class'      => Mix\Http\Session\RedisHandler::class,
+            // 属性
+            'properties' => [
+                // 连接池
+                'pool'      => [
+                    // 组件引用
+                    'component' => 'redisPool',
+                ],
+                // Key前缀
+                'keyPrefix' => 'SESSION:',
+            ],
+        ],
+
+        // 连接池
+        [
+            // 类路径
+            'class'      => Mix\Database\Pool\ConnectionPool::class,
+            // 属性
+            'properties' => [
+                // 最多可空闲连接数
+                'maxIdle'   => 5,
+                // 最大连接数
+                'maxActive' => 50,
+                // 拨号
+                'dial'      => [
+                    // 依赖引用
+                    'ref' => beanname(Mix\Database\Pool\Dial::class),
+                ],
+            ],
+        ],
+
+        // 连接池拨号
+        [
+            // 类路径
+            'class' => Mix\Database\Pool\Dial::class,
+        ],
+
+        // 连接池
+        [
+            // 类路径
+            'class'      => Mix\Redis\Pool\ConnectionPool::class,
+            // 属性
+            'properties' => [
+                // 最多可空闲连接数
+                'maxIdle'   => 5,
+                // 最大连接数
+                'maxActive' => 50,
+                // 拨号
+                'dial'      => [
+                    // 依赖引用
+                    'ref' => beanname(Mix\Redis\Pool\Dial::class),
+                ],
+            ],
+        ],
+
+        // 连接池拨号
+        [
+            // 类路径
+            'class' => Mix\Redis\Pool\Dial::class,
+        ],
+
         // 数据库
         [
             // 类路径
-            'class'      => Mix\Database\Persistent\PDOConnection::class,
+            'class'      => Mix\Database\Coroutine\PDOConnection::class,
             // 属性
             'properties' => [
                 // 数据源格式
-                'dsn'       => env('DATABASE_DSN'),
+                'dsn'           => env('DATABASE_DSN'),
                 // 数据库用户名
-                'username'  => env('DATABASE_USERNAME'),
+                'username'      => env('DATABASE_USERNAME'),
                 // 数据库密码
-                'password'  => env('DATABASE_PASSWORD'),
-                // 设置PDO属性: http://php.net/manual/zh/pdo.setattribute.php
-                'attribute' => [
+                'password'      => env('DATABASE_PASSWORD'),
+                // 驱动连接选项: http://php.net/manual/zh/pdo.setattribute.php
+                'driverOptions' => [
                     // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
                     \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
                 ],
@@ -140,133 +294,7 @@ return [
         // redis
         [
             // 类路径
-            'class'      => Mix\Redis\Persistent\RedisConnection::class,
-            // 属性
-            'properties' => [
-                // 主机
-                'host'     => env('REDIS_HOST'),
-                // 端口
-                'port'     => env('REDIS_PORT'),
-                // 数据库
-                'database' => env('REDIS_DATABASE'),
-                // 密码
-                'password' => env('REDIS_PASSWORD'),
-            ],
-        ],
-
-        // Session
-        [
-            // 类路径
-            'class'      => Mix\WebSocket\SessionReader::class,
-            // 属性
-            'properties' => [
-                // 处理者
-                'handler'   => [
-                    // 依赖引用
-                    'ref' => 'tokenOrSessionReaderHandler',
-                ],
-                // 保存的Key前缀
-                'keyPrefix' => 'SESSION:',
-                // session名
-                'name'      => 'session_id',
-            ],
-        ],
-
-        // Token
-        [
-            // 类路径
-            'class'      => Mix\WebSocket\TokenReader::class,
-            // 属性
-            'properties' => [
-                // 处理者
-                'handler'   => [
-                    // 依赖引用
-                    'ref' => 'tokenOrSessionReaderHandler',
-                ],
-                // 保存的Key前缀
-                'keyPrefix' => 'TOKEN:',
-                // token键名
-                'name'      => 'access_token',
-            ],
-        ],
-
-        // Token|session处理者
-        [
-            // 依赖名称
-            'name'       => 'tokenOrSessionReaderHandler',
-            // 类路径
-            'class'      => Mix\Redis\RedisConnection::class,
-            // 属性
-            'properties' => [
-                // 主机
-                'host'     => env('REDIS_HOST'),
-                // 端口
-                'port'     => env('REDIS_PORT'),
-                // 数据库
-                'database' => env('REDIS_DATABASE'),
-                // 密码
-                'password' => env('REDIS_PASSWORD'),
-            ],
-        ],
-
-        // 消息处理器
-        [
-            // 类路径
-            'class'      => Mix\WebSocket\MessageHandler::class,
-            // 属性
-            'properties' => [
-                // 控制器命名空间
-                'controllerNamespace' => 'WebSocketd\Controllers',
-                // 路由规则
-                'rules'               => [
-
-                    'joinRoom'    => ['Join', 'Room'],
-                    'messageEmit' => ['Message', 'Emit'],
-
-                ],
-            ],
-        ],
-
-        // 服务器
-        [
-            // 类路径
-            'class'      => Mix\WebSocket\Server::class,
-            // 属性
-            'properties' => [
-                // 主机
-                'host'     => 'localhost',
-                // 端口
-                'port'     => 9502,
-                // 运行时的各项参数：https://wiki.swoole.com/wiki/page/274.html
-                'settings' => [
-                    // 开启协程
-                    'enable_coroutine' => false,
-                    // 连接处理线程数
-                    'reactor_num'      => 8,
-                    // 工作进程数
-                    'worker_num'       => 8,
-                    // 数据包分发策略
-                    'dispatch_mode'    => 2,
-                    // PID 文件
-                    'pid_file'         => '/var/run/mix-websocketd.pid',
-                    // 日志文件路径
-                    'log_file'         => '/tmp/mix-websocketd.log',
-                    // 进程的最大任务数
-                    'max_request'      => 10000,
-                    // 退出等待时间
-                    'max_wait_time'    => 60,
-                    // 异步安全重启
-                    'reload_async'     => true,
-                    // 子进程运行用户
-                    /* 'user'        => 'www', */
-                ],
-            ],
-        ],
-
-        // 异步redis
-        [
-            // 类路径
-            'class'      => Mix\Redis\Async\RedisConnection::class,
+            'class'      => Mix\Redis\Coroutine\RedisConnection::class,
             // 属性
             'properties' => [
                 // 主机

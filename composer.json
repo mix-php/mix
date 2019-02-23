@@ -20,7 +20,11 @@
     "mix/framework": "dev-master",
     "mix/console": "dev-master",
     "mix/http": "dev-master",
+    "mix/http-session": "dev-master",
+    "mix/http-server": "dev-master",
+    "mix/http-message": "dev-master",
     "mix/websocket": "dev-master",
+    "mix/websocket-server": "dev-master",
     "mix/log": "dev-master",
     "mix/concurrent": "dev-master",
     "mix/pool": "dev-master",
@@ -28,10 +32,7 @@
     "mix/database": "dev-master",
     "mix/redis": "dev-master",
     "mix/cache": "dev-master",
-    "mix/http-session": "dev-master",
-    "mix/auth": "dev-master",
-    "mix/http-server": "dev-master",
-    "mix/http-message": "dev-master"
+    "mix/auth": "dev-master"
   },
   "minimum-stability": "RC",
   "autoload": {

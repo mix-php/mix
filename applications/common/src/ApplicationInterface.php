@@ -18,6 +18,7 @@
  * @property \Mix\Redis\RedisConnection $redis
  * @property \Mix\Database\Pool\ConnectionPool $pdoPool
  * @property \Mix\Redis\Pool\ConnectionPool $redisPool
+ * @property \Mix\WebSocket\HandlerRegistry $registry
  */
 interface ApplicationInterface
 {
