@@ -5,5 +5,5 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 Mix::loadEnvironmentFrom(__DIR__ . '/../.env');
-$config = require __DIR__ . '/../vendor/mix/http-websocket/config/main.php';
+$config = require __DIR__ . '/../vendor/mix/websocket-daemon/config/main.php';
 (new Mix\Console\Application($config))->run();
