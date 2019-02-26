@@ -1,0 +1,9 @@
+#!/usr/bin/env php
+<?php
+
+// console入口文件
+
+require __DIR__ . '/../vendor/autoload.php';
+Mix::loadEnvironmentFrom(__DIR__ . '/../.env');
+$config = require __DIR__ . '/../applications/console/config/main.php';
+(new Mix\Console\Application($config))->run();

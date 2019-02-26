@@ -23,6 +23,7 @@
     "mix/http-session": "dev-master",
     "mix/http-server": "dev-master",
     "mix/http-message": "dev-master",
+    "mix/http-daemon": "dev-master",
     "mix/websocket": "dev-master",
     "mix/websocket-server": "dev-master",
     "mix/log": "dev-master",
@@ -40,8 +41,8 @@
       "Common\\": "applications/common/src/",
       "Console\\": "applications/console/src/",
       "Daemon\\": "applications/daemon/src/",
-      "Httpd\\": "applications/httpd/src/",
-      "WebSocketd\\": "applications/websocketd/src/"
+      "Http\\": "applications/http/src/",
+      "WebSocket\\": "applications/websocket/src/"
     },
     "classmap": [
       "applications/common/src/ApplicationInterface.php"
@@ -49,12 +50,5 @@
     "files": [
       "applications/common/src/functions.php"
     ]
-  },
-  "config": {
-    "bin-dir": "bin"
-  },
-  "bin": [
-    "applications/console/bin/mix-console",
-    "applications/daemon/bin/mix-daemon"
-  ]
+  }
 }
