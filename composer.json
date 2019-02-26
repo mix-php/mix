@@ -49,5 +49,12 @@
     "files": [
       "applications/common/src/functions.php"
     ]
-  }
+  },
+  "config": {
+    "bin-dir": "bin"
+  },
+  "bin": [
+    "applications/console/bin/mix-console",
+    "applications/daemon/bin/mix-daemon"
+  ]
 }
