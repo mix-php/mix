@@ -12,7 +12,7 @@ return [
         // 注册器
         'registry'  => [
             // 依赖引用
-            'ref' => beanname(Mix\WebSocket\HandlerRegistry::class),
+            'ref' => beanname(Mix\WebSocket\Registry::class),
         ],
 
         // 请求
@@ -71,7 +71,7 @@ return [
         // 注册器
         [
             // 类路径
-            'class'      => Mix\WebSocket\HandlerRegistry::class,
+            'class'      => Mix\WebSocket\Registry::class,
             // 属性
             'properties' => [
                 // 处理者命名空间
@@ -80,7 +80,7 @@ return [
                 'interceptorNamespace' => 'WebSocketd\Interceptors',
                 // 注册规则
                 'rules'                => [
-                    '/websocket' => ['WebSocket', 'interceptor' => 'WebSocketHandler'],
+                    '/websocket' => ['WebSocketHandler', 'interceptor' => 'WebSocketInterceptor'],
                 ],
             ],
         ],
