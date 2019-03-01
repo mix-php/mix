@@ -75,9 +75,9 @@ return [
             // 属性
             'properties' => [
                 // 处理者命名空间
-                'handlerNamespace'     => 'WebSocketd\Handlers',
+                'handlerNamespace'     => 'WebSocket\Handlers',
                 // 拦截器命名空间
-                'interceptorNamespace' => 'WebSocketd\Interceptors',
+                'interceptorNamespace' => 'WebSocket\Interceptors',
                 // 注册规则
                 'rules'                => [
                     '/websocket' => ['WebSocketHandler', 'interceptor' => 'WebSocketInterceptor'],
