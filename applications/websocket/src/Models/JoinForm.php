@@ -2,7 +2,7 @@
 
 namespace WebSocket\Models;
 
-use Mix\Validators\Validator;
+use Mix\Validate\Validator;
 
 /**
  * Join 表单模型类

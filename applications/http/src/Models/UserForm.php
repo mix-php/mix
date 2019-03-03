@@ -2,7 +2,7 @@
 
 namespace Http\Models;
 
-use Mix\Validators\Validator;
+use Mix\Validate\Validator;
 
 class UserForm extends Validator
 {
