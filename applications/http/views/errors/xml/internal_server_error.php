@@ -8,4 +8,4 @@ if (isset($trace)) {
     }
     $data['trace'] = $tmp;
 }
-echo \Mix\Helpers\XmlHelper::encode($data);
+echo \Mix\Helper\XmlHelper::encode($data);

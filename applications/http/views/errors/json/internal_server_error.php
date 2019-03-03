@@ -8,4 +8,4 @@ if (isset($trace)) {
     }
     $data['trace'] = $tmp;
 }
-echo \Mix\Helpers\JsonHelper::encode($data);
+echo \Mix\Helper\JsonHelper::encode($data);
