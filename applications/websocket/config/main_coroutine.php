@@ -30,13 +30,25 @@ return [
         // 错误
         'error'     => [
             // 依赖引用
-            'ref' => beanname(Mix\Http\Error::class),
+            'ref' => beanname(Mix\WebSocket\Error::class),
         ],
 
         // 日志
         'log'       => [
             // 依赖引用
             'ref' => beanname(Mix\Log\Logger::class),
+        ],
+
+        // WebSocket会话
+        'wsSession' => [
+            // 依赖引用
+            'ref' => beanname(Mix\WebSocket\Session\WebSocketSession::class),
+        ],
+
+        // WebSocket连接
+        'ws'        => [
+            // 依赖引用
+            'ref' => beanname(Mix\WebSocket\WebSocketConnection::class),
         ],
 
         // Auth
@@ -100,13 +112,11 @@ return [
         // 错误
         [
             // 类路径
-            'class'      => Mix\Http\Error::class,
+            'class'      => Mix\WebSocket\Error::class,
             // 属性
             'properties' => [
-                // 输出格式
-                'format' => Mix\Http\Error::FORMAT_HTML,
                 // 错误级别
-                'level'  => E_ALL,
+                'level' => E_ALL,
             ],
         ],
 
@@ -139,6 +149,32 @@ return [
                 // 最大文件尺寸
                 'maxFileSize' => 0,
             ],
+        ],
+
+        // WebSocket会话
+        [
+            // 类路径
+            'class'      => Mix\WebSocket\Session\WebSocketSession::class,
+            // 属性
+            'properties' => [
+                // 处理者
+                'handler' => [
+                    // 依赖引用
+                    'ref' => beanname(Mix\WebSocket\Session\ArrayHandler::class),
+                ],
+            ],
+        ],
+
+        // WebSocket会话处理者
+        [
+            // 类路径
+            'class' => Mix\WebSocket\Session\ArrayHandler::class,
+        ],
+
+        // WebSocket连接
+        [
+            // 类路径
+            'class' => Mix\WebSocket\WebSocketConnection::class,
         ],
 
         // Auth
