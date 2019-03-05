@@ -51,6 +51,12 @@ return [
             'ref' => beanname(Mix\WebSocket\WebSocketConnection::class),
         ],
 
+        // WebSocket帧
+        'frame'     => [
+            // 依赖引用
+            'ref' => beanname(Mix\WebSocket\Frame::class),
+        ],
+
         // Auth
         'auth'      => [
             // 依赖引用
@@ -175,6 +181,12 @@ return [
         [
             // 类路径
             'class' => Mix\WebSocket\WebSocketConnection::class,
+        ],
+
+        // WebSocket帧
+        [
+            // 类路径
+            'class' => Mix\WebSocket\Frame::class,
         ],
 
         // Auth

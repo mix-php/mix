@@ -2,7 +2,8 @@
 
 namespace WebSocket\Handlers;
 
-use Mix\WebSocket\Message\Frame;
+use Mix\Http\Message\Request;
+use Mix\WebSocket\Frame;
 use Mix\WebSocket\Registry\HandlerInterface;
 
 /**
@@ -14,39 +15,29 @@ class WebSocketHandler implements HandlerInterface
 {
 
     /**
-     * 处理消息
-     * @return void
+     * 开启连接
+     * @param Request $request
      */
-    public function open()
+    public function open(Request $request)
     {
         // TODO: Implement open() method.
-        var_dump('open');
     }
 
     /**
-     * 处理消息
-     * @return void
+     * 消息处理
+     * @param Frame $frame
      */
-    public function message(\Swoole\WebSocket\Frame $frame)
+    public function message(Frame $frame)
     {
         // TODO: Implement message() method.
-        var_dump('message');
-        var_dump($frame);
-        $f = new Frame([
-            'data' => 'dfsdfsdfsdf',
-        ]);
-        app()->ws->push($f);
-        app()->ws->push($f);
     }
 
     /**
-     * 连接关闭
-     * @return void
+     * 关闭连接
      */
     public function close()
     {
-        // TODO: Implement connectionClosed() method.
-        var_dump('close');
+        // TODO: Implement close() method.
     }
 
 }
