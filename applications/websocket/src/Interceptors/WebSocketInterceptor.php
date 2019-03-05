@@ -19,5 +19,4 @@ class WebSocketInterceptor implements InterceptorInterface
         // TODO: Implement handshake() method.
     }
 
-
 }
