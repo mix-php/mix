@@ -22,7 +22,7 @@ class FileController
      */
     public function actionUpload(Request $request, Response $response)
     {
-        app()->response->format = \Mix\Http\Message\Response::FORMAT_JSON;
+        $response->format = Response::FORMAT_JSON;
 
         // 使用模型
         $model = new FileForm();
