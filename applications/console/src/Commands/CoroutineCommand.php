@@ -3,7 +3,7 @@
 namespace Console\Commands;
 
 use Mix\Concurrent\Sync\WaitGroup;
-use Swoole\Coroutine\Channel;
+use Mix\Core\Coroutine\Channel;
 
 /**
  * 协程范例

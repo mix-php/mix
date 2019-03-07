@@ -3,7 +3,7 @@
 namespace Daemon\Commands;
 
 use Mix\Concurrent\CoroutinePool\Dispatcher;
-use Swoole\Coroutine\Channel;
+use Mix\Core\Coroutine\Channel;
 use Mix\Helper\ProcessHelper;
 
 /**

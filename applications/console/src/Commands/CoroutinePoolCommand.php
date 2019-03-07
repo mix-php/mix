@@ -3,7 +3,7 @@
 namespace Console\Commands;
 
 use Mix\Concurrent\CoroutinePool\Dispatcher;
-use Swoole\Coroutine\Channel;
+use Mix\Core\Coroutine\Channel;
 
 /**
  * 协程池范例
