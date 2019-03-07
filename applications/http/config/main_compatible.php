@@ -4,25 +4,16 @@
 return [
 
     // 应用调试
-    'appDebug'            => env('APP_DEBUG'),
+    'appDebug'       => env('APP_DEBUG'),
 
     // 初始化
-    'initialization'      => [],
+    'initialization' => [],
 
     // 基础路径
-    'basePath'            => dirname(__DIR__),
-
-    // 控制器命名空间
-    'controllerNamespace' => 'Http\Controllers',
-
-    // 中间件命名空间
-    'middlewareNamespace' => 'Http\Middleware',
-
-    // 全局中间件
-    'middleware'          => [],
+    'basePath'       => dirname(__DIR__),
 
     // 组件配置
-    'components'          => [
+    'components'     => [
 
         // 路由
         'route'    => [
@@ -81,7 +72,7 @@ return [
     ],
 
     // 依赖配置
-    'beans'               => [
+    'beans'          => [
 
         // 路由
         [
@@ -89,16 +80,22 @@ return [
             'class'      => Mix\Http\Route::class,
             // 属性
             'properties' => [
+                // 控制器命名空间
+                'controllerNamespace' => 'Http\Controllers',
+                // 中间件命名空间
+                'middlewareNamespace' => 'Http\Middleware',
                 // 默认变量规则
-                'defaultPattern' => '[\w-]+',
+                'defaultPattern'      => '[\w-]+',
                 // 路由变量规则
-                'patterns'       => [
+                'patterns'            => [
                     'id' => '\d+',
                 ],
+                // 全局中间件
+                'middleware'          => [],
                 // 路由规则
-                'rules'          => [
+                'rules'               => [
                     // 一级路由
-                    '{controller}/{action}' => ['{controller}', '{action}', 'middleware' => ['Before']],
+                    '/{controller}/{action}' => ['{controller}', '{action}', 'middleware' => ['Before']],
                 ],
             ],
         ],
