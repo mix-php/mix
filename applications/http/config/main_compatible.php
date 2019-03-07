@@ -3,6 +3,12 @@
 // Apache/PHP-FPM 传统环境下运行的 HTTP 服务配置（传统模式）
 return [
 
+    // 应用调试
+    'appDebug'            => env('APP_DEBUG'),
+
+    // 初始化
+    'initialization'      => [],
+
     // 基础路径
     'basePath'            => dirname(__DIR__),
 

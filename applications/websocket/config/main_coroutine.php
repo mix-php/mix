@@ -3,11 +3,17 @@
 // mix-websocketd 下运行的 WebSocket 服务配置（常驻协程模式）
 return [
 
+    // 应用调试
+    'appDebug'       => env('APP_DEBUG'),
+
+    // 初始化
+    'initialization' => [],
+
     // 基础路径
-    'basePath'   => dirname(__DIR__),
+    'basePath'       => dirname(__DIR__),
 
     // 组件配置
-    'components' => [
+    'components'     => [
 
         // 注册器
         'registry'  => [
@@ -84,7 +90,7 @@ return [
     ],
 
     // 依赖配置
-    'beans'      => [
+    'beans'          => [
 
         // 注册器
         [
