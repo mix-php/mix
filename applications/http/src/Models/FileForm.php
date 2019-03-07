@@ -4,15 +4,24 @@ namespace Http\Models;
 
 use Mix\Validate\Validator;
 
+/**
+ * Class FileForm
+ * @package Http\Models
+ * @author LIUJIAN <coder.keda@gmail.com>
+ */
 class FileForm extends Validator
 {
 
     /**
+     * 上传文件对象
      * @var \Mix\Http\Message\UploadFile
      */
     public $file;
 
-    // 规则
+    /**
+     * 规则
+     * @return array
+     */
     public function rules()
     {
         return [
@@ -20,7 +29,10 @@ class FileForm extends Validator
         ];
     }
 
-    // 场景
+    /**
+     * 场景
+     * @return array
+     */
     public function scenarios()
     {
         return [
@@ -28,7 +40,10 @@ class FileForm extends Validator
         ];
     }
 
-    // 消息
+    /**
+     * 消息
+     * @return array
+     */
     public function messages()
     {
         return [

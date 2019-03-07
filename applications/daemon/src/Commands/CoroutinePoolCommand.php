@@ -7,7 +7,8 @@ use Mix\Core\Coroutine\Channel;
 use Mix\Helper\ProcessHelper;
 
 /**
- * 协程池范例
+ * Class CoroutinePoolCommand
+ * @package Daemon\Commands
  * @author LIUJIAN <coder.keda@gmail.com>
  */
 class CoroutinePoolCommand
@@ -32,9 +33,9 @@ class CoroutinePoolCommand
         // 协程池执行任务
         xgo(function () {
             $maxWorkers = 20;
-            $maxQueue   = 20;
-            $jobQueue   = new Channel($maxQueue);
-            $dispatch   = new Dispatcher([
+            $maxQueue = 20;
+            $jobQueue = new Channel($maxQueue);
+            $dispatch = new Dispatcher([
                 'jobQueue'   => $jobQueue,
                 'maxWorkers' => $maxWorkers,
             ]);
@@ -64,7 +65,7 @@ class CoroutinePoolCommand
     /**
      * 回调函数
      * 在 $maxWorkers 数量的协程之中并行执行
-     * @param $i
+     * @param $data
      */
     public function call($data)
     {

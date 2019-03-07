@@ -5,7 +5,8 @@ namespace Console\Commands;
 use Mix\Core\Coroutine\Timer;
 
 /**
- * 定时器范例
+ * Class TimerCommand
+ * @package Console\Commands
  * @author LIUJIAN <coder.keda@gmail.com>
  */
 class TimerCommand

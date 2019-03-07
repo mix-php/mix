@@ -5,7 +5,8 @@ namespace Http\Middleware;
 use Mix\Http\Middleware\MiddlewareInterface;
 
 /**
- * 后置中间件
+ * Class AfterMiddleware
+ * @package Http\Middleware
  * @author LIUJIAN <coder.keda@gmail.com>
  */
 class AfterMiddleware implements MiddlewareInterface
@@ -17,12 +18,14 @@ class AfterMiddleware implements MiddlewareInterface
      * @param \Closure $next
      * @return mixed
      */
-    public function handle(callable $callable, \Closure $next)
+    public function handle(callable $callback, \Closure $next)
     {
         // 添加中间件执行代码
         $response = $next();
-        list($controller, $action) = $callable;
+        list($controller, $action) = $callback;
+
         // ...
+
         // 返回响应内容
         return $response;
     }

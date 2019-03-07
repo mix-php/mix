@@ -6,7 +6,8 @@ use Mix\Concurrent\Sync\WaitGroup;
 use Mix\Core\Coroutine\Channel;
 
 /**
- * 协程范例
+ * Class CoroutineCommand
+ * @package Console\Commands
  * @author LIUJIAN <coder.keda@gmail.com>
  */
 class CoroutineCommand

@@ -4,14 +4,36 @@ namespace Http\Models;
 
 use Mix\Validate\Validator;
 
+/**
+ * Class UserForm
+ * @package Http\Models
+ * @author LIUJIAN <coder.keda@gmail.com>
+ */
 class UserForm extends Validator
 {
 
+    /**
+     * 名称
+     * @var string
+     */
     public $name;
+
+    /**
+     * 年龄
+     * @var int
+     */
     public $age;
+
+    /**
+     * 邮箱
+     * @var string
+     */
     public $email;
 
-    // 规则
+    /**
+     * 规则
+     * @return array
+     */
     public function rules()
     {
         return [
@@ -21,7 +43,10 @@ class UserForm extends Validator
         ];
     }
 
-    // 场景
+    /**
+     * 场景
+     * @return array
+     */
     public function scenarios()
     {
         return [
@@ -29,7 +54,10 @@ class UserForm extends Validator
         ];
     }
 
-    // 消息
+    /**
+     * 消息
+     * @return array
+     */
     public function messages()
     {
         return [

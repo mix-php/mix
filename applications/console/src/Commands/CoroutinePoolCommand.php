@@ -6,7 +6,8 @@ use Mix\Concurrent\CoroutinePool\Dispatcher;
 use Mix\Core\Coroutine\Channel;
 
 /**
- * 协程池范例
+ * Class CoroutinePoolCommand
+ * @package Console\Commands
  * @author LIUJIAN <coder.keda@gmail.com>
  */
 class CoroutinePoolCommand

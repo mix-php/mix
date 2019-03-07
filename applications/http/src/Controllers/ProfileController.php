@@ -3,22 +3,35 @@
 namespace Http\Controllers;
 
 use Mix\Http\View\ViewTrait;
+use Mix\Http\Message\Request;
+use Mix\Http\Message\Response;
 
 /**
- * 视图范例
+ * Class ProfileController
+ * @package Http\Controllers
  * @author LIUJIAN <coder.keda@gmail.com>
  */
 class ProfileController
 {
 
-    // 引用视图特性
+    /**
+     * 引用视图特性
+     */
     use ViewTrait;
 
-    // 布局
+    /**
+     * 布局
+     * @var string
+     */
     public $layout = 'main';
 
-    // 默认动作
-    public function actionIndex()
+    /**
+     * 默认动作
+     * @param Request $request
+     * @param Response $response
+     * @return string
+     */
+    public function actionIndex(Request $request, Response $response)
     {
         $data = [
             'name'    => '小明',
