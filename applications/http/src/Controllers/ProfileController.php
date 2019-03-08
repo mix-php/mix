@@ -3,8 +3,6 @@
 namespace Http\Controllers;
 
 use Mix\Http\View\ViewTrait;
-use Mix\Http\Message\Request;
-use Mix\Http\Message\Response;
 
 /**
  * Class ProfileController
@@ -27,11 +25,9 @@ class ProfileController
 
     /**
      * 默认动作
-     * @param Request $request
-     * @param Response $response
      * @return string
      */
-    public function actionIndex(Request $request, Response $response)
+    public function actionIndex()
     {
         $data = [
             'name'    => '小明',
