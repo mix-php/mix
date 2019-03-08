@@ -17,7 +17,7 @@
  * 自定义组件
  * @property \Mix\Auth\Authorization $auth
  * @property \Mix\Http\Session\HttpSession $session
- * @property \Mix\WebSocket\Session\WebSocketSession $wsSession
+ * @property \Mix\Tcp\Session\TcpSession $tcpSession
  * @property \Mix\Database\PDOConnection|Mix\Database\MasterSlave\PDOConnection $pdo
  * @property \Mix\Redis\RedisConnection $redis
  * @property \Mix\Database\Pool\ConnectionPool $pdoPool

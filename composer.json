@@ -29,6 +29,7 @@
     "mix/websocket": "dev-master",
     "mix/websocket-server": "dev-master",
     "mix/websocket-daemon": "dev-master",
+    "mix/tcp-session": "dev-master",
     "mix/validate": "dev-master",
     "mix/concurrent": "dev-master",
     "mix/pool": "dev-master",
