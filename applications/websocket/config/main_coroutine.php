@@ -15,74 +15,74 @@ return [
     // 组件配置
     'components'     => [
 
-        // 注册器
-        'registry'  => [
-            // 依赖引用
-            'ref' => beanname(Mix\WebSocket\Registry::class),
-        ],
-
-        // 请求
-        'request'   => [
-            // 依赖引用
-            'ref' => beanname(Mix\Http\Message\Request::class),
-        ],
-
-        // 响应
-        'response'  => [
-            // 依赖引用
-            'ref' => beanname(Mix\Http\Message\Response::class),
-        ],
-
         // 错误
-        'error'     => [
+        'error'      => [
             // 依赖引用
             'ref' => beanname(Mix\WebSocket\Error::class),
         ],
 
         // 日志
-        'log'       => [
+        'log'        => [
             // 依赖引用
             'ref' => beanname(Mix\Log\Logger::class),
         ],
 
-        // WebSocket会话
-        'wsSession' => [
+        // 注册器
+        'registry'   => [
             // 依赖引用
-            'ref' => beanname(Mix\WebSocket\Session\WebSocketSession::class),
+            'ref' => beanname(Mix\WebSocket\Registry::class),
+        ],
+
+        // 请求
+        'request'    => [
+            // 依赖引用
+            'ref' => beanname(Mix\Http\Message\Request::class),
+        ],
+
+        // 响应
+        'response'   => [
+            // 依赖引用
+            'ref' => beanname(Mix\Http\Message\Response::class),
         ],
 
         // WebSocket连接
-        'ws'        => [
+        'ws'         => [
             // 依赖引用
             'ref' => beanname(Mix\WebSocket\WebSocketConnection::class),
         ],
 
         // WebSocket帧
-        'frame'     => [
+        'frame'      => [
             // 依赖引用
             'ref' => beanname(Mix\WebSocket\Frame::class),
         ],
 
+        // Tcp会话
+        'tcpSession' => [
+            // 依赖引用
+            'ref' => beanname(Mix\Tcp\Session\TcpSession::class),
+        ],
+
         // Auth
-        'auth'      => [
+        'auth'       => [
             // 依赖引用
             'ref' => beanname(Mix\Auth\Authorization::class),
         ],
 
         // Session
-        'session'   => [
+        'session'    => [
             // 依赖引用
             'ref' => beanname(Mix\Http\Session\HttpSession::class),
         ],
 
         // 连接池
-        'pdoPool'   => [
+        'pdoPool'    => [
             // 依赖引用
             'ref' => beanname(Mix\Database\Pool\ConnectionPool::class),
         ],
 
         // 连接池
-        'redisPool' => [
+        'redisPool'  => [
             // 依赖引用
             'ref' => beanname(Mix\Redis\Pool\ConnectionPool::class),
         ],
@@ -91,35 +91,6 @@ return [
 
     // 依赖配置
     'beans'          => [
-
-        // 注册器
-        [
-            // 类路径
-            'class'      => Mix\WebSocket\Registry::class,
-            // 属性
-            'properties' => [
-                // 处理者命名空间
-                'handlerNamespace'     => 'WebSocket\Handlers',
-                // 拦截器命名空间
-                'interceptorNamespace' => 'WebSocket\Interceptors',
-                // 注册规则
-                'rules'                => [
-                    '/websocket' => ['WebSocketHandler', 'interceptor' => 'WebSocketInterceptor'],
-                ],
-            ],
-        ],
-
-        // 请求
-        [
-            // 类路径
-            'class' => Mix\Http\Message\Request::class,
-        ],
-
-        // 响应
-        [
-            // 类路径
-            'class' => Mix\Http\Message\Response::class,
-        ],
 
         // 错误
         [
@@ -163,24 +134,33 @@ return [
             ],
         ],
 
-        // WebSocket会话
+        // 注册器
         [
             // 类路径
-            'class'      => Mix\WebSocket\Session\WebSocketSession::class,
+            'class'      => Mix\WebSocket\Registry::class,
             // 属性
             'properties' => [
-                // 处理者
-                'handler' => [
-                    // 依赖引用
-                    'ref' => beanname(Mix\WebSocket\Session\ArrayHandler::class),
+                // 处理者命名空间
+                'handlerNamespace'     => 'WebSocket\Handlers',
+                // 拦截器命名空间
+                'interceptorNamespace' => 'WebSocket\Interceptors',
+                // 注册规则
+                'rules'                => [
+                    '/websocket' => ['WebSocketHandler', 'interceptor' => 'WebSocketInterceptor'],
                 ],
             ],
         ],
 
-        // WebSocket会话处理者
+        // 请求
         [
             // 类路径
-            'class' => Mix\WebSocket\Session\ArrayHandler::class,
+            'class' => Mix\Http\Message\Request::class,
+        ],
+
+        // 响应
+        [
+            // 类路径
+            'class' => Mix\Http\Message\Response::class,
         ],
 
         // WebSocket连接
@@ -193,6 +173,26 @@ return [
         [
             // 类路径
             'class' => Mix\WebSocket\Frame::class,
+        ],
+
+        // Tcp会话
+        [
+            // 类路径
+            'class'      => Mix\Tcp\Session\TcpSession::class,
+            // 属性
+            'properties' => [
+                // 处理者
+                'handler' => [
+                    // 依赖引用
+                    'ref' => beanname(Mix\Tcp\Session\ArrayHandler::class),
+                ],
+            ],
+        ],
+
+        // Tcp会话处理者
+        [
+            // 类路径
+            'class' => Mix\Tcp\Session\ArrayHandler::class,
         ],
 
         // Auth
