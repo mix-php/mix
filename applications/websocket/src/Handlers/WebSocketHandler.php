@@ -4,7 +4,7 @@ namespace WebSocket\Handlers;
 
 use Mix\Http\Message\Request;
 use Mix\WebSocket\Frame;
-use Mix\WebSocket\Registry\HandlerInterface;
+use Mix\WebSocket\Handler\HandlerInterface;
 use Mix\WebSocket\WebSocketConnection;
 
 /**

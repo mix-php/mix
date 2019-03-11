@@ -4,8 +4,8 @@ namespace WebSocket\Interceptors;
 
 use Mix\Http\Message\Request;
 use Mix\Http\Message\Response;
-use Mix\WebSocket\Registry\InterceptorInterface;
-use Mix\WebSocket\Registry\Support\HandshakeInterceptor;
+use Mix\WebSocket\Interceptor\InterceptorInterface;
+use Mix\WebSocket\Support\HandshakeInterceptor;
 
 /**
  * Class WebSocketInterceptor
