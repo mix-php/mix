@@ -2,10 +2,10 @@
 <?php
 
 /**
- * httpd 入口文件
+ * tcpd 入口文件
  */
 
 require __DIR__ . '/../vendor/autoload.php';
 Mix::loadEnvironmentFrom(__DIR__ . '/../.env');
-$config = require __DIR__ . '/../vendor/mix/http-daemon/config/main.php';
+$config = require __DIR__ . '/../vendor/mix/tcp-daemon/config/main.php';
 (new Mix\Console\Application($config))->run();
