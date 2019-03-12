@@ -30,7 +30,7 @@ return [
         // 注册器
         'registry'   => [
             // 依赖引用
-            'ref' => beanname(Mix\WebSocket\Registry::class),
+            'ref' => beanname(Mix\Tcp\Registry::class),
         ],
 
         // Tcp连接
@@ -107,7 +107,7 @@ return [
         // 注册器
         [
             // 类路径
-            'class'      => Mix\WebSocket\Registry::class,
+            'class'      => Mix\Tcp\Registry::class,
             // 属性
             'properties' => [
                 // 处理者
