@@ -5,27 +5,38 @@ namespace WebSocket\Models;
 use Mix\Validate\Validator;
 
 /**
- * Join 表单模型类
+ * Class JoinForm
+ * @package WebSocket\Models
  * @author LIUJIAN <coder.keda@gmail.com>
  */
 class JoinForm extends Validator
 {
 
-    public $room_id;
+    /**
+     * 房间id
+     * @var int
+     */
+    public $roomid;
 
-    // 规则
+    /**
+     * 规则
+     * @return array
+     */
     public function rules()
     {
         return [
-            'room_id' => ['integer', 'unsigned' => true, 'minLength' => 1, 'maxLength' => 10],
+            'roomid' => ['integer', 'unsigned' => true, 'minLength' => 1, 'maxLength' => 10],
         ];
     }
 
-    // 场景
+    /**
+     * 场景
+     * @return array
+     */
     public function scenarios()
     {
         return [
-            'actionRoom' => ['required' => ['room_id']],
+            'actionRoom' => ['required' => ['roomid']],
         ];
     }
 

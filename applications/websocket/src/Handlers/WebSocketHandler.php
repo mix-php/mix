@@ -33,6 +33,26 @@ class WebSocketHandler implements HandlerInterface
     public function message(WebSocketConnection $ws, Frame $frame)
     {
         // TODO: Implement message() method.
+        // 解析数据
+        if (!$frame->isTextFrame()) {
+            return;
+        }
+        $data = json_decode($frame->data, true);
+        if (!isset($data['method']) || !isset($data['params'])) {
+            return;
+        }
+        // 路由到控制器
+        list($controller, $action) = explode('.', $data['method']);
+        $controller = \Mix\Helper\NameHelper::snakeToCamel($controller) . 'Controller';
+        $action     = 'action' . \Mix\Helper\NameHelper::snakeToCamel($action);
+        if (!class_exists($controller)) {
+            return;
+        }
+        $controller = new $controller;
+        if (!method_exists($controller, $action)) {
+            return;
+        }
+        call_user_func([$controller, $action], $data['params']);
     }
 
     /**
@@ -42,6 +62,8 @@ class WebSocketHandler implements HandlerInterface
     public function close(WebSocketConnection $ws)
     {
         // TODO: Implement close() method.
+        // 清除会话信息
+        app()->tcpSession->clear();
     }
 
 }
