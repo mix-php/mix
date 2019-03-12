@@ -43,8 +43,9 @@ class WebSocketHandler implements HandlerInterface
         }
         // 路由到控制器
         list($controller, $action) = explode('.', $data['method']);
-        $controller = \Mix\Helper\NameHelper::snakeToCamel($controller) . 'Controller';
-        $action     = 'action' . \Mix\Helper\NameHelper::snakeToCamel($action);
+        $controller = \Mix\Helper\NameHelper::snakeToCamel($controller, true) . 'Controller';
+        $controller = 'WebSocket\\Controllers\\' . $controller;
+        $action     = 'action' . \Mix\Helper\NameHelper::snakeToCamel($action, true);
         if (!class_exists($controller)) {
             return;
         }

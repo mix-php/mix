@@ -36,7 +36,7 @@ class MessageForm extends Validator
     public function scenarios()
     {
         return [
-            'actionEmit' => ['required' => ['to_uid', 'message']],
+            'actionEmit' => ['required' => ['message']],
         ];
     }
 

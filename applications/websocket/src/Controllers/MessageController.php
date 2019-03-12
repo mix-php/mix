@@ -2,6 +2,7 @@
 
 namespace WebSocket\Controllers;
 
+use Mix\Helper\JsonHelper;
 use Mix\WebSocket\Frame\TextFrame;
 use WebSocket\Models\MessageForm;
 
@@ -37,7 +38,7 @@ class MessageController
                 ],
             ];
             $frame   = new TextFrame([
-                'data' => json_encode($message),
+                'data' => JsonHelper::encode($message, JSON_UNESCAPED_UNICODE),
             ]);
             app()->ws->push($frame);
             return;
@@ -50,7 +51,7 @@ class MessageController
             ],
         ];
         $conn    = app()->redisPool->getConnection();
-        $conn->publish("room_{$roomid}", json_encode($message));
+        $conn->publish("room_{$roomid}", JsonHelper::encode($message, JSON_UNESCAPED_UNICODE));
         $conn->release();
     }
 

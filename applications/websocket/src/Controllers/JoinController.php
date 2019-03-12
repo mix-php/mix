@@ -2,6 +2,8 @@
 
 namespace WebSocket\Controllers;
 
+use Mix\Helper\JsonHelper;
+use Mix\Redis\Coroutine\RedisConnection;
 use Mix\WebSocket\Frame\TextFrame;
 use WebSocket\Models\JoinForm;
 
@@ -20,11 +22,10 @@ class JoinController
      */
     public function actionRoom($params)
     {
-        // 使用模型
+        // 验证数据
         $model             = new JoinForm();
         $model->attributes = $params;
         $model->setScenario('actionRoom');
-        // 验证失败
         if (!$model->validate()) {
             return;
         }
@@ -32,16 +33,25 @@ class JoinController
         // 保存当前加入的房间
         app()->tcpSession->set('roomid', $model->roomid);
 
+        // 重复加入处理
+        if ($subConn = app()->tcpSession->get('subconn')) {
+            /**
+             * @var \Mix\Redis\Coroutine\RedisConnection
+             */
+            $subConn->disconnect();
+        }
+
         // 订阅房间的频道
         xgo(function () use ($model) {
-            $conn = app()->redisPool->getConnection();
-            $conn->subscribe("room_{$model->roomid}", function ($instance, $channel, $message) {
+            $subConn = RedisConnection::newInstance();
+            app()->tcpSession->set('subConn', $subConn);
+            $ws = app()->ws;
+            $subConn->subscribe(["room_{$model->roomid}"], function ($instance, $channel, $message) use ($ws) {
                 $frame = new TextFrame([
                     'data' => $message,
                 ]);
-                app()->ws->push($frame);
+                $ws->push($frame);
             });
-            $conn->release();
         });
 
         // 给当前房间发送消息
@@ -52,7 +62,7 @@ class JoinController
             ],
         ];
         $conn    = app()->redisPool->getConnection();
-        $conn->publish("room_{$model->roomid}", json_encode($message));
+        $conn->publish("room_{$model->roomid}", JsonHelper::encode($message, JSON_UNESCAPED_UNICODE));
         $conn->release();
     }
 

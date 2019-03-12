@@ -24,16 +24,17 @@ class WebSocketInterceptor extends HandshakeInterceptor implements InterceptorIn
     {
         // TODO: Implement handshake() method.
         // 自定义握手处理
-        $userinfo = app()->session->get('userinfo');
-        if (empty($userinfo['uid']) || empty($userinfo['name'])) {
+        $uid  = app()->session->get('uid');
+        $name = app()->session->get('name');
+        if (empty($uid) || empty($name)) {
             $response->statusCode = 500;
             $response->send();
             return;
         }
 
         // 使用tcpSession保存会话信息
-        app()->tcpSession->set('uid', $userinfo['uid']);
-        app()->tcpSession->set('name', $userinfo['name']);
+        app()->tcpSession->set('uid', $uid);
+        app()->tcpSession->set('name', $name);
 
         // 默认握手处理
         parent::handshake($request, $response);
