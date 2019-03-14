@@ -20,7 +20,6 @@
     "mix/framework": "dev-master",
     "mix/console": "dev-master",
     "mix/log": "dev-master",
-    "mix/ini": "dev-master",
     "mix/http": "dev-master",
     "mix/http-session": "dev-master",
     "mix/http-message": "dev-master",
