@@ -2,6 +2,7 @@
 
 namespace Tcp\Handlers;
 
+use Mix\Helper\JsonHelper;
 use Mix\Tcp\Handler\HandlerInterface;
 use Mix\Tcp\TcpConnection;
 
@@ -30,6 +31,63 @@ class TcpHandler implements HandlerInterface
     public function receive(TcpConnection $tcp, string $data)
     {
         // TODO: Implement message() method.
+        // 解析数据
+        $data = json_decode($data, true);
+        if ($data) {
+            $response = [
+                'jsonrpc' => '2.0',
+                'error'   => [
+                    'code'    => -32600,
+                    'message' => 'Invalid Request',
+                ],
+                'id'      => null,
+            ];
+            $tcp->send(JsonHelper::encode($response) . "\n");
+            return;
+        }
+        if (!isset($data['method']) || !isset($data['params']) || !isset($data['id'])) {
+            $response = [
+                'jsonrpc' => '2.0',
+                'error'   => [
+                    'code'    => -32700,
+                    'message' => 'Parse error',
+                ],
+                'id'      => null,
+            ];
+            $tcp->send(JsonHelper::encode($response) . "\n");
+            return;
+        }
+        // 路由到控制器
+        list($controller, $action) = explode('.', $data['method']);
+        $controller = \Mix\Helper\NameHelper::snakeToCamel($controller, true) . 'Controller';
+        $controller = 'Tcp\\Controllers\\' . $controller;
+        $action     = 'action' . \Mix\Helper\NameHelper::snakeToCamel($action, true);
+        if (!class_exists($controller)) {
+            $response = [
+                'jsonrpc' => '2.0',
+                'error'   => [
+                    'code'    => -32601,
+                    'message' => 'Method not found',
+                ],
+                'id'      => $data['id'],
+            ];
+            $tcp->send(JsonHelper::encode($response) . "\n");
+            return;
+        }
+        $controller = new $controller;
+        if (!method_exists($controller, $action)) {
+            $response = [
+                'jsonrpc' => '2.0',
+                'error'   => [
+                    'code'    => -32601,
+                    'message' => 'Method not found',
+                ],
+                'id'      => $data['id'],
+            ];
+            $tcp->send(JsonHelper::encode($response) . "\n");
+            return;
+        }
+        call_user_func([$controller, $action], $data['params'], $data['id']);
     }
 
     /**
