@@ -31,9 +31,13 @@ class TcpHandler implements HandlerInterface
     public function receive(TcpConnection $tcp, string $data)
     {
         // TODO: Implement message() method.
+        // 主动退出处理
+        if (base64_encode($data) == '//T//QYNCg==') {
+            $tcp->disconnect();
+        }
         // 解析数据
         $data = json_decode($data, true);
-        if ($data) {
+        if (!$data) {
             $response = [
                 'jsonrpc' => '2.0',
                 'error'   => [

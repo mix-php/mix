@@ -5,11 +5,11 @@ namespace Tcp\Controllers;
 use Mix\Helper\JsonHelper;
 
 /**
- * Class Hello
+ * Class HelloController
  * @package Tcp\Controllers
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class Hello
+class HelloController
 {
 
     /**
