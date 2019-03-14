@@ -3,7 +3,6 @@
 namespace Http\Controllers;
 
 use Http\Models\FileForm;
-use Mix\Http\Message\Request;
 use Mix\Http\Message\Response;
 
 /**
@@ -16,17 +15,15 @@ class FileController
 
     /**
      * 文件上传
-     * @param Request $request
-     * @param Response $response
      * @return array
      */
-    public function actionUpload(Request $request, Response $response)
+    public function actionUpload()
     {
-        $response->format = Response::FORMAT_JSON;
+        app()->response->format = Response::FORMAT_JSON;
 
         // 使用模型
         $model = new FileForm();
-        $model->attributes = $request->post();
+        $model->attributes = app()->request->post();
         $model->setScenario('upload');
         if (!$model->validate()) {
             return ['code' => 1, 'message' => 'FAILED', 'data' => $model->getErrors()];
