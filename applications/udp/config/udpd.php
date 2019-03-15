@@ -1,6 +1,6 @@
 <?php
 
-// udp服务配置
+// udp 服务配置
 return [
     // 服务器
     'server'      => [

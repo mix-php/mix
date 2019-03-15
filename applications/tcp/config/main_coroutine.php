@@ -1,6 +1,6 @@
 <?php
 
-// mix-websocketd 下运行的 WebSocket 服务配置（常驻协程模式）
+// tcp 应用配置
 return [
 
     // 应用调试

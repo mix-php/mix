@@ -1,6 +1,6 @@
 <?php
 
-// tcp服务配置
+// tcp 服务配置
 return [
     // 服务器
     'server'      => [

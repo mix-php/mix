@@ -1,6 +1,6 @@
 <?php
 
-// websocket服务配置
+// websocket 服务配置
 return [
     // 服务器
     'server'      => [

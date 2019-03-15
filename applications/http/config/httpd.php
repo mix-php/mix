@@ -1,6 +1,6 @@
 <?php
 
-// http服务配置
+// http 服务配置
 return [
     // 服务器
     'server'      => [
@@ -17,7 +17,7 @@ return [
     // 运行参数：https://wiki.swoole.com/wiki/page/274.html
     'setting'     => [
         // 开启协程
-        'enable_coroutine' => false,
+        'enable_coroutine' => true,
         // 主进程事件处理线程数
         'reactor_num'      => 8,
         // 工作进程数
