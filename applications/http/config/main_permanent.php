@@ -15,6 +15,18 @@ return [
     // 组件配置
     'components'     => [
 
+        // 错误
+        'error'    => [
+            // 依赖引用
+            'ref' => beanname(Mix\Http\Error::class),
+        ],
+
+        // 日志
+        'log'      => [
+            // 依赖引用
+            'ref' => beanname(Mix\Log\Logger::class),
+        ],
+
         // 路由
         'route'    => [
             // 依赖引用
@@ -33,18 +45,6 @@ return [
             'ref' => beanname(Mix\Http\Message\Response::class),
         ],
 
-        // 错误
-        'error'    => [
-            // 依赖引用
-            'ref' => beanname(Mix\Http\Error::class),
-        ],
-
-        // 日志
-        'log'      => [
-            // 依赖引用
-            'ref' => beanname(Mix\Log\Logger::class),
-        ],
-
         // Auth
         'auth'     => [
             // 依赖引用
@@ -58,7 +58,7 @@ return [
         ],
 
         // 数据库
-        'db'      => [
+        'db'       => [
             // 依赖引用
             'ref' => beanname(Mix\Database\Persistent\PDOConnection::class),
         ],
@@ -73,6 +73,73 @@ return [
 
     // 依赖配置
     'beans'          => [
+
+        // 错误
+        [
+            // 类路径
+            'class'      => Mix\Http\Error::class,
+            // 属性
+            'properties' => [
+                // 输出格式
+                'format' => Mix\Http\Error::FORMAT_HTML,
+                // 错误级别
+                'level'  => E_ALL,
+            ],
+        ],
+
+        // 日志
+        [
+            // 类路径
+            'class'      => Mix\Log\Logger::class,
+            // 属性
+            'properties' => [
+                // 日志记录级别
+                'levels'  => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
+                // 处理器
+                'handler' => [
+                    // 依赖引用
+                    'ref' => beanname(Mix\Log\MultiHandler::class),
+                ],
+            ],
+        ],
+
+        // 日志处理器
+        [
+            // 类路径
+            'class'      => Mix\Log\MultiHandler::class,
+            // 属性
+            'properties' => [
+                // 标准输出处理器
+                'stdoutHandler' => [
+                    'ref' => beanname(Mix\Log\StdoutHandler::class),
+                ],
+                // 文件处理器
+                'fileHandler'   => [
+                    'ref' => beanname(Mix\Log\FileHandler::class),
+                ],
+            ],
+        ],
+
+        // 日志标准输出处理器
+        [
+            // 类路径
+            'class' => Mix\Log\StdoutHandler::class,
+        ],
+
+        // 日志文件处理器
+        [
+            // 类路径
+            'class'      => Mix\Log\FileHandler::class,
+            // 属性
+            'properties' => [
+                // 日志目录
+                'dir'         => 'logs',
+                // 日志轮转类型
+                'rotate'      => Mix\Log\FileHandler::ROTATE_DAY,
+                // 最大文件尺寸
+                'maxFileSize' => 0,
+            ],
+        ],
 
         // 路由
         [
@@ -155,50 +222,6 @@ return [
             'class' => Mix\Http\Message\Xml::class,
         ],
 
-        // 错误
-        [
-            // 类路径
-            'class'      => Mix\Http\Error::class,
-            // 属性
-            'properties' => [
-                // 输出格式
-                'format' => Mix\Http\Error::FORMAT_HTML,
-                // 错误级别
-                'level'  => E_ALL,
-            ],
-        ],
-
-        // 日志
-        [
-            // 类路径
-            'class'      => Mix\Log\Logger::class,
-            // 属性
-            'properties' => [
-                // 日志记录级别
-                'levels'  => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
-                // 处理者
-                'handler' => [
-                    // 依赖引用
-                    'ref' => beanname(Mix\Log\FileHandler::class),
-                ],
-            ],
-        ],
-
-        // 日志处理者
-        [
-            // 类路径
-            'class'      => Mix\Log\FileHandler::class,
-            // 属性
-            'properties' => [
-                // 日志目录
-                'dir'         => 'logs',
-                // 日志轮转类型
-                'rotate'      => Mix\Log\FileHandler::ROTATE_DAY,
-                // 最大文件尺寸
-                'maxFileSize' => 0,
-            ],
-        ],
-
         // Auth
         [
             // 类路径
@@ -243,7 +266,7 @@ return [
             'class'      => Mix\Http\Session\HttpSession::class,
             // 属性
             'properties' => [
-                // 处理者
+                // 处理器
                 'handler'        => [
                     // 依赖引用
                     'ref' => beanname(Mix\Http\Session\RedisHandler::class),
@@ -265,7 +288,7 @@ return [
             ],
         ],
 
-        // Session处理者
+        // Session处理器
         [
             // 类路径
             'class'      => Mix\Http\Session\RedisHandler::class,

@@ -76,7 +76,7 @@ return [
         ],
 
         // 连接池
-        'dbPool'    => [
+        'dbPool'     => [
             // 依赖引用
             'ref' => beanname(Mix\Database\Pool\ConnectionPool::class),
         ],
@@ -111,15 +111,38 @@ return [
             'properties' => [
                 // 日志记录级别
                 'levels'  => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
-                // 处理者
+                // 处理器
                 'handler' => [
                     // 依赖引用
+                    'ref' => beanname(Mix\Log\MultiHandler::class),
+                ],
+            ],
+        ],
+
+        // 日志处理器
+        [
+            // 类路径
+            'class'      => Mix\Log\MultiHandler::class,
+            // 属性
+            'properties' => [
+                // 标准输出处理器
+                'stdoutHandler' => [
+                    'ref' => beanname(Mix\Log\StdoutHandler::class),
+                ],
+                // 文件处理器
+                'fileHandler'   => [
                     'ref' => beanname(Mix\Log\FileHandler::class),
                 ],
             ],
         ],
 
-        // 日志处理者
+        // 日志标准输出处理器
+        [
+            // 类路径
+            'class' => Mix\Log\StdoutHandler::class,
+        ],
+
+        // 日志文件处理器
         [
             // 类路径
             'class'      => Mix\Log\FileHandler::class,
@@ -140,7 +163,7 @@ return [
             'class'      => Mix\WebSocket\Registry::class,
             // 属性
             'properties' => [
-                // 处理者命名空间
+                // 处理器命名空间
                 'handlerNamespace'     => 'WebSocket\Handlers',
                 // 拦截器命名空间
                 'interceptorNamespace' => 'WebSocket\Interceptors',
@@ -181,7 +204,7 @@ return [
             'class'      => Mix\Tcp\Session\TcpSession::class,
             // 属性
             'properties' => [
-                // 处理者
+                // 处理器
                 'handler' => [
                     // 依赖引用
                     'ref' => beanname(Mix\Tcp\Session\ArrayHandler::class),
@@ -189,7 +212,7 @@ return [
             ],
         ],
 
-        // Tcp会话处理者
+        // Tcp会话处理器
         [
             // 类路径
             'class' => Mix\Tcp\Session\ArrayHandler::class,
@@ -239,7 +262,7 @@ return [
             'class'      => Mix\Http\Session\HttpSession::class,
             // 属性
             'properties' => [
-                // 处理者
+                // 处理器
                 'handler'        => [
                     // 依赖引用
                     'ref' => beanname(Mix\Http\Session\RedisHandler::class),
@@ -261,7 +284,7 @@ return [
             ],
         ],
 
-        // Session处理者
+        // Session处理器
         [
             // 类路径
             'class'      => Mix\Http\Session\RedisHandler::class,

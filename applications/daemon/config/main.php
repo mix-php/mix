@@ -76,15 +76,38 @@ return [
             'properties' => [
                 // 日志记录级别
                 'levels'  => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
-                // 处理者
+                // 处理器
                 'handler' => [
                     // 依赖引用
+                    'ref' => beanname(Mix\Log\MultiHandler::class),
+                ],
+            ],
+        ],
+
+        // 日志处理器
+        [
+            // 类路径
+            'class'      => Mix\Log\MultiHandler::class,
+            // 属性
+            'properties' => [
+                // 标准输出处理器
+                'stdoutHandler' => [
+                    'ref' => beanname(Mix\Log\StdoutHandler::class),
+                ],
+                // 文件处理器
+                'fileHandler'   => [
                     'ref' => beanname(Mix\Log\FileHandler::class),
                 ],
             ],
         ],
 
-        // 日志处理者
+        // 日志标准输出处理器
+        [
+            // 类路径
+            'class' => Mix\Log\StdoutHandler::class,
+        ],
+
+        // 日志文件处理器
         [
             // 类路径
             'class'      => Mix\Log\FileHandler::class,
