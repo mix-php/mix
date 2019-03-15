@@ -93,7 +93,7 @@ composer create-project mixstart/mixphp=v1.1.1 --prefer-dist
 开发文档（未完成）：https://www.kancloud.cn/onanying/mixphp2/content
 
 ```shell
-composer create-project mix/mix=v2.0.1-RC2 --prefer-dist
+composer create-project mix/mix=v2.0.1-RC5 --prefer-dist
 ```
 
 安装入口：
