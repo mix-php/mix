@@ -10,10 +10,11 @@
  * @property \Mix\Http\Message\Request|\Mix\Http\Message\Compatible\Request $request
  * @property \Mix\Http\Message\Response|\Mix\Http\Message\Compatible\Response $response
  * @property \Mix\Console\Error|\Mix\Http\Error|\Mix\WebSocket\Error $error
- * @property \Mix\WebSocket\Registry|\Mix\Tcp\Registry $registry
+ * @property \Mix\WebSocket\Registry|\Mix\Tcp\Registry|\Mix\Udp\Registry $registry
  * @property \Mix\WebSocket\WebSocketConnection $ws
  * @property \Mix\WebSocket\Frame $frame
  * @property \Mix\Tcp\TcpConnection $tcp
+ * @property \Mix\Udp\UdpSender $udp
  *
  * 自定义组件
  * @property \Mix\Auth\Authorization $auth
