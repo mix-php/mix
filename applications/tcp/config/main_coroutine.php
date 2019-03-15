@@ -18,7 +18,7 @@ return [
         // 错误
         'error'      => [
             // 依赖引用
-            'ref' => beanname(Mix\WebSocket\Error::class),
+            'ref' => beanname(Mix\Tcp\Error::class),
         ],
 
         // 日志
@@ -46,7 +46,7 @@ return [
         ],
 
         // 连接池
-        'dbPool'    => [
+        'dbPool'     => [
             // 依赖引用
             'ref' => beanname(Mix\Database\Pool\ConnectionPool::class),
         ],
@@ -65,7 +65,7 @@ return [
         // 错误
         [
             // 类路径
-            'class'      => Mix\WebSocket\Error::class,
+            'class'      => Mix\Tcp\Error::class,
             // 属性
             'properties' => [
                 // 错误级别
