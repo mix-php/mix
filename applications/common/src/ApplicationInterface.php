@@ -20,9 +20,9 @@
  * @property \Mix\Auth\Authorization $auth
  * @property \Mix\Http\Session\HttpSession $session
  * @property \Mix\Tcp\Session\TcpSession $tcpSession
- * @property \Mix\Database\PDOConnection|Mix\Database\MasterSlave\PDOConnection $pdo
+ * @property \Mix\Database\PDOConnection|Mix\Database\MasterSlave\PDOConnection $db
  * @property \Mix\Redis\RedisConnection $redis
- * @property \Mix\Database\Pool\ConnectionPool $pdoPool
+ * @property \Mix\Database\Pool\ConnectionPool $dbPool
  * @property \Mix\Redis\Pool\ConnectionPool $redisPool
  */
 interface ApplicationInterface

@@ -58,7 +58,7 @@ return [
         ],
 
         // 数据库
-        'pdo'      => [
+        'db'      => [
             // 依赖引用
             'ref' => beanname(Mix\Database\Persistent\PDOConnection::class),
         ],

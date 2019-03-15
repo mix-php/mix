@@ -43,8 +43,8 @@ class CoroutineCommand
     {
         $chan = new Channel();
         xgo(function () use ($chan) {
-            $pdo    = app()->pdoPool->getConnection();
-            $result = $pdo->createCommand('select sleep(5)')->queryAll();
+            $db = app()->dbPool->getConnection();
+            $result = $db->createCommand('select sleep(5)')->queryAll();
             $chan->push($result);
         });
         return $chan;
@@ -58,8 +58,8 @@ class CoroutineCommand
     {
         $chan = new Channel();
         xgo(function () use ($chan) {
-            $pdo    = app()->pdoPool->getConnection();
-            $result = $pdo->createCommand('select sleep(2)')->queryAll();
+            $db = app()->dbPool->getConnection();
+            $result = $db->createCommand('select sleep(2)')->queryAll();
             $chan->push($result);
         });
         return $chan;

@@ -46,7 +46,7 @@ return [
         ],
 
         // 连接池
-        'pdoPool'    => [
+        'dbPool'    => [
             // 依赖引用
             'ref' => beanname(Mix\Database\Pool\ConnectionPool::class),
         ],
