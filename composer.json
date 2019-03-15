@@ -32,6 +32,9 @@
     "mix/tcp": "dev-master",
     "mix/tcp-server": "dev-master",
     "mix/tcp-daemon": "dev-master",
+    "mix/udp": "dev-master",
+    "mix/udp-server": "dev-master",
+    "mix/udp-daemon": "dev-master",
     "mix/validate": "dev-master",
     "mix/concurrent": "dev-master",
     "mix/pool": "dev-master",
@@ -48,7 +51,8 @@
       "Daemon\\": "applications/daemon/src/",
       "Http\\": "applications/http/src/",
       "WebSocket\\": "applications/websocket/src/",
-      "Tcp\\": "applications/tcp/src/"
+      "Tcp\\": "applications/tcp/src/",
+      "Udp\\": "applications/udp/src/"
     },
     "classmap": [
       "applications/common/src/ApplicationInterface.php"

@@ -1,0 +1,11 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * udpd 入口文件
+ */
+
+require __DIR__ . '/../vendor/autoload.php';
+Mix::loadEnvironmentFrom(__DIR__ . '/../.env');
+$config = require __DIR__ . '/../vendor/mix/udp-daemon/config/main.php';
+(new Mix\Console\Application($config))->run();
