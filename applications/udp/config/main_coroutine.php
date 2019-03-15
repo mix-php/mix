@@ -16,25 +16,25 @@ return [
     'components'     => [
 
         // 错误
-        'error'      => [
+        'error'     => [
             // 依赖引用
-            'ref' => beanname(Mix\WebSocket\Error::class),
+            'ref' => beanname(Mix\Udp\Error::class),
         ],
 
         // 日志
-        'log'        => [
+        'log'       => [
             // 依赖引用
             'ref' => beanname(Mix\Log\Logger::class),
         ],
 
         // 注册器
-        'registry'   => [
+        'registry'  => [
             // 依赖引用
             'ref' => beanname(Mix\Udp\Registry::class),
         ],
 
         // Udp发送器
-        'udp'        => [
+        'udp'       => [
             // 依赖引用
             'ref' => beanname(Mix\Udp\UdpSender::class),
         ],
@@ -46,7 +46,7 @@ return [
         ],
 
         // 连接池
-        'redisPool'  => [
+        'redisPool' => [
             // 依赖引用
             'ref' => beanname(Mix\Redis\Pool\ConnectionPool::class),
         ],
@@ -59,7 +59,7 @@ return [
         // 错误
         [
             // 类路径
-            'class'      => Mix\WebSocket\Error::class,
+            'class'      => Mix\Udp\Error::class,
             // 属性
             'properties' => [
                 // 错误级别
