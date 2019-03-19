@@ -24,6 +24,7 @@
  * @property \Mix\Redis\RedisConnection $redis
  * @property \Mix\Database\Pool\ConnectionPool $dbPool
  * @property \Mix\Redis\Pool\ConnectionPool $redisPool
+ * @property \Mix\Cache\Cache $cache
  */
 interface ApplicationInterface
 {

@@ -69,6 +69,12 @@ return [
             'ref' => beanname(Mix\Redis\RedisConnection::class),
         ],
 
+        // 文件缓存
+        'cache'    => [
+            // 依赖引用
+            'ref' => beanname(Mix\Cache\Cache::class),
+        ],
+
     ],
 
     // 依赖配置
@@ -338,6 +344,32 @@ return [
                 'database' => env('REDIS_DATABASE'),
                 // 密码
                 'password' => env('REDIS_PASSWORD'),
+            ],
+        ],
+
+        // 文件缓存
+        [
+            // 类路径
+            'class'      => Mix\Cache\Cache::class,
+            // 属性
+            'properties' => [
+                // 处理器
+                'handler' => [
+                    'ref' => beanname(Mix\Cache\FileHandler::class),
+                ],
+            ],
+        ],
+
+        // 文件缓存处理器
+        [
+            // 类路径
+            'class'      => Mix\Cache\FileHandler::class,
+            // 属性
+            'properties' => [
+                // 缓存目录
+                'dir'        => 'cache',
+                // 分区
+                'partitions' => 64,
             ],
         ],
 
