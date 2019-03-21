@@ -2,7 +2,7 @@
 
 namespace Http\Middleware;
 
-use Mix\Http\Middleware\MiddlewareInterface;
+use Mix\Core\Middleware\MiddlewareInterface;
 
 /**
  * Class BeforeMiddleware
