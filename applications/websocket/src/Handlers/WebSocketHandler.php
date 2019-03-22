@@ -5,7 +5,7 @@ namespace WebSocket\Handlers;
 use Mix\Core\Middleware\MiddlewareHandler;
 use Mix\Http\Message\Request;
 use Mix\WebSocket\Frame;
-use Mix\WebSocket\Handler\HandlerInterface;
+use Mix\WebSocket\Handler\WebSocketHandlerInterface;
 use Mix\WebSocket\WebSocketConnection;
 
 /**
@@ -13,7 +13,7 @@ use Mix\WebSocket\WebSocketConnection;
  * @package WebSocket\Handlers
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class WebSocketHandler implements HandlerInterface
+class WebSocketHandler implements WebSocketHandlerInterface
 {
 
     /**
