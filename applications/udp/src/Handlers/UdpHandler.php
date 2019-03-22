@@ -2,7 +2,6 @@
 
 namespace Udp\Handlers;
 
-use Mix\Udp\ClientInfo;
 use Mix\Udp\Handler\UdpHandlerInterface;
 use Mix\Udp\UdpSender;
 
@@ -18,13 +17,13 @@ class UdpHandler implements UdpHandlerInterface
      * 监听数据
      * @param UdpSender $udp
      * @param string $data
-     * @param ClientInfo $clientInfo
+     * @param array $clientInfo
      */
-    public function packet(UdpSender $udp, string $data, ClientInfo $clientInfo)
+    public function packet(UdpSender $udp, string $data, array $clientInfo)
     {
         // TODO: Implement packet() method.
         // 回复消息
-        app()->udp->sendTo($clientInfo->ip, $clientInfo->port, "ok\n");
+        app()->udp->sendTo($clientInfo['address'], $clientInfo['port'], "ok\n");
     }
 
 }
