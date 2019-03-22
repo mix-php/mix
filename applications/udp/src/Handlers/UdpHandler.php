@@ -3,7 +3,7 @@
 namespace Udp\Handlers;
 
 use Mix\Udp\ClientInfo;
-use Mix\Udp\Handler\HandlerInterface;
+use Mix\Udp\Handler\UdpHandlerInterface;
 use Mix\Udp\UdpSender;
 
 /**
@@ -11,7 +11,7 @@ use Mix\Udp\UdpSender;
  * @package Udp\Handlers
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class UdpHandler implements HandlerInterface
+class UdpHandler implements UdpHandlerInterface
 {
 
     /**

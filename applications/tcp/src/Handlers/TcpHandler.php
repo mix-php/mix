@@ -3,7 +3,7 @@
 namespace Tcp\Handlers;
 
 use Mix\Helper\JsonHelper;
-use Mix\Tcp\Handler\HandlerInterface;
+use Mix\Tcp\Handler\TcpHandlerInterface;
 use Mix\Tcp\TcpConnection;
 
 /**
@@ -11,7 +11,7 @@ use Mix\Tcp\TcpConnection;
  * @package Tcp\Handlers
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class TcpHandler implements HandlerInterface
+class TcpHandler implements TcpHandlerInterface
 {
 
     /**
