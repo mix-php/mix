@@ -66,28 +66,20 @@ class TcpHandler implements TcpHandlerInterface
         $controller = \Mix\Helper\NameHelper::snakeToCamel($controller, true) . 'Controller';
         $controller = 'Tcp\\Controllers\\' . $controller;
         $action     = 'action' . \Mix\Helper\NameHelper::snakeToCamel($action, true);
+        $response   = [
+            'jsonrpc' => '2.0',
+            'error'   => [
+                'code'    => -32601,
+                'message' => 'Method not found',
+            ],
+            'id'      => $data['id'],
+        ];
         if (!class_exists($controller)) {
-            $response = [
-                'jsonrpc' => '2.0',
-                'error'   => [
-                    'code'    => -32601,
-                    'message' => 'Method not found',
-                ],
-                'id'      => $data['id'],
-            ];
             $tcp->send(JsonHelper::encode($response) . "\n");
             return;
         }
         $controller = new $controller;
         if (!method_exists($controller, $action)) {
-            $response = [
-                'jsonrpc' => '2.0',
-                'error'   => [
-                    'code'    => -32601,
-                    'message' => 'Method not found',
-                ],
-                'id'      => $data['id'],
-            ];
             $tcp->send(JsonHelper::encode($response) . "\n");
             return;
         }
