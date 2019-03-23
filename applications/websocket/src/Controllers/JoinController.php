@@ -19,15 +19,24 @@ class JoinController
     /**
      * 加入房间
      * @param $params
-     * @return void
+     * @param $id
      */
-    public function actionRoom($params)
+    public function actionRoom($params, $id)
     {
         // 验证数据
         $model             = new JoinForm();
         $model->attributes = $params;
         $model->setScenario('actionRoom');
         if (!$model->validate()) {
+            $response = new TextFrame([
+                'data' => JsonHelper::encode([
+                    'result' => [
+                        'message' => $model->getError(),
+                    ],
+                    'id'     => $id,
+                ], JSON_UNESCAPED_UNICODE),
+            ]);
+            app()->ws->push($response);
             return;
         }
 
@@ -58,16 +67,17 @@ class JoinController
         });
 
         // 给当前房间发送消息
-        Timer::new()->after(100, function () use ($model) {
-            xgo(function () use ($model) {
-                $name    = app()->tcpSession->get('name');
-                $message = [
+        Timer::new()->after(100, function () use ($model, $id) {
+            xgo(function () use ($model, $id) {
+                $name     = app()->tcpSession->get('name');
+                $response = JsonHelper::encode([
                     'result' => [
                         'message' => "{$name} 加入 {$model->roomid} 房间.",
                     ],
-                ];
-                $conn    = app()->redisPool->getConnection();
-                $conn->publish("room_{$model->roomid}", JsonHelper::encode($message, JSON_UNESCAPED_UNICODE));
+                    'id'     => $id,
+                ], JSON_UNESCAPED_UNICODE);
+                $conn     = app()->redisPool->getConnection();
+                $conn->publish("room_{$model->roomid}", $response);
                 $conn->release();
             });
         });

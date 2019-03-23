@@ -3,6 +3,7 @@
 namespace WebSocket\Handlers;
 
 use Mix\Core\Middleware\MiddlewareHandler;
+use Mix\Helper\JsonHelper;
 use Mix\Http\Message\Request;
 use Mix\WebSocket\Frame;
 use Mix\WebSocket\Handler\WebSocketHandlerInterface;
@@ -35,11 +36,35 @@ class WebSocketHandler implements WebSocketHandlerInterface
     {
         // TODO: Implement message() method.
         // 解析数据
+        $response = new Frame\TextFrame([
+            'data' => JsonHelper::encode([
+                'error' => [
+                    'code'    => -32600,
+                    'message' => 'Invalid Request',
+                ],
+                'id'    => null,
+            ], JSON_UNESCAPED_UNICODE),
+        ]);
         if (!$frame->isTextFrame()) {
+            app()->ws->push($response);
             return;
         }
         $data = json_decode($frame->data, true);
-        if (!isset($data['method']) || !isset($data['params'])) {
+        if (!$data) {
+            app()->ws->push($response);
+            return;
+        }
+        if (!isset($data['method']) || !isset($data['params']) || !isset($data['id'])) {
+            $response = new Frame\TextFrame([
+                'data' => JsonHelper::encode([
+                    'error' => [
+                        'code'    => -32700,
+                        'message' => 'Parse error',
+                    ],
+                    'id'    => null,
+                ], JSON_UNESCAPED_UNICODE),
+            ]);
+            app()->ws->push($response);
             return;
         }
         // 路由到控制器
@@ -47,18 +72,29 @@ class WebSocketHandler implements WebSocketHandlerInterface
         $controller = \Mix\Helper\NameHelper::snakeToCamel($controller, true) . 'Controller';
         $controller = 'WebSocket\\Controllers\\' . $controller;
         $action     = 'action' . \Mix\Helper\NameHelper::snakeToCamel($action, true);
+        $response   = new Frame\TextFrame([
+            'data' => JsonHelper::encode([
+                'error' => [
+                    'code'    => -32601,
+                    'message' => 'Method not found',
+                ],
+                'id'    => $data['id'],
+            ], JSON_UNESCAPED_UNICODE),
+        ]);
         if (!class_exists($controller)) {
+            app()->ws->push($response);
             return;
         }
         $controller = new $controller;
         if (!method_exists($controller, $action)) {
+            app()->ws->push($response);
             return;
         }
         // 通过中间件执行功能
         $middlewares = MiddlewareHandler::newInstances('WebSocket\\Middleware', ['Before', 'After']);
         $callback    = [$controller, $action];
-        $params      = [$data['params']];
-        return MiddlewareHandler::run($callback, $params, $middlewares);
+        $params      = [$data['params'], $data['id']];
+        MiddlewareHandler::run($callback, $params, $middlewares);
     }
 
     /**
