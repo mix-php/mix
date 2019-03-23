@@ -4,15 +4,15 @@ namespace WebSocket\Interceptors;
 
 use Mix\Http\Message\Request;
 use Mix\Http\Message\Response;
-use Mix\WebSocket\Interceptor\InterceptorInterface;
-use Mix\WebSocket\Support\HandshakeInterceptor;
+use Mix\WebSocket\Interceptor\WebSocketInterceptorInterface;
+use Mix\WebSocket\Support\WebSocketHandshakeInterceptor;
 
 /**
  * Class WebSocketInterceptor
  * @package WebSocket\Interceptors
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class WebSocketInterceptor extends HandshakeInterceptor implements InterceptorInterface
+class WebSocketInterceptor extends WebSocketHandshakeInterceptor implements WebSocketInterceptorInterface
 {
 
     /**
