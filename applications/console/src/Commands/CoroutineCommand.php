@@ -21,7 +21,7 @@ class CoroutineCommand
             $time = time();
             $chan = new Channel();
             for ($i = 0; $i < 2; $i++) {
-                xgo([$this, 'foo'], [$chan]);
+                xgo([$this, 'foo'], $chan);
             }
             for ($i = 0; $i < 2; $i++) {
                 $result = $chan->pop();
