@@ -24,10 +24,11 @@ return [
     // 命令
     'commands'         => [
 
-        'hl' => ['Hello', 'description' => "demo.", 'options' => ['--name' => 'your name.',]],
-        'co'    => ['Coroutine', 'description' => "Coroutine demo."],
-        'cop'   => ['CoroutinePool', 'description' => 'Coroutine pool demo.'],
-        'tr'    => ['Timer', 'description' => 'Timer demo.'],
+        'hl'  => ['Hello', 'description' => "demo.", 'options' => ['--name' => 'your name.',]],
+        'co'  => ['Coroutine', 'description' => "Coroutine demo."],
+        'wg'  => ['WaitGroup', 'description' => "WaitGroup demo."],
+        'cop' => ['CoroutinePool', 'description' => 'Coroutine pool demo.'],
+        'tr'  => ['Timer', 'description' => 'Timer demo.'],
 
     ],
 
