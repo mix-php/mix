@@ -164,7 +164,7 @@ return [
                     'id' => '\d+',
                 ],
                 // 全局中间件
-                'middleware'          => [],
+                'middleware'          => ['After'],
                 // 路由规则
                 'rules'               => [
                     // 一级路由
