@@ -24,10 +24,10 @@ return [
     // 命令
     'commands'         => [
 
-        'hi'  => ['Hi', 'description' => "demo."],
-        'co'  => ['Coroutine', 'description' => "Coroutine demo."],
-        'cop' => ['CoroutinePool', 'description' => 'Coroutine pool demo.'],
-        'tr'  => ['Timer', 'description' => 'Timer demo.'],
+        'Hello' => ['Hello', 'description' => "demo."],
+        'co'    => ['Coroutine', 'description' => "Coroutine demo."],
+        'cop'   => ['CoroutinePool', 'description' => 'Coroutine pool demo.'],
+        'tr'    => ['Timer', 'description' => 'Timer demo.'],
 
     ],
 

@@ -3,11 +3,11 @@
 namespace Console\Commands;
 
 /**
- * Class HiCommand
+ * Class HelloCommand
  * @package Console\Commands
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class HiCommand
+class HelloCommand
 {
 
     /**
@@ -15,7 +15,7 @@ class HiCommand
      */
     public function main()
     {
-        println('ok');
+        println('Hello, World!');
     }
 
 }
