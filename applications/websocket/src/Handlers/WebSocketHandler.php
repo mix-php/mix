@@ -91,10 +91,8 @@ class WebSocketHandler implements WebSocketHandlerInterface
             return;
         }
         // 通过中间件执行功能
-        $middlewares = MiddlewareHandler::newInstances('WebSocket\\Middleware', ['Before', 'After']);
-        $callback    = [$controller, $action];
-        $params      = [$data['params'], $data['id']];
-        MiddlewareHandler::run($callback, $params, $middlewares);
+        $handler = MiddlewareHandler::new('WebSocket\\Middleware', ['Before', 'After']);
+        $handler->run([$controller, $action], $data['params'], $data['id']);
     }
 
     /**
