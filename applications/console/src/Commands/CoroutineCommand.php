@@ -2,7 +2,6 @@
 
 namespace Console\Commands;
 
-use Mix\Concurrent\Sync\WaitGroup;
 use Mix\Core\Coroutine\Channel;
 
 /**
@@ -19,50 +18,27 @@ class CoroutineCommand
     public function main()
     {
         xgo(function () {
-            $ws = WaitGroup::new();
-            $ws->add();
-            xgo(function () use ($ws) {
-                $time = time();
-                list($foo, $bar) = [$this->foo(), $this->bar()];
-                list($fooResult, $barResult) = [$foo->pop(), $bar->pop()];
-                println('Total time: ' . (time() - $time));
-                var_dump($fooResult);
-                var_dump($barResult);
-                $ws->done();
-            });
-            $ws->wait();
-            println('finish');
+            $time = time();
+            $chan = new Channel();
+            for ($i = 0; $i < 2; $i++) {
+                xgo([$this, 'foo'], [$chan]);
+            }
+            for ($i = 0; $i < 2; $i++) {
+                $result = $chan->pop();
+            }
+            println('Total time: ' . (time() - $time));
         });
     }
 
     /**
      * 查询数据
-     * @return Channel
+     * @param Channel $chan
      */
-    public function foo()
+    public function foo(Channel $chan)
     {
-        $chan = new Channel();
-        xgo(function () use ($chan) {
-            $db = app()->dbPool->getConnection();
-            $result = $db->createCommand('select sleep(5)')->queryAll();
-            $chan->push($result);
-        });
-        return $chan;
-    }
-
-    /**
-     * 查询数据
-     * @return Channel
-     */
-    public function bar()
-    {
-        $chan = new Channel();
-        xgo(function () use ($chan) {
-            $db = app()->dbPool->getConnection();
-            $result = $db->createCommand('select sleep(2)')->queryAll();
-            $chan->push($result);
-        });
-        return $chan;
+        $db     = app()->dbPool->getConnection();
+        $result = $db->createCommand('select sleep(5)')->queryAll();
+        $chan->push($result);
     }
 
 }
