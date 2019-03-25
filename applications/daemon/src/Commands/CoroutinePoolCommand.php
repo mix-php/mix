@@ -33,9 +33,9 @@ class CoroutinePoolCommand
         // 协程池执行任务
         xgo(function () {
             $maxWorkers = 20;
-            $maxQueue = 20;
-            $jobQueue = new Channel($maxQueue);
-            $dispatch = new Dispatcher([
+            $maxQueue   = 20;
+            $jobQueue   = new Channel($maxQueue);
+            $dispatch   = new Dispatcher([
                 'jobQueue'   => $jobQueue,
                 'maxWorkers' => $maxWorkers,
             ]);
@@ -48,7 +48,7 @@ class CoroutinePoolCommand
                     return;
                 }
                 try {
-                    $data = $redis->brPop('test', 3);
+                    $data = $redis->brPop(['test'], 3);
                 } catch (\Throwable $e) {
                     $dispatch->stop();
                     return;
@@ -56,7 +56,7 @@ class CoroutinePoolCommand
                 if (!$data) {
                     continue;
                 }
-                $job = [[$this, 'call'], [array_pop($data)]];
+                $job = [[$this, 'call'], array_pop($data)];
                 $jobQueue->push($job);
             }
         });

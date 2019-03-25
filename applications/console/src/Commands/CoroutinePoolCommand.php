@@ -29,7 +29,7 @@ class CoroutinePoolCommand
             $dispatch->start();
             // 投放任务
             for ($i = 0; $i < 1000; $i++) {
-                $job = [[$this, 'call'], [$i]];
+                $job = [[$this, 'call'], $i];
                 $jobQueue->push($job);
             }
             // 停止
