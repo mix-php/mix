@@ -2,6 +2,8 @@
 
 namespace Console\Commands;
 
+use Mix\Console\CommandLine\Flag;
+
 /**
  * Class HelloCommand
  * @package Console\Commands
@@ -15,7 +17,8 @@ class HelloCommand
      */
     public function main()
     {
-        println('Hello, World!');
+        $name = Flag::string(['name'], 'World');
+        println("Hello, {$name}!");
     }
 
 }

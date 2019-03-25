@@ -24,7 +24,7 @@ return [
     // 命令
     'commands'         => [
 
-        'Hello' => ['Hello', 'description' => "demo."],
+        'hl' => ['Hello', 'description' => "demo.", 'options' => ['--name' => 'your name.',]],
         'co'    => ['Coroutine', 'description' => "Coroutine demo."],
         'cop'   => ['CoroutinePool', 'description' => 'Coroutine pool demo.'],
         'tr'    => ['Timer', 'description' => 'Timer demo.'],
