@@ -18,24 +18,24 @@ class WaitGroupCommand
     public function main()
     {
         xgo(function () {
-            $ws = WaitGroup::new();
+            $wg = WaitGroup::new();
             for ($i = 0; $i < 2; $i++) {
-                $ws->add(1);
-                xgo([$this, 'foo'], $ws);
+                $wg->add(1);
+                xgo([$this, 'foo'], $wg);
             }
-            $ws->wait();
+            $wg->wait();
             println('All done!');
         });
     }
 
     /**
      * 查询数据
-     * @param WaitGroup $ws
+     * @param WaitGroup $wg
      */
-    public function foo(WaitGroup $ws)
+    public function foo(WaitGroup $wg)
     {
-        xdefer(function () use ($ws) {
-            $ws->done();
+        xdefer(function () use ($wg) {
+            $wg->done();
         });
         println('work');
         //throw new \RuntimeException('ERROR');
