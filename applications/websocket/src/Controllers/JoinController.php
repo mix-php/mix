@@ -2,7 +2,6 @@
 
 namespace WebSocket\Controllers;
 
-use Mix\Core\Coroutine;
 use Mix\Core\Coroutine\Timer;
 use Mix\Helper\JsonHelper;
 use Mix\Redis\Coroutine\RedisConnection;
