@@ -2,6 +2,7 @@
 
 namespace WebSocket\Controllers;
 
+use Mix\Core\Coroutine;
 use Mix\Core\Coroutine\Timer;
 use Mix\Helper\JsonHelper;
 use Mix\Redis\Coroutine\RedisConnection;
@@ -68,18 +69,16 @@ class JoinController
 
         // 给当前房间发送消息
         Timer::new()->after(100, function () use ($model, $id) {
-            xgo(function () use ($model, $id) {
-                $name     = app()->tcpSession->get('name');
-                $response = JsonHelper::encode([
-                    'result' => [
-                        'message' => "{$name} 加入 {$model->roomid} 房间.",
-                    ],
-                    'id'     => $id,
-                ], JSON_UNESCAPED_UNICODE);
-                $conn     = app()->redisPool->getConnection();
-                $conn->publish("room_{$model->roomid}", $response);
-                $conn->release();
-            });
+            $name     = app()->tcpSession->get('name');
+            $response = JsonHelper::encode([
+                'result' => [
+                    'message' => "{$name} 加入 {$model->roomid} 房间.",
+                ],
+                'id'     => $id,
+            ], JSON_UNESCAPED_UNICODE);
+            $conn     = app()->redisPool->getConnection();
+            $conn->publish("room_{$model->roomid}", $response);
+            $conn->release();
         });
     }
 
