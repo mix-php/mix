@@ -92,10 +92,12 @@ return [
             'properties' => [
                 // 标准输出处理器
                 'stdoutHandler' => [
+                    // 依赖引用
                     'ref' => beanname(Mix\Log\StdoutHandler::class),
                 ],
                 // 文件处理器
                 'fileHandler'   => [
+                    // 依赖引用
                     'ref' => beanname(Mix\Log\FileHandler::class),
                 ],
             ],
@@ -135,7 +137,7 @@ return [
                 // 拨号
                 'dial'      => [
                     // 依赖引用
-                    'ref' => beanname(Mix\Database\Pool\Dial::class),
+                    'ref' => beanname(Common\Libraries\Dial\DatabaseDial::class),
                 ],
             ],
         ],
@@ -143,7 +145,7 @@ return [
         // 连接池拨号
         [
             // 类路径
-            'class' => Mix\Database\Pool\Dial::class,
+            'class' => Common\Libraries\Dial\DatabaseDial::class,
         ],
 
         // 连接池
@@ -159,7 +161,7 @@ return [
                 // 拨号
                 'dial'      => [
                     // 依赖引用
-                    'ref' => beanname(Mix\Redis\Pool\Dial::class),
+                    'ref' => beanname(Common\Libraries\Dial\RedisDial::class),
                 ],
             ],
         ],
@@ -167,7 +169,7 @@ return [
         // 连接池拨号
         [
             // 类路径
-            'class' => Mix\Redis\Pool\Dial::class,
+            'class' => Common\Libraries\Dial\RedisDial::class,
         ],
 
         // 数据库
