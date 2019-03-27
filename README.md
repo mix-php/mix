@@ -9,12 +9,11 @@
 <p align="center">
 <img src="https://img.shields.io/badge/downloads-29k-green.svg">
 <img src="https://img.shields.io/badge/platform-linux%20%7C%20win%20%7C%20osx-lightgrey.svg">
-<img src="https://img.shields.io/badge/size-160%20KB-green.svg">
 </p>
 
 ## MixPHP 是什么
 
-MixPHP 秉承 **"普及 PHP 常驻内存型解决方案，促进 PHP 往更后端发展"** 的理念而创造，采用 Swoole 扩展作为底层引擎，围绕常驻内存的方式而设计，提供了 HTTP / WebSocket / Console 开发所需的众多开箱即用的组件，MixPHP 追求简单、实用主义，试图让更多开发者以更低的学习成本享受到 Swoole 带来的高性能与全新的编程体验。
+MixPHP 秉承 **"普及 PHP 常驻内存型解决方案，促进 PHP 往更后端发展"** 的理念而创造，采用 Swoole 扩展作为底层引擎，围绕常驻内存的方式而设计，提供了 Console / HTTP / WebSocket / TCP / UDP 开发所需的众多开箱即用的组件，MixPHP 追求简单、实用主义，试图让更多开发者以更低的学习成本享受到 Swoole 带来的高性能与全新的编程体验。
 
 ## 与传统 MVC 框架比较
 
