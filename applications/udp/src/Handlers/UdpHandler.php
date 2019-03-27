@@ -23,7 +23,7 @@ class UdpHandler implements UdpHandlerInterface
     {
         // TODO: Implement packet() method.
         // 回复消息
-        app()->udp->sendTo($clientInfo['address'], $clientInfo['port'], "Hello, World!\n");
+        app()->udp->sendTo($clientInfo['address'], $clientInfo['port'], "Receive successful!\n");
     }
 
 }
