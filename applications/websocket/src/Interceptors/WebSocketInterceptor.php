@@ -10,7 +10,7 @@ use Mix\WebSocket\Support\WebSocketHandshakeInterceptor;
 /**
  * Class WebSocketInterceptor
  * @package WebSocket\Interceptors
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class WebSocketInterceptor extends WebSocketHandshakeInterceptor implements WebSocketInterceptorInterface
 {

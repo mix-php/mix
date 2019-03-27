@@ -2,7 +2,7 @@
 
 /**
  * Interface ApplicationInterface
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  *
  * 系统组件 <不可改名>
  * @property \Mix\Log\Logger $log

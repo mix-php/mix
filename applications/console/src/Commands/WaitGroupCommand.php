@@ -7,7 +7,7 @@ use Mix\Concurrent\Sync\WaitGroup;
 /**
  * Class WaitGroupCommand
  * @package Console\Commands
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class WaitGroupCommand
 {

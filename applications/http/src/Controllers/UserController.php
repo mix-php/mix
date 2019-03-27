@@ -8,7 +8,7 @@ use Mix\Http\Message\Response;
 /**
  * Class UserController
  * @package Http\Controllers
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class UserController
 {

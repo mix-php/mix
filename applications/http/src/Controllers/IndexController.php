@@ -5,7 +5,7 @@ namespace Http\Controllers;
 /**
  * Class IndexController
  * @package Http\Controllers
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class IndexController
 {

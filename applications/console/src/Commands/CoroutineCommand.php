@@ -7,7 +7,7 @@ use Mix\Core\Coroutine\Channel;
 /**
  * Class CoroutineCommand
  * @package Console\Commands
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class CoroutineCommand
 {

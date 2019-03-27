@@ -8,7 +8,7 @@ use Mix\Core\Coroutine\Channel;
 /**
  * Class CoroutinePoolCommand
  * @package Console\Commands
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class CoroutinePoolCommand
 {

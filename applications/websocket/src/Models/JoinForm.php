@@ -7,7 +7,7 @@ use Mix\Validate\Validator;
 /**
  * Class JoinForm
  * @package WebSocket\Models
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class JoinForm extends Validator
 {

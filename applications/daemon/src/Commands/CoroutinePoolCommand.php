@@ -9,7 +9,7 @@ use Mix\Helper\ProcessHelper;
 /**
  * Class CoroutinePoolCommand
  * @package Daemon\Commands
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class CoroutinePoolCommand
 {

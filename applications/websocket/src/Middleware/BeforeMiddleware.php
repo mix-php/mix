@@ -7,7 +7,7 @@ use Mix\Core\Middleware\MiddlewareInterface;
 /**
  * Class BeforeMiddleware
  * @package WebSocket\Middleware
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class BeforeMiddleware implements MiddlewareInterface
 {

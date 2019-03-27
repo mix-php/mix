@@ -9,7 +9,7 @@ use Mix\Tcp\TcpConnection;
 /**
  * Class TcpHandler
  * @package Tcp\Handlers
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class TcpHandler implements TcpHandlerInterface
 {

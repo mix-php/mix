@@ -8,7 +8,7 @@ use Mix\Udp\UdpSender;
 /**
  * Class UdpHandler
  * @package Udp\Handlers
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class UdpHandler implements UdpHandlerInterface
 {
