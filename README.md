@@ -118,7 +118,7 @@ Worker         Num:       8
 Configuration  File:      /data/applications/http/config/main_permanent.php
 ```
 
-访问测试：
+访问测试 (新开一个终端)：
 
 ```
 $> curl http://127.0.0.1:9501/
