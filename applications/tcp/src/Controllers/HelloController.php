@@ -21,6 +21,7 @@ class HelloController
     {
         $response = [
             'jsonrpc' => '2.0',
+            'error'   => null,
             'result'  => [
                 'Hello, World!',
             ],
