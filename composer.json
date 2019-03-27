@@ -43,7 +43,6 @@
     "mix/cache": "~2.0",
     "mix/auth": "~2.0"
   },
-  "minimum-stability": "RC",
   "autoload": {
     "psr-4": {
       "Common\\": "applications/common/src/",
