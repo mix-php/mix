@@ -1,22 +1,22 @@
 <?php
 
-namespace Common\Libraries\Dial;
+namespace Common\Libraries\Dialers;
 
-use Mix\Pool\DialInterface;
+use Mix\Pool\DialerInterface;
 
 /**
- * Class RedisDial
- * @package Common\Libraries\Dial
+ * Class RedisDialer
+ * @package Common\Libraries\Dialers
  * @author liu,jian <coder.keda@gmail.com>
  */
-class RedisDial implements DialInterface
+class RedisDialer implements DialerInterface
 {
 
     /**
-     * 处理
+     * 拨号
      * @return \Mix\Redis\Coroutine\RedisConnection
      */
-    public function handle()
+    public function dial()
     {
         return \Mix\Redis\Coroutine\RedisConnection::newInstance();
     }

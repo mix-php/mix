@@ -1,22 +1,22 @@
 <?php
 
-namespace Common\Libraries\Dial;
+namespace Common\Libraries\Dialers;
 
-use Mix\Pool\DialInterface;
+use Mix\Pool\DialerInterface;
 
 /**
- * Class DatabaseDial
- * @package Common\Libraries\Dial
+ * Class DatabaseDialer
+ * @package Common\Libraries\Dialers
  * @author liu,jian <coder.keda@gmail.com>
  */
-class DatabaseDial implements DialInterface
+class DatabaseDialer implements DialerInterface
 {
 
     /**
-     * 处理
+     * 拨号
      * @return \Mix\Database\Coroutine\PDOConnection
      */
-    public function handle()
+    public function dial()
     {
         return \Mix\Database\Coroutine\PDOConnection::newInstance();
     }

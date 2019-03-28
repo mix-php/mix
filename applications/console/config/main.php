@@ -97,15 +97,12 @@ return [
             'class'      => Mix\Log\MultiHandler::class,
             // 属性
             'properties' => [
-                // 标准输出处理器
-                'stdoutHandler' => [
-                    // 依赖引用
-                    'ref' => beanname(Mix\Log\StdoutHandler::class),
-                ],
-                // 文件处理器
-                'fileHandler'   => [
-                    // 依赖引用
-                    'ref' => beanname(Mix\Log\FileHandler::class),
+                // 处理器
+                'beanNames' => [
+                    // 标准输出处理器
+                    beanname(Mix\Log\StdoutHandler::class),
+                    // 文件处理器
+                    beanname(Mix\Log\FileHandler::class),
                 ],
             ],
         ],
@@ -141,10 +138,10 @@ return [
                 'maxIdle'   => 5,
                 // 最大连接数
                 'maxActive' => 50,
-                // 拨号
-                'dial'      => [
+                // 拨号器
+                'dialer'    => [
                     // 依赖引用
-                    'ref' => beanname(Common\Libraries\Dial\DatabaseDial::class),
+                    'ref' => beanname(Common\Libraries\Dialers\DatabaseDialer::class),
                 ],
             ],
         ],
@@ -152,7 +149,7 @@ return [
         // 连接池拨号
         [
             // 类路径
-            'class' => Common\Libraries\Dial\DatabaseDial::class,
+            'class' => Common\Libraries\Dialers\DatabaseDialer::class,
         ],
 
         // 连接池
@@ -165,10 +162,10 @@ return [
                 'maxIdle'   => 5,
                 // 最大连接数
                 'maxActive' => 50,
-                // 拨号
-                'dial'      => [
+                // 拨号器
+                'dialer'    => [
                     // 依赖引用
-                    'ref' => beanname(Common\Libraries\Dial\RedisDial::class),
+                    'ref' => beanname(Common\Libraries\Dialers\RedisDialer::class),
                 ],
             ],
         ],
@@ -176,7 +173,7 @@ return [
         // 连接池拨号
         [
             // 类路径
-            'class' => Common\Libraries\Dial\RedisDial::class,
+            'class' => Common\Libraries\Dialers\RedisDialer::class,
         ],
 
         // 数据库

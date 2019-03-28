@@ -322,10 +322,10 @@ return [
                 'maxIdle'   => 5,
                 // 最大连接数
                 'maxActive' => 50,
-                // 拨号
-                'dial'      => [
+                // 拨号器
+                'dialer'    => [
                     // 依赖引用
-                    'ref' => beanname(Common\Libraries\Dial\DatabaseDial::class),
+                    'ref' => beanname(Common\Libraries\Dialers\DatabaseDialer::class),
                 ],
             ],
         ],
@@ -333,7 +333,7 @@ return [
         // 连接池拨号
         [
             // 类路径
-            'class' => Common\Libraries\Dial\DatabaseDial::class,
+            'class' => Common\Libraries\Dialers\DatabaseDialer::class,
         ],
 
         // 连接池
@@ -346,10 +346,10 @@ return [
                 'maxIdle'   => 5,
                 // 最大连接数
                 'maxActive' => 50,
-                // 拨号
-                'dial'      => [
+                // 拨号器
+                'dialer'    => [
                     // 依赖引用
-                    'ref' => beanname(Common\Libraries\Dial\RedisDial::class),
+                    'ref' => beanname(Common\Libraries\Dialers\RedisDialer::class),
                 ],
             ],
         ],
@@ -357,7 +357,7 @@ return [
         // 连接池拨号
         [
             // 类路径
-            'class' => Common\Libraries\Dial\RedisDial::class,
+            'class' => Common\Libraries\Dialers\RedisDialer::class,
         ],
 
         // 数据库
