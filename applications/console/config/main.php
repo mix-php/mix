@@ -97,12 +97,15 @@ return [
             'class'      => Mix\Log\MultiHandler::class,
             // 属性
             'properties' => [
-                // 处理器
-                'beanNames' => [
-                    // 标准输出处理器
-                    beanname(Mix\Log\StdoutHandler::class),
-                    // 文件处理器
-                    beanname(Mix\Log\FileHandler::class),
+                // 标准输出处理器
+                'stdoutHandler' => [
+                    // 依赖引用
+                    'ref' => beanname(Mix\Log\StdoutHandler::class),
+                ],
+                // 文件处理器
+                'fileHandler'   => [
+                    // 依赖引用
+                    'ref' => beanname(Mix\Log\FileHandler::class),
                 ],
             ],
         ],
