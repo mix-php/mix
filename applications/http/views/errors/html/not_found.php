@@ -34,7 +34,7 @@
 
 <h1><span><?= $message ?></span></h1>
 
-<p style="margin-top: 20px;"><span><a href="http://mixphp.cn" target="_blank">MixPHP</a> —— 基于 Swoole 的FPM、常驻内存、协程三模 PHP 高性能框架</span></p>
+<p style="margin-top: 20px;"><span><a href="http://mixphp.cn" target="_blank">MixPHP</a> —— 基于 Swoole 的 FastCGI、常驻内存、协程三模 PHP 高性能框架</span></p>
 
 </body>
 </html>
