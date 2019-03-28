@@ -226,10 +226,10 @@ return [
             'class'      => Mix\Auth\Authorization::class,
             // 属性
             'properties' => [
-                // BearerToken
-                'bearerToken' => [
+                // token提取器
+                'tokenExtractor' => [
                     // 依赖引用
-                    'ref' => beanname(Mix\Auth\BearerToken::class),
+                    'ref' => beanname(Mix\Auth\BearerTokenExtractor::class),
                 ],
                 // jwt
                 'jwt'         => [
@@ -239,10 +239,10 @@ return [
             ],
         ],
 
-        // BearerToken
+        // token提取器
         [
             // 类路径
-            'class' => Mix\Auth\BearerToken::class,
+            'class' => Mix\Auth\BearerTokenExtractor::class,
         ],
 
         // jwt
