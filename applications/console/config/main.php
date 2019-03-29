@@ -12,9 +12,6 @@ return [
     // 应用调试
     'appDebug'         => env('APP_DEBUG'),
 
-    // 初始化
-    'initialization'   => [],
-
     // 基础路径
     'basePath'         => dirname(__DIR__),
 
