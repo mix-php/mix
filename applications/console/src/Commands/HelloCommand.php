@@ -17,8 +17,9 @@ class HelloCommand
      */
     public function main()
     {
-        $name = Flag::string(['name'], 'World');
-        println("Hello, {$name}!");
+        $name = Flag::string(['n', 'name'], 'Xiao Ming');
+        $say  = Flag::string('say', 'Hello, World!');
+        println("{$name}: {$say}");
     }
 
 }
