@@ -185,7 +185,7 @@ return [
             // 属性
             'properties' => [
                 // 默认输出格式
-                'defaultFormat' => Mix\Http\Message\Response\HttpResponse::FORMAT_HTML,
+                'defaultFormat' => Mix\Http\Message\Response\HttpResponseInterface::FORMAT_HTML,
                 // json
                 'json'          => [
                     // 依赖引用
