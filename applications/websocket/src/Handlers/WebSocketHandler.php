@@ -4,7 +4,7 @@ namespace WebSocket\Handlers;
 
 use Mix\Core\Middleware\MiddlewareHandler;
 use Mix\Helper\JsonHelper;
-use Mix\Http\Message\Request;
+use Mix\Http\Message\Request\HttpRequest;
 use Mix\WebSocket\Frame;
 use Mix\WebSocket\Handler\WebSocketHandlerInterface;
 use Mix\WebSocket\WebSocketConnection;
