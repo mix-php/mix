@@ -4,13 +4,13 @@
 return [
 
     // 应用调试
-    'appDebug'       => env('APP_DEBUG'),
+    'appDebug'   => env('APP_DEBUG'),
 
     // 基础路径
-    'basePath'       => dirname(__DIR__),
+    'basePath'   => dirname(__DIR__),
 
     // 组件配置
-    'components'     => [
+    'components' => [
 
         // 错误
         'error'     => [
@@ -33,13 +33,13 @@ return [
         // 请求
         'request'   => [
             // 依赖引用
-            'ref' => beanname(Mix\Http\Message\Request::class),
+            'ref' => beanname(Mix\Http\Message\Request\HttpRequest::class),
         ],
 
         // 响应
         'response'  => [
             // 依赖引用
-            'ref' => beanname(Mix\Http\Message\Response::class),
+            'ref' => beanname(Mix\Http\Message\Response\HttpResponse::class),
         ],
 
         // Auth
@@ -75,7 +75,7 @@ return [
     ],
 
     // 依赖配置
-    'beans'          => [
+    'beans'      => [
 
         // 错误
         [
@@ -175,17 +175,17 @@ return [
         // 请求
         [
             // 类路径
-            'class' => Mix\Http\Message\Request::class,
+            'class' => Mix\Http\Message\Request\HttpRequest::class,
         ],
 
         // 响应
         [
             // 类路径
-            'class'      => Mix\Http\Message\Response::class,
+            'class'      => Mix\Http\Message\Response\HttpResponse::class,
             // 属性
             'properties' => [
                 // 默认输出格式
-                'defaultFormat' => Mix\Http\Message\Response::FORMAT_HTML,
+                'defaultFormat' => Mix\Http\Message\Response\HttpResponse::FORMAT_HTML,
                 // json
                 'json'          => [
                     // 依赖引用
@@ -239,7 +239,7 @@ return [
                     'ref' => beanname(Mix\Auth\BearerTokenExtractor::class),
                 ],
                 // jwt
-                'jwt'         => [
+                'jwt'            => [
                     // 依赖引用
                     'ref' => beanname(Mix\Auth\JWT::class),
                 ],

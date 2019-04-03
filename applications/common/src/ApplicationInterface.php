@@ -7,8 +7,8 @@
  * 系统组件 <不可改名>
  * @property \Mix\Log\Logger $log
  * @property \Mix\Http\Route $route
- * @property \Mix\Http\Message\Request|\Mix\Http\Message\Compatible\Request $request
- * @property \Mix\Http\Message\Response|\Mix\Http\Message\Compatible\Response $response
+ * @property \Mix\Http\Message\Request\HttpRequest|\Mix\Http\Message\Request\Compatible\HttpRequest $request
+ * @property \Mix\Http\Message\Response\HttpResponse|\Mix\Http\Message\Response\Compatible\HttpResponse $response
  * @property \Mix\Console\Error|\Mix\Http\Error|\Mix\WebSocket\Error $error
  * @property \Mix\WebSocket\Registry|\Mix\Tcp\Registry|\Mix\Udp\Registry $registry
  * @property \Mix\WebSocket\WebSocketConnection $ws
