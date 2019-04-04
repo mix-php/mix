@@ -3,6 +3,7 @@
 namespace Console\Commands;
 
 use Mix\Core\Coroutine\Channel;
+use Mix\Core\Event;
 
 /**
  * Class CoroutineCommand
@@ -28,6 +29,7 @@ class CoroutineCommand
             }
             println('Total time: ' . (time() - $time));
         });
+        Event::wait();
     }
 
     /**

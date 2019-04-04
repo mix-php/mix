@@ -4,6 +4,7 @@ namespace Console\Commands;
 
 use Mix\Concurrent\CoroutinePool\Dispatcher;
 use Mix\Core\Coroutine\Channel;
+use Mix\Core\Event;
 
 /**
  * Class CoroutinePoolCommand
@@ -35,6 +36,7 @@ class CoroutinePoolCommand
             // 停止
             $dispatch->stop();
         });
+        Event::wait();
     }
 
     /**
