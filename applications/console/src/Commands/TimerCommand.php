@@ -2,7 +2,7 @@
 
 namespace Console\Commands;
 
-use Mix\Core\Coroutine\Timer;
+use Mix\Core\Timer;
 
 /**
  * Class TimerCommand
