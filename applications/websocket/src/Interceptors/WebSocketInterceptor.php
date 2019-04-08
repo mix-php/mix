@@ -17,10 +17,10 @@ class WebSocketInterceptor extends WebSocketHandshakeInterceptor implements WebS
 
     /**
      * 握手
-     * @param Request $request
-     * @param Response $response
+     * @param HttpRequest $request
+     * @param HttpResponse $response
      */
-    public function handshake(Request $request, Response $response)
+    public function handshake(HttpRequest $request, HttpResponse $response)
     {
         // TODO: Implement handshake() method.
         // 自定义握手处理

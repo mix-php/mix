@@ -20,9 +20,9 @@ class WebSocketHandler implements WebSocketHandlerInterface
     /**
      * 开启连接
      * @param WebSocketConnection $ws
-     * @param Request $request
+     * @param HttpRequest $request
      */
-    public function open(WebSocketConnection $ws, Request $request)
+    public function open(WebSocketConnection $ws, HttpRequest $request)
     {
         // TODO: Implement open() method.
     }
