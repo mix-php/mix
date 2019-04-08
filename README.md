@@ -83,7 +83,7 @@ MixPHP开发指南：https://www.kancloud.cn/onanying/mixphp2/content
 推荐使用 [composer](https://www.phpcomposer.com/) 安装。
 
 ```
-composer create-project mix/mix --prefer-dist
+composer create-project mix/mix=v2.0.1-RC5 --prefer-dist
 ```
 
 启动服务器：
