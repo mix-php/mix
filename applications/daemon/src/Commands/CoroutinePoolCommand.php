@@ -2,6 +2,7 @@
 
 namespace Daemon\Commands;
 
+use Daemon\Libraries\CoroutinePoolWorker;
 use Mix\Concurrent\CoroutinePool\Dispatcher;
 use Mix\Core\Coroutine\Channel;
 use Mix\Helper\ProcessHelper;
@@ -39,7 +40,7 @@ class CoroutinePoolCommand
                 'jobQueue'   => $jobQueue,
                 'maxWorkers' => $maxWorkers,
             ]);
-            $dispatch->start();
+            $dispatch->start(CoroutinePoolWorker::class);
             // 投放任务
             $redis = app()->redisPool->getConnection();
             while (true) {
@@ -56,20 +57,10 @@ class CoroutinePoolCommand
                 if (!$data) {
                     continue;
                 }
-                $job = [[$this, 'call'], array_pop($data)];
-                $jobQueue->push($job);
+                $data = array_pop($data); // brPop命令最后一个键才是值
+                $jobQueue->push($data);
             }
         });
-    }
-
-    /**
-     * 回调函数
-     * 在 $maxWorkers 数量的协程之中并行执行
-     * @param $data
-     */
-    public function call($data)
-    {
-        var_dump($data);
     }
 
 }

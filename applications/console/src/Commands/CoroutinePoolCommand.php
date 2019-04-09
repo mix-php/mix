@@ -2,7 +2,7 @@
 
 namespace Console\Commands;
 
-use Console\Libraries\Worker;
+use Console\Libraries\CoroutinePoolWorker;
 use Mix\Concurrent\CoroutinePool\Dispatcher;
 use Mix\Core\Coroutine\Channel;
 use Mix\Core\Event;
@@ -28,13 +28,10 @@ class CoroutinePoolCommand
                 'jobQueue'   => $jobQueue,
                 'maxWorkers' => $maxWorkers,
             ]);
-            $dispatch->start(Worker::class);
+            $dispatch->start(CoroutinePoolWorker::class);
             // 投放任务
             for ($i = 0; $i < 1000; $i++) {
-                $data = [
-                    'id' => $i,
-                ];
-                $jobQueue->push($data);
+                $jobQueue->push($i);
             }
             // 停止
             $dispatch->stop();
