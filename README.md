@@ -69,7 +69,7 @@ MixPHP 支持三种执行方式：传统模式(Apache/FPM)、常驻模式、协�
 
 ## 开发文档
 
-MixPHP开发指南：https://www.kancloud.cn/onanying/mixphp2/content
+MixPHP开发指南：http://doc.mixphp.cn
 
 ## 环境要求
 
