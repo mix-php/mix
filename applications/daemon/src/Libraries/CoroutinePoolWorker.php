@@ -7,7 +7,7 @@ use Mix\Concurrent\CoroutinePool\WorkerInterface;
 
 /**
  * Class CoroutinePoolWorker
- * @package Console\Libraries
+ * @package Daemon\Libraries
  * @author liu,jian <coder.keda@gmail.com>
  */
 class CoroutinePoolWorker extends AbstractWorker implements WorkerInterface
