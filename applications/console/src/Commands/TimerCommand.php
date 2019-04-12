@@ -2,7 +2,6 @@
 
 namespace Console\Commands;
 
-use Mix\Core\Event;
 use Mix\Core\Timer;
 
 /**
@@ -33,8 +32,6 @@ class TimerCommand
         Timer::new()->after(10000, function () use ($timer) {
             $timer->clear();
         });
-
-        Event::wait();
     }
 
 }

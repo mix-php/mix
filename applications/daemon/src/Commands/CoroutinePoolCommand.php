@@ -5,6 +5,7 @@ namespace Daemon\Commands;
 use Daemon\Libraries\CoroutinePoolWorker;
 use Mix\Concurrent\CoroutinePool\Dispatcher;
 use Mix\Core\Coroutine\Channel;
+use Mix\Core\Event;
 use Mix\Helper\ProcessHelper;
 
 /**
@@ -61,6 +62,7 @@ class CoroutinePoolCommand
                 $jobQueue->push($data);
             }
         });
+        Event::wait();
     }
 
 }
