@@ -7,7 +7,7 @@ use Mix\Helper\JsonHelper;
 /**
  * Class HelloController
  * @package Tcp\Controllers
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class HelloController
 {
@@ -21,9 +21,9 @@ class HelloController
     {
         $response = [
             'jsonrpc' => '2.0',
+            'error'   => null,
             'result'  => [
-                'Hello',
-                'World',
+                'Hello, World!',
             ],
             'id'      => $id,
         ];

@@ -2,12 +2,12 @@
 
 namespace Http\Middleware;
 
-use Mix\Http\Middleware\MiddlewareInterface;
+use Mix\Core\Middleware\MiddlewareInterface;
 
 /**
  * Class BeforeMiddleware
  * @package Http\Middleware
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class BeforeMiddleware implements MiddlewareInterface
 {

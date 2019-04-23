@@ -1,15 +1,15 @@
 <?php
 
-namespace Http\Middleware;
+namespace WebSocket\Middleware;
 
 use Mix\Core\Middleware\MiddlewareInterface;
 
 /**
- * Class AfterMiddleware
- * @package Http\Middleware
+ * Class BeforeMiddleware
+ * @package WebSocket\Middleware
  * @author liu,jian <coder.keda@gmail.com>
  */
-class AfterMiddleware implements MiddlewareInterface
+class BeforeMiddleware implements MiddlewareInterface
 {
 
     /**
@@ -21,13 +21,12 @@ class AfterMiddleware implements MiddlewareInterface
     public function handle(callable $callback, \Closure $next)
     {
         // 添加中间件执行代码
-        $response = $next();
         list($controller, $action) = $callback;
 
         // ...
 
-        // 返回响应内容
-        return $response;
+        // 执行下一个中间件
+        return $next();
     }
 
 }

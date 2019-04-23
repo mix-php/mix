@@ -7,14 +7,12 @@
 <p align="center">高性能 • 轻量级 • 命令行</p>
 
 <p align="center">
-<img src="https://img.shields.io/badge/downloads-29k-green.svg">
 <img src="https://img.shields.io/badge/platform-linux%20%7C%20win%20%7C%20osx-lightgrey.svg">
-<img src="https://img.shields.io/badge/size-160%20KB-green.svg">
 </p>
 
 ## MixPHP 是什么
 
-MixPHP 秉承 **"普及 PHP 常驻内存型解决方案，促进 PHP 往更后端发展"** 的理念而创造，采用 Swoole 扩展作为底层引擎，围绕常驻内存的方式而设计，提供了 HTTP / WebSocket / Console 开发所需的众多开箱即用的组件，MixPHP 追求简单、实用主义，试图让更多开发者以更低的学习成本享受到 Swoole 带来的高性能与全新的编程体验。
+MixPHP 秉承 **"普及 PHP 常驻内存型解决方案，促进 PHP 往更后端发展"** 的理念而创造，采用 Swoole 扩展作为底层引擎，围绕常驻内存的方式而设计，提供了 Console / Daemon / HTTP / WebSocket / TCP / UDP 开发所需的众多开箱即用的组件，MixPHP 追求简单、实用主义，试图让更多开发者以更低的学习成本享受到 Swoole 带来的高性能与全新的编程体验。
 
 ## 与传统 MVC 框架比较
 
@@ -44,15 +42,18 @@ MixPHP 支持三种执行方式：传统模式(Apache/FPM)、常驻模式、协�
 
 ## 核心特征
 
-* 高性能：极简架构 + Swoole引擎，超过 Phalcon 这类 C 扩展框架的性能；
-* 服务器：框架自带 mix-httpd 替代 Apache/PHP-FPM 作为高性能 HTTP 服务器；
+* 命令行：封装了命令行开发基础设施，可快速开发控制台程序、守护进程；
+* HTTP：常驻内存 + 协程 + 传统 MVC 框架相似的使用方法；
+* WebSocket：具备长连接开发能力，可开发 IM、消息推送类需求；
+* TCP：可轻松打造 RPC 服务，mqtt 物联网项目；
+* UDP：可处理一些非连接场景的开发任务；
+* 高性能：极简架构 + Swoole引擎 + 协程，超过 Phalcon 这类 C 扩展框架的性能；
+* 服务器：框架自带各类型服务器，无需 Apache/PHP-FPM 等外置容器；
 * 协程：采用 Swoole 原生协程与最新的 PHP Stream 一键协程化技术。
-* 连接池：redisPool、PDOPool 连接池支持。
-* 协程池：Dispatcher、Worker 协程池支持。
-* WebSocket：具备长连接开发能力，扩展了 PHP 开发领域；
-* 多进程：简易的多进程命令行开发，充分利用多核性能，可处理大量数据；
-* 长连接：按进程保持的长连接，支持 Mysql/Redis；
-* 命令行：封装了命令行开发基础设施，可快速开发定时任务、守护进程；
+* 连接池：通用的连接池组件，DB/Redis 等组件默认接入连接池。
+* 协程池：封装了 Golang 常用的 Dispatcher、Worker 协程池方案。
+* 长连接：按进程保持的长连接，支持 DB/Redis；
+* 依赖注入：参考 Java Spring 的 Bean 设计思想，实现了简易好用的 IoC。
 * 组件：基于组件的框架结构，并集成了大量开箱即用的组件；
 * 中间件：AOP (面向切面编程)，注册方便，能更好的对请求进行过滤和处理；
 * 路由：底层全正则实现，性能高，配置简单；
@@ -68,42 +69,23 @@ MixPHP 支持三种执行方式：传统模式(Apache/FPM)、常驻模式、协�
 
 ## 开发文档
 
-MixPHP开发指南：http://doc.mixphp.cn
+MixPHP开发指南：
+
+- http://doc.mixphp.cn
+- https://www.kancloud.cn/onanying/mixphp2/content
 
 ## 环境要求
 
 * PHP >= 7.0
 * Swoole >= 1.9.5 （常驻同步模式）
-* Swoole >= 4.2.2 （常驻协程模式）
+* Swoole >= 4.2.9 （常驻协程模式）
 
 ## 快速开始
 
 推荐使用 [composer](https://www.phpcomposer.com/) 安装。
 
-安装稳定版本 `V1`：
-
-```shell
-composer create-project mixstart/mixphp=v1.1.1 --prefer-dist
 ```
-
-安装最新版本 `V2`：
-
-注意：V2 还未进入正式版本，只能体验，不可使用在线上。
-
-开发文档（未完成）：https://www.kancloud.cn/onanying/mixphp2/content
-
-```shell
-composer create-project mix/mix=v2.0.1-RC5 --prefer-dist
-```
-
-安装入口：
-
-入口文件安装至 `/usr/local/bin`，（可选，不安装可直接执行入口文件）。
-
-```shell
-$> cd /data/mixphp-master
-$> chmod 777 install.sh
-$> ./install.sh
+composer create-project mix/mix --prefer-dist
 ```
 
 启动服务器：
@@ -111,7 +93,8 @@ $> ./install.sh
 接下来启动 `mix-httpd` 服务器。
 
 ```
-$> mix-httpd service start -d
+$> cd bin
+$> ./mix-httpd service start -c ../applications/http/config/httpd.php
 ```
 
 如果一切顺利，运行到最后你将看到如下的输出：
@@ -124,30 +107,29 @@ _/ / / / / / / /\ \/ _ / /_/ / / / / /_/ /
 /_/ /_/ /_/_/ /_/\_\  / .___/_/ /_/ .___/
                      /_/         /_/
 
-Server      Name:      mix-httpd
-System      Name:      linux
-Framework   Version:   2.0.1-Beta1
-PHP         Version:   7.2.9
-Swoole      Version:   4.2.9
-Listen      Addr:      127.0.0.1
-Listen      Port:      9501
-Reactor     Num:       8
-Worker      Num:       8
-Hot         Update:    disabled
-Coroutine   Mode:      disabled
-Config      File:      /data/applications/httpd/config/http_permanent.php
+Server         Name:      mix-httpd
+System         Name:      linux
+PHP            Version:   7.2.9
+Swoole         Version:   4.2.13
+Framework      Version:   2.0.1-RC5
+Coroutine      Mode:      enabled
+Listen         Addr:      127.0.0.1
+Listen         Port:      9501
+Reactor        Num:       8
+Worker         Num:       8
+Configuration  File:      /data/applications/http/config/main_permanent.php
 ```
 
-访问测试：
+访问测试 (新开一个终端)：
 
 ```
 $> curl http://127.0.0.1:9501/
-Hello World
+Hello, World!
 ```
 
 ## 下载
 
-[MixPHP 发行版本](https://github.com/mixstart/mix/releases)
+[MixPHP 发行版本](https://github.com/mix-php/mix/releases)
 
 ## 技术交流
 

@@ -9,9 +9,6 @@ return [
     // 应用版本
     'appVersion'       => '0.0.0',
 
-    // 初始化
-    'initialization'       => [],
-
     // 基础路径
     'basePath'         => dirname(__DIR__),
 
@@ -90,13 +87,18 @@ return [
             'class'      => Mix\Log\MultiHandler::class,
             // 属性
             'properties' => [
-                // 标准输出处理器
-                'stdoutHandler' => [
-                    'ref' => beanname(Mix\Log\StdoutHandler::class),
-                ],
-                // 文件处理器
-                'fileHandler'   => [
-                    'ref' => beanname(Mix\Log\FileHandler::class),
+                // 日志处理器集合
+                'handlers' => [
+                    // 标准输出处理器
+                    [
+                        // 依赖引用
+                        'ref' => beanname(Mix\Log\StdoutHandler::class),
+                    ],
+                    // 文件处理器
+                    [
+                        // 依赖引用
+                        'ref' => beanname(Mix\Log\FileHandler::class),
+                    ],
                 ],
             ],
         ],
@@ -132,10 +134,10 @@ return [
                 'maxIdle'   => 5,
                 // 最大连接数
                 'maxActive' => 50,
-                // 拨号
-                'dial'      => [
+                // 拨号器
+                'dialer'    => [
                     // 依赖引用
-                    'ref' => beanname(Mix\Database\Pool\Dial::class),
+                    'ref' => beanname(Common\Libraries\Dialers\DatabaseDialer::class),
                 ],
             ],
         ],
@@ -143,7 +145,7 @@ return [
         // 连接池拨号
         [
             // 类路径
-            'class' => Mix\Database\Pool\Dial::class,
+            'class' => Common\Libraries\Dialers\DatabaseDialer::class,
         ],
 
         // 连接池
@@ -156,10 +158,10 @@ return [
                 'maxIdle'   => 5,
                 // 最大连接数
                 'maxActive' => 50,
-                // 拨号
-                'dial'      => [
+                // 拨号器
+                'dialer'    => [
                     // 依赖引用
-                    'ref' => beanname(Mix\Redis\Pool\Dial::class),
+                    'ref' => beanname(Common\Libraries\Dialers\RedisDialer::class),
                 ],
             ],
         ],
@@ -167,7 +169,7 @@ return [
         // 连接池拨号
         [
             // 类路径
-            'class' => Mix\Redis\Pool\Dial::class,
+            'class' => Common\Libraries\Dialers\RedisDialer::class,
         ],
 
         // 数据库

@@ -2,14 +2,16 @@
 
 namespace Daemon\Commands;
 
+use Daemon\Libraries\CoroutinePoolWorker;
 use Mix\Concurrent\CoroutinePool\Dispatcher;
 use Mix\Core\Coroutine\Channel;
+use Mix\Core\Event;
 use Mix\Helper\ProcessHelper;
 
 /**
  * Class CoroutinePoolCommand
  * @package Daemon\Commands
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class CoroutinePoolCommand
 {
@@ -33,13 +35,13 @@ class CoroutinePoolCommand
         // 协程池执行任务
         xgo(function () {
             $maxWorkers = 20;
-            $maxQueue = 20;
-            $jobQueue = new Channel($maxQueue);
-            $dispatch = new Dispatcher([
+            $maxQueue   = 20;
+            $jobQueue   = new Channel($maxQueue);
+            $dispatch   = new Dispatcher([
                 'jobQueue'   => $jobQueue,
                 'maxWorkers' => $maxWorkers,
             ]);
-            $dispatch->start();
+            $dispatch->start(CoroutinePoolWorker::class);
             // 投放任务
             $redis = app()->redisPool->getConnection();
             while (true) {
@@ -48,7 +50,7 @@ class CoroutinePoolCommand
                     return;
                 }
                 try {
-                    $data = $redis->brPop('test', 3);
+                    $data = $redis->brPop(['test'], 3);
                 } catch (\Throwable $e) {
                     $dispatch->stop();
                     return;
@@ -56,20 +58,11 @@ class CoroutinePoolCommand
                 if (!$data) {
                     continue;
                 }
-                $job = [[$this, 'call'], [array_pop($data)]];
-                $jobQueue->push($job);
+                $data = array_pop($data); // brPop命令最后一个键才是值
+                $jobQueue->push($data);
             }
         });
-    }
-
-    /**
-     * 回调函数
-     * 在 $maxWorkers 数量的协程之中并行执行
-     * @param $data
-     */
-    public function call($data)
-    {
-        var_dump($data);
+        Event::wait();
     }
 
 }

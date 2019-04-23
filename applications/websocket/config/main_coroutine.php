@@ -4,16 +4,13 @@
 return [
 
     // 应用调试
-    'appDebug'       => env('APP_DEBUG'),
-
-    // 初始化
-    'initialization' => [],
+    'appDebug'   => env('APP_DEBUG'),
 
     // 基础路径
-    'basePath'       => dirname(__DIR__),
+    'basePath'   => dirname(__DIR__),
 
     // 组件配置
-    'components'     => [
+    'components' => [
 
         // 错误
         'error'      => [
@@ -36,13 +33,13 @@ return [
         // 请求
         'request'    => [
             // 依赖引用
-            'ref' => beanname(Mix\Http\Message\Request::class),
+            'ref' => beanname(Mix\Http\Message\Request\HttpRequest::class),
         ],
 
         // 响应
         'response'   => [
             // 依赖引用
-            'ref' => beanname(Mix\Http\Message\Response::class),
+            'ref' => beanname(Mix\Http\Message\Response\HttpResponse::class),
         ],
 
         // WebSocket连接
@@ -90,7 +87,7 @@ return [
     ],
 
     // 依赖配置
-    'beans'          => [
+    'beans'      => [
 
         // 错误
         [
@@ -125,13 +122,18 @@ return [
             'class'      => Mix\Log\MultiHandler::class,
             // 属性
             'properties' => [
-                // 标准输出处理器
-                'stdoutHandler' => [
-                    'ref' => beanname(Mix\Log\StdoutHandler::class),
-                ],
-                // 文件处理器
-                'fileHandler'   => [
-                    'ref' => beanname(Mix\Log\FileHandler::class),
+                // 日志处理器集合
+                'handlers' => [
+                    // 标准输出处理器
+                    [
+                        // 依赖引用
+                        'ref' => beanname(Mix\Log\StdoutHandler::class),
+                    ],
+                    // 文件处理器
+                    [
+                        // 依赖引用
+                        'ref' => beanname(Mix\Log\FileHandler::class),
+                    ],
                 ],
             ],
         ],
@@ -177,13 +179,13 @@ return [
         // 请求
         [
             // 类路径
-            'class' => Mix\Http\Message\Request::class,
+            'class' => Mix\Http\Message\Request\HttpRequest::class,
         ],
 
         // 响应
         [
             // 类路径
-            'class' => Mix\Http\Message\Response::class,
+            'class' => Mix\Http\Message\Response\HttpResponse::class,
         ],
 
         // WebSocket连接
@@ -224,23 +226,23 @@ return [
             'class'      => Mix\Auth\Authorization::class,
             // 属性
             'properties' => [
-                // BearerToken
-                'bearerToken' => [
+                // token提取器
+                'tokenExtractor' => [
                     // 依赖引用
-                    'ref' => beanname(Mix\Auth\BearerToken::class),
+                    'ref' => beanname(Mix\Auth\BearerTokenExtractor::class),
                 ],
                 // jwt
-                'jwt'         => [
+                'jwt'            => [
                     // 依赖引用
                     'ref' => beanname(Mix\Auth\JWT::class),
                 ],
             ],
         ],
 
-        // BearerToken
+        // token提取器
         [
             // 类路径
-            'class' => Mix\Auth\BearerToken::class,
+            'class' => Mix\Auth\BearerTokenExtractor::class,
         ],
 
         // jwt
@@ -310,10 +312,10 @@ return [
                 'maxIdle'   => 5,
                 // 最大连接数
                 'maxActive' => 50,
-                // 拨号
-                'dial'      => [
+                // 拨号器
+                'dialer'    => [
                     // 依赖引用
-                    'ref' => beanname(Mix\Database\Pool\Dial::class),
+                    'ref' => beanname(Common\Libraries\Dialers\DatabaseDialer::class),
                 ],
             ],
         ],
@@ -321,7 +323,7 @@ return [
         // 连接池拨号
         [
             // 类路径
-            'class' => Mix\Database\Pool\Dial::class,
+            'class' => Common\Libraries\Dialers\DatabaseDialer::class,
         ],
 
         // 连接池
@@ -334,10 +336,10 @@ return [
                 'maxIdle'   => 5,
                 // 最大连接数
                 'maxActive' => 50,
-                // 拨号
-                'dial'      => [
+                // 拨号器
+                'dialer'    => [
                     // 依赖引用
-                    'ref' => beanname(Mix\Redis\Pool\Dial::class),
+                    'ref' => beanname(Common\Libraries\Dialers\RedisDialer::class),
                 ],
             ],
         ],
@@ -345,7 +347,7 @@ return [
         // 连接池拨号
         [
             // 类路径
-            'class' => Mix\Redis\Pool\Dial::class,
+            'class' => Common\Libraries\Dialers\RedisDialer::class,
         ],
 
         // 数据库

@@ -3,12 +3,12 @@
 namespace Http\Controllers;
 
 use Http\Models\FileForm;
-use Mix\Http\Message\Response;
+use Mix\Http\Message\Response\HttpResponse;
 
 /**
  * Class FileController
  * @package Http\Controllers
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class FileController
 {
@@ -19,10 +19,10 @@ class FileController
      */
     public function actionUpload()
     {
-        app()->response->format = Response::FORMAT_JSON;
+        app()->response->format = HttpResponse::FORMAT_JSON;
 
         // 使用模型
-        $model = new FileForm();
+        $model             = new FileForm();
         $model->attributes = app()->request->post();
         $model->setScenario('upload');
         if (!$model->validate()) {

@@ -2,13 +2,15 @@
 
 namespace Console\Commands;
 
+use Console\Libraries\CoroutinePoolWorker;
 use Mix\Concurrent\CoroutinePool\Dispatcher;
 use Mix\Core\Coroutine\Channel;
+use Mix\Core\Event;
 
 /**
  * Class CoroutinePoolCommand
  * @package Console\Commands
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class CoroutinePoolCommand
 {
@@ -26,25 +28,15 @@ class CoroutinePoolCommand
                 'jobQueue'   => $jobQueue,
                 'maxWorkers' => $maxWorkers,
             ]);
-            $dispatch->start();
+            $dispatch->start(CoroutinePoolWorker::class);
             // 投放任务
             for ($i = 0; $i < 1000; $i++) {
-                $job = [[$this, 'call'], [$i]];
-                $jobQueue->push($job);
+                $jobQueue->push($i);
             }
             // 停止
             $dispatch->stop();
         });
-    }
-
-    /**
-     * 回调函数
-     * 并行执行在 $maxWorkers 数量的协程之中
-     * @param $i
-     */
-    public function call($i)
-    {
-        var_dump($i);
+        Event::wait();
     }
 
 }

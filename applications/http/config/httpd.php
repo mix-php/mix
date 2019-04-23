@@ -12,7 +12,7 @@ return [
     // 应用
     'application' => [
         // 配置文件
-        'config_file' => __DIR__ . '/main_permanent.php',
+        'config_file' => __DIR__ . '/main_coroutine.php',
     ],
     // 运行参数：https://wiki.swoole.com/wiki/page/274.html
     'setting'     => [
@@ -27,7 +27,7 @@ return [
         // 日志文件路径
         'log_file'         => '/tmp/mix-httpd.log',
         // 子进程运行用户
-        'user'             => 'www',
+        /* 'user'             => 'www', */
     ],
 
 ];

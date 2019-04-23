@@ -3,12 +3,12 @@
 namespace Http\Controllers;
 
 use Http\Models\UserForm;
-use Mix\Http\Message\Response;
+use Mix\Http\Message\Response\HttpResponse;
 
 /**
  * Class UserController
  * @package Http\Controllers
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class UserController
 {
@@ -19,10 +19,10 @@ class UserController
      */
     public function actionCreate()
     {
-        app()->response->format = Response::FORMAT_JSON;
+        app()->response->format = HttpResponse::FORMAT_JSON;
 
         // 使用模型
-        $model = new UserForm();
+        $model             = new UserForm();
         $model->attributes = app()->request->get() + app()->request->post();
         $model->setScenario('create');
         if (!$model->validate()) {

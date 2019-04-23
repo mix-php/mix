@@ -2,33 +2,36 @@
 
 namespace WebSocket\Interceptors;
 
-use Mix\Http\Message\Request;
-use Mix\Http\Message\Response;
-use Mix\WebSocket\Interceptor\InterceptorInterface;
-use Mix\WebSocket\Support\HandshakeInterceptor;
+use Mix\Http\Message\Request\HttpRequest;
+use Mix\Http\Message\Response\HttpResponse;
+use Mix\WebSocket\Interceptor\WebSocketInterceptorInterface;
+use Mix\WebSocket\Support\WebSocketHandshakeInterceptor;
+use Mix\WebSocket\WebSocketConnection;
 
 /**
  * Class WebSocketInterceptor
  * @package WebSocket\Interceptors
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
-class WebSocketInterceptor extends HandshakeInterceptor implements InterceptorInterface
+class WebSocketInterceptor extends WebSocketHandshakeInterceptor implements WebSocketInterceptorInterface
 {
 
     /**
      * 握手
-     * @param Request $request
-     * @param Response $response
+     * @param WebSocketConnection $ws
+     * @param HttpRequest $request
+     * @param HttpResponse $response
      */
-    public function handshake(Request $request, Response $response)
+    public function handshake(WebSocketConnection $ws, HttpRequest $request, HttpResponse $response)
     {
         // TODO: Implement handshake() method.
         // 自定义握手处理
         $uid  = app()->session->get('uid');
         $name = app()->session->get('name');
         if (empty($uid) || empty($name)) {
-            $response->statusCode = 500;
+            $response->statusCode = 400; // 根据RFC, 握手失败状态码为400
             $response->send();
+            $ws->disconnect();
             return;
         }
 
@@ -37,7 +40,7 @@ class WebSocketInterceptor extends HandshakeInterceptor implements InterceptorIn
         app()->tcpSession->set('name', $name);
 
         // 默认握手处理
-        parent::handshake($request, $response);
+        parent::handshake($ws, $request, $response);
     }
 
 }

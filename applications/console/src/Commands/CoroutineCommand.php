@@ -2,13 +2,13 @@
 
 namespace Console\Commands;
 
-use Mix\Concurrent\Sync\WaitGroup;
 use Mix\Core\Coroutine\Channel;
+use Mix\Core\Event;
 
 /**
  * Class CoroutineCommand
  * @package Console\Commands
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class CoroutineCommand
 {
@@ -19,50 +19,29 @@ class CoroutineCommand
     public function main()
     {
         xgo(function () {
-            $ws = WaitGroup::new();
-            $ws->add();
-            xgo(function () use ($ws) {
-                $time = time();
-                list($foo, $bar) = [$this->foo(), $this->bar()];
-                list($fooResult, $barResult) = [$foo->pop(), $bar->pop()];
-                println('Total time: ' . (time() - $time));
-                var_dump($fooResult);
-                var_dump($barResult);
-                $ws->done();
-            });
-            $ws->wait();
-            println('finish');
+            $time = time();
+            $chan = new Channel();
+            for ($i = 0; $i < 2; $i++) {
+                xgo([$this, 'foo'], $chan);
+            }
+            for ($i = 0; $i < 2; $i++) {
+                $result = $chan->pop();
+            }
+            println('Total time: ' . (time() - $time));
         });
+        Event::wait();
     }
 
     /**
      * 查询数据
-     * @return Channel
+     * @param Channel $chan
      */
-    public function foo()
+    public function foo(Channel $chan)
     {
-        $chan = new Channel();
-        xgo(function () use ($chan) {
-            $db = app()->dbPool->getConnection();
-            $result = $db->createCommand('select sleep(5)')->queryAll();
-            $chan->push($result);
-        });
-        return $chan;
-    }
-
-    /**
-     * 查询数据
-     * @return Channel
-     */
-    public function bar()
-    {
-        $chan = new Channel();
-        xgo(function () use ($chan) {
-            $db = app()->dbPool->getConnection();
-            $result = $db->createCommand('select sleep(2)')->queryAll();
-            $chan->push($result);
-        });
-        return $chan;
+        $db     = app()->dbPool->getConnection();
+        $result = $db->createCommand('select sleep(5)')->queryAll();
+        $db->release(); // 不手动释放的连接不会归还连接池，会在析构时丢弃
+        $chan->push($result);
     }
 
 }

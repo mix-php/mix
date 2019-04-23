@@ -27,7 +27,7 @@ return [
         // 日志文件路径
         'log_file'         => '/tmp/mix-tcpd.log',
         // 子进程运行用户
-        'user'             => 'www',
+        /* 'user'             => 'www', */
         // 打开EOF检测
         'open_eof_check'   => true,
         // 设置EOF

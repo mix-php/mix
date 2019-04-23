@@ -1,12 +1,12 @@
 <?php
 
-namespace Http\Middleware;
+namespace WebSocket\Middleware;
 
 use Mix\Core\Middleware\MiddlewareInterface;
 
 /**
  * Class AfterMiddleware
- * @package Http\Middleware
+ * @package WebSocket\Middleware
  * @author liu,jian <coder.keda@gmail.com>
  */
 class AfterMiddleware implements MiddlewareInterface

@@ -7,7 +7,7 @@ use Mix\Validate\Validator;
 /**
  * Class FileForm
  * @package Http\Models
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class FileForm extends Validator
 {
