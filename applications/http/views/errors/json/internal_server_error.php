@@ -1,6 +1,6 @@
 <?php
 
-$data = compact('status', 'code', 'message', 'type', 'file', 'line');
+$data = @compact('status', 'code', 'message', 'type', 'file', 'line');
 if (isset($trace)) {
     $tmp = [];
     foreach (explode("\n", $trace) as $key => $item) {
