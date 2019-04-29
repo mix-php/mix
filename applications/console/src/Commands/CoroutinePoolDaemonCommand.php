@@ -1,19 +1,20 @@
 <?php
 
-namespace Daemon\Commands;
+namespace Console\Commands;
 
-use Daemon\Libraries\CoroutinePoolWorker;
+use Console\Libraries\CoroutinePoolDaemonWorker;
 use Mix\Concurrent\CoroutinePool\Dispatcher;
+use Mix\Console\CommandLine\Flag;
 use Mix\Core\Coroutine\Channel;
 use Mix\Core\Event;
 use Mix\Helper\ProcessHelper;
 
 /**
- * Class CoroutinePoolCommand
+ * Class CoroutinePoolDaemonCommand
  * @package Daemon\Commands
  * @author liu,jian <coder.keda@gmail.com>
  */
-class CoroutinePoolCommand
+class CoroutinePoolDaemonCommand
 {
 
     /**
@@ -27,6 +28,11 @@ class CoroutinePoolCommand
      */
     public function main()
     {
+        // 守护处理
+        $daemon = Flag::bool(['d', 'daemon'], false);
+        if ($daemon) {
+            ProcessHelper::daemon();
+        }
         // 捕获信号
         ProcessHelper::signal([SIGHUP, SIGINT, SIGTERM, SIGQUIT], function ($signal) {
             $this->quit = true;
@@ -41,7 +47,7 @@ class CoroutinePoolCommand
                 'jobQueue'   => $jobQueue,
                 'maxWorkers' => $maxWorkers,
             ]);
-            $dispatch->start(CoroutinePoolWorker::class);
+            $dispatch->start(CoroutinePoolDaemonWorker::class);
             // 投放任务
             $redis = app()->redisPool->getConnection();
             while (true) {
@@ -62,6 +68,7 @@ class CoroutinePoolCommand
                 $jobQueue->push($data);
             }
         });
+        // 等待事件
         Event::wait();
     }
 

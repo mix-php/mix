@@ -1,16 +1,16 @@
 <?php
 
-namespace Daemon\Libraries;
+namespace Console\Libraries;
 
 use Mix\Concurrent\CoroutinePool\AbstractWorker;
 use Mix\Concurrent\CoroutinePool\WorkerInterface;
 
 /**
- * Class CoroutinePoolWorker
+ * Class CoroutinePoolDaemonWorker
  * @package Daemon\Libraries
  * @author liu,jian <coder.keda@gmail.com>
  */
-class CoroutinePoolWorker extends AbstractWorker implements WorkerInterface
+class CoroutinePoolDaemonWorker extends AbstractWorker implements WorkerInterface
 {
 
     /**
