@@ -26,6 +26,10 @@ class WebSocketInterceptor extends WebSocketHandshakeInterceptor implements WebS
     {
         // TODO: Implement handshake() method.
         // 自定义握手处理
+
+        /*
+
+        // 通过session获取用户信息
         $uid  = app()->session->get('uid');
         $name = app()->session->get('name');
         if (empty($uid) || empty($name)) {
@@ -38,6 +42,12 @@ class WebSocketInterceptor extends WebSocketHandshakeInterceptor implements WebS
         // 使用tcpSession保存会话信息
         app()->tcpSession->set('uid', $uid);
         app()->tcpSession->set('name', $name);
+
+        */
+
+        // 使用tcpSession保存会话信息
+        app()->tcpSession->set('uid', 1008);
+        app()->tcpSession->set('name', '小明');
 
         // 默认握手处理
         parent::handshake($ws, $request, $response);
