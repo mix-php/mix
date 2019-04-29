@@ -2,6 +2,7 @@
 
 // udp 服务配置
 return [
+
     // 服务器
     'server'      => [
         // 主机
@@ -9,11 +10,13 @@ return [
         // 端口
         'port' => 9504,
     ],
+
     // 应用
     'application' => [
         // 配置文件
         'config_file' => __DIR__ . '/main_coroutine.php',
     ],
+
     // 运行参数：https://wiki.swoole.com/wiki/page/274.html
     'setting'     => [
         // 开启协程
