@@ -102,6 +102,10 @@ class WebSocketHandler implements WebSocketHandlerInterface
     public function close(WebSocketConnection $ws)
     {
         // TODO: Implement close() method.
+        // 关闭连接，连接必须要手动关闭
+        /** @var \Mix\Redis\Coroutine\RedisConnection $subConn */
+        $subConn = app()->tcpSession->get('subConn');
+        $subConn && $subConn->disconnect();
         // 清除会话信息
         app()->tcpSession->clear();
     }

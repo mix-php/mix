@@ -62,7 +62,9 @@ class JoinController
                     app()->ws->push($frame);
                 });
             } catch (\Throwable $e) {
-                // disconnect() 时会导致 subscribe 抛出错误
+                // 手动 disconnect() 时会导致 subscribe 抛出错误，redis 连接异常断开也会抛出错误
+                // 关闭连接
+                app()->ws->disconnect();
             }
         });
 
