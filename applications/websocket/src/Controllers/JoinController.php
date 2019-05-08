@@ -46,7 +46,8 @@ class JoinController
         // 重复加入处理
         if ($subConn = app()->tcpSession->get('subConn')) {
             /** @var \Mix\Redis\Coroutine\RedisConnection $subConn */
-            $subConn->disconnect();
+            $subConn->disabled = true; // 标记废除
+            $subConn->disconnect(); // 关闭后会导致 subscribe 的连接抛出错误
         }
 
         // 订阅房间的频道
@@ -62,9 +63,11 @@ class JoinController
                     app()->ws->push($frame);
                 });
             } catch (\Throwable $e) {
-                // 手动 disconnect() 时会导致 subscribe 抛出错误，redis 连接异常断开也会抛出错误
-                // 关闭连接
-                app()->ws->disconnect();
+                // redis连接异常断开处理
+                if (empty($subConn->disabled)) {
+                    // 关闭连接
+                    app()->ws->disconnect();
+                }
             }
         });
 
