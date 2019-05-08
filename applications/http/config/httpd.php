@@ -14,13 +14,13 @@ return [
     // 应用
     'application' => [
         // 配置文件
-        'config_file' => __DIR__ . '/main_coroutine.php',
+        'config_file' => __DIR__ . '/main_permanent.php',
     ],
 
     // 运行参数：https://wiki.swoole.com/wiki/page/274.html
     'setting'     => [
         // 开启协程
-        'enable_coroutine'   => true,
+        'enable_coroutine'   => false,
         // 主进程事件处理线程数
         'reactor_num'        => 8,
         // 工作进程数
