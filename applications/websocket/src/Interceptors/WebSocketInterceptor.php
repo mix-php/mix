@@ -28,6 +28,8 @@ class WebSocketInterceptor extends WebSocketHandshakeInterceptor implements WebS
         // 自定义握手处理
 
         /*
+         * 以下为会话处理代码
+         *
 
         // 通过session获取用户信息
         $uid  = app()->session->get('uid');
