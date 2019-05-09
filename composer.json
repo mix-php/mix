@@ -47,7 +47,6 @@
     "psr-4": {
       "Common\\": "applications/common/src/",
       "Console\\": "applications/console/src/",
-      "Daemon\\": "applications/daemon/src/",
       "Http\\": "applications/http/src/",
       "WebSocket\\": "applications/websocket/src/",
       "Tcp\\": "applications/tcp/src/",
