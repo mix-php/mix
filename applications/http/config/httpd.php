@@ -5,8 +5,6 @@ return [
 
     // 服务器
     'server'      => [
-        // 服务名称
-        'name' => 'mix-httpd',
         // 主机
         'host' => '127.0.0.1',
         // 端口
