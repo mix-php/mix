@@ -5,6 +5,8 @@ return [
 
     // 服务器
     'server'      => [
+        // 服务名称
+        'name' => 'mix-httpd',
         // 主机
         'host' => '127.0.0.1',
         // 端口
@@ -14,13 +16,13 @@ return [
     // 应用
     'application' => [
         // 配置文件
-        'config_file' => __DIR__ . '/main_permanent.php',
+        'config_file' => __DIR__ . '/main_coroutine.php',
     ],
 
     // 运行参数：https://wiki.swoole.com/wiki/page/274.html
     'setting'     => [
         // 开启协程
-        'enable_coroutine'   => false,
+        'enable_coroutine'   => true,
         // 主进程事件处理线程数
         'reactor_num'        => 8,
         // 工作进程数
