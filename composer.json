@@ -17,6 +17,10 @@
   ],
   "require": {
     "php": ">=7.0.0",
+    "ext-pdo": "*",
+    "ext-redis": "*",
+    "ext-json": "*",
+    "ext-mbstring": "*",
     "mix/framework": "~2.0.0",
     "mix/console": "~2.0.0",
     "mix/log": "~2.0.0",
@@ -42,6 +46,9 @@
     "mix/redis": "~2.0.0",
     "mix/cache": "~2.0.0",
     "mix/auth": "~2.0.0"
+  },
+  "require-dev": {
+    "swoole/ide-helper": "dev-master"
   },
   "autoload": {
     "psr-4": {
