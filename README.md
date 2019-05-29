@@ -94,8 +94,7 @@ composer create-project mix/mix --prefer-dist
 
 ```
 $> cd bin
-$> chmod 777 *
-$> ./mix-httpd start -c ../applications/http/config/httpd.php
+$> php mix-httpd start -c ../applications/http/config/httpd.php
 ```
 
 如果一切顺利，运行到最后你将看到如下的输出：
