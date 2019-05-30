@@ -3,6 +3,12 @@
 // udp 应用配置
 return [
 
+    // 应用名称
+    'appName'    => 'udp',
+
+    // 应用版本
+    'appVersion' => '0.0.0',
+
     // 应用调试
     'appDebug'       => env('APP_DEBUG'),
 

@@ -3,6 +3,12 @@
 // Apache/PHP-FPM 传统环境下运行的 HTTP 服务配置（传统模式）
 return [
 
+    // 应用名称
+    'appName'    => 'http',
+
+    // 应用版本
+    'appVersion' => '0.0.0',
+
     // 应用调试
     'appDebug'   => env('APP_DEBUG'),
 

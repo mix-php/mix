@@ -13,8 +13,8 @@ return [
 
     // 应用
     'application' => [
-        // 配置文件
-        'config_file' => __DIR__ . '/main_coroutine.php',
+        // 配置信息
+        'config' => require __DIR__ . '/main_coroutine.php',
     ],
 
     // 运行参数：https://wiki.swoole.com/wiki/page/274.html
