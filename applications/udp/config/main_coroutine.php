@@ -10,13 +10,13 @@ return [
     'appVersion' => '0.0.0',
 
     // 应用调试
-    'appDebug'       => env('APP_DEBUG'),
+    'appDebug'   => env('APP_DEBUG'),
 
     // 基础路径
-    'basePath'       => dirname(__DIR__),
+    'basePath'   => dirname(__DIR__),
 
     // 组件配置
-    'components'     => [
+    'components' => [
 
         // 错误
         'error'     => [
@@ -57,7 +57,7 @@ return [
     ],
 
     // 依赖配置
-    'beans'          => [
+    'beans'      => [
 
         // 错误
         [
