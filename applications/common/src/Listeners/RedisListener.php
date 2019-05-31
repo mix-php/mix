@@ -14,9 +14,9 @@ class RedisListener implements ExecuteListenerInterface
 
     /**
      * 监听
-     * @param array $cmd
+     * @param array $log
      */
-    public function listen($cmd)
+    public function listen($log)
     {
         // TODO: Implement listen() method.
     }
