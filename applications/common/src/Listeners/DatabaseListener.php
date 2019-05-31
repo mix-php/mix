@@ -1,15 +1,15 @@
 <?php
 
-namespace Common\Libraries\Listeners;
+namespace Common\Listeners;
 
-use Mix\Database\QueryListenerInterface;
+use Mix\Database\ExecuteListenerInterface;
 
 /**
  * Class DatabaseListener
- * @package Common\Libraries\Listeners
+ * @package Common\Listeners
  * @author liu,jian <coder.keda@gmail.com>
  */
-class DatabaseListener implements QueryListenerInterface
+class DatabaseListener implements ExecuteListenerInterface
 {
 
     /**

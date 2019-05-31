@@ -321,7 +321,7 @@ return [
                 // 拨号器
                 'dialer'    => [
                     // 依赖引用
-                    'ref' => beanname(Common\Libraries\Dialers\DatabaseDialer::class),
+                    'ref' => beanname(Common\Dialers\DatabaseDialer::class),
                 ],
             ],
         ],
@@ -329,7 +329,7 @@ return [
         // 连接池拨号
         [
             // 类路径
-            'class' => Common\Libraries\Dialers\DatabaseDialer::class,
+            'class' => Common\Dialers\DatabaseDialer::class,
         ],
 
         // 连接池
@@ -345,7 +345,7 @@ return [
                 // 拨号器
                 'dialer'    => [
                     // 依赖引用
-                    'ref' => beanname(Common\Libraries\Dialers\RedisDialer::class),
+                    'ref' => beanname(Common\Dialers\RedisDialer::class),
                 ],
             ],
         ],
@@ -353,7 +353,7 @@ return [
         // 连接池拨号
         [
             // 类路径
-            'class' => Common\Libraries\Dialers\RedisDialer::class,
+            'class' => Common\Dialers\RedisDialer::class,
         ],
 
         // 数据库

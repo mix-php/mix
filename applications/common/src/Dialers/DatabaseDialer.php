@@ -1,12 +1,12 @@
 <?php
 
-namespace Common\Libraries\Dialers;
+namespace Common\Dialers;
 
 use Mix\Pool\DialerInterface;
 
 /**
  * Class DatabaseDialer
- * @package Common\Libraries\Dialers
+ * @package Common\Dialers
  * @author liu,jian <coder.keda@gmail.com>
  */
 class DatabaseDialer implements DialerInterface

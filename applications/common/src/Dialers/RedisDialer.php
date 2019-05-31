@@ -1,12 +1,12 @@
 <?php
 
-namespace Common\Libraries\Dialers;
+namespace Common\Dialers;
 
 use Mix\Pool\DialerInterface;
 
 /**
  * Class RedisDialer
- * @package Common\Libraries\Dialers
+ * @package Common\Dialers
  * @author liu,jian <coder.keda@gmail.com>
  */
 class RedisDialer implements DialerInterface

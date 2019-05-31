@@ -331,7 +331,7 @@ return [
                 // 拨号器
                 'dialer'    => [
                     // 依赖引用
-                    'ref' => beanname(Common\Libraries\Dialers\DatabaseDialer::class),
+                    'ref' => beanname(Common\Dialers\DatabaseDialer::class),
                 ],
             ],
         ],
@@ -339,7 +339,7 @@ return [
         // 连接池拨号
         [
             // 类路径
-            'class' => Common\Libraries\Dialers\DatabaseDialer::class,
+            'class' => Common\Dialers\DatabaseDialer::class,
         ],
 
         // 连接池
@@ -355,7 +355,7 @@ return [
                 // 拨号器
                 'dialer'    => [
                     // 依赖引用
-                    'ref' => beanname(Common\Libraries\Dialers\RedisDialer::class),
+                    'ref' => beanname(Common\Dialers\RedisDialer::class),
                 ],
             ],
         ],
@@ -363,7 +363,7 @@ return [
         // 连接池拨号
         [
             // 类路径
-            'class' => Common\Libraries\Dialers\RedisDialer::class,
+            'class' => Common\Dialers\RedisDialer::class,
         ],
 
         // 数据库
@@ -383,18 +383,18 @@ return [
                     // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
                     \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
                 ],
-                // 查询监听器
+                // 监听器
                 'listener'      => [
                     // 依赖引用
-                    'ref' => beanname(Common\Libraries\Listeners\DatabaseListener::class),
+                    'ref' => beanname(Common\Listeners\DatabaseListener::class),
                 ],
             ],
         ],
 
-        // 数据库查询监听器
+        // 数据库监听器
         [
             // 类路径
-            'class' => Common\Libraries\Listeners\DatabaseListener::class,
+            'class' => Common\Listeners\DatabaseListener::class,
         ],
 
         // redis
