@@ -14,7 +14,7 @@ class DatabaseListener implements ExecuteListenerInterface
 
     /**
      * 监听
-     * @param $query
+     * @param array $query
      */
     public function listen($query)
     {
