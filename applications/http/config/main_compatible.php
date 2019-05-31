@@ -363,7 +363,18 @@ return [
                 'database' => env('REDIS_DATABASE'),
                 // 密码
                 'password' => env('REDIS_PASSWORD'),
+                // 监听器
+                'listener'      => [
+                    // 依赖引用
+                    'ref' => beanname(Common\Listeners\RedisListener::class),
+                ],
             ],
+        ],
+
+        // redis监听器
+        [
+            // 类路径
+            'class' => Common\Listeners\RedisListener::class,
         ],
 
         // 文件缓存
