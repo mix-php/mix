@@ -22,8 +22,16 @@
     "ext-json": "*",
     "ext-mbstring": "*",
     "mix/framework": "v2.1.x-dev",
-    "mix/console": "v2.1.x-dev",
     "mix/log": "v2.1.x-dev",
+    "mix/validate": "v2.1.x-dev",
+    "mix/concurrent": "v2.1.x-dev",
+    "mix/pool": "v2.1.x-dev",
+    "mix/database": "v2.1.x-dev",
+    "mix/redis": "v2.1.x-dev",
+    "mix/cache": "v2.1.x-dev",
+    "mix/auth": "v2.1.x-dev",
+    "mix/console": "v2.1.x-dev",
+    "mix/server": "v2.1.x-dev",
     "mix/http": "v2.1.x-dev",
     "mix/http-session": "v2.1.x-dev",
     "mix/http-message": "v2.1.x-dev",
@@ -38,14 +46,7 @@
     "mix/tcp-daemon": "v2.1.x-dev",
     "mix/udp": "v2.1.x-dev",
     "mix/udp-server": "v2.1.x-dev",
-    "mix/udp-daemon": "v2.1.x-dev",
-    "mix/validate": "v2.1.x-dev",
-    "mix/concurrent": "v2.1.x-dev",
-    "mix/pool": "v2.1.x-dev",
-    "mix/database": "v2.1.x-dev",
-    "mix/redis": "v2.1.x-dev",
-    "mix/cache": "v2.1.x-dev",
-    "mix/auth": "v2.1.x-dev"
+    "mix/udp-daemon": "v2.1.x-dev"
   },
   "require-dev": {
     "swoole/ide-helper": "dev-master"
