@@ -23,7 +23,7 @@ return [
 
         'hl' => [
             'Hello',
-            'description' => "Demo.",
+            'description' => "\tEcho demo.",
             'options'     => [
                 [['n', 'name'], 'description' => 'Your name'],
                 ['say', 'description' => "\tSay ..."],
@@ -32,22 +32,22 @@ return [
 
         'co' => [
             'Coroutine',
-            'description' => "Coroutine demo",
+            'description' => "\tCoroutine demo",
         ],
 
         'wg' => [
             'WaitGroup',
-            'description' => "WaitGroup demo",
+            'description' => "\tWaitGroup demo",
         ],
 
         'cop' => [
             'CoroutinePool',
-            'description' => 'Coroutine pool demo',
+            'description' => "\tCoroutine pool demo",
         ],
 
         'copd' => [
             'CoroutinePoolDaemon',
-            'description' => 'Coroutine pool daemon demo',
+            'description' => "\tCoroutine pool daemon demo",
             'options'     => [
                 [['d', 'daemon'], 'description' => 'Run in the background'],
             ],
@@ -55,7 +55,7 @@ return [
 
         'tr' => [
             'Timer',
-            'description' => 'Timer demo',
+            'description' => "\tTimer demo",
         ],
 
     ],
