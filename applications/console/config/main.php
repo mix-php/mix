@@ -21,36 +21,41 @@ return [
     // 命令
     'commands'         => [
 
-        'hl'   => [
+        'hl' => [
             'Hello',
             'description' => "Demo.",
             'options'     => [
-                [['n', 'name'], 'description' => 'Your name.'],
+                [['n', 'name'], 'description' => 'Your name'],
                 ['say', 'description' => "\tSay ..."],
             ],
         ],
-        'co'   => [
+
+        'co' => [
             'Coroutine',
-            'description' => "Coroutine demo.",
+            'description' => "Coroutine demo",
         ],
-        'wg'   => [
+
+        'wg' => [
             'WaitGroup',
-            'description' => "WaitGroup demo.",
+            'description' => "WaitGroup demo",
         ],
-        'cop'  => [
+
+        'cop' => [
             'CoroutinePool',
-            'description' => 'Coroutine pool demo.',
+            'description' => 'Coroutine pool demo',
         ],
+
         'copd' => [
             'CoroutinePoolDaemon',
-            'description' => 'Coroutine pool daemon demo.',
+            'description' => 'Coroutine pool daemon demo',
             'options'     => [
                 [['d', 'daemon'], 'description' => 'Run in the background'],
             ],
         ],
-        'tr'   => [
+
+        'tr' => [
             'Timer',
-            'description' => 'Timer demo.',
+            'description' => 'Timer demo',
         ],
 
     ],
