@@ -8,4 +8,4 @@
 require __DIR__ . '/../vendor/autoload.php';
 Mix::loadEnvironmentFrom(__DIR__ . '/../.env');
 $config = require __DIR__ . '/../vendor/mix/http-daemon/config/main.php';
-(new Mix\Console\Application($config))->run();
+(Mix::$console = new Mix\Console\Application($config))->run();
