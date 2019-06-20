@@ -22,6 +22,7 @@
     "ext-json": "*",
     "ext-mbstring": "*",
     "mix/bean": "v2.1.x-dev",
+    "mix/component": "v2.1.x-dev",
     "mix/container": "v2.1.x-dev",
     "mix/concurrent": "v2.1.x-dev",
     "mix/framework": "v2.1.x-dev",
@@ -54,6 +55,7 @@
   "require-dev": {
     "swoole/ide-helper": "dev-master"
   },
+  "minimum-stability":"dev",
   "autoload": {
     "psr-4": {
       "Common\\": "applications/common/src/",
