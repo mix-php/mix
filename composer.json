@@ -25,6 +25,7 @@
     "mix/container": "v2.1.x-dev",
     "mix/concurrent": "v2.1.x-dev",
     "mix/framework": "v2.1.x-dev",
+    "mix/middleware": "v2.1.x-dev",
     "mix/log": "v2.1.x-dev",
     "mix/validate": "v2.1.x-dev",
     "mix/pool": "v2.1.x-dev",
