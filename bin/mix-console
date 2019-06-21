@@ -6,6 +6,10 @@
  */
 
 require __DIR__ . '/../vendor/autoload.php';
+
+Mix\Concurrent\Coroutine::enableHook();
+
 Mix::loadEnvironmentFrom(__DIR__ . '/../.env');
+
 $config = require __DIR__ . '/../applications/console/config/main.php';
 (Mix::$console = new Mix\Console\Application($config))->run();
