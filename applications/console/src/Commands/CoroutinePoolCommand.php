@@ -4,8 +4,8 @@ namespace Console\Commands;
 
 use Console\Libraries\CoroutinePoolWorker;
 use Mix\Concurrent\CoroutinePool\Dispatcher;
-use Mix\Core\Coroutine\Channel;
-use Mix\Core\Event;
+use Mix\Concurrent\Coroutine\Channel;
+use Mix\Concurrent\Event;
 
 /**
  * Class CoroutinePoolCommand

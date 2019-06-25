@@ -5,9 +5,10 @@ namespace Console\Commands;
 use Console\Libraries\CoroutinePoolDaemonWorker;
 use Mix\Concurrent\CoroutinePool\Dispatcher;
 use Mix\Console\CommandLine\Flag;
-use Mix\Core\Coroutine\Channel;
-use Mix\Core\Event;
+use Mix\Concurrent\Coroutine\Channel;
+use Mix\Concurrent\Event;
 use Mix\Helper\ProcessHelper;
+use Mix\Redis\Pool\ConnectionPool;
 
 /**
  * Class CoroutinePoolDaemonCommand
@@ -49,7 +50,9 @@ class CoroutinePoolDaemonCommand
             ]);
             $dispatch->start(CoroutinePoolDaemonWorker::class);
             // 投放任务
-            $redis = app()->redisPool->getConnection();
+            /** @var ConnectionPool $redisPool */
+            $redisPool = app()->get('redisPool');
+            $redis     = $redisPool->getConnection();
             while (true) {
                 if ($this->quit) {
                     $dispatch->stop();

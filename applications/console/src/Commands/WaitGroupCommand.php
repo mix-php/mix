@@ -3,7 +3,7 @@
 namespace Console\Commands;
 
 use Mix\Concurrent\Sync\WaitGroup;
-use Mix\Core\Event;
+use Mix\Concurrent\Event;
 
 /**
  * Class WaitGroupCommand

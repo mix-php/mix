@@ -3,6 +3,7 @@
 namespace Common\Dialers;
 
 use Mix\Pool\DialerInterface;
+use Mix\Redis\Coroutine\RedisConnection;
 
 /**
  * Class RedisDialer
@@ -14,11 +15,13 @@ class RedisDialer implements DialerInterface
 
     /**
      * 拨号
-     * @return \Mix\Redis\Coroutine\RedisConnection
+     * @return RedisConnection
      */
     public function dial()
     {
-        return \Mix\Redis\Coroutine\RedisConnection::newInstance();
+        /** @var RedisConnection $conn */
+        $conn = app()->get(RedisConnection::class);
+        return $conn;
     }
 
 }

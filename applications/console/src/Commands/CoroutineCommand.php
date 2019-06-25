@@ -2,8 +2,9 @@
 
 namespace Console\Commands;
 
-use Mix\Core\Coroutine\Channel;
-use Mix\Core\Event;
+use Mix\Concurrent\Coroutine\Channel;
+use Mix\Concurrent\Event;
+use Mix\Database\Pool\ConnectionPool;
 
 /**
  * Class CoroutineCommand
@@ -38,7 +39,9 @@ class CoroutineCommand
      */
     public function foo(Channel $chan)
     {
-        $db     = app()->dbPool->getConnection();
+        /** @var ConnectionPool $dbPool */
+        $dbPool = app()->get('dbPool');
+        $db     = $dbPool->getConnection();
         $result = $db->createCommand('select sleep(5)')->queryAll();
         $db->release(); // 不手动释放的连接不会归还连接池，会在析构时丢弃
         $chan->push($result);
