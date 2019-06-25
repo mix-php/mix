@@ -1,15 +1,22 @@
 #!/usr/bin/env php
-<?php
-
-/**
- * tcpd 入口文件
- */
+<?php declare(strict_types=1);
 
 require __DIR__ . '/../vendor/autoload.php';
 
-Mix\Concurrent\Coroutine::enableHook();
+use Symfony\Component\Dotenv\Dotenv;
+use Mix\Concurrent\Coroutine;
 
-Mix::loadEnvironmentFrom(__DIR__ . '/../.env');
+// Coroutine
+Coroutine::enableHook();
+Coroutine::set([
+    'max_coroutine'    => 300000,
+    'enable_coroutine' => false,
+]);
 
+// environment
+$dotenv = new Dotenv();
+$dotenv->load(__DIR__ . '/../.env');
+
+// Run application
 $config = require __DIR__ . '/../vendor/mix/tcp-daemon/config/main.php';
 (Mix::$console = new Mix\Console\Application($config))->run();

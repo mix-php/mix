@@ -1,0 +1,1873 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "8801919733a48f09f59a0e6509fc2e76",
+    "packages": [
+        {
+            "name": "firebase/php-jwt",
+            "version": "v5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/firebase/php-jwt.git",
+                "reference": "9984a4d3a32ae7673d6971ea00bae9d0a1abba0e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/9984a4d3a32ae7673d6971ea00bae9d0a1abba0e",
+                "reference": "9984a4d3a32ae7673d6971ea00bae9d0a1abba0e",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": " 4.8.35"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Firebase\\JWT\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Neuman Vong",
+                    "email": "neuman+pear@twilio.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Anant Narayanan",
+                    "email": "anant@php.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
+            "homepage": "https://github.com/firebase/php-jwt",
+            "time": "2017-06-27T22:17:23+00:00"
+        },
+        {
+            "name": "mix/auth",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/auth.git",
+                "reference": "a957a9b7fd597e5c2bbf78b364610c1c371af096"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/auth/zipball/a957a9b7fd597e5c2bbf78b364610c1c371af096",
+                "reference": "a957a9b7fd597e5c2bbf78b364610c1c371af096",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "firebase/php-jwt": "^5.0",
+                "mix/framework": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Auth\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T09:59:53+00:00"
+        },
+        {
+            "name": "mix/bean",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/bean.git",
+                "reference": "8513677d00393b5ec05165252f2e4d6c19c29a56"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/bean/zipball/8513677d00393b5ec05165252f2e4d6c19c29a56",
+                "reference": "8513677d00393b5ec05165252f2e4d6c19c29a56",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Bean\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP Bean http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-20T09:49:21+00:00"
+        },
+        {
+            "name": "mix/cache",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/cache.git",
+                "reference": "3d7d302fa9590a5166e8dd45203a853a5d1af05b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/cache/zipball/3d7d302fa9590a5166e8dd45203a853a5d1af05b",
+                "reference": "3d7d302fa9590a5166e8dd45203a853a5d1af05b",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "v2.1.x-dev",
+                "php": ">=7.0.0",
+                "psr/simple-cache": "~1.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Cache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:00:09+00:00"
+        },
+        {
+            "name": "mix/concurrent",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/concurrent.git",
+                "reference": "5b35a8da020a6991a1563308d9265e8947407a15"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/concurrent/zipball/5b35a8da020a6991a1563308d9265e8947407a15",
+                "reference": "5b35a8da020a6991a1563308d9265e8947407a15",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Concurrent\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:00:23+00:00"
+        },
+        {
+            "name": "mix/console",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/console.git",
+                "reference": "09f75e9d06cc6adcfffbe4444eb849e4fee636ed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/console/zipball/09f75e9d06cc6adcfffbe4444eb849e4fee636ed",
+                "reference": "09f75e9d06cc6adcfffbe4444eb849e4fee636ed",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Console\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-18T06:56:25+00:00"
+        },
+        {
+            "name": "mix/database",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/database.git",
+                "reference": "0af3b49b00c98bacd1dc4d4d8c0ecbacb010fc0d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/database/zipball/0af3b49b00c98bacd1dc4d4d8c0ecbacb010fc0d",
+                "reference": "0af3b49b00c98bacd1dc4d4d8c0ecbacb010fc0d",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "v2.1.x-dev",
+                "mix/pool": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Database\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:00:51+00:00"
+        },
+        {
+            "name": "mix/framework",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/framework.git",
+                "reference": "ee7be89c005904d5db41d89ec7ce1cb4f493571a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/framework/zipball/ee7be89c005904d5db41d89ec7ce1cb4f493571a",
+                "reference": "ee7be89c005904d5db41d89ec7ce1cb4f493571a",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=7.0.0",
+                "psr/container": "~1.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\": "src/"
+                },
+                "classmap": [
+                    "src/Mix.php"
+                ],
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架核心 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-18T08:11:57+00:00"
+        },
+        {
+            "name": "mix/http",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/http.git",
+                "reference": "c85c9590a534ad2449e378e2fe77e0fa9441f86b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/http/zipball/c85c9590a534ad2449e378e2fe77e0fa9441f86b",
+                "reference": "c85c9590a534ad2449e378e2fe77e0fa9441f86b",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Http\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-14T11:15:23+00:00"
+        },
+        {
+            "name": "mix/http-daemon",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/http-daemon.git",
+                "reference": "ff4bc6d6b3485b01e1eedfa1019b87193b8214b1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/http-daemon/zipball/ff4bc6d6b3485b01e1eedfa1019b87193b8214b1",
+                "reference": "ff4bc6d6b3485b01e1eedfa1019b87193b8214b1",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/console": "v2.1.x-dev",
+                "mix/framework": "v2.1.x-dev",
+                "mix/http-server": "v2.1.x-dev",
+                "mix/log": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Http\\Daemon\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP HTTP 守护程序 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:01:09+00:00"
+        },
+        {
+            "name": "mix/http-message",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/http-message.git",
+                "reference": "096a9058ba6a03aaa2de10d1bb10ccb00a7911c9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/http-message/zipball/096a9058ba6a03aaa2de10d1bb10ccb00a7911c9",
+                "reference": "096a9058ba6a03aaa2de10d1bb10ccb00a7911c9",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:01:21+00:00"
+        },
+        {
+            "name": "mix/http-server",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/http-server.git",
+                "reference": "ea2f50e78f5eae46e7e6bbcadbdfc40d8c2fdcc2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/http-server/zipball/ea2f50e78f5eae46e7e6bbcadbdfc40d8c2fdcc2",
+                "reference": "ea2f50e78f5eae46e7e6bbcadbdfc40d8c2fdcc2",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "v2.1.x-dev",
+                "mix/server": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Http\\Server\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:01:31+00:00"
+        },
+        {
+            "name": "mix/http-session",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/http-session.git",
+                "reference": "94e4b3bb6560d761b8dd640a12c07a3cb371e383"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/http-session/zipball/94e4b3bb6560d761b8dd640a12c07a3cb371e383",
+                "reference": "94e4b3bb6560d761b8dd640a12c07a3cb371e383",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Http\\Session\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:01:40+00:00"
+        },
+        {
+            "name": "mix/log",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/log.git",
+                "reference": "560057d80b48f60138ce4fa2f91c809863c1ff5e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/log/zipball/560057d80b48f60138ce4fa2f91c809863c1ff5e",
+                "reference": "560057d80b48f60138ce4fa2f91c809863c1ff5e",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "v2.1.x-dev",
+                "php": ">=7.0.0",
+                "psr/log": "~1.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Log\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-18T08:16:03+00:00"
+        },
+        {
+            "name": "mix/middleware",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/middleware.git",
+                "reference": "2a12187b84a2e5de1076773ec28f20350df3bc84"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/middleware/zipball/2a12187b84a2e5de1076773ec28f20350df3bc84",
+                "reference": "2a12187b84a2e5de1076773ec28f20350df3bc84",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Middleware\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP Middleware http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-20T11:58:19+00:00"
+        },
+        {
+            "name": "mix/pool",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/pool.git",
+                "reference": "a317e764346acbb45fbe8e9b38bf378dad23fa94"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/pool/zipball/a317e764346acbb45fbe8e9b38bf378dad23fa94",
+                "reference": "a317e764346acbb45fbe8e9b38bf378dad23fa94",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Pool\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:02:00+00:00"
+        },
+        {
+            "name": "mix/redis",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/redis.git",
+                "reference": "51e1d06063dab506306dff3e9ab80be3935185e2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/redis/zipball/51e1d06063dab506306dff3e9ab80be3935185e2",
+                "reference": "51e1d06063dab506306dff3e9ab80be3935185e2",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "v2.1.x-dev",
+                "mix/pool": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Redis\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:02:09+00:00"
+        },
+        {
+            "name": "mix/server",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/server.git",
+                "reference": "a86a05ed6e7adf5b8b19a84bd0324c05d4e3dce3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/server/zipball/a86a05ed6e7adf5b8b19a84bd0324c05d4e3dce3",
+                "reference": "a86a05ed6e7adf5b8b19a84bd0324c05d4e3dce3",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Server\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP Server 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:02:18+00:00"
+        },
+        {
+            "name": "mix/tcp",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/tcp.git",
+                "reference": "9261d05f3aa54276a1ae9d651f9357fe41966aee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/tcp/zipball/9261d05f3aa54276a1ae9d651f9357fe41966aee",
+                "reference": "9261d05f3aa54276a1ae9d651f9357fe41966aee",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Tcp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:02:26+00:00"
+        },
+        {
+            "name": "mix/tcp-daemon",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/tcp-daemon.git",
+                "reference": "40b34000f6f3bec4582960bd2bd6cb2f077cc49e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/tcp-daemon/zipball/40b34000f6f3bec4582960bd2bd6cb2f077cc49e",
+                "reference": "40b34000f6f3bec4582960bd2bd6cb2f077cc49e",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/console": "v2.1.x-dev",
+                "mix/framework": "v2.1.x-dev",
+                "mix/log": "v2.1.x-dev",
+                "mix/tcp-server": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Tcp\\Daemon\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP Tcp 守护程序 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:02:36+00:00"
+        },
+        {
+            "name": "mix/tcp-server",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/tcp-server.git",
+                "reference": "ddc1ae09780dbf0a0b86b496f3e01f878c501219"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/tcp-server/zipball/ddc1ae09780dbf0a0b86b496f3e01f878c501219",
+                "reference": "ddc1ae09780dbf0a0b86b496f3e01f878c501219",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "v2.1.x-dev",
+                "mix/server": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Tcp\\Server\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:02:45+00:00"
+        },
+        {
+            "name": "mix/tcp-session",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/tcp-session.git",
+                "reference": "2523d8d6d51168b548110aa637d80c5e6b2b43de"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/tcp-session/zipball/2523d8d6d51168b548110aa637d80c5e6b2b43de",
+                "reference": "2523d8d6d51168b548110aa637d80c5e6b2b43de",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Tcp\\Session\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:02:53+00:00"
+        },
+        {
+            "name": "mix/udp",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/udp.git",
+                "reference": "7c7d8afe53e4d52bfd92fe685c1ac345062d3ce7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/udp/zipball/7c7d8afe53e4d52bfd92fe685c1ac345062d3ce7",
+                "reference": "7c7d8afe53e4d52bfd92fe685c1ac345062d3ce7",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Udp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:03:01+00:00"
+        },
+        {
+            "name": "mix/udp-daemon",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/udp-daemon.git",
+                "reference": "3da48f93a552be00aa64fc44fd678abf17ed6298"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/udp-daemon/zipball/3da48f93a552be00aa64fc44fd678abf17ed6298",
+                "reference": "3da48f93a552be00aa64fc44fd678abf17ed6298",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/console": "v2.1.x-dev",
+                "mix/framework": "v2.1.x-dev",
+                "mix/log": "v2.1.x-dev",
+                "mix/udp-server": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Udp\\Daemon\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP Tcp 守护程序 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:03:09+00:00"
+        },
+        {
+            "name": "mix/udp-server",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/udp-server.git",
+                "reference": "62a8b6a20b49e67f2d5ff7d2f07e84901c44fb55"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/udp-server/zipball/62a8b6a20b49e67f2d5ff7d2f07e84901c44fb55",
+                "reference": "62a8b6a20b49e67f2d5ff7d2f07e84901c44fb55",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "v2.1.x-dev",
+                "mix/server": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Udp\\Server\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:03:18+00:00"
+        },
+        {
+            "name": "mix/validate",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/validate.git",
+                "reference": "51948f6791d982a756cf7af6f6c07d8902d41cbe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/validate/zipball/51948f6791d982a756cf7af6f6c07d8902d41cbe",
+                "reference": "51948f6791d982a756cf7af6f6c07d8902d41cbe",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Validate\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:03:25+00:00"
+        },
+        {
+            "name": "mix/websocket",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/websocket.git",
+                "reference": "6cc896d274b2b6c08f3edebeb7450b02eb5ad569"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/websocket/zipball/6cc896d274b2b6c08f3edebeb7450b02eb5ad569",
+                "reference": "6cc896d274b2b6c08f3edebeb7450b02eb5ad569",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "v2.1.x-dev",
+                "mix/http-message": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\WebSocket\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:03:35+00:00"
+        },
+        {
+            "name": "mix/websocket-daemon",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/websocket-daemon.git",
+                "reference": "714a251787a472a22dfb97eb1dfcdadabefb0436"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/websocket-daemon/zipball/714a251787a472a22dfb97eb1dfcdadabefb0436",
+                "reference": "714a251787a472a22dfb97eb1dfcdadabefb0436",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/console": "v2.1.x-dev",
+                "mix/framework": "v2.1.x-dev",
+                "mix/log": "v2.1.x-dev",
+                "mix/websocket-server": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\WebSocket\\Daemon\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP WebSocket 守护程序 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:03:43+00:00"
+        },
+        {
+            "name": "mix/websocket-server",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/websocket-server.git",
+                "reference": "a0518865c89394a918bfddc8ad69c380f086b9aa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/websocket-server/zipball/a0518865c89394a918bfddc8ad69c380f086b9aa",
+                "reference": "a0518865c89394a918bfddc8ad69c380f086b9aa",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "v2.1.x-dev",
+                "mix/server": "v2.1.x-dev",
+                "mix/websocket": "v2.1.x-dev",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\WebSocket\\Server\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T10:03:51+00:00"
+        },
+        {
+            "name": "psr/container",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/container.git",
+                "reference": "014d250daebff39eba15ba990eeb2a140798e77c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/014d250daebff39eba15ba990eeb2a140798e77c",
+                "reference": "014d250daebff39eba15ba990eeb2a140798e77c",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Container\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common Container Interface (PHP FIG PSR-11)",
+            "homepage": "https://github.com/php-fig/container",
+            "keywords": [
+                "PSR-11",
+                "container",
+                "container-interface",
+                "container-interop",
+                "psr"
+            ],
+            "time": "2018-12-29T15:36:03+00:00"
+        },
+        {
+            "name": "psr/log",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "c4421fcac1edd5a324fda73e589a5cf96e52ffd0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/c4421fcac1edd5a324fda73e589a5cf96e52ffd0",
+                "reference": "c4421fcac1edd5a324fda73e589a5cf96e52ffd0",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Log\\": "Psr/Log/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "homepage": "https://github.com/php-fig/log",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "time": "2018-11-21T13:42:00+00:00"
+        },
+        {
+            "name": "psr/simple-cache",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/simple-cache.git",
+                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
+                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\SimpleCache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interfaces for simple caching",
+            "keywords": [
+                "cache",
+                "caching",
+                "psr",
+                "psr-16",
+                "simple-cache"
+            ],
+            "time": "2017-10-23T01:57:42+00:00"
+        },
+        {
+            "name": "symfony/dotenv",
+            "version": "4.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/dotenv.git",
+                "reference": "7f99ec25f9318b530595e0dd43c0c26410b3c5d1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/dotenv/zipball/7f99ec25f9318b530595e0dd43c0c26410b3c5d1",
+                "reference": "7f99ec25f9318b530595e0dd43c0c26410b3c5d1",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": "^7.1.3"
+            },
+            "require-dev": {
+                "symfony/process": "^3.4|^4.0|^5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Dotenv\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Registers environment variables from a .env file",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "dotenv",
+                "env",
+                "environment"
+            ],
+            "time": "2019-06-13T11:05:05+00:00"
+        }
+    ],
+    "packages-dev": [
+        {
+            "name": "mix/component",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/component.git",
+                "reference": "c061931644c0b115bc63bc79d0ca822d31aa390b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/component/zipball/c061931644c0b115bc63bc79d0ca822d31aa390b",
+                "reference": "c061931644c0b115bc63bc79d0ca822d31aa390b",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Component\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP Component http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-20T12:06:43+00:00"
+        },
+        {
+            "name": "mix/container",
+            "version": "v2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/container.git",
+                "reference": "8252a9de5a4a539d330a89e704a10a02cda91fda"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/container/zipball/8252a9de5a4a539d330a89e704a10a02cda91fda",
+                "reference": "8252a9de5a4a539d330a89e704a10a02cda91fda",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Container\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP Container http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-20T11:04:10+00:00"
+        },
+        {
+            "name": "swoole/ide-helper",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/swoole/ide-helper.git",
+                "reference": "7035aeb5c6d42c22b44aef1304aac62d6733b5e5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/7035aeb5c6d42c22b44aef1304aac62d6733b5e5",
+                "reference": "7035aeb5c6d42c22b44aef1304aac62d6733b5e5",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require-dev": {
+                "squizlabs/php_codesniffer": "~3.4.0",
+                "zendframework/zend-code": "~3.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Swoole\\IDEHelper\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Team Swoole",
+                    "email": "team@swoole.com"
+                }
+            ],
+            "description": "IDE help files for Swoole.",
+            "time": "2019-05-22T19:49:35+00:00"
+        }
+    ],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "mix/bean": 20,
+        "mix/concurrent": 20,
+        "mix/framework": 20,
+        "mix/middleware": 20,
+        "mix/log": 20,
+        "mix/validate": 20,
+        "mix/pool": 20,
+        "mix/database": 20,
+        "mix/redis": 20,
+        "mix/cache": 20,
+        "mix/auth": 20,
+        "mix/console": 20,
+        "mix/server": 20,
+        "mix/http": 20,
+        "mix/http-session": 20,
+        "mix/http-message": 20,
+        "mix/http-server": 20,
+        "mix/http-daemon": 20,
+        "mix/websocket": 20,
+        "mix/websocket-server": 20,
+        "mix/websocket-daemon": 20,
+        "mix/tcp-session": 20,
+        "mix/tcp": 20,
+        "mix/tcp-server": 20,
+        "mix/tcp-daemon": 20,
+        "mix/udp": 20,
+        "mix/udp-server": 20,
+        "mix/udp-daemon": 20,
+        "swoole/ide-helper": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=7.0.0",
+        "ext-pdo": "*",
+        "ext-redis": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*"
+    },
+    "platform-dev": []
+}
