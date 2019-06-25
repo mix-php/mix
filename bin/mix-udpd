@@ -19,4 +19,4 @@ $dotenv->load(__DIR__ . '/../.env');
 
 // Run application
 $config = require __DIR__ . '/../vendor/mix/udp-daemon/config/main.php';
-(Mix::$console = new Mix\Console\Application($config))->run();
+(new Mix\Console\Application($config))->run();

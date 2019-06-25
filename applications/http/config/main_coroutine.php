@@ -10,7 +10,7 @@ return [
     'appVersion' => '0.0.0',
 
     // 应用调试
-    'appDebug'   => env('APP_DEBUG'),
+    'appDebug'   => getenv('APP_DEBUG'),
 
     // 基础路径
     'basePath'   => dirname(__DIR__),
@@ -373,11 +373,11 @@ return [
             // 属性
             'properties' => [
                 // 数据源格式
-                'dsn'           => env('DATABASE_DSN'),
+                'dsn'           => getenv('DATABASE_DSN'),
                 // 数据库用户名
-                'username'      => env('DATABASE_USERNAME'),
+                'username'      => getenv('DATABASE_USERNAME'),
                 // 数据库密码
-                'password'      => env('DATABASE_PASSWORD'),
+                'password'      => getenv('DATABASE_PASSWORD'),
                 // 驱动连接选项: http://php.net/manual/zh/pdo.setattribute.php
                 'driverOptions' => [
                     // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
@@ -404,13 +404,13 @@ return [
             // 属性
             'properties' => [
                 // 主机
-                'host'     => env('REDIS_HOST'),
+                'host'     => getenv('REDIS_HOST'),
                 // 端口
-                'port'     => env('REDIS_PORT'),
+                'port'     => getenv('REDIS_PORT'),
                 // 数据库
-                'database' => env('REDIS_DATABASE'),
+                'database' => getenv('REDIS_DATABASE'),
                 // 密码
-                'password' => env('REDIS_PASSWORD'),
+                'password' => getenv('REDIS_PASSWORD'),
                 // 监听器
                 'listener' => [
                     // 依赖引用
