@@ -3,8 +3,8 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use Symfony\Component\Dotenv\Dotenv;
 use Mix\Concurrent\Coroutine;
+use Symfony\Component\Dotenv\Dotenv;
 
 // Coroutine
 Coroutine::enableHook();
