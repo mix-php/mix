@@ -64,9 +64,6 @@
       "Tcp\\": "applications/tcp/src/",
       "Udp\\": "applications/udp/src/"
     },
-    "classmap": [
-      "applications/common/src/ApplicationInterface.php"
-    ],
     "files": [
       "applications/common/src/functions.php"
     ]
