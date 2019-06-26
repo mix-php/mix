@@ -67,6 +67,8 @@ return [
         [
             // 名称
             'name'            => 'error',
+            // 作用域
+            'scope'           => Mix\Bean\BeanDefinition::SINGLETON,
             // 类路径
             'class'           => Mix\Console\Error::class,
             // 构造函数注入
@@ -82,6 +84,8 @@ return [
         [
             // 名称
             'name'            => 'log',
+            // 作用域
+            'scope'           => Mix\Bean\BeanDefinition::SINGLETON,
             // 类路径
             'class'           => Mix\Log\Logger::class,
             // 构造函数注入
@@ -149,6 +153,8 @@ return [
         [
             // 名称
             'name'            => 'dbPool',
+            // 作用域
+            'scope'           => Mix\Bean\BeanDefinition::SINGLETON,
             // 类路径
             'class'           => Mix\Database\Pool\ConnectionPool::class,
             // 构造函数注入
@@ -177,6 +183,8 @@ return [
         [
             // 名称
             'name'            => 'redisPool',
+            // 作用域
+            'scope'           => Mix\Bean\BeanDefinition::SINGLETON,
             // 类路径
             'class'           => Mix\Redis\Pool\ConnectionPool::class,
             // 构造函数注入
