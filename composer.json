@@ -49,7 +49,8 @@
     "mix/udp": "v2.1.x-dev",
     "mix/udp-server": "v2.1.x-dev",
     "mix/udp-daemon": "v2.1.x-dev",
-    "symfony/dotenv": "~4.3"
+    "symfony/dotenv": "~4.3",
+    "mix/route": "v2.1.x-dev"
   },
   "require-dev": {
     "swoole/ide-helper": "dev-master"

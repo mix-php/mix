@@ -172,11 +172,11 @@ return [
                     'id' => '\d+',
                 ],
                 // 全局中间件
-                'middleware'          => ['After'],
+                'middlewares'          => ['After'],
                 // 路由规则
                 'rules'               => [
                     // 一级路由
-                    '/{controller}/{action}' => ['{controller}', '{action}', 'middleware' => ['Before']],
+                    '/{controller}/{action}' => ['{controller}', '{action}', 'middlewares' => ['Before']],
                 ],
             ],
         ],
