@@ -33,6 +33,8 @@
     "mix/cache": "v2.1.x-dev",
     "mix/auth": "v2.1.x-dev",
     "mix/console": "v2.1.x-dev",
+    "mix/route": "v2.1.x-dev",
+    "mix/view": "v2.1.x-dev",
     "mix/server": "v2.1.x-dev",
     "mix/http": "v2.1.x-dev",
     "mix/http-session": "v2.1.x-dev",
@@ -49,8 +51,7 @@
     "mix/udp": "v2.1.x-dev",
     "mix/udp-server": "v2.1.x-dev",
     "mix/udp-daemon": "v2.1.x-dev",
-    "symfony/dotenv": "~4.3",
-    "mix/route": "v2.1.x-dev"
+    "symfony/dotenv": "~4.3"
   },
   "require-dev": {
     "swoole/ide-helper": "dev-master"

@@ -2,7 +2,7 @@
 
 namespace Http\Controllers;
 
-use Mix\Http\View\ViewTrait;
+use Mix\View\View;
 
 /**
  * Class ProfileController
@@ -11,11 +11,6 @@ use Mix\Http\View\ViewTrait;
  */
 class ProfileController
 {
-
-    /**
-     * 引用视图特性
-     */
-    use ViewTrait;
 
     /**
      * 布局
@@ -34,7 +29,10 @@ class ProfileController
             'age'     => 18,
             'friends' => ['小红', '小花', '小飞'],
         ];
-        return $this->render('index', $data);
+        $view = new View([
+            'layout' => 'main',
+        ]);
+        return $view->render('profile.index', $data);
     }
 
 }
