@@ -127,6 +127,10 @@ $> curl http://127.0.0.1:9501/
 Hello, World!
 ```
 
+## 安装自动重启工具
+
+- SwooleFor：[https://github.com/mix-php/swoolefor](https://github.com/mix-php/swoolefor)
+
 ## 下载
 
 [MixPHP 发行版本](https://github.com/mix-php/mix/releases)
