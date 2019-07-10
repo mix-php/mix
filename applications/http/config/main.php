@@ -139,22 +139,24 @@ return [
             // 构造函数注入
             'constructorArgs' => [
                 [
-                    // 控制器命名空间
-                    'controllerNamespace' => 'Http\Controllers',
-                    // 中间件命名空间
-                    'middlewareNamespace' => 'Http\Middleware',
-                    // 默认变量规则
-                    'defaultPattern'      => '[\w-]+',
-                    // 路由变量规则
-                    'patterns'            => [
-                        'id' => '\d+',
-                    ],
                     // 全局中间件
-                    'middleware'          => ['After'],
+                    'middleware' => [\Http\Middleware\AfterMiddleware::class],
                     // 路由规则
-                    'rules'               => [
-                        // 一级路由
-                        '/{controller}/{action}' => ['{controller}', '{action}', 'middleware' => ['Before']],
+                    'rules'      => [
+                        // 普通路由
+                        '/'             => [[\Http\Controllers\IndexController::class, 'index'], 'middleware' => [\Http\Middleware\BeforeMiddleware::class]],
+                        '/profile/{id}' => [[\Http\Controllers\ProfileController::class, 'index'], 'middleware' => [\Http\Middleware\BeforeMiddleware::class]],
+                        '/file/upload'  => [[\Http\Controllers\FileController::class, 'upload'], 'middleware' => [\Http\Middleware\BeforeMiddleware::class]],
+                        // 分组路由
+                        '/v2'           => [
+                            // 分组中间件
+                            'middleware' => [],
+                            // 分组路由规则
+                            'rules'      => [
+                                // 分组路由
+                                '/user/create' => [[\Http\Controllers\UserController::class, 'create'], 'middleware' => [\Http\Middleware\BeforeMiddleware::class]],
+                            ],
+                        ],
                     ],
                 ],
             ],
