@@ -2,8 +2,8 @@
 
 namespace Http\Controllers;
 
-use Mix\Http\Message\Request\HttpRequestInterface;
-use Mix\Http\Message\Response\HttpResponseInterface;
+use Mix\Http\Message\Request;
+use Mix\Http\Message\Response;
 
 /**
  * Class IndexController
@@ -17,7 +17,7 @@ class IndexController
      * 默认动作
      * @return string
      */
-    public function actionIndex(HttpRequestInterface $request, HttpResponseInterface $response)
+    public function actionIndex(Request $request, Response $response)
     {
         return 'Hello, World!';
     }

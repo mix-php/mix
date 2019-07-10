@@ -4,19 +4,19 @@
 return [
 
     // 应用名称
-    'appName'    => 'mix-http',
+    'appName'          => 'mix-http',
 
     // 应用版本
-    'appVersion' => '0.0.0',
+    'appVersion'       => '0.0.0',
 
     // 应用调试
-    'appDebug'   => getenv('APP_DEBUG'),
+    'appDebug'         => getenv('APP_DEBUG'),
 
     // 基础路径
-    'basePath'   => dirname(__DIR__),
+    'basePath'         => dirname(__DIR__),
 
     // 命令命名空间
-    'commandNamespace' => 'Console\Commands',
+    'commandNamespace' => 'Http\Commands',
 
     // 命令
     'commands'         => [
@@ -25,34 +25,14 @@ return [
             'Start',
             'description' => "\tStart the mix-httpd service",
             'options'     => [
-                [['c', 'configuration'], 'description' => 'FILENAME -- configuration file path'],
                 [['d', 'daemon'], 'description' => "\t" . 'Run in the background'],
-                [['u', 'update'], 'description' => "\tEnable code hot update (only sync available"],
-            ],
-        ],
-
-        'stop' => [
-            'Stop',
-            'description' => "\tStop the mix-httpd service",
-            'options'     => [
-                [['c', 'configuration'], 'description' => 'FILENAME -- configuration file path'],
-            ],
-        ],
-
-        'restart' => [
-            'Restart',
-            'description' => 'Restart the mix-httpd service',
-            'options'     => [
-                [['c', 'configuration'], 'description' => 'FILENAME -- configuration file path'],
-                [['d', 'daemon'], 'description' => "\t" . 'Run in the background'],
-                [['u', 'update'], 'description' => "\tEnable code hot update (only sync available"],
             ],
         ],
 
     ],
 
     // 依赖配置
-    'beans'      => [
+    'beans'            => [
 
         // 错误
         [
@@ -85,10 +65,7 @@ return [
                     // 日志记录级别
                     'levels'  => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
                     // 处理器
-                    'handler' => [
-                        // 依赖引用
-                        'ref' => Mix\Log\MultiHandler::class,
-                    ],
+                    'handler' => ['ref' => Mix\Log\MultiHandler::class],
                 ],
             ],
         ],
@@ -103,15 +80,9 @@ return [
                     // 日志处理器集合
                     'handlers' => [
                         // 标准输出处理器
-                        [
-                            // 依赖引用
-                            'ref' => Mix\Log\StdoutHandler::class,
-                        ],
+                        ['ref' => Mix\Log\StdoutHandler::class],
                         // 文件处理器
-                        [
-                            // 依赖引用
-                            'ref' => Mix\Log\FileHandler::class,
-                        ],
+                        ['ref' => Mix\Log\FileHandler::class],
                     ],
                 ],
             ],
@@ -140,8 +111,29 @@ return [
             ],
         ],
 
+        // 服务器
+        [
+            // 名称
+            'name'            => 'httpServer',
+            // 类路径
+            'class'           => Mix\Http\Server\HttpServer::class,
+            // 构造函数注入
+            'constructorArgs' => [
+                [
+                    // host
+                    'host' => '127.0.0.1',
+                    // port
+                    'port' => 9501,
+                    // ssl
+                    'ssl'  => false,
+                ],
+            ],
+        ],
+
         // 路由
         [
+            // 名称
+            'name'            => 'route',
             // 类路径
             'class'           => Mix\Route\Router::class,
             // 构造函数注入
