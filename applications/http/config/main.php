@@ -22,7 +22,7 @@ return [
     'commands'         => [
 
         'start' => [
-            'Start',
+            \Http\Commands\StartCommand::class,
             'description' => "\tStart the mix-httpd service",
             'options'     => [
                 [['d', 'daemon'], 'description' => "\t" . 'Run in the background'],
@@ -39,9 +39,9 @@ return [
             // 名称
             'name'            => 'error',
             // 作用域
-            'scope'           => Mix\Bean\BeanDefinition::SINGLETON,
+            'scope'           => \Mix\Bean\BeanDefinition::SINGLETON,
             // 类路径
-            'class'           => Mix\Console\Error::class,
+            'class'           => \Mix\Console\Error::class,
             // 构造函数注入
             'constructorArgs' => [
                 [
@@ -56,16 +56,16 @@ return [
             // 名称
             'name'            => 'log',
             // 作用域
-            'scope'           => Mix\Bean\BeanDefinition::SINGLETON,
+            'scope'           => \Mix\Bean\BeanDefinition::SINGLETON,
             // 类路径
-            'class'           => Mix\Log\Logger::class,
+            'class'           => \Mix\Log\Logger::class,
             // 构造函数注入
             'constructorArgs' => [
                 [
                     // 日志记录级别
                     'levels'  => ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'],
                     // 处理器
-                    'handler' => ['ref' => Mix\Log\MultiHandler::class],
+                    'handler' => ['ref' => \Mix\Log\MultiHandler::class],
                 ],
             ],
         ],
@@ -73,16 +73,16 @@ return [
         // 日志处理器
         [
             // 类路径
-            'class'           => Mix\Log\MultiHandler::class,
+            'class'           => \Mix\Log\MultiHandler::class,
             // 构造函数注入
             'constructorArgs' => [
                 [
                     // 日志处理器集合
                     'handlers' => [
                         // 标准输出处理器
-                        ['ref' => Mix\Log\StdoutHandler::class],
+                        ['ref' => \Mix\Log\StdoutHandler::class],
                         // 文件处理器
-                        ['ref' => Mix\Log\FileHandler::class],
+                        ['ref' => \Mix\Log\FileHandler::class],
                     ],
                 ],
             ],
@@ -91,20 +91,20 @@ return [
         // 日志标准输出处理器
         [
             // 类路径
-            'class' => Mix\Log\StdoutHandler::class,
+            'class' => \Mix\Log\StdoutHandler::class,
         ],
 
         // 日志文件处理器
         [
             // 类路径
-            'class'           => Mix\Log\FileHandler::class,
+            'class'           => \Mix\Log\FileHandler::class,
             // 构造函数注入
             'constructorArgs' => [
                 [
                     // 日志目录
                     'dir'         => 'logs',
                     // 日志轮转类型
-                    'rotate'      => Mix\Log\FileHandler::ROTATE_DAY,
+                    'rotate'      => \Mix\Log\FileHandler::ROTATE_DAY,
                     // 最大文件尺寸
                     'maxFileSize' => 0,
                 ],
@@ -116,7 +116,7 @@ return [
             // 名称
             'name'            => 'httpServer',
             // 类路径
-            'class'           => Mix\Http\Server\HttpServer::class,
+            'class'           => \Mix\Http\Server\HttpServer::class,
             // 构造函数注入
             'constructorArgs' => [
                 [
@@ -135,7 +135,7 @@ return [
             // 名称
             'name'            => 'route',
             // 类路径
-            'class'           => Mix\Route\Router::class,
+            'class'           => \Mix\Route\Router::class,
             // 构造函数注入
             'constructorArgs' => [
                 [

@@ -1,6 +1,6 @@
 <?php
 
-namespace Mix\Http\Server\Support\Commands;
+namespace Http\Commands;
 
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
@@ -50,7 +50,7 @@ class StartCommand
     public function start()
     {
         /** @var HttpServer $http $http */
-        $http = $this->http = app()->get('httpServer');
+        $http = $this->http = $this->http = app()->get('httpServer');
         $http->handle('/', function (ServerRequest $request, Response $response) {
             xgo([$this, 'handle'], $request, $response);
         });

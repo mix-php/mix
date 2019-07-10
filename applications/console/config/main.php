@@ -22,7 +22,7 @@ return [
     'commands'         => [
 
         'hl' => [
-            'Hello',
+            \Console\Commands\HelloCommand::class,
             'description' => "\tEcho demo.",
             'options'     => [
                 [['n', 'name'], 'description' => 'Your name'],
@@ -31,22 +31,22 @@ return [
         ],
 
         'co' => [
-            'Coroutine',
+            \Console\Commands\CoroutineCommand::class,
             'description' => "\tCoroutine demo",
         ],
 
         'wg' => [
-            'WaitGroup',
+            \Console\Commands\WaitGroupCommand::class,
             'description' => "\tWaitGroup demo",
         ],
 
         'cop' => [
-            'CoroutinePool',
+            \Console\Commands\CoroutinePoolCommand::class,
             'description' => "\tCoroutine pool demo",
         ],
 
         'copd' => [
-            'CoroutinePoolDaemon',
+            \Console\Commands\CoroutinePoolDaemonCommand::class,
             'description' => "\tCoroutine pool daemon demo",
             'options'     => [
                 [['d', 'daemon'], 'description' => 'Run in the background'],
@@ -54,7 +54,7 @@ return [
         ],
 
         'tr' => [
-            'Timer',
+            \Console\Commands\TimerCommand::class,
             'description' => "\tTimer demo",
         ],
 
@@ -68,9 +68,9 @@ return [
             // 名称
             'name'            => 'error',
             // 作用域
-            'scope'           => Mix\Bean\BeanDefinition::SINGLETON,
+            'scope'           => \Mix\Bean\BeanDefinition::SINGLETON,
             // 类路径
-            'class'           => Mix\Console\Error::class,
+            'class'           => \Mix\Console\Error::class,
             // 构造函数注入
             'constructorArgs' => [
                 [
@@ -85,9 +85,9 @@ return [
             // 名称
             'name'            => 'log',
             // 作用域
-            'scope'           => Mix\Bean\BeanDefinition::SINGLETON,
+            'scope'           => \Mix\Bean\BeanDefinition::SINGLETON,
             // 类路径
-            'class'           => Mix\Log\Logger::class,
+            'class'           => \Mix\Log\Logger::class,
             // 构造函数注入
             'constructorArgs' => [
                 [
@@ -96,7 +96,7 @@ return [
                     // 处理器
                     'handler' => [
                         // 依赖引用
-                        'ref' => Mix\Log\MultiHandler::class,
+                        'ref' => \Mix\Log\MultiHandler::class,
                     ],
                 ],
             ],
@@ -105,7 +105,7 @@ return [
         // 日志处理器
         [
             // 类路径
-            'class'           => Mix\Log\MultiHandler::class,
+            'class'           => \Mix\Log\MultiHandler::class,
             // 构造函数注入
             'constructorArgs' => [
                 [
@@ -114,12 +114,12 @@ return [
                         // 标准输出处理器
                         [
                             // 依赖引用
-                            'ref' => Mix\Log\StdoutHandler::class,
+                            'ref' => \Mix\Log\StdoutHandler::class,
                         ],
                         // 文件处理器
                         [
                             // 依赖引用
-                            'ref' => Mix\Log\FileHandler::class,
+                            'ref' => \Mix\Log\FileHandler::class,
                         ],
                     ],
                 ],
@@ -129,20 +129,20 @@ return [
         // 日志标准输出处理器
         [
             // 类路径
-            'class' => Mix\Log\StdoutHandler::class,
+            'class' => \Mix\Log\StdoutHandler::class,
         ],
 
         // 日志文件处理器
         [
             // 类路径
-            'class'           => Mix\Log\FileHandler::class,
+            'class'           => \Mix\Log\FileHandler::class,
             // 构造函数注入
             'constructorArgs' => [
                 [
                     // 日志目录
                     'dir'         => 'logs',
                     // 日志轮转类型
-                    'rotate'      => Mix\Log\FileHandler::ROTATE_DAY,
+                    'rotate'      => \Mix\Log\FileHandler::ROTATE_DAY,
                     // 最大文件尺寸
                     'maxFileSize' => 0,
                 ],
@@ -154,9 +154,9 @@ return [
             // 名称
             'name'            => 'dbPool',
             // 作用域
-            'scope'           => Mix\Bean\BeanDefinition::SINGLETON,
+            'scope'           => \Mix\Bean\BeanDefinition::SINGLETON,
             // 类路径
-            'class'           => Mix\Database\Pool\ConnectionPool::class,
+            'class'           => \Mix\Database\Pool\ConnectionPool::class,
             // 构造函数注入
             'constructorArgs' => [
                 [
@@ -184,9 +184,9 @@ return [
             // 名称
             'name'            => 'redisPool',
             // 作用域
-            'scope'           => Mix\Bean\BeanDefinition::SINGLETON,
+            'scope'           => \Mix\Bean\BeanDefinition::SINGLETON,
             // 类路径
-            'class'           => Mix\Redis\Pool\ConnectionPool::class,
+            'class'           => \Mix\Redis\Pool\ConnectionPool::class,
             // 构造函数注入
             'constructorArgs' => [
                 [
@@ -212,7 +212,7 @@ return [
         // 数据库
         [
             // 类路径
-            'class'           => Mix\Database\Coroutine\PDOConnection::class,
+            'class'           => \Mix\Database\Coroutine\PDOConnection::class,
             // 构造函数注入
             'constructorArgs' => [
                 [
@@ -234,7 +234,7 @@ return [
         // redis
         [
             // 类路径
-            'class'           => Mix\Redis\Coroutine\RedisConnection::class,
+            'class'           => \Mix\Redis\Coroutine\RedisConnection::class,
             // 构造函数注入
             'constructorArgs' => [
                 [
@@ -253,7 +253,7 @@ return [
         // 数据库
         [
             // 类路径
-            'class'           => Mix\Database\Persistent\PDOConnection::class,
+            'class'           => \Mix\Database\Persistent\PDOConnection::class,
             // 构造函数注入
             'constructorArgs' => [
                 [
@@ -275,7 +275,7 @@ return [
         // redis
         [
             // 类路径
-            'class'           => Mix\Redis\Persistent\RedisConnection::class,
+            'class'           => \Mix\Redis\Persistent\RedisConnection::class,
             // 构造函数注入
             'constructorArgs' => [
                 [
