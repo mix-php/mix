@@ -98,16 +98,13 @@ return [
         // 日志处理器
         [
             // 类路径
-            'class'      => \Mix\Log\MultiHandler::class,
-            // 属性注入
-            'properties' => [
-                // 日志处理器集合
-                'handlers' => [
-                    // 标准输出处理器
-                    ['ref' => \Mix\Log\StdoutHandler::class],
-                    // 文件处理器
-                    ['ref' => \Mix\Log\FileHandler::class],
-                ],
+            'class'           => \Mix\Log\MultiHandler::class,
+            // 构造函数注入
+            'constructorArgs' => [
+                // 标准输出处理器
+                ['ref' => \Mix\Log\StdoutHandler::class],
+                // 文件处理器
+                ['ref' => \Mix\Log\FileHandler::class],
             ],
         ],
 
