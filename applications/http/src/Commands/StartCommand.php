@@ -4,6 +4,7 @@ namespace Http\Commands;
 
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
+use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\Stream\ContentStream;
@@ -69,7 +70,7 @@ class StartCommand
         /** @var Router $route */
         $route = app()->get('route');
         try {
-            $matchRule = $route->match($request->getMethod(), $request->getHeaderLine('path_info') ?: '/');
+            $matchRule = $route->match($request->getMethod(), $request->getServerParams()['path_info'] ?: '/');
         } catch (\Throwable $e) {
             // 404 处理
             static::show404($e, $response);
@@ -86,7 +87,9 @@ class StartCommand
             $response   = $dispatcher->dispatch();
             // 执行控制器
             if (!$response->getBody()) {
-                $response = call_user_func($matchRule->getCallback(), $request, $response);
+                $content = call_user_func($matchRule->getCallback(), $request, $response);
+                $body    = (new StreamFactory)->createStream($content);
+                $response->withBody($body);
             }
             /** @var Response $response */
             $response->send();

@@ -17,7 +17,7 @@ class IndexController
      * 默认动作
      * @return string
      */
-    public function actionIndex(Request $request, Response $response)
+    public function index(Request $request, Response $response)
     {
         return 'Hello, World!';
     }
