@@ -4,22 +4,19 @@
 return [
 
     // 应用名称
-    'appName'          => 'mix-http',
+    'appName'    => 'mix-http',
 
     // 应用版本
-    'appVersion'       => '0.0.0',
+    'appVersion' => '0.0.0',
 
     // 应用调试
-    'appDebug'         => getenv('APP_DEBUG'),
+    'appDebug'   => getenv('APP_DEBUG'),
 
     // 基础路径
-    'basePath'         => dirname(__DIR__),
-
-    // 命令命名空间
-    'commandNamespace' => 'Http\Commands',
+    'basePath'   => dirname(__DIR__),
 
     // 命令
-    'commands'         => [
+    'commands'   => [
 
         'start' => [
             \Http\Commands\StartCommand::class,
@@ -32,7 +29,7 @@ return [
     ],
 
     // 依赖配置
-    'beans'            => [
+    'beans'      => [
 
         // 错误
         [
@@ -127,22 +124,28 @@ return [
             'initMethod' => 'parse',
             // 属性注入
             'properties' => [
+                // 默认变量规则
+                'defaultPattern' => '[\w-]+',
+                // 路由变量规则
+                'patterns'       => [
+                    'id' => '\d+',
+                ],
                 // 全局中间件
-                'middleware' => [\Http\Middleware\AfterMiddleware::class],
+                'middleware'     => [\Http\Middleware\GlobalMiddleware::class],
                 // 路由规则
-                'rules'      => [
+                'rules'          => [
                     // 普通路由
-                    '/'             => [[\Http\Controllers\IndexController::class, 'index'], 'middleware' => [\Http\Middleware\BeforeMiddleware::class]],
-                    '/profile/{id}' => [[\Http\Controllers\ProfileController::class, 'index'], 'middleware' => [\Http\Middleware\BeforeMiddleware::class]],
-                    '/file/upload'  => [[\Http\Controllers\FileController::class, 'upload'], 'middleware' => [\Http\Middleware\BeforeMiddleware::class]],
+                    '/'             => [[\Http\Controllers\IndexController::class, 'index'], 'middleware' => [\Http\Middleware\ActionMiddleware::class]],
+                    '/profile/{id}' => [[\Http\Controllers\ProfileController::class, 'index'], 'middleware' => [\Http\Middleware\ActionMiddleware::class]],
+                    '/file/upload'  => [[\Http\Controllers\FileController::class, 'upload'], 'middleware' => [\Http\Middleware\ActionMiddleware::class]],
                     // 分组路由
                     '/v2'           => [
                         // 分组中间件
-                        'middleware' => [],
+                        'middleware' => [\Http\Middleware\GroupMiddleware::class],
                         // 分组路由规则
                         'rules'      => [
                             // 分组路由
-                            '/user/create' => [[\Http\Controllers\UserController::class, 'create'], 'middleware' => [\Http\Middleware\BeforeMiddleware::class]],
+                            '/user/create' => [[\Http\Controllers\UserController::class, 'create'], 'middleware' => [\Http\Middleware\ActionMiddleware::class]],
                         ],
                     ],
                 ],
