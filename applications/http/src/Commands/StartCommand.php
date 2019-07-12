@@ -2,6 +2,7 @@
 
 namespace Http\Commands;
 
+use Mix\Bean\ApplicationContext;
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
 use Mix\Http\Message\Factory\StreamFactory;
@@ -10,6 +11,7 @@ use Mix\Http\Message\Response;
 use Mix\Http\Message\Stream\ContentStream;
 use Mix\Http\Server\HttpServer;
 use Mix\Http\Server\Middleware\MiddlewareDispatcher;
+use Mix\Log\Logger;
 use Mix\Route\Router;
 use Mix\View\View;
 
@@ -27,6 +29,25 @@ class StartCommand
     public $http;
 
     /**
+     * @var Logger
+     */
+    public $log;
+
+    /**
+     * @var Router
+     */
+    public $route;
+
+    /**
+     * StartCommand constructor.
+     */
+    public function __construct()
+    {
+        $this->log   = app()->get('log');
+        $this->route = app()->get('route');
+    }
+
+    /**
      * 主函数
      */
     public function main()
@@ -38,6 +59,8 @@ class StartCommand
         }
         // 捕获信号
         ProcessHelper::signal([SIGHUP, SIGINT, SIGTERM, SIGQUIT], function ($signal) {
+            $this->log->info('received signal [{signal}]', ['signal' => $signal]);
+            $this->log->info('server shutdown');
             $this->http and $this->http->shutdown();
             ProcessHelper::signal([SIGHUP, SIGINT, SIGTERM, SIGQUIT], null);
         });
@@ -50,11 +73,12 @@ class StartCommand
      */
     public function start()
     {
-        /** @var HttpServer $http $http */
-        $http = $this->http = $this->http = app()->get('httpServer');
+        $http = $this->http = app()->get('httpServer'); // 协程服务器，只能在协程中启动
         $http->handle('/', function (ServerRequest $request, Response $response) {
             xgo([$this, 'handle'], $request, $response);
         });
+        $this->welcome();
+        $this->log->info('server start');
         $http->start();
     }
 
@@ -67,10 +91,8 @@ class StartCommand
      */
     public function handle(ServerRequest $request, Response $response)
     {
-        /** @var Router $route */
-        $route = app()->get('route');
         try {
-            $matchRule = $route->match($request->getMethod(), $request->getServerParams()['path_info'] ?: '/');
+            $matchRule = $this->route->match($request->getMethod(), $request->getServerParams()['path_info'] ?: '/');
         } catch (\Throwable $e) {
             // 404 处理
             static::show404($e, $response);
@@ -146,6 +168,34 @@ class StartCommand
             ->withStatus(500)
             ->withAddedHeader('Content-Type', 'text/html; charset=UTF-8')
             ->send();
+    }
+
+    /**
+     * 欢迎信息
+     */
+    protected function welcome()
+    {
+        $phpVersion    = PHP_VERSION;
+        $swooleVersion = swoole_version();
+        $host          = $this->http->host;
+        $port          = $this->http->port;
+        echo <<<EOL
+                             _____
+_______ ___ _____ ___   _____  / /_  ____
+__/ __ `__ \/ /\ \/ /__ / __ \/ __ \/ __ \
+_/ / / / / / / /\ \/ _ / /_/ / / / / /_/ /
+/_/ /_/ /_/_/ /_/\_\  / .___/_/ /_/ .___/
+                     /_/         /_/
+
+
+EOL;
+        println('Server         Name:      mix-httpd');
+        println('System         Name:      ' . strtolower(PHP_OS));
+        println("PHP            Version:   {$phpVersion}");
+        println("Swoole         Version:   {$swooleVersion}");
+        println('Framework      Version:   ' . \Mix::$version);
+        println("Listen         Addr:      {$host}");
+        println("Listen         Port:      {$port}");
     }
 
 }
