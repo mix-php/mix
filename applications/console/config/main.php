@@ -75,6 +75,8 @@ return [
             'constructorArgs' => [
                 // 错误级别
                 E_ALL,
+                // 日志
+                ['ref' => 'log'],
             ],
         ],
 
