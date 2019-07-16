@@ -2,7 +2,6 @@
 
 namespace Http\Commands;
 
-use Mix\Bean\ApplicationContext;
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
 use Mix\Http\Message\Factory\StreamFactory;
@@ -45,6 +44,7 @@ class StartCommand
     {
         $this->log   = app()->get('log');
         $this->route = app()->get('route');
+        $this->http  = app()->get('httpServer');
     }
 
     /**
@@ -61,11 +61,11 @@ class StartCommand
         ProcessHelper::signal([SIGHUP, SIGINT, SIGTERM, SIGQUIT], function ($signal) {
             $this->log->info('received signal [{signal}]', ['signal' => $signal]);
             $this->log->info('server shutdown');
-            $this->http and $this->http->shutdown();
+            $this->http->shutdown();
             ProcessHelper::signal([SIGHUP, SIGINT, SIGTERM, SIGQUIT], null);
         });
         // 启动服务器
-        xgo([$this, 'start']);
+        $this->start();
     }
 
     /**
@@ -73,7 +73,7 @@ class StartCommand
      */
     public function start()
     {
-        $http = $this->http = app()->get('httpServer'); // 协程服务器，只能在协程中启动
+        $http = $this->http;
         $http->handle('/', function (ServerRequest $request, Response $response) {
             xgo([$this, 'handle'], $request, $response);
         });
