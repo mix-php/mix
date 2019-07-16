@@ -16,7 +16,7 @@ use Mix\View\View;
 
 /**
  * Class StartCommand
- * @package Mix\Http\Server\Support\Commands
+ * @package Http\Commands
  * @author liu,jian <coder.keda@gmail.com>
  */
 class StartCommand
@@ -42,9 +42,9 @@ class StartCommand
      */
     public function __construct()
     {
-        $this->log   = app()->get('log');
-        $this->route = app()->get('route');
-        $this->http  = app()->get('httpServer');
+        $this->log   = context()->get('log');
+        $this->route = context()->get('route');
+        $this->http  = context()->get('httpServer');
     }
 
     /**
