@@ -13,7 +13,7 @@ return [
     'appDebug'   => getenv('APP_DEBUG'),
 
     // 基础路径
-    'basePath'   => define('', dirname(__DIR__)),
+    'basePath'   => dirname(__DIR__),
 
     // 命令
     'commands'   => [
