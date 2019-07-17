@@ -123,7 +123,7 @@ return [
             // 属性注入
             'properties' => [
                 // 日志目录
-                'dir'         => 'logs',
+                'dir'         => dirname(__DIR__) . DIRECTORY_SEPARATOR . 'logs',
                 // 日志轮转类型
                 'rotate'      => \Mix\Log\FileHandler::ROTATE_DAY,
                 // 最大文件尺寸

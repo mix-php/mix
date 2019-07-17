@@ -13,7 +13,7 @@ return [
     'appDebug'   => getenv('APP_DEBUG'),
 
     // 基础路径
-    'basePath'   => dirname(__DIR__),
+    'basePath'   => define('', dirname(__DIR__)),
 
     // 命令
     'commands'   => [
@@ -91,7 +91,7 @@ return [
             // 属性注入
             'properties' => [
                 // 日志目录
-                'dir'         => 'logs',
+                'dir'         => dirname(__DIR__) . DIRECTORY_SEPARATOR . 'logs',
                 // 日志轮转类型
                 'rotate'      => \Mix\Log\FileHandler::ROTATE_DAY,
                 // 最大文件尺寸
