@@ -35,9 +35,9 @@ class CoroutinePoolDaemonCommand
             ProcessHelper::daemon();
         }
         // 捕获信号
-        ProcessHelper::signal([SIGHUP, SIGINT, SIGTERM, SIGQUIT], function ($signal) {
+        ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], function ($signal) {
             $this->quit = true;
-            ProcessHelper::signal([SIGHUP, SIGINT, SIGTERM, SIGQUIT], null);
+            ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], null);
         });
         // 协程池执行任务
         xgo(function () {
