@@ -58,7 +58,7 @@ class StartCommand
             ProcessHelper::daemon();
         }
         // 捕获信号
-        ProcessHelper::signal([SIGHUP, SIGINT, SIGTERM, SIGQUIT], function ($signal) {
+        ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], function ($signal) {
             $this->log->info('received signal [{signal}]', ['signal' => $signal]);
             $this->log->info('server shutdown');
             $this->http->shutdown();
