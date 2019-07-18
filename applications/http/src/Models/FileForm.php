@@ -3,6 +3,7 @@
 namespace Http\Models;
 
 use Mix\Validate\Validator;
+use Psr\Http\Message\UploadedFileInterface;
 
 /**
  * Class FileForm
@@ -13,8 +14,7 @@ class FileForm extends Validator
 {
 
     /**
-     * 上传文件对象
-     * @var \Mix\Http\Message\UploadFile
+     * @var UploadedFileInterface
      */
     public $file;
 

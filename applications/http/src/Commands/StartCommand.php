@@ -7,7 +7,6 @@ use Mix\Helper\ProcessHelper;
 use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Message\Response;
-use Mix\Http\Message\Stream\ContentStream;
 use Mix\Http\Server\HttpServer;
 use Mix\Http\Server\Middleware\MiddlewareDispatcher;
 use Mix\Log\Logger;
@@ -109,9 +108,7 @@ class StartCommand
             $response   = $dispatcher->dispatch();
             // 执行控制器
             if (!$response->getBody()) {
-                $content = call_user_func($matchRule->getCallback(), $request, $response);
-                $body    = (new StreamFactory)->createStream($content);
-                $response->withBody($body);
+                $response = call_user_func($matchRule->getCallback(), $request, $response);
             }
             /** @var Response $response */
             $response->send();
@@ -131,7 +128,7 @@ class StartCommand
      */
     public static function show404(\Throwable $e, Response $response)
     {
-        $view = new View();
+        $view = new View(app()->basePath . DIRECTORY_SEPARATOR . 'views');
         $html = $view->renderPartial('errors.not_found', [
             'message' => $e->getMessage(),
             'type'    => get_class($e),
@@ -140,7 +137,7 @@ class StartCommand
             'line'    => $e->getLine(),
             'trace'   => $e->getTraceAsString(),
         ]);
-        $response->withBody(new ContentStream($html))
+        $response->withBody((new StreamFactory())->createStream($html))
             ->withStatus(404)
             ->withAddedHeader('Content-Type', 'text/html; charset=UTF-8')
             ->send();
@@ -155,7 +152,7 @@ class StartCommand
      */
     public static function show500(\Throwable $e, Response $response)
     {
-        $view = new View();
+        $view = new View(app()->basePath . DIRECTORY_SEPARATOR . 'views');
         $html = $view->renderPartial('errors.internal_server_error', [
             'message' => $e->getMessage(),
             'type'    => get_class($e),
@@ -164,7 +161,7 @@ class StartCommand
             'line'    => $e->getLine(),
             'trace'   => $e->getTraceAsString(),
         ]);
-        $response->withBody(new ContentStream($html))
+        $response->withBody((new StreamFactory())->createStream($html))
             ->withStatus(500)
             ->withAddedHeader('Content-Type', 'text/html; charset=UTF-8')
             ->send();

@@ -2,7 +2,8 @@
 
 namespace Http\Controllers;
 
-use Mix\Http\Message\Request;
+use Http\Helpers\SendHelper;
+use Mix\Http\Message\ServerRequest;
 use Mix\Http\Message\Response;
 
 /**
@@ -14,12 +15,15 @@ class IndexController
 {
 
     /**
-     * 默认动作
-     * @return string
+     * Index
+     * @param ServerRequest $request
+     * @param Response $response
+     * @return Response
      */
-    public function index(Request $request, Response $response)
+    public function index(ServerRequest $request, Response $response)
     {
-        return 'Hello, World!';
+        $content = 'Hello, World!';
+        return SendHelper::html($content, $response);
     }
 
 }
