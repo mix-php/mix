@@ -6,6 +6,7 @@ use Mix\Helper\JsonHelper;
 use Mix\Helper\XmlHelper;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\Factory\StreamFactory;
+use Mix\View\View;
 
 /**
  * Class SendHelper
@@ -16,12 +17,27 @@ class SendHelper
 {
 
     /**
-     * html
-     * @param string $content
+     * view
      * @param Response $response
+     * @param string $name
+     * @param array $data
+     * @param string $layout
      * @return Response
      */
-    public static function html(string $content, Response $response)
+    public static function view(Response $response, string $name, array $data = [], string $layout = 'main')
+    {
+        $view    = new View(app()->basePath . DIRECTORY_SEPARATOR . 'views', $layout);
+        $content = $view->render($name, $data);
+        return static::html($response, $content);
+    }
+
+    /**
+     * html
+     * @param Response $response
+     * @param string $content
+     * @return Response
+     */
+    public static function html(Response $response, string $content)
     {
         $body = (new StreamFactory())->createStream($content);
         return $response
@@ -31,11 +47,11 @@ class SendHelper
 
     /**
      * json
-     * @param array $content
      * @param Response $response
+     * @param array $content
      * @return Response
      */
-    public static function json(array $content, Response $response)
+    public static function json(Response $response, array $content)
     {
         $body = (new StreamFactory())->createStream(JsonHelper::encode($content, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         return $response
@@ -45,11 +61,11 @@ class SendHelper
 
     /**
      * xml
-     * @param array $content
      * @param Response $response
+     * @param array $content
      * @return Response
      */
-    public static function xml(array $content, Response $response)
+    public static function xml(Response $response, array $content)
     {
         $body = (new StreamFactory())->createStream(XmlHelper::encode($content));
         return $response

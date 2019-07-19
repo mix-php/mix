@@ -3,7 +3,9 @@
 namespace Http\Controllers;
 
 use Http\Models\UserForm;
-use Mix\Http\Message\Response\HttpResponse;
+use Http\Helpers\SendHelper;
+use Mix\Http\Message\Response;
+use Mix\Http\Message\ServerRequest;
 
 /**
  * Class UserController
@@ -14,26 +16,28 @@ class UserController
 {
 
     /**
-     * 新增用户
-     * @return array
+     * Create
+     * @param ServerRequest $request
+     * @param Response $response
+     * @return Response
      */
-    public function actionCreate()
+    public function create(ServerRequest $request, Response $response)
     {
-        app()->response->format = HttpResponse::FORMAT_JSON;
-
         // 使用模型
-        $model             = new UserForm();
+        $model             = new UserForm($request->getAttributes());
         $model->attributes = app()->request->get() + app()->request->post();
         $model->setScenario('create');
         if (!$model->validate()) {
-            return ['code' => 1, 'message' => 'FAILED', 'data' => $model->getErrors()];
+            $content = ['code' => 1, 'message' => 'FAILED', 'data' => $model->getErrors()];
+            return SendHelper::json($response, $content);
         }
 
         // 执行保存数据库
         // ...
 
         // 响应
-        return ['code' => 0, 'message' => 'OK'];
+        $content = ['code' => 0, 'message' => 'OK'];
+        return SendHelper::json($response, $content);
     }
 
 }

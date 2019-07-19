@@ -23,7 +23,7 @@ class IndexController
     public function index(ServerRequest $request, Response $response)
     {
         $content = 'Hello, World!';
-        return SendHelper::html($content, $response);
+        return SendHelper::html($response, $content);
     }
 
 }

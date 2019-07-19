@@ -28,7 +28,7 @@ class FileController
         $model->setScenario('upload');
         if (!$model->validate()) {
             $content = ['code' => 1, 'message' => 'FAILED', 'data' => $model->getErrors()];
-            return SendHelper::json($content, $response);
+            return SendHelper::json($response, $content);
         }
 
         // 保存文件
@@ -37,7 +37,7 @@ class FileController
 
         // 响应
         $content = ['code' => 0, 'message' => 'OK'];
-        return SendHelper::json($content, $response);
+        return SendHelper::json($response, $content);
     }
 
 }

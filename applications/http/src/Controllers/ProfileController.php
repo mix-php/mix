@@ -2,7 +2,9 @@
 
 namespace Http\Controllers;
 
-use Mix\View\View;
+use Http\Helpers\SendHelper;
+use Mix\Http\Message\Response;
+use Mix\Http\Message\ServerRequest;
 
 /**
  * Class ProfileController
@@ -13,26 +15,19 @@ class ProfileController
 {
 
     /**
-     * 布局
-     * @var string
+     * Index
+     * @param ServerRequest $request
+     * @param Response $response
+     * @return Response
      */
-    public $layout = 'main';
-
-    /**
-     * 默认动作
-     * @return string
-     */
-    public function actionIndex()
+    public function index(ServerRequest $request, Response $response)
     {
         $data = [
             'name'    => '小明',
             'age'     => 18,
             'friends' => ['小红', '小花', '小飞'],
         ];
-        $view = new View([
-            'layout' => 'main',
-        ]);
-        return $view->render('profile.index', $data);
+        return SendHelper::view($response, 'profile.index', $data);
     }
 
 }
