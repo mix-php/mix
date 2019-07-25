@@ -1,13 +1,13 @@
 <?php
 
-namespace Http\Models;
+namespace Http\Validators;
 
 use Mix\Validate\Validator;
 use Psr\Http\Message\UploadedFileInterface;
 
 /**
  * Class FileForm
- * @package Http\Models
+ * @package Http\Validators
  * @author liu,jian <coder.keda@gmail.com>
  */
 class FileForm extends Validator

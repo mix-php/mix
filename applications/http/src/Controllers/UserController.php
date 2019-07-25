@@ -2,7 +2,7 @@
 
 namespace Http\Controllers;
 
-use Http\Models\UserForm;
+use Http\Validators\UserForm;
 use Http\Helpers\SendHelper;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
