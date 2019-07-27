@@ -23,6 +23,7 @@ class ProfileController
     public function index(ServerRequest $request, Response $response)
     {
         $data = [
+            'id'      => $request->getAttribute('id'),
             'name'    => '小明',
             'age'     => 18,
             'friends' => ['小红', '小花', '小飞'],
