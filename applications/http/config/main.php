@@ -139,7 +139,7 @@ return [
                     // 普通路由
                     '/'             => [[\Http\Controllers\IndexController::class, 'index'], 'middleware' => [\Http\Middleware\ActionMiddleware::class]],
                     '/profile/{id}' => [[\Http\Controllers\ProfileController::class, 'index'], 'middleware' => [\Http\Middleware\ActionMiddleware::class]],
-                    '/file/upload'  => [[\Http\Controllers\FileController::class, 'upload'], 'middleware' => [\Http\Middleware\ActionMiddleware::class]],
+                    'POST /file/upload'  => [[\Http\Controllers\FileController::class, 'upload'], 'middleware' => [\Http\Middleware\ActionMiddleware::class]],
                     // 分组路由
                     '/v2'           => [
                         // 分组中间件
@@ -147,7 +147,7 @@ return [
                         // 分组路由规则
                         'rules'      => [
                             // 分组路由
-                            '/user/create' => [[\Http\Controllers\UserController::class, 'create'], 'middleware' => [\Http\Middleware\ActionMiddleware::class]],
+                            'POST /user/create' => [[\Http\Controllers\UserController::class, 'create'], 'middleware' => [\Http\Middleware\ActionMiddleware::class]],
                         ],
                     ],
                 ],

@@ -25,7 +25,7 @@ class UserController
     {
         // 使用模型
         $model             = new UserForm($request->getAttributes());
-        $model->attributes = app()->request->get() + app()->request->post();
+        $model->attributes = $request->getAttributes();
         $model->setScenario('create');
         if (!$model->validate()) {
             $content = ['code' => 1, 'message' => 'FAILED', 'data' => $model->getErrors()];
