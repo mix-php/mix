@@ -36,7 +36,7 @@ class FileForm extends Validator
     public function scenarios()
     {
         return [
-            'upload' => ['required' => ['file']],
+            'upload' => ['required' => [], 'optional' => ['file']],
         ];
     }
 

@@ -32,8 +32,10 @@ class FileController
         }
 
         // 保存文件
-        $targetPath = app()->basePath . '/runtime/uploads/' . date('Ymd') . '/' . $model->file->getClientFilename();
-        $model->file->moveTo($targetPath);
+        if ($model->file) {
+            $targetPath = app()->basePath . '/runtime/uploads/' . date('Ymd') . '/' . $model->file->getClientFilename();
+            $model->file->moveTo($targetPath);
+        }
 
         // 响应
         $content = ['code' => 0, 'message' => 'OK'];
