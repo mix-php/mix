@@ -24,7 +24,7 @@ class FileController
     public function upload(ServerRequest $request, Response $response)
     {
         // 使用模型
-        $model = new FileForm($request->getAttributes(), $request);
+        $model = new FileForm($request->getAttributes(), $request->getUploadedFiles());
         $model->setScenario('upload');
         if (!$model->validate()) {
             $content = ['code' => 1, 'message' => 'FAILED', 'data' => $model->getErrors()];
