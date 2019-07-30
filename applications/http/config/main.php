@@ -20,7 +20,7 @@ return [
 
         'start' => [
             \Http\Commands\StartCommand::class,
-            'description' => "\tStart the mix-httpd service",
+            'description' => "\tStart service",
             'options'     => [
                 [['d', 'daemon'], 'description' => "\t" . 'Run in the background'],
             ],

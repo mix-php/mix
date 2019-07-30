@@ -87,6 +87,7 @@ class StartCommand
      * @param Response $response
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
+     * @throws \Throwable
      */
     public function handle(ServerRequest $request, Response $response)
     {
@@ -115,7 +116,8 @@ class StartCommand
         } catch (\Throwable $e) {
             // 500 处理
             static::show500($e, $response);
-            return;
+            // 抛出错误，记录日志
+            throw $e;
         }
     }
 

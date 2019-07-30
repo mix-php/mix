@@ -18,5 +18,5 @@ $dotenv = new Dotenv();
 $dotenv->load(__DIR__ . '/../.env');
 
 // Run application
-$config = require __DIR__ . '/../vendor/mix/tcp-daemon/config/main.php';
+$config = require __DIR__ . '/../applications/tcp/config/main.php';
 (new Mix\Console\Application($config))->run();

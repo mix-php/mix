@@ -45,8 +45,20 @@ class StartCommand
     public function __construct()
     {
         $this->log    = context()->get('log');
-        $this->route  = context()->get('route');
         $this->server = context()->get('tcpServer');
+        $this->init();
+    }
+
+    /**
+     * 初始化
+     */
+    public function init()
+    {
+        // 实例化控制器
+        foreach ($this->methods as $method => $callback) {
+            list($class, $action) = $callback;
+            $this->methods[$method] = [new $class, $action];
+        }
     }
 
     /**
