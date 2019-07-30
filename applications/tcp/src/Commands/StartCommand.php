@@ -103,13 +103,19 @@ class StartCommand
     /**
      * 连接处理
      * @param TcpConnection $conn
+     * @throws \Throwable
      */
     public function handle(TcpConnection $conn)
     {
         while (true) {
-            $data = $conn->recv();
-            if (empty($data)) {
-                return;
+            try {
+                $data = $conn->recv();
+            } catch (\Throwable $e) {
+                // 忽略服务器主动关闭连接抛出的104错误
+                if ($e->getCode() == 104) {
+                    return;
+                }
+                throw $e;
             }
             xgo([$this, 'runAction'], $conn, $data);
         }
