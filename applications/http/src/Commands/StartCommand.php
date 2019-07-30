@@ -24,7 +24,7 @@ class StartCommand
     /**
      * @var HttpServer
      */
-    public $http;
+    public $server;
 
     /**
      * @var Logger
@@ -41,9 +41,9 @@ class StartCommand
      */
     public function __construct()
     {
-        $this->log   = context()->get('log');
-        $this->route = context()->get('route');
-        $this->http  = context()->get('httpServer');
+        $this->log    = context()->get('log');
+        $this->route  = context()->get('route');
+        $this->server = context()->get('httpServer');
     }
 
     /**
@@ -60,7 +60,7 @@ class StartCommand
         ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], function ($signal) {
             $this->log->info('received signal [{signal}]', ['signal' => $signal]);
             $this->log->info('server shutdown');
-            $this->http->shutdown();
+            $this->server->shutdown();
             ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], null);
         });
         // 启动服务器
@@ -72,13 +72,13 @@ class StartCommand
      */
     public function start()
     {
-        $http = $this->http;
-        $http->handle('/', function (ServerRequest $request, Response $response) {
+        $server = $this->server;
+        $server->handle('/', function (ServerRequest $request, Response $response) {
             xgo([$this, 'handle'], $request, $response);
         });
         $this->welcome();
         $this->log->info('server start');
-        $http->start();
+        $server->start();
     }
 
     /**
@@ -174,8 +174,8 @@ class StartCommand
     {
         $phpVersion    = PHP_VERSION;
         $swooleVersion = swoole_version();
-        $host          = $this->http->host;
-        $port          = $this->http->port;
+        $host          = $this->server->host;
+        $port          = $this->server->port;
         echo <<<EOL
                               ____
  ______ ___ _____ ___   _____  / /_ _____

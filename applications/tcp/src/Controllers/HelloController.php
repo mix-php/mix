@@ -2,8 +2,6 @@
 
 namespace Tcp\Controllers;
 
-use Mix\Helper\JsonHelper;
-
 /**
  * Class HelloController
  * @package Tcp\Controllers
@@ -13,21 +11,15 @@ class HelloController
 {
 
     /**
-     * Method DEMO
+     * Method demo
      * @param $params
-     * @param $id
+     * @return array
      */
-    public function actionWorld($params, $id)
+    public function world($params)
     {
-        $response = [
-            'jsonrpc' => '2.0',
-            'error'   => null,
-            'result'  => [
-                'Hello, World!',
-            ],
-            'id'      => $id,
+        return [
+            'Hello, World!',
         ];
-        app()->tcp->send(JsonHelper::encode($response) . "\n");
     }
 
 }
