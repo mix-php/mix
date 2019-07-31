@@ -74,7 +74,7 @@ class StartCommand
     {
         $server = $this->server;
         $server->handle('/', function (ServerRequest $request, Response $response) {
-            xgo([$this, 'handle'], $request, $response);
+            $this->handle($request, $response);
         });
         $this->welcome();
         $this->log->info('server start');

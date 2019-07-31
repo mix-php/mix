@@ -89,7 +89,7 @@ class StartCommand
     {
         $server = $this->server;
         $server->handle(function (Connection $conn) {
-            xgo([$this, 'handle'], $conn);
+            $this->handle($conn);
         });
         $server->set([
             'open_eof_check' => true,
