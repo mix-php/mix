@@ -2,7 +2,7 @@
 
 namespace Console\Commands;
 
-use Console\Libraries\CoroutinePoolDaemonWorker;
+use Console\Workers\CoroutinePoolDaemonWorker;
 use Mix\Concurrent\CoroutinePool\Dispatcher;
 use Mix\Console\CommandLine\Flag;
 use Mix\Concurrent\Coroutine\Channel;

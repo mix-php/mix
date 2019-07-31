@@ -2,7 +2,7 @@
 
 namespace Console\Commands;
 
-use Console\Libraries\CoroutinePoolWorker;
+use Console\Workers\CoroutinePoolWorker;
 use Mix\Concurrent\CoroutinePool\Dispatcher;
 use Mix\Concurrent\Coroutine\Channel;
 use Mix\Concurrent\Event;
