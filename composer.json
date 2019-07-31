@@ -36,13 +36,13 @@
     "mix/view": "v2.1.x-dev",
     "mix/server": "v2.1.x-dev",
     "mix/socket": "v2.1.x-dev",
+    "mix/udp-server": "v2.1.x-dev",
     "mix/http-session": "v2.1.x-dev",
     "mix/http-message": "v2.1.x-dev",
     "mix/http-server": "v2.1.x-dev",
     "mix/websocket": "v2.1.x-dev",
     "mix/websocket-server": "v2.1.x-dev",
     "mix/websocket-daemon": "v2.1.x-dev",
-    "mix/tcp-server": "v2.1.x-dev",
     "symfony/dotenv": "~4.3"
   },
   "require-dev": {

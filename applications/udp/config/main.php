@@ -4,7 +4,7 @@
 return [
 
     // 应用名称
-    'appName'    => 'mix-tcp',
+    'appName'    => 'mix-udp',
 
     // 应用版本
     'appVersion' => '0.0.0',
@@ -19,7 +19,7 @@ return [
     'commands'   => [
 
         'start' => [
-            \Tcp\Commands\StartCommand::class,
+            \Udp\Commands\StartCommand::class,
             'description' => "\tStart service",
             'options'     => [
                 [['d', 'daemon'], 'description' => "\t" . 'Run in the background'],
@@ -104,7 +104,7 @@ return [
             // 名称
             'name'            => 'udpServer',
             // 类路径
-            'class'           => \Mix\Udp\Server\UdpServer::class,
+            'class'           => \Udp\Server\UdpServer::class,
             // 构造函数注入
             'constructorArgs' => [
                 // host
