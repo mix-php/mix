@@ -39,17 +39,10 @@
     "mix/http-session": "v2.1.x-dev",
     "mix/http-message": "v2.1.x-dev",
     "mix/http-server": "v2.1.x-dev",
-    "mix/http-daemon": "v2.1.x-dev",
     "mix/websocket": "v2.1.x-dev",
     "mix/websocket-server": "v2.1.x-dev",
     "mix/websocket-daemon": "v2.1.x-dev",
-    "mix/tcp-session": "v2.1.x-dev",
-    "mix/tcp": "v2.1.x-dev",
     "mix/tcp-server": "v2.1.x-dev",
-    "mix/tcp-daemon": "v2.1.x-dev",
-    "mix/udp": "v2.1.x-dev",
-    "mix/udp-server": "v2.1.x-dev",
-    "mix/udp-daemon": "v2.1.x-dev",
     "symfony/dotenv": "~4.3"
   },
   "require-dev": {
