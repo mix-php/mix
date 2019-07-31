@@ -104,7 +104,7 @@ return [
             // 名称
             'name'            => 'udpServer',
             // 类路径
-            'class'           => \Udp\Server\UdpServer::class,
+            'class'           => \Mix\Udp\Server\UdpServer::class,
             // 构造函数注入
             'constructorArgs' => [
                 // host
