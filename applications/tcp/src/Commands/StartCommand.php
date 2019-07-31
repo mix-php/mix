@@ -5,8 +5,8 @@ namespace Tcp\Commands;
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
 use Mix\Log\Logger;
-use Mix\Tcp\Server\TcpConnection;
-use Mix\Tcp\Server\TcpServer;
+use Mix\Server\Connection;
+use Mix\Server\Server;
 use Tcp\Helpers\SendHelper;
 
 /**
@@ -18,7 +18,7 @@ class StartCommand
 {
 
     /**
-     * @var TcpServer
+     * @var Server
      */
     public $server;
 
@@ -88,7 +88,7 @@ class StartCommand
     public function start()
     {
         $server = $this->server;
-        $server->handle(function (TcpConnection $conn) {
+        $server->handle(function (Connection $conn) {
             xgo([$this, 'handle'], $conn);
         });
         $server->set([
@@ -102,10 +102,10 @@ class StartCommand
 
     /**
      * 连接处理
-     * @param TcpConnection $conn
+     * @param Connection $conn
      * @throws \Throwable
      */
-    public function handle(TcpConnection $conn)
+    public function handle(Connection $conn)
     {
         while (true) {
             try {
@@ -123,10 +123,10 @@ class StartCommand
 
     /**
      * 执行功能
-     * @param TcpConnection $conn
+     * @param Connection $conn
      * @param $data
      */
-    public function runAction(TcpConnection $conn, $data)
+    public function runAction(Connection $conn, $data)
     {
         // 解析数据
         $data = json_decode($data, true);

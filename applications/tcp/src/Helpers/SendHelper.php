@@ -3,7 +3,7 @@
 namespace Tcp\Helpers;
 
 use Mix\Helper\JsonHelper;
-use Mix\Tcp\Server\TcpConnection;
+use Mix\Server\Connection;
 use Tcp\Commands\StartCommand;
 
 /**
@@ -16,12 +16,12 @@ class SendHelper
 
     /**
      * Send error
-     * @param TcpConnection $conn
+     * @param Connection $conn
      * @param $code
      * @param $message
      * @param null $id
      */
-    public static function error(TcpConnection $conn, $code, $message, $id = null)
+    public static function error(Connection $conn, $code, $message, $id = null)
     {
         $response = [
             'jsonrpc' => '2.0',
@@ -36,11 +36,11 @@ class SendHelper
 
     /**
      * Send data
-     * @param TcpConnection $conn
+     * @param Connection $conn
      * @param $result
      * @param null $id
      */
-    public static function data(TcpConnection $conn, $result, $id = null)
+    public static function data(Connection $conn, $result, $id = null)
     {
         $response = [
             'jsonrpc' => '2.0',
