@@ -5,7 +5,7 @@ namespace Udp\Commands;
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
 use Mix\Log\Logger;
-use Mix\Socket\Socket;
+use Swoole\Coroutine\Socket;
 use Mix\Udp\Server\UdpServer;
 
 /**
