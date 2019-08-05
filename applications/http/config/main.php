@@ -4,7 +4,7 @@
 return [
 
     // 应用名称
-    'appName'    => 'mix-http',
+    'appName'    => 'mix-httpd',
 
     // 应用版本
     'appVersion' => '0.0.0',

@@ -1,12 +1,12 @@
 <?php
 
-namespace Http\Validators;
+namespace Http\Forms;
 
 use Mix\Validate\Validator;
 
 /**
  * Class UserForm
- * @package Http\Validators
+ * @package Http\Forms
  * @author liu,jian <coder.keda@gmail.com>
  */
 class UserForm extends Validator

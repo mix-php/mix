@@ -3,7 +3,7 @@
 namespace Http\Controllers;
 
 use Http\Helpers\SendHelper;
-use Http\Validators\FileForm;
+use Http\Forms\FileForm;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Message\Response;
 

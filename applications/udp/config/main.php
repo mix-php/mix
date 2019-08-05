@@ -4,7 +4,7 @@
 return [
 
     // 应用名称
-    'appName'    => 'mix-udp',
+    'appName'    => 'mix-udpd',
 
     // 应用版本
     'appVersion' => '0.0.0',

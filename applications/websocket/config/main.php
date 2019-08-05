@@ -4,7 +4,7 @@
 return [
 
     // 应用名称
-    'appName'    => 'mix-tcpd',
+    'appName'    => 'mix-websocketd',
 
     // 应用版本
     'appVersion' => '0.0.0',
