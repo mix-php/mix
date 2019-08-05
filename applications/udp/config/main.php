@@ -20,9 +20,9 @@ return [
 
         'start' => [
             \Udp\Commands\StartCommand::class,
-            'description' => "\tStart service",
+            'description' => "Start service",
             'options'     => [
-                [['d', 'daemon'], 'description' => "\t" . 'Run in the background'],
+                [['d', 'daemon'], 'description' => "Run in the background"],
             ],
         ],
 

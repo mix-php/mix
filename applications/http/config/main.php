@@ -20,9 +20,9 @@ return [
 
         'start' => [
             \Http\Commands\StartCommand::class,
-            'description' => "\tStart service",
+            'description' => "Start service",
             'options'     => [
-                [['d', 'daemon'], 'description' => "\t" . 'Run in the background'],
+                [['d', 'daemon'], 'description' => "Run in the background"],
             ],
         ],
 
@@ -137,11 +137,11 @@ return [
                 // 路由规则
                 'rules'          => [
                     // 普通路由
-                    '/'             => [[\Http\Controllers\IndexController::class, 'index'], 'middleware' => [\Http\Middleware\ActionMiddleware::class]],
-                    '/profile/{id}' => [[\Http\Controllers\ProfileController::class, 'index'], 'middleware' => [\Http\Middleware\ActionMiddleware::class]],
-                    'POST /file/upload'  => [[\Http\Controllers\FileController::class, 'upload'], 'middleware' => [\Http\Middleware\ActionMiddleware::class]],
+                    '/'                 => [[\Http\Controllers\IndexController::class, 'index'], 'middleware' => [\Http\Middleware\ActionMiddleware::class]],
+                    '/profile/{id}'     => [[\Http\Controllers\ProfileController::class, 'index'], 'middleware' => [\Http\Middleware\ActionMiddleware::class]],
+                    'POST /file/upload' => [[\Http\Controllers\FileController::class, 'upload'], 'middleware' => [\Http\Middleware\ActionMiddleware::class]],
                     // 分组路由
-                    '/v2'           => [
+                    '/v2'               => [
                         // 分组中间件
                         'middleware' => [\Http\Middleware\GroupMiddleware::class],
                         // 分组路由规则
