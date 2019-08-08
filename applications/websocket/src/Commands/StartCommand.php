@@ -1,13 +1,15 @@
 <?php
 
-namespace Tcp\Commands;
+namespace WebSocket\Commands;
 
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
+use Mix\Http\Message\Factory\StreamFactory;
+use Mix\Http\Message\Response;
+use Mix\Http\Message\ServerRequest;
 use Mix\Log\Logger;
-use Mix\Server\Connection;
-use Mix\Server\Server;
-use Tcp\Helpers\SendHelper;
+use Mix\Http\Server\HttpServer;
+use Mix\WebSocket\Upgrader;
 
 /**
  * Class StartCommand
@@ -18,7 +20,7 @@ class StartCommand
 {
 
     /**
-     * @var Server
+     * @var HttpServer
      */
     public $server;
 
@@ -30,14 +32,9 @@ class StartCommand
     /**
      * @var callable[]
      */
-    public $methods = [
-        'hello.world' => [\Tcp\Controllers\HelloController::class, 'world'],
+    public $patterns = [
+        '/websocket' => \WebSocket\Handlers\WebSocketHandler::class,
     ];
-
-    /**
-     * EOF
-     */
-    const EOF = "\r\n";
 
     /**
      * StartCommand constructor.
@@ -45,20 +42,7 @@ class StartCommand
     public function __construct()
     {
         $this->log    = context()->get('log');
-        $this->server = context()->get('tcpServer');
-        $this->init();
-    }
-
-    /**
-     * 初始化
-     */
-    public function init()
-    {
-        // 实例化控制器
-        foreach ($this->methods as $method => $callback) {
-            list($class, $action) = $callback;
-            $this->methods[$method] = [new $class, $action];
-        }
+        $this->server = context()->get('httpServer');
     }
 
     /**
@@ -88,68 +72,33 @@ class StartCommand
     public function start()
     {
         $server = $this->server;
-        $server->handle(function (Connection $conn) {
-            $this->handle($conn);
+        $server->handle('/', function (ServerRequest $request, Response $response) {
+            $this->handle($request, $response);
         });
-        $server->set([
-            'open_eof_check' => true,
-            'package_eof'    => static::EOF,
-        ]);
         $this->welcome();
         $this->log->info('server start');
         $server->start();
     }
 
     /**
-     * 连接处理
-     * @param Connection $conn
-     * @throws \Throwable
+     * 请求处理
+     * @param ServerRequest $request
+     * @param Response $response
      */
-    public function handle(Connection $conn)
+    public function handle(ServerRequest $request, Response $response)
     {
-        while (true) {
-            try {
-                $data = $conn->recv();
-            } catch (\Throwable $e) {
-                // 忽略服务器主动关闭连接抛出的104错误
-                if ($e->getCode() == 104) {
-                    return;
-                }
-                throw $e;
-            }
-            xgo([$this, 'runAction'], $conn, $data);
-        }
-    }
-
-    /**
-     * 执行功能
-     * @param Connection $conn
-     * @param $data
-     */
-    public function runAction(Connection $conn, $data)
-    {
-        // 解析数据
-        $data = json_decode($data, true);
-        if (!$data) {
-            SendHelper::error($conn, -32600, 'Invalid Request');
+        $pathinfo = $request->getServerParams()['path_info'] ?: '/';
+        if (!isset($this->patterns[$pathinfo])) {
+            $response
+                ->withContentType('text/html', 'utf-8')
+                ->withBody((new StreamFactory())->createStream('404'))
+                ->send();
             return;
         }
-        if (!isset($data['method']) || !isset($data['params']) || !isset($data['id'])) {
-            SendHelper::error($conn, -32700, 'Parse error');
-            return;
-        }
-        // 定义变量
-        $method = $data['method'];
-        $params = $data['params'];
-        $id     = $data['id'];
-        // 路由到控制器
-        if (!isset($this->methods[$method])) {
-            SendHelper::error($conn, -32601, 'Method not found', $id);
-            return;
-        }
-        // 执行
-        $result = call_user_func($this->methods[$method], $params);
-        SendHelper::data($conn, $result, $id);
+        $class    = $this->patterns[$pathinfo];
+        $conn     = (new Upgrader())->Upgrade($request, $response);
+        $callback = new $class($conn);
+        call_user_func($callback);
     }
 
     /**
@@ -171,7 +120,7 @@ class StartCommand
 
 
 EOL;
-        println('Server         Name:      mix-tcp');
+        println('Server         Name:      mix-websocketd');
         println('System         Name:      ' . strtolower(PHP_OS));
         println("PHP            Version:   {$phpVersion}");
         println("Swoole         Version:   {$swooleVersion}");

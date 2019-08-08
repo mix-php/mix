@@ -19,7 +19,7 @@ return [
     'commands'   => [
 
         'start' => [
-            \Tcp\Commands\StartCommand::class,
+            \WebSocket\Commands\StartCommand::class,
             'description' => "Start service",
             'options'     => [
                 [['d', 'daemon'], 'description' => "Run in the background"],
@@ -102,15 +102,17 @@ return [
         // 服务器
         [
             // 名称
-            'name'            => 'udpServer',
+            'name'            => 'httpServer',
             // 类路径
-            'class'           => \Mix\Udp\Server\UdpServer::class,
+            'class'           => \Mix\Http\Server\HttpServer::class,
             // 构造函数注入
             'constructorArgs' => [
                 // host
                 '127.0.0.1',
                 // port
-                9503,
+                9502,
+                // ssl
+                false,
             ],
         ],
 
