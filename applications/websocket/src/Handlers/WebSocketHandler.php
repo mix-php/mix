@@ -35,7 +35,7 @@ class WebSocketHandler
     }
 
     /**
-     * invoke
+     * Invoke
      */
     function __invoke()
     {
