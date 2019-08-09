@@ -4,7 +4,7 @@ namespace WebSocket\Controllers;
 
 use Mix\Helper\JsonHelper;
 use Mix\Redis\Coroutine\RedisConnection;
-use Mix\WebSocket\Frame\TextFrame;
+use WebSocket\Exceptions\ExecutionException;
 use WebSocket\Models\JoinForm;
 
 /**
@@ -14,29 +14,23 @@ use WebSocket\Models\JoinForm;
  */
 class JoinController
 {
+    
+    
 
     /**
      * 加入房间
      * @param $params
-     * @param $id
      */
-    public function actionRoom($params, $id)
+    public function room($params)
     {
         // 验证数据
-        $model             = new JoinForm();
-        $model->attributes = $params;
-        $model->setScenario('actionRoom');
+        $attributes = [
+            'roomid' => array_shift($params),
+        ];
+        $model      = new JoinForm($attributes);
+        $model->setScenario('room');
         if (!$model->validate()) {
-            $response = new TextFrame([
-                'data' => JsonHelper::encode([
-                    'result' => [
-                        'message' => $model->getError(),
-                    ],
-                    'id'     => $id,
-                ], JSON_UNESCAPED_UNICODE),
-            ]);
-            app()->ws->push($response);
-            return;
+            throw new ExecutionException($model->getError());
         }
 
         // 保存当前加入的房间

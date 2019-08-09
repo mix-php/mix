@@ -3,6 +3,7 @@
 namespace WebSocket\Handlers;
 
 use Mix\WebSocket\Connection;
+use WebSocket\Exceptions\ExecutionException;
 use WebSocket\Helpers\SendHelper;
 
 /**
@@ -32,6 +33,19 @@ class WebSocketHandler
     public function __construct(Connection $conn)
     {
         $this->conn = $conn;
+        $this->init();
+    }
+
+    /**
+     * 初始化
+     */
+    public function init()
+    {
+        // 实例化控制器
+        foreach ($this->methods as $method => $callback) {
+            list($class, $action) = $callback;
+            $this->methods[$method] = [new $class, $action];
+        }
     }
 
     /**
@@ -66,7 +80,7 @@ class WebSocketHandler
             SendHelper::error($conn, -32600, 'Invalid Request');
             return;
         }
-        if (!isset($data['method']) || !isset($data['params']) || !isset($data['id'])) {
+        if (!isset($data['method']) || (!isset($data['params']) or !is_array($data['params'])) || !isset($data['id'])) {
             SendHelper::error($conn, -32700, 'Parse error');
             return;
         }
@@ -80,7 +94,12 @@ class WebSocketHandler
             return;
         }
         // 执行
-        $result = call_user_func($this->methods[$method], $params);
+        try {
+            $result = call_user_func($this->methods[$method], $params);
+        } catch (ExecutionException $exception) {
+            SendHelper::error($conn, $exception->getCode(), $exception->getMessage(), $id);
+            return;
+        }
         SendHelper::data($conn, $result, $id);
     }
 

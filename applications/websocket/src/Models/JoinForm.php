@@ -36,7 +36,7 @@ class JoinForm extends Validator
     public function scenarios()
     {
         return [
-            'actionRoom' => ['required' => ['roomid']],
+            'room' => ['required' => ['roomid']],
         ];
     }
 

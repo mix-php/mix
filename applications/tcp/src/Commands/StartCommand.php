@@ -7,6 +7,7 @@ use Mix\Helper\ProcessHelper;
 use Mix\Log\Logger;
 use Mix\Server\Connection;
 use Mix\Server\Server;
+use Tcp\Exceptions\ExecutionException;
 use Tcp\Helpers\SendHelper;
 
 /**
@@ -148,7 +149,12 @@ class StartCommand
             return;
         }
         // 执行
-        $result = call_user_func($this->methods[$method], $params);
+        try {
+            $result = call_user_func($this->methods[$method], $params);
+        } catch (ExecutionException $exception) {
+            SendHelper::error($conn, $exception->getCode(), $exception->getMessage(), $id);
+            return;
+        }
         SendHelper::data($conn, $result, $id);
     }
 
