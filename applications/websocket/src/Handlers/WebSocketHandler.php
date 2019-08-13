@@ -8,6 +8,7 @@ use Swoole\WebSocket\Frame;
 use WebSocket\Exceptions\ExecutionException;
 use WebSocket\Helpers\SendHelper;
 use WebSocket\Libraries\CloseWebSocketConnection;
+use WebSocket\Libraries\SessionStorage;
 
 /**
  * Class WebSocketHandler
@@ -28,6 +29,11 @@ class WebSocketHandler
     public $sendChan;
 
     /**
+     * @var SessionStorage
+     */
+    public $sessionStorage;
+
+    /**
      * @var callable[]
      */
     public $methods = [
@@ -40,8 +46,9 @@ class WebSocketHandler
      */
     public function __construct(Connection $conn)
     {
-        $this->conn     = $conn;
-        $this->sendChan = new Channel(5);
+        $this->conn           = $conn;
+        $this->sendChan       = new Channel(5);
+        $this->sessionStorage = new SessionStorage();
         $this->init();
     }
 
@@ -52,6 +59,7 @@ class WebSocketHandler
     {
         // TODO: Implement __destruct() method.
         $this->sendChan->close();
+        $this->sessionStorage->clear();
     }
 
     /**
@@ -80,6 +88,7 @@ class WebSocketHandler
                 }
                 if ($data instanceof CloseWebSocketConnection) {
                     $this->conn->close();
+                    continue;
                 }
                 $frame       = new Frame();
                 $frame->data = $data;
@@ -97,25 +106,24 @@ class WebSocketHandler
                 }
                 throw $e;
             }
-            xgo([$this, 'runAction'], $this->sendChan, $data);
+            xgo([$this, 'runAction'], $data);
         }
     }
 
     /**
      * 执行功能
-     * @param Channel $sendChan
      * @param $data
      */
-    public function runAction(Channel $sendChan, $data)
+    public function runAction($data)
     {
         // 解析数据
         $data = json_decode($data, true);
         if (!$data) {
-            SendHelper::error($sendChan, -32600, 'Invalid Request');
+            SendHelper::error($this->sendChan, -32600, 'Invalid Request');
             return;
         }
         if (!isset($data['method']) || (!isset($data['params']) or !is_array($data['params'])) || !isset($data['id'])) {
-            SendHelper::error($sendChan, -32700, 'Parse error');
+            SendHelper::error($this->sendChan, -32700, 'Parse error');
             return;
         }
         // 定义变量
@@ -124,17 +132,17 @@ class WebSocketHandler
         $id     = $data['id'];
         // 路由到控制器
         if (!isset($this->methods[$method])) {
-            SendHelper::error($sendChan, -32601, 'Method not found', $id);
+            SendHelper::error($this->sendChan, -32601, 'Method not found', $id);
             return;
         }
         // 执行
         try {
-            $result = call_user_func($this->methods[$method], $sendChan, $params);
+            $result = call_user_func($this->methods[$method], $this->sendChan, $this->sessionStorage, $params);
         } catch (ExecutionException $exception) {
-            SendHelper::error($sendChan, $exception->getCode(), $exception->getMessage(), $id);
+            SendHelper::error($this->sendChan, $exception->getCode(), $exception->getMessage(), $id);
             return;
         }
-        SendHelper::data($sendChan, $result, $id);
+        SendHelper::data($this->sendChan, $result, $id);
     }
 
 }

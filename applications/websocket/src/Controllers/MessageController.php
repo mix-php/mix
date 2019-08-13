@@ -2,9 +2,12 @@
 
 namespace WebSocket\Controllers;
 
+use Mix\Concurrent\Coroutine\Channel;
 use Mix\Helper\JsonHelper;
-use Mix\WebSocket\Frame\TextFrame;
-use WebSocket\Models\MessageForm;
+use Mix\Redis\Pool\ConnectionPool;
+use WebSocket\Exceptions\ExecutionException;
+use WebSocket\Forms\MessageForm;
+use WebSocket\Libraries\SessionStorage;
 
 /**
  * Class MessageController
@@ -16,54 +19,51 @@ class MessageController
 
     /**
      * 发送消息
+     * @param Channel $sendChan
+     * @param SessionStorage $sessionStorage
      * @param $params
-     * @param $id
+     * @return array
+     * @throws \PhpDocReader\AnnotationException
+     * @throws \ReflectionException
      */
-    public function actionEmit($params, $id)
+    public function emit(Channel $sendChan, SessionStorage $sessionStorage, $params)
     {
         // 使用模型
-        $model             = new MessageForm();
+        $attributes        = [
+            'text' => array_shift($params),
+        ];
+        $model             = new MessageForm($attributes);
         $model->attributes = $params;
-        $model->setScenario('actionEmit');
+        $model->setScenario('emit');
         // 验证失败
         if (!$model->validate()) {
-            $response = new TextFrame([
-                'data' => JsonHelper::encode([
-                    'result' => [
-                        'message' => $model->getError(),
-                    ],
-                    'id'     => $id,
-                ], JSON_UNESCAPED_UNICODE),
-            ]);
-            app()->ws->push($response);
-            return;
+            throw new ExecutionException($model->getError(), 100001);
         }
 
         // 获取加入的房间id
-        $roomid = app()->tcpSession->get('roomid');
-        if (empty($roomid)) {
-            $response = new TextFrame([
-                'data' => JsonHelper::encode([
-                    'result' => [
-                        'message' => "你没有加入任何房间，请先加入一个房间.",
-                    ],
-                    'id'     => $id,
-                ], JSON_UNESCAPED_UNICODE),
-            ]);
-            app()->ws->push($response);
-            return;
+        $roomId = $sessionStorage->joinRoomId;
+        if (empty($roomId)) {
+            return [
+                'message' => "You didn't join any room, please join a room first.",
+            ];
         }
 
         // 给当前加入的房间发送消息
-        $response = JsonHelper::encode([
+        $message = JsonHelper::encode([
+            'method' => 'room.message',
             'result' => [
-                'message' => $model->message,
+                'message' => $model->text,
             ],
-            'id'     => $id,
+            'id'     => null,
         ], JSON_UNESCAPED_UNICODE);
-        $conn     = app()->redisPool->getConnection();
-        $conn->publish("room_{$roomid}", $response);
-        $conn->release();
+        /** @var ConnectionPool $pool */
+        $pool  = context()->get('redisPool');
+        $redis = $pool->getConnection();
+        $redis->publish("room_{$roomId}", $message);
+        $redis->release();
+        return [
+            'status' => 'success',
+        ];
     }
 
 }

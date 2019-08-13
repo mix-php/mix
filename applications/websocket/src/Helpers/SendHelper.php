@@ -4,7 +4,6 @@ namespace WebSocket\Helpers;
 
 use Mix\Concurrent\Coroutine\Channel;
 use Mix\Helper\JsonHelper;
-use Mix\WebSocket\Connection;
 use Swoole\WebSocket\Frame;
 
 /**

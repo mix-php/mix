@@ -1,22 +1,21 @@
 <?php
 
-namespace WebSocket\Models;
+namespace WebSocket\Forms;
 
 use Mix\Validate\Validator;
 
 /**
  * Class MessageForm
- * @package WebSocket\Models
+ * @package WebSocket\Forms
  * @author liu,jian <coder.keda@gmail.com>
  */
 class MessageForm extends Validator
 {
 
     /**
-     * 消息
      * @var string
      */
-    public $message;
+    public $text;
 
     /**
      * 规则
@@ -25,7 +24,7 @@ class MessageForm extends Validator
     public function rules()
     {
         return [
-            'message' => ['string', 'minLength' => 1, 'maxLength' => 300],
+            'text' => ['string', 'minLength' => 1, 'maxLength' => 300],
         ];
     }
 
@@ -36,7 +35,7 @@ class MessageForm extends Validator
     public function scenarios()
     {
         return [
-            'actionEmit' => ['required' => ['message']],
+            'emit' => ['required' => ['text']],
         ];
     }
 

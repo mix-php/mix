@@ -10,6 +10,7 @@ use Swoole\WebSocket\Frame;
 use WebSocket\Exceptions\ExecutionException;
 use WebSocket\Libraries\CloseWebSocketConnection;
 use WebSocket\Forms\JoinForm;
+use WebSocket\Libraries\SessionStorage;
 
 /**
  * Class JoinController
@@ -20,31 +21,15 @@ class JoinController
 {
 
     /**
-     * @var string
-     */
-    public $joinRoomId;
-
-    /**
-     * @var RedisConnection
-     */
-    public $redis;
-
-    /**
-     * Destruct
-     */
-    public function __destruct()
-    {
-        // TODO: Implement __destruct() method.
-        $this->closeSubscribeRedis();
-    }
-
-    /**
      * 加入房间
      * @param Channel $sendChan
+     * @param SessionStorage $sessionStorage
      * @param $params
      * @return array
+     * @throws \PhpDocReader\AnnotationException
+     * @throws \ReflectionException
      */
-    public function room(Channel $sendChan, $params)
+    public function room(Channel $sendChan, SessionStorage $sessionStorage, $params)
     {
         // 验证数据
         $attributes = [
@@ -57,15 +42,19 @@ class JoinController
         }
 
         // 保存当前加入的房间
-        $this->joinRoomId = $model->roomId;
+        $sessionStorage->joinRoomId = $model->roomId;
 
         // 重复加入处理
-        $this->closeSubscribeRedis();
+        $redis = $sessionStorage->redis;
+        if ($redis) {
+            $redis->disabled = true; // 标记废除
+            $redis->disconnect(); // 关闭后会导致 subscribe 的连接抛出错误
+        }
 
         // 订阅房间的频道
-        xgo(function () use ($sendChan, $model) {
+        xgo(function () use ($sendChan, $sessionStorage, $model) {
             // 订阅房间的频道
-            $redis = $this->redis = context()->get(RedisConnection::class);
+            $redis = $sessionStorage->redis = context()->get(RedisConnection::class);
             try {
                 $redis->subscribe(["room_{$model->roomId}"], function ($instance, $channel, $message) use ($sendChan) {
                     $frame       = new Frame();
@@ -97,20 +86,8 @@ class JoinController
 
         // 给当前连接发送加入消息
         return [
-            'message' => "i joined the room, id: {$model->roomId}.",
+            'message' => "I joined the room, id: {$model->roomId}.",
         ];
-    }
-
-    /**
-     * 关闭订阅的redis
-     */
-    protected function closeSubscribeRedis()
-    {
-        if (!$this->redis) {
-            return;
-        }
-        $this->redis->disabled = true; // 标记废除
-        $this->redis->disconnect(); // 关闭后会导致 subscribe 的连接抛出错误
     }
 
 }
