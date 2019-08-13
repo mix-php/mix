@@ -1,22 +1,26 @@
 <?php
 
-namespace WebSocket\Models;
+namespace WebSocket\Forms;
 
 use Mix\Validate\Validator;
 
 /**
  * Class JoinForm
- * @package WebSocket\Models
+ * @package WebSocket\Forms
  * @author liu,jian <coder.keda@gmail.com>
  */
 class JoinForm extends Validator
 {
 
     /**
-     * 房间id
-     * @var int
+     * @var string
      */
-    public $roomid;
+    public $roomId;
+
+    /**
+     * @var string
+     */
+    public $name;
 
     /**
      * 规则
@@ -25,7 +29,8 @@ class JoinForm extends Validator
     public function rules()
     {
         return [
-            'roomid' => ['integer', 'unsigned' => true, 'minLength' => 1, 'maxLength' => 10],
+            'roomId' => ['integer', 'unsigned' => true, 'minLength' => 1, 'maxLength' => 10],
+            'name'   => ['string', 'filter' => ['trim']],
         ];
     }
 
@@ -36,7 +41,7 @@ class JoinForm extends Validator
     public function scenarios()
     {
         return [
-            'room' => ['required' => ['roomid']],
+            'room' => ['required' => ['roomId', 'name']],
         ];
     }
 

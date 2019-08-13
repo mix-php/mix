@@ -2,9 +2,12 @@
 
 namespace WebSocket\Handlers;
 
+use Mix\Concurrent\Coroutine\Channel;
 use Mix\WebSocket\Connection;
+use Swoole\WebSocket\Frame;
 use WebSocket\Exceptions\ExecutionException;
 use WebSocket\Helpers\SendHelper;
+use WebSocket\Libraries\CloseWebSocketConnection;
 
 /**
  * Class WebSocketHandler
@@ -20,6 +23,11 @@ class WebSocketHandler
     public $conn;
 
     /**
+     * @var Channel
+     */
+    public $sendChan;
+
+    /**
      * @var callable[]
      */
     public $methods = [
@@ -32,8 +40,18 @@ class WebSocketHandler
      */
     public function __construct(Connection $conn)
     {
-        $this->conn = $conn;
+        $this->conn     = $conn;
+        $this->sendChan = new Channel(5);
         $this->init();
+    }
+
+    /**
+     * Destruct
+     */
+    public function __destruct()
+    {
+        // TODO: Implement __destruct() method.
+        $this->sendChan->close();
     }
 
     /**
@@ -53,6 +71,22 @@ class WebSocketHandler
      */
     function __invoke()
     {
+        // 消息发送
+        xgo(function () {
+            while (true) {
+                $data = $this->sendChan->pop();
+                if (!$data) {
+                    return;
+                }
+                if ($data instanceof CloseWebSocketConnection) {
+                    $this->conn->close();
+                }
+                $frame       = new Frame();
+                $frame->data = $data;
+                $this->conn->send($frame);
+            }
+        });
+        // 消息读取
         while (true) {
             try {
                 $data = $this->conn->recv();
@@ -63,25 +97,25 @@ class WebSocketHandler
                 }
                 throw $e;
             }
-            xgo([$this, 'runAction'], $this->conn, $data);
+            xgo([$this, 'runAction'], $this->sendChan, $data);
         }
     }
 
     /**
      * 执行功能
-     * @param Connection $conn
+     * @param Channel $sendChan
      * @param $data
      */
-    public function runAction(Connection $conn, $data)
+    public function runAction(Channel $sendChan, $data)
     {
         // 解析数据
         $data = json_decode($data, true);
         if (!$data) {
-            SendHelper::error($conn, -32600, 'Invalid Request');
+            SendHelper::error($sendChan, -32600, 'Invalid Request');
             return;
         }
         if (!isset($data['method']) || (!isset($data['params']) or !is_array($data['params'])) || !isset($data['id'])) {
-            SendHelper::error($conn, -32700, 'Parse error');
+            SendHelper::error($sendChan, -32700, 'Parse error');
             return;
         }
         // 定义变量
@@ -90,17 +124,17 @@ class WebSocketHandler
         $id     = $data['id'];
         // 路由到控制器
         if (!isset($this->methods[$method])) {
-            SendHelper::error($conn, -32601, 'Method not found', $id);
+            SendHelper::error($sendChan, -32601, 'Method not found', $id);
             return;
         }
         // 执行
         try {
-            $result = call_user_func($this->methods[$method], $params);
+            $result = call_user_func($this->methods[$method], $sendChan, $params);
         } catch (ExecutionException $exception) {
-            SendHelper::error($conn, $exception->getCode(), $exception->getMessage(), $id);
+            SendHelper::error($sendChan, $exception->getCode(), $exception->getMessage(), $id);
             return;
         }
-        SendHelper::data($conn, $result, $id);
+        SendHelper::data($sendChan, $result, $id);
     }
 
 }

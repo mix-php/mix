@@ -2,10 +2,14 @@
 
 namespace WebSocket\Controllers;
 
+use Mix\Concurrent\Coroutine\Channel;
 use Mix\Helper\JsonHelper;
 use Mix\Redis\Coroutine\RedisConnection;
+use Mix\Redis\Pool\ConnectionPool;
+use Swoole\WebSocket\Frame;
 use WebSocket\Exceptions\ExecutionException;
-use WebSocket\Models\JoinForm;
+use WebSocket\Libraries\CloseWebSocketConnection;
+use WebSocket\Forms\JoinForm;
 
 /**
  * Class JoinController
@@ -14,77 +18,99 @@ use WebSocket\Models\JoinForm;
  */
 class JoinController
 {
-    
-    
+
+    /**
+     * @var string
+     */
+    public $joinRoomId;
+
+    /**
+     * @var RedisConnection
+     */
+    public $redis;
+
+    /**
+     * Destruct
+     */
+    public function __destruct()
+    {
+        // TODO: Implement __destruct() method.
+        $this->closeSubscribeRedis();
+    }
 
     /**
      * 加入房间
+     * @param Channel $sendChan
      * @param $params
+     * @return array
      */
-    public function room($params)
+    public function room(Channel $sendChan, $params)
     {
         // 验证数据
         $attributes = [
-            'roomid' => array_shift($params),
+            'room_id' => array_shift($params),
         ];
         $model      = new JoinForm($attributes);
         $model->setScenario('room');
         if (!$model->validate()) {
-            throw new ExecutionException($model->getError());
+            throw new ExecutionException($model->getError(), 100001);
         }
 
         // 保存当前加入的房间
-        app()->tcpSession->set('roomid', $model->roomid);
+        $this->joinRoomId = $model->roomId;
 
         // 重复加入处理
-        if ($subConn = app()->tcpSession->get('subConn')) {
-            /** @var \Mix\Redis\Coroutine\RedisConnection $subConn */
-            $subConn->disabled = true; // 标记废除
-            $subConn->disconnect(); // 关闭后会导致 subscribe 的连接抛出错误
-        }
+        $this->closeSubscribeRedis();
 
         // 订阅房间的频道
-        xgo(function () use ($model) {
+        xgo(function () use ($sendChan, $model) {
             // 订阅房间的频道
-            $subConn = RedisConnection::newInstance();
-            app()->tcpSession->set('subConn', $subConn);
+            $redis = $this->redis = context()->get(RedisConnection::class);
             try {
-                $subConn->subscribe(["room_{$model->roomid}"], function ($instance, $channel, $message) {
-                    $frame = new TextFrame([
-                        'data' => $message,
-                    ]);
-                    app()->ws->push($frame);
+                $redis->subscribe(["room_{$model->roomId}"], function ($instance, $channel, $message) use ($sendChan) {
+                    $frame       = new Frame();
+                    $frame->data = $message;
+                    $sendChan->push($frame);
                 });
             } catch (\Throwable $e) {
                 // redis连接异常断开处理
-                if (empty($subConn->disabled)) {
-                    // 关闭连接
-                    app()->ws->disconnect();
+                if (!empty($redis->disabled)) {
+                    return;
                 }
+                $sendChan->push(new CloseWebSocketConnection());
             }
         });
 
-        // 给当前房间其他人发送加入消息
-        $name     = app()->tcpSession->get('name');
-        $response = JsonHelper::encode([
+        // 给其他订阅当前房间的连接发送加入消息
+        $message = JsonHelper::encode([
+            'method' => 'room.message',
             'result' => [
-                'message' => "{$name} 加入 {$model->roomid} 房间.",
+                'message' => "{$model->name} joined the room, id: {$model->roomId}.",
             ],
-            'id'     => $id,
+            'id'     => null,
         ], JSON_UNESCAPED_UNICODE);
-        $conn     = app()->redisPool->getConnection();
-        $conn->publish("room_{$model->roomid}", $response);
-        $conn->release();
+        /** @var ConnectionPool $pool */
+        $pool  = context()->get('redisPool');
+        $redis = $pool->getConnection();
+        $redis->publish("room_{$model->roomId}", $message);
+        $redis->release();
 
-        // 给我自己发送加入消息
-        app()->ws->push(new TextFrame([
-            'data' => JsonHelper::encode([
-                'result' => [
-                    'message' => "我加入 {$model->roomid} 房间.",
-                ],
-                'id'     => $id,
-            ], JSON_UNESCAPED_UNICODE),
-        ]));
+        // 给当前连接发送加入消息
+        return [
+            'message' => "i joined the room, id: {$model->roomId}.",
+        ];
+    }
+
+    /**
+     * 关闭订阅的redis
+     */
+    protected function closeSubscribeRedis()
+    {
+        if (!$this->redis) {
+            return;
+        }
+        $this->redis->disabled = true; // 标记废除
+        $this->redis->disconnect(); // 关闭后会导致 subscribe 的连接抛出错误
     }
 
 }
