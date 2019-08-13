@@ -37,13 +37,19 @@ class StartCommand
     public $route;
 
     /**
+     * @var string
+     */
+    public $localIp;
+
+    /**
      * StartCommand constructor.
      */
     public function __construct()
     {
-        $this->log    = context()->get('log');
-        $this->route  = context()->get('route');
-        $this->server = context()->get('httpServer');
+        $this->log     = context()->get('log');
+        $this->route   = context()->get('route');
+        $this->server  = context()->get('httpServer');
+        $this->localIp = array_shift(swoole_get_local_ip());
     }
 
     /**
@@ -95,7 +101,7 @@ class StartCommand
         $tick = null;
         if (class_exists(\StatsCenter::class)) {
             $func        = $request->getUri()->getPath();
-            $serverIp    = array_shift(swoole_get_local_ip());
+            $serverIp    = $this->localIp;
             $serviceName = "{$serverIp}:{$this->server->port}";
             $tick        = \StatsCenter::beforeExecRpc($func, $serviceName, $serverIp);
         }
