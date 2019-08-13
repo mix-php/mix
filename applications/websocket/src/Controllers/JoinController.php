@@ -8,7 +8,7 @@ use Mix\Redis\Coroutine\RedisConnection;
 use Mix\Redis\Pool\ConnectionPool;
 use Swoole\WebSocket\Frame;
 use WebSocket\Exceptions\ExecutionException;
-use WebSocket\Libraries\CloseWebSocketConnection;
+use WebSocket\Libraries\CloseConnection;
 use WebSocket\Forms\JoinForm;
 use WebSocket\Libraries\SessionStorage;
 
@@ -66,7 +66,7 @@ class JoinController
                 if (!empty($redis->disabled)) {
                     return;
                 }
-                $sendChan->push(new CloseWebSocketConnection());
+                $sendChan->push(new CloseConnection());
             }
         });
 

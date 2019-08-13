@@ -7,7 +7,7 @@ use Mix\WebSocket\Connection;
 use Swoole\WebSocket\Frame;
 use WebSocket\Exceptions\ExecutionException;
 use WebSocket\Helpers\SendHelper;
-use WebSocket\Libraries\CloseWebSocketConnection;
+use WebSocket\Libraries\CloseConnection;
 use WebSocket\Libraries\SessionStorage;
 
 /**
@@ -86,7 +86,7 @@ class WebSocketHandler
                 if (!$data) {
                     return;
                 }
-                if ($data instanceof CloseWebSocketConnection) {
+                if ($data instanceof CloseConnection) {
                     $this->conn->close();
                     continue;
                 }

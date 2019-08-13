@@ -3,10 +3,10 @@
 namespace WebSocket\Libraries;
 
 /**
- * Class CloseWebSocketConnection
+ * Class CloseConnection
  * @package WebSocket\Libraries
  * @author liu,jian <coder.keda@gmail.com>
  */
-class CloseWebSocketConnection
+class CloseConnection
 {
 }
