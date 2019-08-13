@@ -91,31 +91,46 @@ class StartCommand
      */
     public function handle(ServerRequest $request, Response $response)
     {
+        // Swoole Enterprise Before
+        $tick = null;
+        if (class_exists(\StatsCenter::class)) {
+            $func        = $request->getUri()->getPath();
+            $serverIp    = array_shift(swoole_get_local_ip());
+            $serviceName = "{$serverIp}:{$this->server->port}";
+            $tick        = \StatsCenter::beforeExecRpc($func, $serviceName, $serverIp);
+        }
+        // 路由匹配
         try {
-            $matchRule = $this->route->match($request->getMethod(), $request->getServerParams()['path_info'] ?: '/');
+            $result = $this->route->match($request->getMethod(), $request->getServerParams()['path_info'] ?: '/');
         } catch (\Throwable $e) {
             // 404 处理
             static::show404($e, $response);
+            // Swoole Enterprise After
+            $tick and \StatsCenter::afterExecRpc($tick, false, 404);
             return;
         }
         // 保存路由参数
-        foreach ($matchRule->getParams() as $key => $value) {
+        foreach ($result->getParams() as $key => $value) {
             $request->withAttribute($key, $value);
         }
         // 执行
         try {
             // 执行中间件
-            $dispatcher = new MiddlewareDispatcher($matchRule->getMiddleware(), $request, $response);
+            $dispatcher = new MiddlewareDispatcher($result->getMiddleware(), $request, $response);
             $response   = $dispatcher->dispatch();
             // 执行控制器
             if (!$response->getBody()) {
-                $response = call_user_func($matchRule->getCallback(), $request, $response);
+                $response = call_user_func($result->getCallback(), $request, $response);
             }
             /** @var Response $response */
             $response->send();
+            // Swoole Enterprise After
+            $tick and \StatsCenter::afterExecRpc($tick, true, $response->getStatusCode());
         } catch (\Throwable $e) {
             // 500 处理
             static::show500($e, $response);
+            // Swoole Enterprise After
+            $tick and \StatsCenter::afterExecRpc($tick, false, 500);
             // 抛出错误，记录日志
             throw $e;
         }
