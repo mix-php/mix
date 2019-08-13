@@ -74,7 +74,7 @@ class JoinController
         $message = JsonHelper::encode([
             'method' => 'room.message',
             'result' => [
-                'message' => "{$model->name} joined the room, id: {$model->roomId}.",
+                'message' => "{$model->name} joined the room, room_id: {$model->roomId}.",
             ],
             'id'     => null,
         ], JSON_UNESCAPED_UNICODE);
@@ -86,7 +86,7 @@ class JoinController
 
         // 给当前连接发送加入消息
         return [
-            'message' => "I joined the room, id: {$model->roomId}.",
+            'message' => "I joined the room, room_id: {$model->roomId}.",
         ];
     }
 
