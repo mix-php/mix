@@ -10,7 +10,6 @@ use Symfony\Component\Dotenv\Dotenv;
 Coroutine::enableHook();
 Coroutine::set([
     'max_coroutine'    => 300000,
-    'enable_coroutine' => false,
 ]);
 
 // environment
