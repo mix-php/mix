@@ -7,10 +7,12 @@ use Mix\Concurrent\Coroutine;
 use Symfony\Component\Dotenv\Dotenv;
 
 // Coroutine
-Coroutine::enableHook();
-Coroutine::set([
-    'max_coroutine'    => 300000,
-]);
+if (extension_loaded('swoole')) {
+    Coroutine::enableHook();
+    Coroutine::set([
+        'max_coroutine' => 300000,
+    ]);
+}
 
 // environment
 $dotenv = new Dotenv();
