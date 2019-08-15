@@ -49,7 +49,7 @@ class StartCommand
         $this->log     = context()->get('log');
         $this->route   = context()->get('route');
         $this->server  = context()->get('httpServer');
-        $this->localIp = array_shift(swoole_get_local_ip());
+        $this->localIp = current(swoole_get_local_ip());
     }
 
     /**
