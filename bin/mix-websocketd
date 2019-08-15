@@ -8,9 +8,9 @@ use Symfony\Component\Dotenv\Dotenv;
 
 // Coroutine
 if (extension_loaded('swoole')) {
-    Coroutine::enableHook();
     Coroutine::set([
         'max_coroutine' => 300000,
+        'hook_flags'    => SWOOLE_HOOK_ALL,
     ]);
 }
 
