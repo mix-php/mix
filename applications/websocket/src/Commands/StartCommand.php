@@ -37,12 +37,18 @@ class StartCommand
     ];
 
     /**
+     * @var Upgrader
+     */
+    public $upgrader;
+
+    /**
      * StartCommand constructor.
      */
     public function __construct()
     {
-        $this->log    = context()->get('log');
-        $this->server = context()->get('httpServer');
+        $this->log      = context()->get('log');
+        $this->server   = context()->get('httpServer');
+        $this->upgrader = new Upgrader();
     }
 
     /**
@@ -60,6 +66,7 @@ class StartCommand
             $this->log->info('received signal [{signal}]', ['signal' => $signal]);
             $this->log->info('server shutdown');
             $this->server->shutdown();
+            $this->upgrader->destroy();
             ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], null);
         });
         // 启动服务器
@@ -96,7 +103,7 @@ class StartCommand
             return;
         }
         $class    = $this->patterns[$pathinfo];
-        $conn     = (new Upgrader())->Upgrade($request, $response);
+        $conn     = $this->upgrader->Upgrade($request, $response);
         $callback = new $class($conn);
         call_user_func($callback);
     }

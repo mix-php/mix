@@ -105,7 +105,7 @@ class WebSocketHandler
                 // 抛出异常
                 throw $e;
             }
-            xgo([$this, 'runAction'], $frame->data);
+            //xgo([$this, 'runAction'], $frame->data);
         }
     }
 
