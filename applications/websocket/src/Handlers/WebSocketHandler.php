@@ -4,6 +4,8 @@ namespace WebSocket\Handlers;
 
 use Mix\Concurrent\Coroutine\Channel;
 use Mix\WebSocket\Connection;
+use Mix\WebSocket\Exception\CloseFrameException;
+use Mix\WebSocket\Exception\ReceiveFailureException;
 use Swoole\WebSocket\Frame;
 use WebSocket\Exceptions\ExecutionException;
 use WebSocket\Helpers\SendHelper;
@@ -92,8 +94,12 @@ class WebSocketHandler
             } catch (\Throwable $e) {
                 // 销毁
                 $this->destroy();
-                // 忽略服务器主动关闭连接抛出的104错误
-                if ($e->getCode() == 104) {
+                // 忽略服务器主动断开连接异常
+                if ($e instanceof ReceiveFailureException && $e->getCode() == 104) {
+                    return;
+                }
+                // 忽略客户端主动断开连接异常
+                if ($e instanceof CloseFrameException && in_array($e->getCode(), [1000, 1001])) {
                     return;
                 }
                 // 抛出异常
