@@ -27,8 +27,12 @@ class SessionStorage
      */
     public function clear()
     {
-        $this->redis->disabled = true; // 标记废除
-        $this->redis->disconnect();
+        $redis = $this->redis;
+        if (!$redis) {
+            return;
+        }
+        $redis->disabled = true; // 标记废除
+        $redis->disconnect();
     }
 
 }

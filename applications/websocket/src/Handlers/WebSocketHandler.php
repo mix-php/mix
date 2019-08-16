@@ -53,16 +53,6 @@ class WebSocketHandler
     }
 
     /**
-     * Destruct
-     */
-    public function __destruct()
-    {
-        // TODO: Implement __destruct() method.
-        $this->sendChan->close();
-        $this->sessionStorage->clear();
-    }
-
-    /**
      * 初始化
      */
     public function init()
@@ -98,15 +88,18 @@ class WebSocketHandler
         // 消息读取
         while (true) {
             try {
-                $data = $this->conn->recv();
+                $frame = $this->conn->recv();
             } catch (\Throwable $e) {
+                // 销毁
+                $this->destroy();
                 // 忽略服务器主动关闭连接抛出的104错误
                 if ($e->getCode() == 104) {
                     return;
                 }
+                // 抛出异常
                 throw $e;
             }
-            xgo([$this, 'runAction'], $data);
+            xgo([$this, 'runAction'], $frame->data);
         }
     }
 
@@ -143,6 +136,16 @@ class WebSocketHandler
             return;
         }
         SendHelper::data($this->sendChan, $result, $id);
+    }
+
+    /**
+     * 销毁
+     */
+    public function destroy()
+    {
+        // TODO: Implement __destruct() method.
+        $this->sendChan->close();
+        $this->sessionStorage->clear();
     }
 
 }

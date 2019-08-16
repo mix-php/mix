@@ -90,8 +90,8 @@ class StartCommand
         $pathinfo = $request->getServerParams()['path_info'] ?: '/';
         if (!isset($this->patterns[$pathinfo])) {
             $response
-                ->withContentType('text/html', 'utf-8')
                 ->withBody((new StreamFactory())->createStream('404'))
+                ->withStatus(404)
                 ->send();
             return;
         }
