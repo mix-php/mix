@@ -33,7 +33,7 @@ class SendHelper
         ];
         $frame         = new Frame();
         $frame->opcode = SWOOLE_WEBSOCKET_OPCODE_TEXT;
-        $frame->data   = JsonHelper::encode($data);
+        $frame->data   = JsonHelper::encode($data, JSON_UNESCAPED_UNICODE);
         $sendChan->push($frame);
     }
 
@@ -53,7 +53,7 @@ class SendHelper
         ];
         $frame         = new Frame();
         $frame->opcode = SWOOLE_WEBSOCKET_OPCODE_TEXT;
-        $frame->data   = JsonHelper::encode($data);
+        $frame->data   = JsonHelper::encode($data, JSON_UNESCAPED_UNICODE);
         $sendChan->push($frame);
     }
 

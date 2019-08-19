@@ -6,7 +6,8 @@ use Mix\Concurrent\Coroutine\Channel;
 use Mix\WebSocket\Connection;
 use Mix\WebSocket\Exception\CloseFrameException;
 use Mix\WebSocket\Exception\ReceiveFailureException;
-use Swoole\WebSocket\Frame;
+use WebSocket\Controllers\JoinController;
+use WebSocket\Controllers\MessageController;
 use WebSocket\Exceptions\ExecutionException;
 use WebSocket\Helpers\SendHelper;
 use WebSocket\Libraries\CloseConnection;
@@ -39,7 +40,8 @@ class WebSocketHandler
      * @var callable[]
      */
     public $methods = [
-        'hello.world' => [\Tcp\Controllers\HelloController::class, 'world'],
+        'join.room'    => [JoinController::class, 'room'],
+        'message.emit' => [MessageController::class, 'emit'],
     ];
 
     /**
@@ -74,16 +76,14 @@ class WebSocketHandler
         // 消息发送
         xgo(function () {
             while (true) {
-                $data = $this->sendChan->pop();
-                if (!$data) {
+                $frame = $this->sendChan->pop();
+                if (!$frame) {
                     return;
                 }
-                if ($data instanceof CloseConnection) {
+                if ($frame instanceof CloseConnection) {
                     $this->conn->close();
                     continue;
                 }
-                $frame       = new Frame();
-                $frame->data = $data;
                 $this->conn->send($frame);
             }
         });
@@ -105,7 +105,7 @@ class WebSocketHandler
                 // 抛出异常
                 throw $e;
             }
-            //xgo([$this, 'runAction'], $frame->data);
+            xgo([$this, 'runAction'], $frame->data);
         }
     }
 
@@ -116,19 +116,19 @@ class WebSocketHandler
     public function runAction($data)
     {
         // 解析数据
-        $data = json_decode($data, true);
+        $data = json_decode($data);
         if (!$data) {
             SendHelper::error($this->sendChan, -32600, 'Invalid Request');
             return;
         }
-        if (!isset($data['method']) || (!isset($data['params']) or !is_array($data['params'])) || !isset($data['id'])) {
+        if (!isset($data->method) || (!isset($data->params) or !is_array($data->params)) || !isset($data->id)) {
             SendHelper::error($this->sendChan, -32700, 'Parse error');
             return;
         }
         // 定义变量
-        $method = $data['method'];
-        $params = $data['params'];
-        $id     = $data['id'];
+        $method = $data->method;
+        $params = $data->params;
+        $id     = $data->id;
         // 路由到控制器
         if (!isset($this->methods[$method])) {
             SendHelper::error($this->sendChan, -32601, 'Method not found', $id);

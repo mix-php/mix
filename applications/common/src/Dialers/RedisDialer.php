@@ -19,9 +19,7 @@ class RedisDialer implements DialerInterface
      */
     public function dial()
     {
-        /** @var RedisConnection $conn */
-        $conn = app()->get(RedisConnection::class);
-        return $conn;
+        return context()->get(RedisConnection::class);
     }
 
 }

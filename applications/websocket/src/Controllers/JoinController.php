@@ -33,7 +33,8 @@ class JoinController
     {
         // 验证数据
         $attributes = [
-            'room_id' => array_shift($params),
+            'roomId' => (string)array_shift($params),
+            'name'   => (string)array_shift($params),
         ];
         $model      = new JoinForm($attributes);
         $model->setScenario('room');
