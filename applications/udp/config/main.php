@@ -4,19 +4,28 @@
 return [
 
     // 应用名称
-    'appName'    => 'mix-udpd',
+    'appName'          => 'mix-udpd',
 
     // 应用版本
-    'appVersion' => '0.0.0',
+    'appVersion'       => '0.0.0',
 
     // 应用调试
-    'appDebug'   => getenv('APP_DEBUG'),
+    'appDebug'         => getenv('APP_DEBUG'),
 
     // 基础路径
-    'basePath'   => dirname(__DIR__),
+    'basePath'         => dirname(__DIR__),
+
+    // 开启协程
+    'enableCoroutine'  => true,
+
+    // 协程设置
+    'coroutineSetting' => [
+        'max_coroutine' => 300000,
+        'hook_flags'    => SWOOLE_HOOK_ALL,
+    ],
 
     // 命令
-    'commands'   => [
+    'commands'         => [
 
         'start' => [
             \Udp\Commands\StartCommand::class,
@@ -29,7 +38,7 @@ return [
     ],
 
     // 依赖配置
-    'beans'      => [
+    'beans'            => [
 
         // 错误
         [

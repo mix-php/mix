@@ -15,6 +15,15 @@ return [
     // 基础路径
     'basePath'         => dirname(__DIR__),
 
+    // 开启协程
+    'enableCoroutine'  => true,
+
+    // 协程设置
+    'coroutineSetting' => [
+        'max_coroutine' => 300000,
+        'hook_flags'    => SWOOLE_HOOK_ALL,
+    ],
+
     // 命令命名空间
     'commandNamespace' => 'Console\Commands',
 
