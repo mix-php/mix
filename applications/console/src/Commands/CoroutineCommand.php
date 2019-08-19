@@ -3,7 +3,6 @@
 namespace Console\Commands;
 
 use Mix\Concurrent\Coroutine\Channel;
-use Mix\Concurrent\Event;
 use Mix\Database\Pool\ConnectionPool;
 
 /**
@@ -30,7 +29,6 @@ class CoroutineCommand
             }
             println('Total time: ' . (time() - $time));
         });
-        Event::wait();
     }
 
     /**
@@ -40,7 +38,7 @@ class CoroutineCommand
     public function foo(Channel $chan)
     {
         /** @var ConnectionPool $dbPool */
-        $dbPool = app()->get('dbPool');
+        $dbPool = context()->get('dbPool');
         $db     = $dbPool->getConnection();
         $result = $db->createCommand('select sleep(5)')->queryAll();
         $db->release(); // 不手动释放的连接不会归还连接池，会在析构时丢弃

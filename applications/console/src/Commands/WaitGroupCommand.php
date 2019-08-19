@@ -3,7 +3,6 @@
 namespace Console\Commands;
 
 use Mix\Concurrent\Sync\WaitGroup;
-use Mix\Concurrent\Event;
 
 /**
  * Class WaitGroupCommand
@@ -27,7 +26,6 @@ class WaitGroupCommand
             $wg->wait();
             println('All done!');
         });
-        Event::wait();
     }
 
     /**

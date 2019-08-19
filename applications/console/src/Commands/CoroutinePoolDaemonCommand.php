@@ -6,7 +6,6 @@ use Console\Workers\CoroutinePoolDaemonWorker;
 use Mix\Concurrent\CoroutinePool\Dispatcher;
 use Mix\Console\CommandLine\Flag;
 use Mix\Concurrent\Coroutine\Channel;
-use Mix\Concurrent\Event;
 use Mix\Helper\ProcessHelper;
 use Mix\Redis\Pool\ConnectionPool;
 
@@ -71,8 +70,6 @@ class CoroutinePoolDaemonCommand
                 $jobQueue->push($data);
             }
         });
-        // 等待事件
-        Event::wait();
     }
 
 }
