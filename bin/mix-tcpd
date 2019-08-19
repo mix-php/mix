@@ -3,19 +3,8 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use Mix\Concurrent\Coroutine;
-use Symfony\Component\Dotenv\Dotenv;
-
-// Coroutine
-if (extension_loaded('swoole')) {
-    Coroutine::set([
-        'max_coroutine' => 300000,
-        'hook_flags'    => SWOOLE_HOOK_ALL,
-    ]);
-}
-
 // environment
-$dotenv = new Dotenv();
+$dotenv = new Symfony\Component\Dotenv\Dotenv();
 $dotenv->load(__DIR__ . '/../.env');
 
 // Run application
