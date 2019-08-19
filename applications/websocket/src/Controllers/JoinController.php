@@ -3,11 +3,11 @@
 namespace WebSocket\Controllers;
 
 use Mix\Concurrent\Coroutine\Channel;
-use Mix\Helper\JsonHelper;
 use Mix\Redis\Coroutine\RedisConnection;
 use Mix\Redis\Pool\ConnectionPool;
 use Swoole\WebSocket\Frame;
 use WebSocket\Exceptions\ExecutionException;
+use WebSocket\Helpers\JsonRpcHelper;
 use WebSocket\Libraries\CloseConnection;
 use WebSocket\Forms\JoinForm;
 use WebSocket\Libraries\SessionStorage;
@@ -72,18 +72,16 @@ class JoinController
         });
 
         // 给其他订阅当前房间的连接发送加入消息
-        $message = JsonHelper::encode([
-            'method' => 'room.message',
-            'result' => [
-                'message' => "{$model->name} joined the room, room_id: {$model->roomId}.",
-            ],
-            'id'     => null,
-        ], JSON_UNESCAPED_UNICODE);
-        /** @var ConnectionPool $pool */
-        $pool  = context()->get('redisPool');
-        $redis = $pool->getConnection();
-        $redis->publish("room_{$model->roomId}", $message);
-        $redis->release();
+        xgo(function () use ($model) {
+            $data = JsonRpcHelper::data([
+                'message' => "'{$model->name}' joined the room, room_id: {$model->roomId}.",
+            ]);
+            /** @var ConnectionPool $pool */
+            $pool  = context()->get('redisPool');
+            $redis = $pool->getConnection();
+            $redis->publish("room_{$model->roomId}", $data);
+            $redis->release();
+        });
 
         // 给当前连接发送加入消息
         return [

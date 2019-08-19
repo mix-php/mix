@@ -3,7 +3,6 @@
 namespace WebSocket\Helpers;
 
 use Mix\Concurrent\Coroutine\Channel;
-use Mix\Helper\JsonHelper;
 use Swoole\WebSocket\Frame;
 
 /**
@@ -23,17 +22,9 @@ class SendHelper
      */
     public static function error(Channel $sendChan, $code, $message, $id = null)
     {
-        $data          = [
-            'jsonrpc' => '2.0',
-            'error'   => [
-                'code'    => $code,
-                'message' => $message,
-            ],
-            'id'      => $id,
-        ];
         $frame         = new Frame();
         $frame->opcode = SWOOLE_WEBSOCKET_OPCODE_TEXT;
-        $frame->data   = JsonHelper::encode($data, JSON_UNESCAPED_UNICODE);
+        $frame->data   = JsonRpcHelper::error($code, $message, $id);
         $sendChan->push($frame);
     }
 
@@ -45,15 +36,9 @@ class SendHelper
      */
     public static function data(Channel $sendChan, $result, $id = null)
     {
-        $data          = [
-            'jsonrpc' => '2.0',
-            'error'   => null,
-            'result'  => $result,
-            'id'      => $id,
-        ];
         $frame         = new Frame();
         $frame->opcode = SWOOLE_WEBSOCKET_OPCODE_TEXT;
-        $frame->data   = JsonHelper::encode($data, JSON_UNESCAPED_UNICODE);
+        $frame->data   = JsonRpcHelper::data($result, $id);
         $sendChan->push($frame);
     }
 
