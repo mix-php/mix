@@ -6,6 +6,7 @@ use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
 use Mix\Log\Logger;
 use Mix\Server\Connection;
+use Mix\Server\Exception\ReceiveFailureException;
 use Mix\Server\Server;
 use Tcp\Exceptions\ExecutionException;
 use Tcp\Helpers\SendHelper;
@@ -112,10 +113,11 @@ class StartCommand
             try {
                 $data = $conn->recv();
             } catch (\Throwable $e) {
-                // 忽略服务器主动关闭连接抛出的104错误
-                if ($e->getCode() == 104) {
+                // 忽略服务器主动断开连接异常
+                if ($e instanceof ReceiveFailureException && $e->getCode() == 104) {
                     return;
                 }
+                // 抛出异常
                 throw $e;
             }
             xgo([$this, 'runAction'], $conn, $data);
