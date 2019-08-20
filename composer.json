@@ -17,10 +17,6 @@
   ],
   "require": {
     "php": ">=7.2.0",
-    "ext-pdo": "*",
-    "ext-redis": "*",
-    "ext-json": "*",
-    "ext-mbstring": "*",
     "mix/bean": "v2.1.x-dev",
     "mix/concurrent": "v2.1.x-dev",
     "mix/helper": "v2.1.x-dev",
