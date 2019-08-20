@@ -16,7 +16,7 @@
     }
   ],
   "require": {
-    "php": ">=7.0.0",
+    "php": ">=7.2.0",
     "ext-pdo": "*",
     "ext-redis": "*",
     "ext-json": "*",
@@ -27,6 +27,7 @@
     "mix/log": "v2.1.x-dev",
     "mix/validate": "v2.1.x-dev",
     "mix/pool": "v2.1.x-dev",
+    "mix/event": "v2.1.x-dev",
     "mix/database": "v2.1.x-dev",
     "mix/redis": "v2.1.x-dev",
     "mix/cache": "v2.1.x-dev",
