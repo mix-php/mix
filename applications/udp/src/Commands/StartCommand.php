@@ -5,7 +5,6 @@ namespace Udp\Commands;
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
 use Mix\Log\Logger;
-use Swoole\Coroutine\Socket;
 use Mix\Udp\Server\UdpServer;
 
 /**
@@ -62,7 +61,7 @@ class StartCommand
     public function start()
     {
         $server = $this->server;
-        $server->handle(function (Socket $socket, string $data, array $peer) {
+        $server->handle(function (\Swoole\Coroutine\Socket $socket, string $data, array $peer) {
             $this->handle($socket, $data, $peer);
         });
         $this->welcome();
@@ -72,12 +71,12 @@ class StartCommand
 
     /**
      * 消息处理
-     * @param Socket $socket
+     * @param \Swoole\Coroutine\Socket $socket
      * @param string $data
      * @param array $peer
      * @throws \Throwable
      */
-    public function handle(Socket $socket, string $data, array $peer)
+    public function handle(\Swoole\Coroutine\Socket $socket, string $data, array $peer)
     {
         // 回复消息
         $socket->sendTo($peer['address'], $peer['port'], "Receive successful!\n");
