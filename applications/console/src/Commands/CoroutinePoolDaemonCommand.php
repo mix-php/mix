@@ -50,7 +50,7 @@ class CoroutinePoolDaemonCommand
             $dispatch->start(CoroutinePoolDaemonWorker::class);
             // 投放任务
             /** @var ConnectionPool $redisPool */
-            $redisPool = app()->get('redisPool');
+            $redisPool = context()->get('redisPool');
             $redis     = $redisPool->getConnection();
             while (true) {
                 if ($this->quit) {
