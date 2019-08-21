@@ -20,6 +20,7 @@ class DatabaseListener implements ListenerInterface
     public function events(): array
     {
         // TODO: Implement events() method.
+        // 要监听的事件数组，可监听多个事件
         return [
             ExecuteEvent::class,
         ];
@@ -33,6 +34,7 @@ class DatabaseListener implements ListenerInterface
     public function process(object $event)
     {
         // TODO: Implement process() method.
+        // 事件触发后，会执行该方法
     }
 
 }

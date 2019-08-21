@@ -19,6 +19,7 @@ class DatabaseDialer implements DialerInterface
      */
     public function dial()
     {
+        // 创建一个连接并返回
         return context()->get(PDOConnection::class);
     }
 
