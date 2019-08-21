@@ -2,23 +2,37 @@
 
 namespace Common\Listeners;
 
-use Mix\Redis\ExecuteListenerInterface;
+use Mix\Event\ListenerInterface;
+use Mix\Redis\Event\ExecuteEvent;
 
 /**
  * Class RedisListener
  * @package Common\Listeners
  * @author liu,jian <coder.keda@gmail.com>
  */
-class RedisListener implements ExecuteListenerInterface
+class RedisListener implements ListenerInterface
 {
 
     /**
-     * 监听
-     * @param array $data
+     * 监听的事件
+     * @return array
      */
-    public function listen($data)
+    public function events(): array
     {
-        // TODO: Implement listen() method.
+        // TODO: Implement events() method.
+        return [
+            ExecuteEvent::class,
+        ];
+    }
+
+    /**
+     * 处理事件
+     * @param object $event
+     * @return mixed|void
+     */
+    public function process(object $event)
+    {
+        // TODO: Implement process() method.
     }
 
 }

@@ -4,16 +4,16 @@
 return [
 
     // 应用名称
-    'appName'         => 'mix-console',
+    'appName'    => 'mix-console',
 
     // 应用版本
-    'appVersion'      => '0.0.0',
+    'appVersion' => '0.0.0',
 
     // 应用调试
-    'appDebug'        => getenv('APP_DEBUG'),
+    'appDebug'   => getenv('APP_DEBUG'),
 
     // 基础路径
-    'basePath'        => dirname(__DIR__),
+    'basePath'   => dirname(__DIR__),
 
     // 协程配置
     'coroutine'  => [
@@ -25,7 +25,7 @@ return [
     ],
 
     // 命令
-    'commands'        => [
+    'commands'   => [
 
         'hl' => [
             \Console\Commands\HelloCommand::class,
@@ -67,7 +67,7 @@ return [
     ],
 
     // 依赖配置
-    'beans'           => [
+    'beans'      => [
 
         // 错误
         [
@@ -137,6 +137,19 @@ return [
             ],
         ],
 
+        // 事件调度器
+        [
+            // 作用域
+            'scope'           => \Mix\Bean\BeanDefinition::SINGLETON,
+            // 类路径
+            'class'           => \Mix\Event\EventDispatcher::class,
+            // 构造函数注入
+            'constructorArgs' => [
+                \Common\Listeners\DatabaseListener::class,
+                \Common\Listeners\RedisListener::class,
+            ],
+        ],
+
         // 连接池
         [
             // 名称
@@ -200,16 +213,18 @@ return [
             // 属性注入
             'properties' => [
                 // 数据源格式
-                'dsn'           => getenv('DATABASE_DSN'),
+                'dsn'             => getenv('DATABASE_DSN'),
                 // 数据库用户名
-                'username'      => getenv('DATABASE_USERNAME'),
+                'username'        => getenv('DATABASE_USERNAME'),
                 // 数据库密码
-                'password'      => getenv('DATABASE_PASSWORD'),
+                'password'        => getenv('DATABASE_PASSWORD'),
                 // 驱动连接选项: http://php.net/manual/zh/pdo.setattribute.php
-                'driverOptions' => [
+                'driverOptions'   => [
                     // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
                     \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
                 ],
+                // 事件调度器
+                'eventDispatcher' => ['ref' => \Mix\Event\EventDispatcher::class],
             ],
         ],
 
@@ -227,6 +242,8 @@ return [
                 'database' => getenv('REDIS_DATABASE'),
                 // 密码
                 'password' => getenv('REDIS_PASSWORD'),
+                // 事件调度器
+                'eventDispatcher' => ['ref' => \Mix\Event\EventDispatcher::class],
             ],
         ],
 
@@ -247,6 +264,8 @@ return [
                     // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
                     \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
                 ],
+                // 事件调度器
+                'eventDispatcher' => ['ref' => \Mix\Event\EventDispatcher::class],
             ],
         ],
 
@@ -264,6 +283,8 @@ return [
                 'database' => getenv('REDIS_DATABASE'),
                 // 密码
                 'password' => getenv('REDIS_PASSWORD'),
+                // 事件调度器
+                'eventDispatcher' => ['ref' => \Mix\Event\EventDispatcher::class],
             ],
         ],
 
