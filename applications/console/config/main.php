@@ -165,10 +165,7 @@ return [
                 // 最大连接数
                 'maxActive' => 50,
                 // 拨号器
-                'dialer'    => [
-                    // 依赖引用
-                    'ref' => \Common\Dialers\DatabaseDialer::class,
-                ],
+                'dialer'    => ['ref' => \Common\Dialers\DatabaseDialer::class],
             ],
         ],
 
@@ -193,10 +190,7 @@ return [
                 // 最大连接数
                 'maxActive' => 50,
                 // 拨号器
-                'dialer'    => [
-                    // 依赖引用
-                    'ref' => \Common\Dialers\RedisDialer::class,
-                ],
+                'dialer'    => ['ref' => \Common\Dialers\RedisDialer::class],
             ],
         ],
 
@@ -235,54 +229,13 @@ return [
             // 属性注入
             'properties' => [
                 // 主机
-                'host'     => getenv('REDIS_HOST'),
+                'host'            => getenv('REDIS_HOST'),
                 // 端口
-                'port'     => getenv('REDIS_PORT'),
+                'port'            => getenv('REDIS_PORT'),
                 // 数据库
-                'database' => getenv('REDIS_DATABASE'),
+                'database'        => getenv('REDIS_DATABASE'),
                 // 密码
-                'password' => getenv('REDIS_PASSWORD'),
-                // 事件调度器
-                'eventDispatcher' => ['ref' => \Mix\Event\EventDispatcher::class],
-            ],
-        ],
-
-        // 数据库
-        [
-            // 类路径
-            'class'      => \Mix\Database\Persistent\PDOConnection::class,
-            // 属性注入
-            'properties' => [
-                // 数据源格式
-                'dsn'           => getenv('DATABASE_DSN'),
-                // 数据库用户名
-                'username'      => getenv('DATABASE_USERNAME'),
-                // 数据库密码
-                'password'      => getenv('DATABASE_PASSWORD'),
-                // 驱动连接选项: http://php.net/manual/zh/pdo.setattribute.php
-                'driverOptions' => [
-                    // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
-                    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-                ],
-                // 事件调度器
-                'eventDispatcher' => ['ref' => \Mix\Event\EventDispatcher::class],
-            ],
-        ],
-
-        // redis
-        [
-            // 类路径
-            'class'      => \Mix\Redis\Persistent\RedisConnection::class,
-            // 属性注入
-            'properties' => [
-                // 主机
-                'host'     => getenv('REDIS_HOST'),
-                // 端口
-                'port'     => getenv('REDIS_PORT'),
-                // 数据库
-                'database' => getenv('REDIS_DATABASE'),
-                // 密码
-                'password' => getenv('REDIS_PASSWORD'),
+                'password'        => getenv('REDIS_PASSWORD'),
                 // 事件调度器
                 'eventDispatcher' => ['ref' => \Mix\Event\EventDispatcher::class],
             ],
