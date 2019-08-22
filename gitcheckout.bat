@@ -1,5 +1,5 @@
 @echo off
-for %%i in (auth,bean,cache,concurrent,console,database,helper,http-message,http-server,http-session,log,pool,event,redis,server,udp-server,validate,websocket) do (
+for %%i in (auth,bean,cache,concurrent,console,database,event,helper,http-message,http-server,http-session,log,pool,redis,route,server,udp-server,validate,view,websocket) do (
     echo -- %%i
     cd vendor\mix\%%i
     git.exe checkout %1%
