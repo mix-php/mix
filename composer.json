@@ -1,6 +1,6 @@
 {
   "name": "mix/mix",
-  "description": "基于 Swoole 的 FastCGI、常驻内存、协程三模 PHP 高性能框架 http://www.mixphp.cn",
+  "description": "基于 Swoole 的拼图式单线程协程框架 http://www.mixphp.cn",
   "type": "project",
   "keywords": [
     "framework",
@@ -45,21 +45,10 @@
   "minimum-stability": "dev",
   "autoload": {
     "psr-4": {
-      "Common\\": "applications/common/src/",
-      "Console\\": "applications/console/src/",
-      "Http\\": "applications/http/src/",
-      "WebSocket\\": "applications/websocket/src/",
-      "Tcp\\": "applications/tcp/src/",
-      "Udp\\": "applications/udp/src/"
+      "App\\": "src/"
     },
     "files": [
-      "applications/common/src/functions.php"
+      "src/Common/functions.php"
     ]
-  },
-  "repositories": {
-    "packagist": {
-      "type": "composer",
-      "url": "https://mirrors.aliyun.com/composer/"
-    }
   }
 }
