@@ -27,7 +27,7 @@ return [
     // 命令
     'commands'   => [
 
-        'hl' => [
+        'he' => [
             \Console\Commands\HelloCommand::class,
             'description' => "\tEcho demo.",
             'options'     => [
@@ -46,12 +46,12 @@ return [
             'description' => "\tWaitGroup demo",
         ],
 
-        'cop' => [
+        'cp' => [
             \Console\Commands\CoroutinePoolCommand::class,
             'description' => "\tCoroutine pool demo",
         ],
 
-        'copd' => [
+        'cpd' => [
             \Console\Commands\CoroutinePoolDaemonCommand::class,
             'description' => "\tCoroutine pool daemon demo",
             'options'     => [
@@ -59,7 +59,7 @@ return [
             ],
         ],
 
-        'tr' => [
+        'ti' => [
             \Console\Commands\TimerCommand::class,
             'description' => "\tTimer demo",
         ],
