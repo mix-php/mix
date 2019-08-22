@@ -24,7 +24,7 @@ class WaitGroupCommand
                 xgo([$this, 'foo'], $wg);
             }
             $wg->wait();
-            println('All done!');
+            println('all done!');
         });
     }
 

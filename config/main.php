@@ -30,7 +30,7 @@ return [
         /** Console */
         'he'         => [
             \App\Console\Commands\HelloCommand::class,
-            'description' => "\tEcho demo.",
+            'description' => "\tEcho demo",
             'options'     => [
                 [['n', 'name'], 'description' => 'Your name'],
                 ['say', 'description' => "\tSay ..."],
@@ -348,6 +348,8 @@ return [
                 '127.0.0.1',
                 // port
                 9502,
+                // ssl
+                false,
             ],
         ],
 
