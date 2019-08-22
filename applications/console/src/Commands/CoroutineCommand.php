@@ -27,7 +27,7 @@ class CoroutineCommand
             for ($i = 0; $i < 2; $i++) {
                 $result = $chan->pop();
             }
-            println('Total time: ' . (time() - $time));
+            println(sprintf('Time: %ds', (time() - $time)));
         });
     }
 

@@ -204,6 +204,8 @@ return [
         [
             // 类路径
             'class'      => \Mix\Database\Coroutine\PDOConnection::class,
+            // 初始化方法
+            'initMethod' => 'connect',
             // 属性注入
             'properties' => [
                 // 数据源格式
@@ -216,6 +218,8 @@ return [
                 'attributes'      => [
                     // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
                     \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+                    // 超时
+                    \PDO::ATTR_TIMEOUT            => 5,
                 ],
                 // 事件调度器
                 'eventDispatcher' => ['ref' => \Mix\Event\EventDispatcher::class],
