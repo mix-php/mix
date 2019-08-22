@@ -1,6 +1,6 @@
 {
   "name": "mix/mix",
-  "description": "基于 Swoole 的拼图式单线程协程框架 http://www.mixphp.cn",
+  "description": "基于 Swoole 的组装式单线程协程框架 http://www.mixphp.cn",
   "type": "project",
   "keywords": [
     "framework",
