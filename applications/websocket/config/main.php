@@ -201,7 +201,7 @@ return [
                 // 数据库密码
                 'password'        => getenv('DATABASE_PASSWORD'),
                 // 驱动连接选项: http://php.net/manual/zh/pdo.setattribute.php
-                'driverOptions'   => [
+                'attributes'   => [
                     // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
                     \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
                 ],
