@@ -38,8 +38,12 @@ class CoroutinePoolDaemonCommand
             $this->quit = true;
             ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], null);
         });
+        // 获取连接
+        /** @var ConnectionPool $redisPool */
+        $redisPool = context()->get('redisPool');
+        $redis     = $redisPool->getConnection();
         // 协程池执行任务
-        xgo(function () {
+        xgo(function () use ($redis) {
             $maxWorkers = 20;
             $maxQueue   = 20;
             $jobQueue   = new Channel($maxQueue);
@@ -49,9 +53,6 @@ class CoroutinePoolDaemonCommand
             ]);
             $dispatch->start(CoroutinePoolDaemonWorker::class);
             // 投放任务
-            /** @var ConnectionPool $redisPool */
-            $redisPool = context()->get('redisPool');
-            $redis     = $redisPool->getConnection();
             while (true) {
                 if ($this->quit) {
                     $dispatch->stop();

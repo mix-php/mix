@@ -213,7 +213,7 @@ return [
                 // 数据库密码
                 'password'        => getenv('DATABASE_PASSWORD'),
                 // 驱动连接选项: http://php.net/manual/zh/pdo.setattribute.php
-                'attributes'   => [
+                'attributes'      => [
                     // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
                     \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
                 ],
@@ -226,6 +226,8 @@ return [
         [
             // 类路径
             'class'      => \Mix\Redis\Coroutine\RedisConnection::class,
+            // 初始化方法
+            'initMethod' => 'connect',
             // 属性注入
             'properties' => [
                 // 主机
@@ -236,6 +238,8 @@ return [
                 'database'        => getenv('REDIS_DATABASE'),
                 // 密码
                 'password'        => getenv('REDIS_PASSWORD'),
+                // 超时
+                'timeout'         => 5,
                 // 事件调度器
                 'eventDispatcher' => ['ref' => \Mix\Event\EventDispatcher::class],
             ],
