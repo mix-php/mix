@@ -102,8 +102,8 @@ class StartCommand
                 ->send();
             return;
         }
-        $class    = $this->patterns[$pathinfo];
         $conn     = $this->upgrader->Upgrade($request, $response);
+        $class    = $this->patterns[$pathinfo];
         $callback = new $class($conn);
         call_user_func($callback);
     }

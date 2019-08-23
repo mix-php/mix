@@ -97,7 +97,7 @@ class StartCommand
      */
     public function handle(ServerRequest $request, Response $response)
     {
-        // Swoole Enterprise Before
+        // Swoole Tracker Before
         $tick = null;
         if (class_exists(\StatsCenter::class)) {
             $func        = $request->getUri()->getPath();
@@ -111,7 +111,7 @@ class StartCommand
         } catch (\Throwable $e) {
             // 404 处理
             static::show404($e, $response);
-            // Swoole Enterprise After
+            // Swoole Tracker After
             $tick and \StatsCenter::afterExecRpc($tick, false, 404);
             return;
         }
@@ -130,12 +130,12 @@ class StartCommand
             }
             /** @var Response $response */
             $response->send();
-            // Swoole Enterprise After
+            // Swoole Tracker After
             $tick and \StatsCenter::afterExecRpc($tick, true, $response->getStatusCode());
         } catch (\Throwable $e) {
             // 500 处理
             static::show500($e, $response);
-            // Swoole Enterprise After
+            // Swoole Tracker After
             $tick and \StatsCenter::afterExecRpc($tick, false, 500);
             // 抛出错误，记录日志
             throw $e;
