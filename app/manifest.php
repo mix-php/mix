@@ -281,6 +281,47 @@ return [
             ],
         ],
 
+        // 缓存
+        [
+            // 名称
+            'name'       => 'cache',
+            // 作用域
+            'scope'      => \Mix\Bean\BeanDefinition::SINGLETON,
+            // 类路径
+            'class'      => \Mix\Cache\Cache::class,
+            // 属性注入
+            'properties' => [
+                // 处理器
+                'handler' => ['ref' => \Mix\Cache\FileHandler::class],
+            ],
+        ],
+
+        // 缓存文件处理器
+        [
+            // 类路径
+            'class'      => \Mix\Cache\FileHandler::class,
+            // 属性注入
+            'properties' => [
+                // 缓存目录
+                'dir'        => '',
+                // 分区
+                'partitions' => 64,
+            ],
+        ],
+
+        // 缓存Redis处理器
+        [
+            // 类路径
+            'class'      => \Mix\Cache\RedisHandler::class,
+            // 属性注入
+            'properties' => [
+                // 连接池
+                'pool'      => ['ref' => 'redisPool'],
+                // Key前缀
+                'keyPrefix' => 'CACHE:',
+            ],
+        ],
+
         // Http服务器
         [
             // 名称
@@ -333,6 +374,76 @@ return [
                         ],
                     ],
                 ],
+            ],
+        ],
+
+        // 授权
+        [
+            // 名称
+            'name'            => 'auth',
+            // 作用域
+            'scope'           => \Mix\Bean\BeanDefinition::SINGLETON,
+            // 类路径
+            'class'           => \Mix\Auth\Authorization::class,
+            // 构造函数注入
+            'constructorArgs' => [
+                // JWT
+                ['ref' => \Mix\Auth\JWT::class],
+            ],
+        ],
+
+        // JWT
+        [
+            // 类路径
+            'class'      => \Mix\Auth\JWT::class,
+            // 属性注入
+            'properties' => [
+                // 钥匙
+                'key'       => 'example_key',
+                // 签名算法
+                'algorithm' => \Mix\Auth\JWT::ALGORITHM_RS256,
+            ],
+        ],
+
+        // Session
+        [
+            // 名称
+            'name'       => 'session',
+            // 类路径
+            'class'      => \Mix\Session\Session::class,
+            // 初始化方法
+            'initMethod' => 'start',
+            // 属性注入
+            'properties' => [
+                // 处理器
+                'handler'        => ['ref' => \Mix\Session\RedisHandler::class],
+                // session键名
+                'name'           => 'session_id',
+                // 生存时间
+                'maxLifetime'    => 7200,
+                // 过期时间
+                'cookieExpires'  => 0,
+                // 有效的服务器路径
+                'cookiePath'     => '/',
+                // 有效域名/子域名
+                'cookieDomain'   => '',
+                // 仅通过安全的 HTTPS 连接传给客户端
+                'cookieSecure'   => false,
+                // 仅可通过 HTTP 协议访问
+                'cookieHttpOnly' => false,
+            ],
+        ],
+
+        // Session Redis处理器
+        [
+            // 类路径
+            'class'      => \Mix\Session\RedisHandler::class,
+            // 属性注入
+            'properties' => [
+                // 连接池
+                'pool'      => ['ref' => 'redisPool'],
+                // Key前缀
+                'keyPrefix' => 'SESSION:',
             ],
         ],
 
