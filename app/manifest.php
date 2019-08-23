@@ -1,6 +1,6 @@
 <?php
 
-// Console应用配置
+// 应用清单
 return [
 
     // 应用名称
