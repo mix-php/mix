@@ -45,10 +45,10 @@
   "minimum-stability": "dev",
   "autoload": {
     "psr-4": {
-      "App\\": "src/"
+      "App\\": "app/src/"
     },
     "files": [
-      "src/Common/functions.php"
+      "app/src/functions.php"
     ]
   }
 }
