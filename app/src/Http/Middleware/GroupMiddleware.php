@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use Mix\Http\Message\Response;
+use Mix\Http\Message\ServerRequest;
 use Mix\Http\Server\Middleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -14,24 +16,23 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 class GroupMiddleware implements MiddlewareInterface
 {
-    
+
     /**
-     * @var ServerRequestInterface
+     * @var ServerRequest
      */
     public $request;
 
     /**
-     * @var ResponseInterface
+     * @var Response
      */
     public $response;
 
     /**
-     * AfterMiddleware constructor.
-     *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
+     * GroupMiddleware constructor.
+     * @param ServerRequest $request
+     * @param Response $response
      */
-    public function __construct(ServerRequestInterface $request, ResponseInterface $response)
+    public function __construct(ServerRequest $request, Response $response)
     {
         $this->request  = $request;
         $this->response = $response;

@@ -2,19 +2,21 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Helpers\SendHelper;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Server\Middleware\MiddlewareInterface;
+use Mix\Session\Session;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
- * Class GlobalMiddleware
+ * Class SessionMiddleware
  * @package App\Http\Middleware
  * @author liu,jian <coder.keda@gmail.com>
  */
-class GlobalMiddleware implements MiddlewareInterface
+class SessionMiddleware implements MiddlewareInterface
 {
 
     /**
@@ -28,7 +30,12 @@ class GlobalMiddleware implements MiddlewareInterface
     public $response;
 
     /**
-     * GlobalMiddleware constructor.
+     * @var Session
+     */
+    public $session;
+
+    /**
+     * SessionMiddleware constructor.
      * @param ServerRequest $request
      * @param Response $response
      */
@@ -36,6 +43,11 @@ class GlobalMiddleware implements MiddlewareInterface
     {
         $this->request  = $request;
         $this->response = $response;
+        $this->session  = context()->getBean('session', [
+            'request'  => $request,
+            'response' => $response,
+        ]);
+        $this->request->withSession($this->session); // 把Session放入Request，方便其他位置调用
     }
 
     /**
@@ -48,6 +60,16 @@ class GlobalMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         // TODO: Implement process() method.
+        // 会话验证
+        $userId = $this->session->get('userId');
+        if (!$userId) {
+            // 中断执行，返回错误信息
+            $content  = ['code' => 100001, 'message' => 'No access'];
+            $response = SendHelper::json($this->response, $content);
+            return $response;
+        }
+
+        // 继续往下执行
         return $handler->handle($request);
     }
 

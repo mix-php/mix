@@ -10,11 +10,11 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
- * Class GlobalMiddleware
+ * Class CorsMiddleware
  * @package App\Http\Middleware
  * @author liu,jian <coder.keda@gmail.com>
  */
-class GlobalMiddleware implements MiddlewareInterface
+class CorsMiddleware implements MiddlewareInterface
 {
 
     /**
@@ -28,7 +28,7 @@ class GlobalMiddleware implements MiddlewareInterface
     public $response;
 
     /**
-     * GlobalMiddleware constructor.
+     * ActionMiddleware constructor.
      * @param ServerRequest $request
      * @param Response $response
      */
@@ -48,6 +48,16 @@ class GlobalMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         // TODO: Implement process() method.
+        // 跨域处理
+        $response = $this->response;
+        if ($request->getMethod() == 'OPTIONS') {
+            $response->withHeader('Access-Control-Allow-Origin', '*')
+                ->withHeader('Access-Control-Allow-Credentials', 'true')
+                ->withHeader('Access-Control-Allow-Headers', 'DNT,Keep-Alive,User-Agent,Cache-Control,Content-Type,Authorization');
+            return $response;
+        }
+
+        // 继续往下执行
         return $handler->handle($request);
     }
 
