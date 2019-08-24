@@ -43,16 +43,16 @@ class SendHelper
     }
 
     /**
-     * Send notice
+     * Send notification
      * @param Channel $sendChan
      * @param $result
      * @param null $id
      */
-    public static function notice(Channel $sendChan, $method, $result)
+    public static function notification(Channel $sendChan, $method, $result)
     {
         $frame         = new Frame();
         $frame->opcode = SWOOLE_WEBSOCKET_OPCODE_TEXT;
-        $frame->data   = JsonRpcHelper::notice($method, $result);
+        $frame->data   = JsonRpcHelper::notification($method, $result);
         $sendChan->push($frame);
     }
 

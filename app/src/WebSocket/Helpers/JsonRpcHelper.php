@@ -50,12 +50,12 @@ class JsonRpcHelper
     }
 
     /**
-     * Notice
+     * Notification
      * @param $result
      * @param null $id
      * @return string
      */
-    public static function notice($method, $result)
+    public static function notification($method, $result)
     {
         $data = [
             'jsonrpc' => '2.0',
