@@ -26,10 +26,9 @@ class SendHelper
      */
     public static function view(Response $response, string $name, array $data = [], string $layout = 'main')
     {
-        $ds       = DIRECTORY_SEPARATOR;
-        $basePath = app()->basePath;
-        $view     = new View("{$basePath}{$ds}app{$ds}res{$ds}views", $layout);
-        $content  = $view->render($name, $data);
+        $dir     = app()->basePath . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'res' . DIRECTORY_SEPARATOR . 'views';
+        $view    = new View($dir, $layout);
+        $content = $view->render($name, $data);
         return static::html($response, $content);
     }
 

@@ -151,7 +151,8 @@ class StartCommand
      */
     public static function show404(\Throwable $e, Response $response)
     {
-        $view = new View(app()->basePath . DIRECTORY_SEPARATOR . 'views');
+        $dir  = app()->basePath . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'res' . DIRECTORY_SEPARATOR . 'views';
+        $view = new View($dir);
         $html = $view->renderPartial('errors.not_found', [
             'message' => $e->getMessage(),
             'type'    => get_class($e),
@@ -175,7 +176,8 @@ class StartCommand
      */
     public static function show500(\Throwable $e, Response $response)
     {
-        $view = new View(app()->basePath . DIRECTORY_SEPARATOR . 'views');
+        $dir  = app()->basePath . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'res' . DIRECTORY_SEPARATOR . 'views';
+        $view = new View($dir);
         $html = $view->renderPartial('errors.internal_server_error', [
             'message' => $e->getMessage(),
             'type'    => get_class($e),
