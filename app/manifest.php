@@ -161,7 +161,7 @@ return [
             // 属性注入
             'properties' => [
                 // 日志目录
-                'dir'         => dirname(__DIR__) . DIRECTORY_SEPARATOR . 'logs',
+                'dir'         => dirname(__DIR__) . DIRECTORY_SEPARATOR . 'runtime' . DIRECTORY_SEPARATOR . 'logs',
                 // 日志轮转类型
                 'rotate'      => \Mix\Log\FileHandler::ROTATE_DAY,
                 // 最大文件尺寸
@@ -303,7 +303,7 @@ return [
             // 属性注入
             'properties' => [
                 // 缓存目录
-                'dir'        => '',
+                'dir'        => dirname(__DIR__) . DIRECTORY_SEPARATOR . 'runtime' . DIRECTORY_SEPARATOR . 'cache',
                 // 分区
                 'partitions' => 64,
             ],
