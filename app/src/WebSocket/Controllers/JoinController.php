@@ -73,8 +73,8 @@ class JoinController
 
         // 给其他订阅当前房间的连接发送加入消息
         xgo(function () use ($model) {
-            $data = JsonRpcHelper::data([
-                'message' => "'{$model->name}' joined the room, room_id: {$model->roomId}.",
+            $data = JsonRpcHelper::notice('message.update', [
+                'text' => "'{$model->name}' joined the room, room_id: {$model->roomId}.",
             ]);
             /** @var ConnectionPool $pool */
             $pool  = context()->get('redisPool');

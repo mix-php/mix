@@ -29,16 +29,30 @@ class SendHelper
     }
 
     /**
-     * Send data
+     * Send result
      * @param Channel $sendChan
      * @param $result
      * @param null $id
      */
-    public static function data(Channel $sendChan, $result, $id = null)
+    public static function result(Channel $sendChan, $result, $id = null)
     {
         $frame         = new Frame();
         $frame->opcode = SWOOLE_WEBSOCKET_OPCODE_TEXT;
-        $frame->data   = JsonRpcHelper::data($result, $id);
+        $frame->data   = JsonRpcHelper::result($result, $id);
+        $sendChan->push($frame);
+    }
+
+    /**
+     * Send notice
+     * @param Channel $sendChan
+     * @param $result
+     * @param null $id
+     */
+    public static function notice(Channel $sendChan, $method, $result)
+    {
+        $frame         = new Frame();
+        $frame->opcode = SWOOLE_WEBSOCKET_OPCODE_TEXT;
+        $frame->data   = JsonRpcHelper::notice($method, $result);
         $sendChan->push($frame);
     }
 

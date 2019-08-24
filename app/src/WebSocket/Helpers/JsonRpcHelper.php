@@ -33,18 +33,35 @@ class JsonRpcHelper
     }
 
     /**
-     * Data
+     * Result
      * @param $result
      * @param null $id
      * @return string
      */
-    public static function data($result, $id = null)
+    public static function result($result, $id = null)
     {
         $data = [
             'jsonrpc' => '2.0',
             'error'   => null,
             'result'  => $result,
             'id'      => $id,
+        ];
+        return JsonHelper::encode($data, JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * Notice
+     * @param $result
+     * @param null $id
+     * @return string
+     */
+    public static function notice($method, $result)
+    {
+        $data = [
+            'jsonrpc' => '2.0',
+            'method'  => $method,
+            'params'  => $result,
+            'id'      => null,
         ];
         return JsonHelper::encode($data, JSON_UNESCAPED_UNICODE);
     }

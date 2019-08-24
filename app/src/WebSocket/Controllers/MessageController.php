@@ -49,8 +49,8 @@ class MessageController
 
         // 给当前加入的房间发送消息
         xgo(function () use ($model, $sessionStorage) {
-            $data = JsonRpcHelper::data([
-                'message' => $model->text,
+            $data = JsonRpcHelper::notice('message.update', [
+                'text' => $model->text,
             ]);
             /** @var ConnectionPool $pool */
             $pool  = context()->get('redisPool');

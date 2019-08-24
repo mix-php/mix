@@ -141,7 +141,7 @@ class WebSocketHandler
             SendHelper::error($this->sendChan, $exception->getCode(), $exception->getMessage(), $id);
             return;
         }
-        SendHelper::data($this->sendChan, $result, $id);
+        SendHelper::result($this->sendChan, $result, $id);
     }
 
     /**
