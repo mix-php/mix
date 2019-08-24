@@ -62,6 +62,11 @@ class StartCommand
         if ($daemon) {
             ProcessHelper::daemon();
         }
+        // 端口修改
+        $port = Flag::string(['p', 'port'], '');
+        if ($port) {
+            $this->server->port = $port;
+        }
         // 捕获信号
         ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], function ($signal) {
             $this->log->info('received signal [{signal}]', ['signal' => $signal]);

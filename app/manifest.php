@@ -66,6 +66,7 @@ return [
             'description' => "Start service",
             'options'     => [
                 [['d', 'daemon'], 'description' => "Run in the background"],
+                [['p', 'port'], 'description' => "Listen to the specified port"],
             ],
         ],
 
@@ -75,6 +76,7 @@ return [
             'description' => "Start service",
             'options'     => [
                 [['d', 'daemon'], 'description' => "Run in the background"],
+                [['p', 'port'], 'description' => "Listen to the specified port"],
             ],
         ],
 
@@ -84,6 +86,7 @@ return [
             'description' => "Start service",
             'options'     => [
                 [['d', 'daemon'], 'description' => "Run in the background"],
+                [['p', 'port'], 'description' => "Listen to the specified port"],
             ],
         ],
 
@@ -93,6 +96,7 @@ return [
             'description' => "Start service",
             'options'     => [
                 [['d', 'daemon'], 'description' => "Run in the background"],
+                [['p', 'port'], 'description' => "Listen to the specified port"],
             ],
         ],
 
