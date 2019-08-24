@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Server\Middleware\MiddlewareInterface;
@@ -53,7 +54,8 @@ class CorsMiddleware implements MiddlewareInterface
         if ($request->getMethod() == 'OPTIONS') {
             $response->withHeader('Access-Control-Allow-Origin', '*')
                 ->withHeader('Access-Control-Allow-Credentials', 'true')
-                ->withHeader('Access-Control-Allow-Headers', 'DNT,Keep-Alive,User-Agent,Cache-Control,Content-Type,Authorization');
+                ->withHeader('Access-Control-Allow-Headers', 'DNT,Keep-Alive,User-Agent,Cache-Control,Content-Type,Authorization')
+                ->withBody((new StreamFactory())->createStream(''));
             return $response;
         }
 
