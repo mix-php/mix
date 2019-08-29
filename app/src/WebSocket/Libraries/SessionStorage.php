@@ -2,7 +2,7 @@
 
 namespace App\WebSocket\Libraries;
 
-use Mix\Redis\Coroutine\RedisConnection;
+use Mix\Concurrent\Coroutine\Channel;
 
 /**
  * Class SessionStorage
@@ -18,21 +18,22 @@ class SessionStorage
     public $joinRoomId;
 
     /**
-     * @var RedisConnection
+     * @var Channel
      */
-    public $redis;
+    public $subChan;
+
+    /**
+     * @var Channel
+     */
+    public $subStopChan;
 
     /**
      * 清除
      */
     public function clear()
     {
-        $redis = $this->redis;
-        if (!$redis) {
-            return;
-        }
-        $redis->disabled = true; // 标记废除
-        $redis->disconnect();
+        $this->subChan and $this->subChan->close();
+        $this->subStopChan and $this->subStopChan->close();
     }
 
 }

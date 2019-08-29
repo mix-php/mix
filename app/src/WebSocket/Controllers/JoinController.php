@@ -21,13 +21,24 @@ class JoinController
 {
 
     /**
+     * @var string
+     */
+    protected $quitChannel;
+
+    /**
+     * JoinController constructor.
+     */
+    public function __construct()
+    {
+        $this->quitChannel = 'quit_' . md5(__FILE__);
+    }
+
+    /**
      * 加入房间
      * @param Channel $sendChan
      * @param SessionStorage $sessionStorage
      * @param $params
      * @return array
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
      */
     public function room(Channel $sendChan, SessionStorage $sessionStorage, $params)
     {
@@ -42,50 +53,77 @@ class JoinController
             throw new ExecutionException($model->getError(), 100001);
         }
 
-        // 保存当前加入的房间
-        $sessionStorage->joinRoomId = $model->roomId;
-
-        // 重复加入处理
-        $redis = $sessionStorage->redis;
-        if ($redis) {
-            $redis->disabled = true; // 标记废除
-            $redis->disconnect(); // 关闭后会导致 subscribe 的连接抛出错误
-        }
-
         // 订阅房间的频道
-        xgo(function () use ($sendChan, $sessionStorage, $model) {
-            // 订阅房间的频道
-            $redis = $sessionStorage->redis = context()->get(RedisConnection::class);
-            try {
-                $redis->subscribe(["room_{$model->roomId}"], function ($instance, $channel, $message) use ($sendChan) {
-                    $frame       = new Frame();
-                    $frame->data = $message;
-                    $sendChan->push($frame);
-                });
-            } catch (\Throwable $e) {
-                // redis连接异常断开处理
-                if (!empty($redis->disabled)) {
-                    return;
-                }
-                $sendChan->push(new CloseConnection());
-            }
-        });
+        if (!$sessionStorage->subChan || !$sessionStorage->subStopChan) {
+            $subChan                     = new Channel();
+            $subStopChan                 = new Channel();
+            $sessionStorage->subChan     = $subChan;
+            $sessionStorage->subStopChan = $subStopChan;
+            $subChan->push([$model->roomId, $model->name]); // 推送订阅信息
+            xgo(function () use ($subStopChan) {
+                while (true) {
+                    $stop = $subStopChan->pop();
 
-        // 给其他订阅当前房间的连接发送加入消息
-        xgo(function () use ($model) {
-            $data = JsonRpcHelper::notification('message.update', [
-                'text' => "'{$model->name}' joined the room, room_id: {$model->roomId}.",
-            ]);
-            /** @var ConnectionPool $pool */
-            $pool  = context()->get('redisPool');
-            $redis = $pool->getConnection();
-            $redis->publish("room_{$model->roomId}", $data);
-            $redis->release();
-        });
+                    // 由于phpredis无新增订阅功能，又无法在其他协程close实例，因此使用publish消息的方法平滑关闭redis
+                    // 为避免与其他程序干扰，退出通道与类文件关联唯一
+                    /** @var ConnectionPool $pool */
+                    $pool  = context()->get('redisPool');
+                    $redis = $pool->getConnection();
+                    $redis->publish($this->quitChannel, true);
+                    $redis->release();
+
+                    if (!$stop) {
+                        return;
+                    }
+                }
+            });
+            xgo(function () use ($sendChan, $subChan, $sessionStorage) {
+                while (true) {
+                    $data = $subChan->pop();
+                    if (!$data) {
+                        return;
+                    }
+                    list($roomId, $name) = $data;
+                    try {
+                        // 创建连接
+                        /** @var $redis RedisConnection $pool */
+                        $redis = context()->get(RedisConnection::class);
+                        // 给其他订阅当前房间的连接发送加入消息
+                        $message = JsonRpcHelper::notification('message.update', [
+                            "{$name} joined the room",
+                            $roomId,
+                        ]);
+                        $redis->publish("room_{$roomId}", $message);
+                        // 保存当前房间
+                        $sessionStorage->joinRoomId = $roomId;
+                        // 订阅房间的频道
+                        $channel = "room_{$roomId}";
+                        $redis->subscribe([$this->quitChannel, $channel], function ($instance, $channel, $message) use ($sendChan) {
+                            // 退出订阅
+                            if ($channel == $this->quitChannel) {
+                                /** @var $instance RedisConnection */
+                                $instance->close();
+                                return;
+                            }
+                            // 发消息
+                            $frame       = new Frame();
+                            $frame->data = $message;
+                            $sendChan->push($frame);
+                        });
+                    } catch (\Throwable $e) {
+                        // redis连接异常断开处理
+                        $sendChan->push(new CloseConnection());
+                    }
+                }
+            });
+        } else {
+            $sessionStorage->subChan->push([$model->roomId, $model->name]); // 推送订阅信息
+            $sessionStorage->subStopChan->push(true);
+        }
 
         // 给当前连接发送加入消息
         return [
-            'message' => "I joined the room, room_id: {$model->roomId}.",
+            'status' => 'success',
         ];
     }
 

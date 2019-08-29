@@ -23,8 +23,6 @@ class MessageController
      * @param SessionStorage $sessionStorage
      * @param $params
      * @return array
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
      */
     public function emit(Channel $sendChan, SessionStorage $sessionStorage, $params)
     {
@@ -42,20 +40,19 @@ class MessageController
         // 获取加入的房间id
         if (empty($sessionStorage->joinRoomId)) {
             // 给当前连接发送消息
-            return [
-                'message' => "You didn't join any room, please join a room first.",
-            ];
+            throw new ExecutionException("You didn't join any room", 100002);
         }
 
         // 给当前加入的房间发送消息
         xgo(function () use ($model, $sessionStorage) {
-            $data = JsonRpcHelper::notification('message.update', [
-                'text' => $model->text,
+            $message = JsonRpcHelper::notification('message.update', [
+                $model->text,
+                $sessionStorage->joinRoomId,
             ]);
             /** @var ConnectionPool $pool */
             $pool  = context()->get('redisPool');
             $redis = $pool->getConnection();
-            $redis->publish("room_{$sessionStorage->joinRoomId}", $data);
+            $redis->publish("room_{$sessionStorage->joinRoomId}", $message);
             $redis->release();
         });
 
