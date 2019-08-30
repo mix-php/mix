@@ -42,11 +42,17 @@
 
 全面采用 Swoole 原生协程与最新的 PHP Stream 一键协程化技术。
 
-从 V2.1 起，Mix 采用和 Golang 类似的高度灵活的开发方式，框架只提供底层库，而与具体功能相关的代码都在项目库中实现，用户能更加细粒度的修改每一处细节。
+采用和 Golang 类似的高度灵活的开发方式，框架只提供底层库，而与具体功能相关的代码都在项目库中实现，用户能更加细粒度的修改每一处细节。
 
 ## 框架定位
 
 在其他 Swoole 框架都定位于大中型团队、庞大的 PHP 应用集群的时候，Mix 决定推动这项技术的普及，我们定位于众多的中小型企业、创业型公司，我们将 Swoole 的复杂度封装起来，用简单的编码方式呈现给用户，让更多的中级程序员也可打造高并发系统，让 Swoole 不再只是高级程序员的专利。
+
+## 框架配套工具
+
+- [SwooleFor](https://github.com/mix-php/swoolefor)：自动重启工具，实现热重启功能
+- [mix-phar](https://github.com/mix-php/mix-phar)：用于开发 Phar 命令行程序的分支
+- [guzzle-hook](https://github.com/mix-php/guzzle-hook)：让 Guzzle 支持 Swoole 的 PHP Stream Hook 协程 (无需修改代码)
 
 ## 性能测试
 
@@ -107,10 +113,6 @@ Listen         Port:      9501
 $> curl http://127.0.0.1:9501/
 Hello, World!
 ```
-
-## 安装自动重启工具
-
-- SwooleFor：[https://github.com/mix-php/swoolefor](https://github.com/mix-php/swoolefor)
 
 ## 技术交流
 
