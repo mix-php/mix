@@ -61,16 +61,56 @@ MixPHP开发指南：
 
 ## 环境要求
 
+* Linux, OS X, WSL
 * PHP >= 7.2
 * Swoole >= 4.4
 
 ## 快速开始
 
-使用 [composer](https://www.phpcomposer.com/) 安装：
+推荐使用 [composer](https://www.phpcomposer.com/) 安装。
 
 ```
 composer create-project mix/mix --prefer-dist
 ```
+
+启动服务器：
+
+接下来启动 HTTP 服务器。
+
+```
+$> php /data/bin/mix.php http:start
+```
+
+如果一切顺利，运行到最后你将看到如下的输出：
+
+```
+                              ____
+ ______ ___ _____ ___   _____  / /_ _____
+  / __ `__ \/ /\ \/ /__ / __ \/ __ \/ __ \
+ / / / / / / / /\ \/ _ / /_/ / / / / /_/ /
+/_/ /_/ /_/_/ /_/\_\  / .___/_/ /_/ .___/
+                     /_/         /_/
+
+Server         Name:      mix-httpd
+System         Name:      linux
+PHP            Version:   7.2.12
+Swoole         Version:   4.4.3
+Framework      Version:   2.1.0-alpha
+Listen         Addr:      0.0.0.0
+Listen         Port:      9501
+[info] 2019-08-30 12:07:20.597 <31677> server start
+```
+
+访问测试 (新开一个终端)：
+
+```
+$> curl http://127.0.0.1:9501/
+Hello, World!
+```
+
+## 安装自动重启工具
+
+- SwooleFor：[https://github.com/mix-php/swoolefor](https://github.com/mix-php/swoolefor)
 
 ## 技术交流
 
