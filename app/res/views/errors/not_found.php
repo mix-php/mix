@@ -40,7 +40,7 @@
     <p><?= str_replace("\n", '<br>', $trace); ?></p>
 <?php endif; ?>
 
-<p style="margin-top: 20px;"><span><a href="http://mixphp.cn" target="_blank">MixPHP V3</a> —— Single-core coroutine PHP framework like node/golang</span></p>
+<p style="margin-top: 20px;"><span><a href="http://mixphp.cn" target="_blank">MixPHP V2.1</a> —— Single-threaded coroutine PHP framework</span></p>
 
 </body>
 </html>
