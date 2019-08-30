@@ -31,11 +31,6 @@ class StartCommand
     public $log;
 
     /**
-     * @var Channel
-     */
-    public $sendChan;
-
-    /**
      * @var callable[]
      */
     public $methods = [
@@ -52,9 +47,8 @@ class StartCommand
      */
     public function __construct()
     {
-        $this->log      = context()->get('log');
-        $this->server   = context()->get('tcpServer');
-        $this->sendChan = new Channel(5);
+        $this->log    = context()->get('log');
+        $this->server = context()->get('tcpServer');
         $this->init();
     }
 
@@ -117,12 +111,13 @@ class StartCommand
     public function handle(Connection $conn)
     {
         // 消息发送
-        xdefer(function () {
-            $this->sendChan->close();
+        $sendChan = new Channel(5);
+        xdefer(function () use ($sendChan) {
+            $sendChan->close();
         });
-        xgo(function () use ($conn) {
+        xgo(function () use ($sendChan, $conn) {
             while (true) {
-                $data = $this->sendChan->pop();
+                $data = $sendChan->pop();
                 if (!$data) {
                     return;
                 }
@@ -141,7 +136,7 @@ class StartCommand
                 // 抛出异常
                 throw $e;
             }
-            $this->runAction($this->sendChan, $data);
+            $this->runAction($sendChan, $data);
         }
     }
 
