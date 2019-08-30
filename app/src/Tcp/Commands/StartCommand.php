@@ -2,6 +2,7 @@
 
 namespace App\Tcp\Commands;
 
+use Mix\Concurrent\Coroutine\Channel;
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
 use Mix\Log\Logger;
@@ -30,6 +31,11 @@ class StartCommand
     public $log;
 
     /**
+     * @var Channel
+     */
+    public $sendChan;
+
+    /**
      * @var callable[]
      */
     public $methods = [
@@ -46,8 +52,9 @@ class StartCommand
      */
     public function __construct()
     {
-        $this->log    = context()->get('log');
-        $this->server = context()->get('tcpServer');
+        $this->log      = context()->get('log');
+        $this->server   = context()->get('tcpServer');
+        $this->sendChan = new Channel(5);
         $this->init();
     }
 
@@ -109,6 +116,20 @@ class StartCommand
      */
     public function handle(Connection $conn)
     {
+        // 消息发送
+        xdefer(function () {
+            $this->sendChan->close();
+        });
+        xgo(function () use ($conn) {
+            while (true) {
+                $data = $this->sendChan->pop();
+                if (!$data) {
+                    return;
+                }
+                $conn->send($data);
+            }
+        });
+        // 消息读取
         while (true) {
             try {
                 $data = $conn->recv();
@@ -120,25 +141,25 @@ class StartCommand
                 // 抛出异常
                 throw $e;
             }
-            xgo([$this, 'runAction'], $conn, $data);
+            $this->runAction($this->sendChan, $data);
         }
     }
 
     /**
      * 执行功能
-     * @param Connection $conn
+     * @param Channel $sendChan
      * @param $data
      */
-    public function runAction(Connection $conn, $data)
+    public function runAction(Channel $sendChan, $data)
     {
         // 解析数据
         $data = json_decode($data, true);
         if (!$data) {
-            SendHelper::error($conn, -32600, 'Invalid Request');
+            SendHelper::error($sendChan, -32600, 'Invalid Request');
             return;
         }
         if (!isset($data['method']) || !isset($data['params']) || !isset($data['id'])) {
-            SendHelper::error($conn, -32700, 'Parse error');
+            SendHelper::error($sendChan, -32700, 'Parse error');
             return;
         }
         // 定义变量
@@ -147,17 +168,17 @@ class StartCommand
         $id     = $data['id'];
         // 路由到控制器
         if (!isset($this->methods[$method])) {
-            SendHelper::error($conn, -32601, 'Method not found', $id);
+            SendHelper::error($sendChan, -32601, 'Method not found', $id);
             return;
         }
         // 执行
         try {
             $result = call_user_func($this->methods[$method], $params);
         } catch (ExecutionException $exception) {
-            SendHelper::error($conn, $exception->getCode(), $exception->getMessage(), $id);
+            SendHelper::error($sendChan, $exception->getCode(), $exception->getMessage(), $id);
             return;
         }
-        SendHelper::data($conn, $result, $id);
+        SendHelper::result($sendChan, $result, $id);
     }
 
     /**

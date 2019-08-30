@@ -2,9 +2,7 @@
 
 namespace App\Tcp\Helpers;
 
-use Mix\Helper\JsonHelper;
-use Mix\Server\Connection;
-use App\Tcp\Commands\StartCommand;
+use Mix\Concurrent\Coroutine\Channel;
 
 /**
  * Class SendHelper
@@ -16,39 +14,39 @@ class SendHelper
 
     /**
      * Send error
-     * @param Connection $conn
+     * @param Channel $sendChan
      * @param $code
      * @param $message
      * @param null $id
      */
-    public static function error(Connection $conn, $code, $message, $id = null)
+    public static function error(Channel $sendChan, $code, $message, $id = null)
     {
-        $response = [
-            'jsonrpc' => '2.0',
-            'error'   => [
-                'code'    => $code,
-                'message' => $message,
-            ],
-            'id'      => $id,
-        ];
-        $conn->send(JsonHelper::encode($response) . StartCommand::EOF);
+        $data = JsonRpcHelper::error($code, $message, $id);
+        $sendChan->push($data);
     }
 
     /**
-     * Send data
-     * @param Connection $conn
+     * Send result
+     * @param Channel $sendChan
      * @param $result
      * @param null $id
      */
-    public static function data(Connection $conn, $result, $id = null)
+    public static function result(Channel $sendChan, $result, $id = null)
     {
-        $response = [
-            'jsonrpc' => '2.0',
-            'error'   => null,
-            'result'  => $result,
-            'id'      => $id,
-        ];
-        $conn->send(JsonHelper::encode($response) . StartCommand::EOF);
+        $data = JsonRpcHelper::result($result, $id);
+        $sendChan->push($data);
+    }
+
+    /**
+     * Send notification
+     * @param Channel $sendChan
+     * @param $result
+     * @param null $id
+     */
+    public static function notification(Channel $sendChan, $method, $result)
+    {
+        $data = JsonRpcHelper::notification($method, $result);
+        $sendChan->push($data);
     }
 
 }
