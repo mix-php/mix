@@ -239,7 +239,7 @@ return [
         // Database
         [
             // 类路径
-            'class'      => \Mix\Database\Coroutine\PDOConnection::class,
+            'class'      => \Mix\Database\Coroutine\Connection::class,
             // 初始化方法
             'initMethod' => 'connect',
             // 属性注入
@@ -265,7 +265,7 @@ return [
         // Redis
         [
             // 类路径
-            'class'      => \Mix\Redis\Coroutine\RedisConnection::class,
+            'class'      => \Mix\Redis\Coroutine\Connection::class,
             // 初始化方法
             'initMethod' => 'connect',
             // 属性注入

@@ -3,7 +3,7 @@
 namespace App\WebSocket\Controllers;
 
 use Mix\Concurrent\Coroutine\Channel;
-use Mix\Redis\Coroutine\RedisConnection;
+use Mix\Redis\Coroutine\Connection;
 use Mix\Redis\Pool\ConnectionPool;
 use Swoole\WebSocket\Frame;
 use App\WebSocket\Exceptions\ExecutionException;
@@ -86,8 +86,8 @@ class JoinController
                     list($roomId, $name) = $data;
                     try {
                         // 创建连接
-                        /** @var $redis RedisConnection $pool */
-                        $redis = context()->get(RedisConnection::class);
+                        /** @var $redis Connection $pool */
+                        $redis = context()->get(Connection::class);
                         // 给其他订阅当前房间的连接发送加入消息
                         $message = JsonRpcHelper::notification('message.update', [
                             "{$name} joined the room",
@@ -101,7 +101,7 @@ class JoinController
                         $redis->subscribe([$this->quitChannel, $channel], function ($instance, $channel, $message) use ($sendChan) {
                             // 退出订阅
                             if ($channel == $this->quitChannel) {
-                                /** @var $instance RedisConnection */
+                                /** @var $instance Connection */
                                 $instance->close();
                                 return;
                             }

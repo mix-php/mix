@@ -69,7 +69,7 @@ MixPHP开发指南：
 
 * Linux, OS X, WSL
 * PHP >= 7.2
-* Swoole >= 4.4
+* Swoole >= 4.4.1
 
 ## 快速开始
 

@@ -2,7 +2,7 @@
 
 namespace App\Common\Dialers;
 
-use Mix\Database\Coroutine\PDOConnection;
+use Mix\Database\Coroutine\Connection;
 use Mix\Pool\DialerInterface;
 
 /**
@@ -15,12 +15,12 @@ class DatabaseDialer implements DialerInterface
 
     /**
      * 拨号
-     * @return PDOConnection
+     * @return Connection
      */
     public function dial()
     {
         // 创建一个连接并返回
-        return context()->get(PDOConnection::class);
+        return context()->get(Connection::class);
     }
 
 }
