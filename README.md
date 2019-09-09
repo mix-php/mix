@@ -8,13 +8,13 @@
 
 <p align="center">
 <img src="https://img.shields.io/badge/php-%3E%3D7.2-brightgreen">
-<img src="https://img.shields.io/badge/swoole-%3E%3D4.4-brightgreen">
+<img src="https://img.shields.io/badge/swoole-%3E%3D4.4.1-brightgreen">
 <img src="https://img.shields.io/badge/license-apache%202-blue">
 </p>
 
 ## Mix 是什么
 
-一个基于 Swoole 开发的高性能 PHP 框架，经过两年发展，框架版本经历了：
+一个基于 Swoole 开发的高性能 PHP 框架，经过两年发展，收获很多中小型团队支持，框架版本经历了：
 
 - `V1.*`: 基于 Swoole 的常驻内存型 PHP 高性能框架
 - `V2.0`: 基于 Swoole 的 FastCGI、常驻内存、协程三模 PHP 高性能框架
