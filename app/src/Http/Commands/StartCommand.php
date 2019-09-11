@@ -134,7 +134,7 @@ class StartCommand
                 $response = call_user_func($result->getCallback(), $request, $response);
             }
             /** @var Response $response */
-            $response->send();
+            $response->end();
             // Swoole Tracker After
             $tick and \StatsCenter::afterExecRpc($tick, true, $response->getStatusCode());
         } catch (\Throwable $e) {
