@@ -158,7 +158,7 @@ class StartCommand
     {
         $dir  = app()->basePath . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'res' . DIRECTORY_SEPARATOR . 'views';
         $view = new View($dir);
-        $html = $view->renderPartial('errors.not_found', [
+        $html = $view->render('errors.not_found', [
             'message' => $e->getMessage(),
             'type'    => get_class($e),
             'code'    => $e->getCode(),
@@ -169,7 +169,7 @@ class StartCommand
         $response->withBody((new StreamFactory())->createStream($html))
             ->withStatus(404)
             ->withAddedHeader('Content-Type', 'text/html; charset=UTF-8')
-            ->send();
+            ->end();
     }
 
     /**
@@ -183,7 +183,7 @@ class StartCommand
     {
         $dir  = app()->basePath . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'res' . DIRECTORY_SEPARATOR . 'views';
         $view = new View($dir);
-        $html = $view->renderPartial('errors.internal_server_error', [
+        $html = $view->render('errors.internal_server_error', [
             'message' => $e->getMessage(),
             'type'    => get_class($e),
             'code'    => $e->getCode(),
@@ -194,7 +194,7 @@ class StartCommand
         $response->withBody((new StreamFactory())->createStream($html))
             ->withStatus(500)
             ->withAddedHeader('Content-Type', 'text/html; charset=UTF-8')
-            ->send();
+            ->end();
     }
 
     /**
