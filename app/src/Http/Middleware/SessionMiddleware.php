@@ -61,8 +61,8 @@ class SessionMiddleware implements MiddlewareInterface
     {
         // TODO: Implement process() method.
         // 会话验证
-        $userId = $this->session->get('userId');
-        if (!$userId) {
+        $payload = $this->session->get('payload');
+        if (!$payload) {
             // 中断执行，返回错误信息
             $content  = ['code' => 100001, 'message' => 'No access'];
             $response = SendHelper::json($this->response, $content);
