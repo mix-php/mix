@@ -33,14 +33,15 @@ class UserModel
      */
     public function add(UserForm $form)
     {
-        $db     = $this->pool->getConnection();
-        $status = $db->insert('user', [
+        $db       = $this->pool->getConnection();
+        $status   = $db->insert('user', [
             'name'  => $form->name,
             'age'   => $form->age,
             'email' => $form->email,
         ])->execute();
+        $insertId = $status ? $db->getLastInsertId() : false;
         $db->release();
-        return $status ? $db->getLastInsertId() : false;
+        return $insertId;
     }
 
 }
