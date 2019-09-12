@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Forms\UserForm;
 use App\Http\Helpers\SendHelper;
+use App\Http\Models\UserModel;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 
@@ -23,17 +24,16 @@ class UserController
      */
     public function create(ServerRequest $request, Response $response)
     {
-        // 使用模型
-        $model             = new UserForm($request->getAttributes());
-        $model->attributes = $request->getAttributes();
-        $model->setScenario('create');
-        if (!$model->validate()) {
-            $content = ['code' => 1, 'message' => 'FAILED', 'data' => $model->getErrors()];
+        // 使用表单验证器
+        $form = new UserForm($request->getAttributes());
+        $form->setScenario('create');
+        if (!$form->validate()) {
+            $content = ['code' => 1, 'message' => 'FAILED', 'data' => $form->getErrors()];
             return SendHelper::json($response, $content);
         }
 
         // 执行保存数据库
-        // ...
+        (new UserModel())->add($form);
 
         // 响应
         $content = ['code' => 0, 'message' => 'OK'];

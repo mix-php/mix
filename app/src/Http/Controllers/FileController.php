@@ -23,18 +23,18 @@ class FileController
      */
     public function upload(ServerRequest $request, Response $response)
     {
-        // 使用模型
-        $model = new FileForm($request->getAttributes(), $request->getUploadedFiles());
-        $model->setScenario('upload');
-        if (!$model->validate()) {
-            $content = ['code' => 1, 'message' => 'FAILED', 'data' => $model->getErrors()];
+        // 使用表单验证器
+        $form = new FileForm($request->getAttributes(), $request->getUploadedFiles());
+        $form->setScenario('upload');
+        if (!$form->validate()) {
+            $content = ['code' => 1, 'message' => 'FAILED', 'data' => $form->getErrors()];
             return SendHelper::json($response, $content);
         }
 
         // 保存文件
-        if ($model->file) {
-            $targetPath = app()->basePath . '/runtime/uploads/' . date('Ymd') . '/' . $model->file->getClientFilename();
-            $model->file->moveTo($targetPath);
+        if ($form->file) {
+            $targetPath = app()->basePath . '/runtime/uploads/' . date('Ymd') . '/' . $form->file->getClientFilename();
+            $form->file->moveTo($targetPath);
         }
 
         // 响应
