@@ -391,21 +391,21 @@ return [
             'class'           => \Mix\Auth\Authorization::class,
             // 构造函数注入
             'constructorArgs' => [
-                // JWT
-                ['ref' => \Mix\Auth\JWT::class],
+                // Jwt
+                ['ref' => \Mix\Auth\Jwt::class],
             ],
         ],
 
-        // JWT
+        // Jwt
         [
             // 类路径
-            'class'      => \Mix\Auth\JWT::class,
+            'class'      => \Mix\Auth\Jwt::class,
             // 属性注入
             'properties' => [
                 // 钥匙
                 'key'       => 'example_key',
                 // 签名算法
-                'algorithm' => \Mix\Auth\JWT::ALGORITHM_RS256,
+                'algorithm' => \Mix\Auth\Jwt::ALGORITHM_RS256,
             ],
         ],
 
