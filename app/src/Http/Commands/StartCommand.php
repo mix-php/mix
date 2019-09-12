@@ -168,7 +168,7 @@ class StartCommand
         ]);
         $response->withBody((new StreamFactory())->createStream($html))
             ->withStatus(404)
-            ->withAddedHeader('Content-Type', 'text/html; charset=UTF-8')
+            ->withContentType('text/html', 'utf-8')
             ->end();
     }
 
@@ -193,7 +193,7 @@ class StartCommand
         ]);
         $response->withBody((new StreamFactory())->createStream($html))
             ->withStatus(500)
-            ->withAddedHeader('Content-Type', 'text/html; charset=UTF-8')
+            ->withContentType('text/html', 'utf-8')
             ->end();
     }
 
