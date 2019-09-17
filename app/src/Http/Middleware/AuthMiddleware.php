@@ -69,7 +69,7 @@ class AuthMiddleware implements MiddlewareInterface
         }
 
         // 把JWT Payload放入Request，方便其他位置调用
-        $this->request->withJwtPayload($payload);
+        $this->request->withJWTPayload($payload);
 
         // 继续往下执行
         return $handler->handle($request);
