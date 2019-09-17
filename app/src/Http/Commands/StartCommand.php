@@ -61,7 +61,11 @@ class StartCommand
         if ($daemon) {
             ProcessHelper::daemon();
         }
-        // 端口修改
+        // 参数重写
+        $host = Flag::string(['h', 'host'], '');
+        if ($host) {
+            $this->server->host = $host;
+        }
         $port = Flag::string(['p', 'port'], '');
         if ($port) {
             $this->server->port = $port;

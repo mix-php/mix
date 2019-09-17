@@ -44,6 +44,15 @@ class StartCommand
         if ($daemon) {
             ProcessHelper::daemon();
         }
+        // 参数重写
+        $host = Flag::string(['h', 'host'], '');
+        if ($host) {
+            $this->server->host = $host;
+        }
+        $port = Flag::string(['p', 'port'], '');
+        if ($port) {
+            $this->server->port = $port;
+        }
         // 捕获信号
         ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], function ($signal) {
             $this->log->info('received signal [{signal}]', ['signal' => $signal]);
