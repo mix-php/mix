@@ -46,10 +46,9 @@ class StartCommand
      */
     public function __construct()
     {
-        $this->log     = context()->get('log');
-        $this->route   = context()->get('route');
-        $this->server  = context()->get('httpServer');
-        $this->localIp = current(swoole_get_local_ip());
+        $this->log    = context()->get('log');
+        $this->route  = context()->get('route');
+        $this->server = context()->get('httpServer');
     }
 
     /**
@@ -102,22 +101,12 @@ class StartCommand
      */
     public function handle(ServerRequest $request, Response $response)
     {
-        // Swoole Tracker Before
-        $tick = null;
-        if (class_exists(\StatsCenter::class)) {
-            $func        = $request->getUri()->getPath();
-            $serverIp    = $this->localIp;
-            $serviceName = "{$serverIp}:{$this->server->port}";
-            $tick        = \StatsCenter::beforeExecRpc($func, $serviceName, $serverIp);
-        }
         // 路由匹配
         try {
             $result = $this->route->match($request->getMethod(), $request->getServerParams()['path_info'] ?: '/');
         } catch (\Throwable $e) {
             // 404 处理
             static::show404($e, $response);
-            // Swoole Tracker After
-            $tick and \StatsCenter::afterExecRpc($tick, false, 404);
             return;
         }
         // 保存路由参数
@@ -135,13 +124,9 @@ class StartCommand
             }
             /** @var Response $response */
             $response->end();
-            // Swoole Tracker After
-            $tick and \StatsCenter::afterExecRpc($tick, true, $response->getStatusCode());
         } catch (\Throwable $e) {
             // 500 处理
             static::show500($e, $response);
-            // Swoole Tracker After
-            $tick and \StatsCenter::afterExecRpc($tick, false, 500);
             // 抛出错误，记录日志
             throw $e;
         }
