@@ -102,12 +102,20 @@ class StartCommand
         $pathinfo = $request->getServerParams()['path_info'] ?: '/';
         if (!isset($this->patterns[$pathinfo])) {
             $response
-                ->withBody((new StreamFactory())->createStream('404'))
+                ->withBody((new StreamFactory())->createStream('404 Not Found'))
                 ->withStatus(404)
-                ->send();
+                ->end();
             return;
         }
-        $conn     = $this->upgrader->Upgrade($request, $response);
+        try {
+            $conn = $this->upgrader->Upgrade($request, $response);
+        } catch (\Throwable $e) {
+            $response
+                ->withBody((new StreamFactory())->createStream('401 Unauthorized'))
+                ->withStatus(401)
+                ->end();
+            return;
+        }
         $class    = $this->patterns[$pathinfo];
         $callback = new $class($conn);
         call_user_func($callback);
