@@ -32,7 +32,7 @@
 
 > 以下只针对最新版本 V2.1
 
-服务器全部基于 Swoole\Coroutine\Server 开发，类库封装风格参考 Golang，线程模型与 Node.js 一样为单线程，这样既拥有 Golang 的 CSP 并发模型，又无需像 Golang 一样处理数据的并发安全。
+服务器全部基于 Swoole\Coroutine\Server 开发，线程模型与 Node.js 一样为单进程单线程模型 (现有其他 Swoole 框架基本都是多进程模型)，组件封装风格参考 Golang，这样既拥有 Golang 的 CSP 并发模型，又无需像 Golang 一样处理数据的并发安全。
 
 框架非常轻量灵活，现有组件全部基于 PSR 标准实现，均可独立使用，严格来讲 Mix 其实只封装了 `mix/console` 命令行开发组件，其他全部为选装。
 
