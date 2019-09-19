@@ -3,5 +3,5 @@ for %%i in (auth,bean,cache,concurrent,console,database,event,helper,http-messag
     echo -- %%i
     cd src\%%i
     git.exe checkout %1%
-    cd ../../../
+    cd ../../
 )
