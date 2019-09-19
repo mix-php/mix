@@ -1,10 +1,10 @@
 {
   "name": "mix/mix",
-  "description": "基于 Swoole 4.4+ 单线程协程 PHP 框架 / Single-threaded coroutine PHP framework / http://www.mixphp.cn",
-  "type": "project",
+  "description": "基于 Swoole 4.4+ 单线程协程 PHP 框架 / Single-threaded coroutine PHP framework (http://mixphp.cn)",
+  "type": "framework",
   "keywords": [
     "framework",
-    "mixphp",
+    "mix",
     "swoole"
   ],
   "homepage": "http://www.mixphp.cn/",
@@ -15,40 +15,31 @@
       "email": "coder.keda@gmail.com"
     }
   ],
-  "require": {
-    "php": ">=7.2.0",
-    "mix/bean": "v2.1.0-beta",
-    "mix/concurrent": "v2.1.0-beta",
-    "mix/helper": "v2.1.0-beta",
-    "mix/log": "v2.1.0-beta",
-    "mix/validate": "v2.1.0-beta",
-    "mix/pool": "v2.1.0-beta",
-    "mix/event": "v2.1.0-beta",
-    "mix/database": "v2.1.0-beta",
-    "mix/redis": "v2.1.0-beta",
-    "mix/cache": "v2.1.0-beta",
-    "mix/auth": "v2.1.0-beta",
-    "mix/session": "v2.1.0-beta",
-    "mix/console": "v2.1.0-beta",
-    "mix/route": "v2.1.0-beta",
-    "mix/view": "v2.1.0-beta",
-    "mix/server": "v2.1.0-beta",
-    "mix/udp-server": "v2.1.0-beta",
-    "mix/http-message": "v2.1.0-beta",
-    "mix/http-server": "v2.1.0-beta",
-    "mix/websocket": "v2.1.0-beta",
-    "symfony/dotenv": "~4.3"
+  "replace": {
+    "mix/bean": "self.version",
+    "mix/concurrent": "self.version",
+    "mix/helper": "self.version",
+    "mix/log": "self.version",
+    "mix/validate": "self.version",
+    "mix/pool": "self.version",
+    "mix/event": "self.version",
+    "mix/database": "self.version",
+    "mix/redis": "self.version",
+    "mix/cache": "self.version",
+    "mix/auth": "self.version",
+    "mix/session": "self.version",
+    "mix/console": "self.version",
+    "mix/route": "self.version",
+    "mix/view": "self.version",
+    "mix/server": "self.version",
+    "mix/udp-server": "self.version",
+    "mix/http-message": "self.version",
+    "mix/http-server": "self.version",
+    "mix/websocket": "self.version"
   },
-  "require-dev": {
-    "swoole/ide-helper": "dev-master"
-  },
-  "minimum-stability": "beta",
   "autoload": {
     "psr-4": {
       "App\\": "app/src/"
-    },
-    "files": [
-      "app/src/functions.php"
-    ]
+    }
   }
 }

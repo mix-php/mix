@@ -1,0 +1,60 @@
+[submodule "src/auth"]
+	path = src/auth
+	url = git@github.com:mix-php/auth.git
+[submodule "src/bean"]
+	path = src/bean
+	url = git@github.com:mix-php/bean.git
+[submodule "src/cache"]
+	path = src/cache
+	url = git@github.com:mix-php/cache.git
+[submodule "src/concurrent"]
+	path = src/concurrent
+	url = git@github.com:mix-php/concurrent.git
+[submodule "src/console"]
+	path = src/console
+	url = git@github.com:mix-php/console.git
+[submodule "src/database"]
+	path = src/database
+	url = git@github.com:mix-php/database.git
+[submodule "src/event"]
+	path = src/event
+	url = git@github.com:mix-php/event.git
+[submodule "src/helper"]
+	path = src/helper
+	url = git@github.com:mix-php/helper.git
+[submodule "src/http-message"]
+	path = src/http-message
+	url = git@github.com:mix-php/http-message.git
+[submodule "src/http-server"]
+	path = src/http-server
+	url = git@github.com:mix-php/http-server.git
+[submodule "src/log"]
+	path = src/log
+	url = git@github.com:mix-php/log.git
+[submodule "src/pool"]
+	path = src/pool
+	url = git@github.com:mix-php/pool.git
+[submodule "src/redis"]
+	path = src/redis
+	url = git@github.com:mix-php/redis.git
+[submodule "src/route"]
+	path = src/route
+	url = git@github.com:mix-php/route.git
+[submodule "src/server"]
+	path = src/server
+	url = git@github.com:mix-php/server.git
+[submodule "src/session"]
+	path = src/session
+	url = git@github.com:mix-php/session.git
+[submodule "src/udp-server"]
+	path = src/udp-server
+	url = git@github.com:mix-php/udp-server.git
+[submodule "src/validate"]
+	path = src/validate
+	url = git@github.com:mix-php/validate.git
+[submodule "src/view"]
+	path = src/view
+	url = git@github.com:mix-php/view.git
+[submodule "src/websocket"]
+	path = src/websocket
+	url = git@github.com:mix-php/websocket.git
