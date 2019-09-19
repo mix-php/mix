@@ -15,6 +15,23 @@
       "email": "coder.keda@gmail.com"
     }
   ],
+  "require": {
+    "php": ">=7.0.0",
+    "firebase/php-jwt": "^5.0",
+    "psr/http-message": "^1.0",
+    "psr/container": "~1.0",
+    "php-di/phpdoc-reader": "~2.1",
+    "psr/simple-cache": "~1.0",
+    "psr/log": "~1.0",
+    "ext-pdo": "*",
+    "psr/event-dispatcher": "^1.0",
+    "ext-json": "*",
+    "psr/http-factory": "^1.0",
+    "psr/http-server-middleware": "^1.0",
+    "psr/http-server-handler": "^1.0",
+    "ext-redis": "*",
+    "ext-mbstring": "*"
+  },
   "replace": {
     "mix/bean": "self.version",
     "mix/concurrent": "self.version",
@@ -39,7 +56,33 @@
   },
   "autoload": {
     "psr-4": {
-      "App\\": "app/src/"
-    }
+      "Mix\\Auth\\": "src/auth/src/",
+      "Mix\\Bean\\": "src/bean/src/",
+      "Mix\\Cache\\": "src/cache/src/",
+      "Mix\\Concurrent\\": "src/concurrent/src/",
+      "Mix\\Console\\": "src/console/src/",
+      "Mix\\Database\\": "src/database/src/",
+      "Mix\\Event\\": "src/event/src/",
+      "Mix\\Helper\\": "src/helper/src/",
+      "Mix\\Http\\Message\\": "src/http-message/src/",
+      "Mix\\Http\\Server\\": "src/http-server/src/",
+      "Mix\\Log\\": "src/log/src/",
+      "Mix\\Pool\\": "src/pool/src/",
+      "Mix\\Redis\\": "src/redis/src/",
+      "Mix\\Route\\": "src/route/src/",
+      "Mix\\Server\\": "src/server/src/",
+      "Mix\\Session\\": "src/session/src/",
+      "Mix\\Udp\\Server\\": "src/udp-server/src/",
+      "Mix\\Validate\\": "src/validate/src/",
+      "Mix\\View\\": "src/view/src/",
+      "Mix\\WebSocket\\": "src/websocket/src/"
+    },
+    "classmap": [
+      "src/console/src/Mix.php"
+    ],
+    "files": [
+      "src/concurrent/src/functions.php",
+      "src/console/src/functions.php"
+    ]
   }
 }
