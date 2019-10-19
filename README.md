@@ -51,7 +51,7 @@
 ## 框架配套工具
 
 - [SwooleFor](https://github.com/mix-php/swoolefor)：自动重启工具，实现热更新功能
-- [mix-phar](https://github.com/mix-php/mix-phar)：用于开发 Phar 命令行程序的分支
+- [mix-phar-skeleton](https://github.com/mix-php/mix-phar-skeleton)：开发 Phar 文件命令行的程序骨架
 - [guzzle-hook](https://github.com/mix-php/guzzle-hook)：让 Guzzle 支持 Swoole 的 PHP Stream Hook 协程 (无需修改代码)
 
 ## 性能测试
