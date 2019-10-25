@@ -58,6 +58,6 @@
 [submodule "src/websocket"]
 	path = src/websocket
 	url = git@github.com:mix-php/websocket.git
-[submodule "src/redis-subscriber"]
-	path = src/redis-subscriber
-	url = git@github.com:mix-php/redis-subscriber.git
+[submodule "src/redis-subscribe"]
+	path = src/redis-subscribe
+	url = git@github.com:mix-php/redis-subscribe.git
