@@ -46,9 +46,6 @@
 [submodule "src/session"]
 	path = src/session
 	url = git@github.com:mix-php/session.git
-[submodule "src/udp-server"]
-	path = src/udp-server
-	url = git@github.com:mix-php/udp-server.git
 [submodule "src/validate"]
 	path = src/validate
 	url = git@github.com:mix-php/validate.git
