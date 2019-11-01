@@ -50,7 +50,6 @@
     "mix/route": "self.version",
     "mix/view": "self.version",
     "mix/server": "self.version",
-    "mix/udp-server": "self.version",
     "mix/http-message": "self.version",
     "mix/http-server": "self.version",
     "mix/websocket": "self.version"
@@ -74,7 +73,6 @@
       "Mix\\Route\\": "src/route/src/",
       "Mix\\Server\\": "src/server/src/",
       "Mix\\Session\\": "src/session/src/",
-      "Mix\\Udp\\Server\\": "src/udp-server/src/",
       "Mix\\Validate\\": "src/validate/src/",
       "Mix\\View\\": "src/view/src/",
       "Mix\\WebSocket\\": "src/websocket/src/"
