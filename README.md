@@ -12,7 +12,7 @@
 <img src="https://img.shields.io/badge/license-apache%202-blue">
 </p>
 
-## Mix 是什么
+## Mix PHP 是什么
 
 一个基于 Swoole 开发的高性能 PHP 框架，经过两年发展收获了很多中小型团队的支持，框架版本经历了：
 
@@ -29,8 +29,6 @@
 在性能方面采用常驻内存+协程，拥有传统框架无法比拟的性能。 
 
 ## 与其他基于 Swoole 的框架比较
-
-> 以下只针对最新版本 V2.1
 
 服务器全部基于 Swoole\Coroutine\Server 开发，线程模型与 Node.js 一样为单进程单线程模型 (现有其他 Swoole 框架基本都是多进程模型)，组件封装风格参考 Golang，这样既拥有 Golang 的 CSP 并发模型，又无需像 Golang 一样处理数据的并发安全。
 
