@@ -52,7 +52,8 @@
     "mix/server": "self.version",
     "mix/http-message": "self.version",
     "mix/http-server": "self.version",
-    "mix/websocket": "self.version"
+    "mix/websocket": "self.version",
+    "mix/sync-invoke": "self.version"
   },
   "autoload": {
     "psr-4": {
@@ -75,7 +76,8 @@
       "Mix\\Session\\": "src/session/src/",
       "Mix\\Validate\\": "src/validate/src/",
       "Mix\\View\\": "src/view/src/",
-      "Mix\\WebSocket\\": "src/websocket/src/"
+      "Mix\\WebSocket\\": "src/websocket/src/",
+      "Mix\\Sync\\Invoke\\": "src/sync-invoke/src/"
     },
     "classmap": [
       "src/console/src/Mix.php"
