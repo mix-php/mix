@@ -1,7 +1,7 @@
 <br>
 
 <p align="center">
-<img src="https://box.kancloud.cn/90f9b3c1d667aefa77b09ea1b7ffb054_120x120.png" alt="MixPHP">
+<img src="https://avatars0.githubusercontent.com/u/31677907?s=120&v=4" width="" alt="MixPHP">
 </p>
 
 <p align="center">高性能 • 轻量级 • 命令行</p>
