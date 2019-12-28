@@ -60,7 +60,7 @@
 
 MixPHP开发指南：
 
-- http://doc.mixphp.cn
+- http://mixphp.openmix.org/doc
 - https://www.kancloud.cn/onanying/mixphp2-1/content
 
 ## 环境要求
