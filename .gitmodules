@@ -61,3 +61,6 @@
 [submodule "src/sync-invoke"]
 	path = src/sync-invoke
 	url = https://github.com/mix-php/sync-invoke.git
+[submodule "src/json-rpc"]
+	path = src/json-rpc
+	url = https://github.com/mix-php/json-rpc.git
