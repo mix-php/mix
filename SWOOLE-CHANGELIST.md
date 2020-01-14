@@ -1,4 +1,4 @@
-## Swoole Change
+## Swoole Change List
 
 - Coroutine\Http\Server shutdown 在 4.4.13 能实现关闭开启的全部连接，但在 4.4.13 ~ 4.4.14 中有 bug，会提示 Http\Response::close(): http response is unavailable
 - Coroutine\Http\Response->close 在 4.4.8 才加入，能实现 websocket 关闭连接 
