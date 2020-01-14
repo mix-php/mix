@@ -54,7 +54,8 @@
     "mix/http-message": "self.version",
     "mix/http-server": "self.version",
     "mix/websocket": "self.version",
-    "mix/sync-invoke": "self.version"
+    "mix/sync-invoke": "self.version",
+    "mix/json-rpc": "self.version"
   },
   "autoload": {
     "psr-4": {
@@ -78,7 +79,8 @@
       "Mix\\Validate\\": "src/validate/src/",
       "Mix\\View\\": "src/view/src/",
       "Mix\\WebSocket\\": "src/websocket/src/",
-      "Mix\\Sync\\Invoke\\": "src/sync-invoke/src/"
+      "Mix\\Sync\\Invoke\\": "src/sync-invoke/src/",
+      "Mix\\JsonRpc\\": "src/json-rpc/src/"
     },
     "classmap": [
       "src/console/src/Mix.php"
