@@ -79,7 +79,7 @@
       "Mix\\Validate\\": "src/validate/src/",
       "Mix\\View\\": "src/view/src/",
       "Mix\\WebSocket\\": "src/websocket/src/",
-      "Mix\\Sync\\Invoke\\": "src/sync-invoke/src/",
+      "Mix\\SyncInvoke\\": "src/sync-invoke/src/",
       "Mix\\JsonRpc\\": "src/json-rpc/src/"
     },
     "classmap": [
