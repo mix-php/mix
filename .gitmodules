@@ -1,6 +1,3 @@
-[submodule "src/http-message"]
-	path = src/http-message
-	url = git@github.com:mix-php/http-message.git
 [submodule "src/http-server"]
 	path = src/http-server
 	url = git@github.com:mix-php/http-server.git
