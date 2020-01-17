@@ -1,6 +1,3 @@
-[submodule "src/route"]
-	path = src/route
-	url = git@github.com:mix-php/route.git
 [submodule "src/server"]
 	path = src/server
 	url = git@github.com:mix-php/server.git
