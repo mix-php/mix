@@ -21,7 +21,7 @@ function remote()
 git pull origin $CURRENT_BRANCH
 
 if [[ $# -eq 0 ]]; then
-    REPOS=auth
+    REPOS=$(ls $BASEPATH)
 fi
 
 for REPO in $REPOS ; do
