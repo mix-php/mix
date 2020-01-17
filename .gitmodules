@@ -1,3 +1,0 @@
-[submodule "src/websocket"]
-	path = src/websocket
-	url = git@github.com:mix-php/websocket.git
