@@ -1,6 +1,3 @@
-[submodule "src/pool"]
-	path = src/pool
-	url = git@github.com:mix-php/pool.git
 [submodule "src/redis"]
 	path = src/redis
 	url = git@github.com:mix-php/redis.git
