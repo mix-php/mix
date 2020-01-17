@@ -1,6 +1,3 @@
-[submodule "src/console"]
-	path = src/console
-	url = git@github.com:mix-php/console.git
 [submodule "src/database"]
 	path = src/database
 	url = git@github.com:mix-php/database.git
