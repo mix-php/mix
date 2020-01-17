@@ -1,0 +1,38 @@
+{
+  "name": "mix/database",
+  "description": "Mix Database http://www.mixphp.cn",
+  "type": "framework",
+  "keywords": [
+    "framework",
+    "mix",
+    "swoole"
+  ],
+  "homepage": "http://www.mixphp.cn/",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "liu,jian",
+      "email": "coder.keda@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0",
+    "ext-pdo": "*",
+    "psr/event-dispatcher": "^1.0",
+    "mix/bean": "~2.1.0",
+    "mix/pool": "~2.1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mix\\Database\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Mix\\Tests\\Database\\": "tests/Cases"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8"
+  }
+}

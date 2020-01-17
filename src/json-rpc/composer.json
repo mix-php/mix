@@ -1,0 +1,36 @@
+{
+  "name": "mix/json-rpc",
+  "description": "JSON-RPC 库，支持所有 Swoole 环境 / JSON-RPC library, supports all Swoole environments (http://mixphp.cn)",
+  "type": "framework",
+  "keywords": [
+    "mix",
+    "swoole",
+    "jsonrpc",
+    "json-rpc"
+  ],
+  "homepage": "http://www.mixphp.cn/",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "liu,jian",
+      "email": "coder.keda@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0",
+    "mix/bean": "~2.1.0",
+    "mix/concurrent": "~2.1.0",
+    "mix/server": "~2.1.0",
+    "mix/http-server": "~2.1.0",
+    "mix/pool": "~2.1.0"
+  },
+  "require-dev": {
+    "swoole/ide-helper": "dev-master",
+    "phpunit/phpunit": "^7.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mix\\JsonRpc\\": "src/"
+    }
+  }
+}
