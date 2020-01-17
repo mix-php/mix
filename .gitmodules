@@ -1,6 +1,3 @@
-[submodule "src/cache"]
-	path = src/cache
-	url = git@github.com:mix-php/cache.git
 [submodule "src/concurrent"]
 	path = src/concurrent
 	url = git@github.com:mix-php/concurrent.git
