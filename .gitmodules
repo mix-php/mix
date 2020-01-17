@@ -1,6 +1,3 @@
-[submodule "src/session"]
-	path = src/session
-	url = git@github.com:mix-php/session.git
 [submodule "src/validate"]
 	path = src/validate
 	url = git@github.com:mix-php/validate.git
