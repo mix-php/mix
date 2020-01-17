@@ -1,6 +1,3 @@
-[submodule "src/database"]
-	path = src/database
-	url = git@github.com:mix-php/database.git
 [submodule "src/event"]
 	path = src/event
 	url = git@github.com:mix-php/event.git
