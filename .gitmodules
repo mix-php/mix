@@ -1,6 +1,3 @@
-[submodule "src/bean"]
-	path = src/bean
-	url = git@github.com:mix-php/bean.git
 [submodule "src/cache"]
 	path = src/cache
 	url = git@github.com:mix-php/cache.git
