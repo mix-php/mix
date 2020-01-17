@@ -37,7 +37,7 @@ class BearerTokenExtractor implements TokenExtractorInterface
         if (strpos($authorization, 'Bearer ') !== 0) {
             throw new ExtractTokenException('Failed to extract token.');
         }
-        return substr($authorization, 7);
+        return (string)substr($authorization, 7);
     }
 
 }

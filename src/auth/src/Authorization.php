@@ -33,7 +33,6 @@ class Authorization
     public function getPayload(TokenExtractorInterface $tokenExtractor)
     {
         $token = $tokenExtractor->extractToken();
-
         return $this->jwt->parse($token);
     }
 
