@@ -1,6 +1,3 @@
-[submodule "src/redis"]
-	path = src/redis
-	url = git@github.com:mix-php/redis.git
 [submodule "src/route"]
 	path = src/route
 	url = git@github.com:mix-php/route.git
