@@ -20,7 +20,7 @@ class RandomStringHelper
         $last  = 61;
         $str   = '';
         for ($i = 0; $i < $length; $i++) {
-            $str .= $chars{mt_rand(0, $last)};
+            $str .= $chars[mt_rand(0, $last)];
         }
         return $str;
     }
@@ -37,9 +37,9 @@ class RandomStringHelper
         $str   = '';
         for ($i = 0; $i < $length; $i++) {
             if ($i == 0) {
-                $str .= $chars{mt_rand(0, $last - 1)};
+                $str .= $chars[mt_rand(0, $last - 1)];
             } else {
-                $str .= $chars{mt_rand(0, $last)};
+                $str .= $chars[mt_rand(0, $last)];
             }
         }
         return $str;
