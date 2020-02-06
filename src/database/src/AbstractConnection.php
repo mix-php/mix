@@ -436,7 +436,9 @@ abstract class AbstractConnection
      */
     public function getLastSql()
     {
-        list($sql, $params, $values) = $this->_queryData;
+        $sql    = '';
+        $params = $values = [];
+        !empty($this->_queryData) and list($sql, $params, $values) = $this->_queryData;
         if (empty($params) && empty($values)) {
             return $sql;
         }
@@ -458,7 +460,10 @@ abstract class AbstractConnection
      */
     public function getLastLog()
     {
-        list($sql, $params, $values, $time) = $this->_queryData;
+        $sql    = '';
+        $params = $values = [];
+        $time   = 0;
+        !empty($this->_queryData) and list($sql, $params, $values, $time) = $this->_queryData;
         return [
             'sql'      => $sql,
             'bindings' => $values ?: $params,
