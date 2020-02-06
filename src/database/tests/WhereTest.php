@@ -11,7 +11,7 @@ final class WhereTest extends TestCase
     {
         $_this = $this;
         $func  = function () use ($_this) {
-            $db = db();
+            $db     = db();
             $result = $db->table('users')
                 ->where(['id', '=', 1])
                 ->where(['or', ['id', '=', 2]])
@@ -40,7 +40,22 @@ final class WhereTest extends TestCase
         run($func);
     }
 
+    // [1, '=', 'id']
+    public function testReverse(): void
+    {
+        $_this = $this;
+        $func  = function () use ($_this) {
+            $db = db();
+            try {
+                $result = $db->table('users')->where([
+                    [1, '=', 'id'],
+                ])->get();
+            } catch (\Throwable $ex) {
+                var_dump($ex->getMessage());
+                $_this->assertContains('Invalid where format', $ex->getMessage());
+            }
+        };
+        run($func);
+    }
+
 }
-
-
-
