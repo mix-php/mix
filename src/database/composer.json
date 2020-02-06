@@ -27,12 +27,7 @@
       "Mix\\Database\\": "src/"
     }
   },
-  "autoload-dev": {
-    "psr-4": {
-      "Mix\\Tests\\Database\\": "tests/Cases"
-    }
-  },
   "require-dev": {
-    "phpunit/phpunit": "^8"
+    "phpunit/phpunit": "^7.0.0"
   }
 }

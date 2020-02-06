@@ -46,6 +46,7 @@ class BuildHelper
             $id++;
             $prefix = "__{$id}_";
             $length = count($item);
+            // php switch continue 非常奇葩，所以用 if else
             if ($length == 2) {
                 // 子条件
                 if (in_array($item[0], ['or', 'and']) && is_array($item[1])) {
@@ -59,6 +60,7 @@ class BuildHelper
                     }
                     $sql    .= " " . strtoupper($symbol) . " {$subSql}";
                     $params = array_merge($params, $subParams);
+                    continue;
                 }
                 // 无值条件
                 if (is_string($item[0]) && is_string($item[1])) {
@@ -69,9 +71,10 @@ class BuildHelper
                     if ($key == 0) {
                         $sql = $subSql;
                     }
+                    continue;
                 }
-            }
-            if ($length == 3) {
+                throw new \PDOException(sprintf('Invalid where format: %s', json_encode($item)));
+            } elseif ($length == 3) {
                 // 标准条件 (包含In/NotIn/Between/NotBetween)
                 list($field, $operator, $condition) = $item;
                 $in      = in_array(strtoupper($operator), ['IN', 'NOT IN']);
@@ -104,7 +107,11 @@ class BuildHelper
                     if ($key == 0) {
                         $sql = $subSql;
                     }
+                    continue;
                 }
+                throw new \PDOException(sprintf('Invalid where format: %s', json_encode($item)));
+            } else {
+                throw new \PDOException(sprintf('Invalid where format: %s', json_encode($item)));
             }
         }
         return [$sql, $params];
@@ -122,28 +129,35 @@ class BuildHelper
             $on = [$on];
         }
         foreach ($on as $key => $item) {
-            if (count($item) == 3) {
-                list($field, $operator, $condition) = $item;
-                $subSql = "{$field} {$operator} {$condition}";
-                $sql    .= " AND {$subSql}";
-                if ($key == 0) {
-                    $sql = $subSql;
-                }
-                continue;
-            }
-            if (count($item) == 2) {
+            $length = count($item);
+            // php switch continue 非常奇葩，所以用 if else
+            if ($length == 2) {
                 list($symbol, $subOn) = $item;
-                if (!in_array($symbol, ['or', 'and'])) {
+                if (in_array($symbol, ['or', 'and']) && is_array($subOn)) {
+                    if (count($subOn) == count($subOn, 1)) {
+                        $subOn = [$subOn];
+                    }
+                    $subSql = static::joinOn($subOn);
+                    if (count($subOn) > 1) {
+                        $subSql = "({$subSql})";
+                    }
+                    $sql .= " " . strtoupper($symbol) . " {$subSql}";
                     continue;
                 }
-                if (count($subOn) == count($subOn, 1)) {
-                    $subOn = [$subOn];
+                throw new \PDOException(sprintf('Invalid join on format: %s', json_encode($item)));
+            } elseif ($length == 3) {
+                list($field, $operator, $condition) = $item;
+                if (is_string($field) && is_string($operator) && is_scalar($condition)) {
+                    $subSql = "{$field} {$operator} {$condition}";
+                    $sql    .= " AND {$subSql}";
+                    if ($key == 0) {
+                        $sql = $subSql;
+                    }
+                    continue;
                 }
-                $subSql = static::joinOn($subOn);
-                if (count($subOn) > 1) {
-                    $subSql = "({$subSql})";
-                }
-                $sql .= " " . strtoupper($symbol) . " {$subSql}";
+                throw new \PDOException(sprintf('Invalid join on format: %s', json_encode($item)));
+            } else {
+                throw new \PDOException(sprintf('Invalid join on format: %s', json_encode($item)));
             }
         }
         return $sql;
