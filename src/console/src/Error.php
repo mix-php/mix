@@ -248,7 +248,7 @@ class Error
             }
             $trace[$key] = ' ' . $value;
         }
-        $context['trace'] = implode($trace, "\n");
+        $context['trace'] = implode("\n", $trace);
         $message          = "{message}\n[code] {code} [type] {type}\n[file] in {file} on line {line}\n{trace}";
         if (!$debug) {
             $message = "{message} [{code}] {type} in {file} on line {line}";
