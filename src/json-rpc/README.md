@@ -66,6 +66,7 @@ $client = new \Mix\JsonRpc\Client([
 $requests[] = (new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.sum', [1, 3], 100001)
 $requests[] = (new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.sum', [2, 3], 100002)
 $responses = $client->callMultiple(...$requests);
+// $responses 不保证顺序，需使用 id 遍历结果
 var_dump($responses);
 ```
 
