@@ -3,6 +3,7 @@
 namespace Mix\Http\Message;
 
 use Mix\Session\Session;
+use Mix\Http\Message\Context\Context;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
@@ -51,14 +52,22 @@ class ServerRequest extends Request implements ServerRequestInterface
     protected $attributes = [];
 
     /**
+     * Context
+     * @var Context
+     */
+    protected $context;
+
+    /**
      * Session
      * @var Session
+     * @deprecated 请使用 Context 取代该功能
      */
     protected $session;
 
     /**
      * JWT的有效载荷
      * @var array
+     * @deprecated 请使用 Context 取代该功能
      */
     protected $jwtPayload = [];
 
@@ -364,8 +373,29 @@ class ServerRequest extends Request implements ServerRequestInterface
     }
 
     /**
+     * 获取上下文
+     * @return Context
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
+
+    /**
+     * 设置上下文
+     * @param Context $context
+     * @return $this
+     */
+    public function withContext(Context $context)
+    {
+        $this->context = $context;
+        return $this;
+    }
+
+    /**
      * 获取Session
      * @return Session
+     * @deprecated 请使用 Context 取代该功能
      */
     public function getSession()
     {
@@ -376,6 +406,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      * 设置Session
      * @param Session $session
      * @return $this
+     * @deprecated 请使用 Context 取代该功能
      */
     public function withSession(Session $session)
     {
@@ -386,6 +417,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     /**
      * 获取JWT有效载荷
      * @return array
+     * @deprecated 请使用 Context 取代该功能
      */
     public function getJWTPayload()
     {
@@ -396,6 +428,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      * 设置JWT有效载荷
      * @param array $jwtPayload
      * @return $this
+     * @deprecated 请使用 Context 取代该功能
      */
     public function withJWTPayload(array $jwtPayload)
     {

@@ -113,6 +113,9 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         }
         $serverRequest->withParsedBody($parsedBody);
 
+        $context = (new ContextFactory())->createContext();
+        $serverRequest->withContext($context);
+
         return $serverRequest;
     }
 
