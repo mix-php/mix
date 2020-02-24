@@ -21,20 +21,25 @@ class ConfigHelper
         } else {
             $dir = $path;
         }
-        $config = [];
-        $dh     = @opendir($dir);
+        $dh = @opendir($dir);
         if (!$dh) {
             throw new \RuntimeException(sprintf('Invalid path: %s', $path));
         }
+        $files = [];
         while (false !== ($file = readdir($dh))) {
             if (($file != '.') && ($file != '..')) {
                 $full = $dir . '/' . $file;
                 if (is_file($full)) {
-                    $config = array_merge($config, include $full);
+                    $files[] = $full;
                 }
             }
         }
         closedir($dh);
+        asort($files);
+        $config = [];
+        foreach ($files as $file) {
+            $config = array_merge($config, include $file);
+        }
         return $config;
     }
 
