@@ -9,6 +9,7 @@ use Mix\Console\CommandLine\Argument;
 use Mix\Console\CommandLine\Flag;
 use Mix\Console\Event\CommandBeforeExecuteEvent;
 use Mix\Console\Exception\NotFoundException;
+use Mix\Console\Helper\ConfigHelper;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -42,6 +43,12 @@ class Application
      * @var string
      */
     public $basePath = '';
+
+    /**
+     * 命令路径
+     * @var string
+     */
+    public $commandPath = '';
 
     /**
      * 依赖路径
@@ -116,6 +123,10 @@ class Application
         // 加载核心库
         $this->error           = $this->context->get('error');
         $this->eventDispatcher = $this->context->get('event');
+        // 加载命令
+        if ($this->commandPath != '') {
+            $this->commands = ConfigHelper::each($this->commandPath);
+        }
         // 是否为单命令
         $commands              = $this->commands;
         $frist                 = array_shift($commands);
