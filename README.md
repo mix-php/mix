@@ -8,13 +8,13 @@
 
 <p align="center">
 <img src="https://img.shields.io/badge/php-%3E%3D7.2-brightgreen">
-<img src="https://img.shields.io/badge/swoole-%3E%3D4.4.1-brightgreen">
+<img src="https://img.shields.io/badge/swoole-%3E%3D4.4.4-brightgreen">
 <img src="https://img.shields.io/badge/license-apache%202-blue">
 </p>
 
 ## Mix PHP 是什么
 
-一个基于 Swoole 开发的高性能 PHP 框架，经过两年发展收获了很多中小型团队的支持，框架版本经历了：
+一个基于 Swoole 开发的高性能 PHP 框架，从 `2017` 年开始经过多年发展收获了很多中小型团队的支持，框架版本经历了：
 
 - `V1.*`: 基于 Swoole 的常驻内存型 PHP 高性能框架
 - `V2.0`: 基于 Swoole 的 FastCGI、常驻内存、协程三模 PHP 高性能框架
@@ -44,7 +44,7 @@
 
 ## 框架定位
 
-在其他 Swoole 框架都定位于大中型团队、庞大的 PHP 应用集群的时候，Mix 决定推动这项技术的普及，我们定位于众多的中小型企业、创业型公司，我们将 Swoole 的复杂度封装起来，用简单的编码方式呈现给用户，让更多的中级程序员也可打造高并发系统，让 Swoole 不再只是高级程序员的专利。
+在其他 Swoole 框架都定位于大中型企业的时候，Mix 决定推动这项技术的普及，我们定位于众多的中小型企业、创业型公司，我们将 Swoole 的复杂度封装起来，用简单的编码方式呈现给用户，让更多的中级程序员也可打造高并发系统，让 Swoole 不再只是高级程序员的专利。
 
 ## 框架配套工具
 
@@ -60,7 +60,7 @@
 
 MixPHP开发指南：
 
-- http://mixphp.openmix.org/doc
+- http://doc.mixphp.cn
 - https://www.kancloud.cn/onanying/mixphp2-1/content
 
 ## 环境要求
