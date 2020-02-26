@@ -72,7 +72,7 @@ class Connection
         $size = $this->swooleConnection->send($data);
         if ($size === false) {
             $socket = $this->swooleSocket;
-            throw new \Swoole\Exception($socket->errMsg, $socket->errCode);
+            throw new \Swoole\Exception($socket->errMsg ?: 'Send data failed', $socket->errCode);
         }
         if ($len !== $size) {
             throw new \Swoole\Exception('The sending data is incomplete, it may be that the socket has been closed by the peer.');

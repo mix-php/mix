@@ -73,7 +73,7 @@ class Connection
         $result = $this->swooleResponse->push($data);
         if ($result === false) {
             $socket = $this->swooleResponse->socket;
-            throw new \Swoole\Exception($socket->errMsg, $socket->errCode);
+            throw new \Swoole\Exception($socket->errMsg ?: 'Send frame failed', $socket->errCode);
         }
     }
 
