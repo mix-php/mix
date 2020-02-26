@@ -4,7 +4,6 @@ namespace Mix\Console;
 
 use Mix\Bean\ApplicationContext;
 use Mix\Bean\BeanInjector;
-use Mix\Bean\FileSystemApplicationContext;
 use Mix\Console\CommandLine\Argument;
 use Mix\Console\CommandLine\Flag;
 use Mix\Console\Event\CommandBeforeExecuteEvent;
@@ -116,10 +115,9 @@ class Application
         \Mix::$app = $this;
         // 初始化上下文
         if ($this->beanPath != '') {
-            $this->context = new FileSystemApplicationContext($this->beanPath);
-        } else {
-            $this->context = new ApplicationContext($this->beans);
+            $this->beans = ConfigHelper::each($this->beanPath);
         }
+        $this->context = new ApplicationContext($this->beans);
         // 加载核心库
         $this->error           = $this->context->get('error');
         $this->eventDispatcher = $this->context->get('event');

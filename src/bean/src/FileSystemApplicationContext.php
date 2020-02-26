@@ -5,6 +5,7 @@ namespace Mix\Bean;
 /**
  * Class FileSystemApplicationContext
  * @package Mix\Bean
+ * @deprecated 废弃，统一都使用 ApplicationContext
  */
 class FileSystemApplicationContext extends ApplicationContext
 {
