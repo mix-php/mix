@@ -83,21 +83,22 @@ class Connection
      */
     public function close()
     {
+        $this->connectionManager->remove($this);
         // Swoole >= 4.4.8 才支持 close
         // 但在 4.4.13 ~ 4.4.14 server shutdown 后 close 会抛出 http response is unavailable 警告，需升级 Swoole 版本
-        if (!$this->swooleResponse->close()) {
-            $socket  = $this->swooleResponse->socket;
-            $errMsg  = $socket->errMsg;
-            $errCode = $socket->errCode;
-            if ($errMsg == '' && $errCode == 0) {
-                return;
-            }
-            if ($errMsg == 'Connection reset by peer' && in_array($errCode, [54, 104])) { // mac=54, linux=104
-                return;
-            }
-            throw new \Swoole\Exception($errMsg, $errCode);
+        if ($this->swooleResponse->close()) {
+            return;
         }
-        $this->connectionManager->remove($this);
+        $socket  = $this->swooleResponse->socket;
+        $errMsg  = $socket->errMsg;
+        $errCode = $socket->errCode;
+        if ($errMsg == '' && $errCode == 0) {
+            return;
+        }
+        if ($errMsg == 'Connection reset by peer' && in_array($errCode, [54, 104])) { // mac=54, linux=104
+            return;
+        }
+        throw new \Swoole\Exception($errMsg, $errCode);
     }
 
 }

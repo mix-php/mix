@@ -85,19 +85,20 @@ class Connection
      */
     public function close()
     {
-        if (!$this->swooleConnection->close()) {
-            $socket  = $this->swooleSocket;
-            $errMsg  = $socket->errMsg;
-            $errCode = $socket->errCode;
-            if ($errMsg == '' && $errCode == 0) {
-                return;
-            }
-            if ($errMsg == 'Connection reset by peer' && in_array($errCode, [54, 104])) { // mac=54, linux=104
-                return;
-            }
-            throw new \Swoole\Exception($errMsg, $errCode);
-        }
         $this->connectionManager->remove($this);
+        if ($this->swooleConnection->close()) {
+            return;
+        }
+        $socket  = $this->swooleSocket;
+        $errMsg  = $socket->errMsg;
+        $errCode = $socket->errCode;
+        if ($errMsg == '' && $errCode == 0) {
+            return;
+        }
+        if ($errMsg == 'Connection reset by peer' && in_array($errCode, [54, 104])) { // mac=54, linux=104
+            return;
+        }
+        throw new \Swoole\Exception($errMsg, $errCode);
     }
 
 }
