@@ -175,34 +175,25 @@ class Error
      */
     public function handleException(\Throwable $e)
     {
-        // 错误参数定义
-        $errors = [
-            'code'    => $e->getCode(),
-            'message' => $e->getMessage(),
-            'file'    => $e->getFile(),
-            'line'    => $e->getLine(),
-            'type'    => get_class($e),
-            'trace'   => $e->getTraceAsString(),
-        ];
         // 日志处理
         if ($e instanceof NotFoundException) {
             // 打印到屏幕
-            println($errors['message']);
+            println($e->getMessage());
             return;
         }
         // 输出日志
-        $this->log($errors);
+        $this->log($e);
     }
 
     /**
      * 输出日志
-     * @param array $errors
+     * @param \Throwable $e
      */
-    protected function log(array $errors)
+    protected function log(\Throwable $e)
     {
         $logger = $this->logger;
         // 构造内容
-        list($message, $context) = static::format($errors, \Mix::$app->appDebug);
+        list($message, $context) = static::format($e, \Mix::$app->appDebug);
         // 写入
         $level = static::levelType($context['code']);
         switch ($level) {
@@ -220,13 +211,20 @@ class Error
 
     /**
      * 格式化
-     * @param array $errors
+     * @param \Throwable $e
      * @param bool $debug
-     * @return string
+     * @return array
      */
-    protected static function format(array $errors, bool $debug)
+    public static function format(\Throwable $e, bool $debug)
     {
-        $context = $errors;
+        $context = [
+            'code'    => $e->getCode(),
+            'message' => $e->getMessage(),
+            'file'    => $e->getFile(),
+            'line'    => $e->getLine(),
+            'type'    => get_class($e),
+            'trace'   => $e->getTraceAsString(),
+        ];
         $trace   = explode("\n", $context['trace']);
         foreach ($trace as $key => $value) {
             if (strpos($value, '): ') !== false) {
