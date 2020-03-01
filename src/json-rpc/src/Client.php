@@ -3,6 +3,8 @@
 namespace Mix\JsonRpc;
 
 use Mix\Bean\BeanInjector;
+use Mix\Etcd\ServiceCenter;
+use Mix\JsonRpc\Call\Caller;
 use Mix\JsonRpc\Message\Request;
 use Mix\JsonRpc\Message\Response;
 use Mix\JsonRpc\Helper\JsonRpcHelper;
@@ -28,6 +30,11 @@ class Client
     public $connection;
 
     /**
+     * @var ServiceCenter
+     */
+    public $serviceCenter;
+
+    /**
      * Client constructor.
      * @param array $config
      * @throws \PhpDocReader\AnnotationException
@@ -44,7 +51,22 @@ class Client
      */
     protected function getConnection()
     {
-        return $this->pool ? $this->pool->getConnection() : $this->connection;
+        if (isset($this->pool)) {
+            return $this->pool->getConnection();
+        }
+        return $this->connection;
+    }
+
+    /**
+     * 通过服务调用
+     * @param string $name
+     * @return Caller
+     */
+    public function service(string $name)
+    {
+        $service    = $this->serviceCenter->service($name);
+        $connection = $this->serviceCenter->dial();
+        return (new Caller($connection));
     }
 
     /**
@@ -56,13 +78,7 @@ class Client
      */
     public function call(Request $request)
     {
-        $jsonStr    = JsonRpcHelper::encode($request) . Constants::EOF;
-        $connection = $this->getConnection();
-        $connection->send($jsonStr);
-        $data = $connection->recv();
-        $connection->release();
-        $responses = JsonRpcHelper::parseResponses($data);
-        return array_pop($responses);
+        return (new Caller($this->getConnection()))->call($request);
     }
 
     /**
@@ -74,19 +90,7 @@ class Client
      */
     public function callMultiple(Request ...$requests)
     {
-        if (empty($requests)) {
-            return [];
-        }
-        if (count($requests) == 1) {
-            $jsonStr = JsonRpcHelper::encode(array_pop($requests)) . Constants::EOF;
-        } else {
-            $jsonStr = JsonRpcHelper::encode($requests) . Constants::EOF;
-        }
-        $connection = $this->getConnection();
-        $connection->send($jsonStr);
-        $data = $connection->recv();
-        $connection->release();
-        return JsonRpcHelper::parseResponses($data);
+        return (new Caller($this->getConnection()))->callMultiple(...$requests);
     }
 
 }
