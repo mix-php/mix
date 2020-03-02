@@ -66,7 +66,7 @@ class Registrar
         $leaseID  = $this->leaseID = (int)$reslut['ID'];
         $node     = new Node((new UuidFactory())->uuid4()->toString(), gethostname(), current(swoole_get_local_ip()));
         $services = [];
-        foreach ($bundle->services() as $service) {
+        foreach ($bundle->items() as $service) {
             $services[] = $service->name;
             $client->put(sprintf('/service/%s/%s', $service->name, $service->id), json_encode($service), ['lease' => $leaseID]);
         }

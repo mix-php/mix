@@ -95,14 +95,14 @@ class ServiceCenter
      * @param string $name
      * @return Service
      */
-    public function service(string $name): Service
+    public function get(string $name): Service
     {
         if (isset($this->monitors[$name])) {
-            return $this->monitors[$name]->service();
+            return $this->monitors[$name]->random();
         }
         $monitor               = new ServiceMonitor($this->createClient(), $name, $this->ttl);
         $this->monitors[$name] = $monitor;
-        return $monitor->service();
+        return $monitor->random();
     }
 
     /**

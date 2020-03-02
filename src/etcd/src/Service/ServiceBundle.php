@@ -27,9 +27,18 @@ class ServiceBundle
      * Get all service
      * @return Service[]
      */
-    public function services()
+    public function items()
     {
         return $this->services;
+    }
+ 
+    /**
+     * Add service
+     * @param Service $service
+     */
+    public function add(Service $service)
+    {
+        array_push($this->services, $service);
     }
 
 }

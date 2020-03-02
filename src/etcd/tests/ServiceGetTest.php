@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
-final class ServiceTest extends TestCase
+final class ServiceGetTest extends TestCase
 {
 
     public function testGet(): void
@@ -16,7 +16,7 @@ final class ServiceTest extends TestCase
                 'version' => 'v3',
                 'ttl'     => 10,
             ]);
-            $service = $center->service('php.micro.srv.test');
+            $service = $center->get('php.micro.srv.test');
             var_dump($service);
         };
         run($func);

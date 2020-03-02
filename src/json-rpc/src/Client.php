@@ -64,9 +64,9 @@ class Client
      */
     public function service(string $name)
     {
-        $service    = $this->serviceCenter->service($name);
-        $connection = $this->serviceCenter->dial();
-        return (new Caller($connection));
+        $service    = $this->serviceCenter->get($name);
+        $connection = $this->serviceCenter->dial($service);
+        return new Caller($connection);
     }
 
     /**

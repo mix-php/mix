@@ -90,7 +90,7 @@ class ServiceMonitor
      * @return Service
      * @throws \Exception
      */
-    public function service(): Service
+    public function random(): Service
     {
         if (count($this->services) == 0) {
             throw new \Exception(sprintf('Service not found, name: %s', $this->name));
