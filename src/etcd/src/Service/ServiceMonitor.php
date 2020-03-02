@@ -2,10 +2,8 @@
 
 namespace Mix\Etcd\Service;
 
-use Cassandra\Time;
 use Etcd\Client;
 use Mix\Concurrent\Timer;
-use Mix\Etcd\Factory\ServiceFactory;
 
 /**
  * Class ServiceMonitor

@@ -2,8 +2,6 @@
 
 namespace Mix\Etcd\Node;
 
-use Ramsey\Uuid\UuidFactory;
-
 /**
  * Class Node
  * @package Mix\Etcd\Node

@@ -3,7 +3,6 @@
 namespace Mix\Etcd;
 
 use Etcd\Client;
-use Mix\Bean\BeanFactoryTrait;
 use Mix\Bean\BeanInjector;
 use Mix\Etcd\Register\Registrar;
 use Mix\Etcd\Service\Service;

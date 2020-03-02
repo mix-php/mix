@@ -5,7 +5,6 @@ namespace Mix\Etcd\Register;
 use Etcd\Client;
 use Mix\Concurrent\Timer;
 use Mix\Etcd\Node\Node;
-use Mix\Etcd\Service\Service;
 use Mix\Etcd\Service\ServiceBundle;
 use Ramsey\Uuid\UuidFactory;
 
