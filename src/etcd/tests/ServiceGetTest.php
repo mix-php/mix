@@ -18,6 +18,7 @@ final class ServiceGetTest extends TestCase
             ]);
             $service = $center->get('php.micro.srv.test');
             var_dump($service);
+            $center->clear();
         };
         run($func);
     }
