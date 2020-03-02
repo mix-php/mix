@@ -3,12 +3,12 @@
 namespace Mix\JsonRpc;
 
 use Mix\Bean\BeanInjector;
-use Mix\Etcd\ServiceCenter;
 use Mix\JsonRpc\Call\Caller;
 use Mix\JsonRpc\Message\Request;
 use Mix\JsonRpc\Message\Response;
 use Mix\JsonRpc\Helper\JsonRpcHelper;
 use Mix\Pool\ConnectionPoolInterface;
+use Mix\ServiceCenter\ServiceCenterInterface;
 
 /**
  * Class Client
@@ -30,7 +30,7 @@ class Client
     public $connection;
 
     /**
-     * @var ServiceCenter
+     * @var ServiceCenterInterface
      */
     public $serviceCenter;
 

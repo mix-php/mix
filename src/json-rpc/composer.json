@@ -22,10 +22,10 @@
     "mix/concurrent": "~2.1.0",
     "mix/server": "~2.1.0",
     "mix/http-server": "~2.1.0",
-    "mix/pool": "~2.1.0"
+    "mix/pool": "~2.1.0",
+    "mix/service-center": "~2.1.0"
   },
   "require-dev": {
-    "swoole/ide-helper": "dev-master",
     "phpunit/phpunit": "^7.0.0"
   },
   "autoload": {
