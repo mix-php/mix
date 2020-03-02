@@ -31,7 +31,9 @@
     "psr/http-factory": "^1.0",
     "psr/http-server-middleware": "^1.0",
     "psr/http-server-handler": "^1.0",
-    "opis/closure": "^3.5"
+    "opis/closure": "^3.5",
+    "start-point/etcd-php": "^1.1",
+    "ramsey/uuid": "^3.9"
   },
   "replace": {
     "mix/bean": "self.version",
@@ -55,7 +57,9 @@
     "mix/http-server": "self.version",
     "mix/websocket": "self.version",
     "mix/sync-invoke": "self.version",
-    "mix/json-rpc": "self.version"
+    "mix/json-rpc": "self.version",
+    "mix/service-center": "self.version",
+    "mix/etcd": "self.version"
   },
   "autoload": {
     "psr-4": {
@@ -80,7 +84,9 @@
       "Mix\\View\\": "src/view/src/",
       "Mix\\WebSocket\\": "src/websocket/src/",
       "Mix\\SyncInvoke\\": "src/sync-invoke/src/",
-      "Mix\\JsonRpc\\": "src/json-rpc/src/"
+      "Mix\\JsonRpc\\": "src/json-rpc/src/",
+      "Mix\\ServiceCenter\\": "src/service-center/src/",
+      "Mix\\Etcd\\": "src/etcd/src/"
     },
     "classmap": [
       "src/console/src/Mix.php"
