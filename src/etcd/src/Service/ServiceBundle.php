@@ -2,41 +2,44 @@
 
 namespace Mix\Etcd\Service;
 
+use Mix\ServiceCenter\ServiceBundleInterface;
+use Mix\ServiceCenter\ServiceInterface;
+
 /**
  * Class ServiceBundle
  * @package Mix\Etcd\Service
  */
-class ServiceBundle
+class ServiceBundle implements ServiceBundleInterface
 {
 
     /**
-     * @var Service[]
+     * @var ServiceInterface[]
      */
     protected $services = [];
 
     /**
      * ServiceBundle constructor.
-     * @param Service ...$services
+     * @param ServiceInterface ...$services
      */
-    public function __construct(Service ...$services)
+    public function __construct(ServiceInterface ...$services)
     {
         $this->services = $services;
     }
 
     /**
      * Get all service
-     * @return Service[]
+     * @return ServiceInterface[]
      */
     public function items()
     {
         return $this->services;
     }
- 
+
     /**
      * Add service
-     * @param Service $service
+     * @param ServiceInterface $service
      */
-    public function add(Service $service)
+    public function add(ServiceInterface $service)
     {
         array_push($this->services, $service);
     }

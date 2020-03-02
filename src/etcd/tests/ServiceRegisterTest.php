@@ -20,7 +20,8 @@ final class ServiceRegisterTest extends TestCase
             $serviceBundleFactory = new \Mix\Etcd\Factory\ServiceBundleFactory();
             $ip                   = current(swoole_get_local_ip());
             $service              = $serviceFactory->createService('php.micro.srv.test', $ip, 9501);
-            $serviceBundle        = $serviceBundleFactory->createServiceBundle($service);
+            $service->withMetadata("foo", "bar");
+            $serviceBundle = $serviceBundleFactory->createServiceBundle($service);
             $center->register($serviceBundle);
         };
         run($func);

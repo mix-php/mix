@@ -5,16 +5,17 @@ namespace Mix\Etcd;
 use Etcd\Client;
 use Mix\Bean\BeanInjector;
 use Mix\Etcd\Register\Registrar;
-use Mix\Etcd\Service\Service;
-use Mix\Etcd\Service\ServiceBundle;
 use Mix\Etcd\Service\ServiceMonitor;
-use Mix\Service\DialerInterface;
+use Mix\ServiceCenter\DialerInterface;
+use Mix\ServiceCenter\ServiceBundleInterface;
+use Mix\ServiceCenter\ServiceCenterInterface;
+use Mix\ServiceCenter\ServiceInterface;
 
 /**
  * Class ServiceCenter
  * @package Mix\Etcd
  */
-class ServiceCenter
+class ServiceCenter implements ServiceCenterInterface
 {
 
     /**
@@ -81,10 +82,10 @@ class ServiceCenter
 
     /**
      * dial return connection
-     * @param Service $service
+     * @param ServiceInterface $service
      * @return object
      */
-    public function dial(Service $service)
+    public function dial(ServiceInterface $service)
     {
         return $this->dialer->dial($service);
     }
@@ -92,9 +93,9 @@ class ServiceCenter
     /**
      * Get Service
      * @param string $name
-     * @return Service
+     * @return ServiceInterface
      */
-    public function get(string $name): Service
+    public function get(string $name): ServiceInterface
     {
         if (isset($this->monitors[$name])) {
             return $this->monitors[$name]->random();
@@ -106,10 +107,10 @@ class ServiceCenter
 
     /**
      * Register
-     * @param ServiceBundle $bundle
+     * @param ServiceBundleInterface $bundle
      * @throws \Exception
      */
-    public function register(ServiceBundle $bundle)
+    public function register(ServiceBundleInterface $bundle)
     {
         $id = spl_object_hash($bundle);
         if (isset($this->registrars[$id])) {
@@ -122,10 +123,10 @@ class ServiceCenter
 
     /**
      * Un Register
-     * @param Service $service
+     * @param ServiceBundleInterface $bundle
      * @throws \Exception
      */
-    public function unregister(ServiceBundle $bundle)
+    public function unregister(ServiceBundleInterface $bundle)
     {
         $id = spl_object_hash($bundle);
         if (!isset($this->registrars[$id])) {
