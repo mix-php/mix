@@ -1,21 +1,19 @@
 <?php
 
-namespace Mix\Service;
-
-use Mix\Etcd\Service\Service;
+namespace Mix\ServiceCenter;
 
 /**
  * Interface DialerInterface
- * @package Mix\Service
+ * @package Mix\ServiceCenter
  */
 interface DialerInterface
 {
 
     /**
-     * 拨号
-     * @param Service $service
+     * Dial
+     * @param ServiceInterface $service
      * @return object
      */
-    public function dial(Service $service);
+    public function dial(ServiceInterface $service);
 
 }

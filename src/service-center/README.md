@@ -1,11 +1,11 @@
-## Mix Service
+## Mix Service Center
 
 ...
 
 ## Usage
 
 ```
-composer require mix/service
+composer require mix/service-center
 ```
 
 ## License

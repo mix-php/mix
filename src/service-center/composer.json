@@ -1,6 +1,6 @@
 {
-  "name": "mix/service",
-  "description": "Mix Service http://www.mixphp.cn",
+  "name": "mix/service-center",
+  "description": "Mix Service Center http://www.mixphp.cn",
   "type": "framework",
   "keywords": [
     "framework",
@@ -16,12 +16,11 @@
     }
   ],
   "require": {
-    "php": ">=7.0.0",
-    "ext-swoole": ">=4.4.4"
+    "php": ">=7.0.0"
   },
   "autoload": {
     "psr-4": {
-      "Mix\\Service\\": "src/"
+      "Mix\\ServiceCenter\\": "src/"
     }
   }
 }
