@@ -59,17 +59,22 @@ class Registrar
      */
     public function register()
     {
-        $client   = $this->client;
-        $bundle   = $this->bundle;
-        $reslut   = $client->grant($this->ttl);
-        $leaseID  = $this->leaseID = (int)$reslut['ID'];
-        $node     = new Node((new UuidFactory())->uuid4()->toString(), gethostname(), current(swoole_get_local_ip()));
-        $services = [];
+        $client  = $this->client;
+        $bundle  = $this->bundle;
+        $reslut  = $client->grant($this->ttl);
+        $leaseID = $this->leaseID = (int)$reslut['ID'];
+        $node    = new Node((new UuidFactory())->uuid4()->toString(), gethostname(), current(swoole_get_local_ip()));
         foreach ($bundle->items() as $service) {
-            $services[] = $service->name;
+            $node->services[] = [
+                'id'   => $service->id,
+                'name' => $service->name,
+            ];
+            $service->node    = [
+                'id'   => $node->id,
+                'name' => $node->name,
+            ];
             $client->put(sprintf('/service/%s/%s', $service->name, $service->id), json_encode($service), ['lease' => $leaseID]);
         }
-        $node->services = $services;
         $client->put(sprintf('/node/%s/%s', $node->name, $node->id), json_encode($node), ['lease' => $leaseID]);
         $this->timer = $this->keepAlive();
     }

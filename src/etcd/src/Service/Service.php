@@ -30,6 +30,16 @@ class Service
     public $port = 0;
 
     /**
+     * @var array
+     */
+    public $metadata = [];
+
+    /**
+     * @var array
+     */
+    public $node = [];
+
+    /**
      * Service constructor.
      * @param string $id
      * @param string $name
