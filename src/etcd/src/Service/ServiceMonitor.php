@@ -72,14 +72,19 @@ class ServiceMonitor
         }
         $kvs = $result['kvs'];
         foreach ($kvs as $kv) {
-            $value            = $kv['value'];
-            $object           = json_decode($value, true);
-            $this->services[] = new Service(
-                $object['id'],
-                $object['name'],
-                $object['address'],
-                $object['port']
+            $value   = $kv['value'];
+            $data    = json_decode($value, true);
+            $service = new Service(
+                $data['id'],
+                $data['name'],
+                $data['address'],
+                $data['port']
             );
+            foreach ($data['metadata'] as $key => $value) {
+                $service->withMetadata($key, $value);
+            }
+            $service->withNode($data['node']['id'], $data['node']['name']);
+            $this->services[] = $service;
         }
     }
 
