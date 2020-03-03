@@ -2,8 +2,9 @@
 
 namespace Mix\Etcd\Service;
 
-use Etcd\Client;
 use Mix\Concurrent\Timer;
+use Mix\Etcd\Client\Client;
+use Mix\Etcd\Client\Watcher;
 
 /**
  * Class ServiceMonitor
@@ -13,24 +14,24 @@ class ServiceMonitor
 {
 
     /**
-     * @var string
-     */
-    public $name = '';
-
-    /**
      * @var Client
      */
     public $client;
 
     /**
-     * @var int
+     * @var string
      */
-    public $ttl;
+    public $prefix = '';
 
     /**
-     * @var Service[]
+     * @var Service[name][id]
      */
     protected $services = [];
+
+    /**
+     * @var int second
+     */
+    protected $interval = 10;
 
     /**
      * @var Timer
@@ -38,20 +39,50 @@ class ServiceMonitor
     protected $timer;
 
     /**
+     * @var Watcher
+     */
+    protected $watcher;
+
+    /**
      * ServiceMonitor constructor.
      * @param Client $client
-     * @param string $name
-     * @param int $ttl
+     * @param string $prefix
      * @throws \Exception
      */
-    public function __construct(Client $client, string $name, int $ttl)
+    public function __construct(Client $client, string $prefix)
     {
         $this->client = $client;
-        $this->name   = $name;
-        $this->ttl    = $ttl;
+        $this->prefix = $prefix;
+
+        $func    = function (array $data) {
+            $events = $data['events'];
+            foreach ($events as $event) {
+                $type = $event['type'] ?? 'PUT';
+                $kv   = $event['kv'];
+                switch ($type) {
+                    case 'DELETE':
+                        $key      = base64_decode($kv['key']);
+                        $segments = explode('/', $key);
+                        $id       = array_pop($segments);
+                        $name     = array_pop($segments);
+                        unset($this->services[$name][$id]);
+                        break;
+                    case 'PUT':
+                        $key                                                    = base64_decode($kv['key']);
+                        $value                                                  = base64_decode($kv['value']);
+                        $service                                                = static::parseValue($value);
+                        $this->services[$service->getName()][$service->getID()] = $service;
+                        break;
+                }
+            }
+        };
+        $watcher = $client->watchKeysWithPrefix($prefix, $func);
+        $watcher->forever();
+        $this->watcher = $watcher;
+
         $this->pull();
         $timer = Timer::new();
-        $timer->tick($ttl * 1000 / 5 * 4, function () {
+        $timer->tick($this->interval * 1000, function () {
             $this->pull();
         });
         $this->timer = $timer;
@@ -63,42 +94,56 @@ class ServiceMonitor
      */
     public function pull()
     {
-        $client         = $this->client;
-        $name           = $this->name;
-        $this->services = [];
-        $result         = $client->getKeysWithPrefix(sprintf('/service/%s/', $name));
+        $client = $this->client;
+        $name   = $this->name;
+        $result = $client->getKeysWithPrefix(sprintf('/service/%s/', $name));
         if (!isset($result['count']) || $result['count'] == 0) {
             return;
         }
-        $kvs = $result['kvs'];
+        $services = [];
+        $kvs      = $result['kvs'];
         foreach ($kvs as $kv) {
-            $value   = $kv['value'];
-            $data    = json_decode($value, true);
-            $service = new Service(
-                $data['id'],
-                $data['name'],
-                $data['address'],
-                $data['port']
-            );
-            foreach ($data['metadata'] as $key => $value) {
-                $service->withMetadata($key, $value);
-            }
-            $service->withNode($data['node']['id'], $data['node']['name']);
-            $this->services[] = $service;
+            $value                                            = $kv['value'];
+            $service                                          = static::parseValue($value);
+            $services[$service->getName()][$service->getID()] = $service;
         }
+        $this->services = $services;
+    }
+
+    /**
+     * Parse value to service
+     * @param string $value
+     * @return Service
+     */
+    protected static function parseValue(string $value)
+    {
+        $data    = json_decode($value, true);
+        $service = new Service(
+            $data['id'],
+            $data['name'],
+            $data['address'],
+            $data['port']
+        );
+        foreach ($data['metadata'] as $key => $value) {
+            $service->withMetadata($key, $value);
+        }
+        $service->withNode($data['node']['id'], $data['node']['name']);
+        return $service;
     }
 
     /**
      * Random get service
+     * @param string $name
      * @return Service
      * @throws \Exception
      */
-    public function random(): Service
+    public function random(string $name): Service
     {
-        if (count($this->services) == 0) {
+        $services = $this->services[$name] ?? [];
+        if (empty($services)) {
             throw new \Exception(sprintf('Service not found, name: %s', $this->name));
         }
-        return $this->services[array_rand($this->services)];
+        return $services[array_rand($this->services)];
     }
 
     /**
@@ -106,6 +151,7 @@ class ServiceMonitor
      */
     public function close()
     {
+        $this->watcher->close();
         $this->timer->clear();
     }
 

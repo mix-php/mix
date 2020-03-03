@@ -2,8 +2,8 @@
 
 namespace Mix\Etcd;
 
-use Etcd\Client;
 use Mix\Bean\BeanInjector;
+use Mix\Etcd\Client\Client;
 use Mix\Etcd\Register\Registrar;
 use Mix\Etcd\Service\ServiceMonitor;
 use Mix\ServiceCenter\DialerInterface;
@@ -37,7 +37,7 @@ class ServiceCenter implements ServiceCenterInterface
     public $version = 'v3';
 
     /**
-     * TTL
+     * Keep alive TTL
      * @var int
      */
     public $ttl = 5;
@@ -81,7 +81,7 @@ class ServiceCenter implements ServiceCenterInterface
     }
 
     /**
-     * dial return connection
+     * Dial return connection
      * @param ServiceInterface $service
      * @return object
      */
@@ -97,12 +97,15 @@ class ServiceCenter implements ServiceCenterInterface
      */
     public function get(string $name): ServiceInterface
     {
-        if (isset($this->monitors[$name])) {
-            return $this->monitors[$name]->random();
+        $segments = explode('.', $name);
+        array_pop($segments);
+        $prefix = implode('.', $segments);
+        if (isset($this->monitors[$prefix])) {
+            return $this->monitors[$prefix]->random($name);
         }
-        $monitor               = new ServiceMonitor($this->createClient(), $name, $this->ttl);
-        $this->monitors[$name] = $monitor;
-        return $monitor->random();
+        $monitor                 = new ServiceMonitor($this->createClient(), $prefix);
+        $this->monitors[$prefix] = $monitor;
+        return $monitor->random($name);
     }
 
     /**
