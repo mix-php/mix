@@ -31,7 +31,7 @@ class ServiceMonitor
     /**
      * @var int second
      */
-    protected $interval = 10;
+    protected $interval = 60;
 
     /**
      * @var Timer
