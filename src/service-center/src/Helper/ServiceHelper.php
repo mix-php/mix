@@ -15,7 +15,7 @@ class ServiceHelper
      */
     public static function uuid()
     {
-        return (new UuidFactory())->uuid1(crc32(static::ip()))->toString();
+        return (new UuidFactory())->uuid1(crc32(static::localIP()))->toString();
     }
 
     /**
