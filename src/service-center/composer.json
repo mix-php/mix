@@ -16,7 +16,8 @@
     }
   ],
   "require": {
-    "php": ">=7.0.0"
+    "php": ">=7.0.0",
+    "ramsey/uuid": "^3.9"
   },
   "autoload": {
     "psr-4": {
