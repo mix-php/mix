@@ -2,6 +2,8 @@
 
 namespace Mix\ServiceCenter\Helper;
 
+use Ramsey\Uuid\UuidFactory;
+
 /**
  * Class ServiceHelper
  * @package Mix\ServiceCenter\Helper
