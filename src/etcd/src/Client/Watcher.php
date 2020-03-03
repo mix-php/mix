@@ -32,6 +32,11 @@ class Watcher
     protected $closed = false;
 
     /**
+     * @var bool
+     */
+    protected $watching = false;
+
+    /**
      * @var \Swoole\Coroutine\Client
      */
     protected $client;
@@ -67,8 +72,8 @@ class Watcher
             'open_eof_check' => true,
             'package_eof'    => "\n",
         ]);
-        list($address, $port) = explode(':', $this->server);
-        if (!$client->connect($address, (int)$port, $this->timeout)) {
+        $segments = parse_url($this->server);
+        if (!$client->connect($segments['host'], $segments['port'], $this->timeout)) {
             throw new \Swoole\Exception(sprintf("Etcd client connect failed, %s (%s)", $client->errMsg, $server), $client->errCode);
         }
         return $client;
@@ -80,9 +85,9 @@ class Watcher
      */
     protected function log(\Throwable $ex)
     {
-        $time    = date('[error] Y-m-d H:i:s');
-        $message = sprintf('%s [%d]', $ex->getMessage(), $ex->getCode());
-        echo "$time $message";
+        $time    = date('Y-m-d H:i:s');
+        $message = sprintf('%s [%d] %s line %s', $ex->getMessage(), $ex->getCode(), $ex->getFile(), $ex->getLine());
+        echo "[error] $time $message\n";
     }
 
     /**
@@ -90,6 +95,7 @@ class Watcher
      */
     public function forever()
     {
+        $this->watching = true;
         xgo(function () {
             while (true) {
                 if ($this->closed) {
@@ -99,6 +105,7 @@ class Watcher
                     $this->watch();
                 } catch (\Throwable $ex) {
                     $this->log($ex);
+                    sleep(1);
                 }
             }
         });
@@ -158,6 +165,20 @@ EOF;
     public function close()
     {
         $this->closed = true;
+        if (!$this->watching) {
+            return;
+        }
+        if (!isset($this->client)) {
+            // 等待 go 执行一会，当 close 在刚 forever 执行后就被立即调用的时候
+            for ($i = 0; $i < 4; $i++) {
+                usleep(500000);
+                if (isset($this->client)) {
+                    $this->client->close();
+                    break;
+                }
+            }
+            return;
+        }
         $this->client->close();
     }
 

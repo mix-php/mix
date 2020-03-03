@@ -55,7 +55,10 @@ class ServiceMonitor
         $this->prefix = $prefix;
 
         $func    = function (array $data) {
-            $events = $data['events'];
+            if (!isset($data['result']['events'])) {
+                return;
+            }
+            $events = $data['result']['events'];
             foreach ($events as $event) {
                 $type = $event['type'] ?? 'PUT';
                 $kv   = $event['kv'];
@@ -76,7 +79,7 @@ class ServiceMonitor
                 }
             }
         };
-        $watcher = $client->watchKeysWithPrefix($prefix, $func);
+        $watcher = $client->watchKeysWithPrefix(sprintf('/service/%s', $prefix), $func);
         $watcher->forever();
         $this->watcher = $watcher;
 
@@ -95,8 +98,8 @@ class ServiceMonitor
     public function pull()
     {
         $client = $this->client;
-        $name   = $this->name;
-        $result = $client->getKeysWithPrefix(sprintf('/service/%s/', $name));
+        $prefix = $this->prefix;
+        $result = $client->getKeysWithPrefix(sprintf('/service/%s', $prefix));
         if (!isset($result['count']) || $result['count'] == 0) {
             return;
         }
@@ -141,9 +144,9 @@ class ServiceMonitor
     {
         $services = $this->services[$name] ?? [];
         if (empty($services)) {
-            throw new \Exception(sprintf('Service not found, name: %s', $this->name));
+            throw new \Exception(sprintf('Service not found, name: %s', $name));
         }
-        return $services[array_rand($this->services)];
+        return $services[array_rand($services)];
     }
 
     /**
