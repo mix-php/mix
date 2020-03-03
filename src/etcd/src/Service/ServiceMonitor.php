@@ -89,7 +89,7 @@ class ServiceMonitor
     }
 
     /**
-     * Rand get service
+     * Random get service
      * @return Service
      * @throws \Exception
      */

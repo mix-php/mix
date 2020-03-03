@@ -3,7 +3,7 @@
 namespace Mix\Etcd\Factory;
 
 use Mix\Etcd\Service\Service;
-use Ramsey\Uuid\UuidFactory;
+use Mix\ServiceCenter\Helper\ServiceHelper;
 
 /**
  * Class ServiceFactory
@@ -22,7 +22,7 @@ class ServiceFactory
      */
     public function createService(string $name, string $address, int $port): Service
     {
-        $id = (new UuidFactory())->uuid4()->toString();
+        $id = ServiceHelper::uuid();
         return new Service($id, $name, $address, $port);
     }
 

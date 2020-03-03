@@ -6,7 +6,7 @@ use Etcd\Client;
 use Mix\Concurrent\Timer;
 use Mix\Etcd\Node\Node;
 use Mix\Etcd\Service\ServiceBundle;
-use Ramsey\Uuid\UuidFactory;
+use Mix\ServiceCenter\Helper\ServiceHelper;
 
 /**
  * Class Registrar
@@ -63,7 +63,7 @@ class Registrar
         $bundle  = $this->bundle;
         $reslut  = $client->grant($this->ttl);
         $leaseID = $this->leaseID = (int)$reslut['ID'];
-        $node    = new Node((new UuidFactory())->uuid4()->toString(), gethostname(), current(swoole_get_local_ip()));
+        $node    = new Node(ServiceHelper::uuid(), gethostname(), ServiceHelper::localIP());
         foreach ($bundle->items() as $service) {
             $node->withAddedService($service->getID(), $service->getName());
             $service->withNode($node->getID(), $node->getName());
