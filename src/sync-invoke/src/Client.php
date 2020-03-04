@@ -15,6 +15,12 @@ class Client
 {
 
     /**
+     * 拨号器
+     * @var Dialer
+     */
+    public $dialer;
+
+    /**
      * 连接池
      * @var ConnectionPoolInterface
      */
@@ -41,7 +47,13 @@ class Client
      */
     protected function getConnection()
     {
-        return $this->pool ? $this->pool->getConnection() : $this->connection;
+        if (isset($this->pool)) {
+            return $this->pool->getConnection();
+        }
+        if (!isset($this->connection)) {
+            $this->connection = $this->dialer->dial();
+        }
+        return $this->connection;
     }
 
     /**
