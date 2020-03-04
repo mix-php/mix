@@ -25,7 +25,7 @@ class Dialer
     /**
      * @var float
      */
-    public $timeout = 3.0;
+    public $timeout = 5.0;
 
     /**
      * Dialer constructor.

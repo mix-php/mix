@@ -41,7 +41,7 @@ class Connection
      * @param float $timeout
      * @throws \Swoole\Exception
      */
-    public function __construct(string $host, int $port, float $timeout = 3.0)
+    public function __construct(string $host, int $port, float $timeout = 0.0)
     {
         $this->host    = $host;
         $this->port    = $port;
