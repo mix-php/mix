@@ -43,12 +43,6 @@ class ServiceCenter implements ServiceCenterInterface
     public $ttl = 5;
 
     /**
-     * 拨号器
-     * @var DialerInterface
-     */
-    public $dialer;
-
-    /**
      * 注册器集合
      * @var Registrar[]
      */
@@ -78,16 +72,6 @@ class ServiceCenter implements ServiceCenterInterface
     protected function createClient()
     {
         return new Client(sprintf('%s:%d', $this->host, $this->port), $this->version);
-    }
-
-    /**
-     * Dial return connection
-     * @param ServiceInterface $service
-     * @return object
-     */
-    public function dial(ServiceInterface $service)
-    {
-        return $this->dialer->dial($service);
     }
 
     /**
