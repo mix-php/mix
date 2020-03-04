@@ -3,6 +3,7 @@
 namespace Mix\JsonRpc;
 
 use Mix\Bean\BeanInjector;
+use Mix\ServiceCenter\ServiceInterface;
 
 /**
  * Class Dialer
@@ -44,11 +45,20 @@ class Dialer
      * @return Connection
      * @throws \Swoole\Exception
      */
-    public function dial(string $host = '', int $port = 0)
+    public function dial()
     {
-        $host = $host ?: $this->host;
-        $port = $port ?: $this->port;
-        return new Connection($host, $port, $this->timeout);
+        return new Connection($this->host, $this->port, $this->timeout);
+    }
+
+    /**
+     * Dial by service
+     * @param ServiceInterface $service
+     * @return Connection
+     * @throws \Swoole\Exception
+     */
+    public function dialService(ServiceInterface $service)
+    {
+        return new Connection($service->getAddress(), $service->getPort(), $this->timeout);
     }
 
 }

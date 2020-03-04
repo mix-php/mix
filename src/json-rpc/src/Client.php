@@ -65,7 +65,7 @@ class Client
     {
         $dialer     = $this->dialer;
         $service    = $this->serviceCenter->get($name);
-        $connection = $dialer->dial($service->getAddress(), $service->getPort());
+        $connection = $dialer->dialService($service);
         return new Caller($connection);
     }
 
