@@ -23,7 +23,11 @@ final class ClientTest extends TestCase
             });
             // client
             $client = new \Mix\JsonRpc\Client([
-                'connection' => new \Mix\JsonRpc\Connection('127.0.0.1', 9234),
+                'dialer' => new \Mix\JsonRpc\Dialer([
+                    'host'    => '127.0.0.1',
+                    'port'    => 9234,
+                    'timeout' => 3,
+                ]),
             ]);
 
             // 方法不存在

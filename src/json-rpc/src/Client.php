@@ -7,7 +7,7 @@ use Mix\JsonRpc\Call\Caller;
 use Mix\JsonRpc\Message\Request;
 use Mix\JsonRpc\Message\Response;
 use Mix\JsonRpc\Helper\JsonRpcHelper;
-use Mix\Pool\ConnectionPoolInterface;
+use Mix\JsonRpc\Pool\ConnectionPool;
 use Mix\ServiceCenter\ServiceCenterInterface;
 
 /**
@@ -18,21 +18,20 @@ class Client
 {
 
     /**
-     * 连接池
-     * @var ConnectionPoolInterface
+     * @var Dialer
      */
-    public $pool;
+    public $dialer;
+
+    /**
+     * @var ServiceCenterInterface
+     */
+    public $serviceCenter;
 
     /**
      * 连接
      * @var Connection
      */
     public $connection;
-
-    /**
-     * @var ServiceCenterInterface
-     */
-    public $serviceCenter;
 
     /**
      * Client constructor.
@@ -51,8 +50,8 @@ class Client
      */
     protected function getConnection()
     {
-        if (isset($this->pool)) {
-            return $this->pool->getConnection();
+        if (!isset($this->connection)) {
+            $this->connection = $this->dialer->dial();
         }
         return $this->connection;
     }
@@ -64,8 +63,9 @@ class Client
      */
     public function service(string $name)
     {
+        $dialer     = $this->dialer;
         $service    = $this->serviceCenter->get($name);
-        $connection = $this->serviceCenter->dial($service);
+        $connection = $dialer->dial($service->getAddress(), $service->getPort());
         return new Caller($connection);
     }
 
