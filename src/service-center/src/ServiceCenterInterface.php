@@ -10,13 +10,6 @@ interface ServiceCenterInterface
 {
 
     /**
-     * dial return connection
-     * @param ServiceInterface $service
-     * @return object
-     */
-    public function dial(ServiceInterface $service);
-
-    /**
      * Get Service
      * @param string $name
      * @return ServiceInterface
