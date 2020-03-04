@@ -80,7 +80,7 @@ class Dialer implements DialerInterface
      */
     public function dial()
     {
-        return new Connection([
+        $conn = new Connection([
             'host'            => $this->host,
             'port'            => $this->port,
             'timeout'         => $this->timeout,
@@ -90,6 +90,8 @@ class Dialer implements DialerInterface
             'password'        => $this->password,
             'eventDispatcher' => $this->eventDispatcher,
         ]);
+        $conn->connect();
+        return $conn;
     }
 
 }

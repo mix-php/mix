@@ -60,13 +60,15 @@ class Dialer implements DialerInterface
      */
     public function dial()
     {
-        return new Connection([
+        $conn = new Connection([
             'dsn'             => $this->dsn,
             'username'        => $this->username,
             'password'        => $this->password,
             'attributes'      => $this->attributes,
             'eventDispatcher' => $this->eventDispatcher,
         ]);
+        $conn->connect();
+        return $conn;
     }
 
 }
