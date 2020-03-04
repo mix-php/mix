@@ -17,6 +17,7 @@
   ],
   "require": {
     "php": ">=7.0.0",
+    "ext-swoole": ">=4.4.4",
     "ramsey/uuid": "^3.9"
   },
   "autoload": {

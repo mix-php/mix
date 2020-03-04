@@ -17,6 +17,7 @@
   ],
   "require": {
     "php": ">=7.0.0",
+    "ext-swoole": ">=4.4.4",
     "mix/bean": "~2.1.0"
   },
   "autoload": {
