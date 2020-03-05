@@ -49,7 +49,7 @@ class Dialer implements DialerInterface
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
      */
-    public function __construct(array $config)
+    public function __construct(array $config = [])
     {
         BeanInjector::inject($this, $config);
     }
