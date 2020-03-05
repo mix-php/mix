@@ -30,16 +30,16 @@ class Registry implements RegistryInterface
     public $port = 2379;
 
     /**
-     * Version
-     * @var string
-     */
-    public $version = 'v3';
-
-    /**
      * Keep alive TTL
      * @var int
      */
     public $ttl = 5;
+
+    /**
+     * Version
+     * @var string
+     */
+    public $version = 'v3';
 
     /**
      * 注册器集合
@@ -59,7 +59,7 @@ class Registry implements RegistryInterface
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
      */
-    public function __construct(array $config)
+    public function __construct(array $config = [])
     {
         BeanInjector::inject($this, $config);
     }

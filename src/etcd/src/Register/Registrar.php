@@ -41,6 +41,16 @@ class Registrar
     protected $timer;
 
     /**
+     * @var string
+     */
+    protected $nodeFormat = 'mix/node/%s/%s';
+
+    /**
+     * @var string
+     */
+    protected $serviceFormat = 'mix/service/%s/%s';
+
+    /**
      * Registrar constructor.
      * @param Client $client
      * @param ServiceBundle $bundle
@@ -67,9 +77,9 @@ class Registrar
         foreach ($bundle->items() as $service) {
             $node->withAddedService($service->getID(), $service->getName());
             $service->withNode($node->getID(), $node->getName());
-            $client->put(sprintf('/service/%s/%s', $service->getName(), $service->getID()), json_encode($service), ['lease' => $leaseID]);
+            $client->put(sprintf($this->serviceFormat, $service->getName(), $service->getID()), json_encode($service), ['lease' => $leaseID]);
         }
-        $client->put(sprintf('/node/%s/%s', $node->getName(), $node->getID()), json_encode($node), ['lease' => $leaseID]);
+        $client->put(sprintf($this->nodeFormat, $node->getName(), $node->getID()), json_encode($node), ['lease' => $leaseID]);
         $this->timer = $this->keepAlive();
     }
 

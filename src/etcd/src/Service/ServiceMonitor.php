@@ -44,6 +44,11 @@ class ServiceMonitor
     protected $watcher;
 
     /**
+     * @var string
+     */
+    protected $serviceFormat = 'mix/service/%s';
+
+    /**
      * ServiceMonitor constructor.
      * @param Client $client
      * @param string $prefix
@@ -79,7 +84,7 @@ class ServiceMonitor
                 }
             }
         };
-        $watcher = $client->watchKeysWithPrefix(sprintf('/service/%s', $prefix), $func);
+        $watcher = $client->watchKeysWithPrefix(sprintf($this->serviceFormat, $prefix), $func);
         $watcher->forever();
         $this->watcher = $watcher;
 
