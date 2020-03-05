@@ -1,12 +1,12 @@
 <?php
 
-namespace Mix\ServiceCenter;
+namespace Mix\Micro;
 
 /**
- * Interface ServiceCenterInterface
- * @package Mix\ServiceCenter
+ * Interface RegistryInterface
+ * @package Mix\Micro
  */
-interface ServiceCenterInterface
+interface RegistryInterface
 {
 
     /**

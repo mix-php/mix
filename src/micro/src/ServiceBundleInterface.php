@@ -1,10 +1,10 @@
 <?php
 
-namespace Mix\ServiceCenter;
+namespace Mix\Micro;
 
 /**
  * Interface ServiceBundleInterface
- * @package Mix\ServiceCenter
+ * @package Mix\Micro
  */
 interface ServiceBundleInterface
 {

@@ -6,16 +6,15 @@ use Mix\Bean\BeanInjector;
 use Mix\Etcd\Client\Client;
 use Mix\Etcd\Register\Registrar;
 use Mix\Etcd\Service\ServiceMonitor;
-use Mix\ServiceCenter\DialerInterface;
-use Mix\ServiceCenter\ServiceBundleInterface;
-use Mix\ServiceCenter\ServiceCenterInterface;
-use Mix\ServiceCenter\ServiceInterface;
+use Mix\Micro\ServiceBundleInterface;
+use Mix\Micro\RegistryInterface;
+use Mix\Micro\ServiceInterface;
 
 /**
- * Class ServiceCenter
+ * Class Registry
  * @package Mix\Etcd
  */
-class ServiceCenter implements ServiceCenterInterface
+class Registry implements RegistryInterface
 {
 
     /**
@@ -78,6 +77,7 @@ class ServiceCenter implements ServiceCenterInterface
      * Get Service
      * @param string $name
      * @return ServiceInterface
+     * @throws \Exception
      */
     public function get(string $name): ServiceInterface
     {

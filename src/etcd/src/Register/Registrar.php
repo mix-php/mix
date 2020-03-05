@@ -6,7 +6,7 @@ use Etcd\Client;
 use Mix\Concurrent\Timer;
 use Mix\Etcd\Node\Node;
 use Mix\Etcd\Service\ServiceBundle;
-use Mix\ServiceCenter\Helper\ServiceHelper;
+use Mix\Micro\Helper\ServiceHelper;
 
 /**
  * Class Registrar

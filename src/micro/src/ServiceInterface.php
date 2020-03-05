@@ -1,10 +1,10 @@
 <?php
 
-namespace Mix\ServiceCenter;
+namespace Mix\Micro;
 
 /**
  * Interface ServiceInterface
- * @package Mix\ServiceCenter
+ * @package Mix\Micro
  */
 interface ServiceInterface extends \JsonSerializable
 {

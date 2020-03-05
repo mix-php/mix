@@ -10,7 +10,7 @@ final class ServiceRegisterTest extends TestCase
     {
         $_this = $this;
         $func  = function () use ($_this) {
-            $center               = new \Mix\Etcd\ServiceCenter([
+            $center               = new \Mix\Etcd\Registry([
                 'host'    => '127.0.0.1',
                 'port'    => 2379,
                 'version' => 'v3',
