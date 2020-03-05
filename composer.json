@@ -58,7 +58,7 @@
     "mix/websocket": "self.version",
     "mix/sync-invoke": "self.version",
     "mix/json-rpc": "self.version",
-    "mix/service-center": "self.version",
+    "mix/micro": "self.version",
     "mix/etcd": "self.version"
   },
   "autoload": {
@@ -85,7 +85,7 @@
       "Mix\\WebSocket\\": "src/websocket/src/",
       "Mix\\SyncInvoke\\": "src/sync-invoke/src/",
       "Mix\\JsonRpc\\": "src/json-rpc/src/",
-      "Mix\\ServiceCenter\\": "src/service-center/src/",
+      "Mix\\Micro\\": "src/micro/src/",
       "Mix\\Etcd\\": "src/etcd/src/"
     },
     "classmap": [
