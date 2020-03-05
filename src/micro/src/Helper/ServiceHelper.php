@@ -14,6 +14,7 @@ class ServiceHelper
     /**
      * Create uuid
      * @return string
+     * @throws \Exception
      */
     public static function uuid()
     {
