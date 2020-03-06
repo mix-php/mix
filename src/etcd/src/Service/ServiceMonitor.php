@@ -76,7 +76,6 @@ class ServiceMonitor
                         unset($this->services[$name][$id]);
                         break;
                     case 'PUT':
-                        $key                                                    = base64_decode($kv['key']);
                         $value                                                  = base64_decode($kv['value']);
                         $service                                                = static::parseValue($value);
                         $this->services[$service->getName()][$service->getID()] = $service;
