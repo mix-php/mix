@@ -18,6 +18,6 @@ interface HandlerInterface
      * @param ServerRequest $request
      * @param Response $response
      */
-    public function HandleHTTP(ServerRequest $request, Response $response);
+    public function handleHTTP(ServerRequest $request, Response $response);
 
 }

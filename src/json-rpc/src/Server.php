@@ -233,7 +233,7 @@ class Server implements HandlerInterface
      * @param ServerRequest $request
      * @param \Mix\Http\Message\Response $response
      */
-    public function HandleHTTP(ServerRequest $request, \Mix\Http\Message\Response $response)
+    public function handleHTTP(ServerRequest $request, \Mix\Http\Message\Response $response)
     {
         $contentType = $request->getHeaderLine('Content-Type');
         if (strpos($contentType, 'application/json') === false) {

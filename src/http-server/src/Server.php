@@ -93,7 +93,7 @@ class Server
     {
         if (!is_null($handler)) {
             $this->callbacks = [];
-            $this->handle('/', [$handler, 'HandleHTTP']);
+            $this->handle('/', [$handler, 'handleHTTP']);
         }
         $server = $this->swooleServer = new \Swoole\Coroutine\Http\Server($this->host, $this->port, $this->ssl, $this->reusePort);
         $server->set($this->options);
