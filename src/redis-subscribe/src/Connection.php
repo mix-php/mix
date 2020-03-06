@@ -39,6 +39,7 @@ class Connection
      * @param string $host
      * @param int $port
      * @param float $timeout
+     * @throws \Swoole\Exception
      */
     public function __construct(string $host, int $port, float $timeout = 2.0)
     {
@@ -60,6 +61,7 @@ class Connection
      * Send
      * @param string $data
      * @return bool
+     * @throws \Swoole\Exception
      */
     public function send(string $data)
     {

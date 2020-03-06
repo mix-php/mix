@@ -54,6 +54,8 @@ class Subscriber
      * @param int $port
      * @param string $password
      * @param float $timeout
+     * @throws \Swoole\Exception
+     * @throws \Throwable
      */
     public function __construct(string $host, int $port, string $password = '', float $timeout = 2.0)
     {
@@ -66,6 +68,8 @@ class Subscriber
 
     /**
      * Connect
+     * @throws \Swoole\Exception
+     * @throws \Throwable
      */
     protected function connect()
     {
@@ -79,6 +83,8 @@ class Subscriber
     /**
      * Subscribe
      * @param string ...$channels
+     * @throws \Swoole\Exception
+     * @throws \Throwable
      */
     public function subscribe(string ...$channels)
     {
@@ -94,6 +100,8 @@ class Subscriber
     /**
      * Unsubscribe
      * @param string ...$channels
+     * @throws \Swoole\Exception
+     * @throws \Throwable
      */
     public function unsubscribe(string ...$channels)
     {
@@ -117,6 +125,7 @@ class Subscriber
 
     /**
      * Close
+     * @throws \Swoole\Exception
      */
     public function close()
     {

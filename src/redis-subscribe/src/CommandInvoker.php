@@ -2,6 +2,7 @@
 
 namespace Mix\Redis\Subscribe;
 
+use Mix\Concurrent\Timer;
 use Swoole\Coroutine\Channel;
 
 /**
@@ -40,12 +41,13 @@ class CommandInvoker
         $this->connection     = $connection;
         $this->resultChannel  = new Channel();
         $this->messageChannel = new Channel(100);
-        \Swoole\Coroutine::create([$this, 'receive'], $connection);
+        xgo([$this, 'receive'], $connection);
     }
 
     /**
      * Receive
      * @param Connection $connection
+     * @throws \Swoole\Exception
      */
     public function receive(Connection $connection)
     {
@@ -92,7 +94,13 @@ class CommandInvoker
                 $message          = new Message();
                 $message->channel = $buffer[4];
                 $message->payload = $buffer[6];
+                $timer            = Timer::new();
+                $timer->after(30 * 1000, function () use ($message) {
+                    $this->error(sprintf('Message channel (%s) is 30 seconds full, disconnected', $message->channel));
+                    $this->interrupt();
+                });
                 $this->messageChannel->push($message);
+                $timer->clear();
                 $buffer = null;
                 continue;
             }
@@ -104,6 +112,7 @@ class CommandInvoker
      * @param string $command
      * @param int $number
      * @return array
+     * @throws \Throwable
      */
     public function invoke(string $command, int $number)
     {
@@ -132,6 +141,7 @@ class CommandInvoker
     /**
      * Interrupt
      * @return bool
+     * @throws \Swoole\Exception
      */
     public function interrupt()
     {
@@ -139,6 +149,16 @@ class CommandInvoker
         $this->resultChannel->close();
         $this->messageChannel->close();
         return true;
+    }
+
+    /**
+     * Print error
+     * @param \Throwable $ex
+     */
+    protected function error(string $message)
+    {
+        $time = date('Y-m-d H:i:s');
+        echo "[error] $time $message\n";
     }
 
 }
