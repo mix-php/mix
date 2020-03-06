@@ -3,6 +3,11 @@
 namespace Mix\Route;
 
 use Mix\Bean\BeanInjector;
+use Mix\Http\Message\Factory\StreamFactory;
+use Mix\Http\Message\Response;
+use Mix\Http\Message\ServerRequest;
+use Mix\Http\Server\HandlerInterface;
+use Mix\Http\Server\Middleware\MiddlewareDispatcher;
 use Mix\Route\Exception\NotFoundException;
 
 /**
@@ -10,7 +15,7 @@ use Mix\Route\Exception\NotFoundException;
  * @package Mix\Route
  * @author liu,jian <coder.keda@gmail.com>
  */
-class Router
+class Router implements HandlerInterface
 {
 
     /**
@@ -46,6 +51,8 @@ class Router
     /**
      * Router constructor.
      * @param array $config
+     * @throws \PhpDocReader\AnnotationException
+     * @throws \ReflectionException
      */
     public function __construct(array $config = [])
     {
@@ -161,6 +168,69 @@ class Router
             }
         }
         throw new NotFoundException('Not Found (#404)');
+    }
+
+    /**
+     * Handle HTTP
+     * @param ServerRequest $request
+     * @param Response $response
+     * @throws \Throwable
+     */
+    public function HandleHTTP(ServerRequest $request, Response $response)
+    {
+        // 路由匹配
+        try {
+            $result = $this->match($request->getMethod(), $request->getServerParams()['path_info'] ?: '/');
+        } catch (\Throwable $e) {
+            // 404 处理
+            static::showError($e, $response, 404);
+            return;
+        }
+        // 保存路由参数
+        foreach ($result->getParams() as $key => $value) {
+            $request->withAttribute($key, $value);
+        }
+        // 执行
+        try {
+            // 执行中间件
+            $dispatcher = new MiddlewareDispatcher($result->getMiddleware(), $request, $response);
+            $response   = $dispatcher->dispatch();
+            // 执行控制器
+            if (!$response->getBody()) {
+                $response = call_user_func($result->getCallback($request, $response), $request, $response);
+            }
+            /** @var Response $response */
+            $response->end();
+        } catch (\Throwable $e) {
+            // 500 处理
+            static::showError($e, $response, 500);
+            // 抛出错误，记录日志
+            throw $e;
+        }
+    }
+
+    /**
+     * 404/500 处理, 返回 josn 格式
+     * @param \Throwable $e
+     * @param Response $response
+     * @param int $status
+     */
+    protected static function showError(\Throwable $e, Response $response, int $status)
+    {
+        $content = [
+            'message' => $e->getMessage(),
+            'type'    => get_class($e),
+            'code'    => $e->getCode(),
+            'file'    => $e->getFile(),
+            'line'    => $e->getLine(),
+            'trace'   => $e->getTraceAsString(),
+        ];
+        $body    = (new StreamFactory())->createStream(json_encode($content, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        return $response
+            ->withContentType('application/json', 'utf-8')
+            ->withBody($body)
+            ->withStatus($status)
+            ->end();
     }
 
 }
