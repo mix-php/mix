@@ -135,6 +135,21 @@ class Router implements HandlerInterface
     }
 
     /**
+     * 获取 url 规则映射的全部 service 名称
+     *
+     * Url                  Service        Method
+     * /foo/bar             foo            Foo.Bar
+     * /foo/bar/baz         foo            Bar.Baz
+     * /foo/bar/baz/cat     foo.bar        Baz.Cat
+     *
+     * @return array
+     */
+    public function services()
+    {
+        return [];
+    }
+
+    /**
      * 匹配
      * @param string $method
      * @param string $pathinfo
@@ -176,14 +191,14 @@ class Router implements HandlerInterface
      * @param Response $response
      * @throws \Throwable
      */
-    public function HandleHTTP(ServerRequest $request, Response $response)
+    public function handleHTTP(ServerRequest $request, Response $response)
     {
         // 路由匹配
         try {
             $result = $this->match($request->getMethod(), $request->getServerParams()['path_info'] ?: '/');
         } catch (\Throwable $e) {
             // 404 处理
-            static::showError($e, $response, 404);
+            static::show404($e, $response);
             return;
         }
         // 保存路由参数
@@ -203,33 +218,47 @@ class Router implements HandlerInterface
             $response->end();
         } catch (\Throwable $e) {
             // 500 处理
-            static::showError($e, $response, 500);
+            static::show500($e, $response);
             // 抛出错误，记录日志
             throw $e;
         }
     }
 
     /**
-     * 404/500 处理, 返回 josn 格式
+     * 404 处理, 返回 josn 格式
      * @param \Throwable $e
      * @param Response $response
-     * @param int $status
      */
-    protected static function showError(\Throwable $e, Response $response, int $status)
+    protected static function show404(\Throwable $e, Response $response)
     {
         $content = [
             'message' => $e->getMessage(),
-            'type'    => get_class($e),
             'code'    => $e->getCode(),
-            'file'    => $e->getFile(),
-            'line'    => $e->getLine(),
-            'trace'   => $e->getTraceAsString(),
         ];
         $body    = (new StreamFactory())->createStream(json_encode($content, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         return $response
             ->withContentType('application/json', 'utf-8')
             ->withBody($body)
-            ->withStatus($status)
+            ->withStatus(404)
+            ->end();
+    }
+
+    /**
+     * 500 处理, 返回 josn 格式
+     * @param \Throwable $e
+     * @param Response $response
+     */
+    protected static function show500(\Throwable $e, Response $response)
+    {
+        $content = [
+            'message' => $e->getMessage(),
+            'code'    => $e->getCode(),
+        ];
+        $body    = (new StreamFactory())->createStream(json_encode($content, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        return $response
+            ->withContentType('application/json', 'utf-8')
+            ->withBody($body)
+            ->withStatus(500)
             ->end();
     }
 
