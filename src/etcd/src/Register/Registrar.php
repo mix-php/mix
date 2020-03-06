@@ -2,7 +2,7 @@
 
 namespace Mix\Etcd\Register;
 
-use Etcd\Client;
+use Mix\Etcd\Client\Client;
 use Mix\Concurrent\Timer;
 use Mix\Etcd\Node\Node;
 use Mix\Etcd\Service\ServiceBundle;
@@ -100,7 +100,13 @@ class Registrar
     {
         $timer = Timer::new();
         $timer->tick($this->ttl * 1000 / 5 * 4, function () {
-            $this->client->keepAlive($this->leaseID);
+            try {
+                // 当 lease 失效时，由于返回结果确实 ttl，所以会抛出系统异常
+                $this->client->keepAlive($this->leaseID);
+            } catch (\Throwable $ex) {
+                $this->register();
+                throw $ex;
+            }
         });
         return $timer;
     }
