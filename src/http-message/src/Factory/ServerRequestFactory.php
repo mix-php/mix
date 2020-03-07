@@ -45,53 +45,49 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
     /**
      * Create a new server request.
      *
-     * @param \Swoole\Http\Request $requ
+     * @param \Swoole\Http\Request $request
      * @return ServerRequestInterface
      */
-    public function createServerRequestFromSwoole(\Swoole\Http\Request $requ): ServerRequestInterface
+    public function createServerRequestFromSwoole(\Swoole\Http\Request $request): ServerRequestInterface
     {
-        list($scheme, $protocolVersion) = explode('/', $requ->server['server_protocol']);
-        $method       = $requ->server['request_method'] ?? '';
-        $scheme       = strtolower($scheme);
-        $host         = $requ->header['host'] ?? '';
-        $requestUri   = $requ->server['request_uri'] ?? '';
-        $queryString  = $requ->server['query_string'] ?? '';
-        $uri          = $scheme . '://' . $host . $requestUri . ($queryString ? "?{$queryString}" : '');
-        $serverParams = $requ->server ?? [];
+        list($scheme, $protocolVersion) = explode('/', $request->server['server_protocol']);
+        $method        = $request->server['request_method'] ?? '';
+        $scheme        = strtolower($scheme);
+        $host          = $request->header['host'] ?? '';
+        $requestestUri = $request->server['request_uri'] ?? '';
+        $queryString   = $request->server['query_string'] ?? '';
+        $uri           = $scheme . '://' . $host . $requestestUri . ($queryString ? "?{$queryString}" : '');
+        $serverParams  = $request->server ?? [];
 
         /** @var ServerRequest $serverRequest */
         $serverRequest = $this->createServerRequest($method, $uri, $serverParams);
-        $serverRequest->withSwooleRequest($requ);
+        $serverRequest->withSwooleRequest($request);
         $serverRequest->withProtocolVersion($protocolVersion);
         $serverRequest->withRequestTarget($uri);
 
-        $headers = $requ->header ?? [];
+        $headers = $request->header ?? [];
         foreach ($headers as $name => $value) {
             $serverRequest->withHeader($name, $value);
         }
 
-        $contentType      = $serverRequest->getHeaderLine('content-type');
-        $isFormUrlencoded = strpos($contentType, 'application/x-www-form-urlencoded') === false ? false : true;
-        $isFormJson       = strpos($contentType, 'application/json') === false ? false : true;
-        $isFormData       = strpos($contentType, 'multipart/form-data') === false ? false : true;
+        $contentType = $serverRequest->getHeaderLine('content-type');
+        $isFormJson  = strpos($contentType, 'application/json') === false ? false : true;
+        // $isFormUrlencoded = strpos($contentType, 'application/x-www-form-urlencoded') === false ? false : true;
+        // $isFormData       = strpos($contentType, 'multipart/form-data') === false ? false : true;
 
-        $content = '';
-        if (!$isFormData) { // multipart/form-data 类型不放入body，数据太大，swoole 会解析为 files + post
-            $content = $requ->rawContent();
-        }
-        $body = (new StreamFactory())->createStream($content);
+        $body = (new StreamFactory())->createStreamFromResource($request);
         $serverRequest->withBody($body);
 
-        $cookieParams = $requ->cookie ?? [];
+        $cookieParams = $request->cookie ?? [];
         $serverRequest->withCookieParams($cookieParams);
 
-        $queryParams = $requ->get ?? [];
+        $queryParams = $request->get ?? [];
         $serverRequest->withQueryParams($queryParams);
 
         $uploadedFiles       = [];
         $uploadedFileFactory = new UploadedFileFactory;
         $streamFactory       = new StreamFactory();
-        foreach ($requ->files ?? [] as $name => $file) {
+        foreach ($request->files ?? [] as $name => $file) {
             // 注意：当httpServer的handle内开启协程时，handle方法会先于Callback执行完，
             // 这时临时文件会在还没处理完成就被删除，所以这里生成新文件，在UploadedFile析构时删除该文件
             $tmpfile = $file['tmp_name'] . '.mix';
@@ -106,9 +102,9 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         }
         $serverRequest->withUploadedFiles($uploadedFiles);
 
-        $parsedBody = $requ->post ?? []; // swoole 本身能解析 application/x-www-form-urlencoded multipart/form-data 全部的 method
+        $parsedBody = $request->post ?? []; // swoole 本身能解析 application/x-www-form-urlencoded multipart/form-data 全部的 method
         if ($isFormJson) {
-            $json       = json_decode($requ->rawContent(), true, 512);
+            $json       = json_decode($request->rawContent(), true, 512);
             $parsedBody = is_null($json) ? [] : $json;
         }
         $serverRequest->withParsedBody($parsedBody);

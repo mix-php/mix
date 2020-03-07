@@ -2,9 +2,9 @@
 
 namespace Mix\Http\Message\Factory;
 
-use Mix\Http\Message\Exception\UnavailableMethodException;
 use Mix\Http\Message\Stream\ContentStream;
 use Mix\Http\Message\Stream\FileStream;
+use Mix\Http\Message\Stream\ResourceStream;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
 
@@ -60,7 +60,7 @@ class StreamFactory implements StreamFactoryInterface
      */
     public function createStreamFromResource($resource): StreamInterface
     {
-        throw new UnavailableMethodException('Not implemented');
+        return new ResourceStream($resource);
     }
 
 }
