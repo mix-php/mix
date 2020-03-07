@@ -142,11 +142,33 @@ class Router implements HandlerInterface
      * /foo/bar/baz         foo            Bar.Baz
      * /foo/bar/baz/cat     foo.bar        Baz.Cat
      *
-     * @return array
+     * @return string[]
      */
     public function services()
     {
-        return [];
+        $services = [];
+        foreach ($this->materials as $material) {
+            $regular = $material[0];
+            $slice   = explode(' ', $regular);
+            $path    = substr($slice[1], 0, -3);
+            $slice   = array_filter(explode('\/', $path));
+            switch (count($slice)) {
+                case 0:
+                case 1:
+                    $name = null;
+                    break;
+                case 2:
+                case 3:
+                    $name = array_shift($slice);
+                    break;
+                default:
+                    array_pop($slice);
+                    array_pop($slice);
+                    $name = implode('/', $slice);
+            }
+            $name and $services[] = $name;
+        }
+        return $services;
     }
 
     /**
