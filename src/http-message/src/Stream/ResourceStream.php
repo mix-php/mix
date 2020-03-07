@@ -22,7 +22,7 @@ class ResourceStream implements StreamInterface
     /**
      * @var int
      */
-    protected $size = 0;
+    protected $size;
 
     /**
      * ResourceStream constructor.
@@ -31,7 +31,6 @@ class ResourceStream implements StreamInterface
     public function __construct($request)
     {
         $this->request = $request;
-        $this->size    = $request->header['content-length'];
     }
 
     /**
@@ -82,6 +81,9 @@ class ResourceStream implements StreamInterface
      */
     public function getSize()
     {
+        if (!isset($this->size)) {
+            $this->size = strlen($this->getContents());
+        }
         return $this->size;
     }
 

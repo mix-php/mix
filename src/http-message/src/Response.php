@@ -189,7 +189,7 @@ class Response extends Message implements ResponseInterface
     {
         $headers = $this->getHeaders();
         foreach ($headers as $name => $value) {
-            $this->swooleResponse->header($name, $value);
+            $this->swooleResponse->header($name, implode(',', $value));
         }
 
         $cookies = $this->getCookies();

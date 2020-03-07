@@ -88,7 +88,6 @@ class Message implements MessageInterface
      */
     public function getHeaders()
     {
-        // TODO: Implement getHeaders() method.
         return $this->headers;
     }
 
@@ -102,7 +101,6 @@ class Message implements MessageInterface
      */
     public function hasHeader($name)
     {
-        // TODO: Implement hasHeader() method.
         $name = strtolower($name);
         return isset($this->headers[$name]);
     }
@@ -123,10 +121,9 @@ class Message implements MessageInterface
      */
     public function getHeader($name)
     {
-        // TODO: Implement getHeader() method.
         $name = strtolower($name);
         if ($this->hasHeader($name)) {
-            return explode(',', trim($this->headers[$name]));
+            return $this->headers[$name];
         }
         return [];
     }
@@ -152,10 +149,9 @@ class Message implements MessageInterface
      */
     public function getHeaderLine($name)
     {
-        // TODO: Implement getHeaderLine() method.
         $name = strtolower($name);
         if ($this->hasHeader($name)) {
-            return $this->headers[$name];
+            return implode(',', $this->headers[$name]);
         }
         return '';
     }
@@ -177,12 +173,11 @@ class Message implements MessageInterface
      */
     public function withHeader($name, $value)
     {
-        // TODO: Implement withHeader() method.
         $name = strtolower($name);
         if (is_string($value)) {
+            $this->headers[$name] = [$value];
+        } else if (is_array($value)) {
             $this->headers[$name] = $value;
-        } else {
-            $this->headers[$name] = implode(',', $value);
         }
         return $this;
     }
@@ -205,17 +200,16 @@ class Message implements MessageInterface
      */
     public function withAddedHeader($name, $value)
     {
-        // TODO: Implement withAddedHeader() method.
         $name   = strtolower($name);
         $header = $this->getHeader($name);
         if (is_string($value)) {
             array_push($header, $value);
-        } else {
+        } else if (is_array($value)) {
             foreach ($value as $v) {
                 array_push($header, $v);
             }
         }
-        $this->headers[$name] = implode(',', $header);
+        $this->headers[$name] = $header;
         return $this;
     }
 
