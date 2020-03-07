@@ -13,6 +13,7 @@ interface RegistryInterface
      * Get Service
      * @param string $name
      * @return ServiceInterface
+     * @throws \Exception
      */
     public function get(string $name): ServiceInterface;
     

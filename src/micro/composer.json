@@ -18,7 +18,9 @@
   "require": {
     "php": ">=7.0.0",
     "ext-swoole": ">=4.4.4",
-    "ramsey/uuid": "^3.9"
+    "ramsey/uuid": "^3.9",
+    "mix/bean": "~2.1.0",
+    "mix/http-server": "~2.1.0"
   },
   "autoload": {
     "psr-4": {
