@@ -84,12 +84,11 @@ class Registry implements RegistryInterface
         $segments = explode('.', $name);
         array_pop($segments);
         $prefix = implode('.', $segments);
-        if (isset($this->monitors[$prefix])) {
-            return $this->monitors[$prefix]->random($name);
+        if (!isset($this->monitors[$prefix])) {
+            $monitor                 = new ServiceMonitor($this->createClient(), $prefix);
+            $this->monitors[$prefix] = $monitor;
         }
-        $monitor                 = new ServiceMonitor($this->createClient(), $prefix);
-        $this->monitors[$prefix] = $monitor;
-        return $monitor->random($name);
+        return $this->monitors[$prefix]->random($name);
     }
 
     /**

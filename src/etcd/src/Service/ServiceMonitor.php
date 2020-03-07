@@ -59,7 +59,7 @@ class ServiceMonitor
         $this->client = $client;
         $this->prefix = $prefix;
 
-        $func    = function (array $data) {
+        $func = function (array $data) {
             if (!isset($data['result']['events'])) {
                 return;
             }
@@ -83,6 +83,7 @@ class ServiceMonitor
                 }
             }
         };
+
         $watcher = $client->watchKeysWithPrefix(sprintf($this->serviceFormat, $prefix), $func);
         $watcher->forever();
         $this->watcher = $watcher;
@@ -103,7 +104,7 @@ class ServiceMonitor
     {
         $client = $this->client;
         $prefix = $this->prefix;
-        $result = $client->getKeysWithPrefix(sprintf('/service/%s', $prefix));
+        $result = $client->getKeysWithPrefix(sprintf($this->serviceFormat, $prefix));
         if (!isset($result['count']) || $result['count'] == 0) {
             return;
         }
