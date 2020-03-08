@@ -83,7 +83,7 @@ class Watcher
      * Print error
      * @param \Throwable $ex
      */
-    protected function error(\Throwable $ex)
+    protected static function error(\Throwable $ex)
     {
         $time    = date('Y-m-d H:i:s');
         $message = sprintf('%s [%d] %s line %s', $ex->getMessage(), $ex->getCode(), $ex->getFile(), $ex->getLine());
@@ -104,7 +104,7 @@ class Watcher
                 try {
                     $this->watch();
                 } catch (\Throwable $ex) {
-                    $this->error($ex);
+                    static::error($ex);
                     sleep(1);
                 }
             }
