@@ -518,17 +518,18 @@ abstract class AbstractConnection
         $values = [];
         $subSql = [];
         foreach ($data as $item) {
-            $tmp = [];
-            foreach ($item as $key => $value) {
+            $placeholder = [];
+            foreach ($keys as $key) {
+                $value = $item[$key];
                 // 原始方法
                 if ($value instanceof Expression) {
-                    $tmp[] = $value->getValue();
+                    $placeholder[] = $value->getValue();
                     continue;
                 }
-                $values[] = $value;
-                $tmp[]    = '?';
+                $values[]      = $value;
+                $placeholder[] = '?';
             }
-            $subSql[] = "(" . implode(', ', $tmp) . ")";
+            $subSql[] = "(" . implode(', ', $placeholder) . ")";
         }
         $sql .= implode(', ', $subSql);
         $this->prepare($sql);
