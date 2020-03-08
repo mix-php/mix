@@ -59,7 +59,6 @@ class Handler implements HandlerInterface
      */
     public function handleHTTP(ServerRequest $request, Response $response)
     {
-
         $path = $request->getUri()->getPath();
         switch ($path) {
             case '/json-rpc':
