@@ -42,10 +42,14 @@ class Server implements HandlerInterface
     protected $server;
 
     /**
-     * 服务集合
-     * @var callable[]
+     * @var object[]
      */
     protected $services = [];
+
+    /**
+     * @var callable[]
+     */
+    protected $callables = [];
 
     /**
      * Server constructor.
@@ -61,15 +65,30 @@ class Server implements HandlerInterface
     }
 
     /**
+     * 获取全部 service 名称
+     * @return string[]
+     */
+    public function services()
+    {
+        $services = [];
+        foreach ($this->services as $service) {
+            $name       = strtolower(basename(str_replace('\\', '/', get_class($service))));
+            $services[] = $name;
+        }
+        return $services;
+    }
+
+    /**
      * Register
      * @param object $service
      */
     public function register(object $service)
     {
+        array_push($this->services, $service);
         $name    = str_replace('/', '\\', basename(str_replace('\\', '/', get_class($service))));
         $methods = get_class_methods($service);
         foreach ($methods as $method) {
-            $this->services[sprintf('%s.%s', $name, $method)] = [$service, $method];
+            $this->callables[sprintf('%s.%s', $name, $method)] = [$service, $method];
         }
     }
 
@@ -210,13 +229,13 @@ class Server implements HandlerInterface
                     $responses[] = (new ResponseFactory)->createErrorResponse(-32600, 'Invalid Request', $request->id);
                     return;
                 }
-                if (!isset($this->services[$request->method])) {
+                if (!isset($this->callables[$request->method])) {
                     $responses[] = (new ResponseFactory)->createErrorResponse(-32601, 'Method not found', $request->id);
                     return;
                 }
                 // 执行
                 try {
-                    $result      = call_user_func($this->services[$request->method], ...$request->params);
+                    $result      = call_user_func($this->callables[$request->method], ...$request->params);
                     $result      = is_scalar($result) ? [$result] : $result;
                     $responses[] = (new ResponseFactory)->createResultResponse($result, $request->id);
                 } catch (\Throwable $ex) {

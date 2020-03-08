@@ -30,14 +30,4 @@ class ServiceHelper
         return current(swoole_get_local_ip());
     }
 
-    /**
-     * Get name by class
-     * @param string $class
-     * @return string
-     */
-    public static function className(string $class)
-    {
-        return strtolower(basename(str_replace('\\', '/', $class)));
-    }
-
 }

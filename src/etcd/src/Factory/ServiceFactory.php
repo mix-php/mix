@@ -74,7 +74,7 @@ class ServiceFactory implements ServiceFactoryInterface
         $service = $this->createService($name, $address, $port);
         $service->withMetadata('transport', 'tcp');
         $service->withMetadata('protocol', 'json');
-        $service->withMetadata('type', 'json-rpc');
+        $service->withMetadata('type', 'jsonrpc');
         return $service;
     }
 
