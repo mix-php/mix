@@ -2,9 +2,7 @@
 
 namespace Mix\SyncInvoke;
 
-use Mix\Server\Connection;
-use Mix\Server\Exception\ReceiveException;
-use Mix\SyncInvoke\Exception\CallException;
+use Mix\Server\HandlerInterface;
 
 /**
  * Class Server
@@ -22,6 +20,11 @@ class Server
      * @var bool
      */
     public $reusePort = false;
+
+    /**
+     * @var HandlerInterface
+     */
+    public $handler;
 
     /**
      * @var \Mix\Server\Server
@@ -55,31 +58,10 @@ class Server
             'open_eof_check' => true,
             'package_eof'    => static::EOF,
         ]);
-        $server->handle(function (Connection $conn) {
-            while (true) {
-                try {
-                    $data    = $conn->recv();
-                    $closure = \Opis\Closure\unserialize($data);
-                    try {
-                        $result = call_user_func($closure);
-                    } catch (\Throwable $e) {
-                        $message = sprintf('%s file %s line %s', $e->getMessage(), $e->getFile(), $e->getLine());
-                        $code    = $e->getCode();
-                        $conn->send(serialize(new CallException($message, $code)) . static::EOF);
-                        continue;
-                    }
-                    $conn->send(serialize($result) . static::EOF);
-                } catch (\Throwable $e) {
-                    // 忽略服务器主动断开连接异常
-                    if ($e instanceof ReceiveException && in_array($e->getCode(), [54, 104])) { // mac=54, linux=104
-                        return;
-                    }
-                    // 抛出异常
-                    throw $e;
-                }
-            }
-        });
-        $server->start();
+        if (!isset($this->handler)) {
+            $this->handler = new Handler();
+        }
+        $server->start($this->handler);
     }
 
     /**
