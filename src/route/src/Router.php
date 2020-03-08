@@ -218,9 +218,9 @@ class Router implements HandlerInterface
         // 路由匹配
         try {
             $result = $this->match($request->getMethod(), $request->getServerParams()['path_info'] ?: '/');
-        } catch (\Throwable $e) {
+        } catch (NotFoundException $e) {
             // 404 处理
-            static::show404($e, $response);
+            static::show404($response);
             return;
         }
         // 保存路由参数
@@ -247,26 +247,22 @@ class Router implements HandlerInterface
     }
 
     /**
-     * 404 处理, 返回 josn 格式
-     * @param \Throwable $e
+     * 404 处理
      * @param Response $response
      */
-    protected static function show404(\Throwable $e, Response $response)
+    protected static function show404(Response $response)
     {
-        $content = [
-            'message' => $e->getMessage(),
-            'code'    => $e->getCode(),
-        ];
-        $body    = (new StreamFactory())->createStream(json_encode($content, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $content = '404 Not Found';
+        $body    = (new StreamFactory())->createStream($content);
         return $response
-            ->withContentType('application/json', 'utf-8')
+            ->withContentType('text/plain')
             ->withBody($body)
             ->withStatus(404)
             ->end();
     }
 
     /**
-     * 500 处理, 返回 josn 格式
+     * 500 处理
      * @param \Throwable $e
      * @param Response $response
      */
