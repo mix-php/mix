@@ -43,7 +43,7 @@ class Server
     /**
      * @var callable
      */
-    protected $handler;
+    protected $callback;
 
     /**
      * @var \Swoole\Coroutine\Server
@@ -81,15 +81,18 @@ class Server
      */
     public function handle(callable $callback)
     {
-        $this->handler = $callback;
+        $this->callback = $callback;
     }
 
     /**
      * Start
      * @throws \Swoole\Exception
      */
-    public function start()
+    public function start(HandlerInterface $handler = null)
     {
+        if (!is_null($handler)) {
+            $this->handle([$handler, 'handle']);
+        }
         $server = $this->swooleServer = new \Swoole\Coroutine\Server($this->host, $this->port, $this->ssl, $this->reusePort);
         $server->set($this->options);
         $server->handle(function (\Swoole\Coroutine\Server\Connection $connection) {
@@ -98,7 +101,7 @@ class Server
                 $connection = new Connection($connection, $this->connectionManager);
                 $this->connectionManager->add($connection);
                 // 执行回调
-                call_user_func($this->handler, $connection);
+                call_user_func($this->callback, $connection);
             } catch (\Throwable $e) {
                 $isMix = class_exists(\Mix::class);
                 // 错误处理
