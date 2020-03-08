@@ -29,7 +29,9 @@ class ConfigHelper
         while (false !== ($file = readdir($dh))) {
             if (($file != '.') && ($file != '..')) {
                 $full = $dir . '/' . $file;
-                if (is_file($full)) {
+                $info = pathinfo($file);
+                $ext  = $info['extension'] ?? '';
+                if (is_file($full) && $ext == 'php') {
                     $files[] = $full;
                 }
             }
