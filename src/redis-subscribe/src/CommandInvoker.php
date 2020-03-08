@@ -96,7 +96,7 @@ class CommandInvoker
                 $message->payload = $buffer[6];
                 $timer            = Timer::new();
                 $timer->after(30 * 1000, function () use ($message) {
-                    $this->error(sprintf('Message channel (%s) is 30 seconds full, disconnected', $message->channel));
+                    static::error(sprintf('Message channel (%s) is 30 seconds full, disconnected', $message->channel));
                     $this->interrupt();
                 });
                 $this->messageChannel->push($message);
@@ -155,7 +155,7 @@ class CommandInvoker
      * Print error
      * @param \Throwable $ex
      */
-    protected function error(string $message)
+    protected static function error(string $message)
     {
         $time = date('Y-m-d H:i:s');
         echo "[error] $time $message\n";
