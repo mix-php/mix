@@ -27,11 +27,6 @@ class Handler implements HandlerInterface
     public $namespace = 'php.micro.api';
 
     /**
-     * @var LoggerInterface
-     */
-    public $log;
-
-    /**
      * @var RegistryInterface
      */
     public $registry;
@@ -39,7 +34,17 @@ class Handler implements HandlerInterface
     /**
      * @var float
      */
-    public $timeout = 5.0;
+    public $proxyTimeout = 5.0;
+
+    /**
+     * @var LoggerInterface
+     */
+    public $log;
+
+    /**
+     * @var string
+     */
+    public $logFormat = 'status} | {uri} | {service}';
 
     /**
      * Handler constructor.
@@ -70,6 +75,20 @@ class Handler implements HandlerInterface
     }
 
     /**
+     * Print log
+     * @param string $level
+     * @param string $message
+     * @param array $context
+     */
+    protected function log(string $level, string $message, array $context = [])
+    {
+        if (!isset($this->log)) {
+            return;
+        }
+        $this->log->log($level, $message, $context);
+    }
+
+    /**
      * Proxy API
      * @param ServerRequest $request
      * @param Response $response
@@ -79,13 +98,18 @@ class Handler implements HandlerInterface
         try {
             $service = $this->getService($request->getUri()->getPath());
         } catch (\Throwable $ex) {
-            static::send($response, 404, '');
+            static::show404($response);
+            $this->log('warning', $this->logFormat, [
+                'status' => 404,
+                'uri'    => $request->getUri()->__toString(),
+            ]);
             return;
         }
         $address = $service->getAddress();
         $port    = $service->getPort();
-        $client  = static::createClient($address, $port);
-        $client->set(['timeout' => $this->timeout]);
+
+        $client = static::createClient($address, $port);
+        $client->set(['timeout' => $this->proxyTimeout]);
         $client->setMethod($request->getMethod());
         $client->setData($request->getBody()->getContents());
         $client->setCookies($request->getCookieParams());
@@ -94,18 +118,37 @@ class Handler implements HandlerInterface
             $headers[$name] = implode(',', $header);
         }
         $client->setHeaders($headers);
-        $status = $client->execute(static::getQueryPath($request->getUri()));
-        if (!$status) {
-            static::send($response, 502, '');
+        if (!$client->execute(static::getQueryPath($request->getUri()))) {
+            static::show502($response);
+            $this->log('warning', $this->logFormat, [
+                'status'  => 502,
+                'uri'     => $request->getUri()->__toString(),
+                'service' => json_encode($service),
+            ]);
             return;
         }
-        static::send(
-            $response,
-            $client->getStatusCode(),
-            $client->getBody() ?: '',
-            $client->getHeaders() ?: [],
-            $client->set_cookie_headers ?: []
-        );
+
+        $body   = (new StreamFactory())->createStream($client->getBody() ?: '');
+        $status = $client->getStatusCode();
+        foreach ($client->getHeaders() ?: [] as $key => $value) {
+            if (in_array($key, ['content-length', 'content-encoding', 'set-cookie'])) {
+                continue;
+            }
+            $response->withHeader($key, $value);
+        }
+        foreach ($client->set_cookie_headers ?: [] as $value) {
+            $response->withCookie(static::parseCookie($value));
+        }
+        $response
+            ->withStatus($client->getStatusCode())
+            ->withBody($body)
+            ->end();
+
+        $this->log('info', $this->logFormat, [
+            'status'  => $status,
+            'uri'     => $request->getUri()->__toString(),
+            'service' => json_encode($service),
+        ]);
     }
 
     /**
@@ -168,31 +211,34 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * Send
+     * 404 处理
+     * @param \Throwable $e
      * @param Response $response
-     * @param int $status
-     * @param string $content
-     * @param array $headers
-     * @param array $cookieHeaders
      */
-    protected static function send(Response $response, int $status, string $content, array $headers = [], array $cookieHeaders = [])
+    protected static function show404(Response $response)
     {
-        $body = (new StreamFactory())->createStream($content);
-        foreach ($headers as $key => $value) {
-            if (in_array($key, ['content-length', 'content-encoding', 'set-cookie'])) {
-                continue;
-            }
-            $response->withHeader($key, $value);
-        }
-        foreach ($cookieHeaders as $value) {
-            $response->withCookie(static::parseCookie($value));
-        }
-        if (!isset($headers['content-type'])) {
-            $response->withContentType('text/plain');
-        }
-        $response
-            ->withStatus($status)
+        $content = '404 Not Found';
+        $body    = (new StreamFactory())->createStream($content);
+        return $response
+            ->withContentType('text/plain')
             ->withBody($body)
+            ->withStatus(404)
+            ->end();
+    }
+
+    /**
+     * 502 处理,
+     * @param \Throwable $e
+     * @param Response $response
+     */
+    protected static function show502(Response $response)
+    {
+        $content = '502 Bad Gateway';
+        $body    = (new StreamFactory())->createStream($content);
+        return $response
+            ->withContentType('text/plain')
+            ->withBody($body)
+            ->withStatus(502)
             ->end();
     }
 
