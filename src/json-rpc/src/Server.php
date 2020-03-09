@@ -65,15 +65,15 @@ class Server implements HandlerInterface
     }
 
     /**
-     * 获取全部 service 名称
+     * 获取全部 service 名称, 通过类名
      * @return string[]
      */
     public function services()
     {
         $services = [];
         foreach ($this->services as $service) {
-            $name       = strtolower(basename(str_replace('\\', '/', get_class($service))));
-            $services[] = $name;
+            $className  = strtolower(basename(str_replace('\\', '/', get_class($service))));
+            $services[] = $className;
         }
         return $services;
     }
@@ -85,10 +85,10 @@ class Server implements HandlerInterface
     public function register(object $service)
     {
         array_push($this->services, $service);
-        $name    = str_replace('/', '\\', basename(str_replace('\\', '/', get_class($service))));
-        $methods = get_class_methods($service);
+        $className = str_replace('/', '\\', basename(str_replace('\\', '/', get_class($service))));
+        $methods   = get_class_methods($service);
         foreach ($methods as $method) {
-            $this->callables[sprintf('%s.%s', $name, $method)] = [$service, $method];
+            $this->callables[sprintf('%s.%s', $className, $method)] = [$service, $method];
         }
     }
 
