@@ -67,31 +67,21 @@ class Connection
     }
 
     /**
-     * 关闭连接
-     * @throws \Swoole\Exception
-     */
-    public function close()
-    {
-        if (!$this->client->close()) {
-            $errMsg  = $this->client->errMsg;
-            $errCode = $this->client->errCode;
-            if ($errMsg == '' && $errCode == 0) {
-                return;
-            }
-            throw new \Swoole\Exception($errMsg, $errCode);
-        }
-    }
-
-    /**
      * Recv
-     * @return mixed
+     * @return string
      * @throws \Swoole\Exception
      */
     public function recv()
     {
         $data = $this->client->recv(-1);
-        if ($data === false || $data === "") {
-            throw new \Swoole\Exception($this->client->errMsg, $this->client->errCode);
+        if ($data === false) { // 接收失败
+            $client = $this->client;
+            throw new \Swoole\Exception($client->errMsg, $client->errCode);
+        }
+        if ($data === "") { // 连接关闭
+            $errCode = stripos(PHP_OS, 'Darwin') !== false ? 54 : 104; // mac=54, linux=104
+            $errMsg  = swoole_strerror($errCode, 9);
+            throw new \Swoole\Exception($errMsg, $errCode);
         }
         return $data;
     }
@@ -110,6 +100,22 @@ class Connection
         }
         if ($len !== $size) {
             throw new \Swoole\Exception('The sending data is incomplete, it may be that the socket has been closed by the peer.');
+        }
+    }
+
+    /**
+     * 关闭连接
+     * @throws \Swoole\Exception
+     */
+    public function close()
+    {
+        if (!$this->client->close()) {
+            $errMsg  = $this->client->errMsg;
+            $errCode = $this->client->errCode;
+            if ($errMsg == '' && $errCode == 0) {
+                return;
+            }
+            throw new \Swoole\Exception($errMsg, $errCode);
         }
     }
 

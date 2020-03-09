@@ -23,14 +23,13 @@ class Handler implements HandlerInterface
     /**
      * Handle
      * @param Connection $connection
-     * @return mixed
      */
     public function handle(Connection $connection)
     {
         while (true) {
             try {
-                $data      = $conn->recv();
-                $overview  = preg_replace('/\s/', '', substr($data, 0, 200));
+                $data      = $connection->recv();
+                $overview  = preg_replace('/\s/', '', substr($data, 40, 300));
                 $closure   = \Opis\Closure\unserialize($data);
                 $microtime = static::microtime();
                 try {
@@ -38,7 +37,7 @@ class Handler implements HandlerInterface
                 } catch (\Throwable $e) {
                     $message = sprintf('%s in %s on line %s', $e->getMessage(), $e->getFile(), $e->getLine());
                     $code    = $e->getCode();
-                    $conn->send(serialize(new CallException($message, $code)) . static::EOF);
+                    $connection->send(serialize(new CallException($message, $code)) . Server::EOF);
                     $this->log('warning', '{code} | {message} | {overview}', [
                         'code'     => $code,
                         'message'  => $message,
@@ -51,7 +50,7 @@ class Handler implements HandlerInterface
                     'time'     => $time,
                     'overview' => $overview,
                 ]);
-                $conn->send(serialize($result) . static::EOF);
+                $connection->send(serialize($result) . Server::EOF);
             } catch (\Throwable $e) {
                 // 忽略服务器主动断开连接异常
                 if ($e instanceof ReceiveException && in_array($e->getCode(), [54, 104])) { // mac=54, linux=104
