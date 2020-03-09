@@ -2,7 +2,6 @@
 
 namespace Mix\Micro\Gateway;
 
-use Mix\Http\Server\HandlerInterface;
 use Mix\Http\Server\Server as HttpServer;
 
 /**
@@ -69,7 +68,7 @@ class Server
      */
     public function shutdown()
     {
-        $this->handler->registry->clear();
+        $this->handler->clear();
         $this->httpServer->shutdown();
     }
 
