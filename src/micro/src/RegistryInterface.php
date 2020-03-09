@@ -2,6 +2,8 @@
 
 namespace Mix\Micro;
 
+use Mix\Micro\Exception\NotFoundException;
+
 /**
  * Interface RegistryInterface
  * @package Mix\Micro
@@ -13,10 +15,10 @@ interface RegistryInterface
      * Get Service
      * @param string $name
      * @return ServiceInterface
-     * @throws \Exception
+     * @throws NotFoundException
      */
     public function get(string $name): ServiceInterface;
-    
+
     /**
      * Register
      * @param ServiceBundleInterface $bundle

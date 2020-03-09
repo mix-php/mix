@@ -5,6 +5,7 @@ namespace Mix\Etcd\Service;
 use Mix\Concurrent\Timer;
 use Mix\Etcd\Client\Client;
 use Mix\Etcd\Client\Watcher;
+use Mix\Etcd\Exception\NotFoundException;
 
 /**
  * Class ServiceMonitor
@@ -143,13 +144,13 @@ class ServiceMonitor
      * Random get service
      * @param string $name
      * @return Service
-     * @throws \Exception
+     * @throws NotFoundException
      */
     public function random(string $name): Service
     {
         $services = $this->services[$name] ?? [];
         if (empty($services)) {
-            throw new \Exception(sprintf('Service not found, name: %s', $name));
+            throw new NotFoundException(sprintf('Service not found, name: %s', $name));
         }
         return $services[array_rand($services)];
     }

@@ -2,6 +2,7 @@
 
 namespace Mix\Micro\Gateway;
 
+use Mix\Http\Server\HandlerInterface;
 use Mix\Http\Server\Server as HttpServer;
 
 /**
@@ -22,7 +23,7 @@ class Server
     public $reusePort = false;
 
     /**
-     * @var Handler
+     * @var HandlerInterface
      */
     public $handler;
 

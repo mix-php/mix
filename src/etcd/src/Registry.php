@@ -6,6 +6,7 @@ use Mix\Bean\BeanInjector;
 use Mix\Etcd\Client\Client;
 use Mix\Etcd\Register\Registrar;
 use Mix\Etcd\Service\ServiceMonitor;
+use Mix\Micro\Exception\NotFoundException;
 use Mix\Micro\ServiceBundleInterface;
 use Mix\Micro\RegistryInterface;
 use Mix\Micro\ServiceInterface;
@@ -77,7 +78,7 @@ class Registry implements RegistryInterface
      * Get Service
      * @param string $name
      * @return ServiceInterface
-     * @throws \Exception
+     * @throws NotFoundException
      */
     public function get(string $name): ServiceInterface
     {

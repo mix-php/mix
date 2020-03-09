@@ -27,13 +27,13 @@ class ServiceBundleFactory
     }
 
     /**
-     * Create service bundle form http (api or web)
+     * Create service bundle form api
      * @param HttpServer $server
      * @param Router $router
      * @return ServiceBundle
      * @throws \Exception
      */
-    public function createServiceBundleFromHttp(HttpServer $server, Router $router, string $namespace = 'php.micro.api')
+    public function createServiceBundleFromAPI(HttpServer $server, Router $router, string $namespace = 'php.micro.api')
     {
         $serviceFactory = new ServiceFactory();
         $serviceBundle  = $this->createServiceBundle();
@@ -46,6 +46,18 @@ class ServiceBundleFactory
             $serviceBundle->add($service);
         }
         return $serviceBundle;
+    }
+
+    /**
+     * Create service bundle form web
+     * @param HttpServer $server
+     * @param Router $router
+     * @return ServiceBundle
+     * @throws \Exception
+     */
+    public function createServiceBundleFromWeb(HttpServer $server, Router $router, string $namespace = 'php.micro.web')
+    {
+        $this->createServiceBundleFromAPI($server, $router, $namespace);
     }
 
     /**

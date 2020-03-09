@@ -70,7 +70,7 @@ class Handler implements HandlerInterface
                 $this->proxyJsonRpc($request, $response);
                 break;
             default:
-                $this->proxyAPI($request, $response);
+                $this->proxyApiOrWeb($request, $response);
         }
     }
 
@@ -89,17 +89,18 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * Proxy API
+     * Proxy API or Web
      * @param ServerRequest $request
      * @param Response $response
      */
-    protected function proxyAPI(ServerRequest $request, Response $response)
+    protected function proxyApiOrWeb(ServerRequest $request, Response $response)
     {
         try {
             $service = $this->getService($request->getUri()->getPath());
         } catch (\Throwable $ex) {
             static::show404($response);
             $this->log('warning', $this->logFormat, [
+                'type'   => 'api,web',
                 'status' => 404,
                 'uri'    => $request->getUri()->__toString(),
             ]);
