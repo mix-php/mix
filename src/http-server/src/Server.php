@@ -85,6 +85,15 @@ class Server
     }
 
     /**
+     * Get all pattern
+     * @return string[]
+     */
+    public function patterns()
+    {
+        return array_keys($this->callbacks);
+    }
+
+    /**
      * Start
      * @param HandlerInterface|null $handler
      * @throws \Swoole\Exception
@@ -106,12 +115,11 @@ class Server
                     // 执行回调
                     call_user_func($callback, $request, $response);
                 } catch (\Throwable $e) {
-                    $isMix = class_exists(\Mix::class);
                     // 错误处理
+                    $isMix = class_exists(\Mix::class);
                     if (!$isMix) {
                         throw $e;
                     }
-                    // Mix错误处理
                     /** @var \Mix\Console\Error $error */
                     $error = \Mix::$app->context->get('error');
                     $error->handleException($e);

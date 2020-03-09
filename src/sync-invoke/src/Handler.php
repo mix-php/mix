@@ -56,6 +56,8 @@ class Handler implements HandlerInterface
                 if ($e instanceof ReceiveException && in_array($e->getCode(), [54, 104])) { // mac=54, linux=104
                     return;
                 }
+                // 断开连接
+                $connection->close();
                 // 抛出异常
                 throw $e;
             }
