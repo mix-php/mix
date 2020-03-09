@@ -158,6 +158,7 @@ class Server
 
     /**
      * Shutdown
+     * @throws \Swoole\Exception
      */
     public function shutdown()
     {
