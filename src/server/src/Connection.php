@@ -42,18 +42,18 @@ class Connection
     /**
      * Recv
      * @return string
-     * @throws \Swoole\Exception
+     * @throws ReceiveException
      */
     public function recv()
     {
         $data = $this->swooleConnection->recv();
         if ($data === false) { // 接收失败
-            $this->close();
+            $this->close(); // 需要移除管理器内的连接，所以还要 close
             $socket = $this->swooleSocket;
             throw new ReceiveException($socket->errMsg, $socket->errCode);
         }
         if ($data === "") { // 连接关闭
-            $this->close();
+            $this->close(); // 需要移除管理器内的连接，所以还要 close
             $errCode = stripos(PHP_OS, 'Darwin') !== false ? 54 : 104; // mac=54, linux=104
             $errMsg  = swoole_strerror($errCode, 9);
             throw new ReceiveException($errMsg, $errCode);

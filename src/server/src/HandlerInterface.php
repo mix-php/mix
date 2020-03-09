@@ -12,7 +12,6 @@ interface HandlerInterface
     /**
      * Handle
      * @param Connection $connection
-     * @return mixed
      */
     public function handle(Connection $connection);
 

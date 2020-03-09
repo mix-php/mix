@@ -103,12 +103,13 @@ class Server
                 // 执行回调
                 call_user_func($this->callback, $connection);
             } catch (\Throwable $e) {
-                $isMix = class_exists(\Mix::class);
+                // 断开连接
+                $connection->close();
                 // 错误处理
+                $isMix = class_exists(\Mix::class);
                 if (!$isMix) {
                     throw $e;
                 }
-                // Mix错误处理
                 /** @var \Mix\Console\Error $error */
                 $error = \Mix::$app->context->get('error');
                 $error->handleException($e);
