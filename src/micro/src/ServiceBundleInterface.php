@@ -16,6 +16,12 @@ interface ServiceBundleInterface
     public function items();
 
     /**
+     * Get service num
+     * @return int
+     */
+    public function count();
+
+    /**
      * Add service
      * @param ServiceInterface $service
      */

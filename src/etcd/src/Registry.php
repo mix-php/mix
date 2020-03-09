@@ -103,6 +103,9 @@ class Registry implements RegistryInterface
         if (isset($this->registrars[$id])) {
             throw new \Exception(sprintf('Repeat register service, bundle id: %s', $id));
         }
+        if ($bundle->count() == 0) {
+            return;
+        }
         $registrar = new Registrar($this->createClient(), $bundle, $this->ttl);
         $registrar->register();
         $this->registrars[$id] = $registrar;

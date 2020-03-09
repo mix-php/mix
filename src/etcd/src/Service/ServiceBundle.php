@@ -36,6 +36,15 @@ class ServiceBundle implements ServiceBundleInterface
     }
 
     /**
+     * Get service num
+     * @return int
+     */
+    public function count()
+    {
+        return $this->count($this->services);
+    }
+
+    /**
      * Add service
      * @param ServiceInterface $service
      */
