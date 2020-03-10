@@ -81,7 +81,7 @@ class Connection
      * @return string
      * @throws \Swoole\Exception
      */
-    public function recv()
+    protected function recv()
     {
         $data = $this->client->recv(-1);
         if ($data === false) { // 接收失败
@@ -101,7 +101,7 @@ class Connection
      * @param string $data
      * @throws \Swoole\Exception
      */
-    public function send(string $data)
+    protected function send(string $data)
     {
         $len  = strlen($data);
         $size = $this->client->send($data);
