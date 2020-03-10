@@ -49,6 +49,15 @@ class Connection
     }
 
     /**
+     * 析构
+     */
+    public function __destruct()
+    {
+        // 丢弃连接
+        $this->discard();
+    }
+
+    /**
      * Connect
      * @throws \Swoole\Exception
      */
@@ -66,14 +75,39 @@ class Connection
         }
         $this->client = $client;
     }
+    
+    /**
+     * Invoke
+     * @param \Closure $closure
+     * @return mixed
+     * @throws InvokeException
+     * @throws \Swoole\Exception
+     */
+    public function invoke(\Closure $closure)
+    {
+        $code = \Opis\Closure\serialize($closure);
+        $this->send($code . Connection::EOF);
+        $data = unserialize($this->recv());
+        if ($data instanceof CallException) {
+            throw new InvokeException($data->message, $data->code);
+        }
+        return $data;
+    }
 
     /**
-     * 析构
+     * 关闭连接
+     * @throws \Swoole\Exception
      */
-    public function __destruct()
+    public function close()
     {
-        // 丢弃连接
-        $this->discard();
+        if (!$this->client->close()) {
+            $errMsg  = $this->client->errMsg;
+            $errCode = $this->client->errCode;
+            if ($errMsg == '' && $errCode == 0) {
+                return;
+            }
+            throw new \Swoole\Exception($errMsg, $errCode);
+        }
     }
 
     /**
@@ -110,40 +144,6 @@ class Connection
         }
         if ($len !== $size) {
             throw new \Swoole\Exception('The sending data is incomplete, it may be that the socket has been closed by the peer.');
-        }
-    }
-
-    /**
-     * Invoke
-     * @param \Closure $closure
-     * @return mixed
-     * @throws InvokeException
-     * @throws \Swoole\Exception
-     */
-    public function invoke(\Closure $closure)
-    {
-        $code = \Opis\Closure\serialize($closure);
-        $this->send($code . Connection::EOF);
-        $data = unserialize($this->recv());
-        if ($data instanceof CallException) {
-            throw new InvokeException($data->message, $data->code);
-        }
-        return $data;
-    }
-
-    /**
-     * 关闭连接
-     * @throws \Swoole\Exception
-     */
-    public function close()
-    {
-        if (!$this->client->close()) {
-            $errMsg  = $this->client->errMsg;
-            $errCode = $this->client->errCode;
-            if ($errMsg == '' && $errCode == 0) {
-                return;
-            }
-            throw new \Swoole\Exception($errMsg, $errCode);
         }
     }
 
