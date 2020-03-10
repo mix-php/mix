@@ -1,18 +1,19 @@
 <?php
 
-namespace Mix\JsonRpc;
+namespace Mix\JsonRpc\Client;
 
-use Mix\Pool\ConnectionTrait;
+use Mix\Bean\BeanInjector;
+use Mix\JsonRpc\Call\Caller;
+use Mix\JsonRpc\Message\Request;
+use Mix\JsonRpc\Message\Response;
 use Swoole\Coroutine\Client;
 
 /**
  * Class Connection
- * @package Mix\Sync\Invoke
+ * @package Mix\JsonRpc\Client
  */
 class Connection
 {
-
-    use ConnectionTrait;
 
     /**
      * @var string
@@ -29,6 +30,7 @@ class Connection
      */
     public $timeout = 0.0;
 
+
     /**
      * @var Client
      */
@@ -36,12 +38,20 @@ class Connection
 
     /**
      * Connection constructor.
-     * @param string $host
-     * @param int $port
-     * @param float $timeout
+     * @param array $config
+     * @throws \PhpDocReader\AnnotationException
+     * @throws \ReflectionException
+     */
+    public function __construct(array $config = [])
+    {
+        BeanInjector::inject($this, $config);
+    }
+
+    /**
+     * Connect
      * @throws \Swoole\Exception
      */
-    public function __construct(string $host, int $port, float $timeout = 0.0)
+    public function connect()
     {
         $this->host    = $host;
         $this->port    = $port;
@@ -58,12 +68,27 @@ class Connection
     }
 
     /**
-     * 析构
+     * Call
+     * @param Request $request
+     * @return Response
+     * @throws Exception\ParseException
+     * @throws \Swoole\Exception
      */
-    public function __destruct()
+    public function call(Request $request)
     {
-        // 丢弃连接
-        $this->discard();
+        return (new Caller($this->getConnection()))->call($request);
+    }
+
+    /**
+     * Multi Call
+     * @param Request ...$requests
+     * @return Response[]
+     * @throws Exception\ParseException
+     * @throws \Swoole\Exception
+     */
+    public function callMultiple(Request ...$requests)
+    {
+        return (new Caller($this->getConnection()))->callMultiple(...$requests);
     }
 
     /**
@@ -87,7 +112,7 @@ class Connection
      * @return string
      * @throws \Swoole\Exception
      */
-    public function recv()
+    protected function recv()
     {
         $data = $this->client->recv(-1);
         if ($data === false || $data === "") {
@@ -101,7 +126,7 @@ class Connection
      * @param string $data
      * @throws \Swoole\Exception
      */
-    public function send(string $data)
+    protected function send(string $data)
     {
         $len  = strlen($data);
         $size = $this->client->send($data);

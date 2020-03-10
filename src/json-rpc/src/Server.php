@@ -5,7 +5,6 @@ namespace Mix\JsonRpc;
 use Mix\Concurrent\Sync\WaitGroup;
 use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\ServerRequest;
-use Mix\Http\Server\HandlerInterface;
 use Mix\JsonRpc\Factory\ResponseFactory;
 use Mix\JsonRpc\Helper\JsonRpcHelper;
 use Mix\JsonRpc\Message\Request;
@@ -18,7 +17,7 @@ use Swoole\Coroutine\Channel;
  * Class Server
  * @package Mix\JsonRpc
  */
-class Server implements HandlerInterface
+class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerInterface
 {
 
     /**
@@ -103,10 +102,7 @@ class Server implements HandlerInterface
             'open_eof_check' => true,
             'package_eof'    => Constants::EOF,
         ]);
-        $server->handle(function (Connection $conn) {
-            $this->handleTCP($conn);
-        });
-        $server->start();
+        $server->start($this);
     }
 
     /**
@@ -114,7 +110,7 @@ class Server implements HandlerInterface
      * @param Connection $conn
      * @throws \Throwable
      */
-    protected function handleTCP(Connection $conn)
+    protected function handle(Connection $conn)
     {
         // 消息发送
         $sendChan = new Channel();

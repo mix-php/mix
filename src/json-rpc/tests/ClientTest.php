@@ -22,32 +22,36 @@ final class ClientTest extends TestCase
                 $server->start();
             });
             // client
-            $client = new \Mix\JsonRpc\Client([
-                'dialer' => new \Mix\JsonRpc\Dialer([
-                    'host'    => '127.0.0.1',
-                    'port'    => 9234,
-                    'timeout' => 3,
+            $dialer = new \Mix\JsonRpc\Client\Dialer();
+            $conn   = $dialer->dial('127.0.0.1', 9234);
+            /*
+            $dialer = new \Mix\JsonRpc\Client\Dialer([
+                'registry' => new \Mix\Etcd\Registry([
+                    'host' => '127.0.0.1',
+                    'port' => 2379,
+                    'ttl'  => 10,
                 ]),
             ]);
-
+            $conn   = $dialer->dialFromService('php.micro.srv.calculator');
+            */
             // 方法不存在
-            $response = $client->call((new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('None.None', [1, 3], 0));
+            $response = $conn->call((new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('None.None', [1, 3], 0));
             var_dump(json_encode($response));
             $_this->assertNotNull($response->error);
 
             // 单个返回值
-            $response = $client->call((new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.Sum', [1, 3], 0));
+            $response = $conn->call((new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.Sum', [1, 3], 0));
             var_dump(json_encode($response));
             $_this->assertEquals($response->result[0], 4);
 
             // 多个返回值
-            $response = $client->call((new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.Plus', [1, 3], 0));
+            $response = $conn->call((new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.Plus', [1, 3], 0));
             var_dump(json_encode($response));
             $_this->assertEquals($response->result[0], 2);
             $_this->assertEquals($response->result[1], 4);
 
             // 批量调用
-            $responses = $client->callMultiple((new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.Sum', [1, 3], 10001), (new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.Sum', [2, 3], 10002));
+            $responses = $conn->callMultiple((new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.Sum', [1, 3], 10001), (new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.Sum', [2, 3], 10002));
             var_dump(json_encode($responses));
             $_this->assertEquals($responses[0]->result[0], 4);
             $_this->assertEquals($responses[1]->result[0], 5);

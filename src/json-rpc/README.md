@@ -47,20 +47,15 @@ $http->start($server);
 创建客户端
 
 ```
-$client = new \Mix\JsonRpc\Client([
-    'dialer' => new \Mix\JsonRpc\Dialer([
-        'host'    => '127.0.0.1',
-        'port'    => 9234,
-        'timeout' => 3,
-    ]),
-]);
+$dialer = new \Mix\JsonRpc\Client\Dialer();
+$conn   = $dialer->dial('127.0.0.1', 9234);
 ```
 
 常规调用:
 
 ```
 $request = (new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.sum', [1, 3], 100001)
-$response = $client->call($request);
+$response = $conn->call($request);
 var_dump($response);
 ```
 
@@ -69,33 +64,31 @@ var_dump($response);
 ```
 $requests[] = (new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.sum', [1, 3], 100001)
 $requests[] = (new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.sum', [2, 3], 100002)
-$responses = $client->callMultiple(...$requests);
+$responses = $conn->callMultiple(...$requests);
 // $responses 不保证顺序，需使用 id 遍历结果
 var_dump($responses);
 ```
 
 - 微服务调用
 
-创建带服务中心的客户端
+创建带注册中心的客户端
 
 ```
-$client = new \Mix\JsonRpc\Client([
-    'dialer' => new \Mix\JsonRpc\Dialer([
-        'timeout' => 3,
+$dialer = new \Mix\JsonRpc\Client\Dialer([
+    'registry' => new \Mix\Etcd\Registry([
+        'host' => '127.0.0.1',
+        'port' => 2379,
+        'ttl'  => 10,
     ]),
-    'serviceCenter' => new \Mix\Etcd\ServiceCenter([
-       'host'    => '127.0.0.1',
-       'port'    => 2379,
-       'ttl'     => 10,
-    ]);
 ]);
+$conn   = $dialer->dialFromService('php.micro.srv.calculator');
 ```
 
-通过服务调用：
+常规调用:
 
 ```
 $request = (new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.sum', [1, 3], 100001)
-$response = $client->service('php.micro.srv.calculator')->call($request);
+$response = $conn->call($request);
 var_dump($response);
 ```
 
