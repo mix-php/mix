@@ -5,7 +5,7 @@ namespace Mix\Etcd\Service;
 use Mix\Concurrent\Timer;
 use Mix\Etcd\Client\Client;
 use Mix\Etcd\Client\Watcher;
-use Mix\Etcd\Exception\NotFoundException;
+use Mix\Micro\Exception\NotFoundException;
 
 /**
  * Class ServiceMonitor

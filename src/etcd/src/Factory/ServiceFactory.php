@@ -2,6 +2,7 @@
 
 namespace Mix\Etcd\Factory;
 
+use Mix\Etcd\Service\Service;
 use Mix\Micro\Helper\ServiceHelper;
 use Mix\Micro\ServiceFactoryInterface;
 use Mix\Micro\ServiceInterface;

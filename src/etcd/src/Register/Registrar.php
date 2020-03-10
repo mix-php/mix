@@ -4,7 +4,7 @@ namespace Mix\Etcd\Register;
 
 use Mix\Etcd\Client\Client;
 use Mix\Concurrent\Timer;
-use Mix\Etcd\Exception\NotFoundException;
+use Mix\Micro\Exception\NotFoundException;
 use Mix\Etcd\Node\Node;
 use Mix\Etcd\Service\ServiceBundle;
 use Mix\Micro\Helper\ServiceHelper;
@@ -81,6 +81,7 @@ class Registrar
             $client->put(sprintf($this->serviceFormat, $service->getName(), $service->getID()), json_encode($service), ['lease' => $leaseID]);
         }
         $client->put(sprintf($this->nodeFormat, $node->getName(), $node->getID()), json_encode($node), ['lease' => $leaseID]);
+        $this->timer and $this->timer->clear();
         $this->timer = $this->keepAlive();
     }
 
@@ -90,7 +91,10 @@ class Registrar
     public function unregister()
     {
         $this->timer->clear();
-        $this->client->revoke($this->leaseID);
+        try {   // 忽略异常
+            $this->client->revoke($this->leaseID);
+        } catch (\Throwable $throwable) {
+        }
     }
 
     /**

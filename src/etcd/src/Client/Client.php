@@ -2,7 +2,7 @@
 
 namespace Mix\Etcd\Client;
 
-use Mix\Etcd\Exception\NotFoundException;
+use Mix\Micro\Exception\NotFoundException;
 
 /**
  * Class Client

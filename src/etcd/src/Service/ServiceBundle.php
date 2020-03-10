@@ -41,7 +41,7 @@ class ServiceBundle implements ServiceBundleInterface
      */
     public function count()
     {
-        return $this->count($this->services);
+        return count($this->services);
     }
 
     /**
