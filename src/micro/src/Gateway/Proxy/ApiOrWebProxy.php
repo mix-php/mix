@@ -9,6 +9,7 @@ use Mix\Http\Message\ServerRequest;
 use Mix\Http\Message\Stream\FileStream;
 use Mix\Micro\Exception\NotFoundException;
 use Mix\Micro\Gateway\Handler;
+use Mix\WebSocket\Exception\UpgradeException;
 use Psr\Http\Message\UriInterface;
 use Swoole\Coroutine\Http\Client;
 
@@ -20,7 +21,21 @@ class ApiOrWebProxy
 {
 
     /**
+     * @var WebSocketProxy
+     */
+    public $webSocketProxy;
+
+    /**
+     * ApiOrWebProxy constructor.
+     */
+    public function __construct()
+    {
+        $this->webSocketProxy = new WebSocketProxy();
+    }
+
+    /**
      * Proxy
+     * @param Handler $handler
      * @param ServerRequest $request
      * @param Response $response
      */
@@ -42,7 +57,7 @@ class ApiOrWebProxy
                 'status'  => 404,
                 'method'  => $request->getMethod(),
                 'uri'     => $request->getUri()->__toString(),
-                'service' => json_encode($service),
+                'service' => '',
             ]);
             return;
         }
@@ -72,7 +87,14 @@ class ApiOrWebProxy
             $client->setData($request->getBody()->getContents());
         }
 
-        if (!$client->execute(static::getQueryPath($request->getUri()))) {
+        // websocket
+        if (WebSocketProxy::isWebSocket($request)) {
+            $this->webSocketProxy->proxy($service, $handler, $request, $response);
+            return;
+        }
+        // http
+        $path = static::getQueryPath($request->getUri());
+        if (!$client->execute($path)) {
             $handler::show502($response);
             $this->log('warning', $this->logFormat, [
                 'type'    => $type,
@@ -137,7 +159,6 @@ class ApiOrWebProxy
     }
 
     /**
-     * parse Cookie
      * Parse cookie
      * @param string $header
      * @return Cookie

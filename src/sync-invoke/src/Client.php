@@ -10,6 +10,7 @@ use Mix\SyncInvoke\Exception\InvokeException;
 /**
  * Class Client
  * @package Mix\SyncInvoke
+ * @deprecated 废弃该类，请使用
  */
 class Client
 {

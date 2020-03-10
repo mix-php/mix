@@ -8,7 +8,7 @@ use Mix\JsonRpc\Message\Request;
 use Mix\JsonRpc\Message\Response;
 use Mix\JsonRpc\Helper\JsonRpcHelper;
 use Mix\JsonRpc\Pool\ConnectionPool;
-use Mix\ServiceCenter\ServiceCenterInterface;
+use Mix\Micro\RegistryInterface;
 
 /**
  * Class Client
@@ -23,9 +23,9 @@ class Client
     public $dialer;
 
     /**
-     * @var ServiceCenterInterface
+     * @var RegistryInterface
      */
-    public $serviceCenter;
+    public $registry;
 
     /**
      * 连接
@@ -65,7 +65,7 @@ class Client
     public function service(string $name)
     {
         $dialer     = $this->dialer;
-        $service    = $this->serviceCenter->get($name);
+        $service    = $this->registry->get($name);
         $connection = $dialer->dialService($service);
         return new Caller($connection);
     }

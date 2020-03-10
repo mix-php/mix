@@ -48,6 +48,11 @@ class Handler implements HandlerInterface
     public $logFormat = '{status}|{method}|{uri}|{service}';
 
     /**
+     * @var ApiOrWebProxy
+     */
+    protected $apiOrWebProxy;
+
+    /**
      * Handler constructor.
      * @param array $config
      * @throws \PhpDocReader\AnnotationException
@@ -56,6 +61,14 @@ class Handler implements HandlerInterface
     public function __construct(array $config = [])
     {
         BeanInjector::inject($this, $config);
+    }
+
+    /**
+     * Init
+     */
+    public function init()
+    {
+        $this->apiOrWebProxy = new ApiOrWebProxy();
     }
 
     /**
@@ -70,7 +83,7 @@ class Handler implements HandlerInterface
             case '/jsonrpc':
                 break;
             default:
-                (new ApiOrWebProxy())->proxy($this, $request, $response);
+                $this->apiOrWebProxy->proxy($this, $request, $response);
         }
     }
 
@@ -157,6 +170,7 @@ class Handler implements HandlerInterface
      */
     public function clear()
     {
+        $this->apiOrWebProxy and $this->apiOrWebProxy->webSocketProxy->upgrader->destroy();
         $this->registry->clear();
     }
 
