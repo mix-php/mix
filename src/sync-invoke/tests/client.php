@@ -5,8 +5,9 @@ include 'class.php';
 
 Swoole\Coroutine\run(function () {
 
-    $conn = new \Mix\SyncInvoke\Connection(9505, 5);
-    $data = $conn->invoke(function () {
+    $dialer = new \Mix\SyncInvoke\Client\Dialer();
+    $conn   = $dialer->dial(9505);
+    $data   = $conn->invoke(function () {
         $obj = new Hello();
         return [1, 2, 3, $obj];
     });
