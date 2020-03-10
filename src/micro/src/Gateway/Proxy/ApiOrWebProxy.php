@@ -6,6 +6,7 @@ use Mix\Http\Message\Cookie\Cookie;
 use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
+use Mix\Http\Message\Stream\FileStream;
 use Mix\Micro\Exception\NotFoundException;
 use Mix\Micro\Gateway\Handler;
 use Psr\Http\Message\UriInterface;
@@ -26,7 +27,7 @@ class ApiOrWebProxy
     public function proxy(Handler $handler, ServerRequest $request, Response $response)
     {
         $service = $type = null;
-        foreach ([$this->namespaces->api, $this->namespaces->web] as $key => $namespace) {
+        foreach ([$handler->namespaces->api, $handler->namespaces->web] as $key => $namespace) {
             try {
                 $service = $handler->service($request->getUri()->getPath(), $namespace);
                 $type    = ($key == 0) ? 'api' : 'web';
@@ -36,10 +37,12 @@ class ApiOrWebProxy
         }
         if (is_null($service)) {
             $handler::show404($response);
-            $this->log('warning', $this->logFormat, [
-                'type'   => $type,
-                'status' => 404,
-                'uri'    => $request->getUri()->__toString(),
+            $handler->log('warning', [
+                'type'    => $type,
+                'status'  => 404,
+                'method'  => $request->getMethod(),
+                'uri'     => $request->getUri()->__toString(),
+                'service' => json_encode($service),
             ]);
             return;
         }
@@ -47,19 +50,34 @@ class ApiOrWebProxy
         $port    = $service->getPort();
 
         $client = static::createClient($address, $port);
-        $client->set(['timeout' => $this->proxyTimeout]);
+        $client->set(['timeout' => $handler->proxyTimeout]);
         $client->setMethod($request->getMethod());
-        $client->setData($request->getBody()->getContents());
-        $client->setCookies($request->getCookieParams());
+
         $headers = [];
         foreach ($request->getHeaders() as $name => $header) {
             $headers[$name] = implode(',', $header);
         }
         $client->setHeaders($headers);
+        $client->setCookies($request->getCookieParams());
+
+        $files = $request->getUploadedFiles();
+        if (!empty($files)) {
+            $client->setData($request->getParsedBody());
+            foreach ($files as $name => $file) {
+                /** @var FileStream $stream */
+                $stream = $file->getStream();
+                $client->addFile($stream->getFilename(), $name, $file->getClientMediaType(), $file->getClientFilename());
+            }
+        } else {
+            $client->setData($request->getBody()->getContents());
+        }
+
         if (!$client->execute(static::getQueryPath($request->getUri()))) {
             $handler::show502($response);
             $this->log('warning', $this->logFormat, [
+                'type'    => $type,
                 'status'  => 502,
+                'method'  => $request->getMethod(),
                 'uri'     => $request->getUri()->__toString(),
                 'service' => json_encode($service),
             ]);
@@ -82,8 +100,10 @@ class ApiOrWebProxy
             ->withBody($body)
             ->end();
 
-        $this->log('info', $this->logFormat, [
+        $handler->log('info', [
+            'type'    => $type,
             'status'  => $status,
+            'method'  => $request->getMethod(),
             'uri'     => $request->getUri()->__toString(),
             'service' => json_encode($service),
         ]);

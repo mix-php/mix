@@ -45,7 +45,7 @@ class Handler implements HandlerInterface
     /**
      * @var string
      */
-    public $logFormat = 'status} | {uri} | {service}';
+    public $logFormat = '{status}|{method}|{uri}|{service}';
 
     /**
      * Handler constructor.
@@ -77,15 +77,14 @@ class Handler implements HandlerInterface
     /**
      * Print log
      * @param string $level
-     * @param string $message
      * @param array $context
      */
-    public function log(string $level, string $message, array $context = [])
+    public function log(string $level, array $context = [])
     {
         if (!isset($this->log)) {
             return;
         }
-        $this->log->log($level, $message, $context);
+        $this->log->log($level, $this->logFormat, $context);
     }
 
     /**
