@@ -28,6 +28,7 @@ class Client
 
     /**
      * 连接
+     * 为了兼容老版本直接传入连接，保留改参数为 public
      * @var Connection
      */
     public $connection;
