@@ -119,6 +119,36 @@ class Flag
     }
 
     /**
+     * 获取整数
+     * @param $name
+     * @param int $default
+     * @return int
+     */
+    public static function int($name, int $default = 0)
+    {
+        $value = static::string($name, '');
+        if ($value === '') {
+            return $default;
+        }
+        return (int)$value;
+    }
+
+    /**
+     * 获取浮点数
+     * @param $name
+     * @param float $default
+     * @return float
+     */
+    public static function float($name, float $default = 0)
+    {
+        $value = static::string($name, '');
+        if ($value === '') {
+            return $default;
+        }
+        return (float)$value;
+    }
+
+    /**
      * 全部命令行选项
      * @return array
      */
