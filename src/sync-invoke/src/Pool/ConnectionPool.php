@@ -4,7 +4,7 @@ namespace Mix\SyncInvoke\Pool;
 
 use Mix\Pool\ConnectionPoolInterface;
 use Mix\Pool\AbstractConnectionPool;
-use Mix\SyncInvoke\Connection;
+use Mix\SyncInvoke\Client\Connection;
 
 /**
  * Class ConnectionPool

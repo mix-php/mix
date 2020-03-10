@@ -1,7 +1,8 @@
 <?php
 
-namespace Mix\SyncInvoke;
+namespace Mix\SyncInvoke\Client;
 
+use Mix\Bean\BeanInjector;
 use Mix\Pool\ConnectionTrait;
 use Mix\SyncInvoke\Exception\CallException;
 use Mix\SyncInvoke\Exception\InvokeException;
@@ -9,7 +10,7 @@ use Swoole\Coroutine\Client;
 
 /**
  * Class Connection
- * @package Mix\SyncInvoke
+ * @package Mix\SyncInvoke\Client
  */
 class Connection
 {
@@ -38,11 +39,20 @@ class Connection
 
     /**
      * Connection constructor.
-     * @param int $port
-     * @param float $timeout
+     * @param array $config
+     * @throws \PhpDocReader\AnnotationException
+     * @throws \ReflectionException
+     */
+    public function __construct(array $config = [])
+    {
+        BeanInjector::inject($this, $config);
+    }
+
+    /**
+     * Connect
      * @throws \Swoole\Exception
      */
-    public function __construct(int $port, float $timeout = 5.0)
+    public function connect()
     {
         $this->port    = $port;
         $this->timeout = $timeout;
@@ -101,6 +111,24 @@ class Connection
         if ($len !== $size) {
             throw new \Swoole\Exception('The sending data is incomplete, it may be that the socket has been closed by the peer.');
         }
+    }
+
+    /**
+     * Invoke
+     * @param \Closure $closure
+     * @return mixed
+     * @throws InvokeException
+     * @throws \Swoole\Exception
+     */
+    public function invoke(\Closure $closure)
+    {
+        $code = \Opis\Closure\serialize($closure);
+        $this->send($code . Connection::EOF);
+        $data = unserialize($this->recv());
+        if ($data instanceof CallException) {
+            throw new InvokeException($data->message, $data->code);
+        }
+        return $data;
     }
 
     /**

@@ -63,7 +63,8 @@ class Connection
     /**
      * Recv
      * @return \Swoole\WebSocket\Frame
-     * @throws \Swoole\Exception
+     * @throws ReceiveException
+     * @throws CloseFrameException
      */
     public function recv()
     {

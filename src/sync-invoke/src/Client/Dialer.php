@@ -1,20 +1,15 @@
 <?php
 
-namespace Mix\SyncInvoke;
+namespace Mix\SyncInvoke\Client;
 
 use Mix\Bean\BeanInjector;
 
 /**
  * Class Dialer
- * @package Mix\SyncInvoke
+ * @package Mix\SyncInvoke\Client
  */
 class Dialer
 {
-
-    /**
-     * @var int
-     */
-    public $port = 0;
 
     /**
      * @var float
@@ -34,12 +29,20 @@ class Dialer
 
     /**
      * Dial
+     * @param int $port
      * @return Connection
+     * @throws \PhpDocReader\AnnotationException
+     * @throws \ReflectionException
      * @throws \Swoole\Exception
      */
-    public function dial()
+    public function dial(int $port)
     {
-        return new Connection($this->port, $this->timeout);
+        $conn = new Connection([
+            'port'    => $port,
+            'timeout' => $this->timeout,
+        ]);
+        $conn->connect();
+        return $conn;
     }
 
 }
