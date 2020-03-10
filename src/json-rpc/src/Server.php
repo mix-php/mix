@@ -5,12 +5,14 @@ namespace Mix\JsonRpc;
 use Mix\Concurrent\Sync\WaitGroup;
 use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\ServerRequest;
+use Mix\JsonRpc\Event\ProcessedEvent;
 use Mix\JsonRpc\Factory\ResponseFactory;
 use Mix\JsonRpc\Helper\JsonRpcHelper;
 use Mix\JsonRpc\Message\Request;
 use Mix\JsonRpc\Message\Response;
 use Mix\Server\Connection;
 use Mix\Server\Exception\ReceiveException;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Swoole\Coroutine\Channel;
 
 /**
@@ -34,6 +36,12 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
      * @var bool
      */
     public $reusePort = false;
+
+    /**
+     * 事件调度器
+     * @var EventDispatcherInterface
+     */
+    public $dispatcher;
 
     /**
      * @var \Mix\Server\Server
@@ -230,12 +238,24 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
                     return;
                 }
                 // 执行
+                $microtime = static::microtime();
                 try {
                     $result      = call_user_func($this->callables[$request->method], ...$request->params);
                     $result      = is_scalar($result) ? [$result] : $result;
                     $responses[] = (new ResponseFactory)->createResultResponse($result, $request->id);
+
+                    $event         = new ProcessedEvent();
+                    $event->time   = round((static::microtime() - $microtime) * 1000, 2);
+                    $event->method = $request->method;
+                    $this->dispatch($event);
                 } catch (\Throwable $ex) {
                     $responses[] = (new ResponseFactory)->createErrorResponse($ex->getCode(), $ex->getMessage(), $request->id);
+
+                    $event         = new ProcessedEvent();
+                    $event->time   = round((static::microtime() - $microtime) * 1000, 2);
+                    $event->error  = sprintf('[%d] %s', $ex->getCode(), $ex->getMessage());
+                    $event->method = $request->method;
+                    $this->dispatch($event);
                 }
             });
         }
@@ -257,6 +277,28 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
         }
         $content = $request->getBody()->getContents();
         $this->callHTTP($response, $content);
+    }
+
+    /**
+     * 获取微秒时间
+     * @return float
+     */
+    protected static function microtime()
+    {
+        list($usec, $sec) = explode(" ", microtime());
+        return ((float)$usec + (float)$sec);
+    }
+
+    /**
+     * Dispatch
+     * @param object $event
+     */
+    protected function dispatch(object $event)
+    {
+        if (!isset($this->dispatcher)) {
+            return;
+        }
+        $this->dispatcher->dispatch($event);
     }
 
     /**

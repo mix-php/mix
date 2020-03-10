@@ -5,8 +5,9 @@ namespace Mix\SyncInvoke;
 use Mix\Server\Connection;
 use Mix\Server\Exception\ReceiveException;
 use Mix\Server\HandlerInterface;
+use Mix\SyncInvoke\Event\InvokedEvent;
 use Mix\SyncInvoke\Exception\CallException;
-use Psr\Log\LoggerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class Server
@@ -26,9 +27,10 @@ class Server implements HandlerInterface
     public $reusePort = false;
 
     /**
-     * @var LoggerInterface
+     * 事件调度器
+     * @var EventDispatcherInterface
      */
-    public $log;
+    public $dispatcher;
 
     /**
      * @var \Mix\Server\Server
@@ -62,7 +64,7 @@ class Server implements HandlerInterface
         }
         $server->start($this);
     }
-    
+
     /**
      * Handle
      * @param Connection $connection
@@ -80,19 +82,22 @@ class Server implements HandlerInterface
                 } catch (\Throwable $e) {
                     $message = sprintf('%s in %s on line %s', $e->getMessage(), $e->getFile(), $e->getLine());
                     $code    = $e->getCode();
+
+                    $event        = new InvokedEvent();
+                    $event->time  = round((static::microtime() - $microtime) * 1000, 2);
+                    $event->error = sprintf('[%d] %s', $code, $message);
+                    $event->raw   = $data;
+                    $this->dispatch($event);
+
                     $connection->send(serialize(new CallException($message, $code)) . Server::EOF);
-                    $this->log('warning', '{code}|{message}|{overview}', [
-                        'code'     => $code,
-                        'message'  => $message,
-                        'overview' => $overview,
-                    ]);
                     continue;
                 }
-                $time = round((static::microtime() - $microtime) * 1000, 2);
-                $this->log('info', '{time}ms|{overview}', [
-                    'time'     => $time,
-                    'overview' => $overview,
-                ]);
+
+                $event       = new InvokedEvent();
+                $event->time = round((static::microtime() - $microtime) * 1000, 2);
+                $event->raw  = $data;
+                $this->dispatch($event);
+
                 $connection->send(serialize($result) . Server::EOF);
             } catch (\Throwable $e) {
                 // 忽略服务器主动断开连接异常
@@ -118,17 +123,15 @@ class Server implements HandlerInterface
     }
 
     /**
-     * Print log
-     * @param string $level
-     * @param string $message
-     * @param array $context
+     * Dispatch
+     * @param object $event
      */
-    protected function log(string $level, string $message, array $context = [])
+    protected function dispatch(object $event)
     {
-        if (!isset($this->log)) {
+        if (!isset($this->dispatcher)) {
             return;
         }
-        $this->log->log($level, $message, $context);
+        $this->dispatcher->dispatch($event);
     }
 
     /**
