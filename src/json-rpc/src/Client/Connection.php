@@ -5,6 +5,7 @@ namespace Mix\JsonRpc\Client;
 use Mix\Bean\BeanInjector;
 use Mix\JsonRpc\Call\Caller;
 use Mix\JsonRpc\Constants;
+use Mix\JsonRpc\Helper\JsonRpcHelper;
 use Mix\JsonRpc\Message\Request;
 use Mix\JsonRpc\Message\Response;
 use Swoole\Coroutine\Client;
@@ -30,7 +31,6 @@ class Connection
      * @var float
      */
     public $timeout = 0.0;
-
 
     /**
      * @var Client
@@ -77,7 +77,11 @@ class Connection
      */
     public function call(Request $request)
     {
-        return (new Caller($this->getConnection()))->call($request);
+        $jsonStr    = JsonRpcHelper::encode($request) . Constants::EOF;
+        $this->send($jsonStr);
+        $data = $this->recv();
+        $responses = JsonRpcHelper::parseResponses($data);
+        return array_pop($responses);
     }
 
     /**
@@ -89,7 +93,17 @@ class Connection
      */
     public function callMultiple(Request ...$requests)
     {
-        return (new Caller($this->getConnection()))->callMultiple(...$requests);
+        if (empty($requests)) {
+            return [];
+        }
+        if (count($requests) == 1) {
+            $jsonStr = JsonRpcHelper::encode(array_pop($requests)) . Constants::EOF;
+        } else {
+            $jsonStr = JsonRpcHelper::encode($requests) . Constants::EOF;
+        }
+        $this->send($jsonStr);
+        $data = $this->recv();
+        return JsonRpcHelper::parseResponses($data);
     }
 
     /**

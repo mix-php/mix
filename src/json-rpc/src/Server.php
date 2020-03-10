@@ -118,7 +118,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
      * @param Connection $conn
      * @throws \Throwable
      */
-    protected function handle(Connection $conn)
+    public function handle(Connection $conn)
     {
         // 消息发送
         $sendChan = new Channel();
