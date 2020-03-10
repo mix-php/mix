@@ -43,19 +43,19 @@ class Connection
     {
         $frame = $this->swooleResponse->recv();
         if ($frame === false) { // 接收失败
-            $this->close();
+            $this->close(); // 需要移除管理器内的连接，所以还要 close
             $errCode = swoole_last_error();
             $errMsg  = swoole_strerror($errCode, 9);
             throw new ReceiveException($errMsg, $errCode);
         }
         if ($frame instanceof \Swoole\WebSocket\CloseFrame) { // CloseFrame
-            $this->close();
+            $this->close(); // 需要移除管理器内的连接，所以还要 close
             $errCode = $frame->code;
             $errMsg  = $frame->reason;
             throw new CloseFrameException($errMsg, $errCode);
         }
         if ($frame === "") { // 连接关闭
-            $this->close();
+            $this->close(); // 需要移除管理器内的连接，所以还要 close
             $errCode = stripos(PHP_OS, 'Darwin') !== false ? 54 : 104; // mac=54, linux=104
             $errMsg  = swoole_strerror($errCode, 9);
             throw new ReceiveException($errMsg, $errCode);

@@ -32,11 +32,12 @@ class Upgrader
      * @param ServerRequest $request
      * @param Response $response
      * @return Connection
+     * @throws UpgradeException
      */
     public function Upgrade(ServerRequest $request, Response $response)
     {
         // Handshake verification
-        if ($request->getHeaderLine('Connection') !== 'Upgrade' /*|| $request->getHeaderLine('Upgrade') !== 'websocket'*/) {
+        if ($request->getHeaderLine('connection') !== 'Upgrade' || $request->getHeaderLine('upgrade') !== 'websocket') {
             throw new UpgradeException('Handshake failed, invalid WebSocket request');
         }
         $secWebSocketKey = $request->getHeaderLine('sec-websocket-key');
