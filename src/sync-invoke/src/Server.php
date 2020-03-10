@@ -59,9 +59,6 @@ class Server implements HandlerInterface
             'open_eof_check' => true,
             'package_eof'    => Constants::EOF,
         ]);
-        if (!isset($this->handler)) {
-            $this->handler = new Handler();
-        }
         $server->start($this);
     }
 
@@ -89,7 +86,7 @@ class Server implements HandlerInterface
                     $event->raw   = $data;
                     $this->dispatch($event);
 
-                    $connection->send(serialize(new CallException($message, $code)) . Server::EOF);
+                    $connection->send(serialize(new CallException($message, $code)) . Constants::EOF);
                     continue;
                 }
 
@@ -98,7 +95,7 @@ class Server implements HandlerInterface
                 $event->raw  = $data;
                 $this->dispatch($event);
 
-                $connection->send(serialize($result) . Server::EOF);
+                $connection->send(serialize($result) . Constants::EOF);
             } catch (\Throwable $e) {
                 // 忽略服务器主动断开连接异常
                 if ($e instanceof ReceiveException && in_array($e->getCode(), [54, 104])) { // mac=54, linux=104

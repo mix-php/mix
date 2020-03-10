@@ -4,6 +4,7 @@ namespace Mix\SyncInvoke\Client;
 
 use Mix\Bean\BeanInjector;
 use Mix\Pool\ConnectionTrait;
+use Mix\SyncInvoke\Constants;
 use Mix\SyncInvoke\Exception\CallException;
 use Mix\SyncInvoke\Exception\InvokeException;
 use Swoole\Coroutine\Client;
@@ -33,11 +34,6 @@ class Connection
     protected $client;
 
     /**
-     * EOF
-     */
-    const EOF = "-Y3ac0v\n";
-
-    /**
      * Connection constructor.
      * @param array $config
      * @throws \PhpDocReader\AnnotationException
@@ -63,19 +59,19 @@ class Connection
      */
     public function connect()
     {
-        $this->port    = $port;
-        $this->timeout = $timeout;
-        $client        = new Client(SWOOLE_SOCK_TCP);
+        $port    = $this->port;
+        $timeout = $this->timeout;
+        $client  = new Client(SWOOLE_SOCK_TCP);
         $client->set([
             'open_eof_check' => true,
-            'package_eof'    => static::EOF,
+            'package_eof'    => Constants::EOF,
         ]);
         if (!$client->connect('127.0.0.1', $port, $timeout)) {
             throw new \Swoole\Exception(sprintf("Sync invoke: %s (port: %s)", $client->errMsg, $port), $client->errCode);
         }
         $this->client = $client;
     }
-    
+
     /**
      * Invoke
      * @param \Closure $closure
@@ -86,7 +82,7 @@ class Connection
     public function invoke(\Closure $closure)
     {
         $code = \Opis\Closure\serialize($closure);
-        $this->send($code . Connection::EOF);
+        $this->send($code . Constants::EOF);
         $data = unserialize($this->recv());
         if ($data instanceof CallException) {
             throw new InvokeException($data->message, $data->code);

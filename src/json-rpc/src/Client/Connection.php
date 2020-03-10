@@ -4,6 +4,7 @@ namespace Mix\JsonRpc\Client;
 
 use Mix\Bean\BeanInjector;
 use Mix\JsonRpc\Call\Caller;
+use Mix\JsonRpc\Constants;
 use Mix\JsonRpc\Message\Request;
 use Mix\JsonRpc\Message\Response;
 use Swoole\Coroutine\Client;
@@ -53,10 +54,10 @@ class Connection
      */
     public function connect()
     {
-        $this->host    = $host;
-        $this->port    = $port;
-        $this->timeout = $timeout;
-        $client        = new Client(SWOOLE_SOCK_TCP);
+        $host    = $this->host;
+        $port    = $this->port;
+        $timeout = $this->timeout;
+        $client  = new Client(SWOOLE_SOCK_TCP);
         $client->set([
             'open_eof_check' => true,
             'package_eof'    => Constants::EOF,
