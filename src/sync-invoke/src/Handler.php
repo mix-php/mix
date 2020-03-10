@@ -38,7 +38,7 @@ class Handler implements HandlerInterface
                     $message = sprintf('%s in %s on line %s', $e->getMessage(), $e->getFile(), $e->getLine());
                     $code    = $e->getCode();
                     $connection->send(serialize(new CallException($message, $code)) . Server::EOF);
-                    $this->log('warning', '{code} | {message} | {overview}', [
+                    $this->log('warning', '{code}|{message}|{overview}', [
                         'code'     => $code,
                         'message'  => $message,
                         'overview' => $overview,
@@ -46,7 +46,7 @@ class Handler implements HandlerInterface
                     continue;
                 }
                 $time = round((static::microtime() - $microtime) * 1000, 2);
-                $this->log('info', '{time}ms | {overview}', [
+                $this->log('info', '{time}ms|{overview}', [
                     'time'     => $time,
                     'overview' => $overview,
                 ]);
