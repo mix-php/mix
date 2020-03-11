@@ -85,7 +85,7 @@ class Connection
     {
         $this->connectionManager->remove($this);
         // Swoole >= 4.4.8 才支持 close
-        // 但在 4.4.13 ~ 4.4.14 server shutdown 后 close 会抛出 http response is unavailable 警告，需升级 Swoole 版本
+        // 但在 4.4.13 ~ 4.4.14 当 server->shutdown执行后/response->recv失败后再 close 会抛出 http response is unavailable 致命错误，需升级 Swoole 版本
         if ($this->swooleResponse->close()) {
             return;
         }
