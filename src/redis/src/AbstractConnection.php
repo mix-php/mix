@@ -30,7 +30,7 @@ abstract class AbstractConnection
      * 超时
      * @var float
      */
-    public $timeout = 0.0;
+    public $timeout = 5.0;
 
     /**
      * 重连间隔

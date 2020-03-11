@@ -57,7 +57,7 @@ class Subscriber
      * @throws \Swoole\Exception
      * @throws \Throwable
      */
-    public function __construct(string $host, int $port, string $password = '', float $timeout = 2.0)
+    public function __construct(string $host, int $port, string $password = '', float $timeout = 5.0)
     {
         $this->host     = $host;
         $this->port     = $port;
