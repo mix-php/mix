@@ -47,8 +47,7 @@ Trait BeanFactoryTrait
     /**
      * 装载
      * 实例化所有单例 (Scope == SINGLETON)
-     * 解决 BeanInjector 使用了 PhpDocReader 获取注释类型时使用了 file 操作，会导致 SWOOLE_HOOK_FILE 切换协程，使单例失效
-     * 该方法必须在执行任何业务逻辑前执行
+     * 提前装载能暴露出有异常的代码，便于发现问题
      */
     public function load()
     {
