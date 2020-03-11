@@ -77,13 +77,13 @@ class Server implements HandlerInterface
                 try {
                     $result = call_user_func($closure);
                 } catch (\Throwable $e) {
-                    $message = sprintf('%s in %s on line %s', $e->getMessage(), $e->getFile(), $e->getLine());
+                    $message = sprintf('%s %s in %s on line %s', $e->getMessage(), get_class($e), 'closure://function () {...}', $e->getLine());
                     $code    = $e->getCode();
 
                     $event        = new InvokedEvent();
                     $event->time  = round((static::microtime() - $microtime) * 1000, 2);
-                    $event->error = sprintf('[%d] %s', $code, $message);
                     $event->raw   = $data;
+                    $event->error = sprintf('[%d] %s', $code, $message);
                     $this->dispatch($event);
 
                     $connection->send(serialize(new CallException($message, $code)) . Constants::EOF);

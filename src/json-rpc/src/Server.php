@@ -249,12 +249,14 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
                     $event->method = $request->method;
                     $this->dispatch($event);
                 } catch (\Throwable $ex) {
-                    $responses[] = (new ResponseFactory)->createErrorResponse($ex->getCode(), $ex->getMessage(), $request->id);
+                    $message     = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
+                    $code        = $ex->getCode();
+                    $responses[] = (new ResponseFactory)->createErrorResponse($code, $ex->getMessage(), $request->id);
 
                     $event         = new ProcessedEvent();
                     $event->time   = round((static::microtime() - $microtime) * 1000, 2);
-                    $event->error  = sprintf('[%d] %s', $ex->getCode(), $ex->getMessage());
                     $event->method = $request->method;
+                    $event->error  = sprintf('[%d] %s', $code, $message);
                     $this->dispatch($event);
                 }
             });

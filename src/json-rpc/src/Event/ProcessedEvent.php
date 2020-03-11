@@ -14,17 +14,17 @@ class ProcessedEvent
      * @var float
      */
     public $time;
+    
+    /**
+     * 执行的方法
+     * @var string
+     */
+    public $method;
 
     /**
      * 执行异常信息
      * @var string
      */
     public $error;
-
-    /**
-     * 执行的方法
-     * @var string
-     */
-    public $method;
 
 }

@@ -16,15 +16,15 @@ class InvokedEvent
     public $time;
 
     /**
-     * 执行异常信息
-     * @var string
-     */
-    public $error;
-
-    /**
      * 闭包原始数据
      * @var string
      */
     public $raw;
+
+    /**
+     * 执行异常信息
+     * @var string
+     */
+    public $error;
 
 }
