@@ -101,14 +101,14 @@ PHP            Version:   7.3.12
 Swoole         Version:   4.4.12
 Framework      Version:   2.1.9
 Listen         Addr:      127.0.0.1
-Listen         Port:      9502
+Listen         Port:      9501
 [info] 2020-03-12 09:47:37.284 <20810> server start
 ```
 
 访问测试 (新开一个终端)：
 
 ```
-$> curl http://127.0.0.1:9502/
+$> curl http://127.0.0.1:9501/
 Hello, World!
 ```
 
