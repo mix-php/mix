@@ -54,7 +54,7 @@ $conn   = $dialer->dial('127.0.0.1', 9234);
 常规调用:
 
 ```
-$request = (new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.sum', [1, 3], 100001)
+$request = (new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.Sum', [1, 3], 100001)
 $response = $conn->call($request);
 var_dump($response);
 ```
@@ -62,8 +62,8 @@ var_dump($response);
 批量调用:
 
 ```
-$requests[] = (new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.sum', [1, 3], 100001)
-$requests[] = (new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.sum', [2, 3], 100002)
+$requests[] = (new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.Sum', [1, 3], 100001)
+$requests[] = (new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.Sum', [2, 3], 100002)
 $responses = $conn->callMultiple(...$requests);
 // $responses 不保证顺序，需使用 id 遍历结果
 var_dump($responses);
@@ -87,7 +87,7 @@ $conn   = $dialer->dialFromService('php.micro.srv.calculator');
 常规调用:
 
 ```
-$request = (new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.sum', [1, 3], 100001)
+$request = (new \Mix\JsonRpc\Factory\RequestFactory)->createRequest('Calculator.Sum', [1, 3], 100001)
 $response = $conn->call($request);
 var_dump($response);
 ```
