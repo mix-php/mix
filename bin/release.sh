@@ -27,7 +27,7 @@ do
     echo ""
     echo "Cloning $REMOTE";
     TMP_DIR="/tmp/mix-split"
-    REMOTE_URL="git@github.com:mix-php/$REMOTE.git"
+    REMOTE_URL="https://github.com/mix-php/$REMOTE.git"
 
     rm -rf $TMP_DIR;
     mkdir $TMP_DIR;
