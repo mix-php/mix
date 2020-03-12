@@ -82,7 +82,7 @@ composer create-project --prefer-dist mix/mix-skeleton mix 2.1.*
 接下来启动 HTTP 服务器。
 
 ```
-$> php /data/bin/mix.php http:start
+$> php /data/bin/mix.php web:start
 ```
 
 如果一切顺利，运行到最后你将看到如下的输出：
@@ -95,20 +95,20 @@ $> php /data/bin/mix.php http:start
 /_/ /_/ /_/_/ /_/\_\  / .___/_/ /_/ .___/
                      /_/         /_/
 
-Server         Name:      mix-httpd
-System         Name:      linux
-PHP            Version:   7.2.12
-Swoole         Version:   4.4.3
-Framework      Version:   2.1.0-alpha
-Listen         Addr:      0.0.0.0
-Listen         Port:      9501
-[info] 2019-08-30 12:07:20.597 <31677> server start
+Server         Name:      mix-web
+System         Name:      darwin
+PHP            Version:   7.3.12
+Swoole         Version:   4.4.12
+Framework      Version:   2.1.9
+Listen         Addr:      127.0.0.1
+Listen         Port:      9502
+[info] 2020-03-12 09:47:37.284 <20810> server start
 ```
 
 访问测试 (新开一个终端)：
 
 ```
-$> curl http://127.0.0.1:9501/
+$> curl http://127.0.0.1:9502/
 Hello, World!
 ```
 
