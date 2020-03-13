@@ -10,6 +10,7 @@ use Mix\Http\Message\Stream\FileStream;
 use Mix\Micro\Exception\NotFoundException;
 use Mix\Micro\Gateway\Handler;
 use Mix\WebSocket\Exception\UpgradeException;
+use Mix\WebSocket\Upgrader;
 use Psr\Http\Message\UriInterface;
 use Swoole\Coroutine\Http\Client;
 
@@ -21,16 +22,16 @@ class ApiOrWebProxy
 {
 
     /**
-     * @var WebSocketProxy
+     * @var Upgrader
      */
-    public $webSocketProxy;
+    public $upgrader;
 
     /**
-     * ApiOrWebProxy constructor.
+     * WebSocketProxy constructor.
      */
     public function __construct()
     {
-        $this->webSocketProxy = new WebSocketProxy();
+        $this->upgrader = new Upgrader();
     }
 
     /**
@@ -52,19 +53,25 @@ class ApiOrWebProxy
         }
         if (is_null($service)) {
             $handler::show404($response);
-            $handler->log('warning', [
-                'type'    => $type,
-                'status'  => 404,
-                'method'  => $request->getMethod(),
-                'uri'     => $request->getUri()->__toString(),
-                'service' => '',
-            ]);
+//            $handler->log('warning', [
+//                'type'   => $type,
+//                'status' => 404,
+//                'method' => $request->getMethod(),
+//                'uri'    => $request->getUri()->__toString(),
+//            ]);
             return;
         }
+
+        // websocket
+        if (WebSocketProxy::isWebSocket($request)) {
+            (new WebSocketProxy())->proxy($this->upgrader, $service, $handler, $request, $response);
+            return;
+        }
+
+        // http
         $address = $service->getAddress();
         $port    = $service->getPort();
-
-        $client = static::createClient($address, $port);
+        $client  = static::createClient($address, $port);
         $client->set(['timeout' => $handler->proxyTimeout]);
         $client->setMethod($request->getMethod());
 
@@ -87,12 +94,6 @@ class ApiOrWebProxy
             $client->setData($request->getBody()->getContents());
         }
 
-        // websocket
-        if (WebSocketProxy::isWebSocket($request)) {
-            $this->webSocketProxy->proxy($service, $handler, $request, $response);
-            return;
-        }
-        // http
         $path = static::getQueryPath($request->getUri());
         if (!$client->execute($path)) {
             $handler::show502($response);

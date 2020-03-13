@@ -21,6 +21,16 @@ class Connection
     public $url = '';
 
     /**
+     * @var string[]
+     */
+    public $headers = [];
+
+    /**
+     * @var string[]
+     */
+    public $cookies = [];
+
+    /**
      * @var float
      */
     public $timeout = 0.0;
@@ -47,17 +57,19 @@ class Connection
      */
     public function connect()
     {
-        $this->url = $url;
-        $info      = parse_url($url);
-        $host      = $info['host'] ?? '';
-        $port      = $info['port'] ?? null;
-        $ssl       = isset($info['scheme']) && $info['scheme'] == 'wss' ? true : false;
-        $path      = ($info['path'] ?? '') . ($info['query'] ?? '') . ($info['fragment'] ?? '');
-        $client    = $this->client = new Client($host, $port, $ssl);
+        $info   = parse_url($this->url);
+        $host   = $info['host'] ?? '';
+        $port   = $info['port'] ?? null;
+        $ssl    = isset($info['scheme']) && $info['scheme'] == 'wss' ? true : false;
+        $path   = ($info['path'] ?? '') . ($info['query'] ?? '') . ($info['fragment'] ?? '');
+        $client = $this->client = new Client($host, $port, $ssl);
         $client->set(['timeout' => $this->timeout]);
+        $client->setHeaders($this->headers);
+        $client->setCookies($this->cookies);
         if (!$client->upgrade($path)) {
             throw new UpgradeException(sprintf('WebSocket connect failed (%s)', $url));
         }
+        $this->client = $client;
     }
 
     /**

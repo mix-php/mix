@@ -11,8 +11,8 @@ use Mix\Micro\Exception\NotFoundException;
 use Mix\Micro\Gateway\Proxy\ApiOrWebProxy;
 use Mix\Micro\RegistryInterface;
 use Mix\Micro\ServiceInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\UriInterface;
-use Psr\Log\LoggerInterface;
 use Swoole\Coroutine\Http\Client;
 
 /**
@@ -38,14 +38,10 @@ class Handler implements HandlerInterface
     public $proxyTimeout = 5.0;
 
     /**
-     * @var LoggerInterface
+     * 事件调度器
+     * @var EventDispatcherInterface
      */
-    public $log;
-
-    /**
-     * @var string
-     */
-    public $logFormat = '{status}|{method}|{uri}|{service}';
+    public $dispatcher;
 
     /**
      * @var ApiOrWebProxy
@@ -88,16 +84,15 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * Print log
-     * @param string $level
-     * @param array $context
+     * Dispatch
+     * @param object $event
      */
-    public function log(string $level, array $context = [])
+    public function dispatch(object $event)
     {
-        if (!isset($this->log)) {
+        if (!isset($this->dispatcher)) {
             return;
         }
-        $this->log->log($level, $this->logFormat, $context);
+        $this->dispatcher->dispatch($event);
     }
 
     /**
@@ -170,7 +165,7 @@ class Handler implements HandlerInterface
      */
     public function clear()
     {
-        $this->apiOrWebProxy and $this->apiOrWebProxy->webSocketProxy->upgrader->destroy();
+        $this->apiOrWebProxy and $this->apiOrWebProxy->upgrader->destroy();
         $this->registry->clear();
     }
 

@@ -3,6 +3,7 @@
 namespace Mix\WebSocket\Client;
 
 use Mix\Bean\BeanInjector;
+use Mix\Http\Message\ServerRequest;
 use Mix\WebSocket\Exception\UpgradeException;
 
 /**
@@ -11,6 +12,11 @@ use Mix\WebSocket\Exception\UpgradeException;
  */
 class Dialer
 {
+
+    /**
+     * @var string[]
+     */
+    public $cookies = [];
 
     /**
      * @var float
@@ -31,15 +37,18 @@ class Dialer
     /**
      * Dial
      * @param string $url
+     * @param array $headers
      * @return Connection
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
      * @throws UpgradeException
      */
-    public function dial(string $url)
+    public function dial(string $url, array $headers = [])
     {
         $conn = new Connection([
             'url'     => $url,
+            'headers' => $headers,
+            'cookies' => $this->cookies,
             'timeout' => $this->timeout,
         ]);
         $conn->connect();;
