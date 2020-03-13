@@ -11,6 +11,25 @@ class BuildHelper
 {
 
     /**
+     * 是否为多个Where/On
+     * @param $where
+     * @return bool
+     */
+    public static function isMulti($where)
+    {
+        foreach ($where as $value) {
+            if (!is_array($value)) {
+                return false;
+            }
+            $length = count($value);
+            if (!in_array($length, [2, 3])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * 构建数据
      * @param array $data
      * @return array
@@ -51,7 +70,7 @@ class BuildHelper
                 // 子条件
                 if (in_array($item[0], ['or', 'and']) && is_array($item[1])) {
                     list($symbol, $subWhere) = $item;
-                    if (count($subWhere) == count($subWhere, 1)) {
+                    if (!static::isMulti($subWhere)) {
                         $subWhere = [$subWhere];
                     }
                     list($subSql, $subParams) = static::where($subWhere, $id);
@@ -125,7 +144,7 @@ class BuildHelper
     public static function joinOn(array $on)
     {
         $sql = '';
-        if (count($on) == count($on, 1)) {
+        if (!static::isMulti($on)) {
             $on = [$on];
         }
         foreach ($on as $key => $item) {
@@ -134,7 +153,7 @@ class BuildHelper
             if ($length == 2) {
                 list($symbol, $subOn) = $item;
                 if (in_array($symbol, ['or', 'and']) && is_array($subOn)) {
-                    if (count($subOn) == count($subOn, 1)) {
+                    if (!static::isMulti($subOn)) {
                         $subOn = [$subOn];
                     }
                     $subSql = static::joinOn($subOn);

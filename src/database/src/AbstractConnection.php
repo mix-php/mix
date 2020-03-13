@@ -4,7 +4,6 @@ namespace Mix\Database;
 
 use Mix\Bean\BeanInjector;
 use Mix\Database\Event\ExecutedEvent;
-use Mix\Database\Helper\WhereHelper;
 use Mix\Database\Helper\BuildHelper;
 use Mix\Database\Query\Expression;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -546,7 +545,7 @@ abstract class AbstractConnection
      */
     public function update(string $table, array $data, array $where)
     {
-        if (!WhereHelper::isMulti($where)) {
+        if (!BuildHelper::isMulti($where)) {
             $where = [$where];
         }
         list($dataSql, $dataParams) = BuildHelper::data($data);
@@ -567,7 +566,7 @@ abstract class AbstractConnection
      */
     public function delete(string $table, array $where)
     {
-        if (!WhereHelper::isMulti($where)) {
+        if (!BuildHelper::isMulti($where)) {
             $where = [$where];
         }
         list($sql, $params) = BuildHelper::where($where);

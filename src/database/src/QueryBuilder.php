@@ -2,7 +2,6 @@
 
 namespace Mix\Database;
 
-use Mix\Database\Helper\WhereHelper;
 use Mix\Database\Helper\BuildHelper;
 
 /**
@@ -160,7 +159,7 @@ class QueryBuilder
      */
     public function where(array $where)
     {
-        if (!WhereHelper::isMulti($where)) {
+        if (!BuildHelper::isMulti($where)) {
             array_push($this->_where, $where);
         } else {
             $this->_where = array_merge($this->_where, $where);
