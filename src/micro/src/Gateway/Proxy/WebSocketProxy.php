@@ -6,12 +6,14 @@ use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Micro\Gateway\Handler;
+use Mix\Micro\Gateway\Helper\ProxyHelper;
 use Mix\Micro\ServiceInterface;
 use Mix\WebSocket\Client\Connection;
 use Mix\WebSocket\Client\Dialer;
 use Mix\WebSocket\Exception\CloseFrameException;
 use Mix\WebSocket\Exception\ReceiveException;
 use Mix\WebSocket\Upgrader;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\UriInterface;
 use Swoole\Coroutine\Channel;
 
@@ -21,6 +23,22 @@ use Swoole\Coroutine\Channel;
  */
 class WebSocketProxy
 {
+
+    /**
+     * @var Upgrader
+     */
+    public $upgrader;
+
+    /**
+     * @var float
+     */
+    public $timeout = 5.0;
+
+    /**
+     * 事件调度器
+     * @var EventDispatcherInterface
+     */
+    public $dispatcher;
 
     /**
      * @var Connection
@@ -33,20 +51,29 @@ class WebSocketProxy
     protected $clientConn;
 
     /**
-     * Proxy
+     * WebSocketProxy constructor.
      * @param Upgrader $upgrader
+     * @param float $timeout
+     */
+    public function __construct(Upgrader $upgrader, float $timeout = 5.0)
+    {
+        $this->upgrader = $upgrader;
+        $this->timeout  = $timeout;
+    }
+
+    /**
+     * Proxy
      * @param ServiceInterface $service
-     * @param Handler $handler
      * @param ServerRequest $request
      * @param Response $response
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
      */
-    public function proxy(Upgrader $upgrader, ServiceInterface $service, Handler $handler, ServerRequest $request, Response $response)
+    public function proxy(ServiceInterface $service, ServerRequest $request, Response $response)
     {
         $address = $service->getAddress();
         $port    = $service->getPort();
-        $path    = static::getQueryPath($request->getUri());
+        $path    = ProxyHelper::path($request->getUri());
         $headers = [];
         foreach ($request->getHeaders() as $name => $header) {
             $headers[$name] = implode(',', $header);
@@ -54,15 +81,12 @@ class WebSocketProxy
         $cookies = $request->getCookieParams();
         $dialer  = new Dialer([
             'cookies' => $cookies,
-            'timeout' => 5.0,
+            'timeout' => $this->timeout,
         ]);
         try {
             $this->serviceConn = $dialer->dial(sprintf('ws://%s:%d%s', $address, $port, $path), $headers);
-            $this->clientConn  = $upgrader->Upgrade($request, $response);
+            $this->clientConn  = $this->upgrader->Upgrade($request, $response);
         } catch (\Throwable $ex) {
-
-            var_dump($ex->getMessage());
-
             $response
                 ->withBody((new StreamFactory())->createStream('401 Unauthorized'))
                 ->withStatus(401)
@@ -98,6 +122,7 @@ class WebSocketProxy
                 }
                 // 发送失败
                 $this->close();
+                return;
             }
         }
     }
@@ -127,46 +152,31 @@ class WebSocketProxy
                 }
                 // 发送失败
                 $this->close();
+                return;
             }
         }
+    }
+
+    /**
+     * Dispatch
+     * @param object $event
+     */
+    protected function dispatch(object $event)
+    {
+        if (!isset($this->dispatcher)) {
+            return;
+        }
+        $this->dispatcher->dispatch($event);
     }
 
     /**
      * Close
      * @throws \Swoole\Exception
      */
-    protected function close()
+    public function close()
     {
         $this->clientConn->close();
         $this->serviceConn->close();
-    }
-
-    /**
-     * Get query path
-     * @param UriInterface $uri
-     * @return string
-     */
-    protected static function getQueryPath(UriInterface $uri)
-    {
-        $path     = $uri->getPath();
-        $query    = $uri->getQuery();
-        $query    = $query ? "?{$query}" : '';
-        $fragment = $uri->getFragment();
-        $fragment = $fragment ? "#{$fragment}" : '';
-        $full     = $path . $query . $fragment;
-        return $full;
-    }
-
-    /**
-     * 判断是否为 websocket
-     * @return bool
-     */
-    public static function isWebSocket(ServerRequest $request)
-    {
-        if ($request->getHeaderLine('connection') !== 'Upgrade' || $request->getHeaderLine('upgrade') !== 'websocket') {
-            return false;
-        }
-        return true;
     }
 
 }

@@ -2,13 +2,17 @@
 
 namespace Mix\Micro\Gateway;
 
+use Mix\Http\Message\Response;
+use Mix\Http\Message\ServerRequest;
 use Mix\Http\Server\Server as HttpServer;
+use Mix\Http\Server\HandlerInterface;
+use Mix\Micro\Gateway\Proxy\WebOrApiProxy;
 
 /**
  * Class Server
  * @package Mix\Micro\Gateway
  */
-class Server
+class Server implements HandlerInterface
 {
 
     /**
@@ -22,9 +26,9 @@ class Server
     public $reusePort = false;
 
     /**
-     * @var HandlerInterface
+     * @var WebOrApiProxy
      */
-    public $handler;
+    public $webOrApiProxy;
 
     /**
      * @var string
@@ -59,7 +63,23 @@ class Server
     public function start()
     {
         $server = $this->httpServer = new HttpServer($this->host, $this->port, $this->ssl, $this->reusePort);
-        $server->start($this->handler);
+        $server->start($this);
+    }
+
+    /**
+     * Handle http
+     * @param ServerRequest $request
+     * @param Response $response
+     */
+    public function handleHTTP(ServerRequest $request, Response $response)
+    {
+        $path = $request->getUri()->getPath();
+        switch ($path) {
+            case '/jsonrpc':
+                break;
+            default:
+                $this->webOrApiProxy->proxy($this, $request, $response);
+        }
     }
 
     /**
@@ -68,7 +88,7 @@ class Server
      */
     public function shutdown()
     {
-        $this->handler->clear();
+        $this->webOrApiProxy->close();
         $this->httpServer->shutdown();
     }
 
