@@ -2,7 +2,6 @@
 
 namespace Mix\Micro\Gateway\Proxy;
 
-use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Micro\Gateway\Helper\ProxyHelper;
@@ -62,15 +61,16 @@ class WebSocketProxy
      * @param ServiceInterface $service
      * @param ServerRequest $request
      * @param Response $response
+     * @return bool
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
      */
     public function proxy(ServiceInterface $service, ServerRequest $request, Response $response)
     {
-        $address = $service->getAddress();
-        $port    = $service->getPort();
-        $path    = ProxyHelper::path($request->getUri());
-        $headers = [];
+        $address    = $service->getAddress();
+        $port       = $service->getPort();
+        $requestUri = ProxyHelper::getRequestUri($request->getUri());
+        $headers    = [];
         foreach ($request->getHeaders() as $name => $header) {
             $headers[$name] = implode(',', $header);
         }
@@ -80,14 +80,10 @@ class WebSocketProxy
             'timeout' => $this->timeout,
         ]);
         try {
-            $this->serviceConn = $dialer->dial(sprintf('ws://%s:%d%s', $address, $port, $path), $headers);
+            $this->serviceConn = $dialer->dial(sprintf('ws://%s:%d%s', $address, $port, $requestUri), $headers);
             $this->clientConn  = $this->upgrader->Upgrade($request, $response);
         } catch (\Throwable $ex) {
-            $response
-                ->withBody((new StreamFactory())->createStream('401 Unauthorized'))
-                ->withStatus(401)
-                ->end();
-            return;
+            return false;
         }
         xgo([$this, 'clientRecv']);
         xgo([$this, 'serviceRecv']);
@@ -151,18 +147,6 @@ class WebSocketProxy
                 return;
             }
         }
-    }
-
-    /**
-     * Dispatch
-     * @param object $event
-     */
-    protected function dispatch(object $event)
-    {
-        if (!isset($this->dispatcher)) {
-            return;
-        }
-        $this->dispatcher->dispatch($event);
     }
 
     /**

@@ -14,11 +14,11 @@ class ProxyHelper
 {
 
     /**
-     * Get query path
+     * Get request uri
      * @param UriInterface $uri
      * @return string
      */
-    public static function path(UriInterface $uri)
+    public static function getRequestUri(UriInterface $uri)
     {
         $path     = $uri->getPath();
         $query    = $uri->getQuery();
