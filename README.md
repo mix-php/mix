@@ -1,7 +1,7 @@
 <br>
 
 <p align="center">
-<img src="https://avatars0.githubusercontent.com/u/31677907?s=120&v=4" width="" alt="MixPHP">
+<img src="http://mixphp.cn/static/image/logo_php.png" width="120" alt="MixPHP">
 </p>
 
 <p align="center">高性能 • 轻量级 • 命令行</p>
