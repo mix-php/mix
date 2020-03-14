@@ -5,17 +5,13 @@ namespace Mix\Micro\Gateway\Proxy;
 use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
-use Mix\Micro\Gateway\Handler;
 use Mix\Micro\Gateway\Helper\ProxyHelper;
 use Mix\Micro\ServiceInterface;
 use Mix\WebSocket\Client\Connection;
 use Mix\WebSocket\Client\Dialer;
 use Mix\WebSocket\Exception\CloseFrameException;
-use Mix\WebSocket\Exception\ReceiveException;
 use Mix\WebSocket\Upgrader;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Psr\Http\Message\UriInterface;
-use Swoole\Coroutine\Channel;
 
 /**
  * Class WebSocketProxy

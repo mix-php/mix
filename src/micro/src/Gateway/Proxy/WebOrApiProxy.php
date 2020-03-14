@@ -3,19 +3,15 @@
 namespace Mix\Micro\Gateway\Proxy;
 
 use Mix\Bean\BeanInjector;
-use Mix\Http\Message\Cookie\Cookie;
 use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Message\Stream\FileStream;
 use Mix\Micro\Exception\NotFoundException;
-use Mix\Micro\Gateway\Handler;
 use Mix\Micro\Gateway\Helper\ProxyHelper;
 use Mix\Micro\ServiceInterface;
-use Mix\WebSocket\Exception\UpgradeException;
 use Mix\WebSocket\Upgrader;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Psr\Http\Message\UriInterface;
 use Swoole\Coroutine\Http\Client;
 
 /**
@@ -69,6 +65,8 @@ class WebOrApiProxy
      * Proxy
      * @param ServerRequest $request
      * @param Response $response
+     * @throws \PhpDocReader\AnnotationException
+     * @throws \ReflectionException
      */
     public function proxy(ServerRequest $request, Response $response)
     {
@@ -99,7 +97,7 @@ class WebOrApiProxy
         $address = $service->getAddress();
         $port    = $service->getPort();
         $client  = new Client($address, $port);
-        $client->set(['timeout' => $handler->proxyTimeout]);
+        $client->set(['timeout' => $this->timeout]);
         $client->setMethod($request->getMethod());
 
         $headers = [];
@@ -194,8 +192,8 @@ class WebOrApiProxy
 
     /**
      * 404 处理
-     * @param \Throwable $e
      * @param Response $response
+     * @return void
      */
     public static function show404(Response $response)
     {
@@ -210,8 +208,8 @@ class WebOrApiProxy
 
     /**
      * 502 处理,
-     * @param \Throwable $e
      * @param Response $response
+     * @return void
      */
     public static function show502(Response $response)
     {
