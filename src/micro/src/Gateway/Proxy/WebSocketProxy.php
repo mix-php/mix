@@ -10,7 +10,6 @@ use Mix\WebSocket\Client\Connection;
 use Mix\WebSocket\Client\Dialer;
 use Mix\WebSocket\Exception\CloseFrameException;
 use Mix\WebSocket\Upgrader;
-use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class WebSocketProxy
@@ -28,12 +27,6 @@ class WebSocketProxy
      * @var float
      */
     public $timeout = 5.0;
-
-    /**
-     * 事件调度器
-     * @var EventDispatcherInterface
-     */
-    public $dispatcher;
 
     /**
      * @var Connection
@@ -61,7 +54,7 @@ class WebSocketProxy
      * @param ServiceInterface $service
      * @param ServerRequest $request
      * @param Response $response
-     * @return bool
+     * @return int status
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
      */
@@ -83,10 +76,11 @@ class WebSocketProxy
             $this->serviceConn = $dialer->dial(sprintf('ws://%s:%d%s', $address, $port, $requestUri), $headers);
             $this->clientConn  = $this->upgrader->Upgrade($request, $response);
         } catch (\Throwable $ex) {
-            return false;
+            return 502;
         }
         xgo([$this, 'clientRecv']);
         xgo([$this, 'serviceRecv']);
+        return 101;
     }
 
     /**

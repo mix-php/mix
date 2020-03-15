@@ -3,14 +3,15 @@
 namespace Mix\Micro\Gateway;
 
 use Mix\Http\Message\Factory\StreamFactory;
-use Mix\Http\Message\Response;
-use Mix\Http\Message\ServerRequest;
 use Mix\Http\Server\Server as HttpServer;
 use Mix\Http\Server\HandlerInterface;
 use Mix\Micro\Exception\NotFoundException;
+use Mix\Micro\Gateway\Event\AccessEvent;
 use Mix\Micro\RegistryInterface;
 use Mix\Micro\ServiceInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Class Server
@@ -91,30 +92,38 @@ class Server implements HandlerInterface
     }
 
     /**
-     * Handle http
-     * @param ServerRequest $request
-     * @param Response $response
+     * Handle HTTP
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
      */
-    public function handleHTTP(ServerRequest $request, Response $response)
+    public function handleHTTP(ServerRequestInterface $request, ResponseInterface $response)
     {
         $map     = $this->proxyMap;
         $path    = $request->getUri()->getPath();
         $pattern = isset($map[$path]) ? $path : '/';
-        foreach ($map[$pattern] as $proxy) {
+        foreach ($map[$pattern] ?? [] as $proxy) {
             try {
                 $serivce = $this->service($path, $proxy->namespace());
-                $result  = $proxy->proxy($serivce, $request, $response);
-                if (!$result) {
+                $status  = $proxy->proxy($serivce, $request, $response);
+                if ($status == 502) {
                     static::show502($response);
-                    
                 }
-
+                $event           = new AccessEvent();
+                $event->status   = $status;
+                $event->request  = $request;
+                $event->response = $response;
+                $event->service  = $serivce;
+                $this->dispatch($event);
                 return;
             } catch (NotFoundException $ex) {
             }
         }
         static::show404($response);
-
+        $event           = new AccessEvent();
+        $event->status   = 404;
+        $event->request  = $request;
+        $event->response = $response;
+        $this->dispatch($event);
     }
 
     /**
