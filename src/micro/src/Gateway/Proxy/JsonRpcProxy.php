@@ -22,7 +22,7 @@ class JsonRpcProxy implements ProxyInterface
     /**
      * @var string
      */
-    public $namespace = 'php.micro.srv.jsonrpc';
+    public $namespace = 'php.micro.jsonrpc';
 
     /**
      * Get handle pattern
@@ -39,7 +39,7 @@ class JsonRpcProxy implements ProxyInterface
      */
     public function namespace()
     {
-        // TODO: Implement namespace() method.
+        return $this->namespace;
     }
 
     /**
@@ -47,7 +47,7 @@ class JsonRpcProxy implements ProxyInterface
      * @param ServiceInterface $service
      * @param ServerRequest $request
      * @param Response $response
-     * @return bool
+     * @return int status
      */
     public function proxy(ServiceInterface $service, ServerRequest $request, Response $response)
     {

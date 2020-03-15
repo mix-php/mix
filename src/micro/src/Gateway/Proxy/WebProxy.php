@@ -11,7 +11,6 @@ use Mix\Micro\Gateway\Helper\ProxyHelper;
 use Mix\Micro\Gateway\ProxyInterface;
 use Mix\Micro\ServiceInterface;
 use Mix\WebSocket\Upgrader;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Swoole\Coroutine\Http\Client;
 
 /**
@@ -76,7 +75,7 @@ class WebProxy implements ProxyInterface
      * @param ServiceInterface $service
      * @param ServerRequest $request
      * @param Response $response
-     * @return bool
+     * @return int status
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
      */
@@ -84,8 +83,7 @@ class WebProxy implements ProxyInterface
     {
         // websocket
         if (ProxyHelper::isWebSocket($request)) {
-            $webSocketProxy             = new WebSocketProxy($this->upgrader, $this->timeout);
-            $webSocketProxy->dispatcher = $this->dispatcher;
+            $webSocketProxy = new WebSocketProxy($this->upgrader, $this->timeout);
             return $webSocketProxy->proxy($service, $request, $response);
         }
 
@@ -117,7 +115,7 @@ class WebProxy implements ProxyInterface
 
         $requestUri = ProxyHelper::getRequestUri($request->getUri());
         if (!$client->execute($requestUri)) {
-            return false;
+            return 502;
         }
 
         $body   = (new StreamFactory())->createStream($client->getBody() ?: '');
@@ -135,6 +133,7 @@ class WebProxy implements ProxyInterface
             ->withStatus($status)
             ->withBody($body)
             ->end();
+        return $status;
     }
 
     /**

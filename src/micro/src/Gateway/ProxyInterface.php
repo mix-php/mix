@@ -4,7 +4,6 @@ namespace Mix\Micro\Gateway;
 
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
-use Mix\Micro\Exception\NotFoundException;
 use Mix\Micro\ServiceInterface;
 
 /**
@@ -31,7 +30,7 @@ interface ProxyInterface
      * @param ServiceInterface $service
      * @param ServerRequest $request
      * @param Response $response
-     * @return bool
+     * @return int status
      */
     public function proxy(ServiceInterface $service, ServerRequest $request, Response $response);
 
