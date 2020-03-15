@@ -47,7 +47,10 @@ class Upgrader
         }
         // Upgrade
         $swooleResponse = $response->getSwooleResponse();
-        $swooleResponse->upgrade();
+        if (!$swooleResponse->upgrade()) {
+            throw new UpgradeException('Handshake failed, upgrade error');
+        }
+        $response->withStatus(101);
         $connection = new Connection($swooleResponse, $this->connectionManager);
         $this->connectionManager->add($connection);
         return $connection;
