@@ -2,8 +2,8 @@
 
 namespace Mix\Http\Server;
 
-use Mix\Http\Message\Response;
-use Mix\Http\Message\ServerRequest;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Interface HandlerInterface
@@ -15,9 +15,9 @@ interface HandlerInterface
 
     /**
      * Handle HTTP
-     * @param ServerRequest $request
-     * @param Response $response
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
      */
-    public function handleHTTP(ServerRequest $request, Response $response);
+    public function handleHTTP(ServerRequestInterface $request, ResponseInterface $response);
 
 }
