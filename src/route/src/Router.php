@@ -138,6 +138,8 @@ class Router implements HandlerInterface
      * 获取 url 规则映射的全部 service 名称
      *
      * Url                  Service        Method
+     * /                    index          Index.Index
+     * /foo                 foo            Foo.Index
      * /foo/bar             foo            Foo.Bar
      * /foo/bar/baz         foo            Bar.Baz
      * /foo/bar/baz/cat     foo.bar        Baz.Cat
@@ -154,9 +156,9 @@ class Router implements HandlerInterface
             $slice   = array_filter(explode('\/', $path));
             switch (count($slice)) {
                 case 0:
-                case 1:
-                    $name = null;
+                    $name = 'index';
                     break;
+                case 1:
                 case 2:
                 case 3:
                     $name = array_shift($slice);
@@ -166,7 +168,7 @@ class Router implements HandlerInterface
                     array_pop($slice);
                     $name = implode('/', $slice);
             }
-            $name and $services[] = $name;
+            $services[] = $name;
         }
         return $services;
     }

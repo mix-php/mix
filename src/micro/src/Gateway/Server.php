@@ -130,6 +130,8 @@ class Server implements HandlerInterface
      * Get service
      *
      * Url                  Service        Method
+     * /                    index          Index.Index
+     * /foo                 foo            Foo.Index
      * /foo/bar             foo            Foo.Bar
      * /foo/bar/baz         foo            Bar.Baz
      * /foo/bar/baz/cat     foo.bar        Baz.Cat
@@ -138,14 +140,14 @@ class Server implements HandlerInterface
      * @param string $namespace
      * @return ServiceInterface
      */
-    protected function service(string $path, string $namespace)
+    public function service(string $path, string $namespace)
     {
         $slice = array_filter(explode('/', $path));
         switch (count($slice)) {
             case 0:
-            case 1:
-                throw new NotFoundException('Invalid proxy path');
+                $name = 'index';
                 break;
+            case 1:
             case 2:
             case 3:
                 $name = array_shift($slice);
