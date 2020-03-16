@@ -14,6 +14,12 @@ class AccessEvent
 {
 
     /**
+     * 执行时间 (ms)
+     * @var float
+     */
+    public $time;
+
+    /**
      * 响应的状态码
      * @var int
      */

@@ -3,6 +3,8 @@
 namespace Mix\Micro\Gateway;
 
 use Mix\Http\Message\Factory\StreamFactory;
+use Mix\Http\Message\Response;
+use Mix\Http\Message\ServerRequest;
 use Mix\Http\Server\Server as HttpServer;
 use Mix\Http\Server\HandlerInterface;
 use Mix\Micro\Exception\NotFoundException;
@@ -10,8 +12,6 @@ use Mix\Micro\Gateway\Event\AccessEvent;
 use Mix\Micro\RegistryInterface;
 use Mix\Micro\ServiceInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Class Server
@@ -31,7 +31,7 @@ class Server implements HandlerInterface
     public $reusePort = false;
 
     /**
-     * @var ProxyInterface[]
+     * @var string[]
      */
     public $proxies = [];
 
@@ -83,7 +83,8 @@ class Server implements HandlerInterface
     public function start()
     {
         // 解析
-        foreach ($this->proxies as $proxy) {
+        foreach ($this->proxies as $class) {
+            $proxy                               = new $class();
             $this->proxyMap[$proxy->pattern()][] = $proxy;
         }
         // 启动
@@ -93,14 +94,15 @@ class Server implements HandlerInterface
 
     /**
      * Handle HTTP
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
+     * @param ServerRequest $request
+     * @param Response $response
      */
-    public function handleHTTP(ServerRequestInterface $request, ResponseInterface $response)
+    public function handleHTTP(ServerRequest $request, Response $response)
     {
-        $map     = $this->proxyMap;
-        $path    = $request->getUri()->getPath();
-        $pattern = isset($map[$path]) ? $path : '/';
+        $microtime = static::microtime();
+        $map       = $this->proxyMap;
+        $path      = $request->getUri()->getPath();
+        $pattern   = isset($map[$path]) ? $path : '/';
         foreach ($map[$pattern] ?? [] as $proxy) {
             try {
                 $serivce = $this->service($path, $proxy->namespace());
@@ -109,6 +111,7 @@ class Server implements HandlerInterface
                     static::show502($response);
                 }
                 $event           = new AccessEvent();
+                $event->time     = round((static::microtime() - $microtime) * 1000, 2);
                 $event->status   = $status;
                 $event->request  = $request;
                 $event->response = $response;
@@ -120,6 +123,7 @@ class Server implements HandlerInterface
         }
         static::show404($response);
         $event           = new AccessEvent();
+        $event->time     = round((static::microtime() - $microtime) * 1000, 2);
         $event->status   = 404;
         $event->request  = $request;
         $event->response = $response;
@@ -173,6 +177,16 @@ class Server implements HandlerInterface
     }
 
     /**
+     * 获取微秒时间
+     * @return float
+     */
+    protected static function microtime()
+    {
+        list($usec, $sec) = explode(" ", microtime());
+        return ((float)$usec + (float)$sec);
+    }
+
+    /**
      * 404 处理
      * @param Response $response
      * @return void
@@ -210,8 +224,10 @@ class Server implements HandlerInterface
      */
     public function shutdown()
     {
-        foreach ($this->proxies as $proxy) {
-            $proxy->close();
+        foreach ($this->proxyMap as $values) {
+            foreach ($values as $proxy) {
+                $proxy->close();
+            }
         }
         $this->httpServer->shutdown();
     }

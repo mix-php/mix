@@ -4,6 +4,7 @@ namespace Mix\JsonRpc;
 
 use Mix\Concurrent\Sync\WaitGroup;
 use Mix\Http\Message\Factory\StreamFactory;
+use Mix\Http\Message\ServerRequest;
 use Mix\JsonRpc\Event\ProcessedEvent;
 use Mix\JsonRpc\Factory\ResponseFactory;
 use Mix\JsonRpc\Helper\JsonRpcHelper;
@@ -12,8 +13,6 @@ use Mix\JsonRpc\Message\Response;
 use Mix\Server\Connection;
 use Mix\Server\Exception\ReceiveException;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Coroutine\Channel;
 
 /**
@@ -183,10 +182,10 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
 
     /**
      * 调用HTTP
-     * @param ResponseInterface $httpResponse
+     * @param \Mix\Http\Message\Response $httpResponse
      * @param string $content
      */
-    protected function callHTTP(ResponseInterface $httpResponse, string $content)
+    protected function callHTTP(\Mix\Http\Message\Response $httpResponse, string $content)
     {
         /**
          * 解析
@@ -268,10 +267,10 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
 
     /**
      * Handle HTTP
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
+     * @param ServerRequest $request
+     * @param \Mix\Http\Message\Response $response
      */
-    public function handleHTTP(ServerRequestInterface $request, ResponseInterface $response)
+    public function handleHTTP(ServerRequest $request, \Mix\Http\Message\Response $response)
     {
         $contentType = $request->getHeaderLine('Content-Type');
         if (strpos($contentType, 'application/json') === false) {

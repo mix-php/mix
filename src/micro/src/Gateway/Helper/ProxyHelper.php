@@ -3,7 +3,7 @@
 namespace Mix\Micro\Gateway\Helper;
 
 use Mix\Http\Message\Cookie\Cookie;
-use Mix\Http\Message\ServerRequest;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -33,7 +33,7 @@ class ProxyHelper
      * 判断是否为 websocket
      * @return bool
      */
-    public static function isWebSocket(ServerRequest $request)
+    public static function isWebSocket(ServerRequestInterface $request)
     {
         if ($request->getHeaderLine('connection') !== 'Upgrade' || $request->getHeaderLine('upgrade') !== 'websocket') {
             return false;
