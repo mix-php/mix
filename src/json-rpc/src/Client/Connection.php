@@ -62,8 +62,8 @@ class Connection
             'open_eof_check' => true,
             'package_eof'    => Constants::EOF,
         ]);
-        if (!$client->connect('127.0.0.1', $port, $timeout)) {
-            throw new \Swoole\Exception(sprintf("JSON-RPC: %s (port: %s)", $client->errMsg, $port), $client->errCode);
+        if (!$client->connect($host, $port, $timeout)) {
+            throw new \Swoole\Exception(sprintf("JSON-RPC: %s (host:%s, port: %s)", $client->errMsg, $host, $port), $client->errCode);
         }
         $this->client = $client;
     }
@@ -77,9 +77,9 @@ class Connection
      */
     public function call(Request $request)
     {
-        $jsonStr    = JsonRpcHelper::encode($request) . Constants::EOF;
+        $jsonStr = JsonRpcHelper::encode($request) . Constants::EOF;
         $this->send($jsonStr);
-        $data = $this->recv();
+        $data      = $this->recv();
         $responses = JsonRpcHelper::parseResponses($data);
         return array_pop($responses);
     }
