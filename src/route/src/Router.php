@@ -138,8 +138,8 @@ class Router implements HandlerInterface
      * 获取 url 规则映射的全部 service 名称
      *
      * Url                  Service        Method
-     * /                    index          Index.Index
-     * /foo                 foo            Foo.Index
+     * /                    index          
+     * /foo                 foo            
      * /foo/bar             foo            Foo.Bar
      * /foo/bar/baz         foo            Bar.Baz
      * /foo/bar/baz/cat     foo.bar        Baz.Cat

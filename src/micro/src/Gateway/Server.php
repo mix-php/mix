@@ -134,8 +134,8 @@ class Server implements HandlerInterface
      * Get service
      *
      * Url                  Service        Method
-     * /                    index          Index.Index
-     * /foo                 foo            Foo.Index
+     * /                    index
+     * /foo                 foo
      * /foo/bar             foo            Foo.Bar
      * /foo/bar/baz         foo            Bar.Baz
      * /foo/bar/baz/cat     foo.bar        Baz.Cat
