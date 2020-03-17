@@ -6,7 +6,7 @@ namespace Mix\JsonRpc\Message;
  * Class Response
  * @package Mix\JsonRpc\Message
  */
-class Response
+class Response implements \JsonSerializable
 {
 
     /**
@@ -38,5 +38,21 @@ class Response
      * @var array
      */
     public $params;
+
+    /**
+     * Json serialize
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        $data = [];
+        foreach ($this as $key => $val) {
+            if ($key != 'id' && is_null($value)) {
+                continue;
+            }
+            $data[$key] = $val;
+        }
+        return $data;
+    }
 
 }

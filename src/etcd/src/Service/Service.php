@@ -139,13 +139,11 @@ class Service implements ServiceInterface
      */
     public function jsonSerialize()
     {
-        {
-            $data = [];
-            foreach ($this as $key => $val) {
-                $data[$key] = $val;
-            }
-            return $data;
+        $data = [];
+        foreach ($this as $key => $val) {
+            $data[$key] = $val;
         }
+        return $data;
     }
 
 }

@@ -6,7 +6,7 @@ namespace Mix\JsonRpc\Message;
  * Class Request
  * @package Mix\JsonRpc\Message
  */
-class Request
+class Request implements \JsonSerializable
 {
 
     /**
@@ -28,5 +28,21 @@ class Request
      * @var int
      */
     public $id;
+
+    /**
+     * Json serialize
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        $data = [];
+        foreach ($this as $key => $val) {
+            if ($key != 'id' && is_null($value)) {
+                continue;
+            }
+            $data[$key] = $val;
+        }
+        return $data;
+    }
 
 }
