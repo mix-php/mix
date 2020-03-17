@@ -2,10 +2,19 @@
 
 namespace Mix\Micro\Gateway\Proxy;
 
+use Mix\Bean\BeanInjector;
+use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
+use Mix\JsonRpc\Client\Dialer;
+use Mix\JsonRpc\Factory\RequestFactory;
+use Mix\JsonRpc\Factory\ResponseFactory;
+use Mix\JsonRpc\Helper\JsonRpcHelper;
+use Mix\Micro\Exception\NotFoundException;
 use Mix\Micro\Gateway\ProxyInterface;
+use Mix\Micro\RegistryInterface;
 use Mix\Micro\ServiceInterface;
+use Mix\WebSocket\Upgrader;
 
 /**
  * Class JsonRpcProxy
@@ -25,6 +34,22 @@ class JsonRpcProxy implements ProxyInterface
     public $namespace = 'php.micro.jsonrpc';
 
     /**
+     * @var float
+     */
+    public $timeout = 5.0;
+
+    /**
+     * JsonRpcProxy constructor.
+     * @param array $config
+     * @throws \PhpDocReader\AnnotationException
+     * @throws \ReflectionException
+     */
+    public function __construct(array $config = [])
+    {
+        BeanInjector::inject($this, $config);
+    }
+
+    /**
      * Get handle pattern
      * @return string
      */
@@ -34,12 +59,25 @@ class JsonRpcProxy implements ProxyInterface
     }
 
     /**
-     * Get namespace
-     * @return string
+     * Get service
+     *
+     * Url                  Service        Method
+     * /                    index
+     * /foo                 foo
+     * /foo/bar             foo            Foo.Bar
+     * /foo/bar/baz         foo            Bar.Baz
+     * /foo/bar/baz/cat     foo.bar        Baz.Cat
+     *
+     * @param RegistryInterface $registry
+     * @param ServerRequest $request
+     * @return ServiceInterface
+     * @throws NotFoundException
      */
-    public function namespace()
+    public function service(RegistryInterface $registry, ServerRequest $request)
     {
-        return $this->namespace;
+        $body = $request->getParsedBody();
+        $name = $body['service'] ?? '';
+        return $registry->get($name);
     }
 
     /**
@@ -51,7 +89,47 @@ class JsonRpcProxy implements ProxyInterface
      */
     public function proxy(ServiceInterface $service, ServerRequest $request, Response $response)
     {
-        // TODO: Implement proxy() method.
+        // 参数效验
+        $content = $request->getBody()->getContents();
+        try {
+            list(, $requests) = JsonRpcHelper::parseRequests($content);
+        } catch (\Throwable $ex) {
+            $response = (new ResponseFactory)->createErrorResponse(-32700, 'Parse error', null);
+            $body     = (new StreamFactory())->createStream(json_encode($rpcResponse));
+            $response
+                ->withContentType('application/json', 'utf-8')
+                ->withBody($body)
+                ->withStatus(200)
+                ->end();
+            return;
+        }
+        $rpcRequest = array_pop($requests);
+        if (!JsonRpcHelper::validRequest($rpcRequest)) {
+            $rpcResponse = (new ResponseFactory)->createErrorResponse(-32600, 'Invalid Request', $request->id);
+            $body        = (new StreamFactory())->createStream(json_encode($rpcResponse));
+            $response
+                ->withContentType('application/json', 'utf-8')
+                ->withBody($body)
+                ->withStatus(200)
+                ->end();
+            return;
+        }
+
+        $dialer = new Dialer([
+            'timeout' => $this->timeout,
+        ]);
+        try {
+            $conn        = $dialer->dial($service->getAddress(), $service->getPort());
+            $rpcResponse = $conn->call($rpcRequest);
+        } catch (\Throwable $ex) {
+            $rpcResponse = (new  ResponseFactory())->createErrorResponse($ex->getCode(), $ex->getMessage(), $id);
+        }
+        $body = (new StreamFactory())->createStream(json_encode($rpcResponse));
+        $response
+            ->withContentType('application/json', 'utf-8')
+            ->withBody($body)
+            ->withStatus(200)
+            ->end();
     }
 
     /**
@@ -59,7 +137,6 @@ class JsonRpcProxy implements ProxyInterface
      */
     public function close()
     {
-        // TODO: Implement close() method.
     }
 
 }

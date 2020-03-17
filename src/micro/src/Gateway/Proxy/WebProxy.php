@@ -7,8 +7,10 @@ use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Message\Stream\FileStream;
+use Mix\Micro\Exception\NotFoundException;
 use Mix\Micro\Gateway\Helper\ProxyHelper;
 use Mix\Micro\Gateway\ProxyInterface;
+use Mix\Micro\RegistryInterface;
 use Mix\Micro\ServiceInterface;
 use Mix\WebSocket\Upgrader;
 use Swoole\Coroutine\Http\Client;
@@ -62,12 +64,39 @@ class WebProxy implements ProxyInterface
     }
 
     /**
-     * Get namespace
-     * @return string
+     * Get service
+     *
+     * Url                  Service        Method
+     * /                    index
+     * /foo                 foo
+     * /foo/bar             foo            Foo.Bar
+     * /foo/bar/baz         foo            Bar.Baz
+     * /foo/bar/baz/cat     foo.bar        Baz.Cat
+     *
+     * @param RegistryInterface $registry
+     * @param ServerRequest $request
+     * @return ServiceInterface
+     * @throws NotFoundException
      */
-    public function namespace()
+    public function service(RegistryInterface $registry, ServerRequest $request)
     {
-        return $this->namespace;
+        $path  = $request->getUri()->getPath();
+        $slice = array_filter(explode('/', $path));
+        switch (count($slice)) {
+            case 0:
+                $name = 'index';
+                break;
+            case 1:
+            case 2:
+            case 3:
+                $name = array_shift($slice);
+                break;
+            default:
+                array_pop($slice);
+                array_pop($slice);
+                $name = implode('/', $slice);
+        }
+        return $registry->get(sprintf('%s.%s', $this->namespace, $name));
     }
 
     /**

@@ -105,7 +105,7 @@ class Server implements HandlerInterface
         $pattern   = isset($map[$path]) ? $path : '/';
         foreach ($map[$pattern] ?? [] as $proxy) {
             try {
-                $serivce = $this->service($path, $proxy->namespace());
+                $serivce = $proxy->service($this->registry, $request);
                 $status  = $proxy->proxy($serivce, $request, $response);
                 if ($status == 502) {
                     static::show502($response);
@@ -128,40 +128,6 @@ class Server implements HandlerInterface
         $event->request  = $request;
         $event->response = $response;
         $this->dispatch($event);
-    }
-
-    /**
-     * Get service
-     *
-     * Url                  Service        Method
-     * /                    index
-     * /foo                 foo
-     * /foo/bar             foo            Foo.Bar
-     * /foo/bar/baz         foo            Bar.Baz
-     * /foo/bar/baz/cat     foo.bar        Baz.Cat
-     *
-     * @param string $path
-     * @param string $namespace
-     * @return ServiceInterface
-     */
-    public function service(string $path, string $namespace)
-    {
-        $slice = array_filter(explode('/', $path));
-        switch (count($slice)) {
-            case 0:
-                $name = 'index';
-                break;
-            case 1:
-            case 2:
-            case 3:
-                $name = array_shift($slice);
-                break;
-            default:
-                array_pop($slice);
-                array_pop($slice);
-                $name = implode('/', $slice);
-        }
-        return $this->registry->get(sprintf('%s.%s', $namespace, $name));
     }
 
     /**
@@ -195,7 +161,7 @@ class Server implements HandlerInterface
     {
         $content = '404 Not Found';
         $body    = (new StreamFactory())->createStream($content);
-        return $response
+        $response
             ->withContentType('text/plain')
             ->withBody($body)
             ->withStatus(404)
@@ -211,7 +177,7 @@ class Server implements HandlerInterface
     {
         $content = '502 Bad Gateway';
         $body    = (new StreamFactory())->createStream($content);
-        return $response
+        $response
             ->withContentType('text/plain')
             ->withBody($body)
             ->withStatus(502)

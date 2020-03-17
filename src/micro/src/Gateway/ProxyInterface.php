@@ -4,6 +4,8 @@ namespace Mix\Micro\Gateway;
 
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
+use Mix\Micro\Exception\NotFoundException;
+use Mix\Micro\RegistryInterface;
 use Mix\Micro\ServiceInterface;
 
 /**
@@ -20,10 +22,21 @@ interface ProxyInterface
     public function pattern();
 
     /**
-     * Get namespace
-     * @return string
+     * Get service
+     *
+     * Url                  Service        Method
+     * /                    index
+     * /foo                 foo
+     * /foo/bar             foo            Foo.Bar
+     * /foo/bar/baz         foo            Bar.Baz
+     * /foo/bar/baz/cat     foo.bar        Baz.Cat
+     *
+     * @param RegistryInterface $registry
+     * @param ServerRequest $request
+     * @return ServiceInterface
+     * @throws NotFoundException
      */
-    public function namespace();
+    public function service(RegistryInterface $registry, ServerRequest $request);
 
     /**
      * Proxy
