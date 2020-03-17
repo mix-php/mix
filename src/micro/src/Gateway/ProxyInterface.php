@@ -24,13 +24,6 @@ interface ProxyInterface
     /**
      * Get service
      *
-     * Url                  Service        Method
-     * /                    index
-     * /foo                 foo
-     * /foo/bar             foo            Foo.Bar
-     * /foo/bar/baz         foo            Bar.Baz
-     * /foo/bar/baz/cat     foo.bar        Baz.Cat
-     *
      * @param RegistryInterface $registry
      * @param ServerRequest $request
      * @return ServiceInterface
