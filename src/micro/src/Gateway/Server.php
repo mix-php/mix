@@ -116,7 +116,7 @@ class Server implements HandlerInterface
             return;
         }
 
-        if ($path != '/' && isset($map[$path])) {
+        if (isset($map[$path])) {
             /** @var ProxyInterface $proxy */
             $proxy = array_pop($map[$path]);
             try {
@@ -125,27 +125,15 @@ class Server implements HandlerInterface
                 $this->dispatch($microtime, $status, $request, $response, $serivce);
             } catch (NotFoundException $ex) {
                 $proxy->show404($ex, $response);
-                $this->dispatch($microtime, 404, $request, $response, $serivce ?? null, sprintf('[%d] %s', $ex->getCode(), $ex->getMessage()));
-            } catch (ProxyException $ex) {
+                $this->dispatch($microtime, 404, $request, $response, null, sprintf('[%d] %s', $ex->getCode(), $ex->getMessage()));
+            } catch (\Exception $ex) {
                 $proxy->show500($ex, $response);
                 $this->dispatch($microtime, 500, $request, $response, $serivce ?? null, sprintf('[%d] %s', $ex->getCode(), $ex->getMessage()));
             }
             return;
         }
 
-        foreach ($map['/'] ?? [] as $proxy) {
-            try {
-                $serivce = $proxy->service($this->registry, $request);
-                $status  = $proxy->proxy($serivce, $request, $response);
-                $this->dispatch($microtime, $status, $request, $response, $serivce);
-                return;
-            } catch (NotFoundException $ex) {
-            } catch (ProxyException $ex) {
-                $proxy->show500($ex, $response);
-                $this->dispatch($microtime, 500, $request, $response, $serivce ?? null, sprintf('[%d] %s', $ex->getCode(), $ex->getMessage()));
-            }
-        }
-        $ex = new \Exception(sprintf('Uri %s not found', $request->getUri()->__toString()));
+        $ex = new NotFoundException(sprintf('Uri %s not found', $request->getUri()->__toString()));
         $this->show404($ex, $response);
         $this->dispatch($microtime, 404, $request, $response, null, sprintf('[%d] %s', $ex->getCode(), $ex->getMessage()));
     }

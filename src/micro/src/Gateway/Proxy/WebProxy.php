@@ -175,6 +175,13 @@ class WebProxy implements ProxyInterface
      */
     public function show404(\Exception $exception, Response $response)
     {
+        $content = '404 Not Found';
+        $body    = (new StreamFactory())->createStream($content);
+        $response
+            ->withContentType('text/plain')
+            ->withBody($body)
+            ->withStatus(404)
+            ->end();
     }
 
     /**
