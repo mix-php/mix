@@ -138,8 +138,8 @@ class Router implements HandlerInterface
      * 获取 url 规则映射的全部 service 名称
      *
      * Url                  Service        Method
-     * /                    index          
-     * /foo                 foo            
+     * /                    index
+     * /foo                 foo
      * /foo/bar             foo            Foo.Bar
      * /foo/bar/baz         foo            Bar.Baz
      * /foo/bar/baz/cat     foo.bar        Baz.Cat
@@ -220,9 +220,9 @@ class Router implements HandlerInterface
         // 路由匹配
         try {
             $result = $this->match($request->getMethod(), $request->getServerParams()['path_info'] ?: '/');
-        } catch (NotFoundException $e) {
+        } catch (NotFoundException $ex) {
             // 404 处理
-            static::show404($response);
+            $this->show404($ex, $response);
             return;
         }
         // 保存路由参数
@@ -235,24 +235,25 @@ class Router implements HandlerInterface
             $dispatcher = new MiddlewareDispatcher($result->getMiddleware(), $request, $response);
             $response   = $dispatcher->dispatch();
             // 执行控制器
-            if (!$response->getBody()) {
+            if (is_null($response->getBody())) {
                 $response = call_user_func($result->getCallback($request, $response), $request, $response);
             }
             /** @var Response $response */
             $response->end();
-        } catch (\Throwable $e) {
+        } catch (\Throwable $ex) {
             // 500 处理
-            static::show500($e, $response);
+            $this->show500($ex, $response);
             // 抛出错误，记录日志
-            throw $e;
+            throw $ex;
         }
     }
 
     /**
      * 404 处理
+     * @param \Exception $exception
      * @param Response $response
      */
-    public static function show404(Response $response)
+    public function show404(\Exception $exception, Response $response)
     {
         $content = '404 Not Found';
         $body    = (new StreamFactory())->createStream($content);
@@ -265,10 +266,10 @@ class Router implements HandlerInterface
 
     /**
      * 500 处理
-     * @param \Throwable $e
+     * @param \Exception $exception
      * @param Response $response
      */
-    public static function show500(\Throwable $e, Response $response)
+    public function show500(\Exception $exception, Response $response)
     {
         $content = [
             'message' => $e->getMessage(),

@@ -7,7 +7,7 @@ use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Message\Stream\FileStream;
-use Mix\Micro\Exception\Gateway\ProxyException;
+use Mix\Micro\Gateway\Exception\ProxyException;
 use Mix\Micro\Exception\NotFoundException;
 use Mix\Micro\Gateway\Helper\ProxyHelper;
 use Mix\Micro\Gateway\ProxyInterface;

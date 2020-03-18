@@ -5,13 +5,15 @@ namespace Mix\Micro\Gateway;
 use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
+use Mix\Http\Server\Middleware\MiddlewareDispatcher;
 use Mix\Http\Server\Server as HttpServer;
 use Mix\Http\Server\HandlerInterface;
-use Mix\Micro\Exception\Gateway\ProxyException;
+use Mix\Micro\Gateway\Exception\ProxyException;
 use Mix\Micro\Exception\NotFoundException;
 use Mix\Micro\Gateway\Event\AccessEvent;
 use Mix\Micro\RegistryInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\Http\Server\MiddlewareInterface;
 
 /**
  * Class Server
@@ -34,6 +36,11 @@ class Server implements HandlerInterface
      * @var ProxyInterface[]
      */
     public $proxies = [];
+
+    /**
+     * @var string[] MiddlewareInterface class
+     */
+    public $middleware = [];
 
     /**
      * @var RegistryInterface
@@ -102,7 +109,14 @@ class Server implements HandlerInterface
         $map       = $this->proxyMap;
         $path      = $request->getUri()->getPath();
 
-        if (isset($map[$path])) {
+        $dispatcher = new MiddlewareDispatcher($this->middleware, $request, $response);
+        $response   = $dispatcher->dispatch();
+        if (!is_null($response->getBody())) {
+            $response->end();
+            return;
+        }
+
+        if ($path != '/' && isset($map[$path])) {
             /** @var ProxyInterface $proxy */
             $proxy = array_pop($map[$path]);
             try {

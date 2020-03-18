@@ -9,7 +9,7 @@ use Mix\Http\Message\ServerRequest;
 use Mix\JsonRpc\Client\Dialer;
 use Mix\JsonRpc\Factory\ResponseFactory;
 use Mix\JsonRpc\Helper\JsonRpcHelper;
-use Mix\Micro\Exception\Gateway\ProxyException;
+use Mix\Micro\Gateway\Exception\ProxyException;
 use Mix\Micro\Exception\NotFoundException;
 use Mix\Micro\Gateway\ProxyInterface;
 use Mix\Micro\RegistryInterface;
@@ -63,6 +63,9 @@ class JsonRpcProxy implements ProxyInterface
     public function service(RegistryInterface $registry, ServerRequest $request)
     {
         $body = $request->getParsedBody();
+        if (empty($body)) {
+            throw new ProxyException('Parse request failed');
+        }
         $name = $body['service'] ?? '';
         return $registry->get($name);
     }

@@ -1,10 +1,10 @@
 <?php
 
-namespace Mix\Micro\Exception\Gateway;
+namespace Mix\Micro\Gateway\Exception;
 
 /**
  * Class ProxyException
- * @package Mix\Micro\Exception\Gateway
+ * @package Mix\Micro\Gateway\Exception
  */
 class ProxyException extends \RuntimeException
 {

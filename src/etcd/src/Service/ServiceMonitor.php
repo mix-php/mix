@@ -150,7 +150,7 @@ class ServiceMonitor
     {
         $services = $this->services[$name] ?? [];
         if (empty($services)) {
-            throw new NotFoundException(sprintf('Service not found, name: %s', $name));
+            throw new NotFoundException(sprintf('Service %s not found', $name));
         }
         return $services[array_rand($services)];
     }

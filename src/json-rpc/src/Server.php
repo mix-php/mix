@@ -228,18 +228,16 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
                 xdefer(function () use ($waitGroup) {
                     $waitGroup->done();
                 });
-                // 验证
-                if (!JsonRpcHelper::validRequest($request)) {
-                    $responses[] = (new ResponseFactory)->createErrorResponse(-32600, 'Invalid Request', $request->id);
-                    return;
-                }
-                if (!isset($this->callables[$request->method])) {
-                    $responses[] = (new ResponseFactory)->createErrorResponse(-32601, 'Method not found', $request->id);
-                    return;
-                }
                 // 执行
                 $microtime = static::microtime();
                 try {
+                    // 验证
+                    if (!JsonRpcHelper::validRequest($request)) {
+                        throw new \RuntimeException('Invalid Request', -32600);
+                    }
+                    if (!isset($this->callables[$request->method])) {
+                        throw new \RuntimeException(sprintf('Method %s not found', $request->method), -32601);
+                    }
                     $result      = call_user_func($this->callables[$request->method], ...$request->params);
                     $result      = is_scalar($result) ? [$result] : $result;
                     $responses[] = (new ResponseFactory)->createResultResponse($result, $request->id);

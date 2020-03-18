@@ -71,7 +71,6 @@ class Server implements HandlerInterface
         while (true) {
             try {
                 $data      = $connection->recv();
-                $overview  = preg_replace('/\s/', '', substr($data, 40, 300));
                 $closure   = \Opis\Closure\unserialize($data);
                 $microtime = static::microtime();
                 try {

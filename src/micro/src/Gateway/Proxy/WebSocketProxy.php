@@ -4,7 +4,7 @@ namespace Mix\Micro\Gateway\Proxy;
 
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
-use Mix\Micro\Exception\Gateway\ProxyException;
+use Mix\Micro\Gateway\Exception\ProxyException;
 use Mix\Micro\Gateway\Helper\ProxyHelper;
 use Mix\Micro\ServiceInterface;
 use Mix\WebSocket\Client\Connection;

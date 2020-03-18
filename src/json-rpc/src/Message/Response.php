@@ -47,7 +47,7 @@ class Response implements \JsonSerializable
     {
         $data = [];
         foreach ($this as $key => $val) {
-            if ($key != 'id' && is_null($value)) {
+            if ($key != 'id' && is_null($val)) {
                 continue;
             }
             $data[$key] = $val;

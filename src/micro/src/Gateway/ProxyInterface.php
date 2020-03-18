@@ -4,7 +4,7 @@ namespace Mix\Micro\Gateway;
 
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
-use Mix\Micro\Exception\Gateway\ProxyException;
+use Mix\Micro\Gateway\Exception\ProxyException;
 use Mix\Micro\Exception\NotFoundException;
 use Mix\Micro\RegistryInterface;
 use Mix\Micro\ServiceInterface;

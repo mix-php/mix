@@ -18,16 +18,19 @@ class JsonRpcHelper
 
     /**
      * 解析请求
-     * @param string $payload
+     * @param string|array $payload
      * @return array [bool $single, Request[] $requests]
      * @throws ParseException
      */
-    public static function parseRequests(string $payload)
+    public static function parseRequests($payload)
     {
-        $payload = static::decode($payload);
-        if ($payload === false) {
-            throw new ParseException('Parse requests failed.');
+        if (is_string($payload)) {
+            $payload = static::decode($payload);
+            if ($payload === false) {
+                throw new ParseException('Parse request failed');
+            }
         }
+
         $requests = [];
         $single   = false;
         if (!empty($payload) && !(isset($payload[0]) && is_array($payload[0]))) {
