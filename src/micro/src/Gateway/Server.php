@@ -116,9 +116,10 @@ class Server implements HandlerInterface
             return;
         }
 
-        if (isset($map[$path])) {
-            /** @var ProxyInterface $proxy */
-            $proxy = array_pop($map[$path]);
+        $proxys = $map[$path] ?? ($map['/'] ?? []);
+        /** @var ProxyInterface $proxy */
+        $proxy = array_pop($proxys);
+        if ($proxy) {
             try {
                 $serivce = $proxy->service($this->registry, $request);
                 $status  = $proxy->proxy($serivce, $request, $response);

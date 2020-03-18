@@ -5,6 +5,7 @@ namespace Mix\JsonRpc\Client;
 use Mix\Bean\BeanInjector;
 use Mix\JsonRpc\Call\Caller;
 use Mix\JsonRpc\Constants;
+use Mix\JsonRpc\Exception\ParseException;
 use Mix\JsonRpc\Helper\JsonRpcHelper;
 use Mix\JsonRpc\Message\Request;
 use Mix\JsonRpc\Message\Response;
@@ -73,6 +74,7 @@ class Connection
      * @param Request $request
      * @return Response
      * @throws Exception\ParseException
+     * @throws ParseException
      * @throws \Swoole\Exception
      */
     public function call(Request $request)
@@ -88,7 +90,7 @@ class Connection
      * Multi Call
      * @param Request ...$requests
      * @return Response[]
-     * @throws Exception\ParseException
+     * @throws ParseException
      * @throws \Swoole\Exception
      */
     public function callMultiple(Request ...$requests)
