@@ -7,14 +7,13 @@ use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\JsonRpc\Client\Dialer;
-use Mix\JsonRpc\Factory\RequestFactory;
 use Mix\JsonRpc\Factory\ResponseFactory;
 use Mix\JsonRpc\Helper\JsonRpcHelper;
+use Mix\Micro\Exception\Gateway\ProxyException;
 use Mix\Micro\Exception\NotFoundException;
 use Mix\Micro\Gateway\ProxyInterface;
 use Mix\Micro\RegistryInterface;
 use Mix\Micro\ServiceInterface;
-use Mix\WebSocket\Upgrader;
 
 /**
  * Class JsonRpcProxy
@@ -79,49 +78,105 @@ class JsonRpcProxy implements ProxyInterface
      * @param ServerRequest $request
      * @param Response $response
      * @return int status
+     * @throws \PhpDocReader\AnnotationException
+     * @throws \ReflectionException
+     * @throws ProxyException
      */
     public function proxy(ServiceInterface $service, ServerRequest $request, Response $response)
     {
-        // 参数效验
-        $content = $request->getBody()->getContents();
-        try {
-            list(, $requests) = JsonRpcHelper::parseRequests($content);
-        } catch (\Throwable $ex) {
-            $response = (new ResponseFactory)->createErrorResponse(-32700, 'Parse error', null);
-            $body     = (new StreamFactory())->createStream(json_encode($rpcResponse));
-            $response
-                ->withContentType('application/json', 'utf-8')
-                ->withBody($body)
-                ->withStatus(200)
-                ->end();
-            return;
+        $contentType = $request->getHeaderLine('Content-Type');
+        if (strpos($contentType, 'application/json') === false) {
+            throw new ProxyException('Invalid content type');
         }
-        $rpcRequest = array_pop($requests);
-        if (!JsonRpcHelper::validRequest($rpcRequest)) {
-            $rpcResponse = (new ResponseFactory)->createErrorResponse(-32600, 'Invalid Request', $request->id);
+        $body    = $request->getParsedBody();
+        $content = $body['request'] ?? '';
+        try {
+            list($single, $requests) = JsonRpcHelper::parseRequests($content);
+        } catch (\Throwable $ex) {
+            $rpcResponse = (new ResponseFactory)->createErrorResponse(-32700, 'Parse error', null);
             $body        = (new StreamFactory())->createStream(json_encode($rpcResponse));
+            $status      = 200;
             $response
                 ->withContentType('application/json', 'utf-8')
                 ->withBody($body)
-                ->withStatus(200)
+                ->withStatus($status)
                 ->end();
-            return;
+            return $status;
         }
 
         $dialer = new Dialer([
             'timeout' => $this->timeout,
         ]);
         try {
-            $conn        = $dialer->dial($service->getAddress(), $service->getPort());
-            $rpcResponse = $conn->call($rpcRequest);
+            $conn = $dialer->dial($service->getAddress(), $service->getPort());
+
+            if ($single) {
+                $rpcResponse = $conn->call(array_pop($requests));
+                $body        = (new StreamFactory())->createStream(json_encode($rpcResponse));
+                $status      = 200;
+                $response
+                    ->withContentType('application/json', 'utf-8')
+                    ->withBody($body)
+                    ->withStatus($status)
+                    ->end();
+                return $status;
+            }
+
+            $rpcResponses = $conn->callMultiple(...$requests);
+            $body         = (new StreamFactory())->createStream(json_encode($rpcResponses));
+            $status       = 200;
+            $response
+                ->withContentType('application/json', 'utf-8')
+                ->withBody($body)
+                ->withStatus($status)
+                ->end();
+            return $status;
         } catch (\Throwable $ex) {
-            $rpcResponse = (new  ResponseFactory())->createErrorResponse($ex->getCode(), $ex->getMessage(), $id);
+            throw new ProxyException($ex->getMessage(), $ex->getCode());
         }
-        $body = (new StreamFactory())->createStream(json_encode($rpcResponse));
+    }
+
+    /**
+     * 404 处理
+     * @param \Exception $exception
+     * @param Response $response
+     * @return void
+     */
+    public function show404(\Exception $exception, Response $response)
+    {
+        $content = [
+            'code'    => $exception->getCode(),
+            'message' => $exception->getMessage(),
+            'status'  => '404 Not Found',
+        ];
+        $body    = (new StreamFactory())->createStream(json_encode($content));
+        $status  = 404;
         $response
-            ->withContentType('application/json', 'utf-8')
+            ->withContentType('text/plain')
             ->withBody($body)
-            ->withStatus(200)
+            ->withStatus($status)
+            ->end();
+    }
+
+    /**
+     * 500 处理
+     * @param \Exception $exception
+     * @param Response $response
+     * @return void
+     */
+    public function show500(\Exception $exception, Response $response)
+    {
+        $content = [
+            'code'    => $exception->getCode(),
+            'message' => $exception->getMessage(),
+            'status'  => '500 Internal Server Error',
+        ];
+        $body    = (new StreamFactory())->createStream(json_encode($content));
+        $status  = 500;
+        $response
+            ->withContentType('text/plain')
+            ->withBody($body)
+            ->withStatus($status)
             ->end();
     }
 

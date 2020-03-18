@@ -7,6 +7,7 @@ use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Message\Stream\FileStream;
+use Mix\Micro\Exception\Gateway\ProxyException;
 use Mix\Micro\Exception\NotFoundException;
 use Mix\Micro\Gateway\Helper\ProxyHelper;
 use Mix\Micro\Gateway\ProxyInterface;
@@ -107,6 +108,7 @@ class WebProxy implements ProxyInterface
      * @return int status
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
+     * @throws ProxyException
      */
     public function proxy(ServiceInterface $service, ServerRequest $request, Response $response)
     {
@@ -144,7 +146,7 @@ class WebProxy implements ProxyInterface
 
         $requestUri = ProxyHelper::getRequestUri($request->getUri());
         if (!$client->execute($requestUri)) {
-            return 502;
+            throw new ProxyException($client->errMsg, $client->errCode);
         }
 
         $body   = (new StreamFactory())->createStream($client->getBody() ?: '');
@@ -163,6 +165,33 @@ class WebProxy implements ProxyInterface
             ->withBody($body)
             ->end();
         return $status;
+    }
+
+    /**
+     * 404 处理
+     * @param \Exception $exception
+     * @param Response $response
+     * @return void
+     */
+    public function show404(\Exception $exception, Response $response)
+    {
+    }
+
+    /**
+     * 500 处理
+     * @param \Exception $exception
+     * @param Response $response
+     * @return void
+     */
+    public function show500(\Exception $exception, Response $response)
+    {
+        $content = '500 Internal Server Error';
+        $body    = (new StreamFactory())->createStream($content);
+        $response
+            ->withContentType('text/plain')
+            ->withBody($body)
+            ->withStatus(500)
+            ->end();
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Mix\Micro\Gateway\Proxy;
 
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
+use Mix\Micro\Exception\Gateway\ProxyException;
 use Mix\Micro\Gateway\Helper\ProxyHelper;
 use Mix\Micro\ServiceInterface;
 use Mix\WebSocket\Client\Connection;
@@ -57,6 +58,7 @@ class WebSocketProxy
      * @return int status
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
+     * @throws ProxyException
      */
     public function proxy(ServiceInterface $service, ServerRequest $request, Response $response)
     {
@@ -76,7 +78,7 @@ class WebSocketProxy
             $this->serviceConn = $dialer->dial(sprintf('ws://%s:%d%s', $address, $port, $requestUri), $headers);
             $this->clientConn  = $this->upgrader->Upgrade($request, $response);
         } catch (\Throwable $ex) {
-            return 502;
+            throw new ProxyException($ex->getMessage(), $ex->getCode());
         }
         xgo([$this, 'clientRecv']);
         xgo([$this, 'serviceRecv']);

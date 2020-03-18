@@ -7,10 +7,10 @@ use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Server\Server as HttpServer;
 use Mix\Http\Server\HandlerInterface;
+use Mix\Micro\Exception\Gateway\ProxyException;
 use Mix\Micro\Exception\NotFoundException;
 use Mix\Micro\Gateway\Event\AccessEvent;
 use Mix\Micro\RegistryInterface;
-use Mix\Micro\ServiceInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -31,7 +31,7 @@ class Server implements HandlerInterface
     public $reusePort = false;
 
     /**
-     * @var string[]
+     * @var ProxyInterface[]
      */
     public $proxies = [];
 
@@ -83,8 +83,7 @@ class Server implements HandlerInterface
     public function start()
     {
         // 解析
-        foreach ($this->proxies as $class) {
-            $proxy                               = new $class();
+        foreach ($this->proxies as $proxy) {
             $this->proxyMap[$proxy->pattern()][] = $proxy;
         }
         // 启动
@@ -102,43 +101,62 @@ class Server implements HandlerInterface
         $microtime = static::microtime();
         $map       = $this->proxyMap;
         $path      = $request->getUri()->getPath();
-        $pattern   = isset($map[$path]) ? $path : '/';
-        foreach ($map[$pattern] ?? [] as $proxy) {
+
+        if (isset($map[$path])) {
+            /** @var ProxyInterface $proxy */
+            $proxy = array_pop($map[$path]);
             try {
                 $serivce = $proxy->service($this->registry, $request);
                 $status  = $proxy->proxy($serivce, $request, $response);
-                if ($status == 502) {
-                    static::show502($response);
-                }
-                $event           = new AccessEvent();
-                $event->time     = round((static::microtime() - $microtime) * 1000, 2);
-                $event->status   = $status;
-                $event->request  = $request;
-                $event->response = $response;
-                $event->service  = $serivce;
-                $this->dispatch($event);
+                $this->dispatch($microtime, $status, $request, $response, $serivce);
+            } catch (NotFoundException $ex) {
+                $proxy->show404($ex, $response);
+                $this->dispatch($microtime, 404, $request, $response, $serivce ?? null, sprintf('[%d] %s', $ex->getCode(), $ex->getMessage()));
+            } catch (ProxyException $ex) {
+                $proxy->show500($ex, $response);
+                $this->dispatch($microtime, 500, $request, $response, $serivce ?? null, sprintf('[%d] %s', $ex->getCode(), $ex->getMessage()));
+            }
+            return;
+        }
+
+        foreach ($map['/'] ?? [] as $proxy) {
+            try {
+                $serivce = $proxy->service($this->registry, $request);
+                $status  = $proxy->proxy($serivce, $request, $response);
+                $this->dispatch($microtime, $status, $request, $response, $serivce);
                 return;
             } catch (NotFoundException $ex) {
+            } catch (ProxyException $ex) {
+                $proxy->show500($ex, $response);
+                $this->dispatch($microtime, 500, $request, $response, $serivce ?? null, sprintf('[%d] %s', $ex->getCode(), $ex->getMessage()));
             }
         }
-        static::show404($response);
-        $event           = new AccessEvent();
-        $event->time     = round((static::microtime() - $microtime) * 1000, 2);
-        $event->status   = 404;
-        $event->request  = $request;
-        $event->response = $response;
-        $this->dispatch($event);
+        $ex = new \Exception(sprintf('Uri %s not found', $request->getUri()->__toString()));
+        $this->show404($ex, $response);
+        $this->dispatch($microtime, 404, $request, $response, null, sprintf('[%d] %s', $ex->getCode(), $ex->getMessage()));
     }
 
     /**
      * Dispatch
-     * @param object $event
+     * @param $microtime
+     * @param $status
+     * @param $request
+     * @param $response
+     * @param $service
+     * @param $error
      */
-    protected function dispatch(object $event)
+    protected function dispatch($microtime, $status, $request, $response, $service = null, $error = null)
     {
         if (!isset($this->dispatcher)) {
             return;
         }
+        $event           = new AccessEvent();
+        $event->time     = round((static::microtime() - $microtime) * 1000, 2);
+        $event->status   = $status;
+        $event->request  = $request;
+        $event->response = $response;
+        $event->service  = $service;
+        $event->error    = $error;
         $this->dispatcher->dispatch($event);
     }
 
@@ -154,10 +172,11 @@ class Server implements HandlerInterface
 
     /**
      * 404 处理
+     * @param \Exception $exception
      * @param Response $response
      * @return void
      */
-    public static function show404(Response $response)
+    public function show404(\Exception $exception, Response $response)
     {
         $content = '404 Not Found';
         $body    = (new StreamFactory())->createStream($content);
@@ -165,22 +184,6 @@ class Server implements HandlerInterface
             ->withContentType('text/plain')
             ->withBody($body)
             ->withStatus(404)
-            ->end();
-    }
-
-    /**
-     * 502 处理,
-     * @param Response $response
-     * @return void
-     */
-    public static function show502(Response $response)
-    {
-        $content = '502 Bad Gateway';
-        $body    = (new StreamFactory())->createStream($content);
-        $response
-            ->withContentType('text/plain')
-            ->withBody($body)
-            ->withStatus(502)
             ->end();
     }
 

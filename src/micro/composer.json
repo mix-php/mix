@@ -22,7 +22,8 @@
     "ramsey/uuid": "^3.9",
     "mix/bean": "~2.1.0",
     "mix/http-server": "~2.1.0",
-    "mix/websocket": "~2.1.0"
+    "mix/websocket": "~2.1.0",
+    "mix/json-rpc": "~2.1.0"
   },
   "require-dev": {
     "swoole/ide-helper": "dev-master"

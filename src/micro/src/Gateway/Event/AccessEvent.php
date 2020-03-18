@@ -43,4 +43,10 @@ class AccessEvent
      */
     public $service;
 
+    /**
+     * 执行异常信息
+     * @var string
+     */
+    public $error;
+
 }
