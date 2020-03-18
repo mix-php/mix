@@ -26,17 +26,17 @@ class WebProxy implements ProxyInterface
     /**
      * @var string
      */
-    public $pattern = '/';
-
-    /**
-     * @var string
-     */
     public $namespace = 'php.micro.web';
 
     /**
      * @var float
      */
     public $timeout = 5.0;
+
+    /**
+     * @var string
+     */
+    protected $pattern = '/';
 
     /**
      * @var Upgrader

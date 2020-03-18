@@ -28,11 +28,6 @@ class JsonRpcProxy implements ProxyInterface
     public $pattern = '/jsonrpc';
 
     /**
-     * @var string
-     */
-    public $namespace = 'php.micro.jsonrpc';
-
-    /**
      * @var float
      */
     public $timeout = 5.0;
