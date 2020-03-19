@@ -19,6 +19,7 @@
     "php": ">=7.2.0",
     "ext-swoole": ">=4.4.4",
     "start-point/etcd-php": "^1.1",
+    "psr/event-dispatcher": "^1.0",
     "mix/micro": "~2.1.0",
     "mix/bean": "~2.1.0",
     "mix/concurrent": "~2.1.0",

@@ -126,7 +126,7 @@ class Monitor
 
     /**
      * Pull service
-     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function pull()
     {
