@@ -43,9 +43,9 @@ class Watcher
 
     /**
      * Connect timeout
-     * @var int
+     * @var float
      */
-    protected $timeout = 3;
+    protected $timeout = 5.0;
 
     /**
      * Watcher constructor.

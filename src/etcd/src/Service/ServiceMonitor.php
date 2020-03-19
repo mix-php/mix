@@ -47,7 +47,7 @@ class ServiceMonitor
     /**
      * @var string
      */
-    protected $serviceFormat = 'mix/service/%s';
+    protected $serviceFormat = '/mix/service/%s';
 
     /**
      * ServiceMonitor constructor.

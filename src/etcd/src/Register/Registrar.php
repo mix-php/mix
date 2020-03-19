@@ -44,12 +44,12 @@ class Registrar
     /**
      * @var string
      */
-    protected $nodeFormat = 'mix/node/%s/%s';
+    protected $nodeFormat = '/mix/node/%s/%s';
 
     /**
      * @var string
      */
-    protected $serviceFormat = 'mix/service/%s/%s';
+    protected $serviceFormat = '/mix/service/%s/%s';
 
     /**
      * Registrar constructor.

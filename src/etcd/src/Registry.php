@@ -31,6 +31,18 @@ class Registry implements RegistryInterface
     public $port = 2379;
 
     /**
+     * User
+     * @var string
+     */
+    public $user = '';
+
+    /**
+     * Password
+     * @var string
+     */
+    public $password = '';
+
+    /**
      * Keep alive TTL
      * @var int
      */
@@ -40,7 +52,7 @@ class Registry implements RegistryInterface
      * Version
      * @var string
      */
-    public $version = 'v3';
+    protected $version = 'v3';
 
     /**
      * 注册器集合
@@ -71,7 +83,15 @@ class Registry implements RegistryInterface
      */
     protected function createClient()
     {
-        return new Client(sprintf('%s:%d', $this->host, $this->port), $this->version);
+        $client = new Client(sprintf('%s:%d', $this->host, $this->port), $this->version);
+        if ($this->user !== '') {
+            $client->setPretty(true);
+            $token = $client->authenticate($this->user, $this->password);
+            if (is_string($token)) {
+                $client->setToken($token);
+            }
+        }
+        return $client;
     }
 
     /**
