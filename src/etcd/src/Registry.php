@@ -43,10 +43,18 @@ class Registry implements RegistryInterface
     public $password = '';
 
     /**
-     * Keep alive TTL
+     * Registrar keep alive TTL
+     * 注册器生存时间，会根据该时间定时延期服务的有效期
      * @var int
      */
     public $ttl = 5;
+
+    /**
+     * Monitor max idle time
+     * 监控最大空闲时间，超过该时间将自动关闭
+     * @var int
+     */
+    public $maxIdle = 30;
 
     /**
      * Version
@@ -101,7 +109,7 @@ class Registry implements RegistryInterface
     public function get(string $name): ServiceInterface
     {
         if (!isset($this->monitors[$name])) {
-            $monitor               = new Monitor($this->createClient(), $name);
+            $monitor               = new Monitor($this->createClient(), $this->monitors, $name, $this->maxIdle);
             $this->monitors[$name] = $monitor;
         }
         return $this->monitors[$name]->random();

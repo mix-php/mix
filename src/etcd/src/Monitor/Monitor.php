@@ -21,9 +21,19 @@ class Monitor
     public $client;
 
     /**
+     * @var Monitor[]
+     */
+    public $monitors = [];
+
+    /**
      * @var string
      */
     public $name = '';
+
+    /**
+     * @var int second
+     */
+    public $maxIdle = 0;
 
     /**
      * @var string
@@ -34,11 +44,6 @@ class Monitor
      * @var Service[name][id]
      */
     protected $services = [];
-
-    /**
-     * @var int second
-     */
-    protected $interval = 60;
 
     /**
      * @var Timer
@@ -56,16 +61,25 @@ class Monitor
     protected $serviceFormat = '/mix/service/%s/';
 
     /**
+     * @var int
+     */
+    protected $lastTime = 0;
+
+    /**
      * Monitor constructor.
      * @param Client $client
+     * @param array $monitors
      * @param string $name
+     * @param int $maxIdle
      * @throws \Exception
      */
-    public function __construct(Client $client, string $name)
+    public function __construct(Client $client, array &$monitors, string $name, int $maxIdle)
     {
-        $this->client = $client;
-        $this->name   = $name;
-        $this->prefix = $prefix = sprintf($this->serviceFormat, $name);
+        $this->client   = $client;
+        $this->monitors = &$monitors;
+        $this->name     = $name;
+        $this->maxIdle  = $maxIdle;
+        $this->prefix   = $prefix = sprintf($this->serviceFormat, $name);
 
         $func = function (array $data) {
             if (!isset($data['result']['events'])) {
@@ -98,7 +112,13 @@ class Monitor
 
         $this->pull();
         $timer = Timer::new();
-        $timer->tick($this->interval * 1000, function () {
+        $timer->tick($this->maxIdle * 1000, function () {
+            // 超过 4/5 的生存时间没有获取服务就停止监听器
+            if (time() - $this->lastTime > $this->maxIdle / 5 * 4) {
+                unset($this->monitors[$this->name]);
+                $this->close();
+                return;
+            }
             $this->pull();
         });
         $this->timer = $timer;
@@ -152,9 +172,16 @@ class Monitor
      */
     public function random(): Service
     {
-        $name     = $this->name;
-        $services = $this->services[$name] ?? [];
+        $first          = !$this->lastTime;
+        $this->lastTime = time();
+        $name           = $this->name;
+        $services       = $this->services[$name] ?? [];
         if (empty($services)) {
+            // 第一次获取就找不到，必须关闭监听器，防止恶意404攻击导致注册中心连接数过高
+            if ($first) {
+                unset($this->monitors[$this->name]);
+                $this->close();
+            }
             throw new NotFoundException(sprintf('Service %s not found', $name));
         }
         return $services[array_rand($services)];

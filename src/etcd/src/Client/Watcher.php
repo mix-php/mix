@@ -180,13 +180,20 @@ EOF;
         }
         if (!isset($this->client)) {
             // 等待 go 执行一会，当 close 在刚 forever 执行后就被立即调用的时候
-            for ($i = 0; $i < 4; $i++) {
-                usleep(500000);
+            $timer        = Timer::new();
+            $timer->count = 0;
+            $timer->tick(500, function () use ($timer) {
                 if (isset($this->client)) {
                     $this->client->close();
-                    break;
+                    $timer->clear();
+                    return;
                 }
-            }
+                if ($timer->count >= 6) {
+                    $timer->clear();
+                    return;
+                }
+                $timer->count++;
+            });
             return;
         }
         $this->client->close();
