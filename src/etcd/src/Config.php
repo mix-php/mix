@@ -95,6 +95,22 @@ class Config
     }
 
     /**
+     * Put
+     * @param array $kvs
+     * @throws \GuzzleHttp\Exception\BadResponseException
+     */
+    public function put(array $kvs)
+    {
+        if (!isset($this->client)) {
+            $this->client = $this->createClient();
+        }
+        $client = $this->client;
+        foreach ($kvs as $key => $value) {
+            $client->put($key, $value);
+        }
+    }
+
+    /**
      * Pull config
      * @return string[]
      * @throws \GuzzleHttp\Exception\BadResponseException
@@ -107,7 +123,7 @@ class Config
         $client = $this->client;
         $config = [];
         foreach ($this->namespaces as $namespace) {
-            $kvs = $client->getKeysWithPrefix($prefix);
+            $kvs = $client->getKeysWithPrefix($namespace);
             if (empty($kvs)) {
                 continue;
             }
@@ -118,14 +134,26 @@ class Config
 
     /**
      * 监听配置变化
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function listen()
     {
+        // 拉取全量
+        $config           = $this->pull();
+        $this->lastConfig = $config;
+        foreach ($config as $key => $value) {
+            $event        = new PutEvent();
+            $event->key   = $key;
+            $event->value = $value;
+            $this->dispatcher->dispatch($event);
+        }
+        // 定时监听
         $timer = $this->timer = Timer::new();
         $timer->tick($this->interval * 1000, function () {
-            $config     = $this->pull();
-            $lastConfig = $this->lastConfig;
-            $diff       = array_diff_assoc($lastConfig, $config);
+            $config           = $this->pull();
+            $lastConfig       = $this->lastConfig;
+            $this->lastConfig = $config;
+            $diff             = array_diff_assoc($lastConfig, $config);
             foreach ($diff as $key => $value) {
                 // delete
                 if (isset($lastConfig[$key]) && !isset($config[$key])) {
