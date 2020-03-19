@@ -5,7 +5,7 @@ namespace Mix\Etcd;
 use Mix\Bean\BeanInjector;
 use Mix\Etcd\Client\Client;
 use Mix\Etcd\Register\Registrar;
-use Mix\Etcd\Service\ServiceMonitor;
+use Mix\Etcd\Monitor\Monitor;
 use Mix\Micro\Exception\NotFoundException;
 use Mix\Micro\ServiceBundleInterface;
 use Mix\Micro\RegistryInterface;
@@ -62,7 +62,7 @@ class Registry implements RegistryInterface
 
     /**
      * 服务监控集合
-     * @var ServiceMonitor[]
+     * @var Monitor[]
      */
     protected $monitors = [];
 
@@ -106,7 +106,7 @@ class Registry implements RegistryInterface
         array_pop($segments);
         $prefix = implode('.', $segments);
         if (!isset($this->monitors[$prefix])) {
-            $monitor                 = new ServiceMonitor($this->createClient(), $prefix);
+            $monitor                 = new Monitor($this->createClient(), $prefix);
             $this->monitors[$prefix] = $monitor;
         }
         return $this->monitors[$prefix]->random($name);

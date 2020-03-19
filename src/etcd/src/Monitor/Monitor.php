@@ -1,6 +1,6 @@
 <?php
 
-namespace Mix\Etcd\Service;
+namespace Mix\Etcd\Monitor;
 
 use Mix\Concurrent\Timer;
 use Mix\Etcd\Client\Client;
@@ -8,10 +8,10 @@ use Mix\Etcd\Client\Watcher;
 use Mix\Micro\Exception\NotFoundException;
 
 /**
- * Class ServiceMonitor
- * @package Mix\Etcd\Service
+ * Class Monitor
+ * @package Mix\Etcd\Monitor
  */
-class ServiceMonitor
+class Monitor
 {
 
     /**
@@ -50,7 +50,7 @@ class ServiceMonitor
     protected $serviceFormat = '/mix/service/%s';
 
     /**
-     * ServiceMonitor constructor.
+     * Monitor constructor.
      * @param Client $client
      * @param string $prefix
      * @throws \Exception
