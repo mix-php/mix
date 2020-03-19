@@ -201,6 +201,7 @@ class Server implements HandlerInterface
                 $proxy->close();
             }
         }
+        $this->registry->close();
         $this->httpServer->shutdown();
     }
 

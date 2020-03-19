@@ -4,8 +4,8 @@ namespace Mix\Etcd;
 
 use Mix\Bean\BeanInjector;
 use Mix\Etcd\Client\Client;
-use Mix\Etcd\Register\Registrar;
 use Mix\Etcd\Monitor\Monitor;
+use Mix\Etcd\Register\Registrar;
 use Mix\Micro\Exception\NotFoundException;
 use Mix\Micro\ServiceBundleInterface;
 use Mix\Micro\RegistryInterface;
@@ -150,11 +150,11 @@ class Registry implements RegistryInterface
     }
 
     /**
-     * Clear
+     * Close
      * close all monitor
      * unregister all service
      */
-    public function clear()
+    public function close()
     {
         foreach ($this->monitors as $monitor) {
             $monitor->close();

@@ -34,10 +34,10 @@ interface RegistryInterface
     public function unregister(ServiceBundleInterface $bundle);
 
     /**
-     * Clear
+     * Close
      * close all monitor
      * unregister all service
      */
-    public function clear();
+    public function close();
 
 }
