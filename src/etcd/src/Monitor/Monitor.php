@@ -5,6 +5,7 @@ namespace Mix\Etcd\Monitor;
 use Mix\Concurrent\Timer;
 use Mix\Etcd\Client\Client;
 use Mix\Etcd\Client\Watcher;
+use Mix\Etcd\Service\Service;
 use Mix\Micro\Exception\NotFoundException;
 
 /**
@@ -22,7 +23,12 @@ class Monitor
     /**
      * @var string
      */
-    public $prefix = '';
+    public $name = '';
+
+    /**
+     * @var string
+     */
+    protected $prefix = '';
 
     /**
      * @var Service[name][id]
@@ -47,18 +53,19 @@ class Monitor
     /**
      * @var string
      */
-    protected $serviceFormat = '/mix/service/%s';
+    protected $serviceFormat = '/mix/service/%s/';
 
     /**
      * Monitor constructor.
      * @param Client $client
-     * @param string $prefix
+     * @param string $name
      * @throws \Exception
      */
-    public function __construct(Client $client, string $prefix)
+    public function __construct(Client $client, string $name)
     {
         $this->client = $client;
-        $this->prefix = $prefix;
+        $this->name   = $name;
+        $this->prefix = $prefix = sprintf($this->serviceFormat, $name);
 
         $func = function (array $data) {
             if (!isset($data['result']['events'])) {
@@ -85,7 +92,7 @@ class Monitor
             }
         };
 
-        $watcher = $client->watchKeysWithPrefix(sprintf($this->serviceFormat, $prefix), $func);
+        $watcher = $client->watchKeysWithPrefix($prefix, $func);
         $watcher->forever();
         $this->watcher = $watcher;
 
@@ -105,14 +112,12 @@ class Monitor
     {
         $client = $this->client;
         $prefix = $this->prefix;
-        $result = $client->getKeysWithPrefix(sprintf($this->serviceFormat, $prefix));
-        if (!isset($result['count']) || $result['count'] == 0) {
+        $kvs    = $client->getKeysWithPrefix($prefix);
+        if (empty($kvs)) {
             return;
         }
         $services = [];
-        $kvs      = $result['kvs'];
-        foreach ($kvs as $kv) {
-            $value                                            = $kv['value'];
+        foreach ($kvs as $value) {
             $service                                          = static::parseValue($value);
             $services[$service->getName()][$service->getID()] = $service;
         }
@@ -142,12 +147,12 @@ class Monitor
 
     /**
      * Random get service
-     * @param string $name
      * @return Service
      * @throws NotFoundException
      */
-    public function random(string $name): Service
+    public function random(): Service
     {
+        $name     = $this->name;
         $services = $this->services[$name] ?? [];
         if (empty($services)) {
             throw new NotFoundException(sprintf('Service %s not found', $name));

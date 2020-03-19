@@ -84,12 +84,10 @@ class Registry implements RegistryInterface
     protected function createClient()
     {
         $client = new Client(sprintf('%s:%d', $this->host, $this->port), $this->version);
-        if ($this->user !== '') {
-            $client->setPretty(true);
-            $token = $client->authenticate($this->user, $this->password);
-            if (is_string($token)) {
-                $client->setToken($token);
-            }
+        $client->setPretty(true);
+        $token = $client->authenticate($this->user, $this->password);
+        if (is_string($token)) {
+            $client->setToken($token);
         }
         return $client;
     }
@@ -102,14 +100,11 @@ class Registry implements RegistryInterface
      */
     public function get(string $name): ServiceInterface
     {
-        $segments = explode('.', $name);
-        array_pop($segments);
-        $prefix = implode('.', $segments);
-        if (!isset($this->monitors[$prefix])) {
-            $monitor                 = new Monitor($this->createClient(), $prefix);
-            $this->monitors[$prefix] = $monitor;
+        if (!isset($this->monitors[$name])) {
+            $monitor               = new Monitor($this->createClient(), $name);
+            $this->monitors[$name] = $monitor;
         }
-        return $this->monitors[$prefix]->random($name);
+        return $this->monitors[$name]->random();
     }
 
     /**

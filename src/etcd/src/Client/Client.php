@@ -19,7 +19,48 @@ class Client extends \Etcd\Client
      */
     public function watchKeysWithPrefix(string $prefix, \Closure $func)
     {
-        return new Watcher($this->server, $prefix, $func);
+        return new Watcher($this->server, $this->token, $prefix, $func);
+    }
+
+    /**
+     * 重写该方法，统一登录与非登录的返回数据格式
+     * Gets the key or a range of keys
+     *
+     * @param string $key
+     * @param array $options
+     *         string range_end
+     *         int    limit
+     *         int    revision
+     *         int    sort_order
+     *         int    sort_target
+     *         bool   serializable
+     *         bool   keys_only
+     *         bool   count_only
+     *         int64  min_mod_revision
+     *         int64  max_mod_revision
+     *         int64  min_create_revision
+     *         int64  max_create_revision
+     * @return array|\GuzzleHttp\Exception\BadResponseException
+     */
+    public function get($key, array $options = [])
+    {
+        $params  = [
+            'key' => $key,
+        ];
+        $params  = $this->encode($params);
+        $options = $this->encode($options);
+        $body    = $this->request(self::URI_RANGE, $params, $options);
+        $body    = $this->decodeBodyForFields(
+            $body,
+            'kvs',
+            ['key', 'value',]
+        );
+
+        if (isset($body['kvs'])) {
+            return $this->convertFields($body['kvs']);
+        }
+
+        return [];
     }
 
     /**

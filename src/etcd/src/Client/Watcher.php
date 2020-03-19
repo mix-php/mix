@@ -12,9 +12,15 @@ class Watcher
 {
 
     /**
-     * @var string host:port
+     * host:port
+     * @var string
      */
     public $server;
+
+    /**
+     * @var string
+     */
+    public $token = '';
 
     /**
      * @var string
@@ -50,12 +56,14 @@ class Watcher
     /**
      * Watcher constructor.
      * @param string $server
+     * @param string $token
      * @param string $prefix
      * @param \Closure $func
      */
-    public function __construct(string $server, string $prefix, \Closure $func)
+    public function __construct(string $server, string $token, string $prefix, \Closure $func)
     {
         $this->server = $server;
+        $this->token  = $token;
         $this->prefix = $prefix;
         $this->func   = $func;
     }
@@ -118,6 +126,7 @@ class Watcher
     public function watch()
     {
         $client               = $this->client = $this->createClient();
+        $token                = $this->token;
         $prefix               = $this->prefix;
         $lastIndex            = strlen($prefix) - 1;
         $lastChar             = $prefix[$lastIndex];
@@ -137,6 +146,7 @@ POST /v3/watch HTTP/1.1
 Host: localhost
 Accept: */*
 User-Agent: curl/7.64.1
+Grpc-Metadata-Token: $token
 Content-Length: $length
 Content-Type: application/json
 
