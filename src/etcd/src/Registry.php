@@ -50,17 +50,22 @@ class Registry implements RegistryInterface
     public $ttl = 5;
 
     /**
-     * Monitor max idle time
+     * Monitor idle time
      * 监控最大空闲时间，超过该时间将自动关闭
      * @var int
      */
-    public $maxIdle = 30;
+    public $idle = 30;
 
     /**
      * Version
      * @var string
      */
     protected $version = 'v3';
+
+    /**
+     * @var Client
+     */
+    protected $client;
 
     /**
      * 注册器集合
@@ -73,9 +78,9 @@ class Registry implements RegistryInterface
      * @var Monitor[]
      */
     protected $monitors = [];
-
+    
     /**
-     * ServiceCenter constructor.
+     * Registry constructor.
      * @param array $config
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
@@ -83,6 +88,15 @@ class Registry implements RegistryInterface
     public function __construct(array $config = [])
     {
         BeanInjector::inject($this, $config);
+    }
+
+    /**
+     * Init
+     * @return void
+     */
+    public function init()
+    {
+        $this->client = $this->createClient();
     }
 
     /**
@@ -109,7 +123,7 @@ class Registry implements RegistryInterface
     public function get(string $name): ServiceInterface
     {
         if (!isset($this->monitors[$name])) {
-            $monitor               = new Monitor($this->createClient(), $this->monitors, $name, $this->maxIdle);
+            $monitor               = new Monitor($this->client, $this->monitors, $name, $this->idle);
             $this->monitors[$name] = $monitor;
         }
         return $this->monitors[$name]->random();
@@ -129,7 +143,7 @@ class Registry implements RegistryInterface
         if ($bundle->count() == 0) {
             return;
         }
-        $registrar = new Registrar($this->createClient(), $bundle, $this->ttl);
+        $registrar = new Registrar($this->client, $bundle, $this->ttl);
         $registrar->register();
         $this->registrars[$id] = $registrar;
     }

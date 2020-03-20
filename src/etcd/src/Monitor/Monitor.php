@@ -33,7 +33,7 @@ class Monitor
     /**
      * @var int second
      */
-    public $maxIdle = 0;
+    public $idle = 0;
 
     /**
      * @var string
@@ -70,15 +70,15 @@ class Monitor
      * @param Client $client
      * @param array $monitors
      * @param string $name
-     * @param int $maxIdle
+     * @param int $idle
      * @throws \Exception
      */
-    public function __construct(Client $client, array &$monitors, string $name, int $maxIdle)
+    public function __construct(Client $client, array &$monitors, string $name, int $idle)
     {
         $this->client   = $client;
         $this->monitors = &$monitors;
         $this->name     = $name;
-        $this->maxIdle  = $maxIdle;
+        $this->idle     = $idle;
         $this->prefix   = $prefix = sprintf($this->serviceFormat, $name);
 
         $func = function (array $data) {
@@ -112,9 +112,9 @@ class Monitor
 
         $this->pull();
         $timer = Timer::new();
-        $timer->tick($this->maxIdle * 1000, function () {
+        $timer->tick($this->idle * 1000, function () {
             // 超过 4/5 的生存时间没有获取服务就停止监听器
-            if (time() - $this->lastTime > $this->maxIdle / 5 * 4) {
+            if (time() - $this->lastTime > $this->idle / 5 * 4) {
                 unset($this->monitors[$this->name]);
                 $this->close();
                 return;

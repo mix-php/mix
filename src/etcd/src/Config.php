@@ -2,6 +2,7 @@
 
 namespace Mix\Etcd;
 
+use Mix\Bean\BeanInjector;
 use Mix\Concurrent\Timer;
 use Mix\Etcd\Client\Client;
 use Mix\Micro\Event\DeleteEvent;
@@ -80,6 +81,26 @@ class Config
     protected $lastConfig = [];
 
     /**
+     * Config constructor.
+     * @param array $config
+     * @throws \PhpDocReader\AnnotationException
+     * @throws \ReflectionException
+     */
+    public function __construct(array $config = [])
+    {
+        BeanInjector::inject($this, $config);
+    }
+
+    /**
+     * Init
+     * @return void
+     */
+    public function init()
+    {
+        $this->client = $this->createClient();
+    }
+
+    /**
      * Create Client
      * @return Client
      */
@@ -101,9 +122,6 @@ class Config
      */
     public function put(array $kvs)
     {
-        if (!isset($this->client)) {
-            $this->client = $this->createClient();
-        }
         $client = $this->client;
         foreach ($kvs as $key => $value) {
             $client->put($key, $value);
@@ -117,9 +135,6 @@ class Config
      */
     public function pull()
     {
-        if (!isset($this->client)) {
-            $this->client = $this->createClient();
-        }
         $client = $this->client;
         $config = [];
         foreach ($this->namespaces as $namespace) {
