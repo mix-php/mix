@@ -87,13 +87,13 @@ Trait BeanFactoryTrait
             if (isset($this->objects[$beanName])) {
                 return $this->objects[$beanName];
             }
-            $object                   = static::newInstance($definition, $config);
+            $object                   = $this->newInstance($definition, $config);
             $definition->object       = &$object;
             $this->objects[$beanName] = &$object;
             return $object;
         }
         // prototype
-        return static::newInstance($definition, $config);
+        return $this->newInstance($definition, $config);
     }
 
     /**
@@ -101,7 +101,7 @@ Trait BeanFactoryTrait
      * @param $config
      * @return object
      */
-    protected static function newInstance(BeanDefinition $definition, array $config)
+    protected function newInstance(BeanDefinition $definition, array $config)
     {
         // 配置分类
         $coverConstructorArgs = [];
@@ -129,13 +129,13 @@ Trait BeanFactoryTrait
                 if (is_scalar($arg)) {
                     continue;
                 }
-                $constructorArgs[$key] = BeanInjector::build($this->beanFactory, $arg);
+                $constructorArgs[$key] = BeanInjector::build($this, $arg);
             }
             $object = new $class(...$constructorArgs);
         }
         if ($properties) {
             $properties = $coverProperties + $properties;
-            $properties = BeanInjector::build($this->beanFactory, $properties);
+            $properties = BeanInjector::build($this, $properties);
             $object or $object = new $class();
             BeanInjector::inject($object, $properties);
         }

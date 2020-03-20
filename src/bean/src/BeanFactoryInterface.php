@@ -11,11 +11,6 @@ interface BeanFactoryInterface
 {
 
     /**
-     * 初始化
-     */
-    public function init();
-
-    /**
      * 获取BeanDefinition
      * @param $beanName
      * @return BeanDefinition
