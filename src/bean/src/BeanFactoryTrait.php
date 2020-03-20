@@ -22,13 +22,13 @@ Trait BeanFactoryTrait
      * Bean数组
      * @var BeanDefinition[]
      */
-    protected $_definitions = [];
+    protected $definitions = [];
 
     /**
      * 单例池
-     * @var array
+     * @var &object[]
      */
-    protected $_objects = [];
+    protected $objects = [];
 
     /**
      * 初始化
@@ -36,12 +36,12 @@ Trait BeanFactoryTrait
     public function init()
     {
         $definitions = [];
-        foreach ($this->config as $config) {
-            $definition         = new BeanDefinition($this, $config);
+        foreach ($this->config as $item) {
+            $definition         = new BeanDefinition($item);
             $name               = $definition->getName();
             $definitions[$name] = $definition;
         }
-        $this->_definitions = $definitions;
+        $this->definitions = $definitions;
     }
 
     /**
@@ -52,7 +52,7 @@ Trait BeanFactoryTrait
      */
     public function load()
     {
-        foreach ($this->_definitions as $definition) {
+        foreach ($this->definitions as $definition) {
             if ($definition->getScope() == BeanDefinition::SINGLETON) {
                 $this->get($definition->getName());
             }
@@ -66,10 +66,10 @@ Trait BeanFactoryTrait
      */
     public function getBeanDefinition(string $beanName): BeanDefinition
     {
-        if (!isset($this->_definitions[$beanName])) {
+        if (!isset($this->definitions[$beanName])) {
             throw new NotFoundException("Bean definition not found: {$beanName}");
         }
-        return $this->_definitions[$beanName];
+        return $this->definitions[$beanName];
     }
 
     /**
@@ -80,18 +80,70 @@ Trait BeanFactoryTrait
      */
     public function getBean(string $beanName, array $config = [])
     {
-        $beanDefinition = $this->getBeanDefinition($beanName);
+        $definition              = $this->getBeanDefinition($beanName);
+        $definition->beanFactory = $this;
         // singleton
-        if ($beanDefinition->getScope() == BeanDefinition::SINGLETON) {
-            if (isset($this->_objects[$beanName])) {
-                return $this->_objects[$beanName];
+        if ($definition->getScope() == BeanDefinition::SINGLETON) {
+            if (isset($this->objects[$beanName])) {
+                return $this->objects[$beanName];
             }
-            $object                    = $beanDefinition->newInstance($config);
-            $this->_objects[$beanName] = $object;
+            $object                   = static::newInstance($definition, $config);
+            $definition->object       = &$object;
+            $this->objects[$beanName] = &$object;
             return $object;
         }
         // prototype
-        return $beanDefinition->newInstance($config);
+        return static::newInstance($definition, $config);
+    }
+
+    /**
+     * 创建实例
+     * @param $config
+     * @return object
+     */
+    protected static function newInstance(BeanDefinition $definition, array $config)
+    {
+        // 配置分类
+        $coverConstructorArgs = [];
+        $coverProperties      = [];
+        foreach ($config as $key => $value) {
+            if (is_numeric($key)) {
+                if (is_null($value)) {
+                    continue;
+                }
+                $coverConstructorArgs[$key] = $value;
+            } else {
+                $coverProperties[$key] = $value;
+            }
+        }
+        // 创建实例
+        $class           = $definition->getClass();
+        $properties      = $definition->getProperties();
+        $constructorArgs = $definition->getConstructorArgs();
+        $initMethod      = $definition->getInitMethod();
+        $object          = null;
+        if ($constructorArgs) {
+            $constructorArgs = $coverConstructorArgs + $constructorArgs;
+            // 支持构造参数中的数组参数中的ref的依赖引用
+            foreach ($constructorArgs as $key => $arg) {
+                if (is_scalar($arg)) {
+                    continue;
+                }
+                $constructorArgs[$key] = BeanInjector::build($this->beanFactory, $arg);
+            }
+            $object = new $class(...$constructorArgs);
+        }
+        if ($properties) {
+            $properties = $coverProperties + $properties;
+            $properties = BeanInjector::build($this->beanFactory, $properties);
+            $object or $object = new $class();
+            BeanInjector::inject($object, $properties);
+        }
+        if (!$object) {
+            $object = new $class();
+        }
+        $initMethod and call_user_func([$object, $initMethod]);
+        return $object;
     }
 
 }

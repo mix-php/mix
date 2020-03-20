@@ -19,38 +19,54 @@ class BeanDefinition
     const SINGLETON = 'singleton';
 
     /**
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @var string
+     */
+    protected $initMethod;
+
+    /**
+     * @var string
+     */
+    protected $class;
+
+    /**
+     * @var string
+     */
+    protected $scope;
+
+    /**
+     * @var array
+     */
+    protected $properties = [];
+
+    /**
+     * @var array
+     */
+    protected $constructorArgs = [];
+
+    /**
      * @var BeanFactoryInterface
      */
     public $beanFactory;
 
     /**
-     * @var array
+     * @var &object
      */
-    public $config;
+    public $object;
 
     /**
      * BeanDefinition constructor.
-     * @param BeanFactoryInterface $beanFactory
      * @param array $config
      */
-    public function __construct(BeanFactoryInterface $beanFactory, array $config)
+    public function __construct(array $config = [])
     {
-        // 导入属性
-        $this->beanFactory = $beanFactory;
-        $this->config      = $config;
-    }
-
-    /**
-     * 初始化后执行指定方法
-     * @return string
-     */
-    public function getInitMethod(): string
-    {
-        $config = $this->config;
-        if (isset($config['initMethod'])) {
-            return $config['initMethod'];
+        foreach ($config as $key => $value) {
+            $this->$key = $value;
         }
-        return '';
     }
 
     /**
@@ -59,11 +75,22 @@ class BeanDefinition
      */
     public function getName(): string
     {
-        $config = $this->config;
-        if (isset($config['name'])) {
-            return $config['name'];
+        if (isset($this->name)) {
+            return $this->name;
         }
-        return $config['class'];
+        return $this->class;
+    }
+
+    /**
+     * 初始化后执行指定方法
+     * @return string
+     */
+    public function getInitMethod(): string
+    {
+        if (isset($this->initMethod)) {
+            return $this->initMethod;
+        }
+        return '';
     }
 
     /**
@@ -72,8 +99,7 @@ class BeanDefinition
      */
     public function getClass(): string
     {
-        $config = $this->config;
-        $class  = $config['class'];
+        $class = $this->class;
         return $class;
     }
 
@@ -83,9 +109,8 @@ class BeanDefinition
      */
     public function getScope(): string
     {
-        $config = $this->config;
-        if (isset($config['scope'])) {
-            $scope = $config['scope'];
+        if (isset($this->scope)) {
+            $scope = $this->scope;
             if (!in_array($scope, [static::PROTOTYPE, static::SINGLETON])) {
                 throw new ScopeException('Scope can only be [' . static::PROTOTYPE . ', ' . static::SINGLETON . ']');
             }
@@ -100,9 +125,26 @@ class BeanDefinition
      */
     public function getProperties(): array
     {
-        $config     = $this->config;
-        $properties = $config['properties'] ?? [];
-        return $properties;
+        return $this->properties ?? [];
+    }
+
+    /**
+     * 设置全部属性
+     * @param array $properties
+     */
+    public function withProperties(array $properties)
+    {
+        $this->properties = $properties;
+    }
+
+    /**
+     * 设置单个属性
+     * @param string $key
+     * @param $value
+     */
+    public function withPropertie(string $key, $value)
+    {
+        $this->properties[$key] = $value;
     }
 
     /**
@@ -111,59 +153,29 @@ class BeanDefinition
      */
     public function getConstructorArgs(): array
     {
-        $config = $this->config;
-        $args   = $config['constructorArgs'] ?? [];
-        return $args;
+        return $this->constructorArgs ?? [];
     }
 
     /**
-     * 创建实例
-     * @param $config
-     * @return object
+     * 设置构造参数
+     * @param array $args
      */
-    public function newInstance(array $config)
+    public function withConstructorArgs(array $args)
     {
-        // 配置分类
-        $coverConstructorArgs = [];
-        $coverProperties      = [];
-        foreach ($config as $key => $value) {
-            if (is_numeric($key)) {
-                if (is_null($value)) {
-                    continue;
-                }
-                $coverConstructorArgs[$key] = $value;
-            } else {
-                $coverProperties[$key] = $value;
-            }
+        $this->constructorArgs = $args;
+    }
+
+    /**
+     * 加载或刷新
+     * 只作用于单例，如果单例已经存在将被销毁再重新加载
+     */
+    public function refresh()
+    {
+        if (!isset($this->object) || isset($this->beanFactory)) {
+            return;
         }
-        // 创建实例
-        $class           = $this->getClass();
-        $properties      = $this->getProperties();
-        $constructorArgs = $this->getConstructorArgs();
-        $initMethod      = $this->getInitMethod();
-        $object          = null;
-        if ($constructorArgs) {
-            $constructorArgs = $coverConstructorArgs + $constructorArgs;
-            // 支持构造参数中的数组参数中的ref的依赖引用
-            foreach ($constructorArgs as $key => $arg) {
-                if (is_scalar($arg)) {
-                    continue;
-                }
-                $constructorArgs[$key] = BeanInjector::build($this->beanFactory, $arg);
-            }
-            $object = new $class(...$constructorArgs);
-        }
-        if ($properties) {
-            $properties = $coverProperties + $properties;
-            $properties = BeanInjector::build($this->beanFactory, $properties);
-            $object or $object = new $class();
-            BeanInjector::inject($object, $properties);
-        }
-        if (!$object) {
-            $object = new $class();
-        }
-        $initMethod and call_user_func([$object, $initMethod]);
-        return $object;
+        $this->object = null;
+        $this->beanFactory->getBean($this->getName());
     }
 
 }
