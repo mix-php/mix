@@ -361,8 +361,6 @@ class Application
         if (!method_exists($instance, $method)) {
             throw new NotFoundException("'{$class}::main' method not found.");
         }
-        // 装载
-        $this->context->load();
         // 调用方法
         call_user_func([$instance, $method]);
     }
