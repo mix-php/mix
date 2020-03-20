@@ -2,6 +2,7 @@
 
 namespace Mix\Etcd\Client;
 
+use GuzzleHttp\Client as HttpClient;
 use Mix\Micro\Exception\NotFoundException;
 
 /**
@@ -10,6 +11,31 @@ use Mix\Micro\Exception\NotFoundException;
  */
 class Client extends \Etcd\Client
 {
+
+    /**
+     * 重写修改 handler
+     * Client constructor.
+     * @param string $server
+     * @param string $version
+     */
+    public function __construct($server = '127.0.0.1:2379', $version = 'v3alpha')
+    {
+        $this->server = rtrim($server);
+        if (strpos($this->server, 'http') !== 0) {
+            $this->server = 'http://' . $this->server;
+        }
+        $this->version    = trim($version);
+        $baseUri          = sprintf('%s/%s/', $this->server, $this->version);
+        $handler          = new \GuzzleHttp\Handler\StreamHandler();
+        $stack            = \GuzzleHttp\HandlerStack::create($handler);
+        $this->httpClient = new HttpClient(
+            [
+                'handler'  => $stack,
+                'base_uri' => $baseUri,
+                'timeout'  => 30,
+            ]
+        );
+    }
 
     /**
      * Watch prefix
