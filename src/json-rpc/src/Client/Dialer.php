@@ -19,6 +19,11 @@ class Dialer
     public $timeout = 5.0;
 
     /**
+     * @var int
+     */
+    public $retry = 3;
+
+    /**
      * @var RegistryInterface
      */
     public $registry;
@@ -64,13 +69,21 @@ class Dialer
      */
     public function dialFromService(string $name)
     {
-        $service = $this->registry->get($name);
-        $conn    = new Connection([
-            'host'    => $service->getAddress(),
-            'port'    => $service->getPort(),
-            'timeout' => $this->timeout,
-        ]);
-        $conn->connect();
+        for ($i = 0; $i < $this->retry; $i++) {
+            try {
+                $service = $this->registry->get($name);
+                $conn    = new Connection([
+                    'host'    => $service->getAddress(),
+                    'port'    => $service->getPort(),
+                    'timeout' => $this->timeout,
+                ]);
+                $conn->connect();
+            } catch (\Throwable $ex) {
+                if ($i == $this->retry - 1) {
+                    throw $ex;
+                }
+            }
+        }
         return $conn;
     }
 
