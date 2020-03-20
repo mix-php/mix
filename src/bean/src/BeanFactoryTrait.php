@@ -48,6 +48,7 @@ Trait BeanFactoryTrait
      * 装载
      * 实例化所有单例 (Scope == SINGLETON)
      * 提前装载能暴露出有异常的代码，便于发现问题
+     * @deprecated 移除
      */
     public function load()
     {
