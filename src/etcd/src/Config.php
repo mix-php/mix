@@ -5,8 +5,8 @@ namespace Mix\Etcd;
 use Mix\Bean\BeanInjector;
 use Mix\Concurrent\Timer;
 use Mix\Etcd\Client\Client;
-use Mix\Micro\Event\DeleteEvent;
-use Mix\Micro\Event\PutEvent;
+use Mix\Micro\Config\Event\DeleteEvent;
+use Mix\Micro\Config\Event\PutEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**

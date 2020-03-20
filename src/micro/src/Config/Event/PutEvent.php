@@ -1,10 +1,10 @@
 <?php
 
-namespace Mix\Micro\Event;
+namespace Mix\Micro\Config\Event;
 
 /**
  * Class PutEvent
- * @package Mix\Micro\Event
+ * @package Mix\Micro\Config\Event
  */
 class PutEvent
 {
