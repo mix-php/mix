@@ -2,8 +2,8 @@
 
 namespace Mix\Etcd\Service;
 
-use Mix\Micro\ServiceBundleInterface;
-use Mix\Micro\ServiceInterface;
+use Mix\Micro\Service\ServiceBundleInterface;
+use Mix\Micro\Service\ServiceInterface;
 
 /**
  * Class ServiceBundle

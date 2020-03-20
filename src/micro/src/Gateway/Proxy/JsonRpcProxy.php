@@ -10,10 +10,10 @@ use Mix\JsonRpc\Client\Dialer;
 use Mix\JsonRpc\Factory\ResponseFactory;
 use Mix\JsonRpc\Helper\JsonRpcHelper;
 use Mix\Micro\Gateway\Exception\ProxyException;
-use Mix\Micro\Exception\NotFoundException;
+use Mix\Micro\Service\Exception\NotFoundException;
 use Mix\Micro\Gateway\ProxyInterface;
-use Mix\Micro\RegistryInterface;
-use Mix\Micro\ServiceInterface;
+use Mix\Micro\Service\RegistryInterface;
+use Mix\Micro\Service\ServiceInterface;
 
 /**
  * Class JsonRpcProxy

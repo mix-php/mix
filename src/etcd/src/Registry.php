@@ -6,10 +6,10 @@ use Mix\Bean\BeanInjector;
 use Mix\Etcd\Client\Client;
 use Mix\Etcd\Monitor\Monitor;
 use Mix\Etcd\Register\Registrar;
-use Mix\Micro\Exception\NotFoundException;
-use Mix\Micro\ServiceBundleInterface;
-use Mix\Micro\RegistryInterface;
-use Mix\Micro\ServiceInterface;
+use Mix\Micro\Service\Exception\NotFoundException;
+use Mix\Micro\Service\ServiceBundleInterface;
+use Mix\Micro\Service\RegistryInterface;
+use Mix\Micro\Service\ServiceInterface;
 
 /**
  * Class Registry

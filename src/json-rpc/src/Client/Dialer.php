@@ -3,8 +3,8 @@
 namespace Mix\JsonRpc\Client;
 
 use Mix\Bean\BeanInjector;
-use Mix\Micro\RegistryInterface;
-use Mix\Micro\ServiceInterface;
+use Mix\Micro\Service\RegistryInterface;
+use Mix\Micro\Service\ServiceInterface;
 
 /**
  * Class Dialer

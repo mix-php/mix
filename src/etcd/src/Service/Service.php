@@ -2,7 +2,7 @@
 
 namespace Mix\Etcd\Service;
 
-use Mix\Micro\ServiceInterface;
+use Mix\Micro\Service\ServiceInterface;
 
 /**
  * Class Service

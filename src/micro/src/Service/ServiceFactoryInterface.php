@@ -1,10 +1,10 @@
 <?php
 
-namespace Mix\Micro;
+namespace Mix\Micro\Service;
 
 /**
  * Interface ServiceFactoryInterface
- * @package Mix\Micro
+ * @package Mix\Micro\Service
  */
 interface ServiceFactoryInterface
 {

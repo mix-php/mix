@@ -3,9 +3,9 @@
 namespace Mix\Etcd\Factory;
 
 use Mix\Etcd\Service\Service;
-use Mix\Micro\Helper\ServiceHelper;
-use Mix\Micro\ServiceFactoryInterface;
-use Mix\Micro\ServiceInterface;
+use Mix\Micro\Service\Helper\ServiceHelper;
+use Mix\Micro\Service\ServiceFactoryInterface;
+use Mix\Micro\Service\ServiceInterface;
 
 /**
  * Class ServiceFactory

@@ -6,7 +6,7 @@ use Mix\Etcd\Service\Service;
 use Mix\Etcd\Service\ServiceBundle;
 use Mix\JsonRpc\Server as JsonRpcServer;
 use Mix\Http\Server\Server as HttpServer;
-use Mix\Micro\Helper\ServiceHelper;
+use Mix\Micro\Service\Helper\ServiceHelper;
 use Mix\Route\Router;
 
 /**

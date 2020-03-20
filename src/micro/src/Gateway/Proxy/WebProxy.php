@@ -8,11 +8,11 @@ use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Message\Stream\FileStream;
 use Mix\Micro\Gateway\Exception\ProxyException;
-use Mix\Micro\Exception\NotFoundException;
+use Mix\Micro\Service\Exception\NotFoundException;
 use Mix\Micro\Gateway\Helper\ProxyHelper;
 use Mix\Micro\Gateway\ProxyInterface;
-use Mix\Micro\RegistryInterface;
-use Mix\Micro\ServiceInterface;
+use Mix\Micro\Service\RegistryInterface;
+use Mix\Micro\Service\ServiceInterface;
 use Mix\WebSocket\Upgrader;
 use Swoole\Coroutine\Http\Client;
 
