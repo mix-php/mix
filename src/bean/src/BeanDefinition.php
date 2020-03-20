@@ -128,6 +128,9 @@ class BeanDefinition
         $coverProperties      = [];
         foreach ($config as $key => $value) {
             if (is_numeric($key)) {
+                if (is_null($value)) {
+                    continue;
+                }
                 $coverConstructorArgs[$key] = $value;
             } else {
                 $coverProperties[$key] = $value;
