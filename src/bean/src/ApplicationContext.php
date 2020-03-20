@@ -22,8 +22,8 @@ class ApplicationContext implements BeanFactoryInterface, ContainerInterface
     {
         // 导入属性
         $this->config = $config;
-        // 初始化
-        $this->init();
+        // 解析
+        $this->parse();
     }
 
     /**

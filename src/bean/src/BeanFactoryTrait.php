@@ -31,9 +31,9 @@ Trait BeanFactoryTrait
     protected $objects = [];
 
     /**
-     * 初始化
+     * 解析
      */
-    public function init()
+    public function parse()
     {
         $definitions = [];
         foreach ($this->config as $item) {

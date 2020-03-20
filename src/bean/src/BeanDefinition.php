@@ -99,8 +99,7 @@ class BeanDefinition
      */
     public function getClass(): string
     {
-        $class = $this->class;
-        return $class;
+        return $this->class;
     }
 
     /**
