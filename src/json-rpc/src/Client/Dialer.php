@@ -3,6 +3,7 @@
 namespace Mix\JsonRpc\Client;
 
 use Mix\Bean\BeanInjector;
+use Mix\Micro\Service\Exception\NotFoundException;
 use Mix\Micro\Service\RegistryInterface;
 use Mix\Micro\Service\ServiceInterface;
 
@@ -66,6 +67,7 @@ class Dialer
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
      * @throws \Swoole\Exception
+     * @throws NotFoundException
      */
     public function dialFromService(string $name)
     {
@@ -78,6 +80,9 @@ class Dialer
                     'timeout' => $this->timeout,
                 ]);
                 $conn->connect();
+                break;
+            } catch (NotFoundException $ex) {
+                throw $ex;
             } catch (\Throwable $ex) {
                 if ($i == $this->retry - 1) {
                     throw $ex;
