@@ -170,7 +170,7 @@ class BeanDefinition
      */
     public function refresh()
     {
-        if (!isset($this->object) || isset($this->beanFactory)) {
+        if (!isset($this->object) || !isset($this->beanFactory)) {
             return;
         }
         $this->object = null;
