@@ -168,20 +168,21 @@ class Config
             $config           = $this->pull();
             $lastConfig       = $this->lastConfig;
             $this->lastConfig = $config;
-            $diff             = array_diff_assoc($lastConfig, $config);
-            foreach ($diff as $key => $value) {
-                // delete
-                if (isset($lastConfig[$key]) && !isset($config[$key])) {
-                    $event      = new DeleteEvent();
-                    $event->key = $key;
-                    $this->dispatcher->dispatch($event);
-                    continue;
-                }
+            foreach (array_diff_assoc($config, $lastConfig) as $key => $value) {
                 // put
                 $event        = new PutEvent();
                 $event->key   = $key;
                 $event->value = $value;
                 $this->dispatcher->dispatch($event);
+            }
+            foreach (array_diff_assoc($lastConfig, $config) as $key => $value) {
+                // delete
+                if (!isset($config[$key])) {
+                    $event      = new DeleteEvent();
+                    $event->key = $key;
+                    $this->dispatcher->dispatch($event);
+                    continue;
+                }
             }
         });
     }
