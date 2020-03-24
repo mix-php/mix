@@ -49,7 +49,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
     protected $server;
 
     /**
-     * @var object[]
+     * @var array [[$service, $namespace, $suffix],...]
      */
     protected $services = [];
 
@@ -73,29 +73,64 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
 
     /**
      * 获取全部 service 名称, 通过类名
+     *
+     * Class                                              Service           Method
+     * [namespace]User[suffix]::Add                       user              User.Add
+     * [namespace]Greeter/Say[suffix]::Hello              greeter           Say.Hello
+     * [namespace]China/Greeter/Say[suffix]::Hello        china.greeter     Say.Hello
+     *
      * @return string[]
      */
     public function services()
     {
         $services = [];
-        foreach ($this->services as $service) {
-            $className  = strtolower(basename(str_replace('\\', '/', get_class($service))));
-            $services[] = $className;
+        foreach ($this->services as $item) {
+            list($service, $namespace, $suffix) = $item;
+            $name = get_class($service);
+
+            $namespace = substr($namespace, -1, 1) == '\\' ? $namespace : $namespace . '\\';
+            $name      = str_replace($namespace, '', $name);
+
+            $suffixLength = strlen($suffix);
+            $name         = ($suffixLength > 0 and substr($name, -$suffixLength, $suffixLength) == $suffix) ? substr($name, 0, -$suffixLength) : $name;
+
+            $slice = array_filter(explode('\\', strtolower($name)));
+            switch (count($slice)) {
+                case 0:
+                    $name = '';
+                    break;
+                case 1:
+                case 2:
+                    $name = array_shift($slice);
+                    break;
+                default:
+                    array_pop($slice);
+                    $name = implode('.', $slice);
+            }
+            $services[] = $name;
         }
         return $services;
     }
 
     /**
      * Register
+     * 相同 Class 名，即便命名空间不同也会被覆盖
      * @param object $service
+     * @param string $namespace
+     * @param string $suffix
      */
-    public function register(object $service)
+    public function register(object $service, string $namespace = '', $suffix = '')
     {
-        array_push($this->services, $service);
-        $className = str_replace('/', '\\', basename(str_replace('\\', '/', get_class($service))));
-        $methods   = get_class_methods($service);
+        array_push($this->services, [$service, $namespace, $suffix]);
+
+        $name         = get_class($service);
+        $name         = basename(str_replace('\\', '/', $name));
+        $suffixLength = strlen($suffix);
+        $name         = ($suffixLength > 0 and substr($name, -$suffixLength, $suffixLength) == $suffix) ? substr($name, 0, -$suffixLength) : $name;
+
+        $methods = get_class_methods($service);
         foreach ($methods as $method) {
-            $this->callables[sprintf('%s.%s', $className, $method)] = [$service, $method];
+            $this->callables[sprintf('%s.%s', $name, $method)] = [$service, $method];
         }
     }
 

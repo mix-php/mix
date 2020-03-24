@@ -88,8 +88,8 @@ class Server
      * 获取 url 规则映射的全部 service 名称
      *
      * Url                  Service        Method
-     * /                    index          
-     * /foo                 foo            
+     * /                    index
+     * /foo                 foo
      * /foo/bar             foo            Foo.Bar
      * /foo/bar/baz         foo            Bar.Baz
      * /foo/bar/baz/cat     foo.bar        Baz.Cat
@@ -100,7 +100,7 @@ class Server
     {
         $services = [];
         foreach (array_keys($this->callbacks) as $pattern) {
-            $slice = array_filter(explode('/', $pattern));
+            $slice = array_filter(explode('/', strtolower($pattern)));
             switch (count($slice)) {
                 case 0:
                     $name = 'index';
@@ -113,7 +113,7 @@ class Server
                 default:
                     array_pop($slice);
                     array_pop($slice);
-                    $name = implode('/', $slice);
+                    $name = implode('.', $slice);
             }
             $services[] = $name;
         }

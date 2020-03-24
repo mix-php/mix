@@ -153,7 +153,7 @@ class Router implements HandlerInterface
             $regular = $material[0];
             $slice   = explode(' ', $regular);
             $path    = substr($slice[1], 0, -3);
-            $slice   = array_filter(explode('\/', $path));
+            $slice   = array_filter(explode('\/', strtolower($path)));
             switch (count($slice)) {
                 case 0:
                     $name = 'index';
@@ -166,7 +166,7 @@ class Router implements HandlerInterface
                 default:
                     array_pop($slice);
                     array_pop($slice);
-                    $name = implode('/', $slice);
+                    $name = implode('.', $slice);
             }
             $services[] = $name;
         }
