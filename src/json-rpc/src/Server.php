@@ -49,6 +49,11 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
     protected $server;
 
     /**
+     * @var array
+     */
+    protected $options = [];
+
+    /**
      * @var array [[$service, $namespace, $suffix],...]
      */
     protected $services = [];
@@ -69,6 +74,15 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
         $this->host      = $host;
         $this->port      = $port;
         $this->reusePort = $reusePort;
+    }
+
+    /**
+     * Set
+     * @param array $options
+     */
+    public function set(array $options)
+    {
+        $this->options = $options;
     }
 
     /**
@@ -142,9 +156,9 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
     {
         $server = $this->server = new \Mix\Server\Server($this->host, $this->port, false, $this->reusePort);
         $server->set([
-            'open_eof_check' => true,
-            'package_eof'    => Constants::EOF,
-        ]);
+                'open_eof_check' => true,
+                'package_eof'    => Constants::EOF,
+            ] + $this->options);
         $server->start($this);
     }
 

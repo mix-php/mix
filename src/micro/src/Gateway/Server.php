@@ -68,6 +68,11 @@ class Server implements HandlerInterface
     protected $httpServer;
 
     /**
+     * @var array
+     */
+    protected $options = [];
+
+    /**
      * @var ProxyInterface[][]
      */
     protected $proxyMap = [];
@@ -84,6 +89,15 @@ class Server implements HandlerInterface
     }
 
     /**
+     * Set
+     * @param array $options
+     */
+    public function set(array $options)
+    {
+        $this->options = $options;
+    }
+
+    /**
      * Start
      * @throws \Swoole\Exception
      */
@@ -95,6 +109,7 @@ class Server implements HandlerInterface
         }
         // 启动
         $server = $this->httpServer = new HttpServer($this->host, $this->port, $this->ssl, $this->reusePort);
+        $server->set($this->options);
         $server->start($this);
     }
 

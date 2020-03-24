@@ -38,6 +38,11 @@ class Server implements HandlerInterface
     protected $server;
 
     /**
+     * @var array
+     */
+    protected $options = [];
+
+    /**
      * Server constructor.
      * @param int $port
      * @param bool $reusePort
@@ -49,6 +54,15 @@ class Server implements HandlerInterface
     }
 
     /**
+     * Set
+     * @param array $options
+     */
+    public function set(array $options)
+    {
+        $this->options = $options;
+    }
+
+    /**
      * Start
      * @throws \Swoole\Exception
      */
@@ -56,9 +70,9 @@ class Server implements HandlerInterface
     {
         $server = $this->server = new \Mix\Server\Server('127.0.0.1', $this->port, false, $this->reusePort);
         $server->set([
-            'open_eof_check' => true,
-            'package_eof'    => Constants::EOF,
-        ]);
+                'open_eof_check' => true,
+                'package_eof'    => Constants::EOF,
+            ] + $this->options);
         $server->start($this);
     }
 
