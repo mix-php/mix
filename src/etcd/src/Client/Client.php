@@ -75,6 +75,15 @@ class Client extends \Etcd\Client
     }
 
     /**
+     * Get Token
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
      * Watch prefix
      * @param string $prefix
      * @param \Closure $func
@@ -82,7 +91,7 @@ class Client extends \Etcd\Client
      */
     public function watchKeysWithPrefix(string $prefix, \Closure $func)
     {
-        return new Watcher($this->server, $this->token, $prefix, $func);
+        return new Watcher($this->server, $this, $prefix, $func);
     }
 
     /**

@@ -18,9 +18,9 @@ class Watcher
     public $server;
 
     /**
-     * @var string
+     * @var Client
      */
-    public $token = '';
+    public $client;
 
     /**
      * @var string
@@ -45,7 +45,7 @@ class Watcher
     /**
      * @var \Swoole\Coroutine\Client
      */
-    protected $client;
+    protected $swooleClient;
 
     /**
      * Connect timeout
@@ -56,14 +56,14 @@ class Watcher
     /**
      * Watcher constructor.
      * @param string $server
-     * @param string $token
+     * @param Client $client
      * @param string $prefix
      * @param \Closure $func
      */
-    public function __construct(string $server, string $token, string $prefix, \Closure $func)
+    public function __construct(string $server, Client $client, string $prefix, \Closure $func)
     {
         $this->server = $server;
-        $this->token  = $token;
+        $this->client = $client;
         $this->prefix = $prefix;
         $this->func   = $func;
     }
@@ -125,8 +125,8 @@ class Watcher
      */
     public function watch()
     {
-        $client               = $this->client = $this->createClient();
-        $token                = $this->token;
+        $client               = $this->swooleClient = $this->createClient();
+        $token                = $this->client->getToken();
         $prefix               = $this->prefix;
         $lastIndex            = strlen($prefix) - 1;
         $lastChar             = $prefix[$lastIndex];
@@ -174,17 +174,18 @@ EOF;
      */
     public function close()
     {
+        $client       = $this->swooleClient;
         $this->closed = true;
         if (!$this->watching) {
             return;
         }
-        if (!isset($this->client)) {
+        if (!isset($client)) {
             // 等待 go 执行一会，当 close 在刚 forever 执行后就被立即调用的时候
             $timer        = Timer::new();
             $timer->count = 0;
             $timer->tick(500, function () use ($timer) {
-                if (isset($this->client)) {
-                    $this->client->close();
+                if (isset($client)) {
+                    $client->close();
                     $timer->clear();
                     return;
                 }
@@ -196,7 +197,7 @@ EOF;
             });
             return;
         }
-        $this->client->close();
+        $client->close();
     }
 
 }
