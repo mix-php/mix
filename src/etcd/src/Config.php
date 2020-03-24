@@ -107,11 +107,7 @@ class Config
     protected function createClient()
     {
         $client = new Client(sprintf('%s:%d', $this->host, $this->port), $this->version);
-        $client->setPretty(true);
-        $token = $client->authenticate($this->user, $this->password);
-        if (is_string($token)) {
-            $client->setToken($token);
-        }
+        $client->auth($this->user, $this->password);
         return $client;
     }
 
