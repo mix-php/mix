@@ -342,7 +342,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
      */
     public function shutdown()
     {
-        $this->server->shutdown();
+        $this->server and $this->server->shutdown();
     }
 
 }

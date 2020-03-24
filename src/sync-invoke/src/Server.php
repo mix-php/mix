@@ -136,7 +136,7 @@ class Server implements HandlerInterface
      */
     public function shutdown()
     {
-        $this->server->shutdown();
+        $this->server and $this->server->shutdown();
     }
 
 }
