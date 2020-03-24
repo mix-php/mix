@@ -90,8 +90,8 @@ class Router implements HandlerInterface
                 }
             } else {
                 $rule['middleware'] = array_merge($middleware, $rule['middleware']);
+                $data[$url]         = $rule;
             }
-            $data[$url] = $rule;
         }
         return $data;
     }
