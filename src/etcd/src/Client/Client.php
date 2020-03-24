@@ -58,6 +58,7 @@ class Client extends \Etcd\Client
      */
     public function auth($user, $password)
     {
+        $this->token    = null;
         $this->user     = $user;
         $this->password = $password;
         $token          = $this->authenticate($user, $password); // token default ttl 10m
@@ -191,6 +192,5 @@ class Client extends \Etcd\Client
         }
         return $result;
     }
-
 
 }
