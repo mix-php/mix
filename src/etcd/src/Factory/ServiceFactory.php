@@ -58,7 +58,7 @@ class ServiceFactory implements ServiceFactoryInterface
         $service = $this->createService($name, $address, $port);
         $service->withMetadata('transport', 'http');
         $service->withMetadata('protocol', 'html');
-        $service->withMetadata('type', 'api');
+        $service->withMetadata('type', 'web');
         return $service;
     }
 

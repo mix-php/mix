@@ -39,7 +39,7 @@ class ServiceBundleFactory
         $serviceFactory = new ServiceFactory();
         $serviceBundle  = $this->createServiceBundle();
         foreach (!is_null($router) ? $router->services() : $server->services() as $name) {
-            $service = $serviceFactory->createJsonRpcService(
+            $service = $serviceFactory->createApiService(
                 sprintf('%s.%s', $namespace, $name),
                 ServiceHelper::localIP(),
                 $server->port
@@ -59,7 +59,17 @@ class ServiceBundleFactory
      */
     public function createServiceBundleFromWeb(HttpServer $server, Router $router = null, string $namespace = 'php.micro.web')
     {
-        return $this->createServiceBundleFromAPI($server, $router, $namespace);
+        $serviceFactory = new ServiceFactory();
+        $serviceBundle  = $this->createServiceBundle();
+        foreach (!is_null($router) ? $router->services() : $server->services() as $name) {
+            $service = $serviceFactory->createWebService(
+                sprintf('%s.%s', $namespace, $name),
+                ServiceHelper::localIP(),
+                $server->port
+            );
+            $serviceBundle->add($service);
+        }
+        return $serviceBundle;
     }
 
     /**
