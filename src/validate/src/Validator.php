@@ -197,7 +197,7 @@ class Validator implements \JsonSerializable
     public function jsonSerialize()
     {
         $data = [];
-        foreach (get_class_vars(static::class) as $key => $val) {
+        foreach ($this as $key => $val) {
             if (in_array($key, ['attributes', 'uploadedFiles', '_scenario', '_validators', '_errors'])) {
                 continue;
             }
