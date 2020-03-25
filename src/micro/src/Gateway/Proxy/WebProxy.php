@@ -73,6 +73,8 @@ class WebProxy implements ProxyInterface
      * /foo/bar             foo            Foo.Bar
      * /foo/bar/baz         foo            Bar.Baz
      * /foo/bar/baz/cat     foo.bar        Baz.Cat
+     * /v1/foo/bar          v1.foo         Foo.Bar
+     * /v1/foo/bar/baz      v1.foo         Bar.Baz
      *
      * @param RegistryInterface $registry
      * @param ServerRequest $request
@@ -81,8 +83,12 @@ class WebProxy implements ProxyInterface
      */
     public function service(RegistryInterface $registry, ServerRequest $request)
     {
-        $path  = $request->getUri()->getPath();
-        $slice = array_filter(explode('/', $path));
+        $path    = $request->getUri()->getPath();
+        $slice   = array_filter(explode('/', $path));
+        $version = '';
+        if (isset($slice[1]) && stripos($slice[1], 'v') === 0) {
+            $version = array_shift($slice) . '.';
+        }
         switch (count($slice)) {
             case 0:
                 $name = 'index';
@@ -97,7 +103,7 @@ class WebProxy implements ProxyInterface
                 array_pop($slice);
                 $name = implode('/', $slice);
         }
-        return $registry->get(sprintf('%s.%s', $this->namespace, $name));
+        return $registry->get(sprintf('%s.%s', $this->namespace, $version . $name));
     }
 
     /**

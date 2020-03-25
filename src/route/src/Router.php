@@ -143,6 +143,8 @@ class Router implements HandlerInterface
      * /foo/bar             foo            Foo.Bar
      * /foo/bar/baz         foo            Bar.Baz
      * /foo/bar/baz/cat     foo.bar        Baz.Cat
+     * /v1/foo/bar          v1.foo         Foo.Bar
+     * /v1/foo/bar/baz      v1.foo         Bar.Baz
      *
      * @return string[]
      */
@@ -154,6 +156,10 @@ class Router implements HandlerInterface
             $slice   = explode(' ', $regular);
             $path    = substr($slice[1], 0, -3);
             $slice   = array_filter(explode('\/', strtolower($path)));
+            $version = '';
+            if (isset($slice[1]) && stripos($slice[1], 'v') === 0) {
+                $version = array_shift($slice) . '.';
+            }
             switch (count($slice)) {
                 case 0:
                     $name = 'index';
@@ -168,7 +174,7 @@ class Router implements HandlerInterface
                     array_pop($slice);
                     $name = implode('.', $slice);
             }
-            $services[] = $name;
+            $services[] = $version . $name;
         }
         return $services;
     }
