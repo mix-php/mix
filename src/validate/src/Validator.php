@@ -11,7 +11,7 @@ use Psr\Http\Message\UploadedFileInterface;
  * @package Mix\Validate
  * @author liu,jian <coder.keda@gmail.com>
  */
-class Validator
+class Validator implements \JsonSerializable
 {
 
     /**
@@ -188,6 +188,22 @@ class Validator
         $item  = array_shift($errors);
         $error = array_shift($item);
         return $error;
+    }
+
+    /**
+     * Json serialize
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        $data = [];
+        foreach (get_class_vars(static::class) as $key => $val) {
+            if (in_array($key, ['attributes', 'uploadedFiles', '_scenario', '_validators', '_errors'])) {
+                continue;
+            }
+            $data[$key] = $val;
+        }
+        return $data;
     }
 
 }
