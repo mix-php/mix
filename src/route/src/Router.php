@@ -137,15 +137,15 @@ class Router implements HandlerInterface
     /**
      * 获取 url 规则映射的全部 service 名称
      *
-     * Url                  Service        Method
+     * Url                  Service        
      * /                    index
      * /foo                 foo
-     * /foo/bar             foo            Foo.Bar
-     * /foo/bar/baz         foo            Bar.Baz
-     * /foo/bar/baz/cat     foo.bar        Baz.Cat
-     * /v1/foo/bar          v1.foo         Foo.Bar
-     * /v1/foo/bar/baz      v1.foo         Bar.Baz
-     * /v1/foo/bar/baz/cat  v1.foo.bar     Baz.Cat
+     * /foo/bar             foo            
+     * /foo/bar/baz         foo            
+     * /foo/bar/baz/cat     foo.bar        
+     * /v1/foo/bar          v1.foo         
+     * /v1/foo/bar/baz      v1.foo         
+     * /v1/foo/bar/baz/cat  v1.foo.bar     
      *
      * @return string[]
      */
