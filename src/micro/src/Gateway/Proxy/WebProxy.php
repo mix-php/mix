@@ -75,6 +75,7 @@ class WebProxy implements ProxyInterface
      * /foo/bar/baz/cat     foo.bar        Baz.Cat
      * /v1/foo/bar          v1.foo         Foo.Bar
      * /v1/foo/bar/baz      v1.foo         Bar.Baz
+     * /v1/foo/bar/baz/cat  v1.foo.bar     Baz.Cat
      *
      * @param RegistryInterface $registry
      * @param ServerRequest $request
