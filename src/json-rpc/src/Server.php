@@ -89,9 +89,12 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
      * 获取全部 service 名称, 通过类名
      *
      * Class                                              Service           Method
-     * [namespace]User[suffix]::Add                       user              User.Add
-     * [namespace]Greeter/Say[suffix]::Hello              greeter           Say.Hello
-     * [namespace]China/Greeter/Say[suffix]::Hello        china.greeter     Say.Hello
+     * [namespace]Foo[suffix]::Bar                        foo               Foo.Bar
+     * [namespace]Foo/Bar[suffix]::Baz                    foo               Bar.Baz
+     * [namespace]Foo/Bar/Baz[suffix]::Cat                foo.bar           Baz.Cat
+     * [namespace]V1/Foo[suffix]::Bar                     v1.foo            Foo.Bar
+     * [namespace]V1/Foo/Bar[suffix]::Baz                 v1.foo.bar        Bar.Baz
+     * [namespace]V1/Foo/Bar/Baz[suffix]::Cat             v1.foo.bar        Baz.Cat
      *
      * @return string[]
      */
@@ -108,7 +111,11 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
             $suffixLength = strlen($suffix);
             $name         = ($suffixLength > 0 and substr($name, -$suffixLength, $suffixLength) == $suffix) ? substr($name, 0, -$suffixLength) : $name;
 
-            $slice = array_filter(explode('\\', strtolower($name)));
+            $slice   = array_filter(explode('\\', strtolower($name)));
+            $version = '';
+            if (isset($slice[0]) && stripos($slice[0], 'v') === 0) {
+                $version = array_shift($slice) . '.';
+            }
             switch (count($slice)) {
                 case 0:
                     $name = '';
@@ -121,7 +128,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
                     array_pop($slice);
                     $name = implode('.', $slice);
             }
-            $services[] = $name;
+            $services[] = $version . $name;
         }
         return $services;
     }
