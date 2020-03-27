@@ -14,6 +14,7 @@ class FileHandler implements LoggerHandlerInterface
 
     /**
      * 轮转规则
+     * @deprecated 废弃，固定只可使用 ROTATE_DAY
      */
     const ROTATE_HOUR = 1;
     const ROTATE_DAY = 2;
@@ -22,26 +23,45 @@ class FileHandler implements LoggerHandlerInterface
     /**
      * 单文件
      * @var string
+     * @deprecated 废弃，统一使用 filename
      */
     public $single = '';
 
     /**
      * 日志目录
      * @var string
+     * @deprecated 废弃，统一使用 filename
      */
     public $dir = '';
 
     /**
-     * 日志轮转类型
-     * @var int
+     * 文件名 (绝对路径)
+     * @var string
      */
-    public $rotate = self::ROTATE_DAY;
+    public $filename = '';
+
+    /**
+     * 是否开启轮转
+     * @var bool
+     */
+    public $rotate = true;
 
     /**
      * 最大文件尺寸
      * @var int
      */
     public $maxFileSize = 0;
+
+    /**
+     * 最大天数
+     * @var int
+     */
+    public $maxDays = 7;
+
+    /**
+     * @var string
+     */
+    protected $today = '';
 
     /**
      * FileHandler constructor.
@@ -61,65 +81,107 @@ class FileHandler implements LoggerHandlerInterface
      */
     public function handle($level, $message)
     {
-        $file    = $this->getLogFile($level);
-        $message = preg_replace("/\\e\[[0-9]+m/", '', $message); // 过滤颜色
+        $file = $this->filename;
         if (!$file) {
             return;
         }
+
+        // 创建目录
+        $dir = dirname($file);
+        is_dir($dir) or mkdir($dir, 0777, true);
+
+        $this->rotate();
+
+        $message = preg_replace("/\\e\[[0-9]+m/", '', $message); // 过滤颜色
         error_log($message, 3, $file);
     }
 
     /**
-     * 获取日志文件
-     * @param $level
-     * @return bool|string
+     * 轮转
      */
-    protected function getLogFile($level)
+    protected function rotate()
     {
-        // 没有文件信息
-        if (!$this->single && !$this->dir) {
-            return false;
+        $file = $this->filename;
+        if (!$file || !file_exists($file)) {
+            return;
         }
-        // 单文件
-        if ($this->single) {
-            return $this->single;
+        if (!$this->rotate) {
+            return;
         }
-        // 生成文件名
-        $logDir = $this->dir;
-        switch ($this->rotate) {
-            case self::ROTATE_HOUR:
-                $subDir     = date('Ymd');
-                $timeFormat = date('YmdH');
-                break;
-            case self::ROTATE_DAY:
-                $subDir     = date('Ym');
-                $timeFormat = date('Ymd');
-                break;
-            case self::ROTATE_WEEKLY:
-                $subDir     = date('Y');
-                $timeFormat = date('YW');
-                break;
-            default:
-                $subDir     = '';
-                $timeFormat = '';
+
+        $today = date('Ymd');
+        if (!$this->today) {
+            $this->today = $today;
         }
-        if (in_array($level, Constants::LEVELS)) {
-            $prefix = '';
-        } else {
-            $prefix = "{$level}_";
+        $move = false;
+        if ($this->maxFileSize > 0 && filesize($file) >= $this->maxFileSize) {
+            $move = true;
         }
-        $filename = $logDir . ($subDir ? DIRECTORY_SEPARATOR . $subDir : '') . DIRECTORY_SEPARATOR . $prefix . ($timeFormat ?: '');
-        $file     = "{$filename}.log";
-        // 创建目录
-        $dir = dirname($file);
-        is_dir($dir) or mkdir($dir, 0777, true);
-        // 尺寸轮转
+        if ($this->today != $today) {
+            $move = true;
+        }
+        if (!$move) {
+            return;
+        }
+
         $number = 0;
-        while (file_exists($file) && $this->maxFileSize > 0 && filesize($file) >= $this->maxFileSize) {
-            $file = "{$filename}_" . ++$number . '.log';
+        $info   = pathinfo($file);
+        while (file_exists($file)) {
+            ++$number;
+            $numberString = (string)$number;
+            $multiplier   = 3 - strlen($numberString);
+            $numberString = str_repeat('0', $multiplier < 0 ? 0 : $multiplier) . $numberString;
+            $file         = sprintf('%s_%s_%s.%s', $info['filename'], $this->today, $numberString, $info['extension']);
         }
-        // 返回
-        return $file;
+
+        $ok = @rename($this->filename, $file);
+        if ($ok and $this->today != $today) {
+            $this->clear();
+        }
+
+        $this->today = $today;
+    }
+
+    /**
+     * 清理多余的日志文件
+     */
+    protected function clear()
+    {
+        $info    = pathinfo($this->filename);
+        $prefixs = [];
+        for ($i = -$this->maxDays; $i <= -1; $i++) {
+            $day       = date('Ymd', strtotime(sprintf('%d day', $i)));
+            $prefixs[] = sprintf('%s_%s_', $info['filename'], $day);
+        }
+
+        $dir = dirname($this->filename);
+        $dh  = @opendir($dir);
+        if (!$dh) {
+            return;
+        }
+        while (false !== ($file = readdir($dh))) {
+            if ($file == '.' || $file == '..') {
+                continue;
+            }
+            $full = $dir . '/' . $file;
+            if (!is_file($full)) {
+                continue;
+            }
+            if (strpos($file, $info['filename']) !== 0) {
+                continue;
+            }
+
+            $stet = false;
+            foreach ($prefixs as $prefix) {
+                if (strpos($file, $prefix) === 0) {
+                    $stet = true;
+                    break;
+                }
+            }
+            if (!$stet) {
+                @unlink($full);
+            }
+        }
     }
 
 }
