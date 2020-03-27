@@ -2,8 +2,10 @@
 
 namespace Mix\Console;
 
+use Mix\Console\Event\HandleExceptionEvent;
 use Mix\Console\Exception\ErrorException;
 use Mix\Console\Exception\NotFoundException;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -25,14 +27,21 @@ class Error
     public $logger;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    public $dispatcher;
+
+    /**
      * Error constructor.
      * @param int $level
      * @param LoggerInterface $logger
+     * @param EventDispatcherInterface|null $dispatcher
      */
-    public function __construct(int $level, LoggerInterface $logger)
+    public function __construct(int $level, LoggerInterface $logger, EventDispatcherInterface $dispatcher = null)
     {
-        $this->level  = $level;
-        $this->logger = $logger;
+        $this->level      = $level;
+        $this->logger     = $logger;
+        $this->dispatcher = $dispatcher;
         $this->register();
     }
 
@@ -85,11 +94,26 @@ class Error
 
     /**
      * 异常处理
-     * @param $e
+     * @param $ex
      */
-    public function appException($e)
+    public function appException($ex)
     {
-        $this->handleException($e);
+        $event = new HandleExceptionEvent();
+        $this->dispatch($event);
+        // handle
+        $this->handleException($ex);
+    }
+
+    /**
+     * Dispatch
+     * @param object $event
+     */
+    protected function dispatch(object $event)
+    {
+        if (!isset($this->dispatcher)) {
+            return;
+        }
+        $this->dispatcher->dispatch($event);
     }
 
     /**
@@ -171,29 +195,29 @@ class Error
 
     /**
      * 异常处理
-     * @param \Throwable $e
+     * @param \Throwable $ex
      */
-    public function handleException(\Throwable $e)
+    public function handleException(\Throwable $ex)
     {
         // 日志处理
-        if ($e instanceof NotFoundException) {
+        if ($ex instanceof NotFoundException) {
             // 打印到屏幕
-            println($e->getMessage());
+            println($ex->getMessage());
             return;
         }
         // 输出日志
-        $this->log($e);
+        $this->log($ex);
     }
 
     /**
      * 输出日志
-     * @param \Throwable $e
+     * @param \Throwable $ex
      */
-    protected function log(\Throwable $e)
+    protected function log(\Throwable $ex)
     {
         $logger = $this->logger;
         // 构造内容
-        list($message, $context) = static::format($e, \Mix::$app->appDebug);
+        list($message, $context) = static::format($ex, \Mix::$app->appDebug);
         // 写入
         $level = static::levelType($context['code']);
         switch ($level) {

@@ -67,7 +67,7 @@ Trait BeanFactoryTrait
     public function getBeanDefinition(string $beanName): BeanDefinition
     {
         if (!isset($this->definitions[$beanName])) {
-            throw new NotFoundException("Bean definition not found: {$beanName}");
+            throw new NotFoundException("Bean definition '{$beanName}' not found");
         }
         return $this->definitions[$beanName];
     }

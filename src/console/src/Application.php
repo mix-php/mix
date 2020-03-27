@@ -119,8 +119,8 @@ class Application
         }
         $this->context = new ApplicationContext($this->beans);
         // 加载核心库
-        $this->error           = $this->context->get('error');
         $this->eventDispatcher = $this->context->get('event');
+        $this->error           = $this->context->get('error');
         // 加载命令
         if ($this->commandPath != '') {
             $this->commands = ConfigHelper::each($this->commandPath);
