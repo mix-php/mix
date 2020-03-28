@@ -40,6 +40,38 @@ class Connection
     }
 
     /**
+     * 获取远程地址
+     * @return array
+     */
+    public function getRemoteAddress()
+    {
+        $address = $this->swooleSocket->getpeername();
+        if ($address) {
+            return $address;
+        }
+        return [
+            'address' => '',
+            'port'    => '',
+        ];
+    }
+
+    /**
+     * 获取本地地址
+     * @return array
+     */
+    public function getLocalAddress()
+    {
+        $address = $this->swooleSocket->getsockname();
+        if ($address) {
+            return $address;
+        }
+        return [
+            'address' => '',
+            'port'    => '',
+        ];
+    }
+
+    /**
      * Recv
      * @return string
      * @throws ReceiveException
