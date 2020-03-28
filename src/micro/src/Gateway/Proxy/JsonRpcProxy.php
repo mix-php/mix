@@ -87,7 +87,7 @@ class JsonRpcProxy implements ProxyInterface
             throw new ProxyException('Invalid content type');
         }
         $body    = $request->getParsedBody();
-        $content = $body['request'] ?? '';
+        $content = $body['request'] ?? null;
         try {
             list($single, $requests) = JsonRpcHelper::parseRequests($content);
         } catch (\Throwable $ex) {

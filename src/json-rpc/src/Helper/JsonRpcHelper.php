@@ -18,31 +18,36 @@ class JsonRpcHelper
 
     /**
      * 解析请求
+     * 在 Gateway 使用时传入的是 array
      * @param string|array $payload
      * @return array [bool $single, Request[] $requests]
      * @throws ParseException
      */
     public static function parseRequests($payload)
     {
-        if (is_string($payload)) {
-            $payload = static::decode($payload);
-            if ($payload === false) {
-                throw new ParseException('Parse request failed');
+        if (is_array($payload)) {
+            foreach ($payload as $key => $value) {
+                is_array($value) and $payload[$key] = (object)$value;
             }
         }
-
+        if (is_string($payload)) {
+            $payload = static::decode($payload);
+        }
+        if (is_null($payload)) {
+            throw new ParseException('Parse request failed');
+        }
         $requests = [];
         $single   = false;
-        if (!empty($payload) && !(isset($payload[0]) && is_array($payload[0]))) {
+        if (!is_array($payload)) {
             $single  = true;
             $payload = [$payload];
         }
         foreach ($payload as $value) {
             $request          = new Request();
-            $request->jsonrpc = $value['jsonrpc'] ?? null;
-            $request->id      = $value['id'] ?? null;
-            $request->method  = $value['method'] ?? null;
-            $request->params  = $value['params'] ?? null;
+            $request->jsonrpc = $value->jsonrpc ?? null;
+            $request->id      = $value->id ?? null;
+            $request->method  = $value->method ?? null;
+            $request->params  = $value->params ?? null;
             $requests[]       = $request;
         }
         return [$single, $requests];
@@ -76,29 +81,29 @@ class JsonRpcHelper
     public static function parseResponses(string $payload)
     {
         $payload = static::decode($payload);
-        if ($payload === false) {
+        if (is_null($payload)) {
             throw new ParseException('Parse responses failed.');
         }
         $responses = [];
-        if (!empty($payload) && !(isset($payload[0]) && is_array($payload[0]))) {
+        if (!is_array($payload)) {
             $payload = [$payload];
         }
         foreach ($payload as $value) {
             $response          = new Response();
-            $response->jsonrpc = $value['jsonrpc'] ?? null;
-            $response->id      = $value['id'] ?? null;
-            $response->method  = $value['method'] ?? null;
-            $response->params  = $value['params'] ?? null;
-            $error             = $value['error'] ?? null;
+            $response->jsonrpc = $value->jsonrpc ?? null;
+            $response->id      = $value->id ?? null;
+            $response->method  = $value->method ?? null;
+            $response->params  = $value->params ?? null;
+            $error             = $value->error ?? null;
             if (!is_null($error)) {
-                $code           = $error['code'] ?? 0;
-                $message        = is_string($error) ? $error : ($error['message'] ?? '');
+                $code           = $error->code ?? 0;
+                $message        = is_string($error) ? $error : ($error->message ?? '');
                 $error          = new Error();
                 $error->code    = $code;
                 $error->message = $message;
             }
             $response->error  = $error;
-            $response->result = $value['result'] ?? null;
+            $response->result = $value->result ?? null;
             $responses[]      = $response;
         }
         return $responses;
@@ -112,33 +117,12 @@ class JsonRpcHelper
      */
     public static function content(bool $single, Response ...$responses)
     {
-        $json = [];
-        foreach ($responses as $response) {
-            $json[] = static::filter($response);
-        }
         if ($single) {
-            $jsonStr = static::encode(array_pop($json)) . Constants::EOF;
+            $jsonStr = static::encode(array_pop($responses)) . Constants::EOF;
         } else {
-            $jsonStr = static::encode($json) . Constants::EOF;
+            $jsonStr = static::encode($responses) . Constants::EOF;
         }
         return $jsonStr;
-    }
-
-    /**
-     * 过滤
-     * @param Response $response
-     * @return array
-     */
-    public static function filter(Response $response)
-    {
-        $array = [];
-        foreach ($response as $key => $value) {
-            if ($key != 'id' && is_null($value)) {
-                continue;
-            }
-            $array[$key] = $value;
-        }
-        return $array;
     }
 
     /**
@@ -153,12 +137,13 @@ class JsonRpcHelper
 
     /**
      * Decode
+     * 不可使用 $assoc = true，会导致 {} 在多次解编码后变 []
      * @param $value
      * @return false|array
      */
     public static function decode($value)
     {
-        return json_decode($value, true);
+        return json_decode($value);
     }
 
 }

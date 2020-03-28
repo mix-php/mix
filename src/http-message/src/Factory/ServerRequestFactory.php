@@ -107,8 +107,8 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
 
         $parsedBody = $request->post ?? []; // swoole 本身能解析 application/x-www-form-urlencoded multipart/form-data 全部的 method
         if ($isFormJson) {
-            $json       = json_decode($request->rawContent(), true, 512);
-            $parsedBody = is_null($json) ? [] : $json;
+            $json       = json_decode($request->rawContent(), false, 512); // assoc = false 为了保留 {} 不被转换为 []
+            $parsedBody = is_null($json) ? [] : (array)$json;
         }
         $serverRequest->withParsedBody($parsedBody);
 
