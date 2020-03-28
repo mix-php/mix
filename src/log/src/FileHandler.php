@@ -131,9 +131,9 @@ class FileHandler implements LoggerHandlerInterface
             $numberString = (string)$number;
             $multiplier   = 3 - strlen($numberString);
             $numberString = str_repeat('0', $multiplier < 0 ? 0 : $multiplier) . $numberString;
-            $file         = sprintf('%s_%s_%s.%s', $info['filename'], $this->today, $numberString, $info['extension']);
+            $file         = sprintf('%s.%s.%s.%s', $info['dirname'] . DIRECTORY_SEPARATOR . $info['filename'], $this->today, $numberString, $info['extension']);
         }
-
+        
         $ok = @rename($this->filename, $file);
         if ($ok and $this->today != $today) {
             $this->clear();
@@ -151,7 +151,7 @@ class FileHandler implements LoggerHandlerInterface
         $prefixs = [];
         for ($i = -$this->maxDays; $i <= -1; $i++) {
             $day       = date('Ymd', strtotime(sprintf('%d day', $i)));
-            $prefixs[] = sprintf('%s_%s_', $info['filename'], $day);
+            $prefixs[] = sprintf('%s.%s.', $info['filename'], $day);
         }
 
         $dir = dirname($this->filename);
@@ -167,7 +167,7 @@ class FileHandler implements LoggerHandlerInterface
             if (!is_file($full)) {
                 continue;
             }
-            if (strpos($file, $info['filename']) !== 0) {
+            if (strpos($file, sprintf('%s_', $info['filename'])) !== 0) {
                 continue;
             }
 
