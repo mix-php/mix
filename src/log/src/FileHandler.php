@@ -124,31 +124,33 @@ class FileHandler implements LoggerHandlerInterface
         if ($move) {
             $lock = sprintf('%s.lock', $this->filename);
             $fp   = fopen($lock, "a+");
-            if (flock($fp, LOCK_EX)) {
-                $number = 0;
-                while (file_exists($file)) {
-                    ++$number;
-                    $numberString = (string)$number;
-                    $multiplier   = 3 - strlen($numberString);
-                    $numberString = str_repeat('0', $multiplier < 0 ? 0 : $multiplier) . $numberString;
-                    $file         = sprintf(
-                        '%s.%s.%s.%s',
-                        $info['dirname'] . DIRECTORY_SEPARATOR . $info['filename'],
-                        $this->today,
-                        $numberString,
-                        $info['extension']
-                    );
-                }
+            if ($fp) {
+                if (flock($fp, LOCK_EX)) {
+                    $number = 0;
+                    while (file_exists($file)) {
+                        ++$number;
+                        $numberString = (string)$number;
+                        $multiplier   = 3 - strlen($numberString);
+                        $numberString = str_repeat('0', $multiplier < 0 ? 0 : $multiplier) . $numberString;
+                        $file         = sprintf(
+                            '%s.%s.%s.%s',
+                            $info['dirname'] . DIRECTORY_SEPARATOR . $info['filename'],
+                            $this->today,
+                            $numberString,
+                            $info['extension']
+                        );
+                    }
 
-                $ok = @rename($this->filename, $file);
-                if ($ok and $this->today != $today) {
-                    $this->clear();
-                }
+                    $ok = @rename($this->filename, $file);
+                    if ($ok and $this->today != $today) {
+                        $this->clear();
+                    }
 
-                flock($fp, LOCK_UN);
-                rmdir($lock);
+                    flock($fp, LOCK_UN);
+                    rmdir($lock);
+                }
+                fclose($fp);
             }
-            fclose($fp);
         }
 
         $this->today = $today;
