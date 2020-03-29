@@ -118,38 +118,37 @@ class FileHandler implements LoggerHandlerInterface
         if ($this->maxFileSize > 0 && filesize($file) >= $this->maxFileSize) {
             $move = true;
         }
-        if (
-            $this->today != $today &&
-            !file_exists(sprintf(
-                '%s.%s.%s.%s',
-                $info['dirname'] . DIRECTORY_SEPARATOR . $info['filename'],
-                $this->today,
-                '001',
-                $info['extension']
-            ))
-        ) {
+        if ($this->today != $today && date('Ymd', filectime($this->filename)) != $today) {
             $move = true;
         }
         if ($move) {
-            $number = 0;
-            while (file_exists($file)) {
-                ++$number;
-                $numberString = (string)$number;
-                $multiplier   = 3 - strlen($numberString);
-                $numberString = str_repeat('0', $multiplier < 0 ? 0 : $multiplier) . $numberString;
-                $file         = sprintf(
-                    '%s.%s.%s.%s',
-                    $info['dirname'] . DIRECTORY_SEPARATOR . $info['filename'],
-                    $this->today,
-                    $numberString,
-                    $info['extension']
-                );
-            }
+            $lock = sprintf('%s.lock', $this->filename);
+            $fp   = fopen($lock, "a+");
+            if (flock($fp, LOCK_EX)) {
+                $number = 0;
+                while (file_exists($file)) {
+                    ++$number;
+                    $numberString = (string)$number;
+                    $multiplier   = 3 - strlen($numberString);
+                    $numberString = str_repeat('0', $multiplier < 0 ? 0 : $multiplier) . $numberString;
+                    $file         = sprintf(
+                        '%s.%s.%s.%s',
+                        $info['dirname'] . DIRECTORY_SEPARATOR . $info['filename'],
+                        $this->today,
+                        $numberString,
+                        $info['extension']
+                    );
+                }
 
-            $ok = @rename($this->filename, $file);
-            if ($ok and $this->today != $today) {
-                $this->clear();
+                $ok = @rename($this->filename, $file);
+                if ($ok and $this->today != $today) {
+                    $this->clear();
+                }
+
+                flock($fp, LOCK_UN);
+                rmdir($lock);
             }
+            fclose($fp);
         }
 
         $this->today = $today;
@@ -173,14 +172,14 @@ class FileHandler implements LoggerHandlerInterface
             return;
         }
         while (false !== ($file = readdir($dh))) {
-            if ($file == '.' || $file == '..') {
+            if (in_array($file, ['.', '..', $info['basename'], sprintf('%s.lock', $info['basename'])])) {
                 continue;
             }
             $full = $dir . '/' . $file;
             if (!is_file($full)) {
                 continue;
             }
-            if (strpos($file, sprintf('%s_', $info['filename'])) !== 0) {
+            if (strpos($file, sprintf('%s.', $info['filename'])) !== 0) {
                 continue;
             }
 
