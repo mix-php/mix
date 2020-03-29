@@ -14,11 +14,11 @@ class RequestFactory
     /**
      * Create Request
      * @param string $method
-     * @param array $params
-     * @param $id
+     * @param $params
+     * @param null $id
      * @return Request
      */
-    public function createRequest(string $method, array $params, $id)
+    public function createRequest(string $method, $params, $id = null)
     {
         $request          = new Request();
         $request->jsonrpc = '2.0';

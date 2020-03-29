@@ -294,7 +294,8 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
                     if (!isset($this->callables[$request->method])) {
                         throw new \RuntimeException(sprintf('Method %s not found', $request->method), -32601);
                     }
-                    $result      = call_user_func($this->callables[$request->method], ...$request->params);
+                    $params      = is_array($request->params) ? $request->params : [$request->params];
+                    $result      = call_user_func($this->callables[$request->method], ...$params);
                     $result      = is_scalar($result) ? [$result] : $result;
                     $responses[] = (new ResponseFactory)->createResultResponse($result, $request->id);
 

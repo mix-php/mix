@@ -66,7 +66,7 @@ class JsonRpcHelper
         if (!(is_scalar($request->id) || is_null($request->id))) {
             return false;
         }
-        if (!is_array($request->params)) {
+        if (!(is_array($request->params) || is_object($request->params))) {
             return false;
         }
         return true;
