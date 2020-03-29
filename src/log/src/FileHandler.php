@@ -110,6 +110,7 @@ class FileHandler implements LoggerHandlerInterface
         }
 
         $today = date('Ymd');
+        $info  = pathinfo($file);
         if (!$this->today) {
             $this->today = $today;
         }
@@ -117,26 +118,38 @@ class FileHandler implements LoggerHandlerInterface
         if ($this->maxFileSize > 0 && filesize($file) >= $this->maxFileSize) {
             $move = true;
         }
-        if ($this->today != $today) {
+        if (
+            $this->today != $today &&
+            !file_exists(sprintf(
+                '%s.%s.%s.%s',
+                $info['dirname'] . DIRECTORY_SEPARATOR . $info['filename'],
+                $this->today,
+                '001',
+                $info['extension']
+            ))
+        ) {
             $move = true;
         }
-        if (!$move) {
-            return;
-        }
+        if ($move) {
+            $number = 0;
+            while (file_exists($file)) {
+                ++$number;
+                $numberString = (string)$number;
+                $multiplier   = 3 - strlen($numberString);
+                $numberString = str_repeat('0', $multiplier < 0 ? 0 : $multiplier) . $numberString;
+                $file         = sprintf(
+                    '%s.%s.%s.%s',
+                    $info['dirname'] . DIRECTORY_SEPARATOR . $info['filename'],
+                    $this->today,
+                    $numberString,
+                    $info['extension']
+                );
+            }
 
-        $number = 0;
-        $info   = pathinfo($file);
-        while (file_exists($file)) {
-            ++$number;
-            $numberString = (string)$number;
-            $multiplier   = 3 - strlen($numberString);
-            $numberString = str_repeat('0', $multiplier < 0 ? 0 : $multiplier) . $numberString;
-            $file         = sprintf('%s.%s.%s.%s', $info['dirname'] . DIRECTORY_SEPARATOR . $info['filename'], $this->today, $numberString, $info['extension']);
-        }
-        
-        $ok = @rename($this->filename, $file);
-        if ($ok and $this->today != $today) {
-            $this->clear();
+            $ok = @rename($this->filename, $file);
+            if ($ok and $this->today != $today) {
+                $this->clear();
+            }
         }
 
         $this->today = $today;
