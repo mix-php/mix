@@ -27,10 +27,10 @@ class ProcessHelper
 
     /**
      * 设置进程标题
-     * @param $title
+     * @param string $title
      * @return bool
      */
-    public static function setProcessTitle($title)
+    public static function setProcessTitle(string $title)
     {
         if (PhpHelper::isMac() || PhpHelper::isWin()) {
             return false;
@@ -43,11 +43,11 @@ class ProcessHelper
 
     /**
      * kill进程
-     * @param $pid
+     * @param int $pid
      * @param int $signal
      * @return bool
      */
-    public static function kill($pid, $signal = SIGTERM)
+    public static function kill(int $pid, int $signal = SIGTERM)
     {
         return posix_kill($pid, $signal);
     }
@@ -63,19 +63,24 @@ class ProcessHelper
 
     /**
      * 批量设置异步信号监听
-     * @param $signals array
-     * @param $callback callable|null
+     * @param array $signals
+     * @param callable|null $callback
+     * @param bool $enableCoroutine
      */
-    public static function signal($signals, $callback)
+    public static function signal(array $signals, $callback, bool $enableCoroutine = true)
     {
         foreach ($signals as $signal) {
             if (is_null($callback)) {
                 \Swoole\Process::signal($signal, null);
                 continue;
             }
-            \Swoole\Process::signal($signal, function ($signal) use ($callback) {
-                // 创建协程
-                Coroutine::create($callback, $signal);
+            \Swoole\Process::signal($signal, function ($signal) use ($callback, $enableCoroutine) {
+                if ($enableCoroutine) {
+                    // 创建协程
+                    Coroutine::create($callback, $signal);
+                } else {
+                    call_user_func($callback, $signal);
+                }
             });
         }
     }
