@@ -1,0 +1,27 @@
+{
+  "name": "mix/guzzle",
+  "description": "Mix Guzzle http://www.mixphp.cn",
+  "type": "library",
+  "keywords": [
+    "guzzle",
+    "mix",
+    "swoole"
+  ],
+  "homepage": "https://github.com/mix-php/guzzle",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "liu,jian",
+      "email": "coder.keda@gmail.com"
+    }
+  ],
+  "require": {
+    "funkjedi/composer-include-files": "^1.0",
+    "guzzlehttp/guzzle": ">=6.4,<=6.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mix\\Guzzle\\": "src/"
+    }
+  }
+}
