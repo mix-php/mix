@@ -39,7 +39,7 @@ class Client extends \Etcd\Client
         }
         $this->version    = trim($version);
         $baseUri          = sprintf('%s/%s/', $this->server, $this->version);
-        $handler          = new \GuzzleHttp\Handler\StreamHandler();
+        $handler          = new \Mix\Guzzle\Handler\StreamHandler();
         $stack            = \GuzzleHttp\HandlerStack::create($handler);
         $this->httpClient = new HttpClient(
             [
