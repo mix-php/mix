@@ -111,15 +111,12 @@ class FileHandler implements LoggerHandlerInterface
 
         $today = date('Ymd');
         $info  = pathinfo($file);
-        if (!$this->today) {
-            $this->today = $today;
-        }
-        $move = false;
+        $move  = 0;
         if ($this->maxFileSize > 0 && filesize($file) >= $this->maxFileSize) {
-            $move = true;
+            $move = 1;
         }
-        if ($this->today != $today && date('Ymd', filectime($this->filename)) != $today) {
-            $move = true;
+        if (date('Ymd', filectime($this->filename)) != $today) {
+            $move = -1;
         }
         if ($move) {
             $lock = sprintf('%s.lock', $this->filename);
@@ -142,7 +139,7 @@ class FileHandler implements LoggerHandlerInterface
                     }
 
                     $ok = @rename($this->filename, $file);
-                    if ($ok and $this->today != $today) {
+                    if ($ok and $move == -1) {
                         $this->clear();
                     }
 
