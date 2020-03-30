@@ -1,4 +1,4 @@
-## Guzzle Hook
+## Guzzle
 
 让 Guzzle 支持 Swoole 的 PHP Stream Hook 协程
 
@@ -15,27 +15,7 @@
 composer require mix/guzzle
 ```
 
-## 方法一
-
-> 适用于 Hook 无法修改源码的情况，比如使用的 alisdk 依赖 guzzle 我们不想去修改 alisdk 的源码
-
-在项目的 `composer.json` 文件中增加 `extra` 配置项，如下：
-
-```
-"extra": {
-    "include_files": [
-      "vendor/mix/guzzle/hook.php"
-    ]
-}
-```
-
-更新自动加载：
-
-```
-composer dump-autoload
-```
-
-## 方法二
+### 方法一
 
 当我们自己项目中使用时，可以手动指定 `handler` 的时候，如下：
 
@@ -47,6 +27,26 @@ $client  = new \GuzzleHttp\Client(
         'handler'  => $stack,
     ]
 );
+```
+
+### 方法二
+
+> 适用于 Hook 无法修改源码的情况，比如使用的 alisdk 依赖 guzzle 我们不想去修改 alisdk 的源码
+
+在项目的 `composer.json` 文件中增加 `extra` 配置项，如下：
+
+```
+"extra": {
+    "include_files": [
+      "vendor/mix/guzzle/src/hook.php"
+    ]
+}
+```
+
+更新自动加载：
+
+```
+composer dump-autoload
 ```
 
 ## 原理
