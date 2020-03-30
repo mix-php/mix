@@ -79,7 +79,20 @@ class ProcessHelper
                     // 创建协程
                     Coroutine::create($callback, $signal);
                 } else {
-                    call_user_func($callback, $signal);
+                    try {
+                        // 执行闭包
+                        call_user_func($callback, $signal);
+                    } catch (\Throwable $e) {
+                        $isMix = class_exists(\Mix::class);
+                        // 错误处理
+                        if (!$isMix) {
+                            throw $e;
+                        }
+                        // Mix错误处理
+                        /** @var \Mix\Console\Error $error */
+                        $error = \Mix::$app->context->get('error');
+                        $error->handleException($e);
+                    }
                 }
             });
         }

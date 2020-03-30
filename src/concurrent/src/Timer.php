@@ -17,13 +17,28 @@ class Timer
     protected $timerId;
 
     /**
+     * 开启协程
+     * @var bool
+     */
+    protected $enableCoroutine;
+
+    /**
      * 使用静态方法创建实例
      * @param mixed ...$args
      * @return $this
      */
-    public static function new()
+    public static function new(bool $enableCoroutine = true)
     {
-        return new static();
+        return new static($enableCoroutine);
+    }
+
+    /**
+     * Timer constructor.
+     * @param bool $enableCoroutine
+     */
+    public function __construct(bool $enableCoroutine = true)
+    {
+        $this->enableCoroutine = $enableCoroutine;
     }
 
     /**
@@ -40,7 +55,7 @@ class Timer
         $this->clear();
         // 设置定时器
         $timerId = \Swoole\Timer::after($msec, function (...$params) use ($callback) {
-            if (\Swoole\Coroutine::getCid() == -1) {
+            if ($this->enableCoroutine && \Swoole\Coroutine::getCid() == -1) {
                 // 创建协程
                 Coroutine::create($callback);
             } else {
@@ -80,7 +95,7 @@ class Timer
         $this->clear();
         // 设置定时器
         $timerId = \Swoole\Timer::tick($msec, function (int $timerId, ...$params) use ($callback) {
-            if (\Swoole\Coroutine::getCid() == -1) {
+            if ($this->enableCoroutine && \Swoole\Coroutine::getCid() == -1) {
                 // 创建协程
                 Coroutine::create($callback);
             } else {
