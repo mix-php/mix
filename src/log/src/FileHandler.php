@@ -110,12 +110,15 @@ class FileHandler implements LoggerHandlerInterface
         }
 
         $today = date('Ymd');
-        $info  = pathinfo($file);
-        $move  = 0;
+        if (!$this->today) {
+            $this->today = date('Ymd', filectime($this->filename));
+        }
+        $info = pathinfo($file);
+        $move = 0;
         if ($this->maxFileSize > 0 && filesize($file) >= $this->maxFileSize) {
             $move = 1;
         }
-        if (date('Ymd', filectime($this->filename)) != $today) {
+        if ($this->today != $today) {
             $move = -1;
         }
         if ($move) {
