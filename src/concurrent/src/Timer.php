@@ -39,6 +39,11 @@ class Timer
     public function __construct(bool $enableCoroutine = true)
     {
         $this->enableCoroutine = $enableCoroutine;
+        if (!$enableCoroutine) {
+            \Swoole\Timer::set([
+                'enable_coroutine' => $enableCoroutine,
+            ]);
+        }
     }
 
     /**
