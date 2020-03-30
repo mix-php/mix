@@ -26,6 +26,11 @@ class Client extends \Etcd\Client
     protected $password = '';
 
     /**
+     * @var int
+     */
+    protected $timeout = 5;
+
+    /**
      * 重写修改 handler
      * Client constructor.
      * @param string $server
@@ -45,7 +50,7 @@ class Client extends \Etcd\Client
             [
                 'handler'  => $stack,
                 'base_uri' => $baseUri,
-                'timeout'  => 30,
+                'timeout'  => $this->timeout,
             ]
         );
         $this->setPretty(true);
