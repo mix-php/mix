@@ -15,12 +15,16 @@
 composer require mix/guzzle
 ```
 
+## 方法一
+
+> 适用于 Hook 无法修改源码的情况，比如使用的 alisdk 依赖 guzzle 我们不想去修改 alisdk 的源码
+
 在项目的 `composer.json` 文件中增加 `extra` 配置项，如下：
 
 ```
 "extra": {
     "include_files": [
-      "vendor/mix/guzzle/src/hook.php"
+      "vendor/mix/guzzle/hook.php"
     ]
 }
 ```
@@ -29,6 +33,20 @@ composer require mix/guzzle
 
 ```
 composer dump-autoload
+```
+
+## 方法二
+
+当我们自己项目中使用时，可以手动指定 `handler` 的时候，如下：
+
+```
+$handler = new \Mix\Guzzle\Handler\StreamHandler();
+$stack   = \GuzzleHttp\HandlerStack::create($handler);
+$client  = new \GuzzleHttp\Client(
+    [
+        'handler'  => $stack,
+    ]
+);
 ```
 
 ## 原理
