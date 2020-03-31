@@ -101,7 +101,7 @@ class Application
      * EventDispatcher
      * @var EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    protected $dispatcher;
 
     /**
      * Application constructor.
@@ -119,8 +119,8 @@ class Application
         }
         $this->context = new ApplicationContext($this->beans);
         // 加载核心库
-        $this->eventDispatcher = $this->context->get('event');
-        $this->error           = $this->context->get('error');
+        $this->dispatcher = $this->context->get('event');
+        $this->error      = $this->context->get('error');
         // 加载命令
         if ($this->commandPath != '') {
             $this->commands = ConfigHelper::each($this->commandPath);
@@ -320,7 +320,7 @@ class Application
                 throw new \RuntimeException('Application has coroutine enabled, require swoole extension >= v4.4 to run. install: https://www.swoole.com/');
             }
             // 触发执行命令前置事件
-            $this->eventDispatcher->dispatch(new CommandBeforeExecuteEvent($class));
+            $this->dispatcher->dispatch(new CommandBeforeExecuteEvent($class));
             // 协程执行
             $scheduler = new \Swoole\Coroutine\Scheduler;
             $scheduler->set($options);
@@ -339,7 +339,7 @@ class Application
             return;
         }
         // 触发执行命令前置事件
-        $this->eventDispatcher->dispatch(new CommandBeforeExecuteEvent($class));
+        $this->dispatcher->dispatch(new CommandBeforeExecuteEvent($class));
         // 普通执行
         $this->callMethod($class, $method);
     }

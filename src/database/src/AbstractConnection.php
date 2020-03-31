@@ -41,9 +41,16 @@ abstract class AbstractConnection
 
     /**
      * 事件调度器
+     * @deprecated 废弃，改用 dispatcher
      * @var EventDispatcherInterface
      */
     public $eventDispatcher;
+
+    /**
+     * 事件调度器
+     * @var EventDispatcherInterface
+     */
+    public $dispatcher;
 
     /**
      * PDO
@@ -310,7 +317,7 @@ abstract class AbstractConnection
      */
     protected function dispatchEvent()
     {
-        if (!$this->eventDispatcher) {
+        if (!$this->dispatcher && !$this->eventDispatcher) {
             return;
         }
         $log             = $this->getLastLog();
@@ -318,7 +325,8 @@ abstract class AbstractConnection
         $event->sql      = $log['sql'];
         $event->bindings = $log['bindings'];
         $event->time     = $log['time'];
-        $this->eventDispatcher->dispatch($event);
+        $this->dispatcher and $this->dispatcher->dispatch($event);
+        $this->eventDispatcher and $this->eventDispatcher->dispatch($event);
     }
 
     /**

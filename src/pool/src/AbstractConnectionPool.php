@@ -35,9 +35,16 @@ abstract class AbstractConnectionPool
 
     /**
      * 事件调度器
+     * @deprecated 废弃，改用 dispatcher
      * @var EventDispatcherInterface
      */
     public $eventDispatcher;
+
+    /**
+     * 事件调度器
+     * @var EventDispatcherInterface
+     */
+    public $dispatcher;
 
     /**
      * 连接队列
@@ -142,7 +149,7 @@ abstract class AbstractConnectionPool
         // 入列一个新连接替代丢弃的连接
         $result = $this->push($this->createConnection());
         // 触发事件
-        $this->eventDispatcher and $this->eventDispatcher->dispatch(new ConnectionDiscardedEvent($connection));
+        $this->dispatch(new ConnectionDiscardedEvent($connection));
         // 返回
         return $result;
     }
@@ -208,6 +215,20 @@ abstract class AbstractConnectionPool
     protected function getTotalNumber()
     {
         return $this->getIdleNumber() + $this->getActiveNumber();
+    }
+
+    /**
+     * Dispatch
+     * 保留老字段兼容性
+     * @param object $event
+     */
+    protected function dispatch(object $event)
+    {
+        if (!$this->dispatcher && !$this->eventDispatcher) {
+            return;
+        }
+        $this->dispatcher and $this->dispatcher->dispatch($event);
+        $this->eventDispatcher and $this->eventDispatcher->dispatch($event);
     }
 
 }

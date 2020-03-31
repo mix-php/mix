@@ -59,9 +59,16 @@ abstract class AbstractConnection
 
     /**
      * 事件调度器
+     * @deprecated 废弃，改用 dispatcher
      * @var EventDispatcherInterface
      */
     public $eventDispatcher;
+
+    /**
+     * 事件调度器
+     * @var EventDispatcherInterface
+     */
+    public $dispatcher;
 
     /**
      * redis对象
@@ -131,14 +138,15 @@ abstract class AbstractConnection
      */
     protected function dispatchEvent($command, $arguments, $time)
     {
-        if (!$this->eventDispatcher) {
+        if (!$this->dispatcher && !$this->eventDispatcher) {
             return;
         }
         $event            = new CalledEvent();
         $event->command   = $command;
         $event->arguments = $arguments;
         $event->time      = $time;
-        $this->eventDispatcher->dispatch($event);
+        $this->dispatcher and $this->dispatcher->dispatch($event);
+        $this->eventDispatcher and $this->eventDispatcher->dispatch($event);
     }
 
     /**

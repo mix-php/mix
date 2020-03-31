@@ -39,9 +39,16 @@ class Dialer implements DialerInterface
 
     /**
      * 事件调度器
+     * @deprecated 废弃，改用 dispatcher
      * @var EventDispatcherInterface
      */
     public $eventDispatcher;
+
+    /**
+     * 事件调度器
+     * @var EventDispatcherInterface
+     */
+    public $dispatcher;
 
     /**
      * Dialer constructor.
@@ -61,11 +68,11 @@ class Dialer implements DialerInterface
     public function dial()
     {
         $conn = new Connection([
-            'dsn'             => $this->dsn,
-            'username'        => $this->username,
-            'password'        => $this->password,
-            'attributes'      => $this->attributes,
-            'eventDispatcher' => $this->eventDispatcher,
+            'dsn'        => $this->dsn,
+            'username'   => $this->username,
+            'password'   => $this->password,
+            'attributes' => $this->attributes,
+            'dispatcher' => $this->dispatcher ?? $this->eventDispatcher,
         ]);
         $conn->connect();
         return $conn;
