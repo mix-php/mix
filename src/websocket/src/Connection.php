@@ -45,7 +45,10 @@ class Connection
         if ($frame === false) { // 接收失败
             $this->close(); // 需要移除管理器内的连接，所以还要 close
             $errCode = swoole_last_error();
-            $errMsg  = swoole_strerror($errCode, 9);
+            if ($errCode == 0) {
+                $errCode = stripos(PHP_OS, 'Darwin') !== false ? 54 : 104;
+            }
+            $errMsg = swoole_strerror($errCode, 9);
             throw new ReceiveException($errMsg, $errCode);
         }
         if ($frame instanceof \Swoole\WebSocket\CloseFrame) { // CloseFrame
