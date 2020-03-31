@@ -67,7 +67,7 @@ MixPHP开发指南：
 
 * Linux, OS X, WSL
 * PHP >= 7.2
-* Swoole >= 4.4.4 (websocket >= 4.4.8)
+* Swoole >= 4.4.4 (websocket >= 4.4.15)
 
 ## 快速开始
 

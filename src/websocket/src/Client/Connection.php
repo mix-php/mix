@@ -52,19 +52,33 @@ class Connection
     }
 
     /**
+     * Get default headers
+     * @return array
+     */
+    protected function getDefaultHeaders()
+    {
+        return $defaultHeaders = [
+            'User-Agent' => sprintf('Mix PHP v%s, PHP v%s', \Mix::$version, PHP_VERSION),
+        ];
+    }
+
+    /**
      * Connect
      * @throws UpgradeException
      */
     public function connect()
     {
-        $info   = parse_url($this->url);
-        $host   = $info['host'] ?? '';
-        $port   = $info['port'] ?? null;
-        $ssl    = isset($info['scheme']) && $info['scheme'] == 'wss' ? true : false;
+        $info = parse_url($this->url);
+        $host = $info['host'] ?? '';
+        $port = $info['port'] ?? null;
+        $ssl  = isset($info['scheme']) && $info['scheme'] == 'wss' ? true : false;
+        if ($ssl) {
+            $port = 443;
+        }
         $path   = ($info['path'] ?? '') . ($info['query'] ?? '') . ($info['fragment'] ?? '');
         $client = $this->client = new Client($host, $port, $ssl);
         $client->set(['timeout' => $this->timeout]);
-        $client->setHeaders($this->headers);
+        $client->setHeaders($this->headers + $this->getDefaultHeaders());
         $client->setCookies($this->cookies);
         if (!$client->upgrade($path)) {
             throw new UpgradeException(sprintf('WebSocket connect failed (%s)', $url));
