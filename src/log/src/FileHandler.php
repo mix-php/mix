@@ -147,7 +147,7 @@ class FileHandler implements LoggerHandlerInterface
                     }
 
                     flock($fp, LOCK_UN);
-                    rmdir($lock);
+                    @unlink($lock);
                 }
                 fclose($fp);
             }
