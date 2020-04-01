@@ -3,10 +3,10 @@
 namespace Mix\Micro\Breaker;
 
 /**
- * Class CommandDefinition
+ * Class CommandConfig
  * @package Mix\Micro\Breaker
  */
-class CommandDefinition
+class Command
 {
 
     /**
@@ -38,7 +38,12 @@ class CommandDefinition
      * 熔断尝试恢复时间, 单位: 秒
      * @var float
      */
-    protected $sleepWindow = 5.0;
+    protected $sleepWindow = 10.0;
+
+    /**
+     * @var CommandRuntime
+     */
+    protected $runtime;
 
     /**
      * CommandDefinition constructor.
@@ -49,6 +54,7 @@ class CommandDefinition
         foreach ($config as $key => $value) {
             $this->$key = $value;
         }
+        $this->runtime = new CommandRuntime();
     }
 
     /**
@@ -66,6 +72,8 @@ class CommandDefinition
     {
         return $this->maxConcurrentRequests;
     }
+    
+    
 
     /**
      * @return int
@@ -89,6 +97,14 @@ class CommandDefinition
     public function getSleepWindow(): int
     {
         return $this->sleepWindow;
+    }
+
+    /**
+     * @return CommandRuntime
+     */
+    public function getRuntime()
+    {
+        return $this->runtime;
     }
 
 }

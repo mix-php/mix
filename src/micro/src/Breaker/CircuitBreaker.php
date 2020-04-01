@@ -22,32 +22,6 @@ class CircuitBreaker
     protected $definitions = [];
 
     /**
-     * @var string[]
-     */
-    protected $currentRequests = [];
-
-    /**
-     * @var array
-     */
-    protected $sampling = [];
-
-    /**
-     * 状态值
-     */
-    const STATUS_OPEN = 1;
-    const STATUS_CLOSE = 0;
-
-    /**
-     * @var int
-     */
-    protected $status = self::STATUS_CLOSE;
-
-    /**
-     * @var int
-     */
-    protected $opentime = 0;
-
-    /**
      * Fuser constructor.
      * @param array $config
      */
@@ -64,7 +38,7 @@ class CircuitBreaker
     {
         $definitions = [];
         foreach ($this->config as $item) {
-            $definition         = new CommandDefinition($item);
+            $definition         = new Command($item);
             $name               = $definition->getName();
             $definitions[$name] = $definition;
         }
@@ -72,17 +46,17 @@ class CircuitBreaker
     }
 
     /**
-     * 获取 CommandDefinition
+     * 获取Command
      * @param string $name
-     * @return CommandDefinition
+     * @return Command
      * @throws NotFoundException
      */
-    public function getCommandDefinition(string $commandName): CommandDefinition
+    public function command(string $name): Command
     {
-        if (!isset($this->definitions[$commandName])) {
-            throw new NotFoundException("Command definition '{$commandName}' not found");
+        if (!isset($this->definitions[$name])) {
+            throw new NotFoundException("Command definition '{$name}' not found");
         }
-        return $this->definitions[$commandName];
+        return $this->definitions[$name];
     }
 
     /**
@@ -90,69 +64,48 @@ class CircuitBreaker
      * @param string $name
      * @param \Closure $request
      * @param \Closure $fallback
+     * @return mixed
      * @throws NotFoundException
      */
-    public function do(string $commandName, \Closure $request, \Closure $fallback)
+    public function do(string $name, \Closure $request, \Closure $fallback)
     {
-        $definition = $this->getCommandDefinition($commandName);
+        $command = $this->command($name);
+        $runtime = $command->getRuntime();
         // fuse
-        if ($this->status == static::STATUS_OPEN) {
-            if (static::microtime() - $this->opentime >= $definition->getSleepWindow()) {
-                $this->status(static::STATUS_CLOSE);
+        if ($runtime->status == CommandRuntime::STATUS_OPEN) {
+            if (CommandRuntime::microtime() - $runtime->opentime >= $command->getSleepWindow()) {
+                $runtime->status(CommandRuntime::STATUS_CLOSE);
             }
             return call_user_func($fallback);
         }
-        if (count($this->sampling) >= $definition->getRequestVolumeThreshold()) {
-            $errorPercent   = count($this->sampling["error"] ?? []) / count($this->sampling["success"] ?? []);
-            $this->sampling = [];
-            if ($errorPercent >= $definition->getErrorPercentThreshold() / 100) {
-                $this->status(static::STATUS_OPEN);
+        $requestVolume = count($runtime->sampling, 1);
+        if ($requestVolume >= $command->getRequestVolumeThreshold()) {
+            $errorPercent      = count($runtime->sampling["error"] ?? []) / $requestVolume;
+            $runtime->sampling = [];
+            if ($errorPercent >= $command->getErrorPercentThreshold() / 100) {
+                $runtime->status(CommandRuntime::STATUS_OPEN);
                 return call_user_func($fallback);
             } else {
-                $this->status(static::STATUS_CLOSE);
+                $runtime->status(CommandRuntime::STATUS_CLOSE);
             }
         }
         // concurrent
-        if ($definition->getMaxConcurrentRequests() && count($this->currentRequests) + 1 >= $definition->getMaxConcurrentRequests()) {
+        if ($command->getMaxConcurrentRequests() && count($runtime->currentRequests) + 1 >= $command->getMaxConcurrentRequests()) {
             return call_user_func($fallback);
         }
-        $id                         = spl_object_hash($request);
-        $this->currentRequests[$id] = $request;
+        $id                            = spl_object_hash($request);
+        $runtime->currentRequests[$id] = '';
         // call
         try {
-            call_user_func($request);
-            $this->sampling["success"] = $id;
+            $result                         = call_user_func($request);
+            $runtime->sampling["success"][] = $id;
         } catch (\Throwable $ex) {
-            $this->sampling["error"] = $id;
+            $runtime->sampling["error"][] = $id;
             throw $ex;
         } finally {
-            unset($this->currentRequests[$id]);
+            unset($runtime->currentRequests[$id]);
         }
-    }
-
-    /**
-     * Set status
-     * @param int $status
-     */
-    protected function status(int $status)
-    {
-        if ($status == static::STATUS_OPEN) {
-            $this->opentime = static::microtime();
-            $this->status   = static::STATUS_OPEN;
-            return;
-        }
-        $this->opentime = 0;
-        $this->status   = static::STATUS_CLOSE;
-    }
-
-    /**
-     * 获取当前时间, 单位: 秒, 粒度: 微秒
-     * @return float
-     */
-    protected static function microtime()
-    {
-        list($usec, $sec) = explode(" ", microtime());
-        return ((float)$usec + (float)$sec);
+        return $result;
     }
 
 }
