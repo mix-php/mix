@@ -337,7 +337,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
     }
 
     /**
-     * 获取微秒时间
+     * 获取当前时间, 单位: 秒, 粒度: 微秒
      * @return float
      */
     protected static function microtime()
