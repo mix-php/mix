@@ -15,9 +15,16 @@ class Dialer
 {
 
     /**
+     * Global timeout
      * @var float
      */
     public $timeout = 5.0;
+
+    /**
+     * Call timeout
+     * @var float
+     */
+    public $callTimeout = 10.0;
 
     /**
      * @var int
@@ -52,9 +59,10 @@ class Dialer
     public function dial(string $host, int $port)
     {
         $conn = new Connection([
-            'host'    => $host,
-            'port'    => $port,
-            'timeout' => $this->timeout,
+            'host'        => $host,
+            'port'        => $port,
+            'timeout'     => $this->timeout,
+            'callTimeout' => $this->callTimeout,
         ]);
         $conn->connect();
         return $conn;
@@ -75,9 +83,10 @@ class Dialer
             try {
                 $service = $this->registry->get($name);
                 $conn    = new Connection([
-                    'host'    => $service->getAddress(),
-                    'port'    => $service->getPort(),
-                    'timeout' => $this->timeout,
+                    'host'        => $service->getAddress(),
+                    'port'        => $service->getPort(),
+                    'timeout'     => $this->timeout,
+                    'callTimeout' => $this->callTimeout,
                 ]);
                 $conn->connect();
                 break;

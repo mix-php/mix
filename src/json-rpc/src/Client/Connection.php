@@ -29,9 +29,16 @@ class Connection
     public $port = 0;
 
     /**
+     * Global timeout
      * @var float
      */
     public $timeout = 0.0;
+
+    /**
+     * Call timeout
+     * @var float
+     */
+    public $callTimeout = 10.0;
 
     /**
      * @var Client
@@ -81,7 +88,7 @@ class Connection
     {
         $jsonStr = JsonRpcHelper::encode($request) . Constants::EOF;
         $this->send($jsonStr);
-        $data      = $this->recv();
+        $data      = $this->recv($this->callTimeout);
         $responses = JsonRpcHelper::parseResponses($data);
         return array_pop($responses);
     }
@@ -104,7 +111,7 @@ class Connection
             $jsonStr = JsonRpcHelper::encode($requests) . Constants::EOF;
         }
         $this->send($jsonStr);
-        $data = $this->recv();
+        $data = $this->recv($this->callTimeout);
         return JsonRpcHelper::parseResponses($data);
     }
 
@@ -126,10 +133,11 @@ class Connection
 
     /**
      * Recv
+     * @param float $timeout
      * @return string
      * @throws \Swoole\Exception
      */
-    protected function recv()
+    protected function recv(float $timeout = -1)
     {
         $data = $this->client->recv(-1);
         if ($data === false || $data === "") {
