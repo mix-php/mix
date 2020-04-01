@@ -88,13 +88,14 @@ class Connection
 
     /**
      * Recv
+     * @param float $timeout
      * @return \Swoole\WebSocket\Frame
      * @throws ReceiveException
      * @throws CloseFrameException
      */
-    public function recv()
+    public function recv(float $timeout = -1)
     {
-        $frame = $this->client->recv(-1);
+        $frame = $this->client->recv($timeout);
         if ($frame === false) { // 接收失败
             $this->close(); // 需要移除管理器内的连接，所以还要 close
             $errCode = swoole_last_error();

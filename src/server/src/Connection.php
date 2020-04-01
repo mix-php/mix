@@ -73,12 +73,13 @@ class Connection
 
     /**
      * Recv
+     * @param float $timeout
      * @return string
      * @throws ReceiveException
      */
-    public function recv()
+    public function recv(float $timeout = -1)
     {
-        $data = $this->swooleConnection->recv();
+        $data = $this->swooleConnection->recv($timeout);
         if ($data === false) { // 接收失败
             $this->close(); // 需要移除管理器内的连接，所以还要 close
             $socket = $this->swooleSocket;
