@@ -92,6 +92,7 @@ class Connection
      * @return \Swoole\WebSocket\Frame
      * @throws ReceiveException
      * @throws CloseFrameException
+     * @throws \Swoole\Exception
      */
     public function recv(float $timeout = -1)
     {

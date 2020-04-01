@@ -25,17 +25,24 @@ class WebSocketProxy
     public $upgrader;
 
     /**
+     * Global timeout
      * @var float
      */
     public $timeout = 5.0;
 
     /**
-     * @var Connection
+     * Read timeout
+     * @var float
+     */
+    public $readTimeout = -1;
+
+    /**
+     * @var \Mix\WebSocket\Client\Connection
      */
     protected $serviceConn;
 
     /**
-     * @var Connection
+     * @var \Mix\WebSocket\Connection
      */
     protected $clientConn;
 
@@ -93,7 +100,7 @@ class WebSocketProxy
     {
         while (true) {
             try {
-                $frame = $this->clientConn->recv();
+                $frame = $this->clientConn->recv($this->readTimeout);
                 $this->serviceConn->send($frame);
             } catch (\Throwable $e) {
                 // 对方发送CloseFrame
@@ -123,7 +130,7 @@ class WebSocketProxy
     {
         while (true) {
             try {
-                $frame = $this->serviceConn->recv();
+                $frame = $this->serviceConn->recv($this->readTimeout);
                 $this->clientConn->send($frame);
             } catch (\Throwable $e) {
                 // 对方发送CloseFrame

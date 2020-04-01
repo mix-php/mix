@@ -33,6 +33,11 @@ class JsonRpcProxy implements ProxyInterface
     public $timeout = 5.0;
 
     /**
+     * @var float
+     */
+    public $callTimeout = 10.0;
+
+    /**
      * JsonRpcProxy constructor.
      * @param array $config
      * @throws \PhpDocReader\AnnotationException
@@ -103,7 +108,8 @@ class JsonRpcProxy implements ProxyInterface
         }
 
         $dialer = new Dialer([
-            'timeout' => $this->timeout,
+            'timeout'     => $this->timeout,
+            'callTimeout' => $this->callTimeout,
         ]);
         try {
             $conn = $dialer->dial($service->getAddress(), $service->getPort());
