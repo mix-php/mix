@@ -79,9 +79,11 @@ class CircuitBreaker
             }
             return call_user_func($fallback);
         }
-        $requestVolume = count($runtime->sampling, 1);
+        $successVolume = count($runtime->sampling["success"] ?? []);
+        $errorVolume   = count($runtime->sampling["error"] ?? []);
+        $requestVolume = $successVolume + $errorVolume;
         if ($requestVolume >= $command->getRequestVolumeThreshold()) {
-            $errorPercent      = count($runtime->sampling["error"] ?? []) / $requestVolume;
+            $errorPercent      = $errorVolume / $requestVolume;
             $runtime->sampling = [];
             if ($errorPercent >= $command->getErrorPercentThreshold() / 100) {
                 $runtime->status(CommandRuntime::STATUS_OPEN);
