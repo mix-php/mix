@@ -4,6 +4,7 @@ namespace Mix\Etcd;
 
 use Mix\Bean\BeanInjector;
 use Mix\Etcd\Client\Client;
+use Mix\Etcd\LoadBalancer\LoadBalancerInterface;
 use Mix\Etcd\Monitor\Monitor;
 use Mix\Etcd\Register\Registrar;
 use Mix\Micro\Service\Exception\NotFoundException;
@@ -47,14 +48,19 @@ class Registry implements RegistryInterface
      * 注册器生存时间，会根据该时间定时延期服务的有效期
      * @var int
      */
-    public $ttl = 5;
+    public $registerTTL = 5;
 
     /**
      * Monitor idle time
      * 监控最大空闲时间，超过该时间将自动关闭
      * @var int
      */
-    public $idle = 30;
+    public $monitorMaxIdle = 30;
+
+    /**
+     * @var LoadBalancerInterface
+     */
+    public $loadBalancer;
 
     /**
      * Version
@@ -116,13 +122,14 @@ class Registry implements RegistryInterface
      * @return ServiceInterface
      * @throws NotFoundException
      */
-    public function get(string $name): ServiceInterface
+    public function service(string $name): ServiceInterface
     {
         if (!isset($this->monitors[$name])) {
             $monitor               = new Monitor($this->client, $this->monitors, $name, $this->idle);
             $this->monitors[$name] = $monitor;
         }
-        return $this->monitors[$name]->random();
+        $services = $this->monitors[$name]->services();
+        return $this->loadBalancer->invoke($services);
     }
 
     /**

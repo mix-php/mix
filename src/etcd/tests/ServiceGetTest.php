@@ -17,7 +17,7 @@ final class ServiceGetTest extends TestCase
                 'ttl'     => 10,
             ]);
             for ($i = 0; $i < 5; $i++) {
-                $service = $center->get('php.micro.srv.test');
+                $service = $center->service('php.micro.srv.test');
                 var_dump($service);
                 sleep(1);
             }

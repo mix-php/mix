@@ -166,16 +166,17 @@ class Monitor
     }
 
     /**
-     * Random get service
-     * @return Service
+     * Get all service
+     * @return Service[id]
      * @throws NotFoundException
      */
-    public function random(): Service
+    public function services()
     {
         $first          = !$this->lastTime;
         $this->lastTime = time();
-        $name           = $this->name;
-        $services       = $this->services[$name] ?? [];
+
+        $name     = $this->name;
+        $services = $this->services[$name] ?? [];
         if (empty($services)) {
             // 第一次获取就找不到，必须关闭监听器，防止恶意404攻击导致注册中心连接数过高
             if ($first) {
@@ -184,6 +185,18 @@ class Monitor
             }
             throw new NotFoundException(sprintf('Service %s not found', $name));
         }
+
+        return $services;
+    }
+
+    /**
+     * Round robin get service
+     * @return Service
+     * @throws NotFoundException
+     */
+    public function roundRobin(): Service
+    {
+        $services = $this->services();
         return $services[array_rand($services)];
     }
 

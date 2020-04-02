@@ -72,7 +72,7 @@ class JsonRpcProxy implements ProxyInterface
             throw new ProxyException('Parse request failed');
         }
         $name = $body['service'] ?? '';
-        return $registry->get($name);
+        return $registry->service($name);
     }
 
     /**

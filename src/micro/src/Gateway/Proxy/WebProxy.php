@@ -104,7 +104,7 @@ class WebProxy implements ProxyInterface
                 array_pop($slice);
                 $name = implode('/', $slice);
         }
-        return $registry->get(sprintf('%s.%s', $this->namespace, $version . $name));
+        return $registry->service(sprintf('%s.%s', $this->namespace, $version . $name));
     }
 
     /**

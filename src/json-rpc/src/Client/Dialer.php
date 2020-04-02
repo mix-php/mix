@@ -81,7 +81,7 @@ class Dialer
     {
         for ($i = 0; $i < $this->retry; $i++) {
             try {
-                $service = $this->registry->get($name);
+                $service = $this->registry->service($name);
                 $conn    = new Connection([
                     'host'        => $service->getAddress(),
                     'port'        => $service->getPort(),

@@ -17,7 +17,7 @@ interface RegistryInterface
      * @return ServiceInterface
      * @throws NotFoundException
      */
-    public function get(string $name): ServiceInterface;
+    public function service(string $name): ServiceInterface;
 
     /**
      * Register
