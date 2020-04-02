@@ -3,10 +3,10 @@
 namespace Mix\Micro\Breaker\Event;
 
 /**
- * Class BreakEvent
+ * Class StatusChangeEvent
  * @package Mix\Micro\Breaker\Event
  */
-class BreakEvent
+class StatusChangeEvent
 {
 
     /**

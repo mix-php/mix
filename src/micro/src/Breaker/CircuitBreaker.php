@@ -2,7 +2,7 @@
 
 namespace Mix\Micro\Breaker;
 
-use Mix\Micro\Breaker\Event\BreakEvent;
+use Mix\Micro\Breaker\Event\StatusChangeEvent;
 use Mix\Micro\Breaker\Exception\NotFoundException;
 use Mix\Micro\Breaker\Exception\TimeoutException;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -137,7 +137,7 @@ class CircuitBreaker
         if (!isset($this->dispatcher)) {
             return;
         }
-        $event         = new BreakEvent();
+        $event         = new StatusChangeEvent();
         $event->name   = $command->getName();
         $event->status = $command->getRuntime()->status;
         $this->dispatcher->dispatch($event);
