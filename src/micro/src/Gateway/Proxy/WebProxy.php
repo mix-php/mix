@@ -176,11 +176,11 @@ class WebProxy implements ProxyInterface
 
     /**
      * 404 处理
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @param Response $response
      * @return void
      */
-    public function show404(\Exception $exception, Response $response)
+    public function show404(\Throwable $exception, Response $response)
     {
         $content = '404 Not Found';
         $body    = (new StreamFactory())->createStream($content);
@@ -193,11 +193,11 @@ class WebProxy implements ProxyInterface
 
     /**
      * 500 处理
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @param Response $response
      * @return void
      */
-    public function show500(\Exception $exception, Response $response)
+    public function show500(\Throwable $exception, Response $response)
     {
         $content = '500 Internal Server Error';
         $body    = (new StreamFactory())->createStream($content);

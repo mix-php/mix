@@ -257,10 +257,10 @@ class Router implements HandlerInterface
 
     /**
      * 404 处理
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @param Response $response
      */
-    public function show404(\Exception $exception, Response $response)
+    public function show404(\Throwable $exception, Response $response)
     {
         $content = '404 Not Found';
         $body    = (new StreamFactory())->createStream($content);
@@ -273,10 +273,10 @@ class Router implements HandlerInterface
 
     /**
      * 500 处理
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @param Response $response
      */
-    public function show500(\Exception $exception, Response $response)
+    public function show500(\Throwable $exception, Response $response)
     {
         $content = [
             'message' => $e->getMessage(),

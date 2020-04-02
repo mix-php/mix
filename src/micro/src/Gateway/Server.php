@@ -190,11 +190,11 @@ class Server implements HandlerInterface
 
     /**
      * 404 处理
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @param Response $response
      * @return void
      */
-    public function show404(\Exception $exception, Response $response)
+    public function show404(\Throwable $exception, Response $response)
     {
         $content = '404 Not Found';
         $body    = (new StreamFactory())->createStream($content);
