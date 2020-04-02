@@ -22,8 +22,8 @@ class CommandRuntime
     /**
      * 状态值
      */
-    const STATUS_OPEN = 1;
-    const STATUS_CLOSE = 0;
+    const STATUS_OPEN = 'open';
+    const STATUS_CLOSE = 'close';
 
     /**
      * @var int
@@ -39,7 +39,7 @@ class CommandRuntime
      * Set status
      * @param int $status
      */
-    public function status(int $status)
+    public function status(string $status)
     {
         if ($status == static::STATUS_OPEN) {
             $this->opentime = static::microtime();

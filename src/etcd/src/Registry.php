@@ -126,7 +126,7 @@ class Registry implements RegistryInterface
     public function service(string $name): ServiceInterface
     {
         if (!isset($this->monitors[$name])) {
-            $monitor               = new Monitor($this->client, $this->monitors, $name, $this->idle);
+            $monitor               = new Monitor($this->client, $this->monitors, $name, $this->monitorMaxIdle);
             $this->monitors[$name] = $monitor;
         }
         $services = $this->monitors[$name]->services();
@@ -147,7 +147,7 @@ class Registry implements RegistryInterface
         if ($bundle->count() == 0) {
             return;
         }
-        $registrar = new Registrar($this->client, $bundle, $this->ttl);
+        $registrar = new Registrar($this->client, $bundle, $this->registerTTL);
         $registrar->register();
         $this->registrars[$id] = $registrar;
     }

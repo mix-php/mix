@@ -2,8 +2,10 @@
 
 namespace Mix\Micro\Breaker;
 
+use Mix\Micro\Breaker\Event\BreakEvent;
 use Mix\Micro\Breaker\Exception\NotFoundException;
 use Mix\Micro\Breaker\Exception\TimeoutException;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class CircuitBreaker
@@ -18,6 +20,11 @@ class CircuitBreaker
     public $config = [];
 
     /**
+     * @var EventDispatcherInterface
+     */
+    public $dispatcher;
+
+    /**
      * @var CommandDefinition[]
      */
     protected $definitions = [];
@@ -26,9 +33,10 @@ class CircuitBreaker
      * Fuser constructor.
      * @param array $config
      */
-    public function __construct(array $config)
+    public function __construct(array $config, EventDispatcherInterface $dispatcher = null)
     {
-        $this->config = $config;
+        $this->config     = $config;
+        $this->dispatcher = $dispatcher;
         $this->parse();
     }
 
@@ -76,6 +84,7 @@ class CircuitBreaker
         if ($runtime->status == CommandRuntime::STATUS_OPEN) {
             if (CommandRuntime::microtime() - $runtime->opentime >= $command->getSleepWindow()) {
                 $runtime->status(CommandRuntime::STATUS_CLOSE);
+                $this->dispatch($command);
             }
             return call_user_func($fallback);
         }
@@ -87,9 +96,11 @@ class CircuitBreaker
             $runtime->sampling = [];
             if ($errorPercent >= $command->getErrorPercentThreshold() / 100) {
                 $runtime->status(CommandRuntime::STATUS_OPEN);
+                $this->dispatch($command);
                 return call_user_func($fallback);
             } else {
                 $runtime->status(CommandRuntime::STATUS_CLOSE);
+                $this->dispatch($command);
             }
         }
         // concurrent
@@ -115,6 +126,21 @@ class CircuitBreaker
             unset($runtime->currentRequests[$id]);
         }
         return $result;
+    }
+
+    /**
+     * Dispatch
+     * @param Command $command
+     */
+    protected function dispatch(Command $command)
+    {
+        if (!isset($this->dispatcher)) {
+            return;
+        }
+        $event         = new BreakEvent();
+        $event->name   = $command->getName();
+        $event->status = $command->getRuntime()->status;
+        $this->dispatcher->dispatch($event);
     }
 
 }
