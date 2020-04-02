@@ -3,6 +3,7 @@
 namespace Mix\Micro\Breaker;
 
 use Mix\Micro\Breaker\Exception\NotFoundException;
+use Mix\Micro\Breaker\Exception\TimeoutException;
 
 /**
  * Class CircuitBreaker
@@ -71,7 +72,7 @@ class CircuitBreaker
     {
         $command = $this->command($name);
         $runtime = $command->getRuntime();
-        // fuse
+        // break
         if ($runtime->status == CommandRuntime::STATUS_OPEN) {
             if (CommandRuntime::microtime() - $runtime->opentime >= $command->getSleepWindow()) {
                 $runtime->status(CommandRuntime::STATUS_CLOSE);
@@ -97,8 +98,14 @@ class CircuitBreaker
         $runtime->currentRequests[$id] = '';
         // call
         try {
-            $result                         = call_user_func($request);
+            $starttime = CommandRuntime::microtime();
+            $result    = call_user_func($request);
+            if (CommandRuntime::microtime() - $starttime >= $command->getTimeout()) {
+                throw new TimeoutException('Call timeout');
+            }
             $runtime->sampling["success"][] = $id;
+        } catch (TimeoutException $ex) {
+            $runtime->sampling["error"][] = $id;
         } catch (\Throwable $ex) {
             $runtime->sampling["error"][] = $id;
             throw $ex;

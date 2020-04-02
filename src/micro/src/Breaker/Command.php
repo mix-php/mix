@@ -3,7 +3,7 @@
 namespace Mix\Micro\Breaker;
 
 /**
- * Class CommandConfig
+ * Class Command
  * @package Mix\Micro\Breaker
  */
 class Command
@@ -16,8 +16,13 @@ class Command
     protected $name;
 
     /**
-     * 最大并发数，超过并发返回错误
-     * 0 = 关闭
+     * 超时时间, 单位: 秒
+     * @var float
+     */
+    protected $timeout = 1.0;
+
+    /**
+     * 最大并发数，超过并发返回错误, 0=关闭
      * @var int
      */
     protected $maxConcurrentRequests = 5;
@@ -58,6 +63,7 @@ class Command
     }
 
     /**
+     * Get name
      * @return string
      */
     public function getName(): string
@@ -66,16 +72,43 @@ class Command
     }
 
     /**
+     * Get timeout
+     * @return float
+     */
+    public function getTimeout(): float
+    {
+        return $this->timeout;
+    }
+
+    /**
+     * Set timeout
+     * @param float $timeout
+     */
+    public function withTimeout(float $timeout)
+    {
+        $this->timeout = $timeout;
+    }
+
+    /**
+     * Get max concurrent requests
      * @return int
      */
     public function getMaxConcurrentRequests(): int
     {
         return $this->maxConcurrentRequests;
     }
-    
-    
 
     /**
+     * Set max concurrent requests
+     * @param int $requests
+     */
+    public function withMaxConcurrentRequests(int $requests)
+    {
+        $this->maxConcurrentRequests = $requests;
+    }
+
+    /**
+     * Get request volume threshold
      * @return int
      */
     public function getRequestVolumeThreshold(): int
@@ -84,6 +117,16 @@ class Command
     }
 
     /**
+     * Set request volume threshold
+     * @param int $threshold
+     */
+    public function withRequestVolumeThreshold(int $threshold)
+    {
+        $this->requestVolumeThreshold = $threshold;
+    }
+
+    /**
+     * Get error percent threshold
      * @return int
      */
     public function getErrorPercentThreshold(): int
@@ -92,11 +135,30 @@ class Command
     }
 
     /**
+     * Set error percent threshold
      * @return int
      */
-    public function getSleepWindow(): int
+    public function withErrorPercentThreshold(int $threshold)
+    {
+        $this->errorPercentThreshold = $threshold;
+    }
+
+    /**
+     * Get sleep window
+     * @return float
+     */
+    public function getSleepWindow(): float
     {
         return $this->sleepWindow;
+    }
+
+    /**
+     * Set sleep window
+     * @return float
+     */
+    public function withSleepWindow(float $sleepWindow)
+    {
+        return $this->sleepWindow = $sleepWindow;
     }
 
     /**
