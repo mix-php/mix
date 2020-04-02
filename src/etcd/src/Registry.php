@@ -58,6 +58,7 @@ class Registry implements RegistryInterface
     public $monitorMaxIdle = 30;
 
     /**
+     * 负载均衡器
      * @var LoadBalancerInterface
      */
     public $loadBalancer;
