@@ -35,13 +35,11 @@ class Error
      * Error constructor.
      * @param int $level
      * @param LoggerInterface $logger
-     * @param EventDispatcherInterface|null $dispatcher
      */
-    public function __construct(int $level, LoggerInterface $logger, EventDispatcherInterface $dispatcher = null)
+    public function __construct(int $level, LoggerInterface $logger)
     {
-        $this->level      = $level;
-        $this->logger     = $logger;
-        $this->dispatcher = $dispatcher;
+        $this->level  = $level;
+        $this->logger = $logger;
         $this->register();
     }
 

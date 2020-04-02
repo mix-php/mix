@@ -33,10 +33,9 @@ class CircuitBreaker
      * Fuser constructor.
      * @param array $config
      */
-    public function __construct(array $config, EventDispatcherInterface $dispatcher = null)
+    public function __construct(array $config)
     {
-        $this->config     = $config;
-        $this->dispatcher = $dispatcher;
+        $this->config = $config;
         $this->parse();
     }
 
