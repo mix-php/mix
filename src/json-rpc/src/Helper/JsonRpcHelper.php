@@ -63,7 +63,7 @@ class JsonRpcHelper
 
     /**
      * Parse metadata
-     * 只解析 X- 开头的 Hander
+     * 只解析 X- 开头的 Header，该方法是为了 zipkin 等调用链中间件的接入
      * @param ServerRequest $request
      * @return string[]
      */
