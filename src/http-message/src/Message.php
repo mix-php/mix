@@ -157,6 +157,19 @@ class Message implements MessageInterface
     }
 
     /**
+     * 获取全部 Header, 按行排列 (k=>v)
+     * @return string[]
+     */
+    public function getHeaderLines()
+    {
+        $headers = [];
+        foreach ($request->getHeaders() as $name => $header) {
+            $headers[$name] = implode(',', $header);
+        }
+        return $headers;
+    }
+
+    /**
      * Return an instance with the provided value replacing the specified header.
      *
      * While header names are case-insensitive, the casing of the header will

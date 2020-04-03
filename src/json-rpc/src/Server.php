@@ -102,11 +102,10 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
     {
         $services = [];
         foreach ($this->services as $item) {
-            list($service, $namespace, $suffix) = $item;
-            $name = get_class($service);
+            list($class, $namespace, $suffix) = $item;
 
             $namespace = substr($namespace, -1, 1) == '\\' ? $namespace : $namespace . '\\';
-            $name      = str_replace($namespace, '', $name);
+            $name      = str_replace($namespace, '', $class);
 
             $suffixLength = strlen($suffix);
             $name         = ($suffixLength > 0 and substr($name, -$suffixLength, $suffixLength) == $suffix) ? substr($name, 0, -$suffixLength) : $name;
@@ -136,22 +135,21 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
     /**
      * Register
      * 相同 Class 名，即便命名空间不同也会被覆盖
-     * @param object $service
+     * @param string $class
      * @param string $namespace
      * @param string $suffix
      */
-    public function register(object $service, string $namespace = '', $suffix = '')
+    public function register(string $class, string $namespace = '', $suffix = '')
     {
-        array_push($this->services, [$service, $namespace, $suffix]);
+        array_push($this->services, [$class, $namespace, $suffix]);
 
-        $name         = get_class($service);
-        $name         = basename(str_replace('\\', '/', $name));
+        $name         = basename(str_replace('\\', '/', $class));
         $suffixLength = strlen($suffix);
         $name         = ($suffixLength > 0 and substr($name, -$suffixLength, $suffixLength) == $suffix) ? substr($name, 0, -$suffixLength) : $name;
 
-        $methods = get_class_methods($service);
+        $methods = get_class_methods($class);
         foreach ($methods as $method) {
-            $this->callables[sprintf('%s.%s', $name, $method)] = [$service, $method];
+            $this->callables[sprintf('%s.%s', $name, $method)] = [$class, $method];
         }
     }
 
@@ -224,7 +222,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
          * @var bool $single
          */
         try {
-            list($single, $requests) = JsonRpcHelper::parseRequests($content);
+            list($single, $requests) = JsonRpcHelper::parseRequestsFromTCP($content);
         } catch (\Throwable $ex) {
             $response = (new ResponseFactory)->createErrorResponse(-32700, 'Parse error', null);
             $sendChan->push(JsonRpcHelper::content(true, $response));
@@ -238,10 +236,11 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
 
     /**
      * 调用HTTP
+     * @param ServerRequest $request
      * @param \Mix\Http\Message\Response $httpResponse
      * @param string $content
      */
-    protected function callHTTP(\Mix\Http\Message\Response $httpResponse, string $content)
+    protected function callHTTP(ServerRequest $request, \Mix\Http\Message\Response $httpResponse, string $content)
     {
         /**
          * 解析
@@ -249,7 +248,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
          * @var bool $single
          */
         try {
-            list($single, $requests) = JsonRpcHelper::parseRequests($content);
+            list($single, $requests) = JsonRpcHelper::parseRequestsFromHTTP($request, $content);
         } catch (\Throwable $ex) {
             $response = (new ResponseFactory)->createErrorResponse(-32700, 'Parse error', null);
             $body     = (new StreamFactory)->createStream(JsonRpcHelper::content(true, $response));
@@ -294,24 +293,27 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
                     if (!isset($this->callables[$request->method])) {
                         throw new \RuntimeException(sprintf('Method %s not found', $request->method), -32601);
                     }
+                    // 执行
+                    list($class, $method) = $this->callables[$request->method];
+                    $callable    = [new $class($request), $method];
                     $params      = is_array($request->params) ? $request->params : [$request->params];
-                    $result      = call_user_func($this->callables[$request->method], ...$params);
+                    $result      = call_user_func($callable, ...$params);
                     $result      = is_scalar($result) ? [$result] : $result;
                     $responses[] = (new ResponseFactory)->createResultResponse($result, $request->id);
-
-                    $event         = new ProcessedEvent();
-                    $event->time   = round((static::microtime() - $microtime) * 1000, 2);
-                    $event->method = $request->method;
+                    // event
+                    $event          = new ProcessedEvent();
+                    $event->time    = round((static::microtime() - $microtime) * 1000, 2);
+                    $event->request = $request;
                     $this->dispatch($event);
                 } catch (\Throwable $ex) {
                     $message     = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
                     $code        = $ex->getCode();
                     $responses[] = (new ResponseFactory)->createErrorResponse($code, $ex->getMessage(), $request->id);
-
-                    $event         = new ProcessedEvent();
-                    $event->time   = round((static::microtime() - $microtime) * 1000, 2);
-                    $event->method = $request->method;
-                    $event->error  = sprintf('[%d] %s', $code, $message);
+                    // event
+                    $event          = new ProcessedEvent();
+                    $event->time    = round((static::microtime() - $microtime) * 1000, 2);
+                    $event->request = $request;
+                    $event->error   = sprintf('[%d] %s', $code, $message);
                     $this->dispatch($event);
                 }
             });
@@ -333,7 +335,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
             return;
         }
         $content = $request->getBody()->getContents();
-        $this->callHTTP($response, $content);
+        $this->callHTTP($request, $response, $content);
     }
 
     /**

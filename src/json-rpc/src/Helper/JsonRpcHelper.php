@@ -2,6 +2,7 @@
 
 namespace Mix\JsonRpc\Helper;
 
+use Mix\Http\Message\ServerRequest;
 use Mix\JsonRpc\Constants;
 use Mix\JsonRpc\Exception\ParseException;
 use Mix\JsonRpc\Message\Error;
@@ -18,22 +19,70 @@ class JsonRpcHelper
 
     /**
      * 解析请求
-     * 在 Gateway 使用时传入的是 array
-     * @param string|array $payload
+     * @param ServerRequest $request
+     * @param string $payload
      * @return array [bool $single, Request[] $requests]
      * @throws ParseException
      */
-    public static function parseRequests($payload)
+    public static function parseRequestsFromHTTP(ServerRequest $request, string $payload)
+    {
+        $payload = static::decode($payload);
+        // 只附带 X- 开头的 Hander
+        $metadata = [];
+        foreach ($request->getHeaderLines() as $key => $value) {
+            if (stripos($key, 'X-') === 0) {
+                $metadata[$key] = $value;
+            }
+        }
+        return static::parseRequests($payload, $metadata);
+    }
+
+    /**
+     * 解析请求
+     * @param string $payload
+     * @return array [bool $single, Request[] $requests]
+     * @throws ParseException
+     */
+    public static function parseRequestsFromTCP(string $payload)
+    {
+        $payload = static::decode($payload);
+        return static::parseRequests($payload);
+    }
+
+    /**
+     * 解析请求
+     * @param ServerRequest $request
+     * @param array|object $payload
+     * @return array [bool $single, Request[] $requests]
+     * @throws ParseException
+     */
+    public static function parseRequestsFromProxy(ServerRequest $request, $payload)
     {
         if (is_array($payload)) {
             foreach ($payload as $key => $value) {
                 is_array($value) and $payload[$key] = (object)$value;
             }
         }
-        if (is_string($payload)) {
-            $payload = static::decode($payload);
+        // 只附带 X- 开头的 Hander
+        $metadata = [];
+        foreach ($request->getHeaderLines() as $key => $value) {
+            if (stripos($key, 'X-') === 0) {
+                $metadata[$key] = $value;
+            }
         }
-        if (is_null($payload)) {
+        return static::parseRequests($payload, $metadata);
+    }
+
+    /**
+     * 解析请求
+     * @param object|array $payload
+     * @param array|null $metadata
+     * @return array [bool $single, Request[] $requests]
+     * @throws ParseException
+     */
+    protected static function parseRequests($payload, $metadata = null)
+    {
+        if (empty($payload)) {
             throw new ParseException('Parse request failed');
         }
         $requests = [];
@@ -43,12 +92,14 @@ class JsonRpcHelper
             $payload = [$payload];
         }
         foreach ($payload as $value) {
-            $request          = new Request();
-            $request->jsonrpc = $value->jsonrpc ?? null;
-            $request->id      = $value->id ?? null;
-            $request->method  = $value->method ?? null;
-            $request->params  = $value->params ?? null;
-            $requests[]       = $request;
+            $request           = new Request();
+            $request->jsonrpc  = $value->jsonrpc ?? null;
+            $request->id       = $value->id ?? null;
+            $request->method   = $value->method ?? null;
+            $request->params   = $value->params ?? null;
+            $request->params   = $value->params ?? null;
+            $request->metadata = $value->metadata ?? $metadata;
+            $requests[]        = $request;
         }
         return [$single, $requests];
     }

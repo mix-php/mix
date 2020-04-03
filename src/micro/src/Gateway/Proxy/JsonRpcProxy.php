@@ -94,7 +94,7 @@ class JsonRpcProxy implements ProxyInterface
         $body    = $request->getParsedBody();
         $content = $body['request'] ?? null;
         try {
-            list($single, $requests) = JsonRpcHelper::parseRequests($content);
+            list($single, $requests) = JsonRpcHelper::parseRequestsFromProxy($request, $content);
         } catch (\Throwable $ex) {
             $rpcResponse = (new ResponseFactory)->createErrorResponse(-32700, 'Parse error', null);
             $body        = (new StreamFactory())->createStream(json_encode($rpcResponse));
