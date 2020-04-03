@@ -14,7 +14,7 @@ class RequestFactory
     /**
      * Create Request
      * @param string $method
-     * @param $params
+     * @param array|object $params
      * @param null $id
      * @return Request
      */

@@ -26,14 +26,8 @@ class JsonRpcHelper
      */
     public static function parseRequestsFromHTTP(ServerRequest $request, string $payload)
     {
-        $payload = static::decode($payload);
-        // 只附带 X- 开头的 Hander
-        $metadata = [];
-        foreach ($request->getHeaderLines() as $key => $value) {
-            if (stripos($key, 'X-') === 0) {
-                $metadata[$key] = $value;
-            }
-        }
+        $payload  = static::decode($payload);
+        $metadata = static::parseMetadata($request);
         return static::parseRequests($payload, $metadata);
     }
 
@@ -63,14 +57,25 @@ class JsonRpcHelper
                 is_array($value) and $payload[$key] = (object)$value;
             }
         }
-        // 只附带 X- 开头的 Hander
+        $metadata = static::parseMetadata($request);
+        return static::parseRequests($payload, $metadata);
+    }
+
+    /**
+     * Parse metadata
+     * 只解析 X- 开头的 Hander
+     * @param ServerRequest $request
+     * @return string[]
+     */
+    public static function parseMetadata(ServerRequest $request)
+    {
         $metadata = [];
         foreach ($request->getHeaderLines() as $key => $value) {
             if (stripos($key, 'X-') === 0) {
                 $metadata[$key] = $value;
             }
         }
-        return static::parseRequests($payload, $metadata);
+        return $metadata;
     }
 
     /**
@@ -98,7 +103,7 @@ class JsonRpcHelper
             $request->method   = $value->method ?? null;
             $request->params   = $value->params ?? null;
             $request->params   = $value->params ?? null;
-            $request->metadata = $value->metadata ?? $metadata;
+            $request->metadata = (array)($value->metadata ?? $metadata);
             $requests[]        = $request;
         }
         return [$single, $requests];

@@ -24,6 +24,7 @@
     "mix/concurrent": "~2.1.0",
     "mix/server": "~2.1.0",
     "mix/http-server": "~2.1.0",
+    "mix/http-message": "~2.1.0",
     "mix/micro": "~2.1.0"
   },
   "require-dev": {

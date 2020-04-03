@@ -162,11 +162,11 @@ class Message implements MessageInterface
      */
     public function getHeaderLines()
     {
-        $headers = [];
-        foreach ($request->getHeaders() as $name => $header) {
-            $headers[$name] = implode(',', $header);
+        $headerLines = [];
+        foreach ($this->getHeaders() as $name => $header) {
+            $headerLines[$name] = implode(',', $header);
         }
-        return $headers;
+        return $headerLines;
     }
 
     /**
