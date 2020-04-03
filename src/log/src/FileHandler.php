@@ -101,59 +101,66 @@ class FileHandler implements LoggerHandlerInterface
      */
     protected function rotate()
     {
+        if (!$this->rotate) {
+            return;
+        }
         $file = $this->filename;
         if (!$file || !file_exists($file)) {
             return;
         }
-        if (!$this->rotate) {
-            return;
-        }
 
-        $today = date('Ymd');
+        $today      = date('Ymd');
+        $dateString = '';
         if (!$this->today) {
+            // 处理进程初次启动，日志文件非当日时间
             $this->today = date('Ymd', filectime($this->filename));
         }
         $info = pathinfo($file);
         $move = 0;
         if ($this->maxFileSize > 0 && filesize($file) >= $this->maxFileSize) {
-            $move = 1;
+            $move       = 1;
+            $dateString = $today;
         }
-        if ($this->today != $today) {
-            $move = -1;
+        // 再次判断文件时间是为了处理一直在执行的进程，当日期发生变化时，但是文件已经被其他进程轮转过，不可再次轮转
+        if ($this->today != $today && date('Ymd', filectime($this->filename)) != $today) {
+            $move       = -1;
+            $dateString = $this->today;
         }
-        if ($move) {
-            $lock = sprintf('%s.lock', $this->filename);
-            $fp   = fopen($lock, "a+");
-            if ($fp) {
-                if (flock($fp, LOCK_EX)) {
-                    $number = 0;
-                    while (file_exists($file)) {
-                        ++$number;
-                        $numberString = (string)$number;
-                        $multiplier   = 3 - strlen($numberString);
-                        $numberString = str_repeat('0', $multiplier < 0 ? 0 : $multiplier) . $numberString;
-                        $file         = sprintf(
-                            '%s.%s.%s.%s',
-                            $info['dirname'] . DIRECTORY_SEPARATOR . $info['filename'],
-                            $this->today,
-                            $numberString,
-                            $info['extension']
-                        );
-                    }
-
-                    $ok = @rename($this->filename, $file);
-                    if ($ok and $move == -1) {
-                        $this->clear();
-                    }
-
-                    flock($fp, LOCK_UN);
-                    @unlink($lock);
-                }
-                fclose($fp);
-            }
-        }
-
         $this->today = $today;
+        if (!$move) {
+            return;
+        }
+
+        $lock = sprintf('%s.lock', $this->filename);
+        $fp   = fopen($lock, "a+");
+        if (!$fp) {
+            return;
+        }
+        if (flock($fp, LOCK_EX)) {
+            $number = 0;
+            while (file_exists($file)) {
+                ++$number;
+                $numberString = (string)$number;
+                $multiplier   = 3 - strlen($numberString);
+                $numberString = str_repeat('0', $multiplier < 0 ? 0 : $multiplier) . $numberString;
+                $file         = sprintf(
+                    '%s.%s.%s.%s',
+                    $info['dirname'] . DIRECTORY_SEPARATOR . $info['filename'],
+                    $dateString,
+                    $numberString,
+                    $info['extension']
+                );
+            }
+
+            $ok = @rename($this->filename, $file);
+            if ($ok and $move == -1) {
+                $this->clear();
+            }
+
+            flock($fp, LOCK_UN);
+            @unlink($lock);
+        }
+        fclose($fp);
     }
 
     /**
