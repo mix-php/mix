@@ -20,12 +20,12 @@ class Request implements \JsonSerializable
     public $method;
 
     /**
-     * @var array
+     * @var array|object
      */
     public $params;
 
     /**
-     * @var array
+     * @var string[]
      */
     public $metadata;
 
