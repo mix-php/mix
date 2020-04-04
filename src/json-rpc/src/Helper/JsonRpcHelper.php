@@ -27,8 +27,7 @@ class JsonRpcHelper
     public static function parseRequestsFromHTTP(ServerRequest $request, string $payload)
     {
         $payload  = static::decode($payload);
-        $metadata = static::parseMetadata($request);
-        return static::parseRequests($payload, $metadata);
+        return static::parseRequests($payload);
     }
 
     /**
@@ -57,35 +56,16 @@ class JsonRpcHelper
                 is_array($value) and $payload[$key] = (object)$value;
             }
         }
-        $metadata = static::parseMetadata($request);
-        return static::parseRequests($payload, $metadata);
-    }
-
-    /**
-     * Parse metadata
-     * 只解析 X- 开头的 Header，该方法是为了 zipkin 等调用链中间件的接入
-     * @param ServerRequest $request
-     * @return string[]
-     */
-    public static function parseMetadata(ServerRequest $request)
-    {
-        $metadata = [];
-        foreach ($request->getHeaderLines() as $key => $value) {
-            if (stripos($key, 'X-') === 0) {
-                $metadata[$key] = $value;
-            }
-        }
-        return $metadata;
+        return static::parseRequests($payload);
     }
 
     /**
      * 解析请求
      * @param object|array $payload
-     * @param array|null $metadata
      * @return array [bool $single, Request[] $requests]
      * @throws ParseException
      */
-    protected static function parseRequests($payload, $metadata = null)
+    protected static function parseRequests($payload)
     {
         if (empty($payload)) {
             throw new ParseException('Parse request failed');
@@ -103,7 +83,6 @@ class JsonRpcHelper
             $request->method   = $value->method ?? null;
             $request->params   = $value->params ?? null;
             $request->params   = $value->params ?? null;
-            $request->metadata = (array)($value->metadata ?? $metadata);
             $requests[]        = $request;
         }
         return [$single, $requests];

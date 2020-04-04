@@ -25,11 +25,6 @@ class Request implements \JsonSerializable
     public $params;
 
     /**
-     * @var string[]
-     */
-    public $metadata;
-
-    /**
      * @var int
      */
     public $id;
