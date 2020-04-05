@@ -1,0 +1,31 @@
+{
+  "name": "mix/zipkin",
+  "description": "Mix Zipkin http://www.mixphp.cn",
+  "type": "framework",
+  "keywords": [
+    "framework",
+    "mix",
+    "swoole"
+  ],
+  "homepage": "http://www.mixphp.cn/",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "liu,jian",
+      "email": "coder.keda@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.2.0",
+    "opentracing/opentracing": "1.0.0-beta6",
+    "openzipkin/zipkin": "^1.3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mix\\Zipkin\\": "src/"
+    }
+  }
+}
