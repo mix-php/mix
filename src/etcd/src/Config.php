@@ -5,6 +5,7 @@ namespace Mix\Etcd;
 use Mix\Bean\BeanInjector;
 use Mix\Concurrent\Timer;
 use Mix\Etcd\Client\Client;
+use Mix\Micro\Config\ConfigInterface;
 use Mix\Micro\Config\Event\DeleteEvent;
 use Mix\Micro\Config\Event\PutEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -13,7 +14,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
  * Class Config
  * @package Mix\Etcd
  */
-class Config
+class Config implements ConfigInterface
 {
 
     /**
