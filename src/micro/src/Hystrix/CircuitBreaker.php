@@ -1,15 +1,15 @@
 <?php
 
-namespace Mix\Micro\Breaker;
+namespace Mix\Micro\Hystrix;
 
-use Mix\Micro\Breaker\Event\StatusChangeEvent;
-use Mix\Micro\Breaker\Exception\NotFoundException;
-use Mix\Micro\Breaker\Exception\TimeoutException;
+use Mix\Micro\Hystrix\Event\StatusChangeEvent;
+use Mix\Micro\Hystrix\Exception\NotFoundException;
+use Mix\Micro\Hystrix\Exception\TimeoutException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class CircuitBreaker
- * @package Mix\Micro\Breaker
+ * @package Mix\Micro\Hystrix
  */
 class CircuitBreaker
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Mix\Micro\Breaker;
+namespace Mix\Micro\Hystrix;
 
 /**
  * Class Command
- * @package Mix\Micro\Breaker
+ * @package Mix\Micro\Hystrix
  */
 class Command
 {

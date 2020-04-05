@@ -1,10 +1,10 @@
 <?php
 
-namespace Mix\Micro\Breaker\Exception;
+namespace Mix\Micro\Hystrix\Exception;
 
 /**
  * Class TimeoutException
- * @package Mix\Micro\Breaker\Exception
+ * @package Mix\Micro\Hystrix\Exception
  */
 class TimeoutException extends \RuntimeException
 {

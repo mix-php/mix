@@ -1,10 +1,10 @@
 <?php
 
-namespace Mix\Micro\Breaker;
+namespace Mix\Micro\Hystrix;
 
 /**
  * Class CommandRuntime
- * @package Mix\Micro\Breaker
+ * @package Mix\Micro\Hystrix
  */
 class CommandRuntime
 {
