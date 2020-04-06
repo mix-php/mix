@@ -7,6 +7,8 @@ use Mix\JsonRpc\Call\Caller;
 use Mix\JsonRpc\Constants;
 use Mix\JsonRpc\Exception\ParseException;
 use Mix\JsonRpc\Helper\JsonRpcHelper;
+use Mix\JsonRpc\Intercept\InterceptDispatcher;
+use Mix\JsonRpc\Intercept\InterceptorInterface;
 use Mix\JsonRpc\Message\Request;
 use Mix\JsonRpc\Message\Response;
 use Swoole\Coroutine\Client;
@@ -39,6 +41,11 @@ class Connection
      * @var float
      */
     public $callTimeout = 10.0;
+
+    /**
+     * @var InterceptorInterface[]
+     */
+    public $interceptors = [];
 
     /**
      * @var Client
@@ -86,10 +93,18 @@ class Connection
      */
     public function call(Request $request)
     {
-        $jsonString = JsonRpcHelper::encode($request) . Constants::EOF;
-        $this->send($jsonString);
-        $data      = $this->recv($this->callTimeout);
-        $responses = JsonRpcHelper::parseResponses($data);
+        // 拦截
+        $interceptDispatcher = new InterceptDispatcher($this->interceptors);
+        $response            = $interceptDispatcher->dispatch($request, new Response());
+        // 执行
+        if (!isset($response->result)) {
+            $jsonString = JsonRpcHelper::encode($request) . Constants::EOF;
+            $this->send($jsonString);
+            $data      = $this->recv($this->callTimeout);
+            $responses = JsonRpcHelper::parseResponses($data);
+        } else {
+            $responses[] = $response;
+        }
         return array_pop($responses);
     }
 
@@ -105,14 +120,32 @@ class Connection
         if (empty($requests)) {
             return [];
         }
+
+        // 拦截
+        $unprocessedRequests = [];
+        $processedResponses  = [];
+        foreach ($requests as $request) {
+            $interceptDispatcher = new InterceptDispatcher($this->interceptors);
+            $response            = $interceptDispatcher->dispatch($request, new Response());
+            if (isset($response->result)) {
+                $processedResponses[] = $response;
+            } else {
+                $unprocessedRequests = $requests;
+            }
+        }
+        $requests = $unprocessedRequests;
+
+        // 执行
         if (count($requests) == 1) {
             $jsonStr = JsonRpcHelper::encode(array_pop($requests)) . Constants::EOF;
         } else {
             $jsonStr = JsonRpcHelper::encode($requests) . Constants::EOF;
         }
         $this->send($jsonStr);
-        $data = $this->recv($this->callTimeout);
-        return JsonRpcHelper::parseResponses($data);
+        $data      = $this->recv($this->callTimeout);
+        $responses = JsonRpcHelper::parseResponses($data);
+
+        return array_merge($processedResponses, $responses);
     }
 
     /**

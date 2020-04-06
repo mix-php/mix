@@ -3,6 +3,7 @@
 namespace Mix\JsonRpc\Event;
 
 use Mix\JsonRpc\Message\Request;
+use Mix\JsonRpc\Message\Response;
 
 /**
  * Class ProcessedEvent
@@ -16,12 +17,18 @@ class ProcessedEvent
      * @var float
      */
     public $time;
-    
+
     /**
-     * 执行的方法
+     * 请求
      * @var Request
      */
     public $request;
+
+    /**
+     * 响应
+     * @var Response
+     */
+    public $response;
 
     /**
      * 执行异常信息

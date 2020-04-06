@@ -8,6 +8,8 @@ use Mix\Http\Message\ServerRequest;
 use Mix\JsonRpc\Event\ProcessedEvent;
 use Mix\JsonRpc\Factory\ResponseFactory;
 use Mix\JsonRpc\Helper\JsonRpcHelper;
+use Mix\JsonRpc\Intercept\InterceptDispatcher;
+use Mix\JsonRpc\Intercept\InterceptorInterface;
 use Mix\JsonRpc\Message\Request;
 use Mix\JsonRpc\Message\Response;
 use Mix\Server\Connection;
@@ -42,6 +44,11 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
      * @var EventDispatcherInterface
      */
     public $dispatcher;
+
+    /**
+     * @var InterceptorInterface[]
+     */
+    public $interceptors = [];
 
     /**
      * @var \Mix\Server\Server
@@ -293,28 +300,31 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
                     if (!isset($this->callables[$request->method])) {
                         throw new \RuntimeException(sprintf('Method %s not found', $request->method), -32601);
                     }
+                    // 拦截
+                    $interceptDispatcher = new InterceptDispatcher($this->interceptors);
+                    $response            = $interceptDispatcher->dispatch($request, new Response());
                     // 执行
-                    list($class, $method) = $this->callables[$request->method];
-                    $callable    = [new $class($request), $method];
-                    $params      = is_array($request->params) ? $request->params : [$request->params];
-                    $result      = call_user_func($callable, ...$params);
-                    $result      = is_scalar($result) ? [$result] : $result;
-                    $responses[] = (new ResponseFactory)->createResultResponse($result, $request->id);
+                    if (!isset($response->result)) {
+                        list($class, $method) = $this->callables[$request->method];
+                        $callable    = [new $class($request), $method];
+                        $params      = is_array($request->params) ? $request->params : [$request->params];
+                        $result      = call_user_func($callable, ...$params);
+                        $result      = is_scalar($result) ? [$result] : $result;
+                        $response    = (new ResponseFactory)->createResultResponse($result, $request->id);
+                        $responses[] = $response;
+                    } else {
+                        $responses[] = $response;
+                    }
                     // event
-                    $event          = new ProcessedEvent();
-                    $event->time    = round((static::microtime() - $microtime) * 1000, 2);
-                    $event->request = $request;
-                    $this->dispatch($event);
+                    $this->dispatch($request, $response);
                 } catch (\Throwable $ex) {
                     $message     = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
                     $code        = $ex->getCode();
-                    $responses[] = (new ResponseFactory)->createErrorResponse($code, $ex->getMessage(), $request->id);
+                    $response    = (new ResponseFactory)->createErrorResponse($code, $ex->getMessage(), $request->id);
+                    $responses[] = $response;
                     // event
-                    $event          = new ProcessedEvent();
-                    $event->time    = round((static::microtime() - $microtime) * 1000, 2);
-                    $event->request = $request;
-                    $event->error   = sprintf('[%d] %s', $code, $message);
-                    $this->dispatch($event);
+                    $error = sprintf('[%d] %s', $code, $message);
+                    $this->dispatch($request, $response, $error);
                 }
             });
         }
@@ -350,13 +360,20 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
 
     /**
      * Dispatch
-     * @param object $event
+     * @param Request $request
+     * @param Response $response
+     * @param null $error
      */
-    protected function dispatch(object $event)
+    protected function dispatch(Request $request, Response $response, $error = null)
     {
         if (!isset($this->dispatcher)) {
             return;
         }
+        $event           = new ProcessedEvent();
+        $event->time     = round((static::microtime() - $microtime) * 1000, 2);
+        $event->request  = $request;
+        $event->response = $response;
+        $event->error    = $error;
         $this->dispatcher->dispatch($event);
     }
 
