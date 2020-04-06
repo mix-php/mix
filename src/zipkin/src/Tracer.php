@@ -2,6 +2,7 @@
 
 namespace Mix\Zipkin;
 
+use Mix\Bean\BeanInjector;
 use Mix\Zipkin\Exception\NotFoundException;
 use Mix\Zipkin\Exception\UnavailableException;
 use OpenTracing\Exceptions\InvalidReferencesSet;
@@ -30,12 +31,12 @@ class Tracer implements \OpenTracing\Tracer
     /**
      * @var string
      */
-    public $endpointUrl = 'http://localhost:9411/api/v2/spans';
+    public $url = 'http://127.0.0.1:9411/api/v2/spans';
 
     /**
      * @var int
      */
-    public $timeout = 3;
+    public $timeout = 0;
 
     /**
      * @var string
@@ -43,17 +44,17 @@ class Tracer implements \OpenTracing\Tracer
     public $serviceName;
 
     /**
-     * @var null
+     * @var string|null
      */
     public $ipv4 = null;
 
     /**
-     * @var null
+     * @var string|null
      */
     public $ipv6 = null;
 
     /**
-     * @var null
+     * @var int|null
      */
     public $port = null;
 
@@ -74,19 +75,13 @@ class Tracer implements \OpenTracing\Tracer
 
     /**
      * Tracer constructor.
-     * @param string $serviceName
-     * @param null $ip
-     * @param null $port
+     * @param array $config
+     * @throws \PhpDocReader\AnnotationException
+     * @throws \ReflectionException
      */
-    public function __construct(string $serviceName, $ip = null, $port = null)
+    public function __construct(array $config = [])
     {
-        $this->serviceName = $serviceName;
-        if (strpos($ip, '.') !== false) {
-            $this->ipv4 = $ip;
-        } else {
-            $this->ipv6 = $ip;
-        }
-        $this->port = $port;
+        BeanInjector::inject($this, $config);
     }
 
     /**
@@ -97,7 +92,7 @@ class Tracer implements \OpenTracing\Tracer
         $endpoint      = \Zipkin\Endpoint::create($this->serviceName, $this->ipv4, $this->ipv6, $this->port);
         $sampler       = \Zipkin\Samplers\BinarySampler::createAsAlwaysSample();
         $reporter      = new \Zipkin\Reporters\Http(\Zipkin\Reporters\Http\CurlFactory::create(), [
-            'endpoint_url' => $this->endpointUrl,
+            'endpoint_url' => $this->url,
             "timeout"      => $this->timeout,
         ]);
         $this->tracing = \Zipkin\TracingBuilder::create()
@@ -163,16 +158,15 @@ class Tracer implements \OpenTracing\Tracer
         }
 
         $subSpan = $this->tracer->newChild($this->rootSpan->getContext());
-        $span    = new \Mix\Zipkin\Span($this, $subSpan, $operationName);
+        $span    = new \Mix\Zipkin\Span\Span($this, $subSpan, $operationName);
 
         if (!empty($options['tags'])) {
             foreach ($options['tags'] as $key => $val) {
                 $span->setTag($key, $val);
             }
         }
-
-        $scope = new \Mix\Zipkin\Scope($span);
-        return $scope;
+        
+        return new \Mix\Zipkin\Scope\Scope($span);
     }
 
     /**
@@ -214,7 +208,7 @@ class Tracer implements \OpenTracing\Tracer
             $rootSpan = $this->rootSpan = $tracer->newTrace();
         }
 
-        $span = new \Mix\Zipkin\Span($this, $rootSpan, $operationName);
+        $span = new \Mix\Zipkin\Span\Span($this, $rootSpan, $operationName);
 
         if (!empty($options['tags'])) {
             foreach ($options['tags'] as $key => $val) {
@@ -274,7 +268,7 @@ class Tracer implements \OpenTracing\Tracer
         if ($extractedContext instanceof DefaultSamplingFlags) {
             return null;
         }
-        return new \Mix\Zipkin\SpanContext($this, $extractedContext);
+        return new \Mix\Zipkin\Span\SpanContext($this, $extractedContext);
     }
 
     /**

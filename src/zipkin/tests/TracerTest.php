@@ -8,9 +8,8 @@ final class TracerTest extends TestCase
 
     public function testRootSpan(): void
     {
-
-        $tracer = new \Mix\Zipkin\Tracer('test-1', '192.168.1.1', 1234);
-        $tracer->init();
+        $tracing  = new \Mix\Zipkin\Tracing();
+        $tracer   = $tracing->trace('test-1', '192.168.1.1', 1234);
         $rootSpan = $tracer->startSpan('service-1', ['tags' => ['foo' => 'bar']]);
 
         usleep(100000);
@@ -25,9 +24,8 @@ final class TracerTest extends TestCase
         $metadata = [];
         $tracer->inject($scope2->getSpan()->getContext(), \OpenTracing\Formats\TEXT_MAP, $metadata);
         var_dump($metadata);
-
-        $tracer2 = new \Mix\Zipkin\Tracer('test-2', '192.168.1.1', 1234);
-        $tracer2->init();
+        
+        $tracer2    = $tracing->trace('test-2', '192.168.1.1', 1234);
         $scope2Span = $tracer2->extract(\OpenTracing\Formats\TEXT_MAP, $metadata);
         $rootSpan2  = $tracer2->startSpan('service-2', [
             'tags'     => ['foo' => 'bar'],

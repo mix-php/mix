@@ -1,13 +1,14 @@
 <?php
 
-namespace Mix\Zipkin;
+namespace Mix\Zipkin\Span;
 
 use Mix\Zipkin\Exception\UnavailableException;
+use Mix\Zipkin\Tracer;
 use OpenTracing\SpanContext;
 
 /**
  * Class Span
- * @package Mix\Zipkin
+ * @package Mix\Zipkin\Span
  */
 class Span implements \OpenTracing\Span
 {
@@ -58,7 +59,7 @@ class Span implements \OpenTracing\Span
      */
     public function getContext()
     {
-        return new \Mix\Zipkin\SpanContext($this->tracer, $this->span->getContext());
+        return new \Mix\Zipkin\Span\SpanContext($this->tracer, $this->span->getContext());
     }
 
     /**
