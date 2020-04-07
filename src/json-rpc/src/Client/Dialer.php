@@ -3,7 +3,7 @@
 namespace Mix\JsonRpc\Client;
 
 use Mix\Bean\BeanInjector;
-use Mix\JsonRpc\Intercept\InterceptorInterface;
+use Mix\JsonRpc\Middleware\MiddlewareInterface;
 use Mix\Micro\Service\Exception\NotFoundException;
 use Mix\Micro\Service\RegistryInterface;
 use Mix\Micro\Service\ServiceInterface;
@@ -28,9 +28,9 @@ class Dialer
     public $callTimeout = 10.0;
 
     /**
-     * @var InterceptorInterface[]
+     * @var MiddlewareInterface[]
      */
-    public $interceptors = [];
+    public $middleware = [];
 
     /**
      * @var RegistryInterface
@@ -57,22 +57,21 @@ class Dialer
      * Dial
      * @param string $host
      * @param int $port
-     * @param InterceptorInterface|null $interceptor
+     * @param MiddlewareInterface|null $middleware
      * @return Connection
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
      * @throws \Swoole\Exception
      */
-    public function dial(string $host, int $port, InterceptorInterface $interceptor = null)
+    public function dial(string $host, int $port, MiddlewareInterface $middleware = null)
     {
-        $interceptors = $this->interceptors;
-        $interceptor and array_shift($interceptors, $interceptor);
+        $middleware and array_unshift($this->middleware, $middleware);
         $conn = new Connection([
-            'host'         => $host,
-            'port'         => $port,
-            'timeout'      => $this->timeout,
-            'callTimeout'  => $this->callTimeout,
-            'interceptors' => $interceptors,
+            'host'        => $host,
+            'port'        => $port,
+            'timeout'     => $this->timeout,
+            'callTimeout' => $this->callTimeout,
+            'middleware'  => $this->middleware,
         ]);
         $conn->connect();
         return $conn;

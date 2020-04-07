@@ -10,6 +10,11 @@ class Request implements \JsonSerializable
 {
 
     /**
+     * @var \ArrayObject
+     */
+    public $context;
+
+    /**
      * @var string
      */
     public $jsonrpc;
@@ -30,6 +35,14 @@ class Request implements \JsonSerializable
     public $id;
 
     /**
+     * Request constructor.
+     */
+    public function __construct()
+    {
+        $this->context = new \ArrayObject();
+    }
+
+    /**
      * Json serialize
      * @return array
      */
@@ -37,6 +50,9 @@ class Request implements \JsonSerializable
     {
         $data = [];
         foreach ($this as $key => $val) {
+            if ($key == 'context') {
+                continue;
+            }
             if ($key != 'id' && is_null($val)) {
                 continue;
             }

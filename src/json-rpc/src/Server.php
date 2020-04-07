@@ -8,10 +8,10 @@ use Mix\Http\Message\ServerRequest;
 use Mix\JsonRpc\Event\ProcessedEvent;
 use Mix\JsonRpc\Factory\ResponseFactory;
 use Mix\JsonRpc\Helper\JsonRpcHelper;
-use Mix\JsonRpc\Intercept\InterceptDispatcher;
-use Mix\JsonRpc\Intercept\InterceptorInterface;
 use Mix\JsonRpc\Message\Request;
 use Mix\JsonRpc\Message\Response;
+use Mix\JsonRpc\Middleware\MiddlewareDispatcher;
+use Mix\JsonRpc\Middleware\MiddlewareInterface;
 use Mix\Server\Connection;
 use Mix\Server\Exception\ReceiveException;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -46,9 +46,9 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
     public $dispatcher;
 
     /**
-     * @var InterceptorInterface[]
+     * @var MiddlewareInterface[]
      */
-    public $interceptors = [];
+    public $middleware = [];
 
     /**
      * @var \Mix\Server\Server
@@ -235,8 +235,14 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
             $sendChan->push(JsonRpcHelper::content(true, $response));
             return;
         }
-        // 处理
-        $responses = $this->process(...$requests);
+
+        // 通过拦截器调用
+        $process             = function (array $requests) {
+            return $this->process(...$requests);
+        };
+        $interceptDispatcher = new MiddlewareDispatcher($this->middleware, $process, $requests);
+        $responses           = $interceptDispatcher->dispatch();
+
         // 发送
         $sendChan->push(JsonRpcHelper::content($single, ...$responses));
     }
@@ -265,8 +271,14 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
                 ->end();
             return;
         }
-        // 处理
-        $responses = $this->process(...$requests);
+
+        // 通过拦截器调用
+        $process             = function (array $requests) {
+            return $this->process(...$requests);
+        };
+        $interceptDispatcher = new MiddlewareDispatcher($this->middleware, $process, $requests);
+        $responses           = $interceptDispatcher->dispatch();
+
         // 发送
         $body = (new StreamFactory)->createStream(JsonRpcHelper::content($single, ...$responses));
         $httpResponse->withBody($body)
@@ -300,21 +312,14 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
                     if (!isset($this->callables[$request->method])) {
                         throw new \RuntimeException(sprintf('Method %s not found', $request->method), -32601);
                     }
-                    // 拦截
-                    $interceptDispatcher = new InterceptDispatcher($this->interceptors);
-                    $response            = $interceptDispatcher->dispatch($request, new Response());
                     // 执行
-                    if (!isset($response->result)) {
-                        list($class, $method) = $this->callables[$request->method];
-                        $callable    = [new $class($request), $method];
-                        $params      = is_array($request->params) ? $request->params : [$request->params];
-                        $result      = call_user_func($callable, ...$params);
-                        $result      = is_scalar($result) ? [$result] : $result;
-                        $response    = (new ResponseFactory)->createResultResponse($result, $request->id);
-                        $responses[] = $response;
-                    } else {
-                        $responses[] = $response;
-                    }
+                    list($class, $method) = $this->callables[$request->method];
+                    $callable    = [new $class($request), $method];
+                    $params      = is_array($request->params) ? $request->params : [$request->params];
+                    $result      = call_user_func($callable, ...$params);
+                    $result      = is_scalar($result) ? [$result] : $result;
+                    $response    = (new ResponseFactory)->createResultResponse($result, $request->id);
+                    $responses[] = $response;
                     // event
                     $this->dispatch($request, $response);
                 } catch (\Throwable $ex) {
