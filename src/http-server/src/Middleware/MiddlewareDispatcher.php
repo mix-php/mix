@@ -21,6 +21,11 @@ class MiddlewareDispatcher
     public $middleware;
 
     /**
+     * @var callable
+     */
+    public $callback;
+
+    /**
      * @var ServerRequestInterface
      */
     public $request;
@@ -32,24 +37,29 @@ class MiddlewareDispatcher
 
     /**
      * MiddlewareDispatcher constructor.
-     * @param array $middleware
+     * @param MiddlewareInterface[] $middleware
+     * @param callable $callback
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
      */
-    public function __construct(array $middleware, ServerRequestInterface $request, ResponseInterface $response)
+    public function __construct(array $middleware, callable $callback, ServerRequestInterface $request, ResponseInterface $response)
     {
-        $this->request  = $request;
-        $this->response = $response;
         foreach ($middleware as $class) {
-            $object = new $class(
-                $request,
-                $response
-            );
+            $object = $class;
+            if (!is_object($class)) {
+                $object = new $class(
+                    $request,
+                    $response
+                );
+            }
             if (!($object instanceof MiddlewareInterface)) {
                 throw new TypeException("{$class} type is not '" . MiddlewareInterface::class . "'");
             }
             $this->middleware[] = $object;
         }
+        $this->callback = $callback;
+        $this->request  = $request;
+        $this->response = $response;
     }
 
     /**
@@ -58,7 +68,7 @@ class MiddlewareDispatcher
      */
     public function dispatch(): ResponseInterface
     {
-        return (new RequestHandler($this->middleware, $this->response))->handle($this->request);
+        return (new RequestHandler($this->middleware, $this->callback, $this->response))->handle($this->request);
     }
 
 }

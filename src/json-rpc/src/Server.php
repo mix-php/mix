@@ -236,7 +236,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
             return;
         }
 
-        // 通过拦截器调用
+        // 通过中间件执行
         $process             = function (array $requests) {
             return $this->process(...$requests);
         };
@@ -272,7 +272,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
             return;
         }
 
-        // 通过拦截器调用
+        // 通过中间件执行
         $process             = function (array $requests) {
             return $this->process(...$requests);
         };

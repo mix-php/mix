@@ -137,15 +137,15 @@ class Router implements HandlerInterface
     /**
      * 获取 url 规则映射的全部 service 名称
      *
-     * Url                  Service        
+     * Url                  Service
      * /                    index
      * /foo                 foo
-     * /foo/bar             foo            
-     * /foo/bar/baz         foo            
-     * /foo/bar/baz/cat     foo.bar        
-     * /v1/foo/bar          v1.foo         
-     * /v1/foo/bar/baz      v1.foo         
-     * /v1/foo/bar/baz/cat  v1.foo.bar     
+     * /foo/bar             foo
+     * /foo/bar/baz         foo
+     * /foo/bar/baz/cat     foo.bar
+     * /v1/foo/bar          v1.foo
+     * /v1/foo/bar/baz      v1.foo
+     * /v1/foo/bar/baz/cat  v1.foo.bar
      *
      * @return string[]
      */
@@ -238,13 +238,13 @@ class Router implements HandlerInterface
         }
         // 执行
         try {
-            // 执行中间件
-            $dispatcher = new MiddlewareDispatcher($result->getMiddleware(), $request, $response);
-            $response   = $dispatcher->dispatch();
-            // 执行控制器
-            if (is_null($response->getBody())) {
+            // 通过中间件执行
+            $process    = function (ServerRequest $request, Response $response) use ($result) {
+                // 构造方法内的参数是为了方便继承封装使用
                 $response = call_user_func($result->getCallback($request, $response), $request, $response);
-            }
+            };
+            $dispatcher = new MiddlewareDispatcher($result->getMiddleware(), $process, $request, $response);
+            $response   = $dispatcher->dispatch();
             /** @var Response $response */
             $response->end();
         } catch (\Throwable $ex) {

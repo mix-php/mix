@@ -39,10 +39,7 @@ class MiddlewareDispatcher
         foreach ($middleware as $class) {
             $object = $class;
             if (!is_object($class)) {
-                $object = new $class(
-                    $request,
-                    $response
-                );
+                $object = new $class();
             }
             if (!($object instanceof MiddlewareInterface)) {
                 throw new TypeException("{$class} type is not '" . MiddlewareInterface::class . "'");
