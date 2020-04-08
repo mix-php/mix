@@ -66,13 +66,6 @@ class Registry implements RegistryInterface
     public $loadBalancer;
 
     /**
-     * Version
-     * 只支持 v3，因为 Watcher 使用的 v3 接口
-     * @var string
-     */
-    protected $version = 'v3';
-
-    /**
      * @var Client
      */
     protected $client;
