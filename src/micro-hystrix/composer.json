@@ -1,0 +1,31 @@
+{
+  "name": "mix/micro-hystrix",
+  "description": "Mix Micro Hystrix http://www.mixphp.cn",
+  "type": "framework",
+  "keywords": [
+    "framework",
+    "mix",
+    "swoole"
+  ],
+  "homepage": "http://www.mixphp.cn/",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "liu,jian",
+      "email": "coder.keda@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.2.0",
+    "ext-swoole": ">=4.4.4",
+    "psr/event-dispatcher": "^1.0"
+  },
+  "require-dev": {
+    "swoole/ide-helper": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mix\\Micro\\Hystrix\\": "src/"
+    }
+  }
+}
