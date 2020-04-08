@@ -12,10 +12,9 @@ class Watcher
 {
 
     /**
-     * host:port
      * @var string
      */
-    public $server;
+    public $url;
 
     /**
      * @var Client
@@ -59,13 +58,15 @@ class Watcher
      * @param Client $client
      * @param string $prefix
      * @param \Closure $func
+     * @param float $timeout
      */
-    public function __construct(string $server, Client $client, string $prefix, \Closure $func)
+    public function __construct(string $url, Client $client, string $prefix, \Closure $func, float $timeout = 5.0)
     {
-        $this->server = $server;
-        $this->client = $client;
-        $this->prefix = $prefix;
-        $this->func   = $func;
+        $this->url     = $url;
+        $this->client  = $client;
+        $this->prefix  = $prefix;
+        $this->func    = $func;
+        $this->timeout = $timeout;
     }
 
     /**
@@ -80,7 +81,7 @@ class Watcher
             'open_eof_check' => true,
             'package_eof'    => "\n",
         ]);
-        $segments = parse_url($this->server);
+        $segments = parse_url($this->url);
         if (!$client->connect($segments['host'], $segments['port'], $this->timeout)) {
             throw new \Swoole\Exception(sprintf("Etcd client connect failed, %s (%s)", $client->errMsg, $server), $client->errCode);
         }

@@ -21,16 +21,16 @@ class Registry implements RegistryInterface
 {
 
     /**
-     * Host
+     * Url
      * @var string
      */
-    public $host = '127.0.0.1';
+    public $url = 'http://127.0.0.1:2379/v3';
 
     /**
-     * Port
+     * Timeout
      * @var int
      */
-    public $port = 2379;
+    public $timeout = 5;
 
     /**
      * User
@@ -119,7 +119,7 @@ class Registry implements RegistryInterface
      */
     protected function createClient()
     {
-        $client = new Client(sprintf('%s:%d', $this->host, $this->port), $this->version);
+        $client = new Client($this->url, $this->timeout);
         $client->auth($this->user, $this->password);
         return $client;
     }

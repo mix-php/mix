@@ -1,12 +1,14 @@
-## Mix Tracing
-
-...
+## Mix Zipkin
 
 ## Usage
 
 ```
-composer require mix/tracing
+composer require mix/zipkin
 ```
+
+支持的 zipkin 版本：
+
+- V2
 
 ## License
 

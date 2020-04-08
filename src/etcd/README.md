@@ -1,6 +1,6 @@
 ## Mix Etcd
 
-
+...
 
 ## Usage
 
@@ -8,7 +8,9 @@
 composer require mix/etcd
 ```
 
+支持的 etcd 版本：
 
+- V3
 
 ## License
 

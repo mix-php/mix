@@ -14,6 +14,11 @@ class Client extends \Etcd\Client
 {
 
     /**
+     * @var string
+     */
+    protected $url;
+
+    /**
      * User
      * @var string
      */
@@ -31,26 +36,21 @@ class Client extends \Etcd\Client
     protected $timeout = 5;
 
     /**
-     * 重写修改 handler
      * Client constructor.
-     * @param string $server
+     * @param $url
      * @param string $version
      */
-    public function __construct($server = '127.0.0.1:2379', $version = 'v3alpha')
+    public function __construct($url, $timeout = 5)
     {
-        $this->server = rtrim($server);
-        if (strpos($this->server, 'http') !== 0) {
-            $this->server = 'http://' . $this->server;
-        }
-        $this->version    = trim($version);
-        $baseUri          = sprintf('%s/%s/', $this->server, $this->version);
+        $this->url        = $url;
+        $this->timeout    = $timeout;
         $handler          = new \Mix\Guzzle\Handler\StreamHandler();
         $stack            = \GuzzleHttp\HandlerStack::create($handler);
         $this->httpClient = new HttpClient(
             [
                 'handler'  => $stack,
-                'base_uri' => $baseUri,
-                'timeout'  => $this->timeout,
+                'base_uri' => sprintf('%s/', $url),
+                'timeout'  => $timeout,
             ]
         );
         $this->setPretty(true);
@@ -97,7 +97,7 @@ class Client extends \Etcd\Client
      */
     public function watchKeysWithPrefix(string $prefix, \Closure $func)
     {
-        return new Watcher($this->server, $this, $prefix, $func);
+        return new Watcher($this->url, $this, $prefix, $func, $this->timeout);
     }
 
     /**
