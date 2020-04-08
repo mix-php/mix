@@ -30,8 +30,8 @@ class Calculator
 
 ```
 $server  = new \Mix\JsonRpc\Server('127.0.0.1', 9234);
-$service = new Calculator();
-$server->register($service);
+$class = Calculator::class;
+$server->register($class);
 $server->start();
 ```
 

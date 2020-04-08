@@ -16,8 +16,8 @@ final class ClientTest extends TestCase
         $scheduler->add(function () use ($_this) {
             // server
             $server  = new \Mix\JsonRpc\Server('127.0.0.1', 9234);
-            $service = new Calculator();
-            $server->register($service);
+            $class = Calculator::class;
+            $server->register($class);
             go(function () use ($server) {
                 $server->start();
             });
