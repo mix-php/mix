@@ -5,6 +5,7 @@ namespace Mix\Etcd;
 use Mix\Bean\BeanInjector;
 use Mix\Etcd\Client\Client;
 use Mix\Etcd\LoadBalancer\LoadBalancerInterface;
+use Mix\Etcd\LoadBalancer\RoundRobinBalancer;
 use Mix\Etcd\Monitor\Monitor;
 use Mix\Etcd\Register\Registrar;
 use Mix\Micro\Register\Exception\NotFoundException;
@@ -59,12 +60,14 @@ class Registry implements RegistryInterface
 
     /**
      * 负载均衡器
+     * 默认为 RoundRobinBalancer
      * @var LoadBalancerInterface
      */
     public $loadBalancer;
 
     /**
      * Version
+     * 只支持 v3，因为 Watcher 使用的 v3 接口
      * @var string
      */
     protected $version = 'v3';
@@ -104,6 +107,10 @@ class Registry implements RegistryInterface
     public function init()
     {
         $this->client = $this->createClient();
+        // 创建默认负载均衡器
+        if (!$this->loadBalancer) {
+            $this->loadBalancer = new RoundRobinBalancer();
+        }
     }
 
     /**
