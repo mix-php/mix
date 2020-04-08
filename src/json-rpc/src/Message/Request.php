@@ -10,7 +10,7 @@ class Request implements \JsonSerializable
 {
 
     /**
-     * @var \ArrayObject
+     * @var Context
      */
     public $context;
 
