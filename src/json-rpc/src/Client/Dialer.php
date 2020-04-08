@@ -4,9 +4,9 @@ namespace Mix\JsonRpc\Client;
 
 use Mix\Bean\BeanInjector;
 use Mix\JsonRpc\Middleware\MiddlewareInterface;
-use Mix\Micro\Service\Exception\NotFoundException;
-use Mix\Micro\Service\RegistryInterface;
-use Mix\Micro\Service\ServiceInterface;
+use Mix\Micro\Register\Exception\NotFoundException;
+use Mix\Micro\Register\RegistryInterface;
+use Mix\Micro\Register\ServiceInterface;
 
 /**
  * Class Dialer

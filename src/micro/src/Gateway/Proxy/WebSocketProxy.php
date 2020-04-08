@@ -6,7 +6,7 @@ use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Micro\Gateway\Exception\ProxyException;
 use Mix\Micro\Gateway\Helper\ProxyHelper;
-use Mix\Micro\Service\ServiceInterface;
+use Mix\Micro\Register\ServiceInterface;
 use Mix\WebSocket\Client\Connection;
 use Mix\WebSocket\Client\Dialer;
 use Mix\WebSocket\Exception\CloseFrameException;

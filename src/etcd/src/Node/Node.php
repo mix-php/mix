@@ -2,7 +2,7 @@
 
 namespace Mix\Etcd\Node;
 
-use Mix\Micro\Service\NodeInterface;
+use Mix\Micro\Register\NodeInterface;
 
 /**
  * Class Node

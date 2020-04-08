@@ -4,7 +4,7 @@ namespace Mix\Etcd\Client;
 
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ClientException;
-use Mix\Micro\Service\Exception\NotFoundException;
+use Mix\Micro\Register\Exception\NotFoundException;
 
 /**
  * Class Client

@@ -1,10 +1,10 @@
 <?php
 
-namespace Mix\Micro\Service;
+namespace Mix\Micro\Register;
 
 /**
  * Interface NodeInterface
- * @package Mix\Micro\Service
+ * @package Mix\Micro\Register
  */
 interface NodeInterface extends \JsonSerializable
 {

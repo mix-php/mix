@@ -2,12 +2,11 @@
 
 namespace Mix\Micro\Config;
 
-
 /**
- * Interface ConfigInterface
+ * Interface ConfiguratorInterface
  * @package Mix\Micro\Config
  */
-interface ConfigInterface
+interface ConfiguratorInterface
 {
 
     /**

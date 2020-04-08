@@ -5,9 +5,9 @@ namespace Mix\Micro\Gateway;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Micro\Gateway\Exception\ProxyException;
-use Mix\Micro\Service\Exception\NotFoundException;
-use Mix\Micro\Service\RegistryInterface;
-use Mix\Micro\Service\ServiceInterface;
+use Mix\Micro\Register\Exception\NotFoundException;
+use Mix\Micro\Register\RegistryInterface;
+use Mix\Micro\Register\ServiceInterface;
 
 /**
  * Interface ProxyInterface

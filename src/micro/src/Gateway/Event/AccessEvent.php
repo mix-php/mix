@@ -2,7 +2,7 @@
 
 namespace Mix\Micro\Gateway\Event;
 
-use Mix\Micro\Service\ServiceInterface;
+use Mix\Micro\Register\ServiceInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 

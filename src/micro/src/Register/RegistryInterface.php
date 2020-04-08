@@ -1,12 +1,12 @@
 <?php
 
-namespace Mix\Micro\Service;
+namespace Mix\Micro\Register;
 
-use Mix\Micro\Service\Exception\NotFoundException;
+use Mix\Micro\Register\Exception\NotFoundException;
 
 /**
  * Interface RegistryInterface
- * @package Mix\Micro\Service
+ * @package Mix\Micro\Register
  */
 interface RegistryInterface
 {

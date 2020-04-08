@@ -9,9 +9,9 @@ use Mix\Http\Server\Middleware\MiddlewareDispatcher;
 use Mix\Http\Server\Server as HttpServer;
 use Mix\Http\Server\HandlerInterface;
 use Mix\Micro\Gateway\Exception\ProxyException;
-use Mix\Micro\Service\Exception\NotFoundException;
+use Mix\Micro\Register\Exception\NotFoundException;
 use Mix\Micro\Gateway\Event\AccessEvent;
-use Mix\Micro\Service\RegistryInterface;
+use Mix\Micro\Register\RegistryInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Server\MiddlewareInterface;
 

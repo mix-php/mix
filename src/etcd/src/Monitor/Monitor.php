@@ -6,7 +6,7 @@ use Mix\Concurrent\Timer;
 use Mix\Etcd\Client\Client;
 use Mix\Etcd\Client\Watcher;
 use Mix\Etcd\Service\Service;
-use Mix\Micro\Service\Exception\NotFoundException;
+use Mix\Micro\Register\Exception\NotFoundException;
 
 /**
  * Class Monitor

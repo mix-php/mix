@@ -1,12 +1,12 @@
 <?php
 
-namespace Mix\Micro\Service\Helper;
+namespace Mix\Micro\Register\Helper;
 
 use Ramsey\Uuid\UuidFactory;
 
 /**
  * Class ServiceHelper
- * @package Mix\Micro\Service\Helper
+ * @package Mix\Micro\Register\Helper
  */
 class ServiceHelper
 {

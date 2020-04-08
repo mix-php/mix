@@ -7,10 +7,10 @@ use Mix\Etcd\Client\Client;
 use Mix\Etcd\LoadBalancer\LoadBalancerInterface;
 use Mix\Etcd\Monitor\Monitor;
 use Mix\Etcd\Register\Registrar;
-use Mix\Micro\Service\Exception\NotFoundException;
-use Mix\Micro\Service\ServiceBundleInterface;
-use Mix\Micro\Service\RegistryInterface;
-use Mix\Micro\Service\ServiceInterface;
+use Mix\Micro\Register\Exception\NotFoundException;
+use Mix\Micro\Register\ServiceBundleInterface;
+use Mix\Micro\Register\RegistryInterface;
+use Mix\Micro\Register\ServiceInterface;
 
 /**
  * Class Registry

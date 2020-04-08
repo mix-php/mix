@@ -1,10 +1,10 @@
 <?php
 
-namespace Mix\Micro\Service\Exception;
+namespace Mix\Micro\Register\Exception;
 
 /**
  * Class NotFoundException
- * @package Mix\Micro\Service\Exception
+ * @package Mix\Micro\Register\Exception
  */
 class NotFoundException extends \RuntimeException
 {

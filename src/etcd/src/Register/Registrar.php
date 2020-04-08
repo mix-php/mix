@@ -4,10 +4,10 @@ namespace Mix\Etcd\Register;
 
 use Mix\Etcd\Client\Client;
 use Mix\Concurrent\Timer;
-use Mix\Micro\Service\Exception\NotFoundException;
+use Mix\Micro\Register\Exception\NotFoundException;
 use Mix\Etcd\Node\Node;
 use Mix\Etcd\Service\ServiceBundle;
-use Mix\Micro\Service\Helper\ServiceHelper;
+use Mix\Micro\Register\Helper\ServiceHelper;
 
 /**
  * Class Registrar
