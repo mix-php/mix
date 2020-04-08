@@ -314,8 +314,9 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
                     }
                     // 执行
                     list($class, $method) = $this->callables[$request->method];
-                    $callable    = [new $class($request), $method];
-                    $params      = is_array($request->params) ? $request->params : [$request->params];
+                    $callable = [new $class($request), $method];
+                    $params   = is_array($request->params) ? $request->params : [$request->params];
+                    array_unshift($params, $request->context);
                     $result      = call_user_func($callable, ...$params);
                     $result      = is_scalar($result) ? [$result] : $result;
                     $response    = (new ResponseFactory)->createResultResponse($result, $request->id);

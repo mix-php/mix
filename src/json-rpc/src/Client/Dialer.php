@@ -80,18 +80,18 @@ class Dialer
     /**
      * Dial from service
      * @param string $name
-     * @param InterceptorInterface|null $interceptor
+     * @param MiddlewareInterface|null $middleware
      * @return Connection
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
      * @throws \Swoole\Exception
      */
-    public function dialFromService(string $name, InterceptorInterface $interceptor = null)
+    public function dialFromService(string $name, MiddlewareInterface $middleware = null)
     {
         for ($i = 0; $i < $this->retry; $i++) {
             try {
                 $service = $this->registry->service($name);
-                $conn    = $this->dial($service->getAddress(), $service->getPort(), $interceptor);
+                $conn    = $this->dial($service->getAddress(), $service->getPort(), $middleware);
                 break;
             } catch (NotFoundException $ex) {
                 throw $ex;
