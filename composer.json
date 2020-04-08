@@ -100,7 +100,7 @@
       "Mix\\Micro\\Hystrix\\": "src/micro-hystrix/src/",
       "Mix\\Micro\\Register\\": "src/micro-register/src/",
       "Mix\\Etcd\\": "src/etcd/src/",
-      "Mix\\Zipkin\\": "src/etcd/src/"
+      "Mix\\Zipkin\\": "src/zipkin/src/"
     },
     "classmap": [
       "src/console/src/Mix.php"
