@@ -62,7 +62,7 @@ class WebSocketProxy
      * @param ServiceInterface $service
      * @param ServerRequest $request
      * @param Response $response
-     * @return int status
+     * @return Response
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
      * @throws ProxyException
@@ -89,7 +89,7 @@ class WebSocketProxy
         }
         xgo([$this, 'clientRecv']);
         xgo([$this, 'serviceRecv']);
-        return 101;
+        return $response;
     }
 
     /**

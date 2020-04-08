@@ -136,8 +136,20 @@ class Server implements HandlerInterface
         $proxy = array_pop($proxys);
         if ($proxy) {
             try {
-                $serivce = $proxy->service($this->registry, $request);
-                $status  = $proxy->proxy($serivce, $request, $response);
+                // 通过中间件执行
+                $process    = function (ServerRequest $request, Response $response) use ($result) {
+                    $serivce = $proxy->service($this->registry, $request);
+                    $status  = $proxy->proxy($serivce, $request, $response);
+                    return $response;
+                };
+                $dispatcher = new MiddlewareDispatcher($this->middleware, $process, $request, $response);
+                $response   = $dispatcher->dispatch();
+                $status     = $response->getStatusCode();
+                if ($status != 101) {
+                    /** @var Response $response */
+                    $response->end();
+                }
+
                 $this->dispatch($microtime, $status, $request, $response, $serivce);
             } catch (NotFoundException $ex) {
                 $proxy->show404($ex, $response);

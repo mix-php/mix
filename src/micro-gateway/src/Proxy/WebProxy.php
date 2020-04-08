@@ -112,7 +112,7 @@ class WebProxy implements ProxyInterface
      * @param ServiceInterface $service
      * @param ServerRequest $request
      * @param Response $response
-     * @return int status
+     * @return Response
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
      * @throws ProxyException
@@ -169,9 +169,8 @@ class WebProxy implements ProxyInterface
         }
         $response
             ->withStatus($status)
-            ->withBody($body)
-            ->end();
-        return $status;
+            ->withBody($body);
+        return $response;
     }
 
     /**

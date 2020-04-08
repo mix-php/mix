@@ -80,7 +80,7 @@ class JsonRpcProxy implements ProxyInterface
      * @param ServiceInterface $service
      * @param ServerRequest $request
      * @param Response $response
-     * @return int status
+     * @return Response
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
      * @throws ProxyException
@@ -98,13 +98,11 @@ class JsonRpcProxy implements ProxyInterface
         } catch (\Throwable $ex) {
             $rpcResponse = (new ResponseFactory)->createErrorResponse(-32700, 'Parse error', null);
             $body        = (new StreamFactory())->createStream(json_encode($rpcResponse));
-            $status      = 200;
             $response
                 ->withContentType('application/json', 'utf-8')
                 ->withBody($body)
-                ->withStatus($status)
-                ->end();
-            return $status;
+                ->withStatus(200);
+            return $response;
         }
 
         $dialer = new Dialer([
@@ -117,24 +115,20 @@ class JsonRpcProxy implements ProxyInterface
             if ($single) {
                 $rpcResponse = $conn->call(array_pop($requests));
                 $body        = (new StreamFactory())->createStream(json_encode($rpcResponse));
-                $status      = 200;
                 $response
                     ->withContentType('application/json', 'utf-8')
                     ->withBody($body)
-                    ->withStatus($status)
-                    ->end();
-                return $status;
+                    ->withStatus(200);
+                return $response;
             }
 
             $rpcResponses = $conn->callMultiple(...$requests);
             $body         = (new StreamFactory())->createStream(json_encode($rpcResponses));
-            $status       = 200;
             $response
                 ->withContentType('application/json', 'utf-8')
                 ->withBody($body)
-                ->withStatus($status)
-                ->end();
-            return $status;
+                ->withStatus(200);
+            return $response;
         } catch (\Throwable $ex) {
             throw new ProxyException($ex->getMessage(), $ex->getCode());
         }
