@@ -91,7 +91,7 @@ class Tracer implements \OpenTracing\Tracer
     {
         $endpoint      = \Zipkin\Endpoint::create($this->serviceName, $this->ipv4, $this->ipv6, $this->port);
         $sampler       = \Zipkin\Samplers\BinarySampler::createAsAlwaysSample();
-        $reporter      = new \Zipkin\Reporters\Http(\Zipkin\Reporters\Http\CurlFactory::create(), [
+        $reporter      = new \Zipkin\Reporters\Http(\Mix\Zipkin\Reporter\GuzzleFactory::create(), [
             'endpoint_url' => $this->url,
             "timeout"      => $this->timeout,
         ]);
@@ -165,7 +165,7 @@ class Tracer implements \OpenTracing\Tracer
                 $span->setTag($key, $val);
             }
         }
-        
+
         return new \Mix\Zipkin\Scope\Scope($span);
     }
 

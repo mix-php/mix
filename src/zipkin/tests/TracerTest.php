@@ -23,8 +23,8 @@ final class TracerTest extends TestCase
 
         $metadata = [];
         $tracer->inject($scope2->getSpan()->getContext(), \OpenTracing\Formats\TEXT_MAP, $metadata);
-        var_dump($metadata);
-        
+        echo "\n" . json_encode($metadata);
+
         $tracer2    = $tracing->trace('test-2', '192.168.1.1', 1234);
         $scope2Span = $tracer2->extract(\OpenTracing\Formats\TEXT_MAP, $metadata);
         $rootSpan2  = $tracer2->startSpan('service-2', [
@@ -41,6 +41,8 @@ final class TracerTest extends TestCase
 
         $rootSpan->finish();
         $tracer->flush();
+
+        $this->assertNotEmpty($metadata);
     }
 
 }
