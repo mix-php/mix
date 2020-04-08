@@ -5,7 +5,8 @@
   "keywords": [
     "framework",
     "mix",
-    "swoole"
+    "swoole",
+    "zipkin"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

@@ -1,11 +1,11 @@
-## Mix Micro
+## Mix Micro Register
 
 ...
 
 ## Usage
 
 ```
-composer require mix/micro
+composer require mix/micro-register
 ```
 
 ## License
