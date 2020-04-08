@@ -2,6 +2,8 @@
 
 namespace Mix\Zipkin;
 
+use Mix\Zipkin\Exception\NotFoundException;
+
 /**
  * Class Tracing
  * @package Mix\Zipkin
@@ -40,6 +42,20 @@ class Tracing
         ]);
         $tracer->init();
         return $tracer;
+    }
+
+    /**
+     * 从上下文提取 Tracer
+     * @param \ArrayObject $context
+     * @return Tracer
+     * @throws NotFoundException
+     */
+    public static function extract(\ArrayObject $context)
+    {
+        if (!isset($context['tracer'])) {
+            throw new NotFoundException('Tracer not found, please use TracingServerMiddleware::class');
+        }
+        return $context['tracer'];
     }
 
 }
