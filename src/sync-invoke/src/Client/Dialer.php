@@ -12,9 +12,16 @@ class Dialer
 {
 
     /**
+     * Global timeout
      * @var float
      */
     public $timeout = 5.0;
+
+    /**
+     * Invoke timeout
+     * @var float
+     */
+    public $invokeTimeout = 10.0;
 
     /**
      * Dialer constructor.
@@ -38,8 +45,9 @@ class Dialer
     public function dial(int $port)
     {
         $conn = new Connection([
-            'port'    => $port,
-            'timeout' => $this->timeout,
+            'port'          => $port,
+            'timeout'       => $this->timeout,
+            'invokeTimeout' => $this->invokeTimeout,
         ]);
         $conn->connect();
         return $conn;

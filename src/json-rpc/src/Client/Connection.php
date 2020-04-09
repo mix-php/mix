@@ -43,7 +43,7 @@ class Connection
     public $callTimeout = 10.0;
 
     /**
-     * @var MiddlewareInterface[]
+     * @var array MiddlewareInterface class or object
      */
     public $middleware = [];
 
@@ -155,9 +155,15 @@ class Connection
      */
     protected function recv(float $timeout = -1)
     {
-        $data = $this->client->recv(-1);
-        if ($data === false || $data === "") {
-            throw new \Swoole\Exception($this->client->errMsg, $this->client->errCode);
+        $data = $this->client->recv($timeout);
+        if ($data === false) { // 接收失败
+            $client = $this->client;
+            throw new \Swoole\Exception($client->errMsg, $client->errCode);
+        }
+        if ($data === "") { // 连接关闭
+            $errCode = stripos(PHP_OS, 'Darwin') !== false ? 54 : 104; // mac=54, linux=104
+            $errMsg  = swoole_strerror($errCode, 9);
+            throw new \Swoole\Exception($errMsg, $errCode);
         }
         return $data;
     }

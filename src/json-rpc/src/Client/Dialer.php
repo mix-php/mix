@@ -28,7 +28,7 @@ class Dialer
     public $callTimeout = 10.0;
 
     /**
-     * @var MiddlewareInterface[]
+     * @var array MiddlewareInterface class or object
      */
     public $middleware = [];
 

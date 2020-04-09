@@ -24,9 +24,16 @@ class Connection
     public $port = 0;
 
     /**
+     * Global timeout
      * @var float
      */
     public $timeout = 0.0;
+
+    /**
+     * Invoke timeout
+     * @var float
+     */
+    public $invokeTimeout = 10.0;
 
     /**
      * @var Client
@@ -83,7 +90,7 @@ class Connection
     {
         $code = \Opis\Closure\serialize($closure);
         $this->send($code . Constants::EOF);
-        $data = unserialize($this->recv());
+        $data = unserialize($this->recv($this->invokeTimeout));
         if ($data instanceof CallException) {
             throw new InvokeException($data->message, $data->code);
         }
@@ -108,12 +115,13 @@ class Connection
 
     /**
      * Recv
+     * @param float $timeout
      * @return string
      * @throws \Swoole\Exception
      */
-    protected function recv()
+    protected function recv(float $timeout = -1)
     {
-        $data = $this->client->recv(-1);
+        $data = $this->client->recv($timeout);
         if ($data === false) { // 接收失败
             $client = $this->client;
             throw new \Swoole\Exception($client->errMsg, $client->errCode);
