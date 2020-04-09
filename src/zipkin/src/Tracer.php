@@ -95,7 +95,7 @@ class Tracer implements \OpenTracing\Tracer
     public function init()
     {
         $endpoint      = \Zipkin\Endpoint::create($this->serviceName, $this->ipv4, $this->ipv6, $this->port);
-        $sampler       = \Zipkin\Samplers\PercentageSampler::create($this->rate);
+        $sampler       = \Zipkin\Samplers\PercentageSampler::create((float)$this->rate);
         $reporter      = new \Zipkin\Reporters\Http(\Mix\Zipkin\Reporter\GuzzleFactory::create(), [
             'endpoint_url' => $this->url,
             "timeout"      => $this->timeout,
