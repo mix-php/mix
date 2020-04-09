@@ -23,6 +23,11 @@ class Tracing
     public $disable = false;
 
     /**
+     * @var float
+     */
+    public $rate = 1;
+
+    /**
      * @var int
      */
     public $timeout = 5;
@@ -44,6 +49,7 @@ class Tracing
         $tracer = new Tracer([
             'url'         => $this->url,
             'timeout'     => $this->timeout,
+            'rate'        => $this->rate,
             'serviceName' => $serviceName,
             'ipv4'        => strpos($ip, '.') !== false ? $ip : null,
             'ipv6'        => strpos($ip, ':') !== false ? $ip : null,
