@@ -44,7 +44,7 @@ class TracingClientMiddleware implements MiddlewareInterface
             $tags[sprintf('method-%d', $key)] = $request->method;
         }
 
-        $operationName = 'RPC:Client:Process';
+        $operationName = 'RPC:Client';
         $scope         = $tracer->startActiveSpan($operationName, [
             'tags' => $tags,
         ]);
@@ -54,10 +54,14 @@ class TracingClientMiddleware implements MiddlewareInterface
         // 在第一个请求的最后一个参数追加trace信息
         $request = $requests[0];
         array_push($request->params, $headers);
-        
-        $result = $handler->handle($request, $response);
 
-        $scope->close();
+        try {
+            $result = $handler->handle($requests);
+        } catch (\Throwable $exception) {
+            throw $exception;
+        } finally {
+            $scope->close();
+        }
 
         return $result;
     }

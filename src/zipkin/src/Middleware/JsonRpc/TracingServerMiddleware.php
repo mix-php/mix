@@ -13,7 +13,7 @@ use const OpenTracing\Formats\TEXT_MAP;
  * Class TracingServerMiddleware
  * @package Mix\Zipkin\Middleware\JsonRpc
  */
-class TracingServerMiddleware implements MiddlewareInterface
+abstract class TracingServerMiddleware implements MiddlewareInterface
 {
 
     /**
@@ -38,25 +38,29 @@ class TracingServerMiddleware implements MiddlewareInterface
         }
 
         // 在第一个请求的最后一个参数提取trace信息
-        $request = array_pop($requests);
+        $request = current($requests);
         $params  = $request->params;
         $headers = [];
         if (is_array($params)) {
             $headers = array_pop($params);
             $headers = is_object($headers) ? (array)$headers : [];
         }
-        
+
         $spanContext   = $tracer->extract(TEXT_MAP, $headers);
-        $operationName = 'RPC:Server:Process';
+        $operationName = 'RPC:Server';
         $span          = $tracer->startSpan($operationName, [
             'child_of' => $spanContext,
             'tags'     => $tags,
         ]);
 
-        $result = $handler->handle($requests);
-
-        $span->finish();
-        $tracer->flush();
+        try {
+            $result = $handler->handle($requests);
+        } catch (\Throwable $exception) {
+            throw $exception;
+        } finally {
+            $span->finish();
+            $tracer->flush();
+        }
 
         return $result;
     }
