@@ -9,6 +9,7 @@ use Mix\Http\Message\ServerRequest;
 use Mix\Http\Server\HandlerInterface;
 use Mix\Http\Server\Middleware\MiddlewareDispatcher;
 use Mix\Route\Exception\NotFoundException;
+use Psr\Http\Server\MiddlewareInterface;
 
 /**
  * Class Router
@@ -32,7 +33,7 @@ class Router implements HandlerInterface
 
     /**
      * 全局中间件
-     * @var array
+     * @var array MiddlewareInterface class or object
      */
     public $middleware = [];
 
@@ -236,23 +237,23 @@ class Router implements HandlerInterface
         foreach ($result->getParams() as $key => $value) {
             $request->withAttribute($key, $value);
         }
-        // 执行
-        try {
-            // 通过中间件执行
-            $process    = function (ServerRequest $request, Response $response) use ($result) {
+        // 通过中间件执行
+        $process    = function (ServerRequest $request, Response $response) use ($result) {
+            try {
                 // 构造方法内的参数是为了方便继承封装使用
                 $response = call_user_func($result->getCallback($request, $response), $request, $response);
-            };
-            $dispatcher = new MiddlewareDispatcher($result->getMiddleware(), $process, $request, $response);
-            $response   = $dispatcher->dispatch();
-            /** @var Response $response */
-            $response->end();
-        } catch (\Throwable $ex) {
-            // 500 处理
-            $this->show500($ex, $response);
-            // 抛出错误，记录日志
-            throw $ex;
-        }
+            } catch (\Throwable $ex) {
+                // 500 处理
+                $this->show500($ex, $response);
+                // 抛出错误，记录日志
+                throw $ex;
+            }
+            return $response;
+        };
+        $dispatcher = new MiddlewareDispatcher($result->getMiddleware(), $process, $request, $response);
+        $response   = $dispatcher->dispatch();
+        /** @var Response $response */
+        $response->end();
     }
 
     /**
