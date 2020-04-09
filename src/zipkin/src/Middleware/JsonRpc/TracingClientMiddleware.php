@@ -48,11 +48,11 @@ class TracingClientMiddleware implements MiddlewareInterface
             'tags' => $tags,
         ]);
 
-        $headers = [];
-        $tracer->inject($scope->getSpan()->getContext(), TEXT_MAP, $headers);
+        $traceHeaders = [];
+        $tracer->inject($scope->getSpan()->getContext(), TEXT_MAP, $traceHeaders);
         // 在第一个请求的最后一个参数追加trace信息
         $request = $requests[0];
-        array_push($request->params, $headers);
+        array_push($request->params, $traceHeaders);
 
         try {
             $result = $handler->handle($requests);

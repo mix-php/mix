@@ -37,15 +37,15 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
         }
 
         // 在第一个请求的最后一个参数提取trace信息
-        $request = current($requests);
-        $params  = $request->params;
-        $headers = [];
+        $request      = current($requests);
+        $params       = $request->params;
+        $traceHeaders = [];
         if (is_array($params)) {
-            $headers = array_pop($params);
-            $headers = is_object($headers) ? (array)$headers : [];
+            $traceHeaders = array_pop($params);
+            $traceHeaders = is_object($traceHeaders) ? (array)$traceHeaders : [];
         }
 
-        $spanContext   = $tracer->extract(TEXT_MAP, $headers);
+        $spanContext   = $tracer->extract(TEXT_MAP, $traceHeaders);
         $operationName = 'RPC:Server';
         $span          = $tracer->startSpan($operationName, [
             'child_of' => $spanContext,

@@ -68,10 +68,16 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
         ]);
 
         // 让 Gateway 能把追踪信息通过 Header 代理出去 (web/websocket/api)
-        $headers = [];
-        $tracer->inject($span->getContext(), TEXT_MAP, $headers);
-        foreach ($headers as $name => $value) {
+        $traceHeaders = [];
+        $tracer->inject($span->getContext(), TEXT_MAP, $traceHeaders);
+        foreach ($traceHeaders as $name => $value) {
             $request->withHeader($name, $value);
+        }
+
+        // 把 TraceID 发送至用户的 Header 中
+        $traceID = $traceHeaders['x-b3-traceid'] ?? null;
+        if ($traceID) {
+            $this->response->withHeader('x-b3-traceid', $traceID);
         }
 
         // 记录 x- 开头的内部 Header 信息
