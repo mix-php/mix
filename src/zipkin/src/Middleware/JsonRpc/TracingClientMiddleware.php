@@ -43,7 +43,7 @@ class TracingClientMiddleware implements MiddlewareInterface
             $tags[sprintf('method-%d', $key)] = $request->method;
         }
 
-        $operationName = 'RPC:Client';
+        $operationName = 'jsonrpc:client';
         $scope         = $tracer->startActiveSpan($operationName, [
             'tags' => $tags,
         ]);

@@ -46,7 +46,7 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
         }
 
         $spanContext   = $tracer->extract(TEXT_MAP, $traceHeaders);
-        $operationName = 'RPC:Server';
+        $operationName = 'jsonrpc:server';
         $span          = $tracer->startSpan($operationName, [
             'child_of' => $spanContext,
             'tags'     => $tags,
