@@ -3,6 +3,7 @@
 namespace Mix\Zipkin;
 
 use Mix\Zipkin\Exception\NotFoundException;
+use OpenTracing\NoopTracer;
 
 /**
  * Class Tracing
@@ -17,6 +18,11 @@ class Tracing
     public $url = 'http://127.0.0.1:9411/api/v2/spans';
 
     /**
+     * @var bool
+     */
+    public $disable = false;
+
+    /**
      * @var int
      */
     public $timeout = 5;
@@ -26,12 +32,15 @@ class Tracing
      * @param string $serviceName
      * @param null $ip
      * @param null $port
-     * @return Tracer
+     * @return \OpenTracing\Tracer
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
      */
     public function trace(string $serviceName, $ip = null, $port = null)
     {
+        if ($this->disable) {
+            return new NoopTracer();
+        }
         $tracer = new Tracer([
             'url'         => $this->url,
             'timeout'     => $this->timeout,
@@ -47,7 +56,7 @@ class Tracing
     /**
      * 从上下文提取 Tracer
      * @param \ArrayObject $context
-     * @return Tracer
+     * @return \OpenTracing\Tracer
      * @throws NotFoundException
      */
     public static function extract(\ArrayObject $context)

@@ -5,8 +5,6 @@ namespace Mix\Zipkin\Middleware\Http;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Server\Middleware\MiddlewareInterface;
-use Mix\Zipkin\Tracer;
-use Mix\Zipkin\Tracing;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -43,7 +41,7 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
 
     /**
      * Get tracer
-     * @return Tracer
+     * @return \OpenTracing\Tracer
      */
     abstract public function tracer();
 

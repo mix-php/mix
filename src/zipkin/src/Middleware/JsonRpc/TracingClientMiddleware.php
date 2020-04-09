@@ -6,7 +6,6 @@ use Mix\JsonRpc\Message\Request;
 use Mix\JsonRpc\Message\Response;
 use Mix\JsonRpc\Middleware\MiddlewareInterface;
 use Mix\JsonRpc\Middleware\RequestHandler;
-use Mix\Zipkin\Tracer;
 use const OpenTracing\Formats\TEXT_MAP;
 
 /**
@@ -17,15 +16,15 @@ class TracingClientMiddleware implements MiddlewareInterface
 {
 
     /**
-     * @var Tracer
+     * @var \OpenTracing\Tracer
      */
     public $tracer;
 
     /**
      * TracingClientInterceptor constructor.
-     * @param Tracer $tracer
+     * @param \OpenTracing\Tracer $tracer
      */
-    public function __construct(Tracer $tracer)
+    public function __construct(\OpenTracing\Tracer $tracer)
     {
         $this->tracer = $tracer;
     }
