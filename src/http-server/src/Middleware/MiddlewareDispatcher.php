@@ -44,6 +44,7 @@ class MiddlewareDispatcher
      */
     public function __construct(array $middleware, callable $callback, ServerRequestInterface $request, ResponseInterface $response)
     {
+        $instances = [];
         foreach ($middleware as $class) {
             $object = $class;
             if (!is_object($class)) {
@@ -55,11 +56,12 @@ class MiddlewareDispatcher
             if (!($object instanceof MiddlewareInterface)) {
                 throw new TypeException("{$class} type is not '" . MiddlewareInterface::class . "'");
             }
-            $this->middleware[] = $object;
+            $instances[] = $object;
         }
-        $this->callback = $callback;
-        $this->request  = $request;
-        $this->response = $response;
+        $this->middleware = $instances;
+        $this->callback   = $callback;
+        $this->request    = $request;
+        $this->response   = $response;
     }
 
     /**

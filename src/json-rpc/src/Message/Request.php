@@ -39,7 +39,7 @@ class Request implements \JsonSerializable
      */
     public function __construct()
     {
-        $this->context = new \ArrayObject();
+        $this->context = new Context();
     }
 
     /**

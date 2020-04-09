@@ -38,7 +38,7 @@ class Server implements HandlerInterface
     public $proxies = [];
 
     /**
-     * @var string[] MiddlewareInterface class
+     * @var array MiddlewareInterface class or object
      */
     public $middleware = [];
 
@@ -123,24 +123,26 @@ class Server implements HandlerInterface
         $microtime = static::microtime();
         $map       = $this->proxyMap;
         $path      = $request->getUri()->getPath();
-
-        $dispatcher = new MiddlewareDispatcher($this->middleware, $request, $response);
-        $response   = $dispatcher->dispatch();
-        if (!is_null($response->getBody())) {
-            $response->end();
-            return;
-        }
-
-        $proxys = $map[$path] ?? ($map['/'] ?? []);
+        $proxys    = $map[$path] ?? ($map['/'] ?? []);
         /** @var ProxyInterface $proxy */
         $proxy = array_pop($proxys);
         if ($proxy) {
             try {
+                $serivce = $proxy->service($this->registry, $request);
+
+                // 将服务信息放入 Header 供中间件处理
+                $request->withHeader('x-service-name', $serivce->getName());
+                $request->withHeader('x-service-address', $serivce->getAddress());
+                $request->withHeader('x-service-port', (string)$serivce->getPort());
+
                 // 通过中间件执行
-                $process    = function (ServerRequest $request, Response $response) use ($result) {
-                    $serivce = $proxy->service($this->registry, $request);
-                    $status  = $proxy->proxy($serivce, $request, $response);
-                    return $response;
+                $process    = function (ServerRequest $request, Response $response) use ($proxy, $serivce) {
+                    // 清除服务信息，使其不往下传递
+                    $request->withoutHeader('x-service-name');
+                    $request->withoutHeader('x-service-address');
+                    $request->withoutHeader('x-service-port');
+                    
+                    return $proxy->proxy($serivce, $request, $response);
                 };
                 $dispatcher = new MiddlewareDispatcher($this->middleware, $process, $request, $response);
                 $response   = $dispatcher->dispatch();
@@ -160,7 +162,6 @@ class Server implements HandlerInterface
             }
             return;
         }
-
         $ex = new NotFoundException(sprintf('Uri %s not found', $request->getUri()->__toString()));
         $this->show404($ex, $response);
         $this->dispatch($microtime, 404, $request, $response, null, sprintf('[%d] %s', $ex->getCode(), $ex->getMessage()));

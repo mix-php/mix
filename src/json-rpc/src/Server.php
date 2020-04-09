@@ -46,7 +46,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
     public $dispatcher;
 
     /**
-     * @var MiddlewareInterface[]
+     * @var array MiddlewareInterface class or object
      */
     public $middleware = [];
 
@@ -322,7 +322,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
                     $response    = (new ResponseFactory)->createResultResponse($result, $request->id);
                     $responses[] = $response;
                     // event
-                    $this->dispatch($request, $response);
+                    $this->dispatch($request, $response, $microtime);
                 } catch (\Throwable $ex) {
                     $message     = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
                     $code        = $ex->getCode();
@@ -330,7 +330,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
                     $responses[] = $response;
                     // event
                     $error = sprintf('[%d] %s', $code, $message);
-                    $this->dispatch($request, $response, $error);
+                    $this->dispatch($request, $response, $microtime, $error);
                 }
             });
         }
@@ -368,9 +368,10 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
      * Dispatch
      * @param Request $request
      * @param Response $response
+     * @param float $microtime
      * @param null $error
      */
-    protected function dispatch(Request $request, Response $response, $error = null)
+    protected function dispatch(Request $request, Response $response, float $microtime, $error = null)
     {
         if (!isset($this->dispatcher)) {
             return;

@@ -37,7 +37,7 @@ interface ProxyInterface
      * @param ServiceInterface $service
      * @param ServerRequest $request
      * @param Response $response
-     * @return int status
+     * @return Response
      * @throws ProxyException
      */
     public function proxy(ServiceInterface $service, ServerRequest $request, Response $response);

@@ -191,6 +191,8 @@ class Message implements MessageInterface
             $this->headers[$name] = [$value];
         } else if (is_array($value)) {
             $this->headers[$name] = $value;
+        } else {
+            throw new \InvalidArgumentException('Header value can only be of type string');
         }
         return $this;
     }
@@ -221,6 +223,8 @@ class Message implements MessageInterface
             foreach ($value as $v) {
                 array_push($header, $v);
             }
+        } else {
+            throw new \InvalidArgumentException('Header value can only be of type string');
         }
         $this->headers[$name] = $header;
         return $this;
