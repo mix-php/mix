@@ -33,7 +33,7 @@ class Tracing
     public $timeout = 5;
 
     /**
-     * Trace
+     * Start tracer
      * @param string $serviceName
      * @param null $ip
      * @param null $port
@@ -41,7 +41,7 @@ class Tracing
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
      */
-    public function trace(string $serviceName, $ip = null, $port = null)
+    public function startTracer(string $serviceName, $ip = null, $port = null)
     {
         if ($this->disable) {
             return new NoopTracer();
