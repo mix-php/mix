@@ -33,7 +33,7 @@ class Scope implements \OpenTracing\Scope
      * NOTE: Calling {@link #close} more than once on a single {@link Scope} instance leads to undefined
      * behavior.
      */
-    public function close()
+    public function close(): void
     {
         $this->span->finish();
     }
@@ -41,7 +41,7 @@ class Scope implements \OpenTracing\Scope
     /**
      * @return Span the {@link Span} that's been scoped by this {@link Scope}
      */
-    public function getSpan()
+    public function getSpan(): \OpenTracing\Span
     {
         return $this->span;
     }

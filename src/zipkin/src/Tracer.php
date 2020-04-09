@@ -107,7 +107,7 @@ class Tracer implements \OpenTracing\Tracer
      *
      * @return ScopeManager
      */
-    public function getScopeManager()
+    public function getScopeManager(): ScopeManager
     {
         throw new UnavailableException('Unavailable method');
     }
@@ -119,7 +119,7 @@ class Tracer implements \OpenTracing\Tracer
      *
      * @return Span|null
      */
-    public function getActiveSpan()
+    public function getActiveSpan(): ?Span
     {
         throw new UnavailableException('Unavailable method');
     }
@@ -151,7 +151,7 @@ class Tracer implements \OpenTracing\Tracer
      * @return Scope A Scope that holds newly created Span and is activated on
      *               a ScopeManager.
      */
-    public function startActiveSpan($operationName, $options = [])
+    public function startActiveSpan($operationName, $options = []): Scope
     {
         if (!$this->tracer || !$this->rootSpan) {
             throw new NotFoundException('Root span not found');
@@ -194,7 +194,7 @@ class Tracer implements \OpenTracing\Tracer
      * @see \OpenTracing\StartSpanOptions
      *
      */
-    public function startSpan($operationName, $options = [])
+    public function startSpan($operationName, $options = []): Span
     {
         $tracing = $this->tracing;
         $tracer  = $this->tracer = $tracing->getTracer();
@@ -229,7 +229,7 @@ class Tracer implements \OpenTracing\Tracer
      * @see Formats
      *
      */
-    public function inject(SpanContext $spanContext, $format, &$carrier)
+    public function inject(SpanContext $spanContext, $format, &$carrier): void
     {
         $tracing  = $this->tracing;
         $metadata = [];
@@ -254,7 +254,7 @@ class Tracer implements \OpenTracing\Tracer
      * @see Formats
      *
      */
-    public function extract($format, $carrier)
+    public function extract($format, $carrier): ?SpanContext
     {
         $tracing = $this->tracing;
         switch ($format) {
@@ -282,7 +282,7 @@ class Tracer implements \OpenTracing\Tracer
      * or {@see fastcgi_finish_request} in order to not to delay the end of the request
      * to the client.
      */
-    public function flush()
+    public function flush(): void
     {
         $this->tracer and $this->tracer->flush();
     }

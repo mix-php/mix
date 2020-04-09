@@ -45,7 +45,7 @@ class Span implements \OpenTracing\Span
     /**
      * @return string
      */
-    public function getOperationName()
+    public function getOperationName(): string
     {
         return $this->operationName;
     }
@@ -57,7 +57,7 @@ class Span implements \OpenTracing\Span
      *
      * @return SpanContext
      */
-    public function getContext()
+    public function getContext(): SpanContext
     {
         return new \Mix\Zipkin\Span\SpanContext($this->tracer, $this->span->getContext());
     }
@@ -78,7 +78,7 @@ class Span implements \OpenTracing\Span
      * it should represent the timestamp (including as many decimal places as you need)
      * @return void
      */
-    public function finish($finishTime = null)
+    public function finish($finishTime = null): void
     {
         $this->span->finish($finishTime);
     }
@@ -88,7 +88,7 @@ class Span implements \OpenTracing\Span
      *
      * @param string $newOperationName
      */
-    public function overwriteOperationName($newOperationName)
+    public function overwriteOperationName($newOperationName): void
     {
         $this->operationName = $newOperationName;
         $this->span->setName($newOperationName);
@@ -107,22 +107,22 @@ class Span implements \OpenTracing\Span
      * @param string|bool|int|float $value
      * @return void
      */
-    public function setTag($key, $value)
+    public function setTag($key, $value): void
     {
         $this->span->tag($key, $value);
     }
 
-    public function log(array $fields = [], $timestamp = null)
+    public function log(array $fields = [], $timestamp = null): void
     {
         throw new UnavailableException('Unavailable method');
     }
 
-    public function addBaggageItem($key, $value)
+    public function addBaggageItem($key, $value): void
     {
         throw new UnavailableException('Unavailable method');
     }
 
-    public function getBaggageItem($key)
+    public function getBaggageItem($key): ?string
     {
         throw new UnavailableException('Unavailable method');
     }
