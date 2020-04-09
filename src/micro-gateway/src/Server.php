@@ -141,7 +141,7 @@ class Server implements HandlerInterface
                     $request->withoutHeader('x-service-name');
                     $request->withoutHeader('x-service-address');
                     $request->withoutHeader('x-service-port');
-                    
+
                     return $proxy->proxy($serivce, $request, $response);
                 };
                 $dispatcher = new MiddlewareDispatcher($this->middleware, $process, $request, $response);
@@ -156,9 +156,12 @@ class Server implements HandlerInterface
             } catch (NotFoundException $ex) {
                 $proxy->show404($ex, $response);
                 $this->dispatch($microtime, 404, $request, $response, null, sprintf('[%d] %s', $ex->getCode(), $ex->getMessage()));
-            } catch (\Exception $ex) {
+            } catch (\Swoole\Exception $ex) {
                 $proxy->show500($ex, $response);
                 $this->dispatch($microtime, 500, $request, $response, $serivce ?? null, sprintf('[%d] %s', $ex->getCode(), $ex->getMessage()));
+            } catch (\Throwable $ex) {
+                $proxy->show500($ex, $response);
+                throw $ex;
             }
             return;
         }
