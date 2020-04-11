@@ -1,0 +1,4 @@
+Test_Simple_in_mixgrpc
+bin
+.idea
+!.gitignore
