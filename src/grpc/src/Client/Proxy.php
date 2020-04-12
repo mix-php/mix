@@ -5,7 +5,7 @@ namespace Mix\Grpc\Client;
 use Grpc\ChannelCredentials;
 use Mix\Bean\BeanInjector;
 use Mix\Grpc\Exception\InvokeException;
-use Mix\Grpc\Middleware\MiddlewareDispatcher;
+use Mix\Grpc\Client\Middleware\MiddlewareDispatcher;
 
 /**
  * Class Proxy

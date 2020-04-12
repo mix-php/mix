@@ -1,12 +1,10 @@
 <?php
 
-namespace Mix\Grpc\Middleware;
-
-use Mix\Grpc\Client\Parameters;
+namespace Mix\Grpc\Client\Middleware;
 
 /**
  * Class MiddlewareDispatcher
- * @package Mix\Grpc\Middleware
+ * @package Mix\Grpc\Client\Middleware
  */
 class MiddlewareDispatcher
 {

@@ -4,6 +4,7 @@ namespace Mix\Grpc;
 
 use Mix\Context\Context;
 use Mix\Grpc\Exception\NotFoundException;
+use Mix\Grpc\Helper\GrpcHelper;
 use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Request;
 use Mix\Http\Message\Response;
@@ -14,7 +15,7 @@ use Mix\Http\Server\Middleware\MiddlewareDispatcher;
  * Class Server
  * @package Mix\Grpc
  */
-class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerInterface
+class Server implements \Mix\Http\Server\HandlerInterface
 {
 
     /**
@@ -200,7 +201,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
             $reflectParameter = $reflectMethod->getParameters()[1];
             $rpcRequestClass  = $reflectParameter->getClass()->getName();
             $rpcRequest       = new $rpcRequestClass;
-            static::deserialize($rpcRequest, $request->getBody()->getContents());
+            GrpcHelper::deserialize($rpcRequest, $request->getBody()->getContents());
         }
 
         // 执行
@@ -210,7 +211,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
         isset($rpcRequest) and array_push($parameters, $rpcRequest);
         $rpcResponse = $this->process([$service, $method], $parameters);
 
-        $content = static::serialize($rpcResponse);
+        $content = GrpcHelper::serialize($rpcResponse);
         $body    = (new StreamFactory())->createStream($content);
         $response->withBody($body)
             ->withContentType('application/grpc')
@@ -230,7 +231,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
      */
     protected function process(callable $callback, $parameters)
     {
-        $microtime = static::microtime();
+        $microtime = GrpcHelper::microtime();
         $request   = $response = $error = null;
         try {
             $request  = $parameters[1] ?? null;
@@ -251,14 +252,10 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
      */
     public function handleHTTP(ServerRequest $request, \Mix\Http\Message\Response $response)
     {
-        $method = $request->getMethod();
-        if ($method != 'POST') {
-            $this->show500(new \RuntimeException('Invalid method'), $response);
-            return;
-        }
+        $method      = $request->getMethod();
         $contentType = $request->getHeaderLine('Content-Type');
-        if (strpos($contentType, 'application/grpc') === false) {
-            $this->show500(new \RuntimeException('Invalid content type'), $response);
+        if (strpos($contentType, 'application/grpc') === false || $method != 'POST') {
+            $this->show500(new \RuntimeException('Invalid request'), $response);
             return;
         }
 
@@ -306,61 +303,6 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
     }
 
     /**
-     * Serialize
-     * @param \Google\Protobuf\Internal\Message $message
-     * @return string
-     */
-    static function serialize(\Google\Protobuf\Internal\Message $message): string
-    {
-        return static::pack($message->serializeToString());
-    }
-
-    /**
-     * Deserialize
-     * @param \Google\Protobuf\Internal\Message $message
-     * @param string $data
-     * @throws \Exception
-     */
-    static function deserialize(\Google\Protobuf\Internal\Message &$message, string $data)
-    {
-        $message->mergeFromString(static::unpack($data));
-    }
-
-    /**
-     * Pack
-     * @param string $data
-     * @return string
-     */
-    static function pack(string $data): string
-    {
-        return $data = pack('CN', 0, strlen($data)) . $data;
-    }
-
-    /**
-     * Unpack
-     * @param string $data
-     * @return string
-     */
-    static function unpack(string $data): string
-    {
-        // it's the way to verify the package length
-        // 1 + 4 + data
-        // $len = unpack('N', substr($data, 1, 4))[1];
-        // assert(strlen($data) - 5 === $len);
-        return $data = substr($data, 5);
-    }
-
-    /**
-     * 获取当前时间, 单位: 秒, 粒度: 微秒
-     * @return float
-     */
-    protected static function microtime()
-    {
-        list($usec, $sec) = explode(" ", microtime());
-        return ((float)$usec + (float)$sec);
-    }
-
-    /**
      * Dispatch
      * @param $request
      * @param $response
@@ -373,7 +315,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
             return;
         }
         $event           = new ProcessedEvent();
-        $event->time     = round((static::microtime() - $microtime) * 1000, 2);
+        $event->time     = round((GrpcHelper::microtime() - $microtime) * 1000, 2);
         $event->request  = $request;
         $event->response = $response;
         $event->error    = $error;

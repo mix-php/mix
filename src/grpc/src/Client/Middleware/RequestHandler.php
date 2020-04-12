@@ -1,14 +1,13 @@
 <?php
 
-namespace Mix\Grpc\Middleware;
+namespace Mix\Grpc\Client\Middleware;
 
-use Mix\Grpc\Client\Parameters;
 use Mix\JsonRpc\Message\Request;
 use Mix\JsonRpc\Message\Response;
 
 /**
  * Class RequestHandler
- * @package Mix\JsonRpc\Middleware
+ * @package Mix\Grpc\Client\Middleware
  */
 class RequestHandler
 {
