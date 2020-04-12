@@ -20,7 +20,7 @@ class Response implements \JsonSerializable
     public $id;
 
     /**
-     * @var array|object
+     * @var mixed
      */
     public $result;
 
@@ -35,7 +35,7 @@ class Response implements \JsonSerializable
     public $method;
 
     /**
-     * @var array|object
+     * @var array
      */
     public $params;
 

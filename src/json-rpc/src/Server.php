@@ -254,7 +254,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
         // 反序列化
         try {
             $contents = $request->getBody()->getContents();
-            $request = JsonRpcHelper::deserializeRequestFromHTTP($contents);
+            $request  = JsonRpcHelper::deserializeRequestFromHTTP($contents);
         } catch (\Throwable $ex) {
             $response = (new ResponseFactory)->createErrorResponse(-32700, 'Parse error', null);
             $body     = (new StreamFactory)->createStream(JsonRpcHelper::serializeResponse(true, $response));
@@ -300,10 +300,12 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
             // 执行
             list($class, $method) = $this->callables[$request->method];
             $callable = [new $class($request), $method];
-            $params   = is_array($request->params) ? $request->params : [$request->params];
+            $params   = $request->params;
+            if (!is_array($params)) {
+                throw new \RuntimeException('Params only array type can be used');
+            }
             array_unshift($params, $request->context);
             $result   = call_user_func($callable, ...$params);
-            $result   = is_scalar($result) ? [$result] : $result;
             $response = (new ResponseFactory)->createResultResponse($result, $request->id);
         } catch (\Throwable $ex) {
             $message  = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
