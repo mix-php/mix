@@ -2,6 +2,7 @@
 
 namespace Mix\Http\Message\Factory;
 
+use Mix\Context\Context;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Message\Stream\ContentStream;
 use Mix\Http\Message\Stream\FileStream;
@@ -111,9 +112,8 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
             $parsedBody = is_null($json) ? [] : (array)$json;
         }
         $serverRequest->withParsedBody($parsedBody);
-
-        $context = (new ContextFactory())->createContext();
-        $serverRequest->withContext($context);
+        
+        $serverRequest->withContext(new Context());
 
         return $serverRequest;
     }

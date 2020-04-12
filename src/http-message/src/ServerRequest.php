@@ -3,7 +3,7 @@
 namespace Mix\Http\Message;
 
 use Mix\Session\Session;
-use Mix\Http\Message\Context\Context;
+use Mix\Context\Context;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
