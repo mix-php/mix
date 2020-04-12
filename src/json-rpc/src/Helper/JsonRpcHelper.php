@@ -2,13 +2,11 @@
 
 namespace Mix\JsonRpc\Helper;
 
-use Mix\Http\Message\ServerRequest;
 use Mix\JsonRpc\Constants;
-use Mix\JsonRpc\Exception\ParseException;
+use Mix\JsonRpc\Exception\DeserializeException;
 use Mix\JsonRpc\Message\Error;
 use Mix\JsonRpc\Message\Request;
 use Mix\JsonRpc\Message\Response;
-use Swoole\Coroutine\Channel;
 
 /**
  * Class JsonRpcHelper
@@ -19,73 +17,54 @@ class JsonRpcHelper
 
     /**
      * 解析请求
-     * @param ServerRequest $request
      * @param string $payload
-     * @return array [bool $single, Request[] $requests]
-     * @throws ParseException
+     * @return Request
+     * @throws DeserializeException
      */
-    public static function parseRequestsFromHTTP(ServerRequest $request, string $payload)
+    public static function deserializeRequestFromHTTP(string $payload)
     {
-        $payload  = static::decode($payload);
-        return static::parseRequests($payload);
+        return static::deserializeRequest(static::decode($payload));
     }
 
     /**
      * 解析请求
      * @param string $payload
-     * @return array [bool $single, Request[] $requests]
-     * @throws ParseException
+     * @return Request
+     * @throws DeserializeException
      */
-    public static function parseRequestsFromTCP(string $payload)
+    public static function deserializeRequestFromTCP(string $payload)
     {
-        $payload = static::decode($payload);
-        return static::parseRequests($payload);
+        return static::deserializeRequest(static::decode($payload));
     }
 
     /**
      * 解析请求
-     * @param ServerRequest $request
      * @param array|object $payload
-     * @return array [bool $single, Request[] $requests]
-     * @throws ParseException
+     * @return Request
+     * @throws DeserializeException
      */
-    public static function parseRequestsFromProxy(ServerRequest $request, $payload)
+    public static function deserializeRequestFromProxy($payload)
     {
-        if (is_array($payload)) {
-            foreach ($payload as $key => $value) {
-                is_array($value) and $payload[$key] = (object)$value;
-            }
+        if (is_null($payload) || is_array($payload)) {
+            throw new DeserializeException('Parse failed');
         }
-        return static::parseRequests($payload);
+        return static::deserializeRequest($payload);
     }
 
     /**
      * 解析请求
-     * @param object|array $payload
-     * @return array [bool $single, Request[] $requests]
-     * @throws ParseException
+     * @param object $payload
+     * @return Request
      */
-    protected static function parseRequests($payload)
+    protected static function deserializeRequest(object $object)
     {
-        if (empty($payload)) {
-            throw new ParseException('Parse request failed');
-        }
-        $requests = [];
-        $single   = false;
-        if (!is_array($payload)) {
-            $single  = true;
-            $payload = [$payload];
-        }
-        foreach ($payload as $value) {
-            $request           = new Request();
-            $request->jsonrpc  = $value->jsonrpc ?? null;
-            $request->id       = $value->id ?? null;
-            $request->method   = $value->method ?? null;
-            $request->params   = $value->params ?? null;
-            $request->params   = $value->params ?? null;
-            $requests[]        = $request;
-        }
-        return [$single, $requests];
+        $request          = new Request();
+        $request->jsonrpc = $object->jsonrpc ?? null;
+        $request->id      = $object->id ?? null;
+        $request->method  = $object->method ?? null;
+        $request->params  = $object->params ?? null;
+        $request->params  = $object->params ?? null;
+        return $request;
     }
 
     /**
@@ -108,77 +87,80 @@ class JsonRpcHelper
     }
 
     /**
-     * 解析请求
+     * Deserialize
      * @param string $payload
-     * @return Response[]
-     * @throws ParseException
+     * @return Response
+     * @throws DeserializeException
      */
-    public static function parseResponses(string $payload)
+    public static function deserializeResponse(string $payload)
     {
-        $payload = static::decode($payload);
-        if (is_null($payload)) {
-            throw new ParseException('Parse responses failed.');
+        $object            = static::decode($payload);
+        $response          = new Response();
+        $response->jsonrpc = $object->jsonrpc ?? null;
+        $response->id      = $object->id ?? null;
+        $response->method  = $object->method ?? null;
+        $response->params  = $object->params ?? null;
+        $error             = $object->error ?? null;
+        if (!is_null($error)) {
+            $code           = $error->code ?? 0;
+            $message        = is_string($error) ? $error : ($error->message ?? '');
+            $error          = new Error();
+            $error->code    = $code;
+            $error->message = $message;
         }
-        $responses = [];
-        if (!is_array($payload)) {
-            $payload = [$payload];
-        }
-        foreach ($payload as $value) {
-            $response          = new Response();
-            $response->jsonrpc = $value->jsonrpc ?? null;
-            $response->id      = $value->id ?? null;
-            $response->method  = $value->method ?? null;
-            $response->params  = $value->params ?? null;
-            $error             = $value->error ?? null;
-            if (!is_null($error)) {
-                $code           = $error->code ?? 0;
-                $message        = is_string($error) ? $error : ($error->message ?? '');
-                $error          = new Error();
-                $error->code    = $code;
-                $error->message = $message;
-            }
-            $response->error  = $error;
-            $response->result = $value->result ?? null;
-            $responses[]      = $response;
-        }
-        return $responses;
+        $response->error  = $error;
+        $response->result = $object->result ?? null;
+        return $response;
     }
 
     /**
-     * 生成响应内容
-     * @param bool $single
-     * @param Response ...$responses
+     * Serialize
+     * @param Response $response
      * @return string
      */
-    public static function content(bool $single, Response ...$responses)
+    public static function serializeResponse(Response $response)
     {
-        if ($single) {
-            $jsonStr = static::encode(array_pop($responses)) . Constants::EOF;
-        } else {
-            $jsonStr = static::encode($responses) . Constants::EOF;
-        }
-        return $jsonStr;
+        return static::encode($response) . Constants::EOF;;
     }
 
     /**
      * Encode
      * @param $value
-     * @return false|string
+     * @return string
      */
     public static function encode($value)
     {
-        return json_encode($value, JSON_UNESCAPED_UNICODE);
+        $result = json_encode($value, JSON_UNESCAPED_UNICODE);
+        if ($result === false) {
+            return '';
+        }
+        return $result;
     }
 
     /**
      * Decode
      * 不可使用 $assoc = true，会导致 {} 在多次解编码后变 []
      * @param $value
-     * @return false|array
+     * @return object
+     * @throws DeserializeException
      */
     public static function decode($value)
     {
-        return json_decode($value);
+        $result = json_decode($value);
+        if (is_null($result) || is_array($result)) {
+            throw new DeserializeException('Parse failed.');
+        }
+        return $result;
+    }
+
+    /**
+     * 获取当前时间, 单位: 秒, 粒度: 微秒
+     * @return float
+     */
+    public static function microtime()
+    {
+        list($usec, $sec) = explode(" ", microtime());
+        return ((float)$usec + (float)$sec);
     }
 
 }

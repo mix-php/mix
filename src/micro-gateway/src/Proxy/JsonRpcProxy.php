@@ -88,13 +88,13 @@ class JsonRpcProxy implements ProxyInterface
     public function proxy(ServiceInterface $service, ServerRequest $request, Response $response)
     {
         $contentType = $request->getHeaderLine('Content-Type');
-        if (strpos($contentType, 'application/json') === false) {
-            throw new ProxyException('Invalid content type');
+        $method      = $request->getMethod();
+        if (strpos($contentType, 'application/json') === false || $method != 'POST') {
+            throw new ProxyException('Invalid request');
         }
         $body    = $request->getParsedBody();
-        $content = $body['request'] ?? null;
         try {
-            list($single, $requests) = JsonRpcHelper::parseRequestsFromProxy($request, $content);
+            $rpcRequest = JsonRpcHelper::deserializeRequestFromProxy($body);
         } catch (\Throwable $ex) {
             $rpcResponse = (new ResponseFactory)->createErrorResponse(-32700, 'Parse error', null);
             $body        = (new StreamFactory())->createStream(json_encode($rpcResponse));
@@ -110,20 +110,9 @@ class JsonRpcProxy implements ProxyInterface
             'callTimeout' => $this->callTimeout,
         ]);
         try {
-            $conn = $dialer->dial($service->getAddress(), $service->getPort());
-
-            if ($single) {
-                $rpcResponse = $conn->call(array_pop($requests));
-                $body        = (new StreamFactory())->createStream(json_encode($rpcResponse));
-                $response
-                    ->withContentType('application/json', 'utf-8')
-                    ->withBody($body)
-                    ->withStatus(200);
-                return $response;
-            }
-
-            $rpcResponses = $conn->callMultiple(...$requests);
-            $body         = (new StreamFactory())->createStream(json_encode($rpcResponses));
+            $conn        = $dialer->dial($service->getAddress(), $service->getPort());
+            $rpcResponse = $conn->call($rpcRequest);
+            $body        = (new StreamFactory())->createStream(json_encode($rpcResponse));
             $response
                 ->withContentType('application/json', 'utf-8')
                 ->withBody($body)

@@ -2,6 +2,7 @@
 
 namespace Mix\JsonRpc\Factory;
 
+use Mix\Context\Context;
 use Mix\JsonRpc\Message\Request;
 
 /**
@@ -25,6 +26,7 @@ class RequestFactory
         $request->method  = $method;
         $request->params  = $params;
         $request->id      = $id;
+        $request->context = new Context();
         return $request;
     }
 

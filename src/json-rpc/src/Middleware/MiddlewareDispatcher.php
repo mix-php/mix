@@ -24,17 +24,17 @@ class MiddlewareDispatcher
     public $callback;
 
     /**
-     * @var Request[]
+     * @var Request
      */
-    public $requests;
+    public $request;
 
     /**
      * InterceptDispatcher constructor.
      * @param MiddlewareInterface[] $middleware
      * @param callable $callback
-     * @param Request[] $requests
+     * @param Request $request
      */
-    public function __construct(array $middleware, callable $callback, array $requests)
+    public function __construct(array $middleware, callable $callback, array $request)
     {
         $instances = [];
         foreach ($middleware as $class) {
@@ -49,16 +49,16 @@ class MiddlewareDispatcher
         }
         $this->middleware = $instances;
         $this->callback   = $callback;
-        $this->requests   = $requests;
+        $this->request    = $request;
     }
 
     /**
      * Dispatch
-     * @return Response[] $responses
+     * @return Response
      */
     public function dispatch()
     {
-        return (new RequestHandler($this->middleware, $this->callback))->handle($this->requests);
+        return (new RequestHandler($this->middleware, $this->callback))->handle($this->request);
     }
 
 }

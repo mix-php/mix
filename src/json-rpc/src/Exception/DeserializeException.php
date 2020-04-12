@@ -3,9 +3,9 @@
 namespace Mix\JsonRpc\Exception;
 
 /**
- * Class ParseException
+ * Class DeserializeException
  * @package Mix\JsonRpc\Exception
  */
-class ParseException extends \Exception
+class DeserializeException extends \Exception
 {
 }

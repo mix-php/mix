@@ -35,16 +35,16 @@ class RequestHandler
 
     /**
      * Handle
-     * @param Request[] $requests
-     * @return Response[] $responses
+     * @param Request $request
+     * @return Response $response
      */
-    public function handle(array $requests): array
+    public function handle(Request $request): Response
     {
         $middleware = array_shift($this->middleware);
         if (!$middleware) {
-            return call_user_func($this->callback, $requests);
+            return call_user_func($this->callback, $request);
         }
-        return $middleware->process($requests, $this);
+        return $middleware->process($request, $this);
     }
 
 }

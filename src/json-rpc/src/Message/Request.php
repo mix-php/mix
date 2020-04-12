@@ -2,6 +2,8 @@
 
 namespace Mix\JsonRpc\Message;
 
+use Mix\Context\Context;
+
 /**
  * Class Request
  * @package Mix\JsonRpc\Message
@@ -33,14 +35,6 @@ class Request implements \JsonSerializable
      * @var int
      */
     public $id;
-
-    /**
-     * Request constructor.
-     */
-    public function __construct()
-    {
-        $this->context = new Context();
-    }
 
     /**
      * Json serialize

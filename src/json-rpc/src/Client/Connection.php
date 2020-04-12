@@ -87,48 +87,19 @@ class Connection
      * Call
      * @param Request $request
      * @return Response
-     * @throws Exception\ParseException
-     * @throws ParseException
-     * @throws \Swoole\Exception
+     * @throws 
      */
     public function call(Request $request)
     {
-        $process             = function (array $requests) {
+        $process              = function (array $requests) {
             $request    = array_pop($requests);
             $jsonString = JsonRpcHelper::encode($request) . Constants::EOF;
             $this->send($jsonString);
             $data = $this->recv($this->callTimeout);
-            return JsonRpcHelper::parseResponses($data);
+            return JsonRpcHelper::deserializeResponse($data);
         };
-        $interceptDispatcher = new MiddlewareDispatcher($this->middleware, $process, [$request]);
-        $responses           = $interceptDispatcher->dispatch();
-        return array_pop($responses);
-    }
-
-    /**
-     * Multi Call
-     * @param Request ...$requests
-     * @return Response[]
-     * @throws ParseException
-     * @throws \Swoole\Exception
-     */
-    public function callMultiple(Request ...$requests)
-    {
-        if (empty($requests)) {
-            return [];
-        }
-        $process             = function (array $requests) {
-            if (count($requests) == 1) {
-                $jsonStr = JsonRpcHelper::encode(array_pop($requests)) . Constants::EOF;
-            } else {
-                $jsonStr = JsonRpcHelper::encode($requests) . Constants::EOF;
-            }
-            $this->send($jsonStr);
-            $data = $this->recv($this->callTimeout);
-            return JsonRpcHelper::parseResponses($data);
-        };
-        $interceptDispatcher = new MiddlewareDispatcher($this->middleware, $process, $requests);
-        return $interceptDispatcher->dispatch();
+        $middlewareDispatcher = new MiddlewareDispatcher($this->middleware, $process, $request);
+        return $middlewareDispatcher->dispatch();
     }
 
     /**

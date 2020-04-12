@@ -14,10 +14,10 @@ interface MiddlewareInterface
 
     /**
      * Process
-     * @param Request[] $requests
+     * @param Request $request
      * @param RequestHandler $handler
-     * @return Response[] $responses
+     * @return Response
      */
-    public function process(array $requests, RequestHandler $handler): array;
+    public function process(Request $request, RequestHandler $handler): Response;
 
 }

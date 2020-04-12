@@ -219,32 +219,28 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
     /**
      * 调用TCP
      * @param Channel $sendChan
-     * @param string $content
+     * @param string $payload
      */
-    protected function callTCP(Channel $sendChan, string $content)
+    protected function callTCP(Channel $sendChan, string $payload)
     {
-        /**
-         * 解析
-         * @var Request[] $requests
-         * @var bool $single
-         */
+        // 反序列化
         try {
-            list($single, $requests) = JsonRpcHelper::parseRequestsFromTCP($content);
+            $request = JsonRpcHelper::deserializeRequestFromTCP($payload);
         } catch (\Throwable $ex) {
             $response = (new ResponseFactory)->createErrorResponse(-32700, 'Parse error', null);
-            $sendChan->push(JsonRpcHelper::content(true, $response));
+            $sendChan->push(JsonRpcHelper::serializeResponse($response));
             return;
         }
 
         // 通过中间件执行
-        $process             = function (array $requests) {
-            return $this->process(...$requests);
+        $process             = function (Request $request) {
+            return $this->process($request);
         };
-        $interceptDispatcher = new MiddlewareDispatcher($this->middleware, $process, $requests);
-        $responses           = $interceptDispatcher->dispatch();
+        $interceptDispatcher = new MiddlewareDispatcher($this->middleware, $process, $request);
+        $response            = $interceptDispatcher->dispatch();
 
         // 发送
-        $sendChan->push(JsonRpcHelper::content($single, ...$responses));
+        $sendChan->push(JsonRpcHelper::serializeResponse($response));
     }
 
     /**
@@ -253,18 +249,15 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
      * @param \Mix\Http\Message\Response $httpResponse
      * @param string $content
      */
-    protected function callHTTP(ServerRequest $request, \Mix\Http\Message\Response $httpResponse, string $content)
+    protected function callHTTP(ServerRequest $request, \Mix\Http\Message\Response $httpResponse)
     {
-        /**
-         * 解析
-         * @var Request[] $requests
-         * @var bool $single
-         */
+        // 反序列化
         try {
-            list($single, $requests) = JsonRpcHelper::parseRequestsFromHTTP($request, $content);
+            $contents = $request->getBody()->getContents();
+            $request = JsonRpcHelper::deserializeRequestFromHTTP($contents);
         } catch (\Throwable $ex) {
             $response = (new ResponseFactory)->createErrorResponse(-32700, 'Parse error', null);
-            $body     = (new StreamFactory)->createStream(JsonRpcHelper::content(true, $response));
+            $body     = (new StreamFactory)->createStream(JsonRpcHelper::serializeResponse(true, $response));
             $httpResponse->withBody($body)
                 ->withContentType('application/json')
                 ->withStatus(200)
@@ -273,14 +266,14 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
         }
 
         // 通过中间件执行
-        $process             = function (array $requests) {
-            return $this->process(...$requests);
+        $process             = function (Request $request) {
+            return $this->process($request);
         };
-        $interceptDispatcher = new MiddlewareDispatcher($this->middleware, $process, $requests);
-        $responses           = $interceptDispatcher->dispatch();
+        $interceptDispatcher = new MiddlewareDispatcher($this->middleware, $process, $request);
+        $response            = $interceptDispatcher->dispatch();
 
         // 发送
-        $body = (new StreamFactory)->createStream(JsonRpcHelper::content($single, ...$responses));
+        $body = (new StreamFactory)->createStream(JsonRpcHelper::serializeResponse($response));
         $httpResponse->withBody($body)
             ->withContentType('application/json')
             ->withStatus(200)
@@ -289,53 +282,38 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
 
     /**
      * 处理
-     * @param Request ...$requests
-     * @return array
+     * @param Request $request
+     * @return Response
      */
-    protected function process(Request ...$requests)
+    protected function process(Request $request)
     {
-        $waitGroup = WaitGroup::new();
-        $waitGroup->add(count($requests));
-        $responses = [];
-        foreach ($requests as $request) {
-            xgo(function () use ($request, &$responses, $waitGroup) {
-                xdefer(function () use ($waitGroup) {
-                    $waitGroup->done();
-                });
-                // 执行
-                $microtime = static::microtime();
-                try {
-                    // 验证
-                    if (!JsonRpcHelper::validRequest($request)) {
-                        throw new \RuntimeException('Invalid Request', -32600);
-                    }
-                    if (!isset($this->callables[$request->method])) {
-                        throw new \RuntimeException(sprintf('Method %s not found', $request->method), -32601);
-                    }
-                    // 执行
-                    list($class, $method) = $this->callables[$request->method];
-                    $callable = [new $class($request), $method];
-                    $params   = is_array($request->params) ? $request->params : [$request->params];
-                    array_unshift($params, $request->context);
-                    $result      = call_user_func($callable, ...$params);
-                    $result      = is_scalar($result) ? [$result] : $result;
-                    $response    = (new ResponseFactory)->createResultResponse($result, $request->id);
-                    $responses[] = $response;
-                    // event
-                    $this->dispatch($request, $response, $microtime);
-                } catch (\Throwable $ex) {
-                    $message     = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
-                    $code        = $ex->getCode();
-                    $response    = (new ResponseFactory)->createErrorResponse($code, $ex->getMessage(), $request->id);
-                    $responses[] = $response;
-                    // event
-                    $error = sprintf('[%d] %s', $code, $message);
-                    $this->dispatch($request, $response, $microtime, $error);
-                }
-            });
+        // 执行
+        $microtime = JsonRpcHelper::microtime();
+        try {
+            // 验证
+            if (!JsonRpcHelper::validRequest($request)) {
+                throw new \RuntimeException('Invalid Request', -32600);
+            }
+            if (!isset($this->callables[$request->method])) {
+                throw new \RuntimeException(sprintf('Method %s not found', $request->method), -32601);
+            }
+            // 执行
+            list($class, $method) = $this->callables[$request->method];
+            $callable = [new $class($request), $method];
+            $params   = is_array($request->params) ? $request->params : [$request->params];
+            array_unshift($params, $request->context);
+            $result   = call_user_func($callable, ...$params);
+            $result   = is_scalar($result) ? [$result] : $result;
+            $response = (new ResponseFactory)->createResultResponse($result, $request->id);
+        } catch (\Throwable $ex) {
+            $message  = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
+            $code     = $ex->getCode();
+            $response = (new ResponseFactory)->createErrorResponse($code, $ex->getMessage(), $request->id);
+            $error    = sprintf('[%d] %s', $code, $message);
+        } finally {
+            $this->dispatch($request, $response, $microtime, $error ?? null);
         }
-        $waitGroup->wait();
-        return $responses;
+        return $response;
     }
 
     /**
@@ -346,22 +324,12 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
     public function handleHTTP(ServerRequest $request, \Mix\Http\Message\Response $response)
     {
         $contentType = $request->getHeaderLine('Content-Type');
-        if (strpos($contentType, 'application/json') === false) {
+        $method      = $request->getMethod();
+        if (strpos($contentType, 'application/json') === false || $method != 'POST') {
             $response->withStatus(500)->end();
             return;
         }
-        $content = $request->getBody()->getContents();
-        $this->callHTTP($request, $response, $content);
-    }
-
-    /**
-     * 获取当前时间, 单位: 秒, 粒度: 微秒
-     * @return float
-     */
-    protected static function microtime()
-    {
-        list($usec, $sec) = explode(" ", microtime());
-        return ((float)$usec + (float)$sec);
+        $this->callHTTP($request, $response);
     }
 
     /**
@@ -377,7 +345,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
             return;
         }
         $event           = new ProcessedEvent();
-        $event->time     = round((static::microtime() - $microtime) * 1000, 2);
+        $event->time     = round((JsonRpcHelper::microtime() - $microtime) * 1000, 2);
         $event->request  = $request;
         $event->response = $response;
         $event->error    = $error;
