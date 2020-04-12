@@ -2,6 +2,7 @@
 
 namespace Mix\Grpc\Middleware;
 
+use Mix\Grpc\Client\Parameters;
 use Mix\JsonRpc\Message\Request;
 use Mix\JsonRpc\Message\Response;
 
@@ -35,16 +36,16 @@ class RequestHandler
 
     /**
      * Handle
-     * @param Request[] $requests
-     * @return Response[] $responses
+     * @param Parameters $parameters
+     * @return object
      */
-    public function handle(array $requests): array
+    public function handle(Parameters $parameters): object 
     {
         $middleware = array_shift($this->middleware);
         if (!$middleware) {
-            return call_user_func($this->callback, $requests);
+            return call_user_func($this->callback, $parameters);
         }
-        return $middleware->process($requests, $this);
+        return $middleware->process($parameters, $this);
     }
 
 }

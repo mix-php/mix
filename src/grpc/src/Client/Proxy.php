@@ -5,6 +5,7 @@ namespace Mix\Grpc\Client;
 use Grpc\ChannelCredentials;
 use Mix\Bean\BeanInjector;
 use Mix\Grpc\Exception\InvokeException;
+use Mix\Grpc\Middleware\MiddlewareDispatcher;
 
 /**
  * Class Proxy
@@ -17,7 +18,7 @@ class Proxy
      * @var \Grpc\BaseStub
      */
     public $client;
-    
+
     /**
      * Global timeout
      * @var float
@@ -54,6 +55,8 @@ class Proxy
         $parameters->metadata = $arguments[1] ?? [];
         $parameters->options  = $arguments[2] ?? [];
         $callback             = [$this->client, $name];
+
+        isset($parameters->options['timeout']) or $parameters->options['timeout'] = $this->timeout;
 
         $process = function (Parameters $parameters) use ($callback) {
             $object = call_user_func_array($callback, $parameters);

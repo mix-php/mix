@@ -56,7 +56,6 @@ class Dialer
         return function (string $class, string $hostname) {
             return new $class($hostname, [
                 'credentials' => ChannelCredentials::createInsecure(),
-                'timeout'     => $this->timeout,
             ]);
         };
     }

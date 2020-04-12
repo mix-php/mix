@@ -2,22 +2,21 @@
 
 namespace Mix\Grpc\Middleware;
 
-use Mix\JsonRpc\Message\Request;
-use Mix\JsonRpc\Message\Response;
+use Mix\Grpc\Client\Parameters;
 
 /**
  * Interface MiddlewareInterface
- * @package Mix\JsonRpc\Middleware
+ * @package Mix\Grpc\Middleware
  */
 interface MiddlewareInterface
 {
 
     /**
      * Process
-     * @param Request[] $requests
+     * @param Parameters $parameters
      * @param RequestHandler $handler
-     * @return Response[] $responses
+     * @return object
      */
-    public function process(array $requests, RequestHandler $handler): array;
+    public function process(Parameters $parameters, RequestHandler $handler): object;
 
 }

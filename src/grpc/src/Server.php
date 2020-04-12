@@ -251,6 +251,11 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
      */
     public function handleHTTP(ServerRequest $request, \Mix\Http\Message\Response $response)
     {
+        $method = $request->getMethod();
+        if ($method != 'POST') {
+            $this->show500(new \RuntimeException('Invalid method'), $response);
+            return;
+        }
         $contentType = $request->getHeaderLine('Content-Type');
         if (strpos($contentType, 'application/grpc') === false) {
             $this->show500(new \RuntimeException('Invalid content type'), $response);
