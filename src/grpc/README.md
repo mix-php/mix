@@ -1,11 +1,11 @@
-## Mix Log
+## Mix Grpc
 
 ...
 
 ## Usage
 
 ```
-composer require mix/log
+composer require mix/grpc
 ```
 
 ## License
