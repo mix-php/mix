@@ -23,7 +23,8 @@
     "mix/guzzle": "~2.1.0",
     "mix/bean": "~2.1.0",
     "mix/json-rpc": "~2.1.0",
-    "mix/http-server": "~2.1.0"
+    "mix/http-server": "~2.1.0",
+    "mix/context": "~2.1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^7.0.0"
