@@ -23,9 +23,9 @@ class Timer
     protected $enableCoroutine;
 
     /**
-     * 使用静态方法创建实例
-     * @param mixed ...$args
-     * @return $this
+     * New
+     * @param bool $enableCoroutine
+     * @return static
      */
     public static function new(bool $enableCoroutine = true)
     {
