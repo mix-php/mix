@@ -299,7 +299,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
             }
             // 执行
             list($class, $method) = $this->callables[$request->method];
-            $callable = [new $class($request), $method];
+            $callable = [new $class(), $method];
             $params   = $request->params;
             if (!is_array($params)) {
                 throw new \RuntimeException('Params only array type can be used');
