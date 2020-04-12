@@ -1,0 +1,33 @@
+{
+  "name": "mix/grpc",
+  "description": "Mix Grpc http://www.mixphp.cn",
+  "type": "framework",
+  "keywords": [
+    "framework",
+    "mix",
+    "swoole",
+    "grpc"
+  ],
+  "homepage": "http://www.mixphp.cn/",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "liu,jian",
+      "email": "coder.keda@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0",
+    "ext-swoole": ">=4.4.4",
+    "google/protobuf": "^3.11",
+    "grpc/grpc": "^1.27",
+    "mix/context": "~2.1.0",
+    "mix/http-message": "~2.1.0",
+    "mix/http-server": "~2.1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mix\\Grpc\\": "src/"
+    }
+  }
+}

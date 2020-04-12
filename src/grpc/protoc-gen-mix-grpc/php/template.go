@@ -40,6 +40,7 @@ const phpBody = `<?php
 namespace {{ $ns.Namespace }};
 {{end}}
 use Mix\Grpc;
+use Mix\Context\Context;
 {{- range $n := $ns.Import}}
 use {{ $n }};
 {{- end}}
@@ -50,13 +51,13 @@ interface {{ .Service.Name | interface }} extends Grpc\ServiceInterface
     public const NAME = "{{ .File.Package }}.{{ .Service.Name }}";{{ "\n" }}
 {{- range $m := .Service.Method}}
     /**
-    * @param GRPC\ContextInterface $ctx
+    * @param Context $ctx
     * @param {{ name $ns $m.InputType }} $in
     * @return {{ name $ns $m.OutputType }}
     *
     * @throws Grpc\Exception\InvokeException
     */
-    public function {{ $m.Name }}(Grpc\ContextInterface $ctx, {{ name $ns $m.InputType }} $in): {{ name $ns $m.OutputType }};
+    public function {{ $m.Name }}(Context $ctx, {{ name $ns $m.InputType }} $in): {{ name $ns $m.OutputType }};
 {{end -}}
 }
 `
