@@ -31,17 +31,15 @@ class TracingClientMiddleware implements MiddlewareInterface
 
     /**
      * Process
-     * @param Request[] $requests
+     * @param Request $request
      * @param RequestHandler $handler
-     * @return Response[] $responses
+     * @return Response
      */
-    public function process(array $requests, RequestHandler $handler): array
+    public function process(Request $request, RequestHandler $handler): Response
     {
-        $tracer = $this->tracer;
-        $tags   = [];
-        foreach ($requests as $key => $request) {
-            $tags[sprintf('method-%d', $key)] = $request->method;
-        }
+        $tracer         = $this->tracer;
+        $tags['method'] = $request->method;
+        $tags['id']     = $request->id;
 
         $operationName = 'jsonrpc:client';
         $scope         = $tracer->startActiveSpan($operationName, [
@@ -50,12 +48,11 @@ class TracingClientMiddleware implements MiddlewareInterface
 
         $traceHeaders = [];
         $tracer->inject($scope->getSpan()->getContext(), TEXT_MAP, $traceHeaders);
-        // 在第一个请求的最后一个参数追加trace信息
-        $request = $requests[0];
+        // 在请求的最后一个参数追加trace信息
         array_push($request->params, $traceHeaders);
 
         try {
-            $result = $handler->handle($requests);
+            $result = $handler->handle($request);
         } catch (\Throwable $exception) {
             throw $exception;
         } finally {

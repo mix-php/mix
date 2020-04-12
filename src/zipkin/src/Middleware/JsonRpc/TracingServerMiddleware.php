@@ -23,21 +23,18 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
 
     /**
      * Process
-     * @param Request[] $requests
+     * @param Request $requests
      * @param RequestHandler $handler
-     * @return Response[] $responses
+     * @return Response
      */
-    public function process(array $requests, RequestHandler $handler): array
+    public function process(Request $request, RequestHandler $handler): Response
     {
         $tracer = $this->tracer();
-        $tags   = [];
-        foreach ($requests as $key => $request) {
-            $request->context['tracer']       = $tracer;
-            $tags[sprintf('method-%d', $key)] = $request->method;
-        }
+        $request->context->withValue('__tracer__', $tracer);
+        $tags['method'] = $request->method;
+        $tags['id']     = $request->id;
 
-        // 在第一个请求的最后一个参数提取trace信息
-        $request      = current($requests);
+        // 在请求的最后一个参数提取trace信息
         $params       = $request->params;
         $traceHeaders = [];
         if (is_array($params)) {
@@ -53,7 +50,7 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
         ]);
 
         try {
-            $result = $handler->handle($requests);
+            $result = $handler->handle($request);
         } catch (\Throwable $exception) {
             throw $exception;
         } finally {
