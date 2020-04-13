@@ -3,6 +3,7 @@
 namespace Mix\Grpc;
 
 use Mix\Context\Context;
+use Mix\Grpc\Event\ProcessedEvent;
 use Mix\Grpc\Exception\NotFoundException;
 use Mix\Grpc\Helper\GrpcHelper;
 use Mix\Http\Message\Factory\StreamFactory;
@@ -60,7 +61,7 @@ class Server implements \Mix\Http\Server\HandlerInterface
     protected $options = [];
 
     /**
-     * @var array [[$service, $namespace, $suffix],...]
+     * @var string[]
      */
     protected $services = [];
 
@@ -93,75 +94,53 @@ class Server implements \Mix\Http\Server\HandlerInterface
     }
 
     /**
-     * 获取全部 service 名称, 通过类名
-     *
-     * Class                                              Service           Method
-     * [namespace]Foo[suffix]::Bar                        foo               Foo.Bar
-     * [namespace]Foo/Bar[suffix]::Baz                    foo               Bar.Baz
-     * [namespace]Foo/Bar/Baz[suffix]::Cat                foo.bar           Baz.Cat
-     * [namespace]V1/Foo[suffix]::Bar                     v1.foo            Foo.Bar
-     * [namespace]V1/Foo/Bar[suffix]::Baz                 v1.foo.bar        Bar.Baz
-     * [namespace]V1/Foo/Bar/Baz[suffix]::Cat             v1.foo.bar        Baz.Cat
-     *
+     * 获取全部 service 名称
      * @return string[]
      */
     public function services()
     {
-        $services = [];
-        foreach ($this->services as $item) {
-            list($class, $namespace, $suffix) = $item;
-
-            $namespace = substr($namespace, -1, 1) == '\\' ? $namespace : $namespace . '\\';
-            $name      = str_replace($namespace, '', $class);
-
-            $suffixLength = strlen($suffix);
-            $name         = ($suffixLength > 0 and substr($name, -$suffixLength, $suffixLength) == $suffix) ? substr($name, 0, -$suffixLength) : $name;
-
-            $slice   = array_filter(explode('\\', strtolower($name)));
-            $version = '';
-            if (isset($slice[0]) && stripos($slice[0], 'v') === 0) {
-                $version = array_shift($slice) . '.';
-            }
-            switch (count($slice)) {
-                case 0:
-                    $name = '';
-                    break;
-                case 1:
-                case 2:
-                    $name = array_shift($slice);
-                    break;
-                default:
-                    array_pop($slice);
-                    $name = implode('.', $slice);
-            }
-            $services[] = $version . $name;
-        }
-        return $services;
+        return $this->services;
     }
 
     /**
      * Register
-     * 相同 Class 名，即便命名空间不同也会被覆盖
      * @param string $class
-     * @param string $namespace
-     * @param string $suffix
      * @throws \InvalidArgumentException
      */
-    public function register(string $class, string $namespace = '', $suffix = '')
+    public function register(string $class)
     {
-        array_push($this->services, [$class, $namespace, $suffix]);
-
-        $name         = basename(str_replace('\\', '/', $class));
-        $suffixLength = strlen($suffix);
-        $name         = ($suffixLength > 0 and substr($name, -$suffixLength, $suffixLength) == $suffix) ? substr($name, 0, -$suffixLength) : $name;
-
         if (!is_subclass_of($class, ServiceInterface::class)) {
             throw new \InvalidArgumentException(sprintf('%s is not a subclass of %s', $class, ServiceInterface::class));
         }
 
+        $name = $class::NAME;
+        if (!$name) {
+            throw new \InvalidArgumentException(sprintf('Const %s::NAME can\'t be empty', $class));
+        }
+
+        $reflectClass  = new ReflectionClass($class);
+        $reflectMethod = $reflectClass->getMethod($method);
+        if ($reflectMethod->getNumberOfParameters() != 2) {
+            throw new \InvalidArgumentException(sprintf('%s::%s wrong number of parameters', $class, $method));
+        }
+
+        $slice     = explode('.', $name);
+        $className = array_pop($slice);
+        $service   = implode('.', $slice);
+        array_pop($this->services, $service);
+
         $methods = get_class_methods($class);
         foreach ($methods as $method) {
-            $this->callables[sprintf('/%s/%s', $class::NAME, $method)] = [$class, $method];
+            if (strpos($method, '_') === 0) {
+                continue;
+            }
+            $this->callables[sprintf('/%s/%s', $name, $method)] = [
+                $class, $method,
+                [
+                    'service' => $service,
+                    'method'  => sprintf('%s.%s', $className, $method),
+                ],
+            ];
         }
     }
 
@@ -193,23 +172,21 @@ class Server implements \Mix\Http\Server\HandlerInterface
             throw new NotFoundException('Invalid uri');
         }
 
-        list($class, $method) = $this->callables[$path];
-        $reflectClass  = new ReflectionClass($class);
-        $reflectMethod = $reflectClass->getMethod('call');
+        list($class, $method, $endpoint) = $this->callables[$path];
 
-        if ($reflectMethod->getNumberOfParameters() >= 2) {
-            $reflectParameter = $reflectMethod->getParameters()[1];
-            $rpcRequestClass  = $reflectParameter->getClass()->getName();
-            $rpcRequest       = new $rpcRequestClass;
-            GrpcHelper::deserialize($rpcRequest, $request->getBody()->getContents());
-        }
+        $reflectClass     = new ReflectionClass($class);
+        $reflectMethod    = $reflectClass->getMethod($method);
+        $reflectParameter = $reflectMethod->getParameters()[1];
+        $rpcRequestClass  = $reflectParameter->getClass()->getName();
+        $rpcRequest       = new $rpcRequestClass;
+        GrpcHelper::deserialize($rpcRequest, $request->getBody()->getContents());
 
         // 执行
-        $service    = new $class;
+        $object     = new $class;
         $parameters = [];
         array_push($parameters, $request->getContext());
-        isset($rpcRequest) and array_push($parameters, $rpcRequest);
-        $rpcResponse = $this->process([$service, $method], $parameters);
+        array_push($parameters, $rpcRequest);
+        $rpcResponse = $this->process([$object, $method], $parameters, $endpoint);
 
         $content = GrpcHelper::serialize($rpcResponse);
         $body    = (new StreamFactory())->createStream($content);
@@ -227,9 +204,10 @@ class Server implements \Mix\Http\Server\HandlerInterface
     /**
      * Process
      * @param callable $callback
-     * @param $parameters
+     * @param array $parameters
+     * @param array $endpoint
      */
-    protected function process(callable $callback, $parameters)
+    protected function process(callable $callback, array $parameters, array $endpoint)
     {
         $microtime = GrpcHelper::microtime();
         $request   = $response = $error = null;
@@ -241,7 +219,7 @@ class Server implements \Mix\Http\Server\HandlerInterface
             $code    = $ex->getCode();
             $error   = sprintf('[%d] %s', $code, $message);
         } finally {
-            $this->dispatch($request, $response, $microtime, $error);
+            $this->dispatch($request, $response, $endpoint, $microtime, $error);
         }
     }
 
@@ -306,10 +284,11 @@ class Server implements \Mix\Http\Server\HandlerInterface
      * Dispatch
      * @param $request
      * @param $response
+     * @param string $endpoint
      * @param float $microtime
      * @param null $error
      */
-    protected function dispatch($request, $response, float $microtime, $error = null)
+    protected function dispatch($request, $response, array $endpoint, float $microtime, $error = null)
     {
         if (!isset($this->dispatcher)) {
             return;
@@ -318,6 +297,7 @@ class Server implements \Mix\Http\Server\HandlerInterface
         $event->time     = round((GrpcHelper::microtime() - $microtime) * 1000, 2);
         $event->request  = $request;
         $event->response = $response;
+        $event->endpoint = $endpoint;
         $event->error    = $error;
         $this->dispatcher->dispatch($event);
     }

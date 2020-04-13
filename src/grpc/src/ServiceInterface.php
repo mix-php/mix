@@ -3,9 +3,16 @@
 namespace Mix\Grpc;
 
 /**
- * Class ServiceInterface
- * @package Grpc
+ * Interface ServiceInterface
+ * @package Mix\Grpc
  */
 interface ServiceInterface
 {
+
+    /**
+     * Service name
+     * @var string
+     */
+    public const NAME = '';
+
 }
