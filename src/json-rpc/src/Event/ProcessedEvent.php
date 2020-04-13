@@ -31,6 +31,12 @@ class ProcessedEvent
     public $response;
 
     /**
+     * 端点
+     * @var array ['service'=>'','method'=>'']
+     */
+    public $endpoint;
+
+    /**
      * 执行异常信息
      * @var string
      */

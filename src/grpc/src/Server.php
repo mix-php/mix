@@ -118,22 +118,23 @@ class Server implements \Mix\Http\Server\HandlerInterface
             throw new \InvalidArgumentException(sprintf('Const %s::NAME can\'t be empty', $class));
         }
 
-        $reflectClass  = new ReflectionClass($class);
-        $reflectMethod = $reflectClass->getMethod($method);
-        if ($reflectMethod->getNumberOfParameters() != 2) {
-            throw new \InvalidArgumentException(sprintf('%s::%s wrong number of parameters', $class, $method));
-        }
-
         $slice     = explode('.', $name);
         $className = array_pop($slice);
         $service   = implode('.', $slice);
         array_pop($this->services, $service);
 
-        $methods = get_class_methods($class);
+        $methods      = get_class_methods($class);
+        $reflectClass = new ReflectionClass($class);
         foreach ($methods as $method) {
             if (strpos($method, '_') === 0) {
                 continue;
             }
+
+            $reflectMethod = $reflectClass->getMethod($method);
+            if ($reflectMethod->getNumberOfParameters() != 2) {
+                throw new \InvalidArgumentException(sprintf('%s::%s wrong number of parameters', $class, $method));
+            }
+
             $this->callables[sprintf('/%s/%s', $name, $method)] = [
                 $class, $method,
                 [

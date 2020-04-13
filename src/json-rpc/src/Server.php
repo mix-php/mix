@@ -2,9 +2,9 @@
 
 namespace Mix\JsonRpc;
 
-use Mix\Concurrent\Sync\WaitGroup;
 use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\ServerRequest;
+use Mix\JsonRpc\ServiceInterface;
 use Mix\JsonRpc\Event\ProcessedEvent;
 use Mix\JsonRpc\Factory\ResponseFactory;
 use Mix\JsonRpc\Helper\JsonRpcHelper;
@@ -37,6 +37,11 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
     /**
      * @var bool
      */
+    public $ssl = false;
+
+    /**
+     * @var bool
+     */
     public $reusePort = false;
 
     /**
@@ -61,7 +66,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
     protected $options = [];
 
     /**
-     * @var array [[$service, $namespace, $suffix],...]
+     * @var string[]
      */
     protected $services = [];
 
@@ -74,12 +79,14 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
      * Server constructor.
      * @param string $host
      * @param int $port
+     * @param bool $ssl
      * @param bool $reusePort
      */
-    public function __construct(string $host, int $port, bool $reusePort = false)
+    public function __construct(string $host, int $port, bool $ssl = false, bool $reusePort = false)
     {
         $this->host      = $host;
         $this->port      = $port;
+        $this->ssl       = $ssl;
         $this->reusePort = $reusePort;
     }
 
@@ -93,70 +100,53 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
     }
 
     /**
-     * 获取全部 service 名称, 通过类名
-     *
-     * Class                                              Service           Method
-     * [namespace]Foo[suffix]::Bar                        foo               Foo.Bar
-     * [namespace]Foo/Bar[suffix]::Baz                    foo               Bar.Baz
-     * [namespace]Foo/Bar/Baz[suffix]::Cat                foo.bar           Baz.Cat
-     * [namespace]V1/Foo[suffix]::Bar                     v1.foo            Foo.Bar
-     * [namespace]V1/Foo/Bar[suffix]::Baz                 v1.foo.bar        Bar.Baz
-     * [namespace]V1/Foo/Bar/Baz[suffix]::Cat             v1.foo.bar        Baz.Cat
-     *
+     * 获取全部 service 名称
      * @return string[]
      */
     public function services()
     {
-        $services = [];
-        foreach ($this->services as $item) {
-            list($class, $namespace, $suffix) = $item;
-
-            $namespace = substr($namespace, -1, 1) == '\\' ? $namespace : $namespace . '\\';
-            $name      = str_replace($namespace, '', $class);
-
-            $suffixLength = strlen($suffix);
-            $name         = ($suffixLength > 0 and substr($name, -$suffixLength, $suffixLength) == $suffix) ? substr($name, 0, -$suffixLength) : $name;
-
-            $slice   = array_filter(explode('\\', strtolower($name)));
-            $version = '';
-            if (isset($slice[0]) && stripos($slice[0], 'v') === 0) {
-                $version = array_shift($slice) . '.';
-            }
-            switch (count($slice)) {
-                case 0:
-                    $name = '';
-                    break;
-                case 1:
-                case 2:
-                    $name = array_shift($slice);
-                    break;
-                default:
-                    array_pop($slice);
-                    $name = implode('.', $slice);
-            }
-            $services[] = $version . $name;
-        }
-        return $services;
+        return $this->services;
     }
 
     /**
      * Register
-     * 相同 Class 名，即便命名空间不同也会被覆盖
      * @param string $class
-     * @param string $namespace
-     * @param string $suffix
      */
-    public function register(string $class, string $namespace = '', $suffix = '')
+    public function register(string $class)
     {
-        array_push($this->services, [$class, $namespace, $suffix]);
+        if (!is_subclass_of($class, ServiceInterface::class)) {
+            throw new \InvalidArgumentException(sprintf('%s is not a subclass of %s', $class, ServiceInterface::class));
+        }
 
-        $name         = basename(str_replace('\\', '/', $class));
-        $suffixLength = strlen($suffix);
-        $name         = ($suffixLength > 0 and substr($name, -$suffixLength, $suffixLength) == $suffix) ? substr($name, 0, -$suffixLength) : $name;
+        $name = $class::NAME;
+        if (!$name) {
+            throw new \InvalidArgumentException(sprintf('Const %s::NAME can\'t be empty', $class));
+        }
 
-        $methods = get_class_methods($class);
+        $slice     = explode('.', $name);
+        $className = array_pop($slice);
+        $service   = implode('.', $slice);
+        array_pop($this->services, $service);
+
+        $methods      = get_class_methods($class);
+        $reflectClass = new ReflectionClass($class);
         foreach ($methods as $method) {
-            $this->callables[sprintf('%s.%s', $name, $method)] = [$class, $method];
+            if (strpos($method, '_') === 0) {
+                continue;
+            }
+
+            $reflectMethod = $reflectClass->getMethod($method);
+            if ($reflectMethod->getNumberOfParameters() < 1) {
+                throw new \InvalidArgumentException(sprintf('%s::%s wrong number of parameters', $class, $method));
+            }
+
+            $this->callables[sprintf('%s.%s', $className, $method)] = [
+                $class, $method,
+                [
+                    'service' => $service,
+                    'method'  => sprintf('%s.%s', $className, $method),
+                ],
+            ];
         }
     }
 
@@ -166,7 +156,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
      */
     public function start()
     {
-        $server = $this->server = new \Mix\Server\Server($this->host, $this->port, false, $this->reusePort);
+        $server = $this->server = new \Mix\Server\Server($this->host, $this->port, $this->ssl, $this->reusePort);
         $server->set([
                 'open_eof_check' => true,
                 'package_eof'    => Constants::EOF,
@@ -298,7 +288,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
                 throw new \RuntimeException(sprintf('Method %s not found', $request->method), -32601);
             }
             // 执行
-            list($class, $method) = $this->callables[$request->method];
+            list($class, $method, $endpoint) = $this->callables[$request->method];
             $callable = [new $class(), $method];
             $params   = $request->params;
             if (!is_array($params)) {
@@ -313,7 +303,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
             $response = (new ResponseFactory)->createErrorResponse($code, $ex->getMessage(), $request->id);
             $error    = sprintf('[%d] %s', $code, $message);
         } finally {
-            $this->dispatch($request, $response, $microtime, $error ?? null);
+            $this->dispatch($request, $response, $endpoint, $microtime, $error ?? null);
         }
         return $response;
     }
@@ -341,7 +331,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
      * @param float $microtime
      * @param null $error
      */
-    protected function dispatch(Request $request, Response $response, float $microtime, $error = null)
+    protected function dispatch(Request $request, Response $response, array $endpoint, float $microtime, $error = null)
     {
         if (!isset($this->dispatcher)) {
             return;
@@ -350,6 +340,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
         $event->time     = round((JsonRpcHelper::microtime() - $microtime) * 1000, 2);
         $event->request  = $request;
         $event->response = $response;
+        $event->endpoint = $endpoint;
         $event->error    = $error;
         $this->dispatcher->dispatch($event);
     }
