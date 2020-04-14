@@ -31,8 +31,9 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
     {
         $tracer = $this->tracer();
         $request->context->withValue('__tracer__', $tracer);
+        
         $tags['method'] = $request->method;
-        $tags['id']     = $request->id;
+        $tags['id']     = (string)$request->id;
 
         // 在请求的最后一个参数提取trace信息
         $params       = $request->params;

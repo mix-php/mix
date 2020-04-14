@@ -37,12 +37,6 @@ class ProcessedEvent
     public $service;
 
     /**
-     * 方法
-     * @var string Foo.Bar
-     */
-    public $method;
-
-    /**
      * 执行异常信息
      * @var string
      */

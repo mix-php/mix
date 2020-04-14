@@ -4,6 +4,7 @@ namespace Mix\Etcd\Factory;
 
 use Mix\Etcd\Service\Service;
 use Mix\Etcd\Service\ServiceBundle;
+use Mix\Grpc\Server as GrpcServer;
 use Mix\JsonRpc\Server as JsonRpcServer;
 use Mix\Http\Server\Server as HttpServer;
 use Mix\Micro\Register\Helper\ServiceHelper;
@@ -74,18 +75,38 @@ class ServiceBundleFactory
 
     /**
      * Create service bundle form json-rpc
-     * @param JsonRpcServer $server
-     * @param string $namespace
+     * @param GrpcServer $server
      * @return ServiceBundle
      * @throws \Exception
      */
-    public function createServiceBundleFromJsonRpc(JsonRpcServer $server, string $namespace = 'php.micro.srv.jsonrpc')
+    public function createServiceBundleFromGrpc(GrpcServer $server)
     {
         $serviceFactory = new ServiceFactory();
         $serviceBundle  = $this->createServiceBundle();
         foreach ($server->services() as $name) {
             $service = $serviceFactory->createJsonRpcService(
-                sprintf('%s.%s', $namespace, $name),
+                $name,
+                ServiceHelper::localIP(),
+                $server->port
+            );
+            $serviceBundle->add($service);
+        }
+        return $serviceBundle;
+    }
+
+    /**
+     * Create service bundle form json-rpc
+     * @param JsonRpcServer $server
+     * @return ServiceBundle
+     * @throws \Exception
+     */
+    public function createServiceBundleFromJsonRpc(JsonRpcServer $server)
+    {
+        $serviceFactory = new ServiceFactory();
+        $serviceBundle  = $this->createServiceBundle();
+        foreach ($server->services() as $name) {
+            $service = $serviceFactory->createJsonRpcService(
+                $name,
                 ServiceHelper::localIP(),
                 $server->port
             );

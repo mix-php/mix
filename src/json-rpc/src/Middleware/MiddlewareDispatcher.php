@@ -34,7 +34,7 @@ class MiddlewareDispatcher
      * @param callable $callback
      * @param Request $request
      */
-    public function __construct(array $middleware, callable $callback, array $request)
+    public function __construct(array $middleware, callable $callback, Request $request)
     {
         $instances = [];
         foreach ($middleware as $class) {

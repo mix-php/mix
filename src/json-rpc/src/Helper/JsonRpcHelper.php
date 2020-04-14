@@ -2,6 +2,7 @@
 
 namespace Mix\JsonRpc\Helper;
 
+use Mix\Context\Context;
 use Mix\JsonRpc\Constants;
 use Mix\JsonRpc\Exception\DeserializeException;
 use Mix\JsonRpc\Message\Error;
@@ -59,6 +60,7 @@ class JsonRpcHelper
     protected static function deserializeRequest(object $object)
     {
         $request          = new Request();
+        $request->context = new Context();
         $request->jsonrpc = $object->jsonrpc ?? null;
         $request->id      = $object->id ?? null;
         $request->method  = $object->method ?? null;

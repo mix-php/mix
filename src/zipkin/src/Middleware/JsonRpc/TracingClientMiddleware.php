@@ -40,7 +40,7 @@ class TracingClientMiddleware implements MiddlewareInterface
         $tracer         = $this->tracer;
         
         $tags['method'] = $request->method;
-        $tags['id']     = $request->id;
+        $tags['id']     = (string)$request->id;
         $operationName = 'jsonrpc:client';
         $scope         = $tracer->startActiveSpan($operationName, [
             'tags' => $tags,

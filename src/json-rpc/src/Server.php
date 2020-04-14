@@ -140,7 +140,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
                 throw new \InvalidArgumentException(sprintf('%s::%s wrong number of parameters', $class, $method));
             }
 
-            $this->callables[sprintf('%s.%s', $className, $method)] = [$class, $method, $service, sprintf('%s.%s', $className, $method)];
+            $this->callables[sprintf('%s.%s', $className, $method)] = [$class, $method, $service];
         }
     }
 
@@ -282,7 +282,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
                 throw new \RuntimeException(sprintf('Method %s not found', $request->method), -32601);
             }
             // 执行
-            list($class, $method, $service, $endpoint) = $this->callables[$request->method];
+            list($class, $method, $service) = $this->callables[$request->method];
             $callable = [new $class(), $method];
             $params   = $request->params;
             if (!is_array($params)) {
@@ -297,7 +297,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
             $response = (new ResponseFactory)->createErrorResponse($code, $ex->getMessage(), $request->id);
             $error    = sprintf('[%d] %s', $code, $message);
         } finally {
-            $this->dispatch($request, $response, $service, $endpoint, $microtime, $error ?? null);
+            $this->dispatch($request, $response, $service, $microtime, $error ?? null);
         }
         return $response;
     }
@@ -323,11 +323,10 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
      * @param Request $request
      * @param Response $response
      * @param string $service
-     * @param string $method
      * @param float $microtime
      * @param null $error
      */
-    protected function dispatch(Request $request, Response $response, string $service, string $method, float $microtime, $error = null)
+    protected function dispatch(Request $request, Response $response, string $service, float $microtime, $error = null)
     {
         if (!isset($this->dispatcher)) {
             return;
@@ -337,7 +336,6 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
         $event->request  = $request;
         $event->response = $response;
         $event->service  = $service;
-        $event->method   = $method;
         $event->error    = $error;
         $this->dispatcher->dispatch($event);
     }

@@ -98,7 +98,7 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
         } finally {
             // 记录响应信息
             $span->setTag(HTTP_STATUS_CODE, $this->response->getStatusCode());
-
+            
             $span->finish();
             $tracer->flush();
         }

@@ -91,8 +91,7 @@ class Connection
      */
     public function call(Request $request)
     {
-        $process              = function (array $requests) {
-            $request    = array_pop($requests);
+        $process              = function (Request $request) {
             $jsonString = JsonRpcHelper::encode($request) . Constants::EOF;
             $this->send($jsonString);
             $data = $this->recv($this->callTimeout);
