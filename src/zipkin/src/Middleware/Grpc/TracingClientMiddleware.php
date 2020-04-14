@@ -1,16 +1,15 @@
 <?php
 
-namespace Mix\Zipkin\Middleware\JsonRpc;
+namespace Mix\Zipkin\Middleware\Grpc;
 
-use Mix\JsonRpc\Message\Request;
-use Mix\JsonRpc\Message\Response;
-use Mix\JsonRpc\Middleware\MiddlewareInterface;
-use Mix\JsonRpc\Middleware\RequestHandler;
+use Mix\Grpc\Client\Message\Request;
+use Mix\Grpc\Client\Middleware\MiddlewareInterface;
+use Mix\Grpc\Client\Middleware\RequestHandler;
 use const OpenTracing\Formats\TEXT_MAP;
 
 /**
  * Class TracingClientMiddleware
- * @package Mix\Zipkin\Middleware\JsonRpc
+ * @package Mix\Zipkin\Middleware\Grpc
  */
 class TracingClientMiddleware implements MiddlewareInterface
 {
@@ -31,28 +30,28 @@ class TracingClientMiddleware implements MiddlewareInterface
 
     /**
      * Process
-     * @param Request $request
+     * @param Request $parameters
      * @param RequestHandler $handler
-     * @return Response
+     * @return object
      */
-    public function process(Request $request, RequestHandler $handler): Response
+    public function process(Request $request, RequestHandler $handler): object
     {
-        $tracer         = $this->tracer;
-        
-        $tags['method'] = $request->method;
-        $tags['id']     = $request->id;
-        $operationName = 'jsonrpc:client';
-        $scope         = $tracer->startActiveSpan($operationName, [
+        $tracer = $this->tracer;
+
+        list($object, $method) = $request->callback;
+        $tags['method'] = sprintf('%s.%s', basename(str_replace('\\', '/', get_class($object))), $method);
+        $operationName  = 'grpc:client';
+        $scope          = $tracer->startActiveSpan($operationName, [
             'tags' => $tags,
         ]);
 
         $traceHeaders = [];
         $tracer->inject($scope->getSpan()->getContext(), TEXT_MAP, $traceHeaders);
-        // 在请求的最后一个参数追加trace信息
-        array_push($request->params, $traceHeaders);
+        // 追加trace信息
+        $parameters->metadata = array_merge($parameters->metadata, $traceHeaders);
 
         try {
-            $result = $handler->handle($request);
+            $result = $handler->handle($parameters);
         } catch (\Throwable $exception) {
             throw $exception;
         } finally {

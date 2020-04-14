@@ -4,6 +4,7 @@ namespace Mix\Grpc\Client;
 
 use Grpc\ChannelCredentials;
 use Mix\Bean\BeanInjector;
+use Mix\Grpc\Client\Middleware\MiddlewareInterface;
 use Mix\Micro\Register\Exception\NotFoundException;
 use Mix\Micro\Register\RegistryInterface;
 use Mix\Micro\Register\ServiceInterface;

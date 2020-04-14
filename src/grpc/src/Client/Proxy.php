@@ -4,6 +4,8 @@ namespace Mix\Grpc\Client;
 
 use Grpc\ChannelCredentials;
 use Mix\Bean\BeanInjector;
+use Mix\Grpc\Client\Message\Parameters;
+use Mix\Grpc\Client\Message\Request;
 use Mix\Grpc\Exception\InvokeException;
 use Mix\Grpc\Client\Middleware\MiddlewareDispatcher;
 
@@ -50,16 +52,22 @@ class Proxy
      */
     public function __call($name, $arguments)
     {
-        $parameters           = new Parameters();
-        $parameters->request  = $arguments[0] ?? null;
+        $request              = new Request();
+        $parameters           = $request->parameters = new Parameters();
+        $parameters->argument = $arguments[0] ?? null;
         $parameters->metadata = $arguments[1] ?? [];
         $parameters->options  = $arguments[2] ?? [];
-        $callback             = [$this->client, $name];
+        $callback             = $request->callback = [$this->client, $name];
 
         isset($parameters->options['timeout']) or $parameters->options['timeout'] = $this->timeout;
 
-        $process = function (Parameters $parameters) use ($callback) {
-            $object = call_user_func_array($callback, $parameters);
+        $process = function (Request $request) use ($callback) {
+            $parameters = [
+                $request->parameters->argument,
+                $request->parameters->metadata,
+                $request->parameters->options,
+            ];
+            $object     = call_user_func_array($callback, $parameters);
             list($reply, $status) = $object->wait();
             if (is_null($reply)) {
                 throw new InvokeException($status->details, $status->code);
@@ -67,7 +75,7 @@ class Proxy
             return $reply;
         };
 
-        $interceptDispatcher = new MiddlewareDispatcher($this->middleware, $process, $parameters);
+        $interceptDispatcher = new MiddlewareDispatcher($this->middleware, $process, $request);
         return $interceptDispatcher->dispatch();
     }
 

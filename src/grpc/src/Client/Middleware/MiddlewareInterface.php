@@ -2,6 +2,8 @@
 
 namespace Mix\Grpc\Client\Middleware;
 
+use Mix\Grpc\Client\Message\Request;
+
 /**
  * Interface MiddlewareInterface
  * @package Mix\Grpc\Client\Middleware
@@ -11,10 +13,10 @@ interface MiddlewareInterface
 
     /**
      * Process
-     * @param Parameters $parameters
+     * @param Request $parameters
      * @param RequestHandler $handler
      * @return object
      */
-    public function process(Parameters $parameters, RequestHandler $handler): object;
+    public function process(Request $request, RequestHandler $handler): object;
 
 }

@@ -2,6 +2,8 @@
 
 namespace Mix\Grpc\Client\Middleware;
 
+use Mix\Grpc\Client\Message\Request;
+
 /**
  * Class MiddlewareDispatcher
  * @package Mix\Grpc\Client\Middleware
@@ -20,17 +22,17 @@ class MiddlewareDispatcher
     public $callback;
 
     /**
-     * @var Parameters
+     * @var Request
      */
-    public $parameters;
+    public $request;
 
     /**
      * InterceptDispatcher constructor.
      * @param MiddlewareInterface[] $middleware
      * @param callable $callback
-     * @param Request[] $requests
+     * @param Request $request
      */
-    public function __construct(array $middleware, callable $callback, Parameters $parameters)
+    public function __construct(array $middleware, callable $callback, Request $request)
     {
         $instances = [];
         foreach ($middleware as $class) {
@@ -45,7 +47,7 @@ class MiddlewareDispatcher
         }
         $this->middleware = $instances;
         $this->callback   = $callback;
-        $this->parameters = $parameters;
+        $this->request    = $request;
     }
 
     /**

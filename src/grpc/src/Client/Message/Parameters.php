@@ -1,10 +1,10 @@
 <?php
 
-namespace Mix\Grpc\Client;
+namespace Mix\Grpc\Client\Message;
 
 /**
  * Class Parameters
- * @package Mix\Grpc\Client
+ * @package Mix\Grpc\Client\Message
  */
 class Parameters
 {
@@ -12,7 +12,7 @@ class Parameters
     /**
      * @var object
      */
-    public $request;
+    public $argument;
 
     /**
      * @var array

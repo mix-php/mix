@@ -281,11 +281,11 @@ class Server implements \Mix\Http\Server\HandlerInterface
      * @param $request
      * @param $response
      * @param string $service
-     * @param string $endpoint
+     * @param string $method
      * @param float $microtime
      * @param null $error
      */
-    protected function dispatch($request, $response, string $service, string $endpoint, float $microtime, $error = null)
+    protected function dispatch($request, $response, string $service, string $method, float $microtime, $error = null)
     {
         if (!isset($this->dispatcher)) {
             return;
@@ -295,7 +295,7 @@ class Server implements \Mix\Http\Server\HandlerInterface
         $event->request  = $request;
         $event->response = $response;
         $event->service  = $service;
-        $event->endpoint = $endpoint;
+        $event->method   = $method;
         $event->error    = $error;
         $this->dispatcher->dispatch($event);
     }

@@ -36,10 +36,10 @@ class ProcessedEvent
     public $service;
 
     /**
-     * 端点
+     * 方法
      * @var string Foo.Bar
      */
-    public $endpoint;
+    public $method;
 
     /**
      * 执行异常信息

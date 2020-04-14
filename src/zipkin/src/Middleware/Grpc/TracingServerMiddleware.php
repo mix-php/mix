@@ -1,6 +1,6 @@
 <?php
 
-namespace Mix\Zipkin\Middleware\Http;
+namespace Mix\Zipkin\Middleware\Grpc;
 
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
@@ -13,7 +13,7 @@ use const OpenTracing\Tags\HTTP_STATUS_CODE;
 
 /**
  * Class TracingServerMiddleware
- * @package Mix\Zipkin\Middleware\Http
+ * @package Mix\Zipkin\Middleware\Grpc
  */
 abstract class TracingServerMiddleware implements MiddlewareInterface
 {
