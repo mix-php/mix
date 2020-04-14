@@ -38,11 +38,6 @@ class Dialer
     public $registry;
 
     /**
-     * @var int
-     */
-    public $retry = 3;
-
-    /**
      * Dialer constructor.
      * @param array $config
      * @throws \PhpDocReader\AnnotationException
@@ -88,20 +83,8 @@ class Dialer
      */
     public function dialFromService(string $name, MiddlewareInterface $middleware = null)
     {
-        for ($i = 0; $i < $this->retry; $i++) {
-            try {
-                $service = $this->registry->service($name);
-                $conn    = $this->dial($service->getAddress(), $service->getPort(), $middleware);
-                break;
-            } catch (NotFoundException $ex) {
-                throw $ex;
-            } catch (\Throwable $ex) {
-                if ($i == $this->retry - 1) {
-                    throw $ex;
-                }
-            }
-        }
-        return $conn;
+        $service = $this->registry->service($name);
+        return $this->dial($service->getAddress(), $service->getPort(), $middleware);
     }
 
 }
