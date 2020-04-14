@@ -11,6 +11,7 @@ use Mix\Http\Message\Request;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Server\Middleware\MiddlewareDispatcher;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class Server

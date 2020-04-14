@@ -84,7 +84,7 @@ class ServiceBundleFactory
         $serviceFactory = new ServiceFactory();
         $serviceBundle  = $this->createServiceBundle();
         foreach ($server->services() as $name) {
-            $service = $serviceFactory->createJsonRpcService(
+            $service = $serviceFactory->createGrpcService(
                 $name,
                 ServiceHelper::localIP(),
                 $server->port
