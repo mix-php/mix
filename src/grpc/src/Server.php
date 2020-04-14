@@ -121,10 +121,10 @@ class Server implements \Mix\Http\Server\HandlerInterface
         $slice     = explode('.', $name);
         $className = array_pop($slice);
         $service   = implode('.', $slice);
-        array_pop($this->services, $service);
+        array_push($this->services, $service);
 
         $methods      = get_class_methods($class);
-        $reflectClass = new ReflectionClass($class);
+        $reflectClass = new \ReflectionClass($class);
         foreach ($methods as $method) {
             if (strpos($method, '_') === 0) {
                 continue;

@@ -8,11 +8,4 @@ namespace Mix\JsonRpc;
  */
 interface ServiceInterface
 {
-
-    /**
-     * Service name
-     * @var string
-     */
-    public const NAME = '';
-
 }

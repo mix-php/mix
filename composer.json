@@ -42,6 +42,7 @@
   "replace": {
     "mix/bean": "self.version",
     "mix/concurrent": "self.version",
+    "mix/context": "self.version",
     "mix/helper": "self.version",
     "mix/log": "self.version",
     "mix/validate": "self.version",
@@ -76,6 +77,7 @@
       "Mix\\Bean\\": "src/bean/src/",
       "Mix\\Cache\\": "src/cache/src/",
       "Mix\\Concurrent\\": "src/concurrent/src/",
+      "Mix\\Context\\": "src/context/src/",
       "Mix\\Console\\": "src/console/src/",
       "Mix\\Database\\": "src/database/src/",
       "Mix\\Event\\": "src/event/src/",

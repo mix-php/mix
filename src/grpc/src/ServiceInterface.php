@@ -8,11 +8,4 @@ namespace Mix\Grpc;
  */
 interface ServiceInterface
 {
-
-    /**
-     * Service name
-     * @var string
-     */
-    public const NAME = '';
-
 }
