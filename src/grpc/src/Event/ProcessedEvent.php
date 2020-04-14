@@ -30,8 +30,14 @@ class ProcessedEvent
     public $response;
 
     /**
+     * 服务
+     * @var string
+     */
+    public $service;
+
+    /**
      * 端点
-     * @var array ['service'=>'','method'=>'']
+     * @var string Foo.Bar
      */
     public $endpoint;
 

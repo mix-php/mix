@@ -140,13 +140,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
                 throw new \InvalidArgumentException(sprintf('%s::%s wrong number of parameters', $class, $method));
             }
 
-            $this->callables[sprintf('%s.%s', $className, $method)] = [
-                $class, $method,
-                [
-                    'service' => $service,
-                    'method'  => sprintf('%s.%s', $className, $method),
-                ],
-            ];
+            $this->callables[sprintf('%s.%s', $className, $method)] = [$class, $method, $service, sprintf('%s.%s', $className, $method)];
         }
     }
 
@@ -288,7 +282,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
                 throw new \RuntimeException(sprintf('Method %s not found', $request->method), -32601);
             }
             // 执行
-            list($class, $method, $endpoint) = $this->callables[$request->method];
+            list($class, $method, $service, $endpoint) = $this->callables[$request->method];
             $callable = [new $class(), $method];
             $params   = $request->params;
             if (!is_array($params)) {
@@ -303,7 +297,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
             $response = (new ResponseFactory)->createErrorResponse($code, $ex->getMessage(), $request->id);
             $error    = sprintf('[%d] %s', $code, $message);
         } finally {
-            $this->dispatch($request, $response, $endpoint, $microtime, $error ?? null);
+            $this->dispatch($request, $response, $service, $endpoint, $microtime, $error ?? null);
         }
         return $response;
     }
@@ -328,10 +322,12 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
      * Dispatch
      * @param Request $request
      * @param Response $response
+     * @param string $service
+     * @param string $endpoint
      * @param float $microtime
      * @param null $error
      */
-    protected function dispatch(Request $request, Response $response, array $endpoint, float $microtime, $error = null)
+    protected function dispatch(Request $request, Response $response, string $service, string $endpoint, float $microtime, $error = null)
     {
         if (!isset($this->dispatcher)) {
             return;
@@ -340,6 +336,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
         $event->time     = round((JsonRpcHelper::microtime() - $microtime) * 1000, 2);
         $event->request  = $request;
         $event->response = $response;
+        $event->service  = $service;
         $event->endpoint = $endpoint;
         $event->error    = $error;
         $this->dispatcher->dispatch($event);

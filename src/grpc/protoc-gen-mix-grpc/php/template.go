@@ -51,13 +51,13 @@ interface {{ .Service.Name | interface }} extends Grpc\ServiceInterface
     public const NAME = "{{ .File.Package }}.{{ .Service.Name }}";{{ "\n" }}
 {{- range $m := .Service.Method}}
     /**
-    * @param Context $ctx
-    * @param {{ name $ns $m.InputType }} $in
+    * @param Context $context
+    * @param {{ name $ns $m.InputType }} $request
     * @return {{ name $ns $m.OutputType }}
     *
     * @throws Grpc\Exception\InvokeException
     */
-    public function {{ $m.Name }}(Context $ctx, {{ name $ns $m.InputType }} $req): {{ name $ns $m.OutputType }};
+    public function {{ $m.Name }}(Context $context, {{ name $ns $m.InputType }} $request): {{ name $ns $m.OutputType }};
 {{end -}}
 }
 `

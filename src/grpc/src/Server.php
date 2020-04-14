@@ -135,13 +135,7 @@ class Server implements \Mix\Http\Server\HandlerInterface
                 throw new \InvalidArgumentException(sprintf('%s::%s wrong number of parameters', $class, $method));
             }
 
-            $this->callables[sprintf('/%s/%s', $name, $method)] = [
-                $class, $method,
-                [
-                    'service' => $service,
-                    'method'  => sprintf('%s.%s', $className, $method),
-                ],
-            ];
+            $this->callables[sprintf('/%s/%s', $name, $method)] = [$class, $method, $service, sprintf('%s.%s', $className, $method)];
         }
     }
 
@@ -173,7 +167,7 @@ class Server implements \Mix\Http\Server\HandlerInterface
             throw new NotFoundException('Invalid uri');
         }
 
-        list($class, $method, $endpoint) = $this->callables[$path];
+        list($class, $method, $service, $endpoint) = $this->callables[$path];
 
         $reflectClass     = new ReflectionClass($class);
         $reflectMethod    = $reflectClass->getMethod($method);
@@ -187,7 +181,7 @@ class Server implements \Mix\Http\Server\HandlerInterface
         $parameters = [];
         array_push($parameters, $request->getContext());
         array_push($parameters, $rpcRequest);
-        $rpcResponse = $this->process([$object, $method], $parameters, $endpoint);
+        $rpcResponse = $this->process([$object, $method], $parameters, $service, $endpoint);
 
         $content = GrpcHelper::serialize($rpcResponse);
         $body    = (new StreamFactory())->createStream($content);
@@ -206,9 +200,10 @@ class Server implements \Mix\Http\Server\HandlerInterface
      * Process
      * @param callable $callback
      * @param array $parameters
-     * @param array $endpoint
+     * @param string $service
+     * @param string $endpoint
      */
-    protected function process(callable $callback, array $parameters, array $endpoint)
+    protected function process(callable $callback, array $parameters, string $service, string $endpoint)
     {
         $microtime = GrpcHelper::microtime();
         $request   = $response = $error = null;
@@ -220,7 +215,7 @@ class Server implements \Mix\Http\Server\HandlerInterface
             $code    = $ex->getCode();
             $error   = sprintf('[%d] %s', $code, $message);
         } finally {
-            $this->dispatch($request, $response, $endpoint, $microtime, $error);
+            $this->dispatch($request, $response, $service, $endpoint, $microtime, $error);
         }
     }
 
@@ -285,11 +280,12 @@ class Server implements \Mix\Http\Server\HandlerInterface
      * Dispatch
      * @param $request
      * @param $response
+     * @param string $service
      * @param string $endpoint
      * @param float $microtime
      * @param null $error
      */
-    protected function dispatch($request, $response, array $endpoint, float $microtime, $error = null)
+    protected function dispatch($request, $response, string $service, string $endpoint, float $microtime, $error = null)
     {
         if (!isset($this->dispatcher)) {
             return;
@@ -298,6 +294,7 @@ class Server implements \Mix\Http\Server\HandlerInterface
         $event->time     = round((GrpcHelper::microtime() - $microtime) * 1000, 2);
         $event->request  = $request;
         $event->response = $response;
+        $event->service  = $service;
         $event->endpoint = $endpoint;
         $event->error    = $error;
         $this->dispatcher->dispatch($event);
