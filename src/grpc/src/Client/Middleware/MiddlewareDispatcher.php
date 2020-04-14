@@ -56,7 +56,7 @@ class MiddlewareDispatcher
      */
     public function dispatch()
     {
-        return (new RequestHandler($this->middleware, $this->callback))->handle($this->parameters);
+        return (new RequestHandler($this->middleware, $this->callback))->handle($this->request);
     }
 
 }

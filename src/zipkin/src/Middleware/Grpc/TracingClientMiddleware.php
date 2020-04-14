@@ -47,11 +47,16 @@ class TracingClientMiddleware implements MiddlewareInterface
 
         $traceHeaders = [];
         $tracer->inject($scope->getSpan()->getContext(), TEXT_MAP, $traceHeaders);
-        // 追加trace信息
-        $parameters->metadata = array_merge($parameters->metadata, $traceHeaders);
+        // 追加trace信息, grpc 的 metadata 符合 psr 标准, value 必须是 array 类型
+        $psrHeaders = [];
+        foreach ($traceHeaders as $key => $value) {
+            $psrHeaders[$key] = [$value];
+        }
+        $parameters           = $request->parameters;
+        $parameters->metadata = array_merge($parameters->metadata, $psrHeaders);
 
         try {
-            $result = $handler->handle($parameters);
+            $result = $handler->handle($request);
         } catch (\Throwable $exception) {
             throw $exception;
         } finally {
