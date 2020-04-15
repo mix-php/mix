@@ -6,6 +6,7 @@ use Mix\Grpc\Client\Message\Request;
 use Mix\Grpc\Client\Middleware\MiddlewareInterface;
 use Mix\Grpc\Client\Middleware\RequestHandler;
 use const OpenTracing\Formats\TEXT_MAP;
+use const OpenTracing\Tags\ERROR;
 
 /**
  * Class TracingClientMiddleware
@@ -64,7 +65,7 @@ class TracingClientMiddleware implements MiddlewareInterface
             throw $ex;
         } finally {
             if (isset($error)) {
-                $scope->getSpan()->setTag('error', $error);
+                $scope->getSpan()->setTag(ERROR, $error);
             }
             $scope->close();
         }
