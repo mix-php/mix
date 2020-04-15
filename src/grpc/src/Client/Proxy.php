@@ -59,7 +59,7 @@ class Proxy
         $parameters->options  = $arguments[2] ?? [];
         $callback             = $request->callback = [$this->client, $name];
 
-        isset($parameters->options['timeout']) or $parameters->options['timeout'] = $this->timeout;
+        isset($parameters->options['timeout']) or $parameters->options['timeout'] = $this->timeout * 1000000;
 
         $process = function (Request $request) use ($callback) {
             $parameters = [
@@ -67,7 +67,7 @@ class Proxy
                 $request->parameters->metadata,
                 $request->parameters->options,
             ];
-            $object     = call_user_func_array($callback, $parameters);
+            $object = call_user_func_array($callback, $parameters);
             list($reply, $status) = $object->wait();
             if (is_null($reply)) {
                 throw new InvokeException($status->details, $status->code);

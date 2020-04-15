@@ -170,7 +170,7 @@ class Server implements \Mix\Http\Server\HandlerInterface
 
         list($class, $method, $service, $endpoint) = $this->callables[$path];
 
-        $reflectClass     = new ReflectionClass($class);
+        $reflectClass     = new \ReflectionClass($class);
         $reflectMethod    = $reflectClass->getMethod($method);
         $reflectParameter = $reflectMethod->getParameters()[1];
         $rpcRequestClass  = $reflectParameter->getClass()->getName();
@@ -203,6 +203,7 @@ class Server implements \Mix\Http\Server\HandlerInterface
      * @param array $parameters
      * @param string $service
      * @param string $endpoint
+     * @throws \Throwable
      */
     protected function process(callable $callback, array $parameters, string $service, string $endpoint)
     {
@@ -211,10 +212,12 @@ class Server implements \Mix\Http\Server\HandlerInterface
         try {
             $request  = $parameters[1] ?? null;
             $response = call_user_func_array($callback, $parameters);
+            return $response;
         } catch (\Throwable $ex) {
             $message = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
             $code    = $ex->getCode();
             $error   = sprintf('[%d] %s', $code, $message);
+            throw $ex;
         } finally {
             $this->dispatch($request, $response, $service, $endpoint, $microtime, $error);
         }
@@ -237,7 +240,7 @@ class Server implements \Mix\Http\Server\HandlerInterface
         $request->withContext(new Context());
 
         // 通过中间件执行
-        $process    = function (ServerRequest $request, Response $response) use ($result) {
+        $process    = function (ServerRequest $request, Response $response) {
             try {
                 $this->call($request, $response);
             } catch (NotFoundException $ex) {
@@ -250,7 +253,7 @@ class Server implements \Mix\Http\Server\HandlerInterface
             }
             return $response;
         };
-        $dispatcher = new MiddlewareDispatcher($result->getMiddleware(), $process, $request, $response);
+        $dispatcher = new MiddlewareDispatcher($this->middleware, $process, $request, $response);
         $response   = $dispatcher->dispatch();
 
         /** @var Response $response */
