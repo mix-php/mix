@@ -57,10 +57,10 @@ class Server
      * @param bool $ssl
      * @param bool $reusePort
      */
-    public function __construct(string $host, int $port, bool $ssl = false, bool $reusePort = false)
+    public function __construct(string $host, int &$port, bool $ssl = false, bool $reusePort = false)
     {
         $this->host      = $host;
-        $this->port      = $port;
+        $this->port      = &$port;
         $this->ssl       = $ssl;
         $this->reusePort = $reusePort;
     }
