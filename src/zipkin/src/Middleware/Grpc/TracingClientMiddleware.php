@@ -57,9 +57,15 @@ class TracingClientMiddleware implements MiddlewareInterface
 
         try {
             $result = $handler->handle($request);
-        } catch (\Throwable $exception) {
-            throw $exception;
+        } catch (\Throwable $ex) {
+            $message = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
+            $code    = $ex->getCode();
+            $error   = sprintf('[%d] %s', $code, $message);
+            throw $ex;
         } finally {
+            if (isset($error)) {
+                $scope->getSpan()->setTag('error', $error);
+            }
             $scope->close();
         }
 

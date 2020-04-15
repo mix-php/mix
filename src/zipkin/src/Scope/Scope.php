@@ -2,7 +2,7 @@
 
 namespace Mix\Zipkin\Scope;
 
-use Mix\Zipkin\Span\Span;
+use OpenTracing\Span;
 
 /**
  * Class Scope
@@ -12,11 +12,10 @@ class Scope implements \OpenTracing\Scope
 {
 
     /**
-     * @var \Zipkin\Span
+     * @var Span 
      */
     public $span;
-
-
+    
     /**
      * Scope constructor.
      * @param Span $span
@@ -41,7 +40,7 @@ class Scope implements \OpenTracing\Scope
     /**
      * @return Span the {@link Span} that's been scoped by this {@link Scope}
      */
-    public function getSpan(): \OpenTracing\Span
+    public function getSpan(): Span
     {
         return $this->span;
     }
