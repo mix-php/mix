@@ -13,12 +13,12 @@ class Server
     /**
      * @var string
      */
-    public $host = '127.0.0.1';
+    public $host = '';
 
     /**
      * @var int
      */
-    public $port = 9503;
+    public $port = 0;
 
     /**
      * @var bool
@@ -94,6 +94,7 @@ class Server
             $this->handle([$handler, 'handle']);
         }
         $server = $this->swooleServer = new \Swoole\Coroutine\Server($this->host, $this->port, $this->ssl, $this->reusePort);
+        $this->port = $server->port; // 当随机分配端口时同步端口信息
         $server->set($this->options);
         $server->handle(function (\Swoole\Coroutine\Server\Connection $connection) {
             try {

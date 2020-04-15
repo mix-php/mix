@@ -75,9 +75,10 @@ class Server implements \Mix\Http\Server\HandlerInterface
      * Server constructor.
      * @param string $host
      * @param int $port
+     * @param bool $ssl
      * @param bool $reusePort
      */
-    public function __construct(string $host, int $port, bool $ssl = false, bool $reusePort = false)
+    public function __construct(string $host = '0.0.0.0', int $port = 0, bool $ssl = false, bool $reusePort = false)
     {
         $this->host      = $host;
         $this->port      = $port;
