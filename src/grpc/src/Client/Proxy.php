@@ -67,7 +67,7 @@ class Proxy
                 $request->parameters->metadata,
                 $request->parameters->options,
             ];
-            $object = call_user_func_array($callback, $parameters);
+            $object     = call_user_func_array($callback, $parameters);
             list($reply, $status) = $object->wait();
             if (is_null($reply)) {
                 throw new InvokeException($status->details, $status->code);
