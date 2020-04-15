@@ -57,10 +57,10 @@ class Server
      * @param bool $ssl
      * @param bool $reusePort
      */
-    public function __construct(string $host, int &$port, bool $ssl = false, bool $reusePort = false)
+    public function __construct(string $host, int $port, bool $ssl = false, bool $reusePort = false)
     {
         $this->host              = $host;
-        $this->port              = &$port;
+        $this->port              = $port;
         $this->ssl               = $ssl;
         $this->reusePort         = $reusePort;
         $this->connectionManager = new ConnectionManager();
@@ -93,7 +93,7 @@ class Server
         if (!is_null($handler)) {
             $this->handle([$handler, 'handle']);
         }
-        $server = $this->swooleServer = new \Swoole\Coroutine\Server($this->host, $this->port, $this->ssl, $this->reusePort);
+        $server     = $this->swooleServer = new \Swoole\Coroutine\Server($this->host, $this->port, $this->ssl, $this->reusePort);
         $this->port = $server->port; // 当随机分配端口时同步端口信息
         $server->set($this->options);
         $server->handle(function (\Swoole\Coroutine\Server\Connection $connection) {
