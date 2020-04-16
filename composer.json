@@ -41,7 +41,8 @@
     "mix/opentracing": "^1.0",
     "openzipkin/zipkin": "^1.3",
     "google/protobuf": "^3.11",
-    "grpc/grpc": "^1.27"
+    "grpc/grpc": "^1.27",
+    "monolog/monolog": "^2.0"
   },
   "replace": {
     "mix/bean": "self.version",
