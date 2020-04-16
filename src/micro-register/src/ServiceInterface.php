@@ -58,4 +58,22 @@ interface ServiceInterface extends \JsonSerializable
      */
     public function withAddedNode(NodeInterface $node);
 
+    /**
+     * Get node
+     * @return NodeInterface
+     */
+    public function getNode(): NodeInterface;
+
+    /**
+     * Get address
+     * @return string
+     */
+    public function getAddress(): string;
+
+    /**
+     * Get port
+     * @return int
+     */
+    public function getPort(): int;
+
 }

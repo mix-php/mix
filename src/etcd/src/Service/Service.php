@@ -124,6 +124,37 @@ class Service implements ServiceInterface
     }
 
     /**
+     * Get node
+     * @return NodeInterface
+     */
+    public function getNode(): NodeInterface
+    {
+        return current($this->nodes);
+    }
+
+    /**
+     * Get address
+     * @return string
+     */
+    public function getAddress(): string
+    {
+        $node = $this->getNode();
+        list($address) = explode(':', $node->getAddress());
+        return $address;
+    }
+
+    /**
+     * Get port
+     * @return int
+     */
+    public function getPort(): int
+    {
+        $node = $this->getNode();
+        list(, $port) = explode(':', $node->getAddress());
+        return (int)$port;
+    }
+
+    /**
      * Json serialize
      * @return array
      */

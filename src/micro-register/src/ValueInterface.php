@@ -31,6 +31,6 @@ interface ValueInterface extends \JsonSerializable
      * Set add value
      * @param ValueInterface $value
      */
-    public function getAddedValue(ValueInterface $value);
+    public function withAddedValue(ValueInterface $value);
 
 }

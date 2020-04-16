@@ -3,6 +3,8 @@
 namespace Mix\Etcd\Service;
 
 use Mix\Micro\Register\EndpointInterface;
+use Mix\Micro\Register\RequestInterface;
+use Mix\Micro\Register\ResponseInterface;
 use Mix\Micro\Register\ValueInterface;
 
 /**

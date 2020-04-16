@@ -69,7 +69,7 @@ class Response implements ResponseInterface
      * Set add value
      * @param ValueInterface $value
      */
-    public function getAddedValue(ValueInterface $value)
+    public function withAddedValue(ValueInterface $value)
     {
         $this->values[] = $value;
     }

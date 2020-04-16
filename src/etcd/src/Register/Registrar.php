@@ -76,7 +76,7 @@ class Registrar
         $reslut  = $client->grant($this->ttl);
         $leaseID = $this->leaseID = (int)$reslut['ID'];
         foreach ($bundle->items() as $service) {
-            $client->put(sprintf($this->serviceFormat, $service->getName(), $service->getNodes()[0]->getID()), json_encode($service), ['lease' => $leaseID]);
+            $client->put(sprintf($this->serviceFormat, $service->getName(), $service->getNode()->getID()), json_encode($service), ['lease' => $leaseID]);
         }
         $this->timer and $this->timer->clear();
         $this->timer = $this->keepAlive();

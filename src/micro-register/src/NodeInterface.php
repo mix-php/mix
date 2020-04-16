@@ -16,7 +16,7 @@ interface NodeInterface extends \JsonSerializable
     public function getID(): string;
 
     /**
-     * Get address
+     * Get address ip:port
      * @return string
      */
     public function getAddress(): string;

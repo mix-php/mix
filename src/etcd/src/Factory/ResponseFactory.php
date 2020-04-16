@@ -44,7 +44,7 @@ class ResponseFactory implements ResponseFactoryInterface
             $propertyName = array_shift($slice);
 
             $value = new Value($propertyName, $propertyType);
-            $response->getAddedValue($value);
+            $response->withAddedValue($value);
         }
 
         return $response;

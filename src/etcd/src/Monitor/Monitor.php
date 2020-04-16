@@ -5,7 +5,12 @@ namespace Mix\Etcd\Monitor;
 use Mix\Concurrent\Timer;
 use Mix\Etcd\Client\Client;
 use Mix\Etcd\Client\Watcher;
+use Mix\Etcd\Service\Endpoint;
+use Mix\Etcd\Service\Node;
+use Mix\Etcd\Service\Request;
+use Mix\Etcd\Service\Response;
 use Mix\Etcd\Service\Service;
+use Mix\Etcd\Service\Value;
 use Mix\Micro\Register\Exception\NotFoundException;
 
 /**
@@ -100,9 +105,9 @@ class Monitor
                         unset($this->services[$name][$id]);
                         break;
                     case 'PUT':
-                        $value                                                  = base64_decode($kv['value']);
-                        $service                                                = static::parseValue($value);
-                        $this->services[$service->getName()][$service->getID()] = $service;
+                        $value                                                             = base64_decode($kv['value']);
+                        $service                                                           = static::parseValue($value);
+                        $this->services[$service->getName()][$service->getNode()->getID()] = $service;
                         break;
                 }
             }
@@ -140,8 +145,8 @@ class Monitor
         }
         $services = [];
         foreach ($kvs as $value) {
-            $service                                          = static::parseValue($value);
-            $services[$service->getName()][$service->getID()] = $service;
+            $service                                                     = static::parseValue($value);
+            $services[$service->getName()][$service->getNode()->getID()] = $service;
         }
         $this->services = $services;
     }
@@ -155,15 +160,41 @@ class Monitor
     {
         $data    = json_decode($value, true);
         $service = new Service(
-            $data['id'],
             $data['name'],
-            $data['address'],
-            $data['port']
+            $data['version']
         );
-        foreach ($data['metadata'] as $key => $value) {
-            $service->withMetadata($key, $value);
+
+        foreach ($data['metadata'] ?? [] as $k => $v) {
+            $service->withMetadata($k, $v);
         }
-        $service->withNode($data['node']['id'], $data['node']['name']);
+
+        foreach ($data['endpoints'] ?? [] as $v) {
+            $request = new Request($v['request']['name'], $v['request']['type']);
+            foreach ($v['request']['values'] ?? [] as $vv) {
+                $requestValue = new Value($vv['name'], $vv['type']);
+                $request->withAddedValue($requestValue);
+            }
+
+            $response = new Response($v['response']['name'], $v['response']['type']);
+            foreach ($v['response']['values'] ?? [] as $vv) {
+                $responseValue = new Value($vv['name'], $vv['type']);
+                $response->withAddedValue($responseValue);
+            }
+
+            $endpoint = new Endpoint($v['name'], $request, $response);
+            foreach ($v['metadata'] ?? [] as $kk => $vv) {
+                $endpoint->withMetadata($kk, $vv);
+            }
+            $service->withAddedEndpoint($endpoint);
+        }
+
+        $rawNode = $data['nodes'][0];
+        $node    = new Node($rawNode['id'], $rawNode['address']);
+        foreach ($rawNode['metadata'] ?? [] as $k => $v) {
+            $node->withMetadata($k, $v);
+        }
+        $service->withAddedNode($node);
+
         return $service;
     }
 
