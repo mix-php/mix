@@ -21,17 +21,16 @@ interface RegistryInterface
 
     /**
      * Register
-     * @param ServiceBundleInterface $bundle
+     * @param ServiceInterface ...$service
      * @throws \Exception
      */
-    public function register(ServiceBundleInterface $bundle);
+    public function register(ServiceInterface ...$service): string;
 
     /**
      * Un Register
-     * @param ServiceBundleInterface $bundle
-     * @throws \Exception
+     * @param string $id
      */
-    public function unregister(ServiceBundleInterface $bundle);
+    public function unregister(string $id);
 
     /**
      * Close

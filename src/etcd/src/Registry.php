@@ -4,11 +4,14 @@ namespace Mix\Etcd;
 
 use Mix\Bean\BeanInjector;
 use Mix\Etcd\Client\Client;
+use Mix\Etcd\Exception\UnavailableException;
+use Mix\Etcd\Factory\ServiceBundleFactory;
 use Mix\Etcd\LoadBalancer\LoadBalancerInterface;
 use Mix\Etcd\LoadBalancer\RoundRobinBalancer;
 use Mix\Etcd\Monitor\Monitor;
 use Mix\Etcd\Register\Registrar;
 use Mix\Micro\Register\Exception\NotFoundException;
+use Mix\Micro\Register\Helper\ServiceHelper;
 use Mix\Micro\Register\ServiceBundleInterface;
 use Mix\Micro\Register\RegistryInterface;
 use Mix\Micro\Register\ServiceInterface;
@@ -64,6 +67,12 @@ class Registry implements RegistryInterface
      * @var LoadBalancerInterface
      */
     public $loadBalancer;
+
+    /**
+     *
+     * @var string
+     */
+    public $namespace = '/micro/registry';
 
     /**
      * @var Client
@@ -126,7 +135,7 @@ class Registry implements RegistryInterface
     public function service(string $name): ServiceInterface
     {
         if (!isset($this->monitors[$name])) {
-            $monitor               = new Monitor($this->client, $this->monitors, $name, $this->monitorMaxIdle);
+            $monitor               = new Monitor($this->client, $this->monitors, $this->namespace, $name, $this->monitorMaxIdle);
             $this->monitors[$name] = $monitor;
         }
         $services = $this->monitors[$name]->services();
@@ -135,33 +144,30 @@ class Registry implements RegistryInterface
 
     /**
      * Register
-     * @param ServiceBundleInterface $bundle
-     * @throws \Exception
+     * @param ServiceInterface ...$service
+     * @throws \InvalidArgumentException
      */
-    public function register(ServiceBundleInterface $bundle)
+    public function register(ServiceInterface ...$service): string
     {
-        $id = spl_object_hash($bundle);
-        if (isset($this->registrars[$id])) {
-            throw new \Exception(sprintf('Repeat register service, bundle id: %s', $id));
-        }
+        $bundle = (new ServiceBundleFactory())->createServiceBundle(...$service);
+        $id     = ServiceHelper::uuid();
         if ($bundle->count() == 0) {
-            return;
+            throw new \InvalidArgumentException('Service cannot be empty');
         }
-        $registrar = new Registrar($this->client, $bundle, $this->registerTTL);
+        $registrar = new Registrar($this->client, $bundle, $this->namespace, $this->registerTTL);
         $registrar->register();
         $this->registrars[$id] = $registrar;
+        return $id;
     }
 
     /**
      * Un Register
-     * @param ServiceBundleInterface $bundle
-     * @throws \Exception
+     * @param string $id
      */
-    public function unregister(ServiceBundleInterface $bundle)
+    public function unregister(string $id)
     {
-        $id = spl_object_hash($bundle);
         if (!isset($this->registrars[$id])) {
-            throw new \Exception(sprintf('Unregister service failed, bundle id: %s', $id));
+            return;
         }
         $this->registrars[$id]->unregister();
         unset($this->registrars[$id]);

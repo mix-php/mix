@@ -13,31 +13,25 @@ interface NodeInterface extends \JsonSerializable
      * Get id
      * @return string
      */
-    public function getID();
-
-    /**
-     * Get name
-     * @return string
-     */
-    public function getName();
+    public function getID(): string;
 
     /**
      * Get address
      * @return string
      */
-    public function getAddress();
+    public function getAddress(): string;
 
     /**
-     * Get services
-     * @return string[]
+     * Get metadata
+     * @return []string
      */
-    public function getServices();
+    public function getMetadata();
 
     /**
-     * Append service
+     * Add or update metadata
      * @param string $id
      * @param string $name
      */
-    public function withAddedService(string $id, string $name);
+    public function withMetadata(string $key, string $value);
 
 }

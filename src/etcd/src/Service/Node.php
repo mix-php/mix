@@ -1,12 +1,12 @@
 <?php
 
-namespace Mix\Etcd\Node;
+namespace Mix\Etcd\Service;
 
 use Mix\Micro\Register\NodeInterface;
 
 /**
  * Class Node
- * @package Mix\Etcd\Node
+ * @package Mix\Etcd\Service
  */
 class Node implements NodeInterface
 {
@@ -19,28 +19,21 @@ class Node implements NodeInterface
     /**
      * @var string
      */
-    protected $name = '';
-
-    /**
-     * @var string
-     */
     protected $address = '';
 
     /**
      * @var string[]
      */
-    protected $services = [];
+    protected $metadata;
 
     /**
      * Node constructor.
      * @param string $id
-     * @param string $name
      * @param string $address
      */
-    public function __construct(string $id, string $name, string $address)
+    public function __construct(string $id, string $address)
     {
         $this->id      = $id;
-        $this->name    = $name;
         $this->address = $address;
     }
 
@@ -48,49 +41,37 @@ class Node implements NodeInterface
      * Get id
      * @return string
      */
-    public function getID()
+    public function getID(): string
     {
         return $this->id;
-    }
-
-    /**
-     * Get name
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**
      * Get address
      * @return string
      */
-    public function getAddress()
+    public function getAddress(): string
     {
         return $this->address;
     }
 
     /**
-     * Get services
-     * @return string[]
+     * Get metadata
+     * @return []string
      */
-    public function getServices()
+    public function getMetadata()
     {
-        return $this->services;
+        return $this->metadata;
     }
 
     /**
-     * Append service
+     * Add or update metadata
      * @param string $id
      * @param string $name
      */
-    public function withAddedService(string $id, string $name)
+    public function withMetadata(string $key, string $value)
     {
-        $this->services[] = [
-            'id'   => $id,
-            'name' => $name,
-        ];
+        $this->metadata[$key] = $value;
     }
 
     /**

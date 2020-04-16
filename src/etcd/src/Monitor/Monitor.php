@@ -58,7 +58,7 @@ class Monitor
     /**
      * @var string
      */
-    protected $serviceFormat = '/mix/service/%s/';
+    protected $serviceFormat = '%s/%s/';
 
     /**
      * @var int
@@ -69,17 +69,19 @@ class Monitor
      * Monitor constructor.
      * @param Client $client
      * @param array $monitors
+     * @param string $namespace
      * @param string $name
      * @param int $idle
      * @throws \Exception
      */
-    public function __construct(Client $client, array &$monitors, string $name, int $idle)
+    public function __construct(Client $client, array &$monitors, string $namespace, string $name, int $idle)
     {
-        $this->client   = $client;
-        $this->monitors = &$monitors;
-        $this->name     = $name;
-        $this->idle     = $idle;
-        $this->prefix   = $prefix = sprintf($this->serviceFormat, $name);
+        $this->client        = $client;
+        $this->monitors      = &$monitors;
+        $this->serviceFormat = sprintf($this->serviceFormat, $namespace, '%s');
+        $this->name          = $name;
+        $this->idle          = $idle;
+        $this->prefix        = $prefix = sprintf($this->serviceFormat, $name);
 
         $func = function (array $data) {
             if (!isset($data['result']['events'])) {

@@ -10,28 +10,16 @@ interface ServiceInterface extends \JsonSerializable
 {
 
     /**
-     * Get id
-     * @return string
-     */
-    public function getID();
-
-    /**
      * Get name
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
-     * Get address
-     * @return string
+     * Get id
+     * @return string|null
      */
-    public function getAddress();
-
-    /**
-     * Get port
-     * @return int
-     */
-    public function getPort();
+    public function getVersion(): ?string;
 
     /**
      * Get metadata
@@ -45,18 +33,29 @@ interface ServiceInterface extends \JsonSerializable
      * @param string $name
      */
     public function withMetadata(string $key, string $value);
-    
+
     /**
-     * Get node
-     * @return []string
+     * Get endpoints
+     * @return EndpointInterface[]
      */
-    public function getNode();
+    public function getEndpoints();
+
+    /**
+     * Add endpoint
+     * @param EndpointInterface $endpoint
+     */
+    public function withAddedEndpoint(EndpointInterface $endpoint);
+
+    /**
+     * Get nodes
+     * @return NodeInterface[]
+     */
+    public function getNodes();
 
     /**
      * Set node
-     * @param string $id
-     * @param string $name
+     * @param NodeInterface $node
      */
-    public function withNode(string $id, string $name);
+    public function withAddedNode(NodeInterface $node);
 
 }

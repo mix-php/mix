@@ -7,7 +7,6 @@ use Mix\Concurrent\Timer;
 use Mix\Micro\Register\Exception\NotFoundException;
 use Mix\Etcd\Node\Node;
 use Mix\Etcd\Service\ServiceBundle;
-use Mix\Micro\Register\Helper\ServiceHelper;
 
 /**
  * Class Registrar
@@ -49,19 +48,21 @@ class Registrar
     /**
      * @var string
      */
-    protected $serviceFormat = '/mix/service/%s/%s';
+    protected $serviceFormat = '%s/%s/%s';
 
     /**
      * Registrar constructor.
      * @param Client $client
      * @param ServiceBundle $bundle
+     * @param string $namespace
      * @param int $ttl
      */
-    public function __construct(Client $client, ServiceBundle $bundle, int $ttl)
+    public function __construct(Client $client, ServiceBundle $bundle, string $namespace, int $ttl)
     {
-        $this->client = $client;
-        $this->bundle = $bundle;
-        $this->ttl    = $ttl;
+        $this->client        = $client;
+        $this->bundle        = $bundle;
+        $this->serviceFormat = sprintf($this->serviceFormat, $namespace, '%s', '%s');
+        $this->ttl           = $ttl;
     }
 
     /**
@@ -74,13 +75,9 @@ class Registrar
         $bundle  = $this->bundle;
         $reslut  = $client->grant($this->ttl);
         $leaseID = $this->leaseID = (int)$reslut['ID'];
-        $node    = new Node(ServiceHelper::uuid(), gethostname(), ServiceHelper::localIP());
         foreach ($bundle->items() as $service) {
-            $node->withAddedService($service->getID(), $service->getName());
-            $service->withNode($node->getID(), $node->getName());
-            $client->put(sprintf($this->serviceFormat, $service->getName(), $service->getID()), json_encode($service), ['lease' => $leaseID]);
+            $client->put(sprintf($this->serviceFormat, $service->getName(), $service->getNodes()[0]->getID()), json_encode($service), ['lease' => $leaseID]);
         }
-        $client->put(sprintf($this->nodeFormat, $node->getName(), $node->getID()), json_encode($node), ['lease' => $leaseID]);
         $this->timer and $this->timer->clear();
         $this->timer = $this->keepAlive();
     }

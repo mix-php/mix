@@ -101,7 +101,7 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
 
     /**
      * 获取全部 service 名称
-     * @return string[]
+     * @return string[] [name => [class,...]]
      */
     public function services()
     {
@@ -123,10 +123,10 @@ class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerIn
             throw new \InvalidArgumentException(sprintf('Const %s::NAME can\'t be empty', $class));
         }
 
-        $slice     = explode('.', $name);
-        $className = array_pop($slice);
-        $service   = implode('.', $slice);
-        array_push($this->services, $service);
+        $slice                      = explode('.', $name);
+        $className                  = array_pop($slice);
+        $service                    = implode('.', $slice);
+        $this->services[$service][] = $class;
 
         $methods      = get_class_methods($class);
         $reflectClass = new \ReflectionClass($class);

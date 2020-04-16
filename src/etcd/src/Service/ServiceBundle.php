@@ -2,14 +2,13 @@
 
 namespace Mix\Etcd\Service;
 
-use Mix\Micro\Register\ServiceBundleInterface;
 use Mix\Micro\Register\ServiceInterface;
 
 /**
  * Class ServiceBundle
  * @package Mix\Etcd\Service
  */
-class ServiceBundle implements ServiceBundleInterface
+class ServiceBundle
 {
 
     /**
@@ -39,7 +38,7 @@ class ServiceBundle implements ServiceBundleInterface
      * Get service num
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->services);
     }

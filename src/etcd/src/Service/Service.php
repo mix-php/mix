@@ -2,6 +2,8 @@
 
 namespace Mix\Etcd\Service;
 
+use Mix\Micro\Register\EndpointInterface;
+use Mix\Micro\Register\NodeInterface;
 use Mix\Micro\Register\ServiceInterface;
 
 /**
@@ -14,82 +16,55 @@ class Service implements ServiceInterface
     /**
      * @var string
      */
-    protected $id = '';
+    protected $name;
 
     /**
      * @var string
      */
-    protected $name = '';
-
-    /**
-     * @var string
-     */
-    protected $address = '';
-
-    /**
-     * @var int
-     */
-    protected $port = 0;
+    protected $version;
 
     /**
      * @var string[]
      */
-    protected $metadata = [];
+    protected $metadata;
 
     /**
-     * @var string[]
+     * @var EndpointInterface[]
      */
-    protected $node = [];
+    protected $endpoints = [];
+
+    /**
+     * @var NodeInterface[]
+     */
+    protected $nodes = [];
 
     /**
      * Service constructor.
-     * @param string $id
      * @param string $name
-     * @param string $address
-     * @param int $port
+     * @param string|null $version
      */
-    public function __construct(string $id, string $name, string $address, int $port)
+    public function __construct(string $name, string $version = null)
     {
-        $this->id      = $id;
         $this->name    = $name;
-        $this->address = $address;
-        $this->port    = $port;
-    }
-
-    /**
-     * Get id
-     * @return string
-     */
-    public function getID()
-    {
-        return $this->id;
+        $this->version = $version;
     }
 
     /**
      * Get name
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * Get address
-     * @return string
+     * Get version
+     * @return string|null
      */
-    public function getAddress()
+    public function getVersion(): ?string
     {
-        return $this->address;
-    }
-
-    /**
-     * Get port
-     * @return int
-     */
-    public function getPort()
-    {
-        return $this->port;
+        return $this->version;
     }
 
     /**
@@ -111,26 +86,41 @@ class Service implements ServiceInterface
         $this->metadata[$key] = $value;
     }
 
+
     /**
-     * Get node
-     * @return []string
+     * Get endpoints
+     * @return EndpointInterface[]
      */
-    public function getNode()
+    public function getEndpoints()
     {
-        return $this->node;
+        return $this->endpoints;
+    }
+
+    /**
+     * Add endpoint
+     * @param EndpointInterface $endpoint
+     */
+    public function withAddedEndpoint(EndpointInterface $endpoint)
+    {
+        $this->endpoints[] = $endpoint;
+    }
+
+    /**
+     * Get nodes
+     * @return NodeInterface[]
+     */
+    public function getNodes()
+    {
+        return $this->nodes;
     }
 
     /**
      * Set node
-     * @param string $id
-     * @param string $name
+     * @param NodeInterface $node
      */
-    public function withNode(string $id, string $name)
+    public function withAddedNode(NodeInterface $node)
     {
-        $this->node = [
-            'id'   => $id,
-            'name' => $name,
-        ];
+        $this->nodes[] = $node;
     }
 
     /**
