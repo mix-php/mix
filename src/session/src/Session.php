@@ -6,7 +6,6 @@ use Mix\Bean\BeanInjector;
 use Mix\Http\Message\Factory\CookieFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
-use Mix\Helper\RandomStringHelper;
 
 /**
  * Class Session
@@ -115,9 +114,25 @@ class Session
     public function createId()
     {
         do {
-            $sessionId = RandomStringHelper::randomAlphanumeric($this->idLength);
+            $sessionId = static::randomAlphanumeric($this->idLength);
         } while ($this->handler->exists($sessionId));
         return $sessionId;
+    }
+
+    /**
+     * 获取随机字符
+     * @param $length
+     * @return string
+     */
+    protected static function randomAlphanumeric($length)
+    {
+        $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
+        $last  = 61;
+        $str   = '';
+        for ($i = 0; $i < $length; $i++) {
+            $str .= $chars[mt_rand(0, $last)];
+        }
+        return $str;
     }
 
     /**
