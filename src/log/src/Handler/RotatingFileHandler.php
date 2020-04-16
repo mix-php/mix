@@ -40,7 +40,7 @@ class RotatingFileHandler extends \Monolog\Handler\RotatingFileHandler
      */
     protected function getDefaultFormatter(): FormatterInterface
     {
-        return new LineFormatter("[%datetime%] %channel%.%level_name%: %message%\n", 'Y-m-d H:i:s');
+        return new LineFormatter("[%datetime%] %channel%.%level_name%: %message%\n", 'Y-m-d H:i:s', true);
     }
     
 }
