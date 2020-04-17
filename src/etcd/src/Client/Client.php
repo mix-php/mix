@@ -66,7 +66,10 @@ class Client extends \Etcd\Client
         $this->token    = null;
         $this->user     = $user;
         $this->password = $password;
-        $token          = $this->authenticate($user, $password); // token default ttl 10m
+        if ($user == '') {
+            return;
+        }
+        $token = $this->authenticate($user, $password); // token default ttl 10m
         if (is_string($token)) {
             $this->setToken($token);
         }
