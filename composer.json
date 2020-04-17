@@ -75,7 +75,8 @@
     "mix/micro-hystrix": "self.version",
     "mix/micro-register": "self.version",
     "mix/etcd": "self.version",
-    "mix/zipkin": "self.version"
+    "mix/zipkin": "self.version",
+    "mix/tracing": "self.version"
   },
   "autoload": {
     "psr-4": {
@@ -109,7 +110,8 @@
       "Mix\\Micro\\Hystrix\\": "src/micro-hystrix/src/",
       "Mix\\Micro\\Register\\": "src/micro-register/src/",
       "Mix\\Etcd\\": "src/etcd/src/",
-      "Mix\\Zipkin\\": "src/zipkin/src/"
+      "Mix\\Zipkin\\": "src/zipkin/src/",
+      "Mix\\Tracing\\": "src/tracing/src/"
     },
     "classmap": [
       "src/console/src/Mix.php"
