@@ -23,6 +23,9 @@ class ServiceFactory implements ServiceFactoryInterface
      */
     public function createService(string $name, ?string $version = null): ServiceInterface
     {
+        if (is_null($version)) {
+            $version = date('Y.m.d.H.i');
+        }
         return new Service($name, $version);
     }
 
