@@ -20,7 +20,6 @@
     "ext-swoole": ">=4.4.4",
     "psr/http-message": "^1.0",
     "psr/http-factory": "^1.0",
-    "mix/session": "~2.1.0",
     "mix/context": "~2.1.0"
   },
   "autoload": {

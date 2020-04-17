@@ -2,7 +2,6 @@
 
 namespace Mix\Http\Message;
 
-use Mix\Session\Session;
 use Mix\Context\Context;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
@@ -59,7 +58,7 @@ class ServerRequest extends Request implements ServerRequestInterface
 
     /**
      * Session
-     * @var Session
+     * @var \Mix\Session\Session
      * @deprecated 请使用 Context 取代该功能
      */
     protected $session;
