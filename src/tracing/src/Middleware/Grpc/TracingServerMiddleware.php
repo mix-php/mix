@@ -1,6 +1,6 @@
 <?php
 
-namespace Mix\Zipkin\Middleware\Grpc;
+namespace Mix\Tracing\Middleware\Grpc;
 
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
@@ -13,7 +13,7 @@ use const OpenTracing\Tags\HTTP_STATUS_CODE;
 
 /**
  * Class TracingServerMiddleware
- * @package Mix\Zipkin\Middleware\Grpc
+ * @package Mix\Tracing\Middleware\Grpc
  */
 abstract class TracingServerMiddleware implements MiddlewareInterface
 {
@@ -56,7 +56,7 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
     {
         $tracer = $this->tracer();
 
-        $headers       = $request->getHeaderLines();
+        $headers       = $this->request->getHeaderLines();
         $spanContext   = $tracer->extract(TEXT_MAP, $headers);
         $operationName = $request->getUri()->getPath();
         $span          = $tracer->startSpan($operationName, [
@@ -81,14 +81,14 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
         }
 
         // 记录 x- 开头的内部 Header 信息
-        foreach ($request->getHeaderLines() as $key => $value) {
+        foreach ($this->request->getHeaderLines() as $key => $value) {
             if (stripos($key, 'x-') === 0 && stripos($key, 'x-b3') === false) {
                 $span->setTag($key, $value);
             }
         }
 
         // Tracing::extract
-        $context = $request->getContext();
+        $context = $this->request->getContext();
         $context->withValue('__tracer__', $tracer);
 
         try {

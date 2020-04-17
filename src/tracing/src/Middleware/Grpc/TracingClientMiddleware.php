@@ -1,6 +1,6 @@
 <?php
 
-namespace Mix\Zipkin\Middleware\Grpc;
+namespace Mix\Tracing\Middleware\Grpc;
 
 use Mix\Grpc\Client\Message\Request;
 use Mix\Grpc\Client\Middleware\MiddlewareInterface;
@@ -10,7 +10,7 @@ use const OpenTracing\Tags\ERROR;
 
 /**
  * Class TracingClientMiddleware
- * @package Mix\Zipkin\Middleware\Grpc
+ * @package Mix\Tracing\Middleware\Grpc
  */
 class TracingClientMiddleware implements MiddlewareInterface
 {

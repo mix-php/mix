@@ -5,7 +5,6 @@ namespace Mix\Etcd\Register;
 use Mix\Etcd\Client\Client;
 use Mix\Concurrent\Timer;
 use Mix\Micro\Register\Exception\NotFoundException;
-use Mix\Etcd\Node\Node;
 use Mix\Etcd\Service\ServiceBundle;
 
 /**
