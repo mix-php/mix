@@ -4,13 +4,9 @@ namespace Mix\Etcd\Factory;
 
 use Mix\Etcd\Service\Service;
 use Mix\Etcd\Service\ServiceBundle;
-use Mix\Grpc\Server as GrpcServer;
-use Mix\Http\Server\Server as HttpServer;
-use Mix\JsonRpc\Server as JsonRpcServer;
 use Mix\Micro\Register\Helper\ServiceHelper;
 use Mix\Micro\Register\ServiceFactoryInterface;
 use Mix\Micro\Register\ServiceInterface;
-use Mix\Route\Router;
 
 /**
  * Class ServiceFactory
@@ -32,13 +28,13 @@ class ServiceFactory implements ServiceFactoryInterface
 
     /**
      * Create service bundle form api
-     * @param HttpServer $server
-     * @param Router|null $router
+     * @param \Mix\Http\Server\Server $server
+     * @param \Mix\Route\Router|null $router
      * @param string $namespace
      * @param string|null $version
      * @return ServiceInterface[]
      */
-    public function createServicesFromAPI(HttpServer $server, Router $router = null, string $namespace = 'php.micro.api', ?string $version = null)
+    public function createServicesFromAPI(\Mix\Http\Server\Server $server, \Mix\Route\Router $router = null, string $namespace = 'php.micro.api', ?string $version = null)
     {
         $serviceFactory = new ServiceFactory();
         $nodeFactory    = new NodeFactory();
@@ -58,13 +54,13 @@ class ServiceFactory implements ServiceFactoryInterface
 
     /**
      * Create service bundle form web
-     * @param HttpServer $server
-     * @param Router|null $router
+     * @param \Mix\Http\Server\Server $server
+     * @param \Mix\Route\Router|null $router
      * @param string $namespace
      * @param string|null $version
      * @return ServiceInterface[]
      */
-    public function createServicesFromWeb(HttpServer $server, Router $router = null, string $namespace = 'php.micro.web', ?string $version = null)
+    public function createServicesFromWeb(\Mix\Http\Server\Server $server, \Mix\Route\Router $router = null, string $namespace = 'php.micro.web', ?string $version = null)
     {
         $serviceFactory = new ServiceFactory();
         $services       = [];
@@ -83,11 +79,11 @@ class ServiceFactory implements ServiceFactoryInterface
 
     /**
      * Create service bundle form json-rpc
-     * @param GrpcServer $server
+     * @param \Mix\Grpc\Server $server
      * @param string|null $version
      * @return ServiceInterface[]
      */
-    public function createServicesFromGrpc(GrpcServer $server, ?string $version = null)
+    public function createServicesFromGrpc(\Mix\Grpc\Server $server, ?string $version = null)
     {
         $serviceFactory  = new ServiceFactory();
         $endpointFactory = new EndpointFactory();
@@ -137,11 +133,11 @@ class ServiceFactory implements ServiceFactoryInterface
 
     /**
      * Create service bundle form json-rpc
-     * @param JsonRpcServer $server
+     * @param \Mix\JsonRpc\Server $server
      * @param string|null $version
      * @return ServiceInterface[]
      */
-    public function createServicesFromJsonRpc(JsonRpcServer $server, ?string $version = null)
+    public function createServicesFromJsonRpc(\Mix\JsonRpc\Server $server, ?string $version = null)
     {
         $serviceFactory  = new ServiceFactory();
         $endpointFactory = new EndpointFactory();
