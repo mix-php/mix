@@ -6,6 +6,7 @@ use Mix\Context\Context;
 use Mix\Grpc\Event\ProcessedEvent;
 use Mix\Grpc\Exception\NotFoundException;
 use Mix\Grpc\Helper\GrpcHelper;
+use Mix\Grpc\Middleware\JsonHandleMiddleware;
 use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Request;
 use Mix\Http\Message\Response;
@@ -124,7 +125,7 @@ class Server implements \Mix\Http\Server\HandlerInterface
         $className                  = array_pop($slice);
         $service                    = implode('.', $slice);
         $this->services[$service][] = $class;
-        
+
         $methods      = get_class_methods($class);
         $reflectClass = new \ReflectionClass($class);
         foreach ($methods as $method) {
@@ -151,6 +152,7 @@ class Server implements \Mix\Http\Server\HandlerInterface
         $server->port = &$this->port; // 当随机分配端口时同步端口信息
         $server->set([
                 'open_http2_protocol' => true,
+                'http_compression'    => false,
             ] + $this->options);
         $server->start($this);
     }
@@ -190,11 +192,7 @@ class Server implements \Mix\Http\Server\HandlerInterface
         $body    = (new StreamFactory())->createStream($content);
         $response->withBody($body)
             ->withContentType('application/grpc')
-            ->withHeader('trailer', 'grpc-status, grpc-message')
             ->withStatus(200);
-        $swooleResponse = $response->getSwooleResponse();
-        $swooleResponse->trailer('grpc-status', 0);
-        $swooleResponse->trailer('grpc-message', '');
 
         return $response;
     }
@@ -234,29 +232,42 @@ class Server implements \Mix\Http\Server\HandlerInterface
     {
         $method      = $request->getMethod();
         $contentType = $request->getHeaderLine('Content-Type');
-        if (strpos($contentType, 'application/grpc') === false || $method != 'POST') {
+        $isGrpc      = strpos($contentType, 'application/grpc') === 0 ? true : false;
+        $isJson      = strpos($contentType, 'application/json') === 0 ? true : false;
+        if ((!$isGrpc && !$isJson) || $method != 'POST') {
             $this->show500(new \RuntimeException('Invalid request'), $response);
             return;
         }
+
+        var_dump($request->getHeaderLines());
 
         $request->withContext(new Context());
 
         // 通过中间件执行
         $process    = function (ServerRequest $request, Response $response) {
-            try {
-                $this->call($request, $response);
-            } catch (NotFoundException $ex) {
-                $this->show404($ex, $response);
-            } catch (\Throwable $ex) {
-                // 500 处理
-                $this->show500($ex, $response);
-                // 抛出错误，记录日志
-                throw $ex;
-            }
-            return $response;
+            return $this->call($request, $response);
         };
-        $dispatcher = new MiddlewareDispatcher($this->middleware, $process, $request, $response);
-        $response   = $dispatcher->dispatch();
+        $middleware = $this->middleware;
+        array_unshift($middleware, JsonHandleMiddleware::class);
+        $dispatcher = new MiddlewareDispatcher($middleware, $process, $request, $response);
+        try {
+            $response = $dispatcher->dispatch();
+        } catch (NotFoundException $ex) {
+            $this->show404($ex, $response);
+            return;
+        } catch (\Throwable $ex) {
+            // 500 处理
+            $this->show500($ex, $response);
+            // 抛出错误，记录日志
+            throw $ex;
+        }
+
+        if (strpos($response->getHeaderLine('Content-Type'), 'application/grpc') === 0) {
+            $response->withHeader('trailer', 'grpc-status, grpc-message');
+            $swooleResponse = $response->getSwooleResponse();
+            $swooleResponse->trailer('grpc-status', 0);
+            $swooleResponse->trailer('grpc-message', '');
+        }
 
         /** @var Response $response */
         $response->end();
