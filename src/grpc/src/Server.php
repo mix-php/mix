@@ -239,8 +239,6 @@ class Server implements \Mix\Http\Server\HandlerInterface
             return;
         }
 
-        var_dump($request->getHeaderLines());
-
         $request->withContext(new Context());
 
         // 通过中间件执行

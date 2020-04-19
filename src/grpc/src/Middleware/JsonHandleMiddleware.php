@@ -132,8 +132,6 @@ class JsonHandleMiddleware implements MiddlewareInterface
             $protobuf = $response->getBody()->getContents();
             $json     = static::protobufToJson(GrpcHelper::unpack($protobuf), $microService, $microMethod);
 
-            var_dump($json);
-
             $stream = (new StreamFactory())->createStream($json);
             $response->withBody($stream);
             $response->withHeader('Content-Type', 'application/json');
