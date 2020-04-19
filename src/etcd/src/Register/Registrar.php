@@ -5,7 +5,7 @@ namespace Mix\Etcd\Register;
 use Mix\Etcd\Client\Client;
 use Mix\Concurrent\Timer;
 use Mix\Micro\Register\Exception\NotFoundException;
-use Mix\Etcd\Service\ServiceBundle;
+use Mix\Micro\Register\ServiceInterface;
 
 /**
  * Class Registrar
@@ -20,9 +20,9 @@ class Registrar
     public $client;
 
     /**
-     * @var ServiceBundle
+     * @var ServiceInterface
      */
-    public $bundle;
+    public $service;
 
     /**
      * @var int
@@ -52,14 +52,14 @@ class Registrar
     /**
      * Registrar constructor.
      * @param Client $client
-     * @param ServiceBundle $bundle
+     * @param ServiceInterface $service
      * @param string $namespace
      * @param int $ttl
      */
-    public function __construct(Client $client, ServiceBundle $bundle, string $namespace, int $ttl)
+    public function __construct(Client $client, ServiceInterface $service, string $namespace, int $ttl)
     {
         $this->client        = $client;
-        $this->bundle        = $bundle;
+        $this->service       = $service;
         $this->serviceFormat = sprintf($this->serviceFormat, $namespace, '%s', '%s');
         $this->ttl           = $ttl;
     }
@@ -71,12 +71,10 @@ class Registrar
     public function register()
     {
         $client  = $this->client;
-        $bundle  = $this->bundle;
+        $service = $this->service;
         $reslut  = $client->grant($this->ttl);
         $leaseID = $this->leaseID = (int)$reslut['ID'];
-        foreach ($bundle->items() as $service) {
-            $client->put(sprintf($this->serviceFormat, $service->getName(), $service->getNode()->getID()), json_encode($service), ['lease' => $leaseID]);
-        }
+        $client->put(sprintf($this->serviceFormat, $service->getName(), $service->getNode()->getID()), json_encode($service), ['lease' => $leaseID]);
         $this->timer and $this->timer->clear();
         $this->timer = $this->keepAlive();
     }

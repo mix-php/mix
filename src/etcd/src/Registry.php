@@ -144,33 +144,37 @@ class Registry implements RegistryInterface
 
     /**
      * Register
-     * @param ServiceInterface ...$service
+     * @param ServiceInterface ...$services
      * @throws \InvalidArgumentException
      */
-    public function register(ServiceInterface ...$service): string
+    public function register(ServiceInterface ...$services)
     {
-        $bundle = (new ServiceBundleFactory())->createServiceBundle(...$service);
-        $id     = ServiceHelper::uuid();
-        if ($bundle->count() == 0) {
-            throw new \InvalidArgumentException('Service cannot be empty');
+        foreach ($services as $service) {
+            $id = $service->getNode()->getID();
+            if (isset($this->registrars[$id])) {
+                throw new \InvalidArgumentException(sprintf('Service %s repeated register', $id));
+            }
+            $registrar = new Registrar($this->client, $service, $this->namespace, $this->registerTTL);
+            $registrar->register();
+            $this->registrars[$id] = $registrar;
         }
-        $registrar = new Registrar($this->client, $bundle, $this->namespace, $this->registerTTL);
-        $registrar->register();
-        $this->registrars[$id] = $registrar;
-        return $id;
     }
 
     /**
      * Un Register
-     * @param string $id
+     * @param ServiceInterface ...$service
+     * @throws \InvalidArgumentException
      */
-    public function unregister(string $id)
+    public function unregister(ServiceInterface ...$service)
     {
-        if (!isset($this->registrars[$id])) {
-            return;
+        foreach ($services as $service) {
+            $id = $service->getNode()->getID();
+            if (!isset($this->registrars[$id])) {
+                throw new \InvalidArgumentException(sprintf('Service %s not registered', $id));
+            }
+            $this->registrars[$id]->unregister();
+            unset($this->registrars[$id]);
         }
-        $this->registrars[$id]->unregister();
-        unset($this->registrars[$id]);
     }
 
     /**

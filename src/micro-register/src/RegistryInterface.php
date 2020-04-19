@@ -24,13 +24,14 @@ interface RegistryInterface
      * @param ServiceInterface ...$service
      * @throws \Exception
      */
-    public function register(ServiceInterface ...$service): string;
+    public function register(ServiceInterface ...$service);
 
     /**
      * Un Register
-     * @param string $id
+     * @param ServiceInterface ...$service
+     * @throws \Exception
      */
-    public function unregister(string $id);
+    public function unregister(ServiceInterface ...$service);
 
     /**
      * Close
