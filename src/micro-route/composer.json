@@ -1,0 +1,27 @@
+{
+  "name": "mix/micro-route",
+  "description": "Mix Micro Route http://www.mixphp.cn",
+  "type": "framework",
+  "keywords": [
+    "framework",
+    "mix",
+    "swoole"
+  ],
+  "homepage": "http://www.mixphp.cn/",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "liu,jian",
+      "email": "coder.keda@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0",
+    "mix/route": "~2.1.0",
+  },
+  "autoload": {
+    "psr-4": {
+      "Mix\\Micro\\Route\\": "src/"
+    }
+  }
+}
