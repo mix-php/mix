@@ -1,6 +1,6 @@
 <?php
 
-namespace Mix\Tracing\Middleware\JsonRpc;
+namespace Mix\Tracing\JsonRpc;
 
 use Mix\JsonRpc\Message\Request;
 use Mix\JsonRpc\Message\Response;
@@ -10,7 +10,7 @@ use const OpenTracing\Formats\TEXT_MAP;
 
 /**
  * Class TracingClientMiddleware
- * @package Mix\Tracing\Middleware\JsonRpc
+ * @package Mix\Tracing\JsonRpc
  */
 class TracingClientMiddleware implements MiddlewareInterface
 {

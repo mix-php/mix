@@ -1,6 +1,6 @@
 <?php
 
-namespace Mix\Tracing\Middleware\Http;
+namespace Mix\Tracing\Grpc;
 
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
@@ -10,11 +10,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use const OpenTracing\Formats\TEXT_MAP;
 use const OpenTracing\Tags\HTTP_STATUS_CODE;
-use const OpenTracing\Tags\ERROR;
 
 /**
  * Class TracingServerMiddleware
- * @package Mix\Tracing\Middleware\Http
+ * @package Mix\Tracing\Grpc
  */
 abstract class TracingServerMiddleware implements MiddlewareInterface
 {
@@ -94,16 +93,11 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
 
         try {
             $result = $handler->handle($request);
-        } catch (\Throwable $ex) {
-            $message = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
-            $code    = $ex->getCode();
-            $error   = sprintf('[%d] %s', $code, $message);
-            throw $ex;
+        } catch (\Throwable $exception) {
+            throw $exception;
         } finally {
+            // 记录响应信息
             $span->setTag(HTTP_STATUS_CODE, $this->response->getStatusCode());
-            if (isset($error)) {
-                $span->setTag(ERROR, $error);
-            }
 
             $span->finish();
             $tracer->flush();
