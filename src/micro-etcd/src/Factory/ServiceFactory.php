@@ -43,7 +43,8 @@ class ServiceFactory implements ServiceFactoryInterface
         $nodeFactory    = new NodeFactory();
         $services       = [];
         foreach (!is_null($router) ? $router->services() : $server->services() as $name) {
-            $service = $serviceFactory->createService(sprintf('%s.%s', $namespace, $name), $version);
+            $name    = sprintf('%s.%s', $namespace, $name);
+            $service = $serviceFactory->createService($name, $version);
             $node    = $nodeFactory->createNode($name, sprintf('%s:%d', ServiceHelper::localIP(), $server->port));
             $node->withMetadata('registry', 'etcd');
             $node->withMetadata('protocol', 'json');
@@ -69,7 +70,8 @@ class ServiceFactory implements ServiceFactoryInterface
         $nodeFactory    = new NodeFactory();
         $services       = [];
         foreach (!is_null($router) ? $router->services() : $server->services() as $name) {
-            $service = $serviceFactory->createService(sprintf('%s.%s', $namespace, $name), $version);
+            $name    = sprintf('%s.%s', $namespace, $name);
+            $service = $serviceFactory->createService($name, $version);
             $node    = $nodeFactory->createNode($name, sprintf('%s:%d', ServiceHelper::localIP(), $server->port));
             $node->withMetadata('registry', 'etcd');
             $node->withMetadata('protocol', 'html');

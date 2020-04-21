@@ -124,7 +124,7 @@ class Server
             }
             $services[] = $version . $name;
         }
-        return $services;
+        return array_unique($services);
     }
 
     /**

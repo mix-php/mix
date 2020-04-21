@@ -160,22 +160,6 @@ class Router implements HandlerInterface
     }
 
     /**
-     * With group rule
-     * @param string $pattern
-     * @param array $rules
-     * @param array $middleware
-     * @return $this
-     */
-    public function group(string $pattern, array $rules, array $middleware = [])
-    {
-        $this->rules[$pattern] = [
-            'middleware' => $middleware,
-            'rules'      => $rules,
-        ];
-        return $this;
-    }
-
-    /**
      * 匹配
      * @param string $method
      * @param string $pathinfo
