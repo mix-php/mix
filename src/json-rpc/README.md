@@ -75,7 +75,7 @@ var_dump($responses);
 
 ```
 $dialer = new \Mix\JsonRpc\Client\Dialer([
-    'registry' => new \Mix\Etcd\Registry([
+    'registry' => new \Mix\Micro\Etcd\Registry([
         'host' => '127.0.0.1',
         'port' => 2379,
         'ttl'  => 10,

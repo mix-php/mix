@@ -26,7 +26,7 @@ final class ClientTest extends TestCase
             $conn   = $dialer->dial('127.0.0.1', 9234);
             /*
             $dialer = new \Mix\JsonRpc\Client\Dialer([
-                'registry' => new \Mix\Etcd\Registry([
+                'registry' => new \Mix\Micro\Etcd\Registry([
                     'host' => '127.0.0.1',
                     'port' => 2379,
                     'ttl'  => 10,

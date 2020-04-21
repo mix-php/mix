@@ -74,6 +74,7 @@
     "mix/micro-gateway": "self.version",
     "mix/micro-hystrix": "self.version",
     "mix/micro-register": "self.version",
+    "mix/micro-route": "self.version",
     "mix/etcd": "self.version",
     "mix/zipkin": "self.version",
     "mix/tracing": "self.version"
@@ -109,9 +110,10 @@
       "Mix\\Micro\\Gateway\\": "src/micro-gateway/src/",
       "Mix\\Micro\\Hystrix\\": "src/micro-hystrix/src/",
       "Mix\\Micro\\Register\\": "src/micro-register/src/",
-      "Mix\\Etcd\\": "src/etcd/src/",
-      "Mix\\Zipkin\\": "src/zipkin/src/",
-      "Mix\\Tracing\\": "src/tracing/src/"
+      "Mix\\Micro\\Etcd\\": "src/micro-etcd/src/",
+      "Mix\\Micro\\Route\\": "src/micro-route/src/",
+      "Mix\\Tracing\\": "src/tracing/src/",
+      "Mix\\Tracing\\Zipkin\\": "src/tracing-zipkin/src/"
     },
     "classmap": [
       "src/console/src/Mix.php"

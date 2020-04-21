@@ -2,6 +2,9 @@
 
 namespace Mix\Micro\Route;
 
+use Mix\Http\Message\Response;
+use Mix\Http\Message\ServerRequest;
+
 /**
  * Class Router
  * @package Mix\Micro\Route
@@ -53,6 +56,21 @@ class Router extends \Mix\Route\Router
             $services[] = $version . $name;
         }
         return $services;
+    }
+
+    /**
+     * Handle HTTP
+     * @param ServerRequest $request
+     * @param Response $response
+     * @throws \Throwable
+     */
+    public function handleHTTP(ServerRequest $request, Response $response)
+    {
+        var_dump($request->getMethod());
+        var_dump($request->getUri());
+        var_dump($request->getHeaderLines());
+        var_dump($request->getBody()->getContents());
+        return parent::handleHTTP($request, $response);
     }
 
 }
