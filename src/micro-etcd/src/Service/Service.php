@@ -100,7 +100,7 @@ class Service implements ServiceInterface
      * Add endpoint
      * @param EndpointInterface $endpoint
      */
-    public function withAddedEndpoint(EndpointInterface $endpoint)
+    public function withEndpoint(EndpointInterface $endpoint)
     {
         $this->endpoints[] = $endpoint;
     }
@@ -118,7 +118,7 @@ class Service implements ServiceInterface
      * Set node
      * @param NodeInterface $node
      */
-    public function withAddedNode(NodeInterface $node)
+    public function withNode(NodeInterface $node)
     {
         $this->nodes[] = $node;
     }

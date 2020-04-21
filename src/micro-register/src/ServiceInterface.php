@@ -44,7 +44,7 @@ interface ServiceInterface extends \JsonSerializable
      * Add endpoint
      * @param EndpointInterface $endpoint
      */
-    public function withAddedEndpoint(EndpointInterface $endpoint);
+    public function withEndpoint(EndpointInterface $endpoint);
 
     /**
      * Get nodes
@@ -56,7 +56,7 @@ interface ServiceInterface extends \JsonSerializable
      * Set node
      * @param NodeInterface $node
      */
-    public function withAddedNode(NodeInterface $node);
+    public function withNode(NodeInterface $node);
 
     /**
      * Get node

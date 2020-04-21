@@ -179,7 +179,7 @@ class Response extends Message implements ResponseInterface
      */
     public function redirect(string $url, int $status = 302)
     {
-        return $this->withAddedHeader('Location', $url)->withStatus($status);
+        return $this->withHeader('Location', $url)->withStatus($status);
     }
 
     /**

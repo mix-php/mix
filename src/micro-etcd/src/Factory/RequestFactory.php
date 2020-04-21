@@ -43,7 +43,7 @@ class RequestFactory implements RequestFactoryInterface
             $propertyName = array_shift($slice);
 
             $value = new Value($propertyName, $propertyType);
-            $request->withAddedValue($value);
+            $request->withValue($value);
         }
 
         return $request;

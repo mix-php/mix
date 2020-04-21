@@ -172,20 +172,20 @@ class Monitor
             $request = new Request($v['request']['name'], $v['request']['type']);
             foreach ($v['request']['values'] ?? [] as $vv) {
                 $requestValue = new Value($vv['name'], $vv['type']);
-                $request->withAddedValue($requestValue);
+                $request->withValue($requestValue);
             }
 
             $response = new Response($v['response']['name'], $v['response']['type']);
             foreach ($v['response']['values'] ?? [] as $vv) {
                 $responseValue = new Value($vv['name'], $vv['type']);
-                $response->withAddedValue($responseValue);
+                $response->withValue($responseValue);
             }
 
             $endpoint = new Endpoint($v['name'], $request, $response);
             foreach ($v['metadata'] ?? [] as $kk => $vv) {
                 $endpoint->withMetadata($kk, $vv);
             }
-            $service->withAddedEndpoint($endpoint);
+            $service->withEndpoint($endpoint);
         }
 
         $rawNode = $data['nodes'][0];
@@ -193,7 +193,7 @@ class Monitor
         foreach ($rawNode['metadata'] ?? [] as $k => $v) {
             $node->withMetadata($k, $v);
         }
-        $service->withAddedNode($node);
+        $service->withNode($node);
 
         return $service;
     }

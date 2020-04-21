@@ -69,7 +69,7 @@ class Request implements RequestInterface
      * Set add value
      * @param ValueInterface $value
      */
-    public function withAddedValue(ValueInterface $value)
+    public function withValue(ValueInterface $value)
     {
         $this->values[] = $value;
     }

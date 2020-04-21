@@ -49,7 +49,7 @@ class ServiceFactory implements ServiceFactoryInterface
             $node->withMetadata('protocol', 'json');
             $node->withMetadata('server', 'json');
             $node->withMetadata('transport', 'http');
-            $service->withAddedNode($node);
+            $service->withNode($node);
             $services[] = $service;
         }
         return $services;
@@ -75,7 +75,7 @@ class ServiceFactory implements ServiceFactoryInterface
             $node->withMetadata('protocol', 'html');
             $node->withMetadata('server', 'html');
             $node->withMetadata('transport', 'http');
-            $service->withAddedNode($node);
+            $service->withNode($node);
             $services[] = $service;
         }
         return $services;
@@ -121,7 +121,7 @@ class ServiceFactory implements ServiceFactoryInterface
                     $response     = $responseFactory->createResponse($reflectClass);
                     $endpoint->withResponse($response);
 
-                    $service->withAddedEndpoint($endpoint);
+                    $service->withEndpoint($endpoint);
                 }
             }
             $node = $nodeFactory->createNode($name, sprintf('%s:%d', ServiceHelper::localIP(), $server->port));
@@ -129,7 +129,7 @@ class ServiceFactory implements ServiceFactoryInterface
             $node->withMetadata('protocol', 'grpc');
             $node->withMetadata('server', 'grpc');
             $node->withMetadata('transport', 'http');
-            $service->withAddedNode($node);
+            $service->withNode($node);
             $services[] = $service;
         }
         return $services;
@@ -163,7 +163,7 @@ class ServiceFactory implements ServiceFactoryInterface
                     $className = array_pop($slice);
 
                     $endpoint = $endpointFactory->createEndpoint(sprintf('%s.%s', $className, $method));
-                    $service->withAddedEndpoint($endpoint);
+                    $service->withEndpoint($endpoint);
                 }
             }
             $node = $nodeFactory->createNode($name, sprintf('%s:%d', ServiceHelper::localIP(), $server->port));
@@ -171,7 +171,7 @@ class ServiceFactory implements ServiceFactoryInterface
             $node->withMetadata('protocol', 'json');
             $node->withMetadata('server', 'json');
             $node->withMetadata('transport', 'tcp');
-            $service->withAddedNode($node);
+            $service->withNode($node);
             $services[] = $service;
         }
         return $services;
