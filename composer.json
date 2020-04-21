@@ -74,10 +74,10 @@
     "mix/micro-gateway": "self.version",
     "mix/micro-hystrix": "self.version",
     "mix/micro-register": "self.version",
+    "mix/micro-etcd": "self.version",
     "mix/micro-route": "self.version",
-    "mix/etcd": "self.version",
-    "mix/zipkin": "self.version",
-    "mix/tracing": "self.version"
+    "mix/tracing": "self.version",
+    "mix/tracing-zipkin": "self.version"
   },
   "autoload": {
     "psr-4": {
