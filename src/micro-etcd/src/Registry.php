@@ -150,7 +150,7 @@ class Registry implements RegistryInterface
     public function register(ServiceInterface ...$services)
     {
         foreach ($services as $service) {
-            $id = $service->getNode()->getID();
+            $id = $service->getFirstNode()->getID();
             if (isset($this->registrars[$id])) {
                 throw new \InvalidArgumentException(sprintf('Service %s repeated register', $id));
             }
@@ -168,7 +168,7 @@ class Registry implements RegistryInterface
     public function unregister(ServiceInterface ...$service)
     {
         foreach ($services as $service) {
-            $id = $service->getNode()->getID();
+            $id = $service->getFirstNode()->getID();
             if (!isset($this->registrars[$id])) {
                 throw new \InvalidArgumentException(sprintf('Service %s not registered', $id));
             }

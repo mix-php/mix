@@ -127,7 +127,7 @@ class Service implements ServiceInterface
      * Get node
      * @return NodeInterface
      */
-    public function getNode(): NodeInterface
+    public function getFirstNode(): NodeInterface
     {
         return current($this->nodes);
     }
@@ -138,7 +138,7 @@ class Service implements ServiceInterface
      */
     public function getAddress(): string
     {
-        $node = $this->getNode();
+        $node = $this->getFirstNode();
         list($address) = explode(':', $node->getAddress());
         return $address;
     }
@@ -149,7 +149,7 @@ class Service implements ServiceInterface
      */
     public function getPort(): int
     {
-        $node = $this->getNode();
+        $node = $this->getFirstNode();
         list(, $port) = explode(':', $node->getAddress());
         return (int)$port;
     }

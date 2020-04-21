@@ -62,7 +62,7 @@ interface ServiceInterface extends \JsonSerializable
      * Get node
      * @return NodeInterface
      */
-    public function getNode(): NodeInterface;
+    public function getFirstNode(): NodeInterface;
 
     /**
      * Get address

@@ -107,7 +107,7 @@ class Monitor
                     case 'PUT':
                         $value                                                             = base64_decode($kv['value']);
                         $service                                                           = static::parseValue($value);
-                        $this->services[$service->getName()][$service->getNode()->getID()] = $service;
+                        $this->services[$service->getName()][$service->getFirstNode()->getID()] = $service;
                         break;
                 }
             }
@@ -146,7 +146,7 @@ class Monitor
         $services = [];
         foreach ($kvs as $value) {
             $service                                                     = static::parseValue($value);
-            $services[$service->getName()][$service->getNode()->getID()] = $service;
+            $services[$service->getName()][$service->getFirstNode()->getID()] = $service;
         }
         $this->services = $services;
     }

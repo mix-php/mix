@@ -132,7 +132,7 @@ class Server implements HandlerInterface
 
                 // 将服务信息放入 Header 供中间件处理
                 $request->withHeader('x-service-name', $serivce->getName());
-                $request->withHeader('x-service-address', $serivce->getNode()->getAddress());
+                $request->withHeader('x-service-address', $serivce->getFirstNode()->getAddress());
 
                 // 通过中间件执行
                 $process    = function (ServerRequest $request, Response $response) use ($proxy, $serivce) {
