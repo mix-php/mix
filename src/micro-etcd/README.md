@@ -1,11 +1,9 @@
-## Mix Etcd
-
-...
+## Mix Micro Etcd
 
 ## Usage
 
 ```
-composer require mix/etcd
+composer require mix/micro-etcd
 ```
 
 支持的 etcd 版本：

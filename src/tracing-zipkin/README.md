@@ -1,9 +1,9 @@
-## Mix Zipkin
+## Mix Tracing Zipkin
 
 ## Usage
 
 ```
-composer require mix/zipkin
+composer require mix/tracing-zipkin
 ```
 
 支持的 zipkin 版本：

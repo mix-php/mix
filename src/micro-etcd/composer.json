@@ -1,6 +1,6 @@
 {
-  "name": "mix/etcd",
-  "description": "Mix Etcd http://www.mixphp.cn",
+  "name": "mix/micro-etcd",
+  "description": "Mix Micro Etcd http://www.mixphp.cn",
   "type": "framework",
   "keywords": [
     "framework",
