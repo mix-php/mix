@@ -136,6 +136,46 @@ class Router implements HandlerInterface
     }
 
     /**
+     * With pattern
+     * @param string $name
+     * @param string $regular
+     * @return $this
+     */
+    public function pattern(string $name, string $regular)
+    {
+        $this->patterns[$name] = $regular;
+        return $this;
+    }
+
+    /**
+     * With rule
+     * @param string $pattern
+     * @param array $rule [callable, 'middleware'=>[]]
+     * @return $this
+     */
+    public function rule(string $pattern, array $rule)
+    {
+        $this->rules[$pattern] = $rule;
+        return $this;
+    }
+
+    /**
+     * With group rule
+     * @param string $pattern
+     * @param array $rules
+     * @param array $middleware
+     * @return $this
+     */
+    public function group(string $pattern, array $rules, array $middleware = [])
+    {
+        $this->rules[$pattern] = [
+            'middleware' => $middleware,
+            'rules'      => $rules,
+        ];
+        return $this;
+    }
+
+    /**
      * 匹配
      * @param string $method
      * @param string $pathinfo
