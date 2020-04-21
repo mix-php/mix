@@ -118,6 +118,16 @@ class ServerRequest extends Request implements ServerRequestInterface
     }
 
     /**
+     * With server params
+     * @param array $serverParams
+     */
+    public function withServerParams(array $serverParams)
+    {
+        $this->serverParams = $serverParams;
+        return $this;
+    }
+
+    /**
      * Retrieve cookies.
      *
      * Retrieves cookies sent by the client to the server.

@@ -66,6 +66,7 @@ class ServiceFactory implements ServiceFactoryInterface
     public function createServicesFromWeb(\Mix\Http\Server\Server $server, \Mix\Route\Router $router = null, string $namespace = 'php.micro.web', ?string $version = null)
     {
         $serviceFactory = new ServiceFactory();
+        $nodeFactory    = new NodeFactory();
         $services       = [];
         foreach (!is_null($router) ? $router->services() : $server->services() as $name) {
             $service = $serviceFactory->createService(sprintf('%s.%s', $namespace, $name), $version);
