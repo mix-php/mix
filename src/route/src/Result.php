@@ -40,13 +40,15 @@ class Result
 
     /**
      * 获取Callback
-     * @param mixed ...$constructorArgs
      * @return callable
      */
-    public function getCallback(...$constructorArgs): callable
+    public function getCallback(): callable
     {
+        if ($this->callback instanceof \Closure) {
+            return $this->callback;
+        }
         list($class, $method) = $this->callback;
-        return [new $class(...$constructorArgs), $method];
+        return [is_object($class) ? $class : new $class(), $method];
     }
 
     /**

@@ -32,17 +32,17 @@ class ServiceFactory implements ServiceFactoryInterface
     /**
      * Create service bundle form api
      * @param \Mix\Http\Server\Server $server
-     * @param \Mix\Route\Router|null $router
+     * @param \Mix\Route\Router $router
      * @param string $namespace
      * @param string|null $version
      * @return ServiceInterface[]
      */
-    public function createServicesFromAPI(\Mix\Http\Server\Server $server, \Mix\Route\Router $router = null, string $namespace = 'php.micro.api', ?string $version = null)
+    public function createServicesFromAPI(\Mix\Http\Server\Server $server, \Mix\Route\Router $router, string $namespace = 'php.micro.api', ?string $version = null)
     {
         $serviceFactory = new ServiceFactory();
         $nodeFactory    = new NodeFactory();
         $services       = [];
-        foreach (!is_null($router) ? $router->services() : $server->services() as $name) {
+        foreach ($router->services() as $name) {
             $name    = sprintf('%s.%s', $namespace, $name);
             $service = $serviceFactory->createService($name, $version);
             $node    = $nodeFactory->createNode($name, sprintf('%s:%d', ServiceHelper::localIP(), $server->port));
@@ -59,17 +59,17 @@ class ServiceFactory implements ServiceFactoryInterface
     /**
      * Create service bundle form web
      * @param \Mix\Http\Server\Server $server
-     * @param \Mix\Route\Router|null $router
+     * @param \Mix\Route\Router $router
      * @param string $namespace
      * @param string|null $version
      * @return ServiceInterface[]
      */
-    public function createServicesFromWeb(\Mix\Http\Server\Server $server, \Mix\Route\Router $router = null, string $namespace = 'php.micro.web', ?string $version = null)
+    public function createServicesFromWeb(\Mix\Http\Server\Server $server, \Mix\Route\Router $router, string $namespace = 'php.micro.web', ?string $version = null)
     {
         $serviceFactory = new ServiceFactory();
         $nodeFactory    = new NodeFactory();
         $services       = [];
-        foreach (!is_null($router) ? $router->services() : $server->services() as $name) {
+        foreach ($router->services() as $name) {
             $name    = sprintf('%s.%s', $namespace, $name);
             $service = $serviceFactory->createService($name, $version);
             $node    = $nodeFactory->createNode($name, sprintf('%s:%d', ServiceHelper::localIP(), $server->port));

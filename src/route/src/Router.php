@@ -219,7 +219,8 @@ class Router implements HandlerInterface
         $process    = function (ServerRequest $request, Response $response) use ($result) {
             try {
                 // 构造方法内的参数是为了方便继承封装使用
-                $response = call_user_func($result->getCallback($request, $response), $request, $response);
+                // 为了支持 \Closure 移除了构造方法传参数，为路由支持 websocket
+                $response = call_user_func($result->getCallback(), $request, $response);
             } catch (\Throwable $ex) {
                 // 500 处理
                 $this->show500($ex, $response);
