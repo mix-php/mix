@@ -187,6 +187,11 @@ class Response extends Message implements ResponseInterface
      */
     public function end()
     {
+        // websocket upgrade 不处理
+        if ($this->getStatusCode() == 101) {
+            return;
+        }
+
         $headers = $this->getHeaders();
         foreach ($headers as $name => $value) {
             $this->swooleResponse->header($name, implode(',', $value));
