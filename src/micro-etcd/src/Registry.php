@@ -165,14 +165,14 @@ class Registry implements RegistryInterface
      * @param ServiceInterface ...$service
      * @throws \InvalidArgumentException
      */
-    public function unregister(ServiceInterface ...$service)
+    public function deregister(ServiceInterface ...$service)
     {
         foreach ($services as $service) {
             $id = $service->getFirstNode()->getID();
             if (!isset($this->registrars[$id])) {
                 throw new \InvalidArgumentException(sprintf('Service %s not registered', $id));
             }
-            $this->registrars[$id]->unregister();
+            $this->registrars[$id]->deregister();
             unset($this->registrars[$id]);
         }
     }
@@ -180,7 +180,7 @@ class Registry implements RegistryInterface
     /**
      * Close
      * close all monitor
-     * unregister all service
+     * deregister all service
      */
     public function close()
     {
@@ -188,7 +188,7 @@ class Registry implements RegistryInterface
             $monitor->close();
         }
         foreach ($this->registrars as $registrar) {
-            $registrar->unregister();
+            $registrar->deregister();
         }
     }
 

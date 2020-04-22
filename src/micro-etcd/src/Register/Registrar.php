@@ -82,7 +82,7 @@ class Registrar
     /**
      * Un Register
      */
-    public function unregister()
+    public function deregister()
     {
         $this->timer->clear();
         try {   // 忽略异常

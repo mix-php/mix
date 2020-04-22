@@ -31,12 +31,12 @@ interface RegistryInterface
      * @param ServiceInterface ...$service
      * @throws \Exception
      */
-    public function unregister(ServiceInterface ...$service);
+    public function deregister(ServiceInterface ...$service);
 
     /**
      * Close
      * close all monitor
-     * unregister all service
+     * deregister all service
      */
     public function close();
 
