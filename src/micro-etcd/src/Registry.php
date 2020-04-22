@@ -161,7 +161,7 @@ class Registry implements RegistryInterface
     }
 
     /**
-     * Un Register
+     * Deregister
      * @param ServiceInterface ...$service
      * @throws \InvalidArgumentException
      */

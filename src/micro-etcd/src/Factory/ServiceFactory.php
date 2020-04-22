@@ -37,7 +37,7 @@ class ServiceFactory implements ServiceFactoryInterface
      * @param string|null $version
      * @return ServiceInterface[]
      */
-    public function createServicesFromAPI(\Mix\Http\Server\Server $server, \Mix\Route\Router $router, string $namespace = 'php.micro.api', ?string $version = null)
+    public function createServiceFromAPI(\Mix\Http\Server\Server $server, \Mix\Route\Router $router, string $namespace = 'php.micro.api', ?string $version = null)
     {
         $serviceFactory = new ServiceFactory();
         $nodeFactory    = new NodeFactory();
@@ -64,7 +64,7 @@ class ServiceFactory implements ServiceFactoryInterface
      * @param string|null $version
      * @return ServiceInterface[]
      */
-    public function createServicesFromWeb(\Mix\Http\Server\Server $server, \Mix\Route\Router $router, string $namespace = 'php.micro.web', ?string $version = null)
+    public function createServiceFromWeb(\Mix\Http\Server\Server $server, \Mix\Route\Router $router, string $namespace = 'php.micro.web', ?string $version = null)
     {
         $serviceFactory = new ServiceFactory();
         $nodeFactory    = new NodeFactory();
@@ -89,7 +89,7 @@ class ServiceFactory implements ServiceFactoryInterface
      * @param string|null $version
      * @return ServiceInterface[]
      */
-    public function createServicesFromGrpc(\Mix\Grpc\Server $server, ?string $version = null)
+    public function createServiceFromGrpc(\Mix\Grpc\Server $server, ?string $version = null)
     {
         $serviceFactory  = new ServiceFactory();
         $endpointFactory = new EndpointFactory();
@@ -143,7 +143,7 @@ class ServiceFactory implements ServiceFactoryInterface
      * @param string|null $version
      * @return ServiceInterface[]
      */
-    public function createServicesFromJsonRpc(\Mix\JsonRpc\Server $server, ?string $version = null)
+    public function createServiceFromJsonRpc(\Mix\JsonRpc\Server $server, ?string $version = null)
     {
         $serviceFactory  = new ServiceFactory();
         $endpointFactory = new EndpointFactory();
