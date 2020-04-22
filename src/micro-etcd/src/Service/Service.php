@@ -138,7 +138,7 @@ class Service implements ServiceInterface
      */
     public function getID(): string
     {
-        return $this->getID();
+        return $this->getFirstNode()->getID();
     }
 
     /**
