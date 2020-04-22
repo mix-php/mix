@@ -59,10 +59,10 @@ interface ServiceInterface extends \JsonSerializable
     public function withNode(NodeInterface $node);
 
     /**
-     * Get node
-     * @return NodeInterface
+     * Get id
+     * @return string
      */
-    public function getFirstNode(): NodeInterface;
+    public function getID(): string;
 
     /**
      * Get address

@@ -129,7 +129,16 @@ class Service implements ServiceInterface
      */
     public function getFirstNode(): NodeInterface
     {
-        return current($this->nodes);
+        return current($this->getNodes());
+    }
+
+    /**
+     * Get id
+     * @return string
+     */
+    public function getID(): string
+    {
+        return $this->getID();
     }
 
     /**
