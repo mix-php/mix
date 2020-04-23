@@ -2,9 +2,6 @@
 
 namespace Mix\Micro\Etcd\Service;
 
-use Mix\Micro\Register\RequestInterface;
-use Mix\Micro\Register\ValueInterface;
-
 /**
  * Class Request
  * @package Mix\Micro\Etcd\Service
@@ -23,7 +20,7 @@ class Request implements RequestInterface
     protected $type = '';
 
     /**
-     * @var ValueInterface[]
+     * @var Value[]
      */
     protected $values;
 
@@ -58,7 +55,7 @@ class Request implements RequestInterface
 
     /**
      * Get values
-     * @return ValueInterface[]|null
+     * @return Value[]|null
      */
     public function getValues()
     {
@@ -67,9 +64,9 @@ class Request implements RequestInterface
 
     /**
      * Set add value
-     * @param ValueInterface $value
+     * @param Value $value
      */
-    public function withValue(ValueInterface $value)
+    public function withValue(Value $value)
     {
         $this->values[] = $value;
     }

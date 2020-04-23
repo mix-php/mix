@@ -2,13 +2,11 @@
 
 namespace Mix\Micro\Etcd\Service;
 
-use Mix\Micro\Register\NodeInterface;
-
 /**
  * Class Node
  * @package Mix\Micro\Etcd\Service
  */
-class Node implements NodeInterface
+class Node
 {
 
     /**

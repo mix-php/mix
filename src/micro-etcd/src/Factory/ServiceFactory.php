@@ -5,14 +5,13 @@ namespace Mix\Micro\Etcd\Factory;
 use Mix\Micro\Etcd\Service\Service;
 use Mix\Micro\Etcd\Service\ServiceBundle;
 use Mix\Micro\Register\Helper\ServiceHelper;
-use Mix\Micro\Register\ServiceFactoryInterface;
 use Mix\Micro\Register\ServiceInterface;
 
 /**
  * Class ServiceFactory
  * @package Mix\Micro\Etcd\Factory
  */
-class ServiceFactory implements ServiceFactoryInterface
+class ServiceFactory
 {
 
     /**

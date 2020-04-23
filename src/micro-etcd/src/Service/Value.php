@@ -2,13 +2,11 @@
 
 namespace Mix\Micro\Etcd\Service;
 
-use Mix\Micro\Register\ValueInterface;
-
 /**
  * Class Request
  * @package Mix\Micro\Etcd\Service
  */
-class Value implements ValueInterface
+class Value
 {
 
     /**

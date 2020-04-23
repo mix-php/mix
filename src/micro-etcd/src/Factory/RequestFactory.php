@@ -4,22 +4,20 @@ namespace Mix\Micro\Etcd\Factory;
 
 use Mix\Micro\Etcd\Service\Request;
 use Mix\Micro\Etcd\Service\Value;
-use Mix\Micro\Register\RequestFactoryInterface;
-use Mix\Micro\Register\RequestInterface;
 
 /**
  * Class RequestFactory
  * @package Mix\Micro\Etcd\Factory
  */
-class RequestFactory implements RequestFactoryInterface
+class RequestFactory
 {
 
     /**
      * Create request
      * @param \ReflectionParameter $parameter
-     * @return RequestInterface
+     * @return Request
      */
-    public function createRequest(\ReflectionParameter $parameter): RequestInterface
+    public function createRequest(\ReflectionParameter $parameter): Request
     {
         $name    = basename(str_replace('\\', '/', $parameter->getClass()->getName()));
         $type    = $parameter->getClass()->getName();

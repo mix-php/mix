@@ -2,8 +2,6 @@
 
 namespace Mix\Micro\Etcd\Service;
 
-use Mix\Micro\Register\EndpointInterface;
-use Mix\Micro\Register\NodeInterface;
 use Mix\Micro\Register\ServiceInterface;
 
 /**
@@ -29,7 +27,7 @@ class Service implements ServiceInterface
     protected $metadata;
 
     /**
-     * @var EndpointInterface[]
+     * @var Endpoint[]
      */
     protected $endpoints = [];
 
@@ -89,7 +87,7 @@ class Service implements ServiceInterface
 
     /**
      * Get endpoints
-     * @return EndpointInterface[]
+     * @return Endpoint[]
      */
     public function getEndpoints()
     {
@@ -98,7 +96,7 @@ class Service implements ServiceInterface
 
     /**
      * Add endpoint
-     * @param EndpointInterface $endpoint
+     * @param Endpoint $endpoint
      */
     public function withEndpoint(EndpointInterface $endpoint)
     {
@@ -107,7 +105,7 @@ class Service implements ServiceInterface
 
     /**
      * Get nodes
-     * @return NodeInterface[]
+     * @return Node[]
      */
     public function getNodes()
     {
@@ -116,18 +114,18 @@ class Service implements ServiceInterface
 
     /**
      * Set node
-     * @param NodeInterface $node
+     * @param Node $node
      */
-    public function withNode(NodeInterface $node)
+    public function withNode(Node $node)
     {
         $this->nodes[] = $node;
     }
 
     /**
      * Get node
-     * @return NodeInterface
+     * @return Node
      */
-    public function getFirstNode(): NodeInterface
+    public function getFirstNode(): Node
     {
         return current($this->getNodes());
     }

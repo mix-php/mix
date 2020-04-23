@@ -5,22 +5,20 @@ namespace Mix\Micro\Etcd\Factory;
 use Mix\Micro\Etcd\Service\Request;
 use Mix\Micro\Etcd\Service\Response;
 use Mix\Micro\Etcd\Service\Value;
-use Mix\Micro\Register\ResponseFactoryInterface;
-use Mix\Micro\Register\ResponseInterface;
 
 /**
  * Class ResponseFactory
  * @package Mix\Micro\Etcd\Factory
  */
-class ResponseFactory implements ResponseFactoryInterface
+class ResponseFactory
 {
 
     /**
      * Create response
      * @param \ReflectionClass $class
-     * @return ResponseInterface
+     * @return Response
      */
-    public function createResponse(\ReflectionClass $class): ResponseInterface
+    public function createResponse(\ReflectionClass $class): Response
     {
         $name     = basename(str_replace('\\', '/', $class->getName()));
         $type     = $class->getName();

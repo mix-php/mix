@@ -2,14 +2,11 @@
 
 namespace Mix\Micro\Etcd\Service;
 
-use Mix\Micro\Register\ResponseInterface;
-use Mix\Micro\Register\ValueInterface;
-
 /**
  * Class Response
  * @package Mix\Micro\Etcd\Service
  */
-class Response implements ResponseInterface
+class Response
 {
 
     /**
@@ -23,7 +20,7 @@ class Response implements ResponseInterface
     protected $type = '';
 
     /**
-     * @var ValueInterface[]
+     * @var Value[]
      */
     protected $values;
 
@@ -58,7 +55,7 @@ class Response implements ResponseInterface
 
     /**
      * Get values
-     * @return ValueInterface[]|null
+     * @return Value[]|null
      */
     public function getValues()
     {
@@ -67,9 +64,9 @@ class Response implements ResponseInterface
 
     /**
      * Set add value
-     * @param ValueInterface $value
+     * @param Value $value
      */
-    public function withValue(ValueInterface $value)
+    public function withValue(Value $value)
     {
         $this->values[] = $value;
     }

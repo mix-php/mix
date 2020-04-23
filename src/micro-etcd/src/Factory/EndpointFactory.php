@@ -3,22 +3,20 @@
 namespace Mix\Micro\Etcd\Factory;
 
 use Mix\Micro\Etcd\Service\Endpoint;
-use Mix\Micro\Register\EndpointFactoryInterface;
-use Mix\Micro\Register\EndpointInterface;
 
 /**
  * Class EndpointFactory
  * @package Mix\Micro\Etcd\Factory
  */
-class EndpointFactory implements EndpointFactoryInterface
+class EndpointFactory
 {
 
     /**
      * Create endpoint
      * @param string $name
-     * @return EndpointInterface
+     * @return Endpoint
      */
-    public function createEndpoint(string $name): EndpointInterface
+    public function createEndpoint(string $name): Endpoint
     {
         return new Endpoint($name);
     }
