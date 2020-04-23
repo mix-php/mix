@@ -46,7 +46,7 @@ class Monitor
     protected $prefix = '';
 
     /**
-     * @var Service[name][id]
+     * @var Service[][]
      */
     protected $services = [];
 
@@ -200,7 +200,7 @@ class Monitor
 
     /**
      * Get all service
-     * @return Service[id]
+     * @return Service[]
      * @throws NotFoundException
      */
     public function services()

@@ -4,6 +4,7 @@ namespace Mix\Micro\Etcd\Register;
 
 use Mix\Micro\Etcd\Client\Client;
 use Mix\Concurrent\Timer;
+use Mix\Micro\Etcd\Service\Service;
 use Mix\Micro\Register\Exception\NotFoundException;
 use Mix\Micro\Register\ServiceInterface;
 
@@ -20,7 +21,7 @@ class Registrar
     public $client;
 
     /**
-     * @var ServiceInterface
+     * @var Service
      */
     public $service;
 
@@ -52,11 +53,11 @@ class Registrar
     /**
      * Registrar constructor.
      * @param Client $client
-     * @param ServiceInterface $service
+     * @param Service $service
      * @param string $namespace
      * @param int $ttl
      */
-    public function __construct(Client $client, ServiceInterface $service, string $namespace, int $ttl)
+    public function __construct(Client $client, Service $service, string $namespace, int $ttl)
     {
         $this->client        = $client;
         $this->service       = $service;
