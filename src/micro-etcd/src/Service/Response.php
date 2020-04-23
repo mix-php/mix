@@ -6,7 +6,7 @@ namespace Mix\Micro\Etcd\Service;
  * Class Response
  * @package Mix\Micro\Etcd\Service
  */
-class Response
+class Response implements \JsonSerializable
 {
 
     /**

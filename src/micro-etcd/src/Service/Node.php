@@ -6,7 +6,7 @@ namespace Mix\Micro\Etcd\Service;
  * Class Node
  * @package Mix\Micro\Etcd\Service
  */
-class Node
+class Node implements \JsonSerializable
 {
 
     /**

@@ -2,16 +2,11 @@
 
 namespace Mix\Micro\Etcd\Service;
 
-use Mix\Micro\Register\EndpointInterface;
-use Mix\Micro\Register\RequestInterface;
-use Mix\Micro\Register\ResponseInterface;
-use Mix\Micro\Register\ValueInterface;
-
 /**
  * Class Endpoint
  * @package Mix\Micro\Etcd\Service
  */
-class Endpoint implements EndpointInterface
+class Endpoint implements \JsonSerializable
 {
 
     /**
@@ -20,12 +15,12 @@ class Endpoint implements EndpointInterface
     protected $name;
 
     /**
-     * @var RequestInterface
+     * @var Request
      */
     protected $request;
 
     /**
-     * @var ResponseInterface
+     * @var Response
      */
     protected $response;
 
@@ -37,10 +32,10 @@ class Endpoint implements EndpointInterface
     /**
      * Endpoint constructor.
      * @param string $name
-     * @param RequestInterface|null $request
-     * @param ResponseInterface|null $response
+     * @param Request|null $request
+     * @param Response|null $response
      */
-    public function __construct(string $name, RequestInterface $request = null, ResponseInterface $response = null)
+    public function __construct(string $name, Request $request = null, Response $response = null)
     {
         $this->name     = $name;
         $this->request  = $request;
@@ -59,36 +54,36 @@ class Endpoint implements EndpointInterface
 
     /**
      * Get request
-     * @return ValueInterface
+     * @return Value
      */
-    public function getRequest(): ValueInterface
+    public function getRequest(): Value
     {
         return $this->request;
     }
 
     /**
      * Set request
-     * @param ValueInterface $request
+     * @param Value $request
      */
-    public function withRequest(ValueInterface $request)
+    public function withRequest(Value $request)
     {
         $this->request = $request;
     }
 
     /**
      * Get request
-     * @return ValueInterface
+     * @return Value
      */
-    public function getResponse(): ValueInterface
+    public function getResponse(): Value
     {
         return $this->response;
     }
 
     /**
      * Set response
-     * @param ValueInterface $response
+     * @param Value $response
      */
-    public function withResponse(ValueInterface $response)
+    public function withResponse(Value $response)
     {
         $this->response = $response;
     }

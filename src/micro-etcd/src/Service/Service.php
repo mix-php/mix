@@ -32,7 +32,7 @@ class Service implements ServiceInterface
     protected $endpoints = [];
 
     /**
-     * @var NodeInterface[]
+     * @var Node[]
      */
     protected $nodes = [];
 
@@ -98,7 +98,7 @@ class Service implements ServiceInterface
      * Add endpoint
      * @param Endpoint $endpoint
      */
-    public function withEndpoint(EndpointInterface $endpoint)
+    public function withEndpoint(Endpoint $endpoint)
     {
         $this->endpoints[] = $endpoint;
     }

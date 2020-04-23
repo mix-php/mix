@@ -6,7 +6,7 @@ namespace Mix\Micro\Etcd\Service;
  * Class Request
  * @package Mix\Micro\Etcd\Service
  */
-class Value
+class Value implements \JsonSerializable
 {
 
     /**
@@ -20,7 +20,7 @@ class Value
     protected $type = '';
 
     /**
-     * @var ValueInterface[]
+     * @var Value[]
      */
     protected $values;
 
@@ -55,7 +55,7 @@ class Value
 
     /**
      * Get values
-     * @return ValueInterface[]|null
+     * @return Value[]|null
      */
     public function getValues()
     {
@@ -64,9 +64,9 @@ class Value
 
     /**
      * Set add value
-     * @param ValueInterface $value
+     * @param Value $value
      */
-    public function withValue(ValueInterface $value)
+    public function withValue(Value $value)
     {
         $this->values[] = $value;
     }

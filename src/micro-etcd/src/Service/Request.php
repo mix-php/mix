@@ -6,7 +6,7 @@ namespace Mix\Micro\Etcd\Service;
  * Class Request
  * @package Mix\Micro\Etcd\Service
  */
-class Request implements RequestInterface
+class Request implements \JsonSerializable
 {
 
     /**
