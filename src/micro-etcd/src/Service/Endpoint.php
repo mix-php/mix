@@ -54,36 +54,36 @@ class Endpoint implements \JsonSerializable
 
     /**
      * Get request
-     * @return Value
+     * @return Request
      */
-    public function getRequest(): Value
+    public function getRequest(): Request
     {
         return $this->request;
     }
 
     /**
      * Set request
-     * @param Value $request
+     * @param Request $request
      */
-    public function withRequest(Value $request)
+    public function withRequest(Request $request)
     {
         $this->request = $request;
     }
 
     /**
-     * Get request
-     * @return Value
+     * Get response
+     * @return Response
      */
-    public function getResponse(): Value
+    public function getResponse(): Response
     {
         return $this->response;
     }
 
     /**
      * Set response
-     * @param Value $response
+     * @param Response $response
      */
-    public function withResponse(Value $response)
+    public function withResponse(Response $response)
     {
         $this->response = $response;
     }
