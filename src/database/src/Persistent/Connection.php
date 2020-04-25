@@ -71,7 +71,8 @@ class Connection extends AbstractConnection
 
     /**
      * 开始事务
-     * @return bool
+     * @return $this
+     * @throws \PDOException
      */
     public function beginTransaction()
     {

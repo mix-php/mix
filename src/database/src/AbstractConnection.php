@@ -5,6 +5,7 @@ namespace Mix\Database;
 use Mix\Bean\BeanInjector;
 use Mix\Database\Event\ExecutedEvent;
 use Mix\Database\Helper\BuildHelper;
+use Mix\Database\Persistent\Connection;
 use Mix\Database\Query\Expression;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
@@ -606,29 +607,37 @@ abstract class AbstractConnection
 
     /**
      * 开始事务
-     * @return bool
+     * @return $this
+     * @throws \PDOException
      */
     public function beginTransaction()
     {
-        return $this->_pdo->beginTransaction();
+        if (!$this->_pdo->beginTransaction()) {
+            throw new \PDOException('Begin transaction failed');
+        }
+        return $this;
     }
 
     /**
      * 提交事务
-     * @return bool
+     * @throws \PDOException
      */
     public function commit()
     {
-        return $this->_pdo->commit();
+        if (!$this->_pdo->commit()) {
+            throw new \PDOException('Commit transaction failed');
+        }
     }
 
     /**
      * 回滚事务
-     * @return bool
+     * @throws \PDOException
      */
     public function rollback()
     {
-        return $this->_pdo->rollBack();
+        if (!$this->_pdo->rollBack()) {
+            throw new \PDOException('Rollback transaction failed');
+        }
     }
 
     /**
