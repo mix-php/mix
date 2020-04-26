@@ -2,8 +2,6 @@
 
 namespace Mix\Cache;
 
-use Mix\Bean\BeanInjector;
-
 /**
  * Class FileHandler
  * @package Mix\Cache
@@ -25,12 +23,14 @@ class FileHandler implements CacheHandlerInterface
     public $partitions = 64;
 
     /**
-     * Authorization constructor.
-     * @param array $config
+     * FileHandler constructor.
+     * @param string $dir
+     * @param int $partitions
      */
-    public function __construct(array $config = [])
+    public function __construct(string $dir, int $partitions = 64)
     {
-        BeanInjector::inject($this, $config);
+        $this->dir        = $dir;
+        $this->partitions = $partitions;
     }
 
     /**

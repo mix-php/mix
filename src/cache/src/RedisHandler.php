@@ -2,7 +2,6 @@
 
 namespace Mix\Cache;
 
-use Mix\Bean\BeanInjector;
 use Mix\Redis\Redis;
 
 /**
@@ -26,12 +25,14 @@ class RedisHandler implements CacheHandlerInterface
     public $keyPrefix = 'CACHE:';
 
     /**
-     * Authorization constructor.
-     * @param array $config
+     * RedisHandler constructor.
+     * @param Redis $redis
+     * @param string $keyPrefix
      */
-    public function __construct(array $config = [])
+    public function __construct(Redis $redis, string $keyPrefix = 'CACHE:')
     {
-        BeanInjector::inject($this, $config);
+        $this->redis     = $redis;
+        $this->keyPrefix = $keyPrefix;
     }
 
     /**

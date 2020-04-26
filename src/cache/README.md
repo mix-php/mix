@@ -1,7 +1,5 @@
 ## Mix Cache
 
-...
-
 ## Usage
 
 ```

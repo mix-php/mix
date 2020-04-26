@@ -2,7 +2,6 @@
 
 namespace Mix\Cache;
 
-use Mix\Bean\BeanInjector;
 use Psr\SimpleCache\CacheInterface;
 
 /**
@@ -20,12 +19,12 @@ class Cache implements CacheInterface
     public $handler;
 
     /**
-     * Authorization constructor.
-     * @param array $config
+     * Cache constructor.
+     * @param CacheHandlerInterface $handler
      */
-    public function __construct(array $config = [])
+    public function __construct(CacheHandlerInterface $handler)
     {
-        BeanInjector::inject($this, $config);
+        $this->handler = $handler;
     }
 
     /**
