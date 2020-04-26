@@ -5,11 +5,11 @@ const DATABASE_USERNAME = 'root';
 const DATABASE_PASSWORD = '123456';
 
 /**
- * @return \Mix\Database\Connection
+ * @return \Mix\Database\Database
  */
 function db()
 {
-    $conn = new \Mix\Database\Connection([
+    $conn = new \Mix\Database\Database([
         // 数据源格式
         'dsn'      => DATABASE_DSN,
         // 数据库用户名
@@ -17,7 +17,7 @@ function db()
         // 数据库密码
         'password' => DATABASE_PASSWORD,
     ]);
-    $conn->connect();
+    $conn->init();
     return $conn;
 }
 

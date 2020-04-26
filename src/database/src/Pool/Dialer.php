@@ -3,9 +3,8 @@
 namespace Mix\Database\Pool;
 
 use Mix\Bean\BeanInjector;
-use Mix\Database\Connection;
+use Mix\Database\Driver;
 use Mix\Pool\DialerInterface;
-use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class Dialer
@@ -35,20 +34,7 @@ class Dialer implements DialerInterface
      * 驱动连接选项
      * @var array
      */
-    public $attributes = [];
-
-    /**
-     * 事件调度器
-     * @deprecated 废弃，改用 dispatcher
-     * @var EventDispatcherInterface
-     */
-    public $eventDispatcher;
-
-    /**
-     * 事件调度器
-     * @var EventDispatcherInterface
-     */
-    public $dispatcher;
+    public $options = [];
 
     /**
      * Dialer constructor.
@@ -63,19 +49,17 @@ class Dialer implements DialerInterface
 
     /**
      * Dial
-     * @return Connection
+     * @return Driver
+     * @throws PDOException
      */
     public function dial()
     {
-        $conn = new Connection([
-            'dsn'        => $this->dsn,
-            'username'   => $this->username,
-            'password'   => $this->password,
-            'attributes' => $this->attributes,
-            'dispatcher' => $this->dispatcher ?? $this->eventDispatcher,
-        ]);
-        $conn->connect();
-        return $conn;
+        return new Driver(
+            $this->dsn,
+            $this->username,
+            $this->password,
+            $this->options
+        );
     }
 
 }

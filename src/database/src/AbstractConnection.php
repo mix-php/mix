@@ -2,7 +2,6 @@
 
 namespace Mix\Database;
 
-use Mix\Bean\BeanInjector;
 use Mix\Database\Event\ExecutedEvent;
 use Mix\Database\Helper\BuildHelper;
 use Mix\Database\Persistent\Connection;
@@ -14,38 +13,14 @@ use Psr\EventDispatcher\EventDispatcherInterface;
  * @package Mix\Database
  * @author liu,jian <coder.keda@gmail.com>
  */
-abstract class AbstractConnection
+abstract class AbstractConnection implements ConnectionInterface
 {
 
     /**
-     * 数据源格式
-     * @var string
+     * 驱动
+     * @var Driver
      */
-    public $dsn = '';
-
-    /**
-     * 数据库用户名
-     * @var string
-     */
-    public $username = 'root';
-
-    /*
-     * 数据库密码
-     */
-    public $password = '';
-
-    /**
-     * 驱动连接选项
-     * @var array
-     */
-    public $attributes = [];
-
-    /**
-     * 事件调度器
-     * @deprecated 废弃，改用 dispatcher
-     * @var EventDispatcherInterface
-     */
-    public $eventDispatcher;
+    public $driver;
 
     /**
      * 事件调度器
@@ -54,108 +29,60 @@ abstract class AbstractConnection
     public $dispatcher;
 
     /**
-     * PDO
-     * @var \PDO
-     */
-    protected $_pdo;
-
-    /**
      * PDOStatement
      * @var \PDOStatement
      */
-    protected $_pdoStatement;
+    protected $statement;
 
     /**
      * sql
      * @var string
      */
-    protected $_sql = '';
+    protected $sql = '';
 
     /**
      * params
      * @var array
      */
-    protected $_params = [];
+    protected $params = [];
 
     /**
      * values
      * @var array
      */
-    protected $_values = [];
+    protected $values = [];
 
     /**
      * 查询数据
      * @var array
      */
-    protected $_queryData = [];
-
-    /**
-     * 默认驱动连接选项
-     * @var array
-     */
-    protected $_defaultAttributes = [
-        \PDO::ATTR_EMULATE_PREPARES   => false,
-        \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
-        \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-    ];
-
-    /**
-     * 驱动连接选项
-     * @var array
-     */
-    protected $_attributes = [];
+    protected $queryData = [];
 
     /**
      * AbstractConnection constructor.
-     * @param array $config
+     * @param Driver $driver
      */
-    public function __construct(array $config = [])
+    public function __construct(Driver $driver)
     {
-        BeanInjector::inject($this, $config);
-    }
-
-    /**
-     * 驱动连接选项
-     * @return array
-     */
-    protected function getAttributes()
-    {
-        return $this->attributes + $this->_defaultAttributes;
-    }
-
-    /**
-     * 创建连接
-     * @return \PDO
-     */
-    protected function createConnection()
-    {
-        return new \PDO(
-            $this->dsn,
-            $this->username,
-            $this->password,
-            $this->getAttributes()
-        );
+        $this->driver = $driver;
     }
 
     /**
      * 连接
-     * @return bool
+     * @throws PDOException
      */
     public function connect()
     {
-        $this->_pdo = $this->createConnection();
-        return true;
+        $this->driver->connect();
     }
 
     /**
      * 关闭连接
-     * @return bool
      */
     public function close()
     {
-        $this->_pdoStatement = null;
-        $this->_pdo          = null;
-        return true;
+        $this->statement = null;
+        $this->driver->close();
     }
 
     /**
@@ -176,18 +103,18 @@ abstract class AbstractConnection
 
     /**
      * 准备执行语句
-     * @param $sql
+     * @param string $sql
      * @return $this
      */
-    public function prepare($sql)
+    public function prepare(string $sql)
     {
         // 清扫数据
-        $this->_sql    = '';
-        $this->_params = [];
-        $this->_values = [];
+        $this->sql    = '';
+        $this->params = [];
+        $this->values = [];
         // 字符串构建
         if (is_string($sql)) {
-            $this->_sql = $sql;
+            $this->sql = $sql;
         }
         // 数组构建
         if (is_array($sql)) {
@@ -198,10 +125,10 @@ abstract class AbstractConnection
                     $fragments[] = $fragment;
                 }
             }
-            $this->_sql = implode(' ', $fragments);
+            $this->sql = implode(' ', $fragments);
         }
         // 保存SQL
-        $this->_queryData = [$this->_sql, [], [], 0];
+        $this->queryData = [$this->sql, [], [], 0];
         // 返回
         return $this;
     }
@@ -213,7 +140,7 @@ abstract class AbstractConnection
      */
     public function bindParams(array $data)
     {
-        $this->_params = array_merge($this->_params, $data);
+        $this->params = array_merge($this->params, $data);
         return $this;
     }
 
@@ -224,7 +151,7 @@ abstract class AbstractConnection
      */
     protected function bindValues(array $data)
     {
-        $this->_values = array_merge($this->_values, $data);
+        $this->values = array_merge($this->values, $data);
         return $this;
     }
 
@@ -232,10 +159,9 @@ abstract class AbstractConnection
      * 返回当前PDO连接是否在事务内（在事务内的连接回池会造成下次开启事务产生错误）
      * @return bool
      */
-    public function inTransaction()
+    public function inTransaction(): bool
     {
-        /** @var  $pdo \PDO */
-        $pdo = $this->_pdo;
+        $pdo = $this->driver->instance();
         return (bool)($pdo ? $pdo->inTransaction() : false);
     }
 
@@ -244,7 +170,7 @@ abstract class AbstractConnection
      * @param string $value
      * @return Expression
      */
-    public static function raw(string $value)
+    public static function raw(string $value): Expression
     {
         return new Expression($value);
     }
@@ -272,34 +198,34 @@ abstract class AbstractConnection
      */
     protected function build()
     {
-        if (!empty($this->_params)) {
+        if (!empty($this->params)) {
             // 准备与参数绑定
             // 原始方法
-            foreach ($this->_params as $key => $item) {
+            foreach ($this->params as $key => $item) {
                 if ($item instanceof Expression) {
-                    unset($this->_params[$key]);
-                    $key        = substr($key, 0, 1) == ':' ? $key : ":{$key}";
-                    $this->_sql = str_replace($key, $item->getValue(), $this->_sql);
+                    unset($this->params[$key]);
+                    $key       = substr($key, 0, 1) == ':' ? $key : ":{$key}";
+                    $this->sql = str_replace($key, $item->getValue(), $this->sql);
                 }
             }
             // 有参数
-            list($sql, $params) = $this->bindArrayParams($this->_sql, $this->_params);
-            $this->_pdoStatement = $this->_pdo->prepare($sql);
-            $this->_queryData    = [$sql, $params, [], 0]; // 必须在 bindParam 前，才能避免类型被转换
+            list($sql, $params) = $this->bindArrayParams($this->sql, $this->params);
+            $this->statement = $this->driver->instance()->prepare($sql);
+            $this->queryData = [$sql, $params, [], 0]; // 必须在 bindParam 前，才能避免类型被转换
             foreach ($params as $key => &$value) {
-                $this->_pdoStatement->bindParam($key, $value);
+                $this->statement->bindParam($key, $value);
             }
-        } elseif (!empty($this->_values)) {
+        } elseif (!empty($this->values)) {
             // 批量插入
-            $this->_pdoStatement = $this->_pdo->prepare($this->_sql);
-            $this->_queryData    = [$this->_sql, [], $this->_values, 0];
-            foreach ($this->_values as $key => $value) {
-                $this->_pdoStatement->bindValue($key + 1, $value);
+            $this->statement = $this->driver->instance()->prepare($this->sql);
+            $this->queryData = [$this->sql, [], $this->values, 0];
+            foreach ($this->values as $key => $value) {
+                $this->statement->bindValue($key + 1, $value);
             }
         } else {
             // 无参数
-            $this->_pdoStatement = $this->_pdo->prepare($this->_sql);
-            $this->_queryData    = [$this->_sql, [], [], 0];
+            $this->statement = $this->driver->instance()->prepare($this->sql);
+            $this->queryData = [$this->sql, [], [], 0];
         }
     }
 
@@ -308,9 +234,9 @@ abstract class AbstractConnection
      */
     protected function clear()
     {
-        $this->_sql    = '';
-        $this->_params = [];
-        $this->_values = [];
+        $this->sql    = '';
+        $this->params = [];
+        $this->values = [];
     }
 
     /**
@@ -344,15 +270,15 @@ abstract class AbstractConnection
      * 执行SQL语句
      * @return bool
      */
-    public function execute()
+    public function execute(): bool
     {
         // 构建查询
         $this->build();
         // 执行
-        $microtime           = static::microtime();
-        $success             = $this->_pdoStatement->execute();
-        $time                = round((static::microtime() - $microtime) * 1000, 2);
-        $this->_queryData[3] = $time;
+        $microtime          = static::microtime();
+        $success            = $this->statement->execute();
+        $time               = round((static::microtime() - $microtime) * 1000, 2);
+        $this->queryData[3] = $time;
         // 清扫
         $this->clear();
         // 调度执行事件
@@ -365,10 +291,10 @@ abstract class AbstractConnection
      * 返回结果集
      * @return \PDOStatement
      */
-    public function query()
+    public function query(): \PDOStatement
     {
         $this->execute();
-        return $this->_pdoStatement;
+        return $this->statement;
     }
 
     /**
@@ -380,7 +306,7 @@ abstract class AbstractConnection
     {
         $this->execute();
         $fetchStyle = $fetchStyle ?: $this->getAttributes()[\PDO::ATTR_DEFAULT_FETCH_MODE];
-        return $this->_pdoStatement->fetch($fetchStyle);
+        return $this->statement->fetch($fetchStyle);
     }
 
     /**
@@ -388,11 +314,11 @@ abstract class AbstractConnection
      * @param int $fetchStyle
      * @return array
      */
-    public function queryAll(int $fetchStyle = null)
+    public function queryAll(int $fetchStyle = null): array
     {
         $this->execute();
         $fetchStyle = $fetchStyle ?: $this->getAttributes()[\PDO::ATTR_DEFAULT_FETCH_MODE];
-        return $this->_pdoStatement->fetchAll($fetchStyle);
+        return $this->statement->fetchAll($fetchStyle);
     }
 
     /**
@@ -400,11 +326,11 @@ abstract class AbstractConnection
      * @param int $columnNumber
      * @return array
      */
-    public function queryColumn(int $columnNumber = 0)
+    public function queryColumn(int $columnNumber = 0): array
     {
         $this->execute();
         $column = [];
-        while ($row = $this->_pdoStatement->fetchColumn($columnNumber)) {
+        while ($row = $this->statement->fetchColumn($columnNumber)) {
             $column[] = $row;
         }
         return $column;
@@ -417,36 +343,36 @@ abstract class AbstractConnection
     public function queryScalar()
     {
         $this->execute();
-        return $this->_pdoStatement->fetchColumn();
+        return $this->statement->fetchColumn();
     }
 
     /**
      * 返回最后插入行的ID或序列值
      * @return string
      */
-    public function getLastInsertId()
+    public function getLastInsertId(): string
     {
-        return $this->_pdo->lastInsertId();
+        return $this->driver->instance()->lastInsertId();
     }
 
     /**
      * 返回受上一个 SQL 语句影响的行数
      * @return int
      */
-    public function getRowCount()
+    public function getRowCount(): int
     {
-        return $this->_pdoStatement->rowCount();
+        return $this->statement->rowCount();
     }
 
     /**
      * 返回最后的SQL语句
      * @return string
      */
-    public function getLastSql()
+    public function getLastSql(): string
     {
         $sql    = '';
         $params = $values = [];
-        !empty($this->_queryData) and list($sql, $params, $values) = $this->_queryData;
+        !empty($this->queryData) and list($sql, $params, $values) = $this->queryData;
         if (empty($params) && empty($values)) {
             return $sql;
         }
@@ -466,12 +392,12 @@ abstract class AbstractConnection
      * 获取最后的日志
      * @return array
      */
-    public function getLastLog()
+    public function getLastLog(): array
     {
         $sql    = '';
         $params = $values = [];
         $time   = 0;
-        !empty($this->_queryData) and list($sql, $params, $values, $time) = $this->_queryData;
+        !empty($this->queryData) and list($sql, $params, $values, $time) = $this->queryData;
         return [
             'sql'      => $sql,
             'bindings' => $values ?: $params,
@@ -492,7 +418,7 @@ abstract class AbstractConnection
             }
             return $var;
         }
-        return is_string($var) ? $this->_pdo->quote($var) : $var;
+        return is_string($var) ? $this->driver->instance()->quote($var) : $var;
     }
 
     /**
@@ -612,7 +538,7 @@ abstract class AbstractConnection
      */
     public function beginTransaction()
     {
-        if (!$this->_pdo->beginTransaction()) {
+        if (!$this->driver->instance()->beginTransaction()) {
             throw new \PDOException('Begin transaction failed');
         }
         return $this;
@@ -624,7 +550,7 @@ abstract class AbstractConnection
      */
     public function commit()
     {
-        if (!$this->_pdo->commit()) {
+        if (!$this->driver->instance()->commit()) {
             throw new \PDOException('Commit transaction failed');
         }
     }
@@ -635,7 +561,7 @@ abstract class AbstractConnection
      */
     public function rollback()
     {
-        if (!$this->_pdo->rollBack()) {
+        if (!$this->driver->instance()->rollBack()) {
             throw new \PDOException('Rollback transaction failed');
         }
     }
@@ -645,7 +571,7 @@ abstract class AbstractConnection
      * @param string $table
      * @return QueryBuilder
      */
-    public function table(string $table)
+    public function table(string $table): QueryBuilder
     {
         return QueryBuilder::new($this)->table($table);
     }

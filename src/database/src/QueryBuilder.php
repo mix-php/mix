@@ -64,20 +64,10 @@ class QueryBuilder
     protected $_limit = 0;
 
     /**
-     * 使用静态方法创建实例
-     * @param ConnectionInterface $connection
-     * @return QueryBuilder
-     */
-    public static function new(ConnectionInterface $connection)
-    {
-        return new static($connection);
-    }
-
-    /**
      * QueryBuilder constructor.
-     * @param ConnectionInterface $connection
+     * @param Connection $connection
      */
-    public function __construct(ConnectionInterface $connection)
+    public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }

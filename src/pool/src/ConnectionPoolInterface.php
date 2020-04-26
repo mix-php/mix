@@ -12,27 +12,28 @@ interface ConnectionPoolInterface
 
     /**
      * 获取连接
-     * @return mixed
+     * @return object
      */
-    public function getConnection();
+    public function get();
 
     /**
      * 释放连接
-     * @param $connection
+     * @param object $connection
+     * @return bool
      */
-    public function release($connection);
+    public function release(object $connection);
 
     /**
      * 丢弃连接
-     * @param $connection
+     * @param object $connection
      * @return bool
      */
-    public function discard($connection);
+    public function discard(object $connection);
 
     /**
      * 获取连接池的统计信息
      * @return array
      */
-    public function getStats();
+    public function stats();
 
 }

@@ -12,7 +12,7 @@ use Swoole\Coroutine\Channel;
  * @package Mix\Pool
  * @author liu,jian <coder.keda@gmail.com>
  */
-abstract class AbstractConnectionPool
+abstract class AbstractConnectionPool implements ConnectionPoolInterface
 {
 
     /**
@@ -35,13 +35,6 @@ abstract class AbstractConnectionPool
 
     /**
      * 事件调度器
-     * @deprecated 废弃，改用 dispatcher
-     * @var EventDispatcherInterface
-     */
-    public $eventDispatcher;
-
-    /**
-     * 事件调度器
      * @var EventDispatcherInterface
      */
     public $dispatcher;
@@ -50,13 +43,13 @@ abstract class AbstractConnectionPool
      * 连接队列
      * @var Channel
      */
-    protected $_queue;
+    protected $queue;
 
     /**
      * 活跃连接集合
      * @var array
      */
-    protected $_actives = [];
+    protected $actives = [];
 
     /**
      * AbstractConnectionPool constructor.
@@ -68,7 +61,7 @@ abstract class AbstractConnectionPool
     {
         BeanInjector::inject($this, $config);
         // 创建连接队列
-        $this->_queue = new Channel($this->maxIdle);
+        $this->queue = new Channel($this->maxIdle);
     }
 
     /**
@@ -78,17 +71,17 @@ abstract class AbstractConnectionPool
     protected function createConnection()
     {
         // 连接创建时会挂起当前协程，导致 actives 未增加，因此需先 actives++ 连接创建成功后 actives--
-        $closure             = function () {
+        $closure            = function () {
             $connection       = $this->dialer->dial();
             $connection->pool = $this;
             return $connection;
         };
-        $id                  = spl_object_hash($closure);
-        $this->_actives[$id] = '';
+        $id                 = spl_object_hash($closure);
+        $this->actives[$id] = '';
         try {
             $connection = call_user_func($closure);
         } finally {
-            unset($this->_actives[$id]);
+            unset($this->actives[$id]);
         }
         return $connection;
     }
@@ -97,7 +90,7 @@ abstract class AbstractConnectionPool
      * 获取连接
      * @return object
      */
-    public function getConnection()
+    public function get()
     {
         if ($this->getIdleNumber() > 0 || $this->getTotalNumber() >= $this->maxActive) {
             // 队列有连接，从队列取
@@ -108,8 +101,8 @@ abstract class AbstractConnectionPool
             $connection = $this->createConnection();
         }
         // 登记, 队列中出来的也需要登记，因为有可能是 discard 中创建的新连接
-        $id                  = spl_object_hash($connection);
-        $this->_actives[$id] = ''; // 不可保存外部连接的引用，否则导致外部连接不析构
+        $id                 = spl_object_hash($connection);
+        $this->actives[$id] = ''; // 不可保存外部连接的引用，否则导致外部连接不析构
         // 返回
         return $connection;
     }
@@ -119,15 +112,15 @@ abstract class AbstractConnectionPool
      * @param $connection
      * @return bool
      */
-    public function release($connection)
+    public function release(object $connection)
     {
         $id = spl_object_hash($connection);
         // 判断是否已释放
-        if (!isset($this->_actives[$id])) {
+        if (!isset($this->actives[$id])) {
             return false;
         }
         // 移除登记
-        unset($this->_actives[$id]); // 注意：必须是先减 actives，否则会 maxActive - maxIdle <= 1 时会阻塞
+        unset($this->actives[$id]); // 注意：必须是先减 actives，否则会 maxActive - maxIdle <= 1 时会阻塞
         // 入列
         return $this->push($connection);
     }
@@ -137,15 +130,15 @@ abstract class AbstractConnectionPool
      * @param $connection
      * @return bool
      */
-    public function discard($connection)
+    public function discard(object $connection)
     {
         $id = spl_object_hash($connection);
         // 判断是否已丢弃
-        if (!isset($this->_actives[$id])) {
+        if (!isset($this->actives[$id])) {
             return false;
         }
         // 移除登记
-        unset($this->_actives[$id]); // 注意：必须是先减 actives，否则会 maxActive - maxIdle <= 1 时会阻塞
+        unset($this->actives[$id]); // 注意：必须是先减 actives，否则会 maxActive - maxIdle <= 1 时会阻塞
         // 入列一个新连接替代丢弃的连接
         $result = $this->push($this->createConnection());
         // 触发事件
@@ -158,7 +151,7 @@ abstract class AbstractConnectionPool
      * 获取连接池的统计信息
      * @return array
      */
-    public function getStats()
+    public function stats()
     {
         return [
             'total'  => $this->getTotalNumber(),
@@ -175,7 +168,7 @@ abstract class AbstractConnectionPool
     protected function push($connection)
     {
         if ($this->getIdleNumber() < $this->maxIdle) {
-            return $this->_queue->push($connection);
+            return $this->queue->push($connection);
         }
         return false;
     }
@@ -186,7 +179,7 @@ abstract class AbstractConnectionPool
      */
     protected function pop()
     {
-        return $this->_queue->pop();
+        return $this->queue->pop();
     }
 
     /**
@@ -195,7 +188,7 @@ abstract class AbstractConnectionPool
      */
     protected function getIdleNumber()
     {
-        $count = $this->_queue->stats()['queue_num'];
+        $count = $this->queue->stats()['queue_num'];
         return $count < 0 ? 0 : $count;
     }
 
@@ -205,7 +198,7 @@ abstract class AbstractConnectionPool
      */
     protected function getActiveNumber()
     {
-        return count($this->_actives);
+        return count($this->actives);
     }
 
     /**
@@ -219,16 +212,14 @@ abstract class AbstractConnectionPool
 
     /**
      * Dispatch
-     * 保留老字段兼容性
      * @param object $event
      */
     protected function dispatch(object $event)
     {
-        if (!$this->dispatcher && !$this->eventDispatcher) {
+        if (!$this->dispatcher) {
             return;
         }
         $this->dispatcher and $this->dispatcher->dispatch($event);
-        $this->eventDispatcher and $this->eventDispatcher->dispatch($event);
     }
 
 }

@@ -88,7 +88,7 @@ class BeanInjector
                 $values = [$value];
             }
             foreach ($values as $val) {
-                if (!($val instanceof $propertyClass)) {
+                if (isset($val) && !($val instanceof $propertyClass)) {
                     throw new InjectException("The type of the imported property does not match, class: {$class}, property: {$name}, @var: {$propertyClass}");
                 }
             }
