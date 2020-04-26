@@ -14,7 +14,6 @@ final class DialerTest extends TestCase
             $conn   = $db->prepare('select * from `users` limit 1');
             $result = $conn->queryAll();
             $sql    = $conn->getLastSql();
-            var_dump($sql);
             $_this->assertEquals(count($result), 1);
         };
         run($func);

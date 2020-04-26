@@ -23,7 +23,6 @@ final class BatchInsertTest extends TestCase
                 ],
             ])->execute();
             $sql    = $db->getLastSql();
-            var_dump($sql);
             $_this->assertContains("('test3', 3), ('test4', 4)", $sql);
         };
         run($func);
