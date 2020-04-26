@@ -3,7 +3,6 @@
 namespace Mix\Redis\Pool;
 
 use Mix\Redis\Connection;
-use Mix\Pool\ConnectionPoolInterface;
 use Mix\Pool\AbstractConnectionPool;
 
 /**
@@ -11,16 +10,16 @@ use Mix\Pool\AbstractConnectionPool;
  * @package Mix\Redis\Pool
  * @author liu,jian <coder.keda@gmail.com>
  */
-class ConnectionPool extends AbstractConnectionPool implements ConnectionPoolInterface
+class ConnectionPool extends AbstractConnectionPool
 {
 
     /**
      * 获取连接
      * @return Connection
      */
-    public function getConnection()
+    public function get()
     {
-        return parent::getConnection();
+        return parent::get();
     }
 
 }

@@ -7,13 +7,10 @@ namespace Mix\Redis;
  * @package Mix\Redis
  * @author liu,jian <coder.keda@gmail.com>
  *
- * method array|bool sScan($key, $iterator, $pattern = '', $count = 0)
- * method array|bool scan(&$iterator, $pattern = null, $count = 0)
- * method array|bool zScan($key, $iterator, $pattern = '', $count = 0)
- * method array hScan($key, $iterator, $pattern = '', $count = 0)
- * method close()
- * method discard() 被覆盖为其他功能，需使用 __call 调用
- *
+ * @method array|bool sScan($key, &$iterator, $pattern = '', $count = 0)
+ * @method array|bool scan(&$iterator, $pattern = null, $count = 0)
+ * @method array|bool zScan($key, &$iterator, $pattern = '', $count = 0)
+ * @method array hScan($key, &$iterator, $pattern = '', $count = 0)
  * @method bool psetex($key, $ttl, $value)
  * @method mixed client($command, $arg = '')
  * @method mixed slowlog($command)
@@ -30,6 +27,7 @@ namespace Mix\Redis;
  * @method int delete($key1, $key2 = null, $key3 = null)
  * @method multi($mode = \Redis::MULTI)
  * @method array exec()
+ * @method discard()
  * @method watch($key)
  * @method unwatch()
  * @method subscribe(array $channels, $callback)
@@ -184,76 +182,4 @@ namespace Mix\Redis;
  */
 interface ConnectionInterface
 {
-
-    /**
-     * 连接
-     * @return bool
-     */
-    public function connect();
-
-    /**
-     * 关闭连接
-     * @return bool
-     */
-    public function close();
-
-    /**
-     * 执行命令
-     * @param $name
-     * @param $arguments
-     * @return mixed
-     */
-    public function __call($command, $arguments);
-
-    /**
-     * 遍历key
-     * @param $iterator
-     * @param string $pattern
-     * @param int $count
-     * @return array|bool
-     */
-    public function scan(&$iterator, $pattern = '', $count = 0);
-
-    /**
-     * 遍历set key
-     * @param $key
-     * @param $iterator
-     * @param string $pattern
-     * @param int $count
-     * @return array|bool
-     */
-    public function sScan($key, &$iterator, $pattern = '', $count = 0);
-
-    /**
-     * 遍历zset key
-     * @param $key
-     * @param $iterator
-     * @param string $pattern
-     * @param int $count
-     * @return array|bool
-     */
-    public function zScan($key, &$iterator, $pattern = '', $count = 0);
-
-    /**
-     * 遍历hash key
-     * @param $key
-     * @param $iterator
-     * @param string $pattern
-     * @param int $count
-     * @return array
-     */
-    public function hScan($key, &$iterator, $pattern = '', $count = 0);
-
-    /**
-     * 释放连接
-     * @return bool
-     */
-    public function release();
-
-    /**
-     * 丢弃连接
-     * @return bool
-     */
-    public function discard();
-
 }

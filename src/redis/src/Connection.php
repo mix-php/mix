@@ -9,29 +9,74 @@ use Mix\Pool\ConnectionTrait;
  * @package Mix\Redis
  * @author liu,jian <coder.keda@gmail.com>
  */
-class Connection extends \Mix\Redis\Persistent\Connection implements ConnectionInterface
+class Connection extends AbstractConnection
 {
 
     use ConnectionTrait;
+    use ReferenceTrait;
+
+    /**
+     * @var string
+     */
+    protected $lastCommand = '';
 
     /**
      * 执行命令
-     * 当出现未知异常时，主动丢弃，使用户无法归还到池
      * @param $name
      * @param array $arguments
      * @return mixed
+     * @throws \RedisException
      * @throws \Throwable
      */
     public function __call($name, $arguments = [])
     {
+        $this->lastCommand = $name;
         try {
+            // 执行父类命令
             return parent::__call($name, $arguments);
         } catch (\Throwable $e) {
-            // 丢弃连接
-            $this->discard();
-            // 抛出异常
-            throw $e;
+            if (static::isDisconnectException($e) && !in_array(strtolower($this->lastCommand), ['multi', 'exec'])) {
+                // 断开连接异常处理
+                $this->reconnect();
+                // 重新执行命令
+                return $this->__call($name, $arguments);
+            } else {
+                // 丢弃连接
+                $this->__discard($this->driver);
+                // 抛出其他异常
+                throw $e;
+            }
         }
+    }
+
+    /**
+     * 判断是否为断开连接异常
+     * @param \Throwable $e
+     * @return bool
+     */
+    protected static function isDisconnectException(\Throwable $e)
+    {
+        $disconnectMessages = [
+            'failed with errno',
+            'connection lost',
+        ];
+        $errorMessage       = $e->getMessage();
+        foreach ($disconnectMessages as $message) {
+            if (false !== stripos($errorMessage, $message)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 重新连接
+     * @throws \RedisException
+     */
+    protected function reconnect()
+    {
+        $this->close();
+        $this->connect();
     }
 
     /**
@@ -39,8 +84,11 @@ class Connection extends \Mix\Redis\Persistent\Connection implements ConnectionI
      */
     public function __destruct()
     {
-        // 丢弃连接
-        $this->discard();
+        if (in_array(strtolower($this->lastCommand), ['multi', 'exec'])) {
+            $this->__discard($this->driver);
+            return;
+        }
+        $this->__release($this->driver);
     }
 
 }
