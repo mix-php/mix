@@ -3,8 +3,7 @@
 namespace Mix\Cache;
 
 use Mix\Bean\BeanInjector;
-use Mix\Pool\ConnectionPoolInterface;
-use Mix\Redis\ConnectionInterface;
+use Mix\Redis\Redis;
 
 /**
  * Class RedisHandler
@@ -16,15 +15,9 @@ class RedisHandler implements CacheHandlerInterface
 
     /**
      * 连接池
-     * @var ConnectionPoolInterface
+     * @var Redis
      */
-    public $pool;
-
-    /**
-     * 连接
-     * @var ConnectionInterface
-     */
-    public $connection;
+    public $redis;
 
     /**
      * Key前缀
@@ -42,28 +35,6 @@ class RedisHandler implements CacheHandlerInterface
     }
 
     /**
-     * 获取连接
-     * @return ConnectionInterface
-     */
-    protected function getConnection()
-    {
-        return $this->pool ? $this->pool->getConnection() : $this->connection;
-    }
-
-    /**
-     * 释放连接
-     * @param $connection
-     * @return bool
-     */
-    protected function release($connection)
-    {
-        if (!method_exists($connection, 'release')) {
-            return false;
-        }
-        return call_user_func([$connection, 'release']);
-    }
-
-    /**
      * 获取缓存
      * @param $key
      * @param null $default
@@ -71,10 +42,8 @@ class RedisHandler implements CacheHandlerInterface
      */
     public function get($key, $default = null)
     {
-        $cacheKey   = $this->keyPrefix . $key;
-        $connection = $this->getConnection();
-        $value      = $connection->get($cacheKey);
-        $this->release($connection);
+        $cacheKey = $this->keyPrefix . $key;
+        $value    = $this->redis->get($cacheKey);
         if (empty($value)) {
             return $default;
         }
@@ -94,14 +63,12 @@ class RedisHandler implements CacheHandlerInterface
      */
     public function set($key, $value, $ttl = null)
     {
-        $cacheKey   = $this->keyPrefix . $key;
-        $connection = $this->getConnection();
+        $cacheKey = $this->keyPrefix . $key;
         if (is_null($ttl)) {
-            $success = $connection->set($cacheKey, serialize($value));
+            $success = $this->redis->set($cacheKey, serialize($value));
         } else {
-            $success = $connection->setex($cacheKey, $ttl, serialize($value));
+            $success = $this->redis->setex($cacheKey, $ttl, serialize($value));
         }
-        $this->release($connection);
         return $success ? true : false;
     }
 
@@ -112,10 +79,8 @@ class RedisHandler implements CacheHandlerInterface
      */
     public function delete($key)
     {
-        $cacheKey   = $this->keyPrefix . $key;
-        $connection = $this->getConnection();
-        $success    = $connection->del($cacheKey);
-        $this->release($connection);
+        $cacheKey = $this->keyPrefix . $key;
+        $success  = $this->redis->del($cacheKey);
         return $success ? true : false;
     }
 
@@ -125,18 +90,16 @@ class RedisHandler implements CacheHandlerInterface
      */
     public function clear()
     {
-        $iterator   = null;
-        $connection = $this->getConnection();
+        $iterator = null;
         while (true) {
-            $keys = $connection->scan($iterator, "{$this->keyPrefix}*");
+            $keys = $this->redis->scan($iterator, "{$this->keyPrefix}*");
             if ($keys === false) {
                 return true;
             }
             foreach ($keys as $key) {
-                $connection->del($key);
+                $this->redis->del($key);
             }
         }
-        $this->release($connection);
         return true;
     }
 
@@ -147,10 +110,8 @@ class RedisHandler implements CacheHandlerInterface
      */
     public function has($key)
     {
-        $cacheKey   = $this->keyPrefix . $key;
-        $connection = $this->getConnection();
-        $success    = $connection->exists($cacheKey);
-        $this->release($connection);
+        $cacheKey = $this->keyPrefix . $key;
+        $success  = $this->redis->exists($cacheKey);
         return $success ? true : false;
     }
 

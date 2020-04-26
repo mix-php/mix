@@ -141,14 +141,14 @@ class FileHandler implements CacheHandlerInterface
             if (($file != '.') && ($file != '..')) {
                 $full = $dir . '/' . $file;
                 if (is_dir($full)) {
-                    self::deleteFolder($full);
+                    static::deleteFolder($full);
                 } else {
-                    unlink($full);
+                    @unlink($full);
                 }
             }
         }
         closedir($dh);
-        rmdir($dir);
+        @rmdir($dir);
         return true;
     }
 
