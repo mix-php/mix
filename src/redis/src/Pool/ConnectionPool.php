@@ -2,7 +2,7 @@
 
 namespace Mix\Redis\Pool;
 
-use Mix\Redis\Connection;
+use Mix\Redis\Driver;
 use Mix\Pool\AbstractConnectionPool;
 
 /**
@@ -14,12 +14,12 @@ class ConnectionPool extends AbstractConnectionPool
 {
 
     /**
-     * 获取连接
-     * @return Connection
+     * 借用连接
+     * @return Driver
      */
-    public function get()
+    public function borrow()
     {
-        return parent::get();
+        return parent::borrow();
     }
 
 }

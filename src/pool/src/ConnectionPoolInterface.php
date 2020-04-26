@@ -11,17 +11,17 @@ interface ConnectionPoolInterface
 {
 
     /**
-     * 获取连接
+     * 借用连接
      * @return object
      */
-    public function get();
+    public function borrow();
 
     /**
-     * 释放连接
+     * 归还连接
      * @param object $connection
      * @return bool
      */
-    public function release(object $connection);
+    public function return(object $connection);
 
     /**
      * 丢弃连接

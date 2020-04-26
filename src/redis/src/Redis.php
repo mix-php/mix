@@ -114,12 +114,12 @@ class Redis implements ConnectionInterface
     }
 
     /**
-     * Open connection
+     * Borrow connection
      * @return Connection
      */
-    public function open(): Connection
+    public function borrow(): Connection
     {
-        $driver           = $this->pool->get();
+        $driver           = $this->pool->borrow();
         $conn             = new Connection($driver);
         $conn->dispatcher = $this->dispatcher;
         return $conn;
@@ -132,7 +132,7 @@ class Redis implements ConnectionInterface
      */
     public function multi($mode = \Redis::MULTI): Connection
     {
-        $conn = $this->open();
+        $conn = $this->borrow();
         $conn->__call(__FUNCTION__, [$mode]);
         return $conn;
     }
@@ -157,7 +157,7 @@ class Redis implements ConnectionInterface
      */
     public function __call($name, $arguments)
     {
-        return $this->open()->__call($name, $arguments);
+        return $this->borrow()->__call($name, $arguments);
     }
 
 }

@@ -87,10 +87,10 @@ abstract class AbstractConnectionPool implements ConnectionPoolInterface
     }
 
     /**
-     * 获取连接
+     * 借用连接
      * @return object
      */
-    public function get()
+    public function borrow()
     {
         if ($this->getIdleNumber() > 0 || $this->getTotalNumber() >= $this->maxActive) {
             // 队列有连接，从队列取
@@ -108,11 +108,11 @@ abstract class AbstractConnectionPool implements ConnectionPoolInterface
     }
 
     /**
-     * 释放连接
+     * 归还连接
      * @param $connection
      * @return bool
      */
-    public function release(object $connection)
+    public function return(object $connection)
     {
         $id = spl_object_hash($connection);
         // 判断是否已释放

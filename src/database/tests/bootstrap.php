@@ -10,15 +10,12 @@ const DATABASE_PASSWORD = '123456';
 function db()
 {
     $db = new \Mix\Database\Database([
-        // 数据源格式
         'dsn'      => DATABASE_DSN,
-        // 数据库用户名
         'username' => DATABASE_USERNAME,
-        // 数据库密码
         'password' => DATABASE_PASSWORD,
     ]);
     $db->init();
-    return $db->open();
+    return $db->borrow();
 }
 
 function run($func)

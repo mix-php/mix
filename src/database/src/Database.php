@@ -89,12 +89,12 @@ class Database
     }
 
     /**
-     * Open connection
+     * Borrow connection
      * @return Connection
      */
-    public function open(): Connection
+    public function borrow(): Connection
     {
-        $driver           = $this->pool->get();
+        $driver           = $this->pool->borrow();
         $conn             = new Connection($driver);
         $conn->dispatcher = $this->dispatcher;
         return $conn;
@@ -107,7 +107,7 @@ class Database
      */
     public function prepare($sql): Connection
     {
-        return $this->open()->prepare($sql);
+        return $this->borrow()->prepare($sql);
     }
 
     /**
@@ -118,7 +118,7 @@ class Database
      */
     public function insert(string $table, array $data): Connection
     {
-        return $this->open()->insert($table, $data);
+        return $this->borrow()->insert($table, $data);
     }
 
     /**
@@ -129,7 +129,7 @@ class Database
      */
     public function batchInsert(string $table, array $data): Connection
     {
-        return $this->open()->batchInsert($table, $data);
+        return $this->borrow()->batchInsert($table, $data);
     }
 
     /**
@@ -141,7 +141,7 @@ class Database
      */
     public function update(string $table, array $data, array $where): Connection
     {
-        return $this->open()->update($table, $data, $where);
+        return $this->borrow()->update($table, $data, $where);
     }
 
     /**
@@ -152,7 +152,7 @@ class Database
      */
     public function delete(string $table, array $where): Connection
     {
-        return $this->open()->delete($table, $where);
+        return $this->borrow()->delete($table, $where);
     }
 
     /**
@@ -162,7 +162,7 @@ class Database
      */
     public function transaction(\Closure $closure)
     {
-        return $this->open()->transaction($closure);
+        return $this->borrow()->transaction($closure);
     }
 
     /**
@@ -171,7 +171,7 @@ class Database
      */
     public function beginTransaction(): Connection
     {
-        return $this->open()->beginTransaction();
+        return $this->borrow()->beginTransaction();
     }
 
     /**
@@ -181,7 +181,7 @@ class Database
      */
     public function table(string $table): QueryBuilder
     {
-        return $this->open()->table($table);
+        return $this->borrow()->table($table);
     }
 
 }
