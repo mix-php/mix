@@ -155,7 +155,7 @@ class Connection extends AbstractConnection
             $this->__discard($this->driver);
             return;
         }
-        return $this->__release($this->driver);
+        return $this->__return($this->driver);
     }
 
 }

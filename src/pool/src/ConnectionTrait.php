@@ -29,11 +29,11 @@ trait ConnectionTrait
     }
 
     /**
-     * 释放连接
+     * 归还连接
      * @param object $connection
      * @return bool
      */
-    public function __release(object $connection)
+    public function __return(object $connection)
     {
         if (isset($this->pool)) {
             return $this->pool->release($connection);

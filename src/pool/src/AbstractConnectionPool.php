@@ -12,7 +12,7 @@ use Swoole\Coroutine\Channel;
  * @package Mix\Pool
  * @author liu,jian <coder.keda@gmail.com>
  */
-abstract class AbstractConnectionPool implements ConnectionPoolInterface
+abstract class AbstractConnectionPool
 {
 
     /**
