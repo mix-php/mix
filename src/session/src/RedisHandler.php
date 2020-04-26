@@ -2,7 +2,6 @@
 
 namespace Mix\Session;
 
-use Mix\Bean\BeanInjector;
 use Mix\Redis\Redis;
 
 /**
@@ -26,48 +25,14 @@ class RedisHandler implements SessionHandlerInterface
     public $keyPrefix = 'SESSION:';
 
     /**
-     * session_id
-     * @var string
+     * RedisHandler constructor.
+     * @param Redis $redis
+     * @param string $keyPrefix
      */
-    protected $sessionId = '';
-
-    /**
-     * Authorization constructor.
-     * @param array $config
-     */
-    public function __construct(array $config = [])
+    public function __construct(Redis $redis, string $keyPrefix = 'SESSION:')
     {
-        BeanInjector::inject($this, $config);
-    }
-    
-    /**
-     * 设置session_id
-     * @param string $sessionId
-     * @return static
-     */
-    public function withSessionId(string $sessionId)
-    {
-        $this->sessionId = $sessionId;
-        return $this;
-    }
-
-    /**
-     * 获取session_id
-     * @return string
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
-     * 获取保存的key
-     * @param string $sessionId
-     * @return string
-     */
-    public function getSaveKey(string $sessionId)
-    {
-        return $this->keyPrefix . $sessionId;
+        $this->redis     = $redis;
+        $this->keyPrefix = $keyPrefix;
     }
 
     /**
@@ -84,49 +49,53 @@ class RedisHandler implements SessionHandlerInterface
 
     /**
      * 更新生存时间
+     * @param string $sessionId
      * @param int $maxLifetime
      * @return bool
      */
-    public function expire(int $maxLifetime)
+    public function expire(string $sessionId, int $maxLifetime)
     {
-        $key     = $this->getSaveKey($this->getSessionId());
+        $key     = $this->getSaveKey($sessionId);
         $success = $this->redis->expire($key, $maxLifetime);
         return $success ? true : false;
     }
 
     /**
      * 赋值
+     * @param string $sessionId
      * @param string $name
      * @param $value
      * @return bool
      */
-    public function set(string $name, $value)
+    public function set(string $sessionId, string $name, $value)
     {
-        $key     = $this->getSaveKey($this->getSessionId());
+        $key     = $this->getSaveKey($sessionId);
         $success = $this->redis->hMset($key, [$name => serialize($value)]);
         return $success ? true : false;
     }
 
     /**
      * 取值
+     * @param string $sessionId
      * @param string $name
      * @param null $default
      * @return mixed
      */
-    public function get(string $name, $default = null)
+    public function get(string $sessionId, string $name, $default = null)
     {
-        $key   = $this->getSaveKey($this->getSessionId());
+        $key   = $this->getSaveKey($sessionId);
         $value = $this->redis->hGet($key, $name);
         return $value === false ? $default : unserialize($value);
     }
 
     /**
      * 取所有值
+     * @param string $sessionId
      * @return array
      */
-    public function getAttributes()
+    public function all(string $sessionId)
     {
-        $key    = $this->getSaveKey($this->getSessionId());
+        $key    = $this->getSaveKey($sessionId);
         $result = $this->redis->hGetAll($key);
         foreach ($result as $name => $item) {
             $result[$name] = unserialize($item);
@@ -136,37 +105,50 @@ class RedisHandler implements SessionHandlerInterface
 
     /**
      * 删除
+     * @param string $sessionId
      * @param string $name
      * @return bool
      */
-    public function delete(string $name)
+    public function delete(string $sessionId, string $name)
     {
-        $key     = $this->getSaveKey($this->getSessionId());
+        $key     = $this->getSaveKey($sessionId);
         $success = $this->redis->hDel($key, $name);
         return $success ? true : false;
     }
 
     /**
      * 清除session
+     * @param string $sessionId
      * @return bool
      */
-    public function clear()
+    public function clear(string $sessionId)
     {
-        $key     = $this->getSaveKey($this->getSessionId());
+        $key     = $this->getSaveKey($sessionId);
         $success = $this->redis->del($key);
         return $success ? true : false;
     }
 
     /**
      * 判断是否存在
+     * @param string $sessionId
      * @param string $name
      * @return bool
      */
-    public function has(string $name)
+    public function has(string $sessionId, string $name)
     {
-        $key   = $this->getSaveKey($this->getSessionId());
+        $key   = $this->getSaveKey($sessionId);
         $exist = $this->redis->hExists($key, $name);
         return $exist ? true : false;
+    }
+
+    /**
+     * 获取保存的key
+     * @param string $sessionId
+     * @return string
+     */
+    protected function getSaveKey(string $sessionId)
+    {
+        return $this->keyPrefix . $sessionId;
     }
 
 }

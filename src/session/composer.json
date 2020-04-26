@@ -17,7 +17,6 @@
   ],
   "require": {
     "php": ">=7.0.0",
-    "mix/bean": "~2.1.0",
     "mix/http-message": "~2.1.0",
     "mix/redis": "~2.1.0"
   },

@@ -2,7 +2,6 @@
 
 namespace Mix\Session;
 
-use Mix\Bean\BeanInjector;
 use Mix\Http\Message\Factory\CookieFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
@@ -16,16 +15,6 @@ class Session
 {
 
     /**
-     * @var ServerRequest
-     */
-    public $request;
-
-    /**
-     * @var Response
-     */
-    public $response;
-
-    /**
      * 处理者
      * @var SessionHandlerInterface
      */
@@ -36,12 +25,6 @@ class Session
      * @var string
      */
     public $name = 'session_id';
-
-    /**
-     * session_id
-     * @var string
-     */
-    protected $id = '';
 
     /**
      * session_id长度
@@ -86,32 +69,51 @@ class Session
     public $cookieHttpOnly = false;
 
     /**
-     * Authorization constructor.
-     * @param array $config
+     * session_id
+     * @var string
      */
-    public function __construct(array $config = [])
+    protected $id = '';
+
+    /**
+     * @var ServerRequest
+     */
+    protected $request;
+
+    /**
+     * @var Response
+     */
+    protected $response;
+
+    /**
+     * Session constructor.
+     * @param SessionHandlerInterface $handler
+     */
+    public function __construct(SessionHandlerInterface $handler)
     {
-        BeanInjector::inject($this, $config);
+        $this->handler = $handler;
     }
 
     /**
      * 启动新会话或者重用现有会话
+     * @param ServerRequest $request
+     * @param Response $response
      */
-    public function start()
+    public function start(ServerRequest $request, Response $response)
     {
-        $sessionId = $this->request->getAttribute($this->name);
+        $this->request  = $request;
+        $this->response = $response;
+        $sessionId      = $this->request->getAttribute($this->name);
         if (is_null($sessionId)) {
             $sessionId = $this->createId();
         }
         $this->id = $sessionId;
-        $this->handler->withSessionId($sessionId);
     }
 
     /**
      * 创建session_id
      * @return string
      */
-    public function createId()
+    protected function createId()
     {
         do {
             $sessionId = static::randomAlphanumeric($this->idLength);
@@ -144,9 +146,9 @@ class Session
     public function set(string $name, $value)
     {
         // 赋值
-        $this->handler->set($name, $value);
+        $this->handler->set($this->getId(), $name, $value);
         // 更新生存时间
-        $this->handler->expire($this->maxLifetime);
+        $this->handler->expire($this->getId(), $this->maxLifetime);
         // 设置/更新cookie
         $factory = new CookieFactory();
         $cookie  = $factory->createCookie($this->name, $this->id, time() + $this->maxLifetime);
@@ -177,16 +179,16 @@ class Session
             ->withHttpOnly($this->cookieHttpOnly);
         $this->response->withCookie($cookie);
         // 返回值
-        return $this->handler->get($name, $default);
+        return $this->handler->get($this->getId(), $name, $default);
     }
 
     /**
      * 取所有值
      * @return array
      */
-    public function getAttributes()
+    public function all()
     {
-        return $this->handler->getAttributes();
+        return $this->handler->all($this->getId());
     }
 
     /**
@@ -196,7 +198,7 @@ class Session
      */
     public function delete(string $name)
     {
-        return $this->handler->delete($name);
+        return $this->handler->delete($this->getId(), $name);
     }
 
     /**
@@ -205,7 +207,7 @@ class Session
      */
     public function clear()
     {
-        return $this->handler->clear();
+        return $this->handler->clear($this->getId());
     }
 
     /**
@@ -215,7 +217,7 @@ class Session
      */
     public function has(string $name)
     {
-        return $this->handler->has($name);
+        return $this->handler->has($this->getId(), $name);
     }
 
     /**
