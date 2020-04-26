@@ -74,6 +74,15 @@ class Driver
     }
 
     /**
+     * Get options
+     * @return array
+     */
+    public function options()
+    {
+        return $this->options + $this->defaultOptions;
+    }
+
+    /**
      * Connect
      * @throws PDOException
      */

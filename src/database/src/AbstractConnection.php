@@ -13,7 +13,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
  * @package Mix\Database
  * @author liu,jian <coder.keda@gmail.com>
  */
-abstract class AbstractConnection implements ConnectionInterface
+abstract class AbstractConnection
 {
 
     /**
@@ -103,10 +103,10 @@ abstract class AbstractConnection implements ConnectionInterface
 
     /**
      * 准备执行语句
-     * @param string $sql
+     * @param string|array $sql
      * @return $this
      */
-    public function prepare(string $sql)
+    public function prepare($sql)
     {
         // 清扫数据
         $this->sql    = '';
@@ -244,7 +244,7 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     protected function dispatchEvent()
     {
-        if (!$this->dispatcher && !$this->eventDispatcher) {
+        if (!$this->dispatcher) {
             return;
         }
         $log             = $this->getLastLog();
@@ -253,7 +253,6 @@ abstract class AbstractConnection implements ConnectionInterface
         $event->bindings = $log['bindings'];
         $event->time     = $log['time'];
         $this->dispatcher and $this->dispatcher->dispatch($event);
-        $this->eventDispatcher and $this->eventDispatcher->dispatch($event);
     }
 
     /**
@@ -317,7 +316,7 @@ abstract class AbstractConnection implements ConnectionInterface
     public function queryAll(int $fetchStyle = null): array
     {
         $this->execute();
-        $fetchStyle = $fetchStyle ?: $this->getAttributes()[\PDO::ATTR_DEFAULT_FETCH_MODE];
+        $fetchStyle = $fetchStyle ?: $this->driver->options()[\PDO::ATTR_DEFAULT_FETCH_MODE];
         return $this->statement->fetchAll($fetchStyle);
     }
 
@@ -573,7 +572,7 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function table(string $table): QueryBuilder
     {
-        return QueryBuilder::new($this)->table($table);
+        return (new QueryBuilder($this))->table($table);
     }
 
 }

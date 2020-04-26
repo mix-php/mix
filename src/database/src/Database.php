@@ -78,10 +78,10 @@ class Database
             'maxIdle'    => $this->maxIdle,
             'maxActive'  => $this->maxActive,
             'dialer'     => new Dialer([
-                'dsn'        => $this->dsn,
-                'username'   => $this->username,
-                'password'   => $this->password,
-                'options'    => $this->options,
+                'dsn'      => $this->dsn,
+                'username' => $this->username,
+                'password' => $this->password,
+                'options'  => $this->options,
             ]),
             'dispatcher' => $this->dispatcher,
         ]);
@@ -89,10 +89,10 @@ class Database
     }
 
     /**
-     * Get connection
+     * Open connection
      * @return Connection
      */
-    protected function getConnection(): Connection
+    public function open(): Connection
     {
         $driver           = $this->pool->get();
         $conn             = new Connection($driver);
@@ -102,12 +102,12 @@ class Database
 
     /**
      * 准备执行语句
-     * @param string $sql
+     * @param string|array $sql
      * @return Connection
      */
-    public function prepare(string $sql): Connection
+    public function prepare($sql): Connection
     {
-        return $this->getConnection()->prepare($sql);
+        return $this->open()->prepare($sql);
     }
 
     /**
@@ -118,7 +118,7 @@ class Database
      */
     public function insert(string $table, array $data): Connection
     {
-        return $this->getConnection()->insert($table, $data);
+        return $this->open()->insert($table, $data);
     }
 
     /**
@@ -129,7 +129,7 @@ class Database
      */
     public function batchInsert(string $table, array $data): Connection
     {
-        return $this->getConnection()->batchInsert($table, $data);
+        return $this->open()->batchInsert($table, $data);
     }
 
     /**
@@ -141,7 +141,7 @@ class Database
      */
     public function update(string $table, array $data, array $where): Connection
     {
-        return $this->getConnection()->update($table, $data, $where);
+        return $this->open()->update($table, $data, $where);
     }
 
     /**
@@ -152,7 +152,7 @@ class Database
      */
     public function delete(string $table, array $where): Connection
     {
-        return $this->getConnection()->delete($table, $where);
+        return $this->open()->delete($table, $where);
     }
 
     /**
@@ -162,7 +162,7 @@ class Database
      */
     public function transaction(\Closure $closure)
     {
-        return $this->getConnection()->transaction($closure);
+        return $this->open()->transaction($closure);
     }
 
     /**
@@ -171,7 +171,7 @@ class Database
      */
     public function beginTransaction(): Connection
     {
-        return $this->getConnection()->beginTransaction($sql);
+        return $this->open()->beginTransaction();
     }
 
     /**
@@ -181,7 +181,7 @@ class Database
      */
     public function table(string $table): QueryBuilder
     {
-        return (new QueryBuilder($this->getConnection()))->table($table);
+        return $this->open()->table($table);
     }
 
 }
