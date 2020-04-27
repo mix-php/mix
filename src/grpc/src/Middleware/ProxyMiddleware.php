@@ -7,16 +7,17 @@ use Mix\Grpc\Helper\GrpcHelper;
 use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
+use Mix\Http\Message\Stream\ContentStream;
 use Mix\Http\Server\Middleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
- * Class JsonHandleMiddleware
+ * Class ProxyMiddleware
  * @package Mix\Grpc\Middleware
  */
-class JsonHandleMiddleware implements MiddlewareInterface
+class ProxyMiddleware implements MiddlewareInterface
 {
 
     /**
@@ -107,14 +108,31 @@ class JsonHandleMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        // 支持 go-micro web or api 的 /rpc 代理
-        // micro web headers: micro-endpoint micro-id micro-method micro-service
-        // micro api headers: micro-endpoint micro-from-service micro-id micro-method micro-service
-        $contentType  = $request->getHeaderLine('Content-Type');
-        $isJson       = strpos($contentType, 'application/json') === 0 ? true : false;
+        /** 支持 go-micro web or api 的 /rpc 代理 **/
+        $path        = $request->getUri()->getPath();
+        $contentType = $request->getHeaderLine('Content-Type');
+
+        // v1
+        // uri: /
+        // web headers: micro-endpoint micro-id micro-method micro-service
+        // api headers: micro-endpoint micro-from-service micro-id micro-method micro-service
+        $isV1         = strpos($contentType, 'application/json') === 0 && $path == '/' ? true : false;
         $microService = $request->getHeaderLine('micro-service');
         $microMethod  = $request->getHeaderLine('micro-method');
-        if ($isJson) {
+
+        // v2
+        // uri: /php.micro.grpc.greeter.Say/Hello
+        $isV2         = strpos($contentType, 'application/grpc+json') === 0 && $path !== '/' ? true : false;
+        $slice        = array_filter(explode('/', $path));
+        $service      = explode('.', array_shift($slice));
+        $method[]     = array_pop($service);
+        $method[]     = array_pop($slice);
+        $microService = implode('.', $service);
+        $microMethod  = implode('.', $method);
+        $request->withBody(new ContentStream(GrpcHelper::unpack($request->getBody()->getContents())));
+
+        // handle
+        if ($isV1 || $isV2) {
             try {
                 $protobuf = static::jsonToProtobuf($request->getBody()->getContents(), $microService, $microMethod);
             } catch (\ReflectionException $ex) {
@@ -131,10 +149,17 @@ class JsonHandleMiddleware implements MiddlewareInterface
 
             $protobuf = $response->getBody()->getContents();
             $json     = static::protobufToJson(GrpcHelper::unpack($protobuf), $microService, $microMethod);
+            if ($isV2) {
+                $json = GrpcHelper::pack($json);
+            }
 
             $stream = (new StreamFactory())->createStream($json);
             $response->withBody($stream);
-            $response->withHeader('Content-Type', 'application/json');
+            if ($isV1) {
+                $response->withHeader('Content-Type', 'application/json');
+            } else {
+                $response->withHeader('Content-Type', 'application/grpc+json');
+            }
 
             return $response;
         }

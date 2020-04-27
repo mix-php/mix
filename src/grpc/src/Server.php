@@ -6,7 +6,7 @@ use Mix\Context\Context;
 use Mix\Grpc\Event\ProcessedEvent;
 use Mix\Grpc\Exception\NotFoundException;
 use Mix\Grpc\Helper\GrpcHelper;
-use Mix\Grpc\Middleware\JsonHandleMiddleware;
+use Mix\Grpc\Middleware\ProxyMiddleware;
 use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Request;
 use Mix\Http\Message\Response;
@@ -246,7 +246,7 @@ class Server implements \Mix\Http\Server\HandlerInterface
             return $this->call($request, $response);
         };
         $middleware = $this->middleware;
-        array_unshift($middleware, JsonHandleMiddleware::class);
+        array_unshift($middleware, ProxyMiddleware::class);
         $dispatcher = new MiddlewareDispatcher($middleware, $process, $request, $response);
         try {
             $response = $dispatcher->dispatch();

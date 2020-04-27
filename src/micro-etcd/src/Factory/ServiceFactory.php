@@ -23,7 +23,7 @@ class ServiceFactory
     public function createService(string $name, ?string $version = null): ServiceInterface
     {
         if (is_null($version)) {
-            $version = date('Y.m.d.H.i');
+            $version = 'latest';
         }
         return new Service($name, $version);
     }
@@ -129,7 +129,7 @@ class ServiceFactory
             $node->withMetadata('registry', 'etcd');
             $node->withMetadata('protocol', 'grpc');
             $node->withMetadata('server', 'grpc');
-            $node->withMetadata('transport', 'http');
+            $node->withMetadata('transport', 'grpc');
             $service->withNode($node);
             $services[] = $service;
         }
