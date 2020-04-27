@@ -1,13 +1,13 @@
 <?php
 
-namespace Mix\SyncInvoke\Pool;
+namespace Mix\SyncInvoke\Client\Pool;
 
 use Mix\Pool\AbstractConnectionPool;
 use Mix\SyncInvoke\Client\Dialer;
 
 /**
  * Class ConnectionPool
- * @package Mix\SyncInvoke\Pool
+ * @package Mix\SyncInvoke\Client\Pool
  */
 class ConnectionPool extends AbstractConnectionPool
 {

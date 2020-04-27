@@ -2,6 +2,7 @@
 
 namespace Mix\SyncInvoke\Client;
 
+use Mix\Pool\ObjectTrait;
 use Mix\SyncInvoke\Constants;
 use Swoole\Coroutine\Client;
 
@@ -11,6 +12,8 @@ use Swoole\Coroutine\Client;
  */
 class Driver
 {
+    
+    use ObjectTrait;
 
     /**
      * @var int

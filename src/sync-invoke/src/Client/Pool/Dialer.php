@@ -1,6 +1,6 @@
 <?php
 
-namespace Mix\SyncInvoke\Pool;
+namespace Mix\SyncInvoke\Client\Pool;
 
 use Mix\Bean\BeanInjector;
 use Mix\Pool\DialerInterface;
@@ -9,7 +9,7 @@ use Mix\SyncInvoke\Client\Driver;
 
 /**
  * Class Dialer
- * @package Mix\SyncInvoke\Pool
+ * @package Mix\SyncInvoke\Client\Pool
  */
 class Dialer implements DialerInterface
 {

@@ -3,8 +3,8 @@
 namespace Mix\SyncInvoke\Client;
 
 use Mix\Bean\BeanInjector;
-use Mix\SyncInvoke\Pool\ConnectionPool;
-use Mix\SyncInvoke\Pool\Dialer;
+use Mix\SyncInvoke\Client\Pool\ConnectionPool;
+use Mix\SyncInvoke\Client\Pool\Dialer;
 use Mix\SyncInvoke\Exception\InvokeException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 

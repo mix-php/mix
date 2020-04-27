@@ -2,7 +2,6 @@
 
 namespace Mix\SyncInvoke\Client;
 
-use Mix\Pool\ConnectionTrait;
 use Mix\SyncInvoke\Constants;
 use Mix\SyncInvoke\Exception\CallException;
 use Mix\SyncInvoke\Exception\InvokeException;
@@ -13,8 +12,6 @@ use Mix\SyncInvoke\Exception\InvokeException;
  */
 class Connection
 {
-
-    use ConnectionTrait;
 
     /**
      * @var Driver
@@ -71,7 +68,7 @@ class Connection
                 throw new InvokeException($data->message, $data->code);
             }
         } catch (\Throwable $ex) {
-            $this->__discard($this->driver);
+            $this->driver->__discard();
             throw $ex;
         }
         return $data;
@@ -120,7 +117,7 @@ class Connection
      */
     public function __destruct()
     {
-        $this->__return($this->driver);
+        $this->driver->__return();
     }
 
 }
