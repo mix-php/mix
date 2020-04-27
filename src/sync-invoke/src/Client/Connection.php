@@ -2,12 +2,10 @@
 
 namespace Mix\SyncInvoke\Client;
 
-use Mix\Bean\BeanInjector;
 use Mix\Pool\ConnectionTrait;
 use Mix\SyncInvoke\Constants;
 use Mix\SyncInvoke\Exception\CallException;
 use Mix\SyncInvoke\Exception\InvokeException;
-use Swoole\Coroutine\Client;
 
 /**
  * Class Connection
@@ -19,15 +17,9 @@ class Connection
     use ConnectionTrait;
 
     /**
-     * @var int
+     * @var Driver
      */
-    public $port = 0;
-
-    /**
-     * Global timeout
-     * @var float
-     */
-    public $timeout = 0.0;
+    public $driver;
 
     /**
      * Invoke timeout
@@ -36,28 +28,12 @@ class Connection
     public $invokeTimeout = 10.0;
 
     /**
-     * @var Client
-     */
-    protected $client;
-
-    /**
      * Connection constructor.
-     * @param array $config
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
+     * @param Driver $driver
      */
-    public function __construct(array $config = [])
+    public function __construct(Driver $driver)
     {
-        BeanInjector::inject($this, $config);
-    }
-
-    /**
-     * 析构
-     */
-    public function __destruct()
-    {
-        // 丢弃连接
-        $this->discard();
+        $this->driver = $driver;
     }
 
     /**
@@ -66,17 +42,16 @@ class Connection
      */
     public function connect()
     {
-        $port    = $this->port;
-        $timeout = $this->timeout;
-        $client  = new Client(SWOOLE_SOCK_TCP);
-        $client->set([
-            'open_eof_check' => true,
-            'package_eof'    => Constants::EOF,
-        ]);
-        if (!$client->connect('127.0.0.1', $port, $timeout)) {
-            throw new \Swoole\Exception(sprintf("Sync invoke: %s (port: %s)", $client->errMsg, $port), $client->errCode);
-        }
-        $this->client = $client;
+        $this->driver->connect();
+    }
+
+    /**
+     * 关闭连接
+     * @throws \Swoole\Exception
+     */
+    public function close()
+    {
+        $this->driver->close();
     }
 
     /**
@@ -88,29 +63,18 @@ class Connection
      */
     public function invoke(\Closure $closure)
     {
-        $code = \Opis\Closure\serialize($closure);
-        $this->send($code . Constants::EOF);
-        $data = unserialize($this->recv($this->invokeTimeout));
-        if ($data instanceof CallException) {
-            throw new InvokeException($data->message, $data->code);
+        try {
+            $code = \Opis\Closure\serialize($closure);
+            $this->send($code . Constants::EOF);
+            $data = unserialize($this->recv($this->invokeTimeout));
+            if ($data instanceof CallException) {
+                throw new InvokeException($data->message, $data->code);
+            }
+        } catch (\Throwable $ex) {
+            $this->__discard($this->driver);
+            throw $ex;
         }
         return $data;
-    }
-
-    /**
-     * 关闭连接
-     * @throws \Swoole\Exception
-     */
-    public function close()
-    {
-        if (!$this->client->close()) {
-            $errMsg  = $this->client->errMsg;
-            $errCode = $this->client->errCode;
-            if ($errMsg == '' && $errCode == 0) {
-                return;
-            }
-            throw new \Swoole\Exception($errMsg, $errCode);
-        }
     }
 
     /**
@@ -121,7 +85,7 @@ class Connection
      */
     protected function recv(float $timeout = -1)
     {
-        $data = $this->client->recv($timeout);
+        $data = $this->driver->instance()->recv($timeout);
         if ($data === false) { // 接收失败
             $client = $this->client;
             throw new \Swoole\Exception($client->errMsg, $client->errCode);
@@ -142,13 +106,21 @@ class Connection
     protected function send(string $data)
     {
         $len  = strlen($data);
-        $size = $this->client->send($data);
+        $size = $this->driver->instance()->send($data);
         if ($size === false) {
             throw new \Swoole\Exception($this->client->errMsg, $this->client->errCode);
         }
         if ($len !== $size) {
             throw new \Swoole\Exception('The sending data is incomplete, it may be that the socket has been closed by the peer.');
         }
+    }
+
+    /**
+     * 析构
+     */
+    public function __destruct()
+    {
+        $this->__return($this->driver);
     }
 
 }

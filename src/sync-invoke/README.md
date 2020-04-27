@@ -23,8 +23,8 @@ $server->start();
 
 ```
 $dialer = new \Mix\SyncInvoke\Client\Dialer();
-$conn   = $dialer->dial(9505);
-$data   = $conn->invoke(function () {
+$client = $dialer->dial(9505);
+$data   = $client->invoke(function () {
     $obj = new Hello();
     return [1, 2, 3, $obj];
 });

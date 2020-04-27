@@ -5,6 +5,7 @@ namespace Mix\SyncInvoke\Pool;
 use Mix\Bean\BeanInjector;
 use Mix\Pool\DialerInterface;
 use Mix\SyncInvoke\Client\Connection;
+use Mix\SyncInvoke\Client\Driver;
 
 /**
  * Class Dialer
@@ -36,19 +37,12 @@ class Dialer implements DialerInterface
 
     /**
      * Dial
-     * @return Connection
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
+     * @return Driver
      * @throws \Swoole\Exception
      */
     public function dial()
     {
-        $conn = new Connection([
-            'port'    => $this->port,
-            'timeout' => $this->timeout,
-        ]);
-        $conn->connect();
-        return $conn;
+        return new Driver($this->port, $this->timeout);
     }
 
 }

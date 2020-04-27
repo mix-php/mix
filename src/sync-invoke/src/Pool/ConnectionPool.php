@@ -2,25 +2,23 @@
 
 namespace Mix\SyncInvoke\Pool;
 
-use Mix\Pool\ConnectionPoolInterface;
 use Mix\Pool\AbstractConnectionPool;
-use Mix\SyncInvoke\Client\Connection;
+use Mix\SyncInvoke\Client\Dialer;
 
 /**
  * Class ConnectionPool
- * @package Mix\Redis\Pool
- * @author liu,jian <coder.keda@gmail.com>
+ * @package Mix\SyncInvoke\Pool
  */
-class ConnectionPool extends AbstractConnectionPool implements ConnectionPoolInterface
+class ConnectionPool extends AbstractConnectionPool
 {
 
     /**
-     * 获取连接
-     * @return Connection
+     * 借用连接
+     * @return Dialer
      */
-    public function getConnection()
+    public function borrow()
     {
-        return parent::getConnection();
+        return parent::borrow();
     }
 
 }

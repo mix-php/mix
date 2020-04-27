@@ -3,6 +3,7 @@
 namespace Mix\SyncInvoke\Client;
 
 use Mix\Bean\BeanInjector;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class Dialer
@@ -24,6 +25,12 @@ class Dialer
     public $invokeTimeout = 10.0;
 
     /**
+     * 事件调度器
+     * @var EventDispatcherInterface
+     */
+    public $dispatcher;
+
+    /**
      * Dialer constructor.
      * @param array $config
      * @throws \PhpDocReader\AnnotationException
@@ -37,20 +44,19 @@ class Dialer
     /**
      * Dial
      * @param int $port
-     * @return Connection
+     * @return Client
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
-     * @throws \Swoole\Exception
      */
     public function dial(int $port)
     {
-        $conn = new Connection([
+        $client = new Client([
             'port'          => $port,
             'timeout'       => $this->timeout,
             'invokeTimeout' => $this->invokeTimeout,
+            'dispatcher'    => $this->dispatcher,
         ]);
-        $conn->connect();
-        return $conn;
+        return $client;
     }
 
 }
