@@ -10,13 +10,13 @@ final class PoolTest extends TestCase
     {
         $_this = $this;
         $func  = function () use ($_this) {
-            $db   = db();
-            $max  = $db->maxActive * 2;
-            $time = time();
-            $chan = new \Swoole\Coroutine\Channel();
+            $redis = redis();
+            $max   = $redis->maxActive * 2;
+            $time  = time();
+            $chan  = new \Swoole\Coroutine\Channel();
             for ($i = 0; $i < $max; $i++) {
-                go(function () use ($db, $chan) {
-                    $db->prepare('select sleep(2)')->queryAll();
+                go(function () use ($redis, $chan) {
+                    $redis->blPop('foo_list', 2);
                     $chan->push(true);
                 });
             }

@@ -3,14 +3,14 @@
 namespace Mix\Redis\Pool;
 
 use Mix\Redis\Driver;
-use Mix\Pool\AbstractConnectionPool;
+use Mix\Pool\AbstractObjectPool;
 
 /**
  * Class ConnectionPool
  * @package Mix\Redis\Pool
  * @author liu,jian <coder.keda@gmail.com>
  */
-class ConnectionPool extends AbstractConnectionPool
+class ConnectionPool extends AbstractObjectPool
 {
 
     /**

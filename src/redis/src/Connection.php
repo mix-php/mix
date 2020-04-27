@@ -2,8 +2,6 @@
 
 namespace Mix\Redis;
 
-use Mix\Pool\ConnectionTrait;
-
 /**
  * Class Connection
  * @package Mix\Redis
@@ -12,7 +10,6 @@ use Mix\Pool\ConnectionTrait;
 class Connection extends AbstractConnection
 {
 
-    use ConnectionTrait;
     use ReferenceTrait;
 
     /**
@@ -42,7 +39,7 @@ class Connection extends AbstractConnection
                 return $this->__call($name, $arguments);
             } else {
                 // 丢弃连接
-                $this->__discard($this->driver);
+                $this->driver->__discard();
                 // 抛出其他异常
                 throw $e;
             }
@@ -85,10 +82,10 @@ class Connection extends AbstractConnection
     public function __destruct()
     {
         if (in_array(strtolower($this->lastCommand), ['multi', 'exec'])) {
-            $this->__discard($this->driver);
+            $this->driver->__discard();
             return;
         }
-        $this->__return($this->driver);
+        $this->driver->__return();
     }
 
 }
