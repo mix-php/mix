@@ -25,6 +25,18 @@ class Dialer
     public $invokeTimeout = 10.0;
 
     /**
+     * 最多可空闲连接数
+     * @var int
+     */
+    public $maxIdle = 5;
+
+    /**
+     * 最大连接数
+     * @var int
+     */
+    public $maxActive = 5;
+
+    /**
      * 事件调度器
      * @var EventDispatcherInterface
      */
@@ -54,8 +66,11 @@ class Dialer
             'port'          => $port,
             'timeout'       => $this->timeout,
             'invokeTimeout' => $this->invokeTimeout,
+            'maxIdle'       => $this->maxIdle,
+            'maxActive'     => $this->maxActive,
             'dispatcher'    => $this->dispatcher,
         ]);
+        $client->init();
         return $client;
     }
 
