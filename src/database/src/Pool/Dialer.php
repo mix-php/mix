@@ -50,7 +50,7 @@ class Dialer implements DialerInterface
     /**
      * Dial
      * @return Driver
-     * @throws PDOException
+     * @throws \PDOException
      */
     public function dial()
     {

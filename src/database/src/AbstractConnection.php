@@ -69,7 +69,7 @@ abstract class AbstractConnection
 
     /**
      * 连接
-     * @throws PDOException
+     * @throws \PDOException
      */
     public function connect()
     {

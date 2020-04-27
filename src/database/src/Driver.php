@@ -53,7 +53,7 @@ class Driver
      * @param string $username
      * @param string $password
      * @param array $options
-     * @throws PDOException
+     * @throws \PDOException
      */
     public function __construct(string $dsn, string $username, string $password, array $options)
     {
@@ -84,7 +84,7 @@ class Driver
 
     /**
      * Connect
-     * @throws PDOException
+     * @throws \PDOException
      */
     public function connect()
     {

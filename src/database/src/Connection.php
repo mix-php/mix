@@ -139,6 +139,7 @@ class Connection extends AbstractConnection
 
     /**
      * 重新连接
+     * @throws \PDOException
      */
     protected function reconnect()
     {
@@ -155,7 +156,7 @@ class Connection extends AbstractConnection
             $this->__discard($this->driver);
             return;
         }
-        return $this->__return($this->driver);
+        $this->__return($this->driver);
     }
 
 }
