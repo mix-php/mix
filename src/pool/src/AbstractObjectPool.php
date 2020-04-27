@@ -3,16 +3,16 @@
 namespace Mix\Pool;
 
 use Mix\Bean\BeanInjector;
-use Mix\Pool\Event\ConnectionDiscardedEvent;
+use Mix\Pool\Event\DiscardedEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Swoole\Coroutine\Channel;
 
 /**
- * Class AbstractConnectionPool
+ * Class AbstractObjectPool
  * @package Mix\Pool
  * @author liu,jian <coder.keda@gmail.com>
  */
-abstract class AbstractConnectionPool
+abstract class AbstractObjectPool
 {
 
     /**
@@ -142,7 +142,7 @@ abstract class AbstractConnectionPool
         // 入列一个新连接替代丢弃的连接
         $result = $this->push($this->createConnection());
         // 触发事件
-        $this->dispatch(new ConnectionDiscardedEvent($connection));
+        $this->dispatch(new DiscardedEvent($connection));
         // 返回
         return $result;
     }
