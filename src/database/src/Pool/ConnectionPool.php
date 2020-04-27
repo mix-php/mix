@@ -3,14 +3,14 @@
 namespace Mix\Database\Pool;
 
 use Mix\Database\Driver;
-use Mix\Pool\AbstractConnectionPool;
+use Mix\Pool\AbstractObjectPool;
 
 /**
  * Class ConnectionPool
  * @package Mix\Database\Pool
  * @author liu,jian <coder.keda@gmail.com>
  */
-class ConnectionPool extends AbstractConnectionPool
+class ConnectionPool extends AbstractObjectPool
 {
 
     /**

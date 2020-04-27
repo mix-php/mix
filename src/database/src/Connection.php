@@ -2,8 +2,6 @@
 
 namespace Mix\Database;
 
-use Mix\Pool\ConnectionTrait;
-
 /**
  * Class Connection
  * @package Mix\Database
@@ -11,8 +9,6 @@ use Mix\Pool\ConnectionTrait;
  */
 class Connection extends AbstractConnection
 {
-
-    use ConnectionTrait;
 
     /**
      * 返回结果集
@@ -101,7 +97,7 @@ class Connection extends AbstractConnection
                 return $this->call($name, $arguments);
             } else {
                 // 丢弃连接
-                $this->__discard($this->driver);
+                $this->driver->__discard();
                 // 抛出其他异常
                 throw $e;
             }
@@ -153,10 +149,10 @@ class Connection extends AbstractConnection
     public function __destruct()
     {
         if ($this->inTransaction()) {
-            $this->__discard($this->driver);
+            $this->driver->__discard();
             return;
         }
-        $this->__return($this->driver);
+        $this->driver->__return();
     }
 
 }

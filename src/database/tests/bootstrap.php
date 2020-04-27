@@ -7,7 +7,7 @@ const DATABASE_PASSWORD = '123456';
 /**
  * @return \Mix\Database\Connection
  */
-function db()
+function conn()
 {
     $db = new \Mix\Database\Database([
         'dsn'      => DATABASE_DSN,
@@ -16,6 +16,20 @@ function db()
     ]);
     $db->init();
     return $db->borrow();
+}
+
+/**
+ * @return \Mix\Database\Database
+ */
+function db()
+{
+    $db = new \Mix\Database\Database([
+        'dsn'      => DATABASE_DSN,
+        'username' => DATABASE_USERNAME,
+        'password' => DATABASE_PASSWORD,
+    ]);
+    $db->init();
+    return $db;
 }
 
 if (!function_exists('run')) {

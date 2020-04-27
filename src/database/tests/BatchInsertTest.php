@@ -11,8 +11,8 @@ final class BatchInsertTest extends TestCase
     {
         $_this = $this;
         $func  = function () use ($_this) {
-            $db     = db();
-            $result = $db->batchInsert('users', [
+            $conn   = conn();
+            $result = $conn->batchInsert('users', [
                 [
                     'text' => 'test3',
                     'num'  => 3,
@@ -22,7 +22,7 @@ final class BatchInsertTest extends TestCase
                     'text' => 'test4',
                 ],
             ])->execute();
-            $sql    = $db->getLastSql();
+            $sql    = $conn->getLastSql();
             $_this->assertContains("('test3', 3), ('test4', 4)", $sql);
         };
         run($func);

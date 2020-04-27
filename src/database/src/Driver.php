@@ -2,12 +2,16 @@
 
 namespace Mix\Database;
 
+use Mix\Pool\ObjectTrait;
+
 /**
  * Class Driver
  * @package Mix\Database
  */
 class Driver
 {
+
+    use ObjectTrait;
 
     /**
      * 数据源格式
