@@ -11,6 +11,7 @@ use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Request;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
+use Mix\Http\Message\Stream\ContentStream;
 use Mix\Http\Server\Middleware\MiddlewareDispatcher;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
@@ -232,9 +233,13 @@ class Server implements \Mix\Http\Server\HandlerInterface
     {
         $method      = $request->getMethod();
         $contentType = $request->getHeaderLine('Content-Type');
-        $isGrpc      = strpos($contentType, 'application/grpc') === 0 ? true : false;
-        $isJson      = strpos($contentType, 'application/json') === 0 ? true : false;
-        if ((!$isGrpc && !$isJson) || $method != 'POST') {
+        $ok          = in_array($contentType, [
+            'application/grpc',
+            'application/json',
+            'application/grpc+proto',
+            'application/grpc+json',
+        ]) ? true : false;
+        if (!$ok || $method != 'POST') {
             $this->show500(new \RuntimeException('Invalid request'), $response);
             return;
         }

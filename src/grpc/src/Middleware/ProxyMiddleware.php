@@ -116,20 +116,24 @@ class ProxyMiddleware implements MiddlewareInterface
         // uri: /
         // web headers: micro-endpoint micro-id micro-method micro-service
         // api headers: micro-endpoint micro-from-service micro-id micro-method micro-service
-        $isV1         = strpos($contentType, 'application/json') === 0 && $path == '/' ? true : false;
-        $microService = $request->getHeaderLine('micro-service');
-        $microMethod  = $request->getHeaderLine('micro-method');
-
+        $isV1 = $contentType == 'application/json' && $path == '/' ? true : false;
+        if ($isV1) {
+            $microService = $request->getHeaderLine('micro-service');
+            $microMethod  = $request->getHeaderLine('micro-method');
+        }
+        
         // v2
         // uri: /php.micro.grpc.greeter.Say/Hello
-        $isV2         = strpos($contentType, 'application/grpc+json') === 0 && $path !== '/' ? true : false;
-        $slice        = array_filter(explode('/', $path));
-        $service      = explode('.', array_shift($slice));
-        $method[]     = array_pop($service);
-        $method[]     = array_pop($slice);
-        $microService = implode('.', $service);
-        $microMethod  = implode('.', $method);
-        $request->withBody(new ContentStream(GrpcHelper::unpack($request->getBody()->getContents())));
+        $isV2 = $contentType == 'application/grpc+json' && $path !== '/' ? true : false;
+        if ($isV2) {
+            $slice        = array_filter(explode('/', $path));
+            $service      = explode('.', array_shift($slice));
+            $method[]     = array_pop($service);
+            $method[]     = array_pop($slice);
+            $microService = implode('.', $service);
+            $microMethod  = implode('.', $method);
+            $request->withBody(new ContentStream(GrpcHelper::unpack($request->getBody()->getContents())));
+        }
 
         // handle
         if ($isV1 || $isV2) {
