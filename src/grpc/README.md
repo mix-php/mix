@@ -32,11 +32,11 @@ composer require mix/grpc
 [grpc](https://github.com/grpc/grpc) 是 protoc 的一个插件，负责将 proto 文件中定义的 serivce 生成对应语言的的 server、client 代码，但是 PHP 的 grpc 插件只能生成 client 代码，
 因此 mix 自己开发了一个 protoc 插件 [protoc-gen-mix-grpc](https://github.com/mix-php/grpc/tree/master/protoc-gen-mix-grpc) 用来生成 service 的 server 代码。
 
-直接下载即可：
+以上 3 个二进制文件，我都帮你们编译好了，包含多个常用 OS 类型，直接下载即可：
 
-- [binary](https://github.com/mix-php/grpc/releases/tag/binary)
+- [https://github.com/mix-php/grpc/releases/tag/binary](https://github.com/mix-php/grpc/releases/tag/binary)
 
-下载完成后 linux、macOS 将二进制文件放入系统 `/usr/local/bin` 目录，win 放入 `C:\WINDOWS\system32`
+下载完成后 Linux、MacOS 将二进制文件放入系统 `/usr/local/bin` 目录，Win 放入 `C:\WINDOWS\system32`
 
 ### 生成代码
 
@@ -168,6 +168,8 @@ $response = $client->Hello($request);
 
 var_dump($response->getMsg());
 ```
+
+PHP gRPC 微服务就这样完成了，就是这么简单。
 
 ## License
 
