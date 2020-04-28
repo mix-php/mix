@@ -1,9 +1,8 @@
 {
   "name": "mix/grpc",
-  "description": "Mix Grpc http://www.mixphp.cn",
-  "type": "framework",
+  "description": "Swoole-based gRPC library with protoc code generator http://www.mixphp.cn",
+  "type": "library",
   "keywords": [
-    "framework",
     "mix",
     "swoole",
     "grpc"
@@ -29,6 +28,15 @@
   "autoload": {
     "psr-4": {
       "Mix\\Grpc\\": "src/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.0.0"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "GPBMetadata\\": "protos/GPBMetadata/",
+      "Php\\": "protos/Php/"
     }
   }
 }

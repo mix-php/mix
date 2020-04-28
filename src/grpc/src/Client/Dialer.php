@@ -67,7 +67,7 @@ class Dialer
      * @param int $port
      * @param string $class
      * @param MiddlewareInterface|null $middleware
-     * @return Proxy
+     * @return object Proxy::class
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
      */

@@ -151,10 +151,7 @@ class Server implements \Mix\Http\Server\HandlerInterface
     {
         $server       = $this->server = new \Mix\Http\Server\Server($this->host, $this->port, $this->ssl, $this->reusePort);
         $server->port = &$this->port; // 当随机分配端口时同步端口信息
-        $server->set([
-                'open_http2_protocol' => true,
-                'http_compression'    => false,
-            ] + $this->options);
+        $server->set(['open_http2_protocol' => true] + $this->options + ['http_compression' => false]);
         $server->start($this);
     }
 
