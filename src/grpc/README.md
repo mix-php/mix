@@ -16,27 +16,52 @@ composer require mix/grpc
 传统方式如果要搭建 PHP gRPC 服务器只能借助 nginx+h2+phpfpm 来搭建，这样就不需要 server 代码了，但是短生命周期又无法很好的支持服务注册，
 因为这些原因导致 PHP 在 gRPC 中一直都是充当 Client 的角色，Mix gRPC 试图改变这一现状，本项目提供了：
 
-- 使用 Swoole 作为 gRPC Server
+- 使用 [Swoole](https://github.com/swoole/swoole-src) 作为 gRPC Server
 - 使用 Golang 打造的 protoc-gen-mix 来生成 PHP Service 代码
-- gRPC Server 支持 [go-micro](https://github.com/micro/micro) 的 rpc 代理，可与 go 微服务生态紧密结合，我们还提供了 go-micro 完全兼容的服务中心 [mix/micro-etcd](https://github.com/mix-php/micro-etcd)
 - 完全独立，可在任何 cli 模式的 php 代码中执行，任何框架中执行 Laravel、ThinkPHP、MixPHP 等都可以。
-- 同时为了降低门槛，我已经将 protoc、protoc-gen-php-grpc、 protoc-gen-mix-grpc 三个文件编译好了 win、linux、macOS 三个系统的二进制文件，直接 [下载](https://github.com/mix-php/grpc/releases/tag/binary) 即可。
+- 同时为了降低门槛，我已经将 protoc、protoc-gen-php-grpc、 protoc-gen-mix-grpc 三个文件编译好了 win、linux、macOS 三个系统的二进制文件，直接下载即可。
+- 兼容微服务代理 gRPC Server 支持 [micro](https://github.com/micro/micro) 的 rpc 代理，可与 Golang 微服务生态紧密结合。
+- 我们还提供了 go-micro 完全兼容的服务中心 [mix/micro-etcd](https://github.com/mix-php/micro-etcd) 借助他 PHP 能与 Golang 微服务网格直接通信。
 
-这一切让 PHP 编写 gRPC 和 Golang 中一样方便快捷，同时性能强劲。
+这一切让 PHP 编写 gRPC 和 Golang 一样方便快捷，同时性能强劲。
 
 ## 使用
 
+### 安装 Swoole
+
+- https://wiki.swoole.com/#/environment
+
+### 安装 php_grpc 扩展
+
+由于 [grpc](https://github.com/grpc/grpc) 插件生成的 client 代码使用了 php_grpc 扩展的代码，因此还需安装该扩展才可正常执行代码。
+
+```
+clone https://github.com/grpc/grpc.git
+```
+
+和编译安装其他 php 扩展流程一样：
+
+```
+$ cd grpc/src/php/ext/grpc
+$ phpize
+$ ./configure
+$ make
+$ [sudo] make install
+```
+
+然后在 php.ini 增加 `extension=grpc`
+
 ### 下载 protoc 与相关 plugin
 
-[protoc](https://github.com/protocolbuffers/protobuf) 是 grpc 提供的数据结构代码生成器，负责将 [proto]() 数据结构文件生成为对应语言的 class、struct 供程序使用，
-[grpc](https://github.com/grpc/grpc) 是 protoc 的一个插件，负责将 proto 文件中定义的 serivce 生成对应语言的的 server、client 代码，但是 PHP 的 grpc 插件只能生成 client 代码，
+[protoc](https://github.com/protocolbuffers/protobuf) 是 grpc 提供的数据结构代码生成器，负责将 .proto 数据结构文件生成为对应语言的 class、struct 供程序使用，
+[grpc](https://github.com/grpc/grpc) 是 protoc 的一个插件，负责将 .proto 文件中定义的 serivce 生成对应语言的的 server、client 代码，但是 PHP 的 grpc 插件只能生成 client 代码，
 因此 mix 自己开发了一个 protoc 插件 [protoc-gen-mix-grpc](https://github.com/mix-php/grpc/tree/master/protoc-gen-mix-grpc) 用来生成 service 的 server 代码。
 
 以上 3 个二进制文件，我都帮你们编译好了，包含多个常用 OS 类型，直接下载即可：
 
 - [https://github.com/mix-php/grpc/releases/tag/binary](https://github.com/mix-php/grpc/releases/tag/binary)
 
-下载完成后 Linux、MacOS 将二进制文件放入系统 `/usr/local/bin` 目录，Win 放入 `C:\WINDOWS\system32`
+下载完成后 linux、macOS 将二进制文件放入系统 `/usr/local/bin` 目录，win 放入 `C:\WINDOWS\system32`
 
 ### 生成代码
 
@@ -105,26 +130,6 @@ protoc.exe --php_out=. --php-grpc_out=. --mix-grpc_out=. greeter.proto
 
 修改后执行 `composer dump-aotoload` 使其生效。
 
-### 安装 grpc php 扩展
-
-由于 [grpc](https://github.com/grpc/grpc) 插件生成的 client 代码使用了 php_grpc 扩展的代码，因此还需安装该扩展才可正常执行代码。
-
-```
-clone https://github.com/grpc/grpc.git
-```
-
-和编译安装其他 php 扩展流程一样：
-
-```
-$ cd grpc/src/php/ext/grpc
-$ phpize
-$ ./configure
-$ make
-$ [sudo] make install
-```
-
-然后在 php.ini 增加 `extension=grpc`
-
 ### 服务器
 
 我们用原生 php 代码来编写一个 gRPC 服务器：
@@ -169,7 +174,7 @@ $response = $client->Hello($request);
 var_dump($response->getMsg());
 ```
 
-PHP gRPC 微服务就这样完成了，就是这么简单。
+Mix gRPC 开发微服务就这样完成了，就是这么简单。
 
 ## License
 
