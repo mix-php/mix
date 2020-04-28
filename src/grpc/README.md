@@ -29,7 +29,7 @@ composer require mix/grpc
 
 ### 安装 Swoole
 
-- https://wiki.swoole.com/#/environment
+- Swoole >= 4.4.4: https://wiki.swoole.com/#/environment
 
 ### 安装 php_grpc 扩展
 
@@ -134,7 +134,7 @@ protoc.exe --php_out=. --php-grpc_out=. --mix-grpc_out=. greeter.proto
 
 我们用原生 php 代码来编写一个 gRPC 服务器：
 
-> 只需实现 mix protoc 生成的接口，然后将类注册到 server 中即可，非常简单高效
+> 只需实现 protoc-gen-mix-grpc 生成的接口，然后将类注册到 server 中即可，非常简单高效
 
 ```
 // 编写一个服务
