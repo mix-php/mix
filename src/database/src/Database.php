@@ -5,6 +5,7 @@ namespace Mix\Database;
 use Mix\Bean\BeanInjector;
 use Mix\Database\Pool\ConnectionPool;
 use Mix\Database\Pool\Dialer;
+use Mix\Database\Query\Expression;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -182,6 +183,16 @@ class Database
     public function table(string $table): QueryBuilder
     {
         return $this->borrow()->table($table);
+    }
+
+    /**
+     * 返回一个RawQuery对象，对象的值将不经过参数绑定，直接解释为SQL的一部分，适合传递数据库原生函数
+     * @param string $value
+     * @return Expression
+     */
+    public static function raw(string $value): Expression
+    {
+        return new Expression($value);
     }
 
 }
