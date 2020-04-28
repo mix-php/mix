@@ -4,12 +4,11 @@ namespace Mix\Database;
 
 use Mix\Database\Event\ExecutedEvent;
 use Mix\Database\Helper\BuildHelper;
-use Mix\Database\Persistent\Connection;
 use Mix\Database\Query\Expression;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Class Connection
+ * Class AbstractConnection
  * @package Mix\Database
  * @author liu,jian <coder.keda@gmail.com>
  */
