@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 final class MainTest extends TestCase
 {
 
-    public function test(): void
+    public function testServerClient(): void
     {
         $_this = $this;
         $func  = function () use ($_this) {
@@ -16,17 +16,15 @@ final class MainTest extends TestCase
                 $server->start();
             });
 
-            for ($i = 0; $i < 10; $i++) {
-                go(function () use ($i) {
-                    $dialer = new \Mix\Grpc\Client\Dialer();
-                    /** @var \Php\Micro\Grpc\Greeter\SayClient $client */
-                    $client  = $dialer->dial('127.0.0.1', 54953, \Php\Micro\Grpc\Greeter\SayClient::class);
-                    $request = new \Php\Micro\Grpc\Greeter\Request();
-                    $request->setName('xiaoming');
-                    $response = $client->Hello($request);
-                });
-            }
+            $dialer  = new \Mix\Grpc\Client\Dialer();
+            $conn    = $dialer->dial('127.0.0.1', 9595);
+            $client  = new \Php\Micro\Grpc\Greeter\SayClient($conn);
+            $request = new \Php\Micro\Grpc\Greeter\Request();
+            $request->setName('xiaoming');
+            $response = $client->Hello(new \Mix\Context\Context(), $request);
 
+            $_this->assertEquals($response->getMsg(), 'hello, xiaoming');
+            
             $server->shutdown();
         };
         run($func);

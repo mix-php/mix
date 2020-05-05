@@ -1,6 +1,6 @@
 {
   "name": "mix/grpc",
-  "description": "Swoole-based gRPC library with protoc code generator http://www.mixphp.cn",
+  "description": "Swoole-based gRPC library, including protoc code generator, server, and client",
   "type": "library",
   "keywords": [
     "mix",

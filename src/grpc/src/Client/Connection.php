@@ -55,9 +55,9 @@ class Connection
      */
     public function init()
     {
-        $client = new \Swoole\Coroutine\Http2\Client($host, $port, false);
+        $client = new \Swoole\Coroutine\Http2\Client($this->host, $this->port, false);
         $client->set([
-            'timeout' => $timeout,
+            'timeout' => $this->timeout,
         ]);
         if (!$client->connect()) {
             throw new InvokeException($client->errMsg, $client->errCode);

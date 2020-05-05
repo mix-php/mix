@@ -45,7 +45,7 @@ abstract class AbstractClient
         $headers += [
             'Content-Type' => 'application/grpc+proto',
         ];
-        $body    = $request->serializeToString();
+        $body    = GrpcHelper::serialize($request);
         $timeout = $options['timeout'] ?? 5.0;
         $resp    = $conn->request('POST', $path, $headers, $body, $timeout);
         GrpcHelper::deserialize($response, $resp->data);
