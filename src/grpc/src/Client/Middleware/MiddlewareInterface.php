@@ -2,8 +2,6 @@
 
 namespace Mix\Grpc\Client\Middleware;
 
-use Mix\Grpc\Client\Message\Request;
-
 /**
  * Interface MiddlewareInterface
  * @package Mix\Grpc\Client\Middleware
@@ -13,10 +11,10 @@ interface MiddlewareInterface
 
     /**
      * Process
-     * @param Request $parameters
+     * @param \Swoole\Http2\Request $parameters
      * @param RequestHandler $handler
-     * @return object
+     * @return \Swoole\Http2\Response
      */
-    public function process(Request $request, RequestHandler $handler): object;
+    public function process(\Swoole\Http2\Request $request, RequestHandler $handler): \Swoole\Http2\Response;
 
 }

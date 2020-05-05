@@ -2,12 +2,10 @@
 
 namespace Mix\Grpc\Client;
 
-use Grpc\ChannelCredentials;
 use Mix\Bean\BeanInjector;
 use Mix\Grpc\Client\Middleware\MiddlewareInterface;
-use Mix\Micro\Register\Exception\NotFoundException;
+use Mix\Grpc\Exception\InvokeException;
 use Mix\Micro\Register\RegistryInterface;
-use Mix\Micro\Register\ServiceInterface;
 
 /**
  * Class Dialer
@@ -15,11 +13,6 @@ use Mix\Micro\Register\ServiceInterface;
  */
 class Dialer
 {
-
-    /**
-     * @var \Closure
-     */
-    public $factory;
 
     /**
      * Global timeout
@@ -49,50 +42,38 @@ class Dialer
     }
 
     /**
-     * Get default factory
-     * @return \Closure
-     */
-    protected function defaultFactory()
-    {
-        return function (string $class, string $hostname) {
-            return new $class($hostname, [
-                'credentials' => ChannelCredentials::createInsecure(),
-            ]);
-        };
-    }
-
-    /**
      * Dial
      * @param string $host
      * @param int $port
-     * @param string $class
      * @param MiddlewareInterface|null $middleware
-     * @return object Proxy::class
+     * @return Connection
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
+     * @throws InvokeException
      */
-    public function dial(string $host, int $port, string $class, MiddlewareInterface $middleware = null)
+    public function dial(string $host, int $port, MiddlewareInterface $middleware = null)
     {
         $middleware and array_unshift($this->middleware, $middleware);
-        $factory = $this->factory ?? $this->defaultFactory();
-        $client  = call_user_func($factory, $class, sprintf('%s:%d', $host, $port));
-        return new Proxy([
-            'client'     => $client,
+        $conn = new Connection([
+            'host'       => $host,
+            'port'       => $port,
             'timeout'    => $this->timeout,
             'middleware' => $this->middleware,
         ]);
+        $conn->init();
+        return $conn;
     }
 
     /**
      * Dial from service
      * @param string $name
-     * @param string $class
      * @param MiddlewareInterface|null $middleware
-     * @return Proxy
+     * @return Connection
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
+     * @throws InvokeException
      */
-    public function dialFromService(string $name, string $class, MiddlewareInterface $middleware = null)
+    public function dialFromService(string $name, MiddlewareInterface $middleware = null)
     {
         $service = $this->registry->service($name);
         return $this->dial($service->getAddress(), $service->getPort(), $class, $middleware);

@@ -30,9 +30,9 @@ class MiddlewareDispatcher
      * InterceptDispatcher constructor.
      * @param MiddlewareInterface[] $middleware
      * @param callable $callback
-     * @param Request $request
+     * @param \Swoole\Http2\Request $request
      */
-    public function __construct(array $middleware, callable $callback, Request $request)
+    public function __construct(array $middleware, callable $callback, \Swoole\Http2\Request $request)
     {
         $instances = [];
         foreach ($middleware as $class) {
@@ -52,9 +52,9 @@ class MiddlewareDispatcher
 
     /**
      * Dispatch
-     * @return object
+     * @return \Swoole\Http2\Response
      */
-    public function dispatch()
+    public function dispatch(): \Swoole\Http2\Response
     {
         return (new RequestHandler($this->middleware, $this->callback))->handle($this->request);
     }

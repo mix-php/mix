@@ -2,7 +2,6 @@
 
 namespace Mix\Tracing\Grpc;
 
-use Mix\Grpc\Client\Message\Request;
 use Mix\Grpc\Client\Middleware\MiddlewareInterface;
 use Mix\Grpc\Client\Middleware\RequestHandler;
 use const OpenTracing\Formats\TEXT_MAP;
@@ -31,19 +30,20 @@ class TracingClientMiddleware implements MiddlewareInterface
 
     /**
      * Process
-     * @param Request $parameters
+     * @param \Swoole\Http2\Request $parameters
      * @param RequestHandler $handler
      * @return object
      */
-    public function process(Request $request, RequestHandler $handler): object
+    public function process(\Swoole\Http2\Request $request, RequestHandler $handler): \Swoole\Http2\Response
     {
         $tracer = $this->tracer;
 
-        list($object, $method) = $request->callback;
-        $tags['method'] = sprintf('%s.%s', substr(basename(str_replace('\\', '/', get_class($object))), 0, -6), $method);
-        $operationName  = 'grpc:client';
-        $scope          = $tracer->startActiveSpan($operationName, [
-            'tags' => $tags,
+        $operationName = 'grpc:client';
+        $scope         = $tracer->startActiveSpan($operationName, [
+            'tags' => [
+                'method' => $request->method(),
+                'uri'    => $request->path,
+            ],
         ]);
 
         $traceHeaders = [];
@@ -53,8 +53,7 @@ class TracingClientMiddleware implements MiddlewareInterface
         foreach ($traceHeaders as $key => $value) {
             $psrHeaders[$key] = [$value];
         }
-        $parameters           = $request->parameters;
-        $parameters->metadata = array_merge($parameters->metadata, $psrHeaders);
+        $request->headers = array_merge($request->headers, $psrHeaders);
 
         try {
             $result = $handler->handle($request);

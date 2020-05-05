@@ -18,9 +18,7 @@
   "require": {
     "php": ">=7.0.0",
     "ext-swoole": ">=4.4.4",
-    "ext-grpc": ">=1.25.0",
     "google/protobuf": "^3.11",
-    "grpc/grpc": "^1.27",
     "mix/context": "~2.1.0",
     "mix/http-message": "~2.1.0",
     "mix/http-server": "~2.1.0"

@@ -2,8 +2,6 @@
 
 namespace Mix\Grpc\Client\Middleware;
 
-use Mix\Grpc\Client\Message\Request;
-
 /**
  * Class RequestHandler
  * @package Mix\Grpc\Client\Middleware
@@ -34,10 +32,10 @@ class RequestHandler
 
     /**
      * Handle
-     * @param Request $request
-     * @return object
+     * @param \Swoole\Http2\Request $request
+     * @return \Swoole\Http2\Response
      */
-    public function handle(Request $request): object 
+    public function handle(\Swoole\Http2\Request $request): \Swoole\Http2\Response 
     {
         $middleware = array_shift($this->middleware);
         if (!$middleware) {

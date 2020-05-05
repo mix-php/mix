@@ -58,7 +58,7 @@ class {{ .Service.Name | client }} extends Grpc\Client\AbstractClient
     */
     public function {{ $m.Name }}(Context $context, {{ name $ns $m.InputType }} $request, array $options = []): {{ name $ns $m.OutputType }}
     {
-        return $this->_simpleRequest('/{{ $.File.Package }}.{{ $.Service.Name }}/{{ $m.Name }}', $context, $request, $options);
+        return $this->_simpleRequest('/{{ $.File.Package }}.{{ $.Service.Name }}/{{ $m.Name }}', $context, $request, new {{ name $ns $m.OutputType }}(), $options);
     }
 {{end -}}
 }
