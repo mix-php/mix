@@ -36,24 +36,24 @@ class TracingClientMiddleware implements MiddlewareInterface
      */
     public function process(\Swoole\Http2\Request $request, RequestHandler $handler): \Swoole\Http2\Response
     {
+        $slice         = array_filter(explode('/', $request->path));
+        $tmp           = array_filter(explode('.', array_shift($slice)));
+        $serviceMethod = sprintf('%s.%s', array_pop($tmp), array_pop($slice));
+        $serviceName   = implode('.', $tmp);
+
         $tracer = $this->tracer;
 
-        $operationName = 'grpc:client';
+        $operationName = 'grpc.client';
         $scope         = $tracer->startActiveSpan($operationName, [
             'tags' => [
-                'method' => $request->method(),
-                'uri'    => $request->path,
+                'service.name'   => $serviceName,
+                'service.method' => $serviceMethod,
             ],
         ]);
 
         $traceHeaders = [];
         $tracer->inject($scope->getSpan()->getContext(), TEXT_MAP, $traceHeaders);
-        // 追加trace信息, grpc 的 metadata 符合 psr 标准, value 必须是 array 类型
-        $psrHeaders = [];
-        foreach ($traceHeaders as $key => $value) {
-            $psrHeaders[$key] = [$value];
-        }
-        $request->headers = array_merge($request->headers, $psrHeaders);
+        $request->headers = array_merge($request->headers, $traceHeaders);
 
         try {
             $result = $handler->handle($request);

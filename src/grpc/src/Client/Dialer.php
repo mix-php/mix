@@ -76,7 +76,7 @@ class Dialer
     public function dialFromService(string $name, MiddlewareInterface $middleware = null)
     {
         $service = $this->registry->service($name);
-        return $this->dial($service->getAddress(), $service->getPort(), $class, $middleware);
+        return $this->dial($service->getAddress(), $service->getPort(), $middleware);
     }
 
 }

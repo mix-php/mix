@@ -41,9 +41,10 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
 
     /**
      * Get tracer
+     * @param string $serviceName
      * @return \OpenTracing\Tracer
      */
-    abstract public function tracer();
+    abstract public function tracer(string $serviceName);
 
     /**
      * Process an incoming server request.
@@ -54,7 +55,11 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $tracer = $this->tracer();
+        $slice         = array_filter(explode('/', $request->getUri()->getPath()));
+        $tmp           = array_filter(explode('.', array_shift($slice)));
+        $serviceMethod = sprintf('%s.%s', array_pop($tmp), array_pop($slice));
+        $serviceName   = implode('.', $tmp);
+        $tracer        = $this->tracer($serviceName);
 
         $headers       = $this->request->getHeaderLines();
         $spanContext   = $tracer->extract(TEXT_MAP, $headers);
@@ -62,8 +67,8 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
         $span          = $tracer->startSpan($operationName, [
             'child_of' => $spanContext,
             'tags'     => [
-                'method' => $request->getMethod(),
-                'uri'    => $request->getUri()->__toString(),
+                'service.name'   => $serviceName,
+                'service.method' => $serviceMethod,
             ],
         ]);
 

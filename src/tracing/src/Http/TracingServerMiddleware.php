@@ -9,8 +9,10 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use const OpenTracing\Formats\TEXT_MAP;
+use const OpenTracing\Tags\HTTP_METHOD;
 use const OpenTracing\Tags\HTTP_STATUS_CODE;
 use const OpenTracing\Tags\ERROR;
+use const OpenTracing\Tags\HTTP_URL;
 
 /**
  * Class TracingServerMiddleware
@@ -42,9 +44,10 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
 
     /**
      * Get tracer
+     * @param string $serviceName
      * @return \OpenTracing\Tracer
      */
-    abstract public function tracer();
+    abstract public function tracer(string $serviceName);
 
     /**
      * Process an incoming server request.
@@ -55,7 +58,8 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $tracer = $this->tracer();
+        $serviceName = $request->getUri()->getPath();
+        $tracer      = $this->tracer($serviceName);
 
         $headers       = $this->request->getHeaderLines();
         $spanContext   = $tracer->extract(TEXT_MAP, $headers);
@@ -63,8 +67,8 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
         $span          = $tracer->startSpan($operationName, [
             'child_of' => $spanContext,
             'tags'     => [
-                'method' => $request->getMethod(),
-                'uri'    => $request->getUri()->__toString(),
+                HTTP_METHOD => $request->getMethod(),
+                HTTP_URL    => $request->getUri()->__toString(),
             ],
         ]);
 

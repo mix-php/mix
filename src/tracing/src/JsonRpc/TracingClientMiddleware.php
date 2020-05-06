@@ -37,13 +37,14 @@ class TracingClientMiddleware implements MiddlewareInterface
      */
     public function process(Request $request, RequestHandler $handler): Response
     {
-        $tracer         = $this->tracer;
+        $tracer = $this->tracer;
         
-        $tags['method'] = $request->method;
-        $tags['id']     = (string)$request->id;
-        $operationName = 'jsonrpc:client';
+        $operationName = 'jsonrpc.client';
         $scope         = $tracer->startActiveSpan($operationName, [
-            'tags' => $tags,
+            'tags' => [
+                'method' => $request->method,
+                'id'     => (string)$request->id,
+            ],
         ]);
 
         $traceHeaders = [];

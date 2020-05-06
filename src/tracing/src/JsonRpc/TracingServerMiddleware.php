@@ -17,9 +17,10 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
 
     /**
      * Get tracer
+     * @param string $serviceName
      * @return \OpenTracing\Tracer
      */
-    abstract public function tracer();
+    abstract public function tracer(string $serviceName);
 
     /**
      * Process
@@ -29,11 +30,8 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
      */
     public function process(Request $request, RequestHandler $handler): Response
     {
-        $tracer = $this->tracer();
-        $request->context->withValue('__tracer__', $tracer);
-        
-        $tags['method'] = $request->method;
-        $tags['id']     = (string)$request->id;
+        $serviceName = $request->method;
+        $tracer      = $this->tracer($serviceName);
 
         // 在请求的最后一个参数提取trace信息
         $params       = $request->params;
@@ -44,11 +42,17 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
         }
 
         $spanContext   = $tracer->extract(TEXT_MAP, $traceHeaders);
-        $operationName = 'jsonrpc:server';
+        $operationName = 'jsonrpc.server';
         $span          = $tracer->startSpan($operationName, [
             'child_of' => $spanContext,
-            'tags'     => $tags,
+            'tags'     => [
+                'method' => $request->method,
+                'id'     => (string)$request->id,
+            ],
         ]);
+
+        // Tracing::extract
+        $request->context->withValue('__tracer__', $tracer);
 
         try {
             $result = $handler->handle($request);
