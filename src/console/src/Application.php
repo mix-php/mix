@@ -234,16 +234,16 @@ class Application
         println('');
         println('Commands:');
         foreach ($this->commands as $key => $item) {
-            $command     = $key;
-            $subCommand  = '';
-            $description = $item['description'] ?? '';
+            $command    = $key;
+            $subCommand = '';
+            $usage      = $item['usage'] ?? '';
             if (strpos($key, ' ') !== false) {
                 list($command, $subCommand) = explode(' ', $key);
             }
             if ($subCommand == '') {
-                println("  {$command}\t{$description}");
+                println("  {$command}\t{$usage}");
             } else {
-                println("  {$command} {$subCommand}\t{$description}");
+                println("  {$command} {$subCommand}\t{$usage}");
             }
         }
     }
@@ -282,9 +282,9 @@ class Application
                     $flags[] = "--{$name}";
                 }
             }
-            $flag        = implode(', ', $flags);
-            $description = $option['description'] ?? '';
-            println("  {$flag}\t{$description}");
+            $flag  = implode(', ', $flags);
+            $usage = $option['usage'] ?? '';
+            println("  {$flag}\t{$usage}");
         }
     }
 
