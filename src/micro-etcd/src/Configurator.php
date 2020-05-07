@@ -42,7 +42,7 @@ class Configurator implements ConfiguratorInterface
     public $password = '';
 
     /**
-     * 刷新配置间隔时间
+     * 配置刷新间隔时间，单位：秒
      * @var int
      */
     public $interval = 5;
@@ -67,9 +67,9 @@ class Configurator implements ConfiguratorInterface
     protected $client;
 
     /**
-     * @var Timer
+     * @var Timer[]
      */
-    protected $timer;
+    protected $timers = [];
 
     /**
      * @var string[]
@@ -155,7 +155,7 @@ class Configurator implements ConfiguratorInterface
             $this->dispatcher->dispatch($event);
         }
         // 定时监听
-        $timer = $this->timer = Timer::new();
+        $timer = Timer::new();
         $timer->tick($this->interval * 1000, function () {
             $config           = $this->pull();
             $lastConfig       = $this->lastConfig;
@@ -177,6 +177,23 @@ class Configurator implements ConfiguratorInterface
                 }
             }
         });
+        $this->timers[] = $timer;
+    }
+
+    /**
+     * 同步文件配置到配置中心
+     * @param string $path 目录或者文件路径
+     */
+    public function sync(string $path)
+    {
+        // 定时同步
+        $timer = Timer::new();
+        $timer->tick($this->interval * 1000, function () use ($path) {
+            $noodlehaus = new \Noodlehaus\Config($path);
+            $kvs        = $noodlehaus->all();
+            $this->put($kvs);
+        });
+        $this->timers[] = $timer;
     }
 
     /**
@@ -184,7 +201,9 @@ class Configurator implements ConfiguratorInterface
      */
     public function close()
     {
-        $this->timer and $this->timer->clear();
+        foreach ($this->timers as $timer) {
+            $timer->clear();
+        }
     }
 
 }

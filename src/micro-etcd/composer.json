@@ -25,7 +25,8 @@
     "mix/micro-register": "~2.1.0",
     "mix/bean": "~2.1.0",
     "mix/concurrent": "~2.1.0",
-    "mix/guzzle": "~2.1.0"
+    "mix/guzzle": "~2.1.0",
+    "hassankhan/config": "^2.1"
   },
   "require-dev": {
     "phpunit/phpunit": "^7.0.0"
