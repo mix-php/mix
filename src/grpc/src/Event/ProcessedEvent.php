@@ -19,13 +19,13 @@ class ProcessedEvent
 
     /**
      * 请求
-     * @var Message
+     * @var Message|null
      */
     public $request;
 
     /**
      * 响应
-     * @var Message
+     * @var Message|null
      */
     public $response;
 
@@ -43,7 +43,7 @@ class ProcessedEvent
 
     /**
      * 执行异常信息
-     * @var string
+     * @var string|null
      */
     public $error;
 

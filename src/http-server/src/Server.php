@@ -4,6 +4,9 @@ namespace Mix\Http\Server;
 
 use Mix\Http\Message\Factory\ResponseFactory;
 use Mix\Http\Message\Factory\ServerRequestFactory;
+use Mix\Http\Server\Event\HandledEvent;
+use Mix\Http\Server\Helper\ServerHelper;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
 
@@ -34,6 +37,12 @@ class Server
      * @var bool
      */
     public $reusePort = false;
+
+    /**
+     * 事件调度器
+     * @var EventDispatcherInterface
+     */
+    public $dispatcher;
 
     /**
      * @var array
@@ -99,28 +108,54 @@ class Server
         $this->port = $server->port; // 当随机分配端口时同步端口信息
         $server->set($this->options);
         foreach ($this->callbacks as $pattern => $callback) {
-            $server->handle($pattern, function (Request $requ, Response $resp) use ($callback) {
+            $server->handle($pattern, function (Request $swooleRequest, Response $swooleResponse) use ($callback) {
+                $request   = (new ServerRequestFactory)->createServerRequestFromSwoole($swooleRequest);
+                $response  = (new ResponseFactory)->createResponseFromSwoole($swooleResponse);
+                $microtime = ServerHelper::microtime();
+                $error     = null;
                 try {
-                    // 生成PSR的request,response
-                    $request  = (new ServerRequestFactory)->createServerRequestFromSwoole($requ);
-                    $response = (new ResponseFactory)->createResponseFromSwoole($resp);
                     // 执行回调
                     call_user_func($callback, $request, $response);
-                } catch (\Throwable $e) {
+                } catch (\Throwable $ex) {
+                    $message = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
+                    $code    = $ex->getCode();
+                    $error   = sprintf('[%d] %s', $code, $message);
                     // 错误处理
                     $isMix = class_exists(\Mix::class);
                     if (!$isMix) {
-                        throw $e;
+                        throw $ex;
                     }
-                    /** @var \Mix\Console\Error $error */
-                    $error = \Mix::$app->context->get('error');
-                    $error->handleException($e);
+                    /** @var \Mix\Console\Error $errorHandler */
+                    $errorHandler = \Mix::$app->context->get('error');
+                    $errorHandler->handleException($ex);
+                } finally {
+                    $this->dispatch($request, $response, $microtime, $error);
                 }
             });
         }
         if (!$server->start()) {
             throw new \Swoole\Exception($server->errMsg, $server->errCode);
         }
+    }
+
+    /**
+     * Dispatch
+     * @param $request
+     * @param $response
+     * @param float $microtime
+     * @param null $error
+     */
+    protected function dispatch($request, $response, float $microtime, $error = null)
+    {
+        if (!isset($this->dispatcher)) {
+            return;
+        }
+        $event           = new HandledEvent();
+        $event->time     = round((ServerHelper::microtime() - $microtime) * 1000, 2);
+        $event->request  = $request;
+        $event->response = $response;
+        $event->error    = $error;
+        $this->dispatcher->dispatch($event);
     }
 
     /**
