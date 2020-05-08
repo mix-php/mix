@@ -2,7 +2,6 @@
 
 namespace Mix\Micro\Etcd;
 
-use Mix\Bean\BeanInjector;
 use Mix\Concurrent\Timer;
 use Mix\Micro\Etcd\Client\Client;
 use Mix\Micro\Config\ConfiguratorInterface;
@@ -24,12 +23,6 @@ class Configurator implements ConfiguratorInterface
     public $url = 'http://127.0.0.1:2379/v3';
 
     /**
-     * Timeout
-     * @var int
-     */
-    public $timeout = 5;
-
-    /**
      * User
      * @var string
      */
@@ -42,21 +35,17 @@ class Configurator implements ConfiguratorInterface
     public $password = '';
 
     /**
-     * 配置刷新间隔时间，单位：秒
+     * Timeout
      * @var int
      */
-    public $interval = 5;
+    public $timeout = 5;
 
     /**
-     * 接入的名称空间
-     * @var string[]
+     * @var string
      */
-    public $namespaces = [
-        '/app',
-    ];
+    public $namespace = '/micro/config';
 
     /**
-     * 事件调度器
      * @var EventDispatcherInterface
      */
     public $dispatcher;
@@ -67,33 +56,29 @@ class Configurator implements ConfiguratorInterface
     protected $client;
 
     /**
-     * @var Timer[]
+     * @var callable
      */
-    protected $timers = [];
+    protected $listenCallback;
 
     /**
-     * @var string[]
+     * @var Timer
      */
-    protected $lastConfig = [];
+    protected $listenTimer;
 
     /**
-     * Config constructor.
-     * @param array $config
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
+     * Configurator constructor.
+     * @param string $url
+     * @param string $user
+     * @param string $password
+     * @param int $timeout
      */
-    public function __construct(array $config = [])
+    public function __construct(string $url, string $user, string $password, int $timeout)
     {
-        BeanInjector::inject($this, $config);
-    }
-
-    /**
-     * Init
-     * @return void
-     */
-    public function init()
-    {
-        $this->client = $this->createClient();
+        $this->url      = $url;
+        $this->user     = $user;
+        $this->password = $password;
+        $this->timeout  = $timeout;
+        $this->client   = $this->createClient();
     }
 
     /**
@@ -108,58 +93,27 @@ class Configurator implements ConfiguratorInterface
     }
 
     /**
-     * Put
-     * @param array $kvs
-     * @throws \GuzzleHttp\Exception\BadResponseException
-     */
-    public function put(array $kvs)
-    {
-        $client = $this->client;
-        foreach ($kvs as $key => $value) {
-            $client->put($key, $value);
-        }
-    }
-
-    /**
-     * Pull config
-     * @return string[]
-     * @throws \GuzzleHttp\Exception\BadResponseException
-     */
-    public function pull()
-    {
-        $client = $this->client;
-        $config = [];
-        foreach ($this->namespaces as $namespace) {
-            $kvs = $client->getKeysWithPrefix($namespace);
-            if (empty($kvs)) {
-                continue;
-            }
-            $config = array_merge($config, $kvs);
-        }
-        return $config;
-    }
-
-    /**
-     * 监听配置变化
+     * Listen
+     * @throws \RuntimeException
      * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function listen()
     {
+        if (isset($this->listenTimer)) {
+            throw new \RuntimeException('Already listening');
+        }
         // 拉取全量
-        $config           = $this->pull();
-        $this->lastConfig = $config;
-        foreach ($config as $key => $value) {
+        $lastConfig = $this->all();
+        foreach ($lastConfig as $key => $value) {
             $event        = new PutEvent();
             $event->key   = $key;
             $event->value = $value;
             $this->dispatcher->dispatch($event);
         }
         // 定时监听
-        $timer = Timer::new();
-        $timer->tick($this->interval * 1000, function () {
-            $config           = $this->pull();
-            $lastConfig       = $this->lastConfig;
-            $this->lastConfig = $config;
+        $timer    = Timer::new();
+        $callback = function () use (&$lastConfig) {
+            $config = $this->all();
             foreach (array_diff_assoc($config, $lastConfig) as $key => $value) {
                 // put
                 $event        = new PutEvent();
@@ -176,24 +130,65 @@ class Configurator implements ConfiguratorInterface
                     continue;
                 }
             }
-        });
-        $this->timers[] = $timer;
+        };
+        $timer->tick($this->interval * 1000, $callback);
+        $this->listenCallback = $callback;
+        $this->listenTimer    = $timer;
     }
 
     /**
-     * 同步文件配置到配置中心
+     * Sync to config-server
+     * 可在 git webhook 中调用某个接口来触发该方法
      * @param string $path 目录或者文件路径
+     * @param string $prefix
      */
     public function sync(string $path)
     {
-        // 定时同步
-        $timer = Timer::new();
-        $timer->tick($this->interval * 1000, function () use ($path) {
-            $noodlehaus = new \Noodlehaus\Config($path);
-            $kvs        = $noodlehaus->all();
-            $this->put($kvs);
-        });
-        $this->timers[] = $timer;
+        $config     = (new \Noodlehaus\Config($path))->all();
+        $lastConfig = $this->all();
+        // put
+        $kvs = array_diff_assoc($config, $lastConfig);
+        empty($kvs) or $this->put($kvs);
+        // delete
+        $keys = array_keys(array_diff_assoc($lastConfig, $config));
+        empty($keys) or $this->delete($kvs);
+        // call listen
+        $this->listenCallback and call_user_func($this->listenCallback);
+    }
+
+    /**
+     * Pull
+     * @return string[]
+     * @throws \GuzzleHttp\Exception\BadResponseException
+     */
+    public function all()
+    {
+        return $this->client->getKeysWithPrefix($this->namespace);
+    }
+
+    /**
+     * Put
+     * @param array $kvs
+     * @throws \GuzzleHttp\Exception\BadResponseException
+     */
+    public function put(array $kvs)
+    {
+        $client = $this->client;
+        foreach ($kvs as $key => $value) {
+            $client->put($key, $value);
+        }
+    }
+
+    /**
+     * Delete
+     * @param array $keys
+     */
+    public function delete(array $keys)
+    {
+        $client = $this->client;
+        foreach ($keys as $key) {
+            $client->del($key);
+        }
     }
 
     /**
@@ -201,9 +196,7 @@ class Configurator implements ConfiguratorInterface
      */
     public function close()
     {
-        foreach ($this->timers as $timer) {
-            $timer->clear();
-        }
+        $this->listenTimer and $this->listenTimer->clear();
     }
 
 }
