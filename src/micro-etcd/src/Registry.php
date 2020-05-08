@@ -47,6 +47,11 @@ class Registry implements RegistryInterface
     public $password = '';
 
     /**
+     * @var string
+     */
+    public $namespace = '/micro/registry';
+
+    /**
      * Registrar keep alive TTL
      * 注册器生存时间，会根据该时间定时延期服务的有效期
      * @var int
@@ -58,13 +63,7 @@ class Registry implements RegistryInterface
      * 监控最大空闲时间，超过该时间将自动关闭
      * @var int
      */
-    public $monitorMaxIdle = 30;
-
-    /**
-     *
-     * @var string
-     */
-    public $namespace = '/micro/registry';
+    public $maxIdle = 30;
 
     /**
      * 负载均衡器
@@ -136,7 +135,7 @@ class Registry implements RegistryInterface
     public function service(string $name): ServiceInterface
     {
         if (!isset($this->monitors[$name])) {
-            $monitor               = new Monitor($this->client, $this->monitors, $this->namespace, $name, $this->monitorMaxIdle);
+            $monitor               = new Monitor($this->client, $this->monitors, $this->namespace, $name, $this->maxIdle);
             $this->monitors[$name] = $monitor;
         }
         $services = $this->monitors[$name]->services();

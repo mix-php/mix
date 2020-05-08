@@ -11,10 +11,11 @@ interface ConfiguratorInterface
 
     /**
      * Listen
+     * @param EventDispatcherInterface $dispatcher
      * @throws \RuntimeException
      * @throws \GuzzleHttp\Exception\BadResponseException
      */
-    public function listen();
+    public function listen(EventDispatcherInterface $dispatcher);
 
     /**
      * Sync to config-server
@@ -30,19 +31,6 @@ interface ConfiguratorInterface
      * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function all();
-
-    /**
-     * Put
-     * @param array $kvs
-     * @throws \GuzzleHttp\Exception\BadResponseException
-     */
-    public function put(array $kvs);
-
-    /**
-     * Delete
-     * @param array $keys
-     */
-    public function delete(array $keys);
 
     /**
      * Close

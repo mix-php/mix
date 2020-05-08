@@ -46,9 +46,9 @@ class Configurator implements ConfiguratorInterface
     public $namespace = '/micro/config';
 
     /**
-     * @var EventDispatcherInterface
+     * @var int
      */
-    public $dispatcher;
+    public $interval = 5;
 
     /**
      * @var Client
@@ -94,13 +94,17 @@ class Configurator implements ConfiguratorInterface
 
     /**
      * Listen
+     * @param EventDispatcherInterface $dispatcher
      * @throws \RuntimeException
      * @throws \GuzzleHttp\Exception\BadResponseException
      */
-    public function listen()
+    public function listen(EventDispatcherInterface $dispatcher)
     {
         if (isset($this->listenTimer)) {
             throw new \RuntimeException('Already listening');
+        }
+        if (!isset($this->dispatcher)) {
+            throw new \RuntimeException('Please set dispatcher first');
         }
         // 拉取全量
         $lastConfig = $this->all();
@@ -171,7 +175,7 @@ class Configurator implements ConfiguratorInterface
      * @param array $kvs
      * @throws \GuzzleHttp\Exception\BadResponseException
      */
-    public function put(array $kvs)
+    protected function put(array $kvs)
     {
         $client = $this->client;
         foreach ($kvs as $key => $value) {
@@ -183,7 +187,7 @@ class Configurator implements ConfiguratorInterface
      * Delete
      * @param array $keys
      */
-    public function delete(array $keys)
+    protected function delete(array $keys)
     {
         $client = $this->client;
         foreach ($keys as $key) {
