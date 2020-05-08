@@ -2,7 +2,6 @@
 
 namespace Mix\Micro\Etcd;
 
-use Mix\Bean\BeanInjector;
 use Mix\Micro\Etcd\Client\Client;
 use Mix\Micro\Etcd\Exception\UnavailableException;
 use Mix\Micro\Etcd\Factory\ServiceBundleFactory;
@@ -62,17 +61,17 @@ class Registry implements RegistryInterface
     public $monitorMaxIdle = 30;
 
     /**
+     *
+     * @var string
+     */
+    public $namespace = '/micro/registry';
+
+    /**
      * 负载均衡器
      * 默认为 RoundRobinBalancer
      * @var LoadBalancerInterface
      */
     public $loadBalancer;
-
-    /**
-     *
-     * @var string
-     */
-    public $namespace = '/micro/registry';
 
     /**
      * @var Client
@@ -92,27 +91,20 @@ class Registry implements RegistryInterface
     protected $monitors = [];
 
     /**
-     * Registry constructor.
-     * @param array $config
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
+     * Configurator constructor.
+     * @param string $url
+     * @param string $user
+     * @param string $password
+     * @param int $timeout
      */
-    public function __construct(array $config = [])
+    public function __construct(string $url, string $user, string $password, int $timeout = 5)
     {
-        BeanInjector::inject($this, $config);
-    }
-
-    /**
-     * Init
-     * @return void
-     */
-    public function init()
-    {
-        $this->client = $this->createClient();
-        // 创建默认负载均衡器
-        if (!$this->loadBalancer) {
-            $this->loadBalancer = new RoundRobinBalancer();
-        }
+        $this->url          = $url;
+        $this->user         = $user;
+        $this->password     = $password;
+        $this->timeout      = $timeout;
+        $this->client       = $this->createClient();
+        $this->loadBalancer = $this->getDefaultLoadBalancer();
     }
 
     /**
@@ -124,6 +116,15 @@ class Registry implements RegistryInterface
         $client = new Client($this->url, $this->timeout);
         $client->auth($this->user, $this->password);
         return $client;
+    }
+
+    /**
+     * Default LoadBalancer
+     * @return RoundRobinBalancer
+     */
+    protected function getDefaultLoadBalancer()
+    {
+        return new RoundRobinBalancer();
     }
 
     /**

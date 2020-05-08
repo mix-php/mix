@@ -72,7 +72,7 @@ class Configurator implements ConfiguratorInterface
      * @param string $password
      * @param int $timeout
      */
-    public function __construct(string $url, string $user, string $password, int $timeout)
+    public function __construct(string $url, string $user, string $password, int $timeout = 5)
     {
         $this->url      = $url;
         $this->user     = $user;
