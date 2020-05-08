@@ -103,36 +103,35 @@ class Configurator implements ConfiguratorInterface
         if (isset($this->listenTimer)) {
             throw new \RuntimeException('Already listening');
         }
-        if (!isset($this->dispatcher)) {
-            throw new \RuntimeException('Please set dispatcher first');
-        }
         // 拉取全量
         $lastConfig = $this->all();
         foreach ($lastConfig as $key => $value) {
             $event        = new PutEvent();
             $event->key   = $key;
             $event->value = $value;
-            $this->dispatcher->dispatch($event);
+            $dispatcher->dispatch($event);
         }
         // 定时监听
         $timer    = Timer::new();
         $callback = function () use (&$lastConfig) {
             $config = $this->all();
-            foreach (array_diff_assoc($config, $lastConfig) as $key => $value) {
-                // put
+            // put
+            $putKvs = array_diff_assoc($config, $lastConfig);
+            foreach ($putKvs as $key => $value) {
                 $event        = new PutEvent();
                 $event->key   = $key;
                 $event->value = $value;
-                $this->dispatcher->dispatch($event);
+                $dispatcher->dispatch($event);
             }
-            foreach (array_diff_assoc($lastConfig, $config) as $key => $value) {
-                // delete
-                if (!isset($config[$key])) {
-                    $event      = new DeleteEvent();
-                    $event->key = $key;
-                    $this->dispatcher->dispatch($event);
+            // delete
+            $deleteKvs = array_diff_assoc($lastConfig, $config);
+            foreach ($deleteKvs as $key => $value) {
+                if (isset($putKvs[$key])) { // 如果同一个 key put/delete 都有，只处理 put
                     continue;
                 }
+                $event      = new DeleteEvent();
+                $event->key = $key;
+                $dispatcher->dispatch($event);
             }
         };
         $timer->tick($this->interval * 1000, $callback);
@@ -141,23 +140,47 @@ class Configurator implements ConfiguratorInterface
     }
 
     /**
-     * Sync to config-server
-     * 可在 git webhook 中调用某个接口来触发该方法
+     * Sync
      * @param string $path 目录或者文件路径
-     * @param string $prefix
      */
     public function sync(string $path)
     {
-        $config     = (new \Noodlehaus\Config($path))->all();
+        $config = [];
+        foreach ((new \Noodlehaus\Config($path))->all() as $key => $value) {
+            $config[sprintf('%s%s', $this->namespace, $key)] = $value;
+        }
         $lastConfig = $this->all();
         // put
-        $kvs = array_diff_assoc($config, $lastConfig);
-        empty($kvs) or $this->put($kvs);
+        $putKvs = array_diff_assoc($config, $lastConfig);
+        empty($putKvs) or $this->put($putKvs);
         // delete
-        $keys = array_keys(array_diff_assoc($lastConfig, $config));
-        empty($keys) or $this->delete($kvs);
+        $deleteKeys = [];
+        foreach (array_keys(array_diff_assoc($lastConfig, $config)) as $key) {
+            if (isset($putKvs[$key])) { // 如果同一个 key put/delete 都有，只处理 put
+                continue;
+            }
+            $deleteKeys[] = $key;
+        }
+        empty($deleteKeys) or $this->delete($deleteKeys);
         // call listen
-        $this->listenCallback and call_user_func($this->listenCallback);
+        if ($this->listenCallback && (!empty($putKvs) || !empty($deleteKeys))) {
+            call_user_func($this->listenCallback);
+        }
+    }
+
+    /**
+     * Get
+     * @param string $key
+     * @param string $default
+     * @return string
+     */
+    public function get(string $key, string $default = ''): string
+    {
+        $kv = $this->client->get($key);
+        if (empty($kv)) {
+            return $default;
+        }
+        return array_pop($kv);
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace Mix\Micro\Config;
 
+use Psr\EventDispatcher\EventDispatcherInterface;
+
 /**
  * Interface ConfiguratorInterface
  * @package Mix\Micro\Config
@@ -25,6 +27,14 @@ interface ConfiguratorInterface
      */
     public function sync(string $path);
 
+    /**
+     * Get
+     * @param string $key
+     * @param string $default
+     * @return string
+     */
+    public function get(string $key, string $default = ''): string;
+    
     /**
      * All
      * @return string[]
