@@ -3,9 +3,8 @@
 namespace Mix\JsonRpc\Client;
 
 use Mix\Bean\BeanInjector;
-use Mix\JsonRpc\Call\Caller;
 use Mix\JsonRpc\Constants;
-use Mix\JsonRpc\Exception\ParseException;
+use Mix\JsonRpc\Exception\DeserializeException;
 use Mix\JsonRpc\Helper\JsonRpcHelper;
 use Mix\JsonRpc\Middleware\MiddlewareDispatcher;
 use Mix\JsonRpc\Middleware\MiddlewareInterface;
@@ -87,7 +86,7 @@ class Connection
      * Call
      * @param Request $request
      * @return Response
-     * @throws 
+     * @throws DeserializeException
      */
     public function call(Request $request)
     {

@@ -56,8 +56,8 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
 
         try {
             $result = $handler->handle($request);
-        } catch (\Throwable $exception) {
-            throw $exception;
+        } catch (\Throwable $ex) {
+            throw $ex;
         } finally {
             $span->finish();
             $tracer->flush();

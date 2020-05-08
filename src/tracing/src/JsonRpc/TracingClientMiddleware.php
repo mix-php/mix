@@ -54,8 +54,8 @@ class TracingClientMiddleware implements MiddlewareInterface
 
         try {
             $result = $handler->handle($request);
-        } catch (\Throwable $exception) {
-            throw $exception;
+        } catch (\Throwable $ex) {
+            throw $ex;
         } finally {
             $scope->close();
         }
