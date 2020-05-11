@@ -134,4 +134,24 @@ final class WhereTest extends TestCase
         run($func);
     }
 
+    // raw test
+    public function testExpression()
+    {
+        $_this = $this;
+        $func  = function () use ($_this) {
+            $conn   = conn();
+            
+            $result = $conn->table('users')->where([
+                ['id', '>', \Mix\Database\Database::raw('MOD(5,2)')],
+            ])->first();
+            $_this->assertTrue((bool)$result);
+
+            $result = $conn->table('users')->where([
+                [\Mix\Database\Database::raw('CHAR_LENGTH(id)'), '=', 1],
+            ])->get();
+            $_this->assertTrue((bool)$result);
+        };
+        run($func);
+    }
+
 }

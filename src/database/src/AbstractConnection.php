@@ -293,7 +293,7 @@ abstract class AbstractConnection
     public function queryOne(int $fetchStyle = null)
     {
         $this->execute();
-        $fetchStyle = $fetchStyle ?: $this->getAttributes()[\PDO::ATTR_DEFAULT_FETCH_MODE];
+        $fetchStyle = $fetchStyle ?: $this->driver->options()[\PDO::ATTR_DEFAULT_FETCH_MODE];
         return $this->statement->fetch($fetchStyle);
     }
 
