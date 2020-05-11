@@ -1,11 +1,13 @@
 {
-  "name": "mix/log",
-  "description": "Mix Log http://www.mixphp.cn",
+  "name": "mix/monolog",
+  "description": "Monolog support Swoole coroutine, support cli console print",
   "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "swoole",
+    "coroutine",
+    "log",
+    "monolog"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",
@@ -21,7 +23,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Mix\\Log\\": "src/"
+      "Mix\\Monolog\\": "src/"
     }
   }
 }

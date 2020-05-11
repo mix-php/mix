@@ -1,6 +1,6 @@
 <?php
 
-namespace Mix\Log\Handler;
+namespace Mix\Monolog\Handler;
 
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
@@ -23,24 +23,16 @@ function restore_error_handler()
 /**
  * 重写系统方法，屏蔽异常
  */
-function fopen($filename, $mode, $use_include_path = null, $context = null)
+function unlink($filename, $context = null)
 {
-    return @\fopen($filename, $mode, $use_include_path, $context);
+    return @\unlink($filename, $context);
 }
 
 /**
- * 重写系统方法，屏蔽异常
- */
-function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
-{
-    return @\mkdir($pathname, $mode, $recursive, $context);
-}
-
-/**
- * Class StreamHandler
+ * Class RotatingFileHandler
  * @package Mix\Log\Handler
  */
-class StreamHandler extends \Monolog\Handler\StreamHandler
+class RotatingFileHandler extends \Monolog\Handler\RotatingFileHandler
 {
 
     /**
@@ -50,5 +42,5 @@ class StreamHandler extends \Monolog\Handler\StreamHandler
     {
         return new LineFormatter("[%datetime%] %channel%.%level_name%: %message%\n", 'Y-m-d H:i:s', true);
     }
-
+    
 }

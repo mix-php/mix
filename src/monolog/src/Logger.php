@@ -1,10 +1,10 @@
 <?php
 
-namespace Mix\Log;
+namespace Mix\Monolog;
 
 /**
  * Class Logger
- * @package Mix\Log
+ * @package Mix\Monolog
  */
 class Logger extends \Monolog\Logger
 {

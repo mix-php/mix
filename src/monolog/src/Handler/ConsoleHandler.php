@@ -1,6 +1,6 @@
 <?php
 
-namespace Mix\Log\Handler;
+namespace Mix\Monolog\Handler;
 
 use Mix\Console\CommandLine\Color;
 use Monolog\Formatter\FormatterInterface;
@@ -11,7 +11,7 @@ use Monolog\Logger;
 
 /**
  * Class ConsoleHandler
- * @package Mix\Log\Handler
+ * @package Mix\Monolog\Handler
  */
 class ConsoleHandler extends AbstractProcessingHandler
 {
