@@ -1,12 +1,12 @@
 {
   "name": "mix/tracing-zipkin",
-  "description": "Mix Tracing Zipkin http://www.mixphp.cn",
+  "description": "Zipkin tracing library based on Opentracing standard",
   "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole",
-    "zipkin"
+    "tracing",
+    "zipkin",
+    "opentracing"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

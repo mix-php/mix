@@ -1,11 +1,10 @@
 {
   "name": "mix/validate",
-  "description": "Mix Validate http://www.mixphp.cn",
+  "description": "Validate library, reference Yii2",
   "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "validate"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

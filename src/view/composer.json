@@ -1,11 +1,10 @@
 {
   "name": "mix/view",
-  "description": "Mix View http://www.mixphp.cn",
+  "description": "View library, reference Yii2",
   "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "view"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

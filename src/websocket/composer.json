@@ -1,11 +1,14 @@
 {
   "name": "mix/websocket",
-  "description": "Mix WebSocket http://www.mixphp.cn",
+  "description": "WebSocket library based on Swoole coroutine, including server and client",
   "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "swoole",
+    "coroutine",
+    "websocket",
+    "server",
+    "client"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

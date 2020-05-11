@@ -1,12 +1,12 @@
 {
   "name": "mix/tracing",
-  "description": "Mix Tracing http://www.mixphp.cn",
+  "description": "tracing library, following PSR-7 / PSR-15 / Opentracing standard",
   "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole",
-    "opentracing"
+    "tracing",
+    "opentracing",
+    "psr"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",
