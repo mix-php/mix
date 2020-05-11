@@ -1,7 +1,7 @@
 {
   "name": "mix/tracing-zipkin",
   "description": "Mix Tracing Zipkin http://www.mixphp.cn",
-  "type": "framework",
+  "type": "library",
   "keywords": [
     "framework",
     "mix",

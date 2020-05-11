@@ -1,10 +1,18 @@
 ## Mix Cache
 
+基于 PSR-6 标准的缓存库，支持 file, redis 存储
+
 ## Usage
+
+安装：
 
 ```
 composer require mix/cache
 ```
+
+文档：
+
+- https://www.kancloud.cn/onanying/mixphp2-1/1255318
 
 ## License
 

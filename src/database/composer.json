@@ -1,10 +1,11 @@
 {
   "name": "mix/database",
-  "description": "Mix Database http://www.mixphp.cn",
-  "type": "framework",
+  "description": "Coroutine database library based on Swoole, built-in connection pool",
+  "type": "library",
   "keywords": [
-    "framework",
     "mix",
+    "database",
+    "mysql",
     "swoole"
   ],
   "homepage": "http://www.mixphp.cn/",

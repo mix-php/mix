@@ -1,11 +1,13 @@
 {
   "name": "mix/http-message",
-  "description": "Mix Http Message http://www.mixphp.cn",
-  "type": "framework",
+  "description": "Http message library based on PSR-7 / PSR-17 standard, support Swoole",
+  "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "swoole",
+    "http",
+    "message",
+    "psr"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

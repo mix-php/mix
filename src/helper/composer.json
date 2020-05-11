@@ -1,11 +1,10 @@
 {
   "name": "mix/helper",
-  "description": "Mix Helper http://www.mixphp.cn",
-  "type": "framework",
+  "description": "Common helper methods",
+  "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "helper"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

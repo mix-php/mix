@@ -1,11 +1,11 @@
 {
   "name": "mix/console",
-  "description": "Mix Console http://www.mixphp.cn",
-  "type": "framework",
+  "description": "Command line console program development library",
+  "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "cli",
+    "console"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

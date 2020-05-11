@@ -1,7 +1,7 @@
 {
   "name": "mix/micro-config",
   "description": "Mix Micro Config http://www.mixphp.cn",
-  "type": "framework",
+  "type": "library",
   "keywords": [
     "framework",
     "mix",

@@ -1,7 +1,7 @@
 {
   "name": "mix/http-server",
   "description": "Mix Http Server http://www.mixphp.cn",
-  "type": "framework",
+  "type": "library",
   "keywords": [
     "framework",
     "mix",

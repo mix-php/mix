@@ -1,7 +1,7 @@
 {
   "name": "mix/redis-subscribe",
   "description": "Mix Redis Subscribe http://www.mixphp.cn",
-  "type": "framework",
+  "type": "library",
   "keywords": [
     "framework",
     "mix",

@@ -1,7 +1,7 @@
 {
   "name": "mix/micro-route",
   "description": "Mix Micro Route http://www.mixphp.cn",
-  "type": "framework",
+  "type": "library",
   "keywords": [
     "framework",
     "mix",

@@ -1,11 +1,12 @@
 {
   "name": "mix/auth",
-  "description": "Mix Auth http://www.mixphp.cn",
-  "type": "framework",
+  "description": "JWT authorization library based on psr-7 standard",
+  "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "auth",
+    "jwt",
+    "psr"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

@@ -1,7 +1,7 @@
 {
   "name": "mix/micro-gateway",
   "description": "Mix Micro Gateway http://www.mixphp.cn",
-  "type": "framework",
+  "type": "library",
   "keywords": [
     "framework",
     "mix",

@@ -1,7 +1,7 @@
 {
   "name": "mix/server",
   "description": "Mix Server http://www.mixphp.cn",
-  "type": "framework",
+  "type": "library",
   "keywords": [
     "framework",
     "mix",

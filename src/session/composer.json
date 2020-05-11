@@ -1,7 +1,7 @@
 {
   "name": "mix/session",
   "description": "Mix Session http://www.mixphp.cn",
-  "type": "framework",
+  "type": "library",
   "keywords": [
     "framework",
     "mix",

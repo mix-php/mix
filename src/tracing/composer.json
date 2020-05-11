@@ -1,7 +1,7 @@
 {
   "name": "mix/tracing",
   "description": "Mix Tracing http://www.mixphp.cn",
-  "type": "framework",
+  "type": "library",
   "keywords": [
     "framework",
     "mix",

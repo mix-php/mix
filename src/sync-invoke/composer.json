@@ -1,7 +1,7 @@
 {
   "name": "mix/sync-invoke",
   "description": "Mix Sync Invoke http://www.mixphp.cn",
-  "type": "framework",
+  "type": "library",
   "keywords": [
     "framework",
     "mix",

@@ -1,6 +1,6 @@
 ## Guzzle
 
-让 Guzzle 支持 Swoole 的 PHP Stream Hook 协程
+支持 Swoole 协程的 Guzzle, 可 Hook 第三方库
 
 ## 安装
 

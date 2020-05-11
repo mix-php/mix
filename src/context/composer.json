@@ -1,11 +1,10 @@
 {
   "name": "mix/context",
-  "description": "Mix Context http://www.mixphp.cn",
-  "type": "framework",
+  "description": "Context processing library",
+  "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "context"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

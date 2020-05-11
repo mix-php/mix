@@ -1,11 +1,13 @@
 {
   "name": "mix/cache",
-  "description": "Mix Cache http://www.mixphp.cn",
-  "type": "framework",
+  "description": "Psr-6 standard based cache library, support file, redis storage",
+  "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "cache",
+    "psr",
+    "file",
+    "redis"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

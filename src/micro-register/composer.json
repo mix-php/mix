@@ -1,7 +1,7 @@
 {
   "name": "mix/micro-register",
   "description": "Mix Micro Register http://www.mixphp.cn",
-  "type": "framework",
+  "type": "library",
   "keywords": [
     "framework",
     "mix",

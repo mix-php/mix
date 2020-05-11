@@ -1,11 +1,12 @@
 {
   "name": "mix/concurrent",
-  "description": "Mix Concurrent http://www.mixphp.cn",
-  "type": "framework",
+  "description": "Coroutine concurrency library based on Swoole",
+  "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "swoole",
+    "concurrent",
+    "coroutine"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

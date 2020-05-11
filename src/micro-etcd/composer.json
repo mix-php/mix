@@ -1,7 +1,7 @@
 {
   "name": "mix/micro-etcd",
   "description": "Mix Micro Etcd http://www.mixphp.cn",
-  "type": "framework",
+  "type": "library",
   "keywords": [
     "framework",
     "mix",

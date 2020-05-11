@@ -1,7 +1,7 @@
 {
   "name": "mix/micro-hystrix",
   "description": "Mix Micro Hystrix http://www.mixphp.cn",
-  "type": "framework",
+  "type": "library",
   "keywords": [
     "framework",
     "mix",

@@ -1,7 +1,7 @@
 {
   "name": "mix/json-rpc",
   "description": "JSON-RPC 库，支持所有 Swoole 环境 / JSON-RPC library, supports all Swoole environments (http://mixphp.cn)",
-  "type": "framework",
+  "type": "library",
   "keywords": [
     "mix",
     "swoole",

@@ -1,7 +1,7 @@
 {
   "name": "mix/log",
   "description": "Mix Log http://www.mixphp.cn",
-  "type": "framework",
+  "type": "library",
   "keywords": [
     "framework",
     "mix",

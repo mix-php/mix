@@ -1,11 +1,12 @@
 {
   "name": "mix/event",
-  "description": "Mix Event http://www.mixphp.cn",
-  "type": "framework",
+  "description": "Event dispatch library based on PSR-14 standard",
+  "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "event",
+    "dispatch",
+    "psr"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

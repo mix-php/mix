@@ -1,11 +1,12 @@
 {
   "name": "mix/bean",
-  "description": "Mix Bean http://www.mixphp.cn",
-  "type": "framework",
+  "description": "Refer to the container developed by spring bean, with DI, ICO",
+  "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "bean",
+    "di",
+    "ico"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",
