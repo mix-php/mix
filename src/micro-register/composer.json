@@ -1,11 +1,12 @@
 {
   "name": "mix/micro-register",
-  "description": "Mix Micro Register http://www.mixphp.cn",
+  "description": "Common interface for microservice registry-center library",
   "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "swoole",
+    "microservice",
+    "registry-center"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

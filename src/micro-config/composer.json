@@ -1,11 +1,11 @@
 {
   "name": "mix/micro-config",
-  "description": "Mix Micro Config http://www.mixphp.cn",
+  "description": "Common interface for microservice config-center library",
   "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "microservice",
+    "config-center"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

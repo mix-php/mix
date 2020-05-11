@@ -1,11 +1,11 @@
 {
   "name": "mix/route",
-  "description": "Mix Route http://www.mixphp.cn",
+  "description": "Http route library, following psr-7 / psr-15 standard",
   "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "route",
+    "psr"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

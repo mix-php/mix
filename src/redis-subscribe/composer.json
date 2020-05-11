@@ -1,11 +1,12 @@
 {
   "name": "mix/redis-subscribe",
-  "description": "Mix Redis Subscribe http://www.mixphp.cn",
+  "description": "Redis subscribe library based on Swoole coroutine",
   "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "swoole",
+    "redis",
+    "subscribe"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

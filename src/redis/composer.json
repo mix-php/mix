@@ -1,11 +1,13 @@
 {
   "name": "mix/redis",
-  "description": "Mix Redis http://www.mixphp.cn",
+  "description": "Coroutine redis library based on Swoole, built-in connection pool",
   "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "swoole",
+    "coroutine",
+    "redis",
+    "connection-pool"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

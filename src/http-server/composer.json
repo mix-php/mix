@@ -1,6 +1,6 @@
 {
   "name": "mix/http-server",
-  "description": "Http server library based on Swoole coroutine, follow psr-7 / psr-15 / psr-17 standard",
+  "description": "Http server library based on Swoole coroutine, following psr-7 / psr-15 standard",
   "type": "library",
   "keywords": [
     "mix",

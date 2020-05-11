@@ -1,6 +1,10 @@
 ## Mix Micro Etcd
 
+使用 Etcd 的微服务注册中心和配置中心，基于 Swoole 开发
+
 ## Usage
+
+安装：
 
 ```
 composer require mix/micro-etcd

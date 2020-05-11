@@ -1,11 +1,13 @@
 {
   "name": "mix/micro-gateway",
-  "description": "Mix Micro Gateway http://www.mixphp.cn",
+  "description": "Web/API gateway based on Swoole, microservice proxy",
   "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "swoole",
+    "microservice",
+    "gateway",
+    "proxy"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

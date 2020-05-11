@@ -1,11 +1,13 @@
 {
   "name": "mix/server",
-  "description": "Mix Server http://www.mixphp.cn",
+  "description": "tcp server library based on Swoole coroutine",
   "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "swoole",
+    "coroutine",
+    "tcp",
+    "server"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

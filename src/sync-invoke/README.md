@@ -1,6 +1,6 @@
 ## Mix Sync Invoke
 
-通用的同步代码执行库，支持所有 Swoole 环境，可用于执行无法被 Swoole Hook 的同步阻塞代码。
+Swoole 同步阻塞代码调用库，用于执行无法被 Swoole Hook 协程化的同步阻塞代码
 
 ## Usage
 

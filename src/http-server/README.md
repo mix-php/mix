@@ -1,6 +1,6 @@
 ## Mix Http Server
 
-基于 Swoole 协程的 http server 类库，遵循 PSR-7 / PSR-15 / PSR-17 标准
+基于 Swoole 协程的 http server 类库，遵循 PSR-7 / PSR-15 标准
 
 ## Usage
 

@@ -1,12 +1,13 @@
 {
   "name": "mix/micro-etcd",
-  "description": "Mix Micro Etcd http://www.mixphp.cn",
+  "description": "Microservice registry-center and config-center using Etcd, developed based on Swoole",
   "type": "library",
   "keywords": [
-    "framework",
     "mix",
     "swoole",
-    "etcd"
+    "etcd",
+    "registry-center",
+    "config-center"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

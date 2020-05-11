@@ -1,11 +1,11 @@
 {
   "name": "mix/micro-route",
-  "description": "Mix Micro Route http://www.mixphp.cn",
+  "description": "Router supporting microservice registration and micro web",
   "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "route",
+    "microservice"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

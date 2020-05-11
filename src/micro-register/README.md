@@ -1,8 +1,10 @@
 ## Mix Micro Register
 
-...
+微服务注册中心库通用接口
 
 ## Usage
+
+安装：
 
 ```
 composer require mix/micro-register

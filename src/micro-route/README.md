@@ -1,6 +1,10 @@
 ## Mix Micro Route
 
+支持微服务注册和 micro web 的路由器
+
 ## Usage
+
+安装：
 
 ```
 composer require mix/micro-route

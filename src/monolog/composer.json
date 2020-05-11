@@ -1,6 +1,6 @@
 {
   "name": "mix/monolog",
-  "description": "Monolog support Swoole coroutine, support cli console print",
+  "description": "Monolog support Swoole coroutine and cli console printing",
   "type": "library",
   "keywords": [
     "mix",

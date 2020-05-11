@@ -1,11 +1,11 @@
 {
   "name": "mix/session",
-  "description": "Mix Session http://www.mixphp.cn",
+  "description": "Session library based on Swoole coroutine Redis, following PSR-7 standard",
   "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "session",
+    "redis"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

@@ -1,8 +1,10 @@
 ## Mix Pool
 
-...
+基于 Swoole 的通用连接池库
 
 ## Usage
+
+安装：
 
 ```
 composer require mix/pool

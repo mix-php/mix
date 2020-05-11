@@ -1,11 +1,13 @@
 {
   "name": "mix/micro-hystrix",
-  "description": "Mix Micro Hystrix http://www.mixphp.cn",
+  "description": "Microservice circuit breaker, reference spring hystrix, developed based on Swoole",
   "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "swoole",
+    "hystrix",
+    "microservice",
+    "circuitbreaker"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

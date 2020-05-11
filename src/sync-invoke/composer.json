@@ -1,11 +1,13 @@
 {
   "name": "mix/sync-invoke",
-  "description": "Mix Sync Invoke http://www.mixphp.cn",
+  "description": "Swoole synchronous blocking code invoke library",
   "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "swoole",
+    "sync",
+    "block",
+    "invoke"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",

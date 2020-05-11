@@ -1,12 +1,18 @@
 ## Mix Route
 
-...
+Http 路由类库，遵循 PSR-7 / PSR-15 标准
 
 ## Usage
+
+安装：
 
 ```
 composer require mix/route
 ```
+
+文档：
+
+- https://www.kancloud.cn/onanying/mixphp2-1/1255263
 
 ## License
 
