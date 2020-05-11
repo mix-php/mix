@@ -22,11 +22,9 @@ composer require mix/guzzle
 ```
 $handler = new \Mix\Guzzle\Handler\StreamHandler();
 $stack   = \GuzzleHttp\HandlerStack::create($handler);
-$client  = new \GuzzleHttp\Client(
-    [
-        'handler'  => $stack,
-    ]
-);
+$client  = new \GuzzleHttp\Client([
+    'handler'  => $stack,
+]);
 ```
 
 ### 方法二

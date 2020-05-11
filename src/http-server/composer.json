@@ -1,11 +1,13 @@
 {
   "name": "mix/http-server",
-  "description": "Mix Http Server http://www.mixphp.cn",
+  "description": "Http server library based on Swoole coroutine, follow psr-7 / psr-15 / psr-17 standard",
   "type": "library",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "swoole",
+    "http",
+    "server",
+    "coroutine"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",
@@ -26,5 +28,9 @@
     "psr-4": {
       "Mix\\Http\\Server\\": "src/"
     }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.0.0",
+    "mix/guzzle": "~2.1.0"
   }
 }

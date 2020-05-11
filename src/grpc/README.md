@@ -1,8 +1,8 @@
 ## Mix Grpc
 
-基于 Swoole 的 gRPC 类库，包含 protoc 代码生成器、服务器、客户端
+基于 Swoole 协程的 gRPC 类库，包含 protoc 代码生成器、服务器、客户端
 
-Swoole-based gRPC library, including protoc code generator, server, and client
+gRPC library based on Swoole coroutine, including protoc code generator, server, and client
 
 ## 安装
 

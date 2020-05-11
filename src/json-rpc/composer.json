@@ -1,12 +1,17 @@
 {
   "name": "mix/json-rpc",
-  "description": "JSON-RPC 库，支持所有 Swoole 环境 / JSON-RPC library, supports all Swoole environments (http://mixphp.cn)",
+  "description": "JSON-RPC library based on Swoole coroutine, including server and client, supports both TCP and HTTP protocols",
   "type": "library",
   "keywords": [
     "mix",
     "swoole",
+    "coroutine",
     "jsonrpc",
-    "json-rpc"
+    "json-rpc",
+    "tcp",
+    "http",
+    "server",
+    "client"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",
