@@ -1,6 +1,6 @@
 {
   "name": "mix/tracing",
-  "description": "tracing library, following PSR-7 / PSR-15 / Opentracing standard",
+  "description": "Tracing library, following PSR-7 / PSR-15 / Opentracing standard",
   "type": "library",
   "keywords": [
     "mix",

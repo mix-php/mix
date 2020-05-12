@@ -1,6 +1,6 @@
 {
   "name": "mix/server",
-  "description": "tcp server library based on Swoole coroutine",
+  "description": "Tcp server library based on Swoole coroutine",
   "type": "library",
   "keywords": [
     "mix",
