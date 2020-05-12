@@ -58,7 +58,7 @@ class Connection
     protected function getDefaultHeaders()
     {
         return $defaultHeaders = [
-            'User-Agent' => sprintf('Mix PHP v%s, PHP v%s', \Mix::$version, PHP_VERSION),
+            'User-Agent' => sprintf('Mix WebSocket/PHP %s/Swoole %s', PHP_VERSION, SWOOLE_VERSION),
         ];
     }
 
