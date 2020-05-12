@@ -20,9 +20,9 @@
     "php": ">=7.2.0",
     "mix/opentracing": "^1.0",
     "openzipkin/zipkin": "^1.3",
-    "mix/guzzle": "~2.1.0",
-    "mix/bean": "~2.1.0",
-    "mix/context": "~2.1.0"
+    "mix/guzzle": "~2.2.0",
+    "mix/bean": "~2.2.0",
+    "mix/context": "~2.2.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^7.0.0"

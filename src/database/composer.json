@@ -21,8 +21,8 @@
     "ext-pdo": "*",
     "ext-swoole": ">=4.4.4",
     "psr/event-dispatcher": "^1.0",
-    "mix/bean": "~2.1.0",
-    "mix/pool": "~2.1.0"
+    "mix/bean": "~2.2.0",
+    "mix/pool": "~2.2.0"
   },
   "autoload": {
     "psr-4": {

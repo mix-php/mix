@@ -19,10 +19,10 @@
   "require": {
     "php": ">=7.2.0",
     "mix/opentracing": "^1.0",
-    "mix/grpc": "~2.1.0",
-    "mix/json-rpc": "~2.1.0",
-    "mix/http-server": "~2.1.0",
-    "mix/http-message": "~2.1.0"
+    "mix/grpc": "~2.2.0",
+    "mix/json-rpc": "~2.2.0",
+    "mix/http-server": "~2.2.0",
+    "mix/http-message": "~2.2.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^7.0.0"

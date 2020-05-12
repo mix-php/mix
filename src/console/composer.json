@@ -19,7 +19,7 @@
     "php": ">=7.0.0",
     "psr/log": "~1.0",
     "psr/event-dispatcher": "^1.0",
-    "mix/bean": "~2.1.0"
+    "mix/bean": "~2.2.0"
   },
   "autoload": {
     "psr-4": {
