@@ -11,7 +11,7 @@
 ## 环境依赖 (Require)
 
 * PHP >= 7.0
-* Swoole >= 4.0
+* Swoole >= 4.4
 
 ## 使用 (Usage)
 
