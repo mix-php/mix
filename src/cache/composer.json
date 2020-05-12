@@ -1,6 +1,6 @@
 {
   "name": "mix/cache",
-  "description": "Psr-6 standard based cache library, support file, redis storage",
+  "description": "PSR-6 standard based cache library, support file, redis storage",
   "type": "library",
   "keywords": [
     "mix",

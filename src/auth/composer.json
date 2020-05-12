@@ -1,6 +1,6 @@
 {
   "name": "mix/auth",
-  "description": "JWT authorization library based on psr-7 standard",
+  "description": "JWT authorization library based on PSR-7 standard",
   "type": "library",
   "keywords": [
     "mix",
