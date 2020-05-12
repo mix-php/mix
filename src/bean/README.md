@@ -1,6 +1,6 @@
 ## Mix Bean
 
-参考 Spring Bean 开发的容器，具有 DI、ICO
+DI、ICO 容器，参考 spring bean 设计
 
 ## Usage
 

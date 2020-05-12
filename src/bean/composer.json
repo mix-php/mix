@@ -1,6 +1,6 @@
 {
   "name": "mix/bean",
-  "description": "Refer to the container developed by spring bean, with DI, ICO",
+  "description": "DI, ICO container, reference spring bean",
   "type": "library",
   "keywords": [
     "mix",
