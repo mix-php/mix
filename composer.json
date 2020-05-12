@@ -1,6 +1,6 @@
 {
   "name": "mix/mix",
-  "description": "Single-threaded coroutine PHP framework (http://mixphp.cn)",
+  "description": "Single-threaded coroutine PHP framework",
   "type": "framework",
   "keywords": [
     "mix",
