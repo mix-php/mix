@@ -50,10 +50,10 @@ class Connection
     }
 
     /**
-     * Init
+     * Connect
      * @throws InvokeException
      */
-    public function init()
+    public function connect()
     {
         $client = new \Swoole\Coroutine\Http2\Client($this->host, $this->port, false);
         $client->set([

@@ -60,7 +60,7 @@ class Dialer
             'timeout'    => $this->timeout,
             'middleware' => $this->middleware,
         ]);
-        $conn->init();
+        $conn->connect();
         return $conn;
     }
 
