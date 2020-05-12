@@ -1,6 +1,6 @@
 {
   "name": "mix/route",
-  "description": "Http route library, following psr-7 / psr-15 standard",
+  "description": "Http route library, following PSR-7 / PSR-15 standard",
   "type": "library",
   "keywords": [
     "mix",
