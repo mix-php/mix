@@ -18,8 +18,7 @@
   ],
   "require": {
     "php": ">=7.0.0",
-    "ext-swoole": ">=4.4.4",
-    "mix/bean": "~2.2.0"
+    "ext-swoole": ">=4.4.4"
   },
   "autoload": {
     "psr-4": {

@@ -2,9 +2,8 @@
 
 namespace Mix\Concurrent\CoroutinePool;
 
-use Mix\Bean\BeanInjector;
-use Swoole\Coroutine\Channel;
 use Mix\Concurrent\Exception\TypeException;
+use Swoole\Coroutine\Channel;
 use Mix\Concurrent\Timer;
 use Mix\Concurrent\Coroutine;
 
@@ -32,56 +31,45 @@ class Dispatcher
      * 内部数据的是Channel
      * @var Channel
      */
-    public $workerPool;
+    protected $workerPool;
 
     /**
      * 工作者集合
      * @var array
      */
-    public $workers = [];
+    protected $workers = [];
 
     /**
      * 退出
      * @var Channel
      */
-    protected $_quit;
+    protected $quit;
 
     /**
      * Dispatcher constructor.
-     * @param array $config
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
+     * @param Channel $jobQueue
+     * @param int $maxWorkers
      */
-    public function __construct(array $config)
+    public function __construct(Channel $jobQueue, int $maxWorkers)
     {
-        BeanInjector::inject($this, $config);
-        $this->init();
-    }
-
-    /**
-     * 初始化
-     */
-    public function init()
-    {
-        if (!isset($this->workerPool)) {
-            $this->workerPool = new Channel($this->maxWorkers);
-        }
-        $this->_quit = new Channel();
+        $this->jobQueue   = $jobQueue;
+        $this->maxWorkers = $maxWorkers;
+        $this->workerPool = new Channel($this->maxWorkers);
+        $this->quit       = new Channel();
     }
 
     /**
      * 启动
+     * @param string $worker
      */
-    public function start($worker)
+    public function start(string $worker)
     {
-        if (!is_subclass_of($worker, WorkerInterface::class)) {
-            throw new TypeException("{$worker} type is not '" . WorkerInterface::class . "'");
+        if (!is_subclass_of($worker, AbstractWorker::class)) {
+            throw new TypeException("{$worker} type is not '" . AbstractWorker::class . "'");
         }
         for ($i = 0; $i < $this->maxWorkers; $i++) {
             /** @var AbstractWorker $worker */
-            $worker          = new $worker([
-                'workerPool' => $this->workerPool,
-            ]);
+            $worker          = new $worker($this->workerPool);
             $this->workers[] = $worker;
             $worker->start();
         }
@@ -104,7 +92,7 @@ class Dispatcher
             }
         });
         Coroutine::create(function () {
-            $this->_quit->pop();
+            $this->quit->pop();
             $timer = new Timer();
             $timer->tick(100, function () use ($timer) {
                 if ($this->jobQueue->stats()['queue_num'] > 0) {
@@ -125,7 +113,7 @@ class Dispatcher
     public function stop()
     {
         Coroutine::create(function () {
-            $this->_quit->push(true);
+            $this->quit->push(true);
         });
     }
 

@@ -2,7 +2,6 @@
 
 namespace Mix\Concurrent\CoroutinePool;
 
-use Mix\Bean\BeanInjector;
 use Swoole\Coroutine\Channel;
 use Mix\Concurrent\Coroutine;
 
@@ -30,26 +29,24 @@ abstract class AbstractWorker
      * 退出
      * @var Channel
      */
-    protected $_quit;
+    protected $quit;
 
     /**
      * AbstractWorker constructor.
-     * @param array $config
+     * @param Channel $workerPool
      */
-    public function __construct(array $config)
+    public function __construct(Channel $workerPool)
     {
-        BeanInjector::inject($this, $config);
-        $this->init();
+        $this->workerPool = $workerPool;
+        $this->jobChannel = new Channel();
+        $this->quit       = new Channel();
     }
 
     /**
-     * 初始化
+     * 处理
+     * @param $data
      */
-    public function init()
-    {
-        $this->jobChannel = new Channel();
-        $this->_quit      = new Channel();
-    }
+    abstract public function handle($data);
 
     /**
      * 启动
@@ -67,7 +64,7 @@ abstract class AbstractWorker
             }
         });
         Coroutine::create(function () {
-            $this->_quit->pop();
+            $this->quit->pop();
             $this->jobChannel->close();
         });
     }
@@ -78,7 +75,7 @@ abstract class AbstractWorker
     public function stop()
     {
         Coroutine::create(function () {
-            $this->_quit->push(true);
+            $this->quit->push(true);
         });
     }
 
