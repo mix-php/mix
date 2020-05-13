@@ -1,32 +1,30 @@
 <?php
 
-namespace Mix\Monolog\Handler;
-
-use Monolog\Formatter\FormatterInterface;
-use Monolog\Formatter\LineFormatter;
+namespace Monolog\Handler;
 
 /**
  * 重写写系统方法，使其失效
  * @param callable $call
  */
-function set_error_handler(callable $call)
-{
+if (!function_exists('Monolog\Handler\set_error_handler')) {
+    function set_error_handler(callable $call)
+    {
+    }
 }
 
 /**
  * 重写系统方法，使其失效
  */
-function restore_error_handler()
-{
+if (!function_exists('Monolog\Handler\restore_error_handler')) {
+    function restore_error_handler()
+    {
+    }
 }
 
-/**
- * 重写系统方法，屏蔽异常
- */
-function unlink($filename, $context = null)
-{
-    return @\unlink($filename, $context);
-}
+namespace Mix\Monolog\Handler;
+
+use Monolog\Formatter\FormatterInterface;
+use Monolog\Formatter\LineFormatter;
 
 /**
  * Class RotatingFileHandler
@@ -42,5 +40,5 @@ class RotatingFileHandler extends \Monolog\Handler\RotatingFileHandler
     {
         return new LineFormatter("[%datetime%] %channel%.%level_name%: %message%\n", 'Y-m-d H:i:s', true);
     }
-    
+
 }

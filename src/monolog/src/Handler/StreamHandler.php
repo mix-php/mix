@@ -1,40 +1,30 @@
 <?php
 
-namespace Mix\Monolog\Handler;
-
-use Monolog\Formatter\FormatterInterface;
-use Monolog\Formatter\LineFormatter;
+namespace Monolog\Handler;
 
 /**
  * 重写写系统方法，使其失效
  * @param callable $call
  */
-function set_error_handler(callable $call)
-{
+if (!function_exists('Monolog\Handler\set_error_handler')) {
+    function set_error_handler(callable $call)
+    {
+    }
 }
 
 /**
  * 重写系统方法，使其失效
  */
-function restore_error_handler()
-{
+if (!function_exists('Monolog\Handler\restore_error_handler')) {
+    function restore_error_handler()
+    {
+    }
 }
 
-/**
- * 重写系统方法，屏蔽异常
- */
-function fopen($filename, $mode, $use_include_path = null, $context = null)
-{
-    return @\fopen($filename, $mode, $use_include_path, $context);
-}
+namespace Mix\Monolog\Handler;
 
-/**
- * 重写系统方法，屏蔽异常
- */
-function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
-{
-    return @\mkdir($pathname, $mode, $recursive, $context);
-}
+use Monolog\Formatter\FormatterInterface;
+use Monolog\Formatter\LineFormatter;
 
 /**
  * Class StreamHandler
