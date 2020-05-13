@@ -81,6 +81,7 @@ class Connection
         $request->method  = $method;
         $request->path    = $path;
         $request->headers = $headers + [
+                'host'       => sprintf('%s:%s', $this->host, $this->port),
                 'user-agent' => sprintf('Mix gRPC/PHP %s/Swoole %s', PHP_VERSION, SWOOLE_VERSION),
             ];
         $request->data    = $body;
