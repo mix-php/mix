@@ -64,7 +64,7 @@ class Router implements HandlerInterface
      * 解析
      * 生成路由数据，将路由规则转换为正则表达式，并提取路由参数名
      */
-    public function parse(): void
+    public function parse()
     {
         $rules           = $this->merge($this->rules, $this->middleware);
         $this->materials = $this->convert($rules);
@@ -81,9 +81,9 @@ class Router implements HandlerInterface
         $data = [];
         foreach ($rules as $url => $rule) {
             $rule['middleware'] = $rule['middleware'] ?? [];
-            if (isset($rule['rules'])) {
+            if (($gRules = current($rule)) && is_array($gRules) && !is_callable($gRules, true)) {
                 // 分组处理
-                foreach ($rule['rules'] as $gUrl => $gRule) {
+                foreach ($gRules as $gUrl => $gRule) {
                     $gUrl                = substr_replace($gUrl, $url . '/', strpos($gUrl, '/'), 1);
                     $gRule['middleware'] = $gRule['middleware'] ?? [];
                     $gRule['middleware'] = array_merge($middleware, $rule['middleware'], $gRule['middleware']);
