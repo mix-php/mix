@@ -24,7 +24,7 @@ class Client
      * Global timeout
      * @var float
      */
-    public $timeout = 0.0;
+    public $timeout = 5.0;
 
     /**
      * Invoke timeout
