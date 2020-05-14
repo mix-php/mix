@@ -4,7 +4,6 @@ namespace GuzzleHttp\Handler;
 
 /**
  * 重写写系统方法，使其失效
- * @param callable $call
  */
 if (!function_exists('Monolog\Handler\set_error_handler')) {
     function set_error_handler($call)
