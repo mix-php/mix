@@ -2,14 +2,14 @@
 
 namespace Mix\SyncInvoke\Client\Pool;
 
-use Mix\Pool\AbstractConnectionPool;
+use Mix\Pool\AbstractObjectPool;
 use Mix\SyncInvoke\Client\Dialer;
 
 /**
  * Class ConnectionPool
  * @package Mix\SyncInvoke\Client\Pool
  */
-class ConnectionPool extends AbstractConnectionPool
+class ConnectionPool extends AbstractObjectPool
 {
 
     /**

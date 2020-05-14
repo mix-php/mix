@@ -52,7 +52,7 @@ abstract class AbstractObjectPool
     protected $actives = [];
 
     /**
-     * AbstractConnectionPool constructor.
+     * AbstractObjectPool constructor.
      * @param array $config
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
