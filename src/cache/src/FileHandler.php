@@ -17,20 +17,19 @@ class FileHandler implements CacheHandlerInterface
     public $dir = '';
 
     /**
-     * 分区
      * @var int
      */
-    public $partitions = 64;
+    public $shard = 64;
 
     /**
      * FileHandler constructor.
      * @param string $dir
-     * @param int $partitions
+     * @param int $shard
      */
-    public function __construct(string $dir, int $partitions = 64)
+    public function __construct(string $dir, int $shard = 64)
     {
-        $this->dir        = $dir;
-        $this->partitions = $partitions;
+        $this->dir   = $dir;
+        $this->shard = $shard;
     }
 
     /**
@@ -121,7 +120,7 @@ class FileHandler implements CacheHandlerInterface
     protected function getCacheFile($key)
     {
         $dir    = $this->dir;
-        $subDir = crc32($key) % $this->partitions;
+        $subDir = crc32($key) % $this->shard;
         $file   = md5($key);
         return $dir . DIRECTORY_SEPARATOR . $subDir . DIRECTORY_SEPARATOR . $file;
     }
