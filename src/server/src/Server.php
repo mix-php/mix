@@ -86,9 +86,10 @@ class Server
 
     /**
      * Start
+     * @param ServerHandlerInterface|null $handler
      * @throws \Swoole\Exception
      */
-    public function start(HandlerInterface $handler = null)
+    public function start(ServerHandlerInterface $handler = null)
     {
         if (!is_null($handler)) {
             $this->handle([$handler, 'handle']);

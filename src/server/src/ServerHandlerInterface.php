@@ -3,10 +3,10 @@
 namespace Mix\Server;
 
 /**
- * Interface HandlerInterface
+ * Interface ServerHandlerInterface
  * @package Mix\Server
  */
-interface HandlerInterface
+interface ServerHandlerInterface
 {
 
     /**

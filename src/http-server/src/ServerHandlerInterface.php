@@ -6,11 +6,11 @@ use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 
 /**
- * Interface HandlerInterface
+ * Interface ServerHandlerInterface
  * @package Mix\Http\Server
  * @author liu,jian <coder.keda@gmail.com>
  */
-interface HandlerInterface
+interface ServerHandlerInterface
 {
 
     /**

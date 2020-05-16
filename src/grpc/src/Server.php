@@ -19,7 +19,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
  * Class Server
  * @package Mix\Grpc
  */
-class Server implements \Mix\Http\Server\HandlerInterface
+class Server implements \Mix\Http\Server\ServerHandlerInterface
 {
 
     /**

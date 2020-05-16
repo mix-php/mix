@@ -28,7 +28,7 @@ $server->start();
 - 实现 `HandlerInterface` 接口
 
 ```
-class Router implements \Mix\Http\Server\HandlerInterface
+class Router implements \Mix\Http\Server\ServerHandlerInterface
 {
     public function handleHTTP(ServerRequest $request, Response $response) {
         // ...

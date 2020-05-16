@@ -4,7 +4,6 @@ namespace Mix\SyncInvoke;
 
 use Mix\Server\Connection;
 use Mix\Server\Exception\ReceiveException;
-use Mix\Server\HandlerInterface;
 use Mix\SyncInvoke\Event\InvokedEvent;
 use Mix\SyncInvoke\Exception\CallException;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -13,7 +12,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
  * Class Server
  * @package Mix\SyncInvoke
  */
-class Server implements HandlerInterface
+class Server implements \Mix\Server\ServerHandlerInterface
 {
 
     /**

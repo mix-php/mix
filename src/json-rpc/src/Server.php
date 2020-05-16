@@ -21,7 +21,7 @@ use Swoole\Coroutine\Channel;
  * Class Server
  * @package Mix\JsonRpc
  */
-class Server implements \Mix\Http\Server\HandlerInterface, \Mix\Server\HandlerInterface
+class Server implements \Mix\Http\Server\ServerHandlerInterface, \Mix\Server\ServerHandlerInterface
 {
 
     /**
