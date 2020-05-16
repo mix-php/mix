@@ -6,7 +6,6 @@ use Mix\Bean\BeanInjector;
 use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
-use Mix\Http\Server\HandlerInterface;
 use Mix\Http\Server\Middleware\MiddlewareDispatcher;
 use Mix\Route\Exception\NotFoundException;
 use Psr\Http\Server\MiddlewareInterface;
@@ -16,7 +15,7 @@ use Psr\Http\Server\MiddlewareInterface;
  * @package Mix\Route
  * @author liu,jian <coder.keda@gmail.com>
  */
-class Router implements HandlerInterface
+class Router implements \Mix\Http\Server\ServerHandlerInterface
 {
 
     /**
