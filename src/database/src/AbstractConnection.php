@@ -148,7 +148,7 @@ abstract class AbstractConnection
      * @param array $data
      * @return $this
      */
-    protected function bindValues(array $data)
+    public function bindValues(array $data)
     {
         $this->values = array_merge($this->values, $data);
         return $this;
