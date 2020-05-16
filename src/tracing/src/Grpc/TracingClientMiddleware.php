@@ -43,11 +43,12 @@ class TracingClientMiddleware implements MiddlewareInterface
 
         $tracer = $this->tracer;
 
-        $operationName = 'grpc.client';
+        $operationName = sprintf('%s:%s', 'grpc.client', $serviceName);
         $scope         = $tracer->startActiveSpan($operationName, [
             'tags' => [
-                'service.name'   => $serviceName,
-                'service.method' => $serviceMethod,
+                'service.name'    => $serviceName,
+                'service.method'  => $serviceMethod,
+                'service.address' => $request->headers['host'] ?? '',
             ],
         ]);
 
