@@ -18,11 +18,12 @@
 
 - `V1.*`: 基于 Swoole 的常驻内存型 PHP 高性能框架
 - `V2.0`: 基于 Swoole 的 FastCGI、常驻内存、协程三模 PHP 高性能框架
-- `V2.1`: 基于 Swoole 4.4+ 单线程协程 PHP 框架 🆕
+- `V2.1`: 基于 Swoole 4.4+ 单线程协程 PHP 框架 
+- `V2.2`: 基于 Swoole 4.4+ 单线程协程 PHP 微服务框架 🆕
 
 ## 与传统 MVC 框架比较
 
-传统框架大部分都是在 HTTP 领域开发，而 Mix 能开发 HTTP、WebSocket、TCP、UDP 几乎全部互联网领域。
+传统框架大部分都是在 HTTP 领域开发，而 Mix 能开发 HTTP、WebSocket、TCP、UDP、RPC 几乎全部互联网领域。
 
 在命令开发方面 Mix 也有更多的封装，填充代码即可开发一个功能完备的命令行程序。
 
@@ -38,9 +39,19 @@
 
 我们的开发文档可能是所有框架中最详细的，源码自带 Demo，稍微修改一下即可使用。
 
-全面采用 Swoole 原生协程与最新的 PHP Stream 一键协程化技术。
+全面采用 Swoole 原生协程与最新的 PHP Stream Hook 一键协程化技术。
 
 采用和 Golang 类似的高度灵活的开发方式，框架只提供底层库，而与具体功能相关的代码都在项目库中实现，用户能更加细粒度的修改每一处细节。
+
+## 微服务
+
+微服务方面采用的其他 Swoole 框架没有走的创新道路，在现有全部语言种只有 java spring cloud, golang go-micro 两大微服务生态最为成熟，由于 Mix 一直是类 golang 风格框架，加上单进程协程的独特优点，我们实现的 [go-micro](https://github.com/micro/go-micro) 的代码级互通，并可以使用 [micro runtime](https://micro.mu/docs/runtime.html) 工具包的网关、代理、Dashboard 等全部微服务治理基础设施，这意味着 PHP 能与 Go 一同无缝打造高性能 RPC 服务网格，加上 mix = beego + go-micro 两大框架的功能集合，因此采用 mix 开发的单体应用能在无需大量修改业务代码的情况下低成本升级到微服务。
+
+- [Mix gRPC](https://github.com/mix-php/grpc)
+- [Mix JSON-RPC](https://github.com/mix-php/json-rpc)
+- [Mix Micro Etcd](https://github.com/mix-php/micro-etcd)
+- [Mix Micro Hystrix](https://github.com/mix-php/micro-hystrix)
+- [Mix Tracing Zipkin](https://github.com/mix-php/tracing-zipkin)
 
 ## 框架定位
 
@@ -49,12 +60,10 @@
 ## 框架配套工具
 
 - [SwooleFor](https://github.com/mix-php/swoolefor)：自动重启工具，实现热更新功能
-- [mix-phar-skeleton](https://github.com/mix-php/mix-phar-skeleton)：开发 Phar 文件命令行的程序骨架
-- [guzzle-hook](https://github.com/mix-php/guzzle-hook)：让 Guzzle 支持 Swoole 的 PHP Stream Hook 协程 (无需修改代码)
 
 ## 性能测试
 
-[MixPHP 并发性能全面对比测试](http://www.jianshu.com/p/f769b6be1caf)
+- [MixPHP 并发性能全面对比测试](http://www.jianshu.com/p/f769b6be1caf)
 
 ## 开发文档
 
@@ -74,7 +83,7 @@ MixPHP开发指南：
 推荐使用 [composer](https://www.phpcomposer.com/) 安装。
 
 ```
-composer create-project --prefer-dist mix/mix-skeleton mix 2.1.*
+composer create-project --prefer-dist mix/mix-skeleton mix ~2.2.0
 ```
 
 启动服务器：
@@ -82,7 +91,7 @@ composer create-project --prefer-dist mix/mix-skeleton mix 2.1.*
 接下来启动 HTTP 服务器。
 
 ```
-$> php /data/bin/mix.php web:start
+$> php /data/bin/mix.php web
 ```
 
 如果一切顺利，运行到最后你将看到如下的输出：
@@ -98,11 +107,11 @@ $> php /data/bin/mix.php web:start
 Server         Name:      mix-web
 System         Name:      darwin
 PHP            Version:   7.3.12
-Swoole         Version:   4.4.12
-Framework      Version:   2.1.9
-Listen         Addr:      127.0.0.1
+Swoole         Version:   4.5.0
+Framework      Version:   2.2.2
+Listen         Addr:      0.0.0.0
 Listen         Port:      9501
-[info] 2020-03-12 09:47:37.284 <20810> server start
+[2020-05-16 18:09:43] WEB.INFO: server start
 ```
 
 访问测试 (新开一个终端)：
