@@ -9,7 +9,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use const OpenTracing\Formats\TEXT_MAP;
+use const OpenTracing\Tags\HTTP_METHOD;
 use const OpenTracing\Tags\HTTP_STATUS_CODE;
+use const OpenTracing\Tags\HTTP_URL;
 
 /**
  * Class TracingServerMiddleware
@@ -69,6 +71,8 @@ abstract class TracingServerMiddleware implements MiddlewareInterface
             'tags'     => [
                 'service.name'   => $serviceName,
                 'service.method' => $serviceMethod,
+                HTTP_METHOD      => $request->getMethod(),
+                HTTP_URL         => $request->getUri()->__toString(),
             ],
         ]);
 
