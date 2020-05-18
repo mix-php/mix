@@ -231,7 +231,7 @@ abstract class AbstractConnection
     /**
      * 调度事件
      */
-    protected function dispatchEvent()
+    protected function dispatch()
     {
         if (!$this->dispatcher) {
             return;
@@ -270,7 +270,7 @@ abstract class AbstractConnection
         // 清扫
         $this->clear();
         // 调度执行事件
-        $this->dispatchEvent();
+        $this->dispatch();
         // 返回
         return $success;
     }

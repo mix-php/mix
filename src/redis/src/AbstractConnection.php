@@ -57,7 +57,7 @@ abstract class AbstractConnection implements ConnectionInterface
      * @param $arguments
      * @param $time
      */
-    protected function dispatchEvent($command, $arguments, $time)
+    protected function dispatch($command, $arguments, $time)
     {
         if (!$this->dispatcher) {
             return;
@@ -92,7 +92,7 @@ abstract class AbstractConnection implements ConnectionInterface
         $result    = call_user_func_array([$this->driver->instance(), $command], $arguments);
         $time      = round((static::microtime() - $microtime) * 1000, 2);
         // 调度执行事件
-        $this->dispatchEvent($command, $arguments, $time);
+        $this->dispatch($command, $arguments, $time);
         // 返回
         return $result;
     }
