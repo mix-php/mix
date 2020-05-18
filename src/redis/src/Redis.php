@@ -2,7 +2,6 @@
 
 namespace Mix\Redis;
 
-use Mix\Bean\BeanInjector;
 use Mix\Redis\Pool\ConnectionPool;
 use Mix\Redis\Pool\Dialer;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -20,50 +19,44 @@ class Redis implements ConnectionInterface
      * 主机
      * @var string
      */
-    public $host = '';
+    protected $host = '';
 
     /**
      * 端口
      * @var int
      */
-    public $port = 6379;
+    protected $port = 6379;
 
     /**
      * 密码
      * @var string
      */
-    public $password = '';
+    protected $password = '';
 
     /**
      * 数据库
      * @var int
      */
-    public $database = 0;
+    protected $database = 0;
 
     /**
      * 超时
      * @var float
      */
-    public $timeout = 5.0;
+    protected $timeout = 5.0;
 
     /**
      * 重连间隔
      * @var int
      */
-    public $retryInterval = 0;
+    protected $retryInterval = 0;
 
     /**
      * 读取超时
      * phpredis >= 3.1.3
-     * @var int
+     * @var float
      */
-    public $readTimeout = -1;
-
-    /**
-     * 最多可空闲连接数
-     * @var int
-     */
-    public $maxIdle = 5;
+    protected $readTimeout = -1;
 
     /**
      * 最大连接数
@@ -71,6 +64,12 @@ class Redis implements ConnectionInterface
      */
     public $maxActive = 5;
 
+    /**
+     * 最多可空闲连接数
+     * @var int
+     */
+    public $maxIdle = 5;
+    
     /**
      * 事件调度器
      * @var EventDispatcherInterface
@@ -83,23 +82,29 @@ class Redis implements ConnectionInterface
     protected $pool;
 
     /**
-     * AbstractConnection constructor.
-     * @param array $config
+     * Redis constructor.
+     * @param string $host
+     * @param int $port
+     * @param string $password
+     * @param int $database
+     * @param float $timeout
+     * @param int $retryInterval
+     * @param float $readTimeout
+     * @throws \PhpDocReader\AnnotationException
+     * @throws \ReflectionException
      */
-    public function __construct(array $config = [])
+    public function __construct(string $host, int $port = 6379, string $password = '', int $database = 0, float $timeout = 5.0, int $retryInterval = 0, float $readTimeout = -1)
     {
-        BeanInjector::inject($this, $config);
-    }
+        $this->host          = $host;
+        $this->port          = $port;
+        $this->password      = $password;
+        $this->database      = $database;
+        $this->timeout       = $timeout;
+        $this->retryInterval = $retryInterval;
+        $this->readTimeout   = $readTimeout;
 
-    /**
-     * Init
-     */
-    public function init()
-    {
-        $pool       = new ConnectionPool([
-            'maxIdle'    => $this->maxIdle,
-            'maxActive'  => $this->maxActive,
-            'dialer'     => new Dialer([
+        $pool             = new ConnectionPool([
+            'dialer' => new Dialer([
                 'host'          => $this->host,
                 'port'          => $this->port,
                 'password'      => $this->password,
@@ -108,9 +113,11 @@ class Redis implements ConnectionInterface
                 'retryInterval' => $this->retryInterval,
                 'readTimeout'   => $this->readTimeout,
             ]),
-            'dispatcher' => $this->dispatcher,
         ]);
-        $this->pool = $pool;
+        $pool->maxActive  = &$this->maxActive;
+        $pool->maxIdle    = &$this->maxIdle;
+        $pool->dispatcher = &$this->dispatcher;
+        $this->pool       = $pool;
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace Mix\Database;
 
-use Mix\Bean\BeanInjector;
 use Mix\Database\Pool\ConnectionPool;
 use Mix\Database\Pool\Dialer;
 use Mix\Database\Query\Expression;
@@ -19,36 +18,36 @@ class Database
      * 数据源格式
      * @var string
      */
-    public $dsn = '';
+    protected $dsn = '';
 
     /**
      * 数据库用户名
      * @var string
      */
-    public $username = 'root';
+    protected $username = 'root';
 
     /*
      * 数据库密码
      */
-    public $password = '';
+    protected $password = '';
 
     /**
      * 驱动连接选项
      * @var array
      */
-    public $options = [];
+    protected $options = [];
+
+    /**
+     * 最大连接数
+     * @var int
+     */
+    public $maxActive = 10;
 
     /**
      * 最多可空闲连接数
      * @var int
      */
     public $maxIdle = 5;
-
-    /**
-     * 最大连接数
-     * @var int
-     */
-    public $maxActive = 5;
 
     /**
      * 事件调度器
@@ -62,31 +61,33 @@ class Database
     protected $pool;
 
     /**
-     * AbstractConnection constructor.
-     * @param array $config
+     * Database constructor.
+     * @param string $dsn
+     * @param string $username
+     * @param string $password
+     * @param array $options
+     * @throws \PhpDocReader\AnnotationException
+     * @throws \ReflectionException
      */
-    public function __construct(array $config = [])
+    public function __construct(string $dsn, string $username, string $password, array $options = [])
     {
-        BeanInjector::inject($this, $config);
-    }
+        $this->dsn      = $dsn;
+        $this->username = $username;
+        $this->password = $password;
+        $this->options  = $options;
 
-    /**
-     * Init
-     */
-    public function init()
-    {
-        $pool       = new ConnectionPool([
-            'maxIdle'    => $this->maxIdle,
-            'maxActive'  => $this->maxActive,
-            'dialer'     => new Dialer([
+        $pool             = new ConnectionPool([
+            'dialer' => new Dialer([
                 'dsn'      => $this->dsn,
                 'username' => $this->username,
                 'password' => $this->password,
                 'options'  => $this->options,
             ]),
-            'dispatcher' => $this->dispatcher,
         ]);
-        $this->pool = $pool;
+        $pool->maxActive  = &$this->maxActive;
+        $pool->maxIdle    = &$this->maxIdle;
+        $pool->dispatcher = &$this->dispatcher;
+        $this->pool       = $pool;
     }
 
     /**

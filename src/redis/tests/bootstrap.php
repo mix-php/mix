@@ -10,13 +10,12 @@ const REDIS_DATABASE = 0;
  */
 function redis()
 {
-    $redis = new \Mix\Redis\Redis([
-        'host'     => REDIS_HOST,
-        'port'     => REDIS_PORT,
-        'password' => REDIS_PASSWORD,
-        'database' => REDIS_DATABASE,
-    ]);
-    $redis->init();
+    $redis = new \Mix\Redis\Redis(
+        REDIS_HOST,
+        REDIS_PORT,
+        REDIS_PASSWORD,
+        REDIS_DATABASE,
+    );
     return $redis;
 }
 

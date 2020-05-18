@@ -2,7 +2,6 @@
 
 namespace Mix\SyncInvoke\Client;
 
-use Mix\Bean\BeanInjector;
 use Mix\SyncInvoke\Client\Pool\ConnectionPool;
 use Mix\SyncInvoke\Client\Pool\Dialer;
 use Mix\SyncInvoke\Exception\InvokeException;
@@ -18,31 +17,31 @@ class Client
     /**
      * @var int
      */
-    public $port;
+    protected $port;
 
     /**
      * Global timeout
      * @var float
      */
-    public $timeout = 5.0;
+    protected $timeout = 5.0;
 
     /**
      * Invoke timeout
      * @var float
      */
-    public $invokeTimeout = 10.0;
-
-    /**
-     * 最多可空闲连接数
-     * @var int
-     */
-    public $maxIdle = 5;
+    protected $invokeTimeout = 10.0;
 
     /**
      * 最大连接数
      * @var int
      */
     public $maxActive = 5;
+
+    /**
+     * 最多可空闲连接数
+     * @var int
+     */
+    public $maxIdle = 5;
 
     /**
      * 事件调度器
@@ -56,31 +55,29 @@ class Client
     protected $pool;
 
     /**
-     * Connection constructor.
-     * @param array $config
+     * Client constructor.
+     * @param int $port
+     * @param float $timeout
+     * @param float $invokeTimeout
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
      */
-    public function __construct(array $config = [])
+    public function __construct(int $port, float $timeout = 5.0, float $invokeTimeout = 10.0)
     {
-        BeanInjector::inject($this, $config);
-    }
+        $this->port          = $port;
+        $this->timeout       = $timeout;
+        $this->invokeTimeout = $invokeTimeout;
 
-    /**
-     * Init
-     */
-    public function init()
-    {
-        $pool       = new ConnectionPool([
-            'maxIdle'    => $this->maxIdle,
-            'maxActive'  => $this->maxActive,
-            'dialer'     => new Dialer([
+        $pool             = new ConnectionPool([
+            'dialer' => new Dialer([
                 'port'    => $this->port,
                 'timeout' => $this->timeout,
             ]),
-            'dispatcher' => $this->dispatcher,
         ]);
-        $this->pool = $pool;
+        $pool->maxActive  = &$this->maxActive;
+        $pool->maxIdle    = &$this->maxIdle;
+        $pool->dispatcher = &$this->dispatcher;
+        $this->pool       = $pool;
     }
 
     /**

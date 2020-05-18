@@ -16,16 +16,16 @@ abstract class AbstractObjectPool
 {
 
     /**
-     * 最多可空闲连接数
-     * @var int
-     */
-    public $maxIdle = 5;
-
-    /**
-     * 最大连接数
+     * 最大活跃数
      * @var int
      */
     public $maxActive = 5;
+
+    /**
+     * 最多可空闲数
+     * @var int
+     */
+    public $maxIdle = 5;
 
     /**
      * 拨号器

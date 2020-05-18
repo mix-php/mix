@@ -13,39 +13,16 @@ class Dialer
 {
 
     /**
-     * 数据源格式
-     * @var string
+     * 最大连接数
+     * @var int
      */
-    public $dsn = '';
-
-    /**
-     * 数据库用户名
-     * @var string
-     */
-    public $username = 'root';
-
-    /*
-     * 数据库密码
-     */
-    public $password = '';
-
-    /**
-     * 驱动连接选项
-     * @var array
-     */
-    public $options = [];
+    public $maxActive = 10;
 
     /**
      * 最多可空闲连接数
      * @var int
      */
     public $maxIdle = 5;
-
-    /**
-     * 最大连接数
-     * @var int
-     */
-    public $maxActive = 5;
 
     /**
      * 事件调度器
@@ -64,20 +41,18 @@ class Dialer
 
     /**
      * Dial
+     * @param string $dsn
+     * @param string $username
+     * @param string $password
+     * @param array $options
      * @return Database
      */
-    public function dial(string $dsn, string $username, string $password): Database
+    public function dial(string $dsn, string $username, string $password, array $options = []): Database
     {
-        $db = new Database([
-            'dsn'        => $dsn,
-            'username'   => $username,
-            'password'   => $password,
-            'options'    => $this->options,
-            'maxIdle'    => $this->maxIdle,
-            'maxActive'  => $this->maxActive,
-            'dispatcher' => $this->dispatcher,
-        ]);
-        $db->init();
+        $db             = new Database($dsn, $username, $password, $options);
+        $db->maxActive  = $this->maxActive;
+        $db->maxIdle    = $this->maxIdle;
+        $db->dispatcher = $this->dispatcher;
         return $db;
     }
 
