@@ -97,13 +97,14 @@ class Session
      * 启动新会话或者重用现有会话
      * @param ServerRequest $request
      * @param Response $response
+     * @param bool $regenerate
      */
-    public function start(ServerRequest $request, Response $response)
+    public function start(ServerRequest $request, Response $response, bool $regenerate = false)
     {
         $this->request  = $request;
         $this->response = $response;
         $sessionId      = $this->request->getAttribute($this->name);
-        if (is_null($sessionId)) {
+        if ($regenerate || is_null($sessionId)) {
             $sessionId = $this->createId();
         }
         $this->id = $sessionId;
