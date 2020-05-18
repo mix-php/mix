@@ -13,6 +13,12 @@ class Dialer
 {
 
     /**
+     * 驱动连接选项
+     * @var array
+     */
+    public $options = [];
+
+    /**
      * 最大连接数
      * @var int
      */
@@ -44,12 +50,11 @@ class Dialer
      * @param string $dsn
      * @param string $username
      * @param string $password
-     * @param array $options
      * @return Database
      */
-    public function dial(string $dsn, string $username, string $password, array $options = []): Database
+    public function dial(string $dsn, string $username, string $password): Database
     {
-        $db             = new Database($dsn, $username, $password, $options);
+        $db             = new Database($dsn, $username, $password, $this->options);
         $db->maxActive  = $this->maxActive;
         $db->maxIdle    = $this->maxIdle;
         $db->dispatcher = $this->dispatcher;

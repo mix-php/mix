@@ -13,6 +13,25 @@ class Dialer
 {
 
     /**
+     * 全局超时
+     * @var float
+     */
+    public $timeout = 5.0;
+
+    /**
+     * 重连间隔
+     * @var int
+     */
+    public $retryInterval = 0;
+
+    /**
+     * 读取超时
+     * phpredis >= 3.1.3
+     * @var float
+     */
+    public $readTimeout = -1;
+
+    /**
      * 最大连接数
      * @var int
      */
@@ -45,23 +64,20 @@ class Dialer
      * @param int $port
      * @param string $password
      * @param int $database
-     * @param float $timeout
-     * @param int $retryInterval
-     * @param float $readTimeout
      * @return Redis
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
      */
-    public function dial(string $host, int $port = 6379, string $password = '', int $database = 0, float $timeout = 5.0, int $retryInterval = 0, float $readTimeout = -1): Redis
+    public function dial(string $host, int $port = 6379, string $password = '', int $database = 0): Redis
     {
         $redis             = new Redis(
             $host,
             $port,
             $password,
             $database,
-            $timeout,
-            $retryInterval,
-            $readTimeout
+            $this->timeout,
+            $this->retryInterval,
+            $this->readTimeout
         );
         $redis->maxActive  = $this->maxActive;
         $redis->maxIdle    = $this->maxIdle;

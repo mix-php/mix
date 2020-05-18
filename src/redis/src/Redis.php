@@ -40,7 +40,7 @@ class Redis implements ConnectionInterface
     protected $database = 0;
 
     /**
-     * 超时
+     * 全局超时
      * @var float
      */
     protected $timeout = 5.0;
