@@ -83,7 +83,7 @@ MixPHP开发指南：
 推荐使用 [composer](https://www.phpcomposer.com/) 安装。
 
 ```
-composer create-project --prefer-dist mix/mix-skeleton mix ~2.2.0
+composer create-project --prefer-dist mix/mix-skeleton mix ~2.1.0
 ```
 
 启动服务器：
