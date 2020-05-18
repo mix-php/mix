@@ -2,6 +2,7 @@
 
 namespace Mix\Redis;
 
+use Mix\Redis\Event\CalledEvent;
 use Mix\Redis\Pool\ConnectionPool;
 use Mix\Redis\Pool\Dialer;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -69,7 +70,7 @@ class Redis implements ConnectionInterface
      * @var int
      */
     public $maxIdle = 5;
-    
+
     /**
      * 事件调度器
      * @var EventDispatcherInterface
@@ -126,7 +127,16 @@ class Redis implements ConnectionInterface
      */
     public function borrow(): Connection
     {
-        $driver           = $this->pool->borrow();
+        $microtime = static::microtime();
+        try {
+            $driver = $this->pool->borrow();
+        } catch (\Throwable $ex) {
+            $message = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
+            $code    = $ex->getCode();
+            $error   = sprintf('[%d] %s', $code, $message);
+            $this->dispatch($microtime, $error);
+            throw $ex;
+        }
         $conn             = new Connection($driver);
         $conn->dispatcher = $this->dispatcher;
         return $conn;
@@ -165,6 +175,32 @@ class Redis implements ConnectionInterface
     public function __call($name, $arguments)
     {
         return $this->borrow()->__call($name, $arguments);
+    }
+
+    /**
+     * 获取当前时间, 单位: 秒, 粒度: 微秒
+     * @return float
+     */
+    protected static function microtime()
+    {
+        list($usec, $sec) = explode(" ", microtime());
+        return ((float)$usec + (float)$sec);
+    }
+
+    /**
+     * 调度事件
+     * @param float $microtime
+     * @param string|null $error
+     */
+    protected function dispatch(float $microtime, string $error = null)
+    {
+        if (!$this->dispatcher) {
+            return;
+        }
+        $event        = new CalledEvent();
+        $event->time  = round((static::microtime() - $microtime) * 1000, 2);
+        $event->error = $error;
+        $this->dispatcher->dispatch($event);
     }
 
 }

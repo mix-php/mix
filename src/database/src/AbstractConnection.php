@@ -229,24 +229,6 @@ abstract class AbstractConnection
     }
 
     /**
-     * 调度事件
-     * @param array $log
-     * @param string|null $error
-     */
-    protected function dispatch(array $log, string $error = null)
-    {
-        if (!$this->dispatcher) {
-            return;
-        }
-        $event           = new ExecutedEvent();
-        $event->sql      = $log['sql'];
-        $event->bindings = $log['bindings'];
-        $event->time     = $log['time'];
-        $event->error    = $error;
-        $this->dispatcher->dispatch($event);
-    }
-
-    /**
      * 获取当前时间, 单位: 秒, 粒度: 微秒
      * @return float
      */
@@ -255,6 +237,26 @@ abstract class AbstractConnection
         list($usec, $sec) = explode(" ", microtime());
         return ((float)$usec + (float)$sec);
     }
+    
+    /**
+     * 调度事件
+     * @param string $sql
+     * @param array $bindings
+     * @param float $time
+     * @param string|null $error
+     */
+    protected function dispatch(string $sql, array $bindings, float $time, string $error = null)
+    {
+        if (!$this->dispatcher) {
+            return;
+        }
+        $event           = new ExecutedEvent();
+        $event->sql      = $sql;
+        $event->bindings = $bindings;
+        $event->time     = $time;
+        $event->error    = $error;
+        $this->dispatcher->dispatch($event);
+    }
 
     /**
      * 执行SQL语句
@@ -262,22 +264,22 @@ abstract class AbstractConnection
      */
     public function execute(): bool
     {
+        $microtime = static::microtime();
         try {
-            $microtime = static::microtime();
             $this->build();
-            $success            = $this->statement->execute();
-            $time               = round((static::microtime() - $microtime) * 1000, 2);
-            $this->queryData[3] = $time;
-            // 清扫
-            $this->clear();
+            $success = $this->statement->execute();
         } catch (\Throwable $ex) {
             $message = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
             $code    = $ex->getCode();
             $error   = sprintf('[%d] %s', $code, $message);
             throw $ex;
         } finally {
+            $time               = round((static::microtime() - $microtime) * 1000, 2);
+            $this->queryData[3] = $time;
+            $this->clear();
+
             $log = $this->getLastLog();
-            $this->dispatch($log, $error ?? null);
+            $this->dispatch($log['sql'], $log['bindings'], $log['time'], $error ?? null);
         }
         // 返回
         return $success;

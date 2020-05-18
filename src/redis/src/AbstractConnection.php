@@ -89,17 +89,17 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function __call(string $command, array $arguments = [])
     {
+        $microtime = static::microtime();
         try {
-            $microtime = static::microtime();
-            $result    = call_user_func_array([$this->driver->instance(), $command], $arguments);
-            $time      = round((static::microtime() - $microtime) * 1000, 2);
+            $result = call_user_func_array([$this->driver->instance(), $command], $arguments);
         } catch (\Throwable $ex) {
             $message = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
             $code    = $ex->getCode();
             $error   = sprintf('[%d] %s', $code, $message);
             throw $ex;
         } finally {
-            $this->dispatch($command, $arguments, $time ?? 0, $error ?? null);
+            $time = round((static::microtime() - $microtime) * 1000, 2);
+            $this->dispatch($command, $arguments, $time, $error ?? null);
         }
         return $result;
     }
