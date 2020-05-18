@@ -298,7 +298,7 @@ class Server implements \Mix\Http\Server\ServerHandlerInterface, \Mix\Server\Ser
             $response = (new ResponseFactory)->createErrorResponse($code, $ex->getMessage(), $request->id);
             $error    = sprintf('[%d] %s', $code, $message);
         } finally {
-            $this->dispatch($request, $response, $service, $microtime, $error ?? null);
+            $this->dispatch($request, $response, $service ?? '', $microtime, $error ?? null);
         }
         return $response;
     }

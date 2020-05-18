@@ -230,17 +230,19 @@ abstract class AbstractConnection
 
     /**
      * 调度事件
+     * @param array $log
+     * @param string|null $error
      */
-    protected function dispatch()
+    protected function dispatch(array $log, string $error = null)
     {
         if (!$this->dispatcher) {
             return;
         }
-        $log             = $this->getLastLog();
         $event           = new ExecutedEvent();
         $event->sql      = $log['sql'];
         $event->bindings = $log['bindings'];
         $event->time     = $log['time'];
+        $event->error    = $error;
         $this->dispatcher->dispatch($event);
     }
 
@@ -260,17 +262,23 @@ abstract class AbstractConnection
      */
     public function execute(): bool
     {
-        // 构建查询
-        $this->build();
-        // 执行
-        $microtime          = static::microtime();
-        $success            = $this->statement->execute();
-        $time               = round((static::microtime() - $microtime) * 1000, 2);
-        $this->queryData[3] = $time;
-        // 清扫
-        $this->clear();
-        // 调度执行事件
-        $this->dispatch();
+        try {
+            $microtime = static::microtime();
+            $this->build();
+            $success            = $this->statement->execute();
+            $time               = round((static::microtime() - $microtime) * 1000, 2);
+            $this->queryData[3] = $time;
+            // 清扫
+            $this->clear();
+        } catch (\Throwable $ex) {
+            $message = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
+            $code    = $ex->getCode();
+            $error   = sprintf('[%d] %s', $code, $message);
+            throw $ex;
+        } finally {
+            $log = $this->getLastLog();
+            $this->dispatch($log, $error ?? null);
+        }
         // 返回
         return $success;
     }

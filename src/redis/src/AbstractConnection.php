@@ -53,11 +53,12 @@ abstract class AbstractConnection implements ConnectionInterface
 
     /**
      * 调度事件
-     * @param $command
-     * @param $arguments
-     * @param $time
+     * @param string $command
+     * @param array $arguments
+     * @param float $time
+     * @param string|null $error
      */
-    protected function dispatch($command, $arguments, $time)
+    protected function dispatch(string $command, array $arguments, float $time, string $error = null)
     {
         if (!$this->dispatcher) {
             return;
@@ -66,6 +67,7 @@ abstract class AbstractConnection implements ConnectionInterface
         $event->command   = $command;
         $event->arguments = $arguments;
         $event->time      = $time;
+        $event->error     = $error;
         $this->dispatcher->dispatch($event);
     }
 
@@ -81,19 +83,24 @@ abstract class AbstractConnection implements ConnectionInterface
 
     /**
      * 执行命令
-     * @param $command
+     * @param string $command
      * @param array $arguments
      * @return mixed
      */
-    public function __call($command, $arguments = [])
+    public function __call(string $command, array $arguments = [])
     {
-        // 执行命令
-        $microtime = static::microtime();
-        $result    = call_user_func_array([$this->driver->instance(), $command], $arguments);
-        $time      = round((static::microtime() - $microtime) * 1000, 2);
-        // 调度执行事件
-        $this->dispatch($command, $arguments, $time);
-        // 返回
+        try {
+            $microtime = static::microtime();
+            $result    = call_user_func_array([$this->driver->instance(), $command], $arguments);
+            $time      = round((static::microtime() - $microtime) * 1000, 2);
+        } catch (\Throwable $ex) {
+            $message = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
+            $code    = $ex->getCode();
+            $error   = sprintf('[%d] %s', $code, $message);
+            throw $ex;
+        } finally {
+            $this->dispatch($command, $arguments, $time ?? 0, $error ?? null);
+        }
         return $result;
     }
 

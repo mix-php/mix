@@ -77,10 +77,13 @@ class Connection
             if ($data instanceof CallException) {
                 throw new InvokeException($data->message, $data->code);
             }
-            $this->dispatch($code, $microtime, null);
         } catch (\Throwable $ex) {
             $this->driver->__discard();
+            $message = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
+            $error   = sprintf('[%d] %s', $ex->getCode(), $message);
             throw $ex;
+        } finally {
+            $this->dispatch($code, $microtime, $error ?? null);
         }
         return $data;
     }

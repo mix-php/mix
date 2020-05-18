@@ -86,16 +86,17 @@ class Server implements \Mix\Server\ServerHandlerInterface
                 $code      = $connection->recv();
                 $closure   = \Opis\Closure\unserialize($code);
                 $microtime = static::microtime();
+                $error     = null;
                 try {
                     $result = call_user_func($closure);
                 } catch (\Throwable $ex) {
                     $message = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), 'closure://function () {...}', $ex->getLine());
                     $error   = sprintf('[%d] %s', $ex->getCode(), $message);
-                    $this->dispatch($code, $microtime, $error);
                     $connection->send(serialize(new CallException($message, $ex->getCode())) . Constants::EOF);
                     continue;
+                } finally {
+                    $this->dispatch($code, $microtime, $error);
                 }
-                $this->dispatch($code, $microtime, null);
                 $connection->send(serialize($result) . Constants::EOF);
             } catch (\Throwable $ex) {
                 // 忽略服务器主动断开连接异常
@@ -137,7 +138,7 @@ class Server implements \Mix\Server\ServerHandlerInterface
         $event->error = $error;
         $this->dispatcher->dispatch($event);
     }
-
+    
     /**
      * Shutdown
      * @throws \Swoole\Exception

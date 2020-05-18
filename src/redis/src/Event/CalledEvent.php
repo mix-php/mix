@@ -25,4 +25,9 @@ class CalledEvent
      */
     public $time = 0;
 
+    /**
+     * @var string|null
+     */
+    public $error;
+
 }
