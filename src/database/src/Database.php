@@ -2,8 +2,6 @@
 
 namespace Mix\Database;
 
-use Mix\Concurrent\Exception\TypeException;
-use Mix\Database\Event\ExecutedEvent;
 use Mix\Database\Pool\ConnectionPool;
 use Mix\Database\Pool\Dialer;
 use Mix\Database\Query\Expression;
@@ -98,16 +96,7 @@ class Database
      */
     public function borrow(): Connection
     {
-        $microtime = static::microtime();
-        try {
-            $driver = $this->pool->borrow();
-        } catch (\Throwable $ex) {
-            $message = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
-            $code    = $ex->getCode();
-            $error   = sprintf('[%d] %s', $code, $message);
-            $this->dispatch($microtime, $error);
-            throw $ex;
-        }
+        $driver           = $this->pool->borrow();
         $conn             = new Connection($driver);
         $conn->dispatcher = $this->dispatcher;
         return $conn;
@@ -205,32 +194,6 @@ class Database
     public static function raw(string $value): Expression
     {
         return new Expression($value);
-    }
-
-    /**
-     * 获取当前时间, 单位: 秒, 粒度: 微秒
-     * @return float
-     */
-    protected static function microtime()
-    {
-        list($usec, $sec) = explode(" ", microtime());
-        return ((float)$usec + (float)$sec);
-    }
-
-    /**
-     * 调度事件
-     * @param float $microtime
-     * @param string|null $error
-     */
-    protected function dispatch(float $microtime, string $error = null)
-    {
-        if (!$this->dispatcher) {
-            return;
-        }
-        $event        = new ExecutedEvent();
-        $event->time  = round((static::microtime() - $microtime) * 1000, 2);
-        $event->error = $error;
-        $this->dispatcher->dispatch($event);
     }
 
 }
