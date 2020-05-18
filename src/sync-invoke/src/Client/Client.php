@@ -86,9 +86,9 @@ class Client
      */
     public function borrow(): Connection
     {
-        $driver              = $this->pool->borrow();
-        $conn                = new Connection($driver);
-        $conn->invokeTimeout = $this->invokeTimeout;
+        $driver           = $this->pool->borrow();
+        $conn             = new Connection($driver, $this->invokeTimeout);
+        $conn->dispatcher = $this->dispatcher;
         return $conn;
     }
 

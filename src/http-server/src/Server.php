@@ -143,9 +143,9 @@ class Server
      * @param $request
      * @param $response
      * @param float $microtime
-     * @param null $error
+     * @param string|null $error
      */
-    protected function dispatch($request, $response, float $microtime, $error = null)
+    protected function dispatch($request, $response, float $microtime, string $error = null)
     {
         if (!isset($this->dispatcher)) {
             return;

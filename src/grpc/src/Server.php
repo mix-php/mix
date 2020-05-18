@@ -300,9 +300,9 @@ class Server implements \Mix\Http\Server\ServerHandlerInterface
      * @param string $service
      * @param string $method
      * @param float $microtime
-     * @param null $error
+     * @param string|null $error
      */
-    protected function dispatch($request, $response, string $service, string $method, float $microtime, $error = null)
+    protected function dispatch($request, $response, string $service, string $method, float $microtime, string $error = null)
     {
         if (!isset($this->dispatcher)) {
             return;

@@ -3,6 +3,7 @@
 namespace Mix\SyncInvoke\Client;
 
 use Mix\SyncInvoke\Constants;
+use Mix\SyncInvoke\Event\InvokedEvent;
 use Mix\SyncInvoke\Exception\CallException;
 use Mix\SyncInvoke\Exception\InvokeException;
 
@@ -25,12 +26,20 @@ class Connection
     public $invokeTimeout = 10.0;
 
     /**
+     * 事件调度器
+     * @var EventDispatcherInterface
+     */
+    public $dispatcher;
+
+    /**
      * Connection constructor.
      * @param Driver $driver
+     * @param float $invokeTimeout
      */
-    public function __construct(Driver $driver)
+    public function __construct(Driver $driver, float $invokeTimeout)
     {
-        $this->driver = $driver;
+        $this->driver        = $driver;
+        $this->invokeTimeout = $invokeTimeout;
     }
 
     /**
@@ -60,6 +69,7 @@ class Connection
      */
     public function invoke(\Closure $closure)
     {
+        $microtime = static::microtime();
         try {
             $code = \Opis\Closure\serialize($closure);
             $this->send($code . Constants::EOF);
@@ -67,6 +77,7 @@ class Connection
             if ($data instanceof CallException) {
                 throw new InvokeException($data->message, $data->code);
             }
+            $this->dispatch($code, $microtime, null);
         } catch (\Throwable $ex) {
             $this->driver->__discard();
             throw $ex;
@@ -110,6 +121,34 @@ class Connection
         if ($len !== $size) {
             throw new \Swoole\Exception('The sending data is incomplete, it may be that the socket has been closed by the peer.');
         }
+    }
+
+    /**
+     * 获取当前时间, 单位: 秒, 粒度: 微秒
+     * @return float
+     */
+    protected static function microtime()
+    {
+        list($usec, $sec) = explode(" ", microtime());
+        return ((float)$usec + (float)$sec);
+    }
+
+    /**
+     * Dispatch
+     * @param string $code
+     * @param float $microtime
+     * @param string|null $error
+     */
+    protected function dispatch(string $code, float $microtime, string $error = null)
+    {
+        if (!isset($this->dispatcher)) {
+            return;
+        }
+        $event        = new InvokedEvent();
+        $event->time  = round((static::microtime() - $microtime) * 1000, 2);
+        $event->code  = $code;
+        $event->error = $error;
+        $this->dispatcher->dispatch($event);
     }
 
     /**

@@ -3,10 +3,10 @@
 namespace Mix\SyncInvoke\Event;
 
 /**
- * Class InvokedEvent
+ * Class CalledEvent
  * @package Mix\SyncInvoke\Event
  */
-class InvokedEvent
+class CalledEvent
 {
 
     /**

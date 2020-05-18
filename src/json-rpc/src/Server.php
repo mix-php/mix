@@ -325,9 +325,9 @@ class Server implements \Mix\Http\Server\ServerHandlerInterface, \Mix\Server\Ser
      * @param Response $response
      * @param string $service
      * @param float $microtime
-     * @param null $error
+     * @param string|null $error
      */
-    protected function dispatch(Request $request, Response $response, string $service, float $microtime, $error = null)
+    protected function dispatch(Request $request, Response $response, string $service, float $microtime, string $error = null)
     {
         if (!isset($this->dispatcher)) {
             return;

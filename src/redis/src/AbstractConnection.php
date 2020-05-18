@@ -66,7 +66,7 @@ abstract class AbstractConnection implements ConnectionInterface
         $event->command   = $command;
         $event->arguments = $arguments;
         $event->time      = $time;
-        $this->dispatcher and $this->dispatcher->dispatch($event);
+        $this->dispatcher->dispatch($event);
     }
 
     /**

@@ -241,7 +241,7 @@ abstract class AbstractConnection
         $event->sql      = $log['sql'];
         $event->bindings = $log['bindings'];
         $event->time     = $log['time'];
-        $this->dispatcher and $this->dispatcher->dispatch($event);
+        $this->dispatcher->dispatch($event);
     }
 
     /**
