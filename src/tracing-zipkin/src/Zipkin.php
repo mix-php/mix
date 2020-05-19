@@ -2,15 +2,13 @@
 
 namespace Mix\Tracing\Zipkin;
 
-use Mix\Context\Context;
-use Mix\Tracing\Zipkin\Exception\NotFoundException;
 use OpenTracing\NoopTracer;
 
 /**
- * Class Tracing
+ * Class Zipkin
  * @package Mix\Tracing\Zipkin
  */
-class Tracing
+class Zipkin
 {
 
     /**
@@ -58,17 +56,6 @@ class Tracing
         ]);
         $tracer->init();
         return $tracer;
-    }
-
-    /**
-     * 从上下文提取 Tracer
-     * @param Context $context
-     * @return Tracer
-     * @throws \InvalidArgumentException
-     */
-    public static function extract(Context $context)
-    {
-        return $context->value('__tracer__');
     }
 
 }

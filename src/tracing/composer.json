@@ -19,6 +19,7 @@
   "require": {
     "php": ">=7.2.0",
     "mix/opentracing": "^1.0",
+    "mix/context": "~2.2.0",
     "mix/grpc": "~2.2.0",
     "mix/json-rpc": "~2.2.0",
     "mix/http-server": "~2.2.0",
