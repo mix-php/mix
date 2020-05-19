@@ -519,13 +519,11 @@ abstract class AbstractConnection
     {
         $this->beginTransaction();
         try {
-            $closure();
-            // 提交事务
+            call_user_func($closure, $this);
             $this->commit();
-        } catch (\Throwable $e) {
-            // 回滚事务
+        } catch (\Throwable $ex) {
             $this->rollBack();
-            throw $e;
+            throw $ex;
         }
     }
 
