@@ -61,11 +61,7 @@ var_dump($response);
 
 ```
 $dialer = new \Mix\JsonRpc\Client\Dialer([
-    'registry' => new \Mix\Micro\Etcd\Registry([
-        'host' => '127.0.0.1',
-        'port' => 2379,
-        'ttl'  => 10,
-    ]),
+    'registry' => new \Mix\Micro\Etcd\Registry('http://127.0.0.1:2379/v3'),
 ]);
 $conn   = $dialer->dialFromService('php.micro.jsonrpc.calculator');
 
