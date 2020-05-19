@@ -152,6 +152,24 @@ $response = $client->Hello($request);
 var_dump($response->getMsg());
 ```
 
+微服务调用：
+
+```
+// 通过服务名称拨号一个连接
+$dialer = new \Mix\JsonRpc\Client\Dialer([
+    'registry' => new \Mix\Micro\Etcd\Registry('http://127.0.0.1:2379/v3'),
+]);
+$conn   = $dialer->dialFromService('php.micro.grpc.calculator');
+// 通过连接创建客户端
+$client  = new \Php\Micro\Grpc\Greeter\SayClient($conn);
+// 发送请求
+$request = new \Php\Micro\Grpc\Greeter\Request();
+$request->setName('xiaoming');
+$response = $client->Hello($request);
+// 打印结果
+var_dump($response->getMsg());
+```
+
 Mix gRPC 开发微服务就这样完成了，就是这么简单。
 
 ## License

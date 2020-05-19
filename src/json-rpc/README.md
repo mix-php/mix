@@ -57,7 +57,7 @@ $response = $conn->call($request);
 var_dump($response);
 ```
 
-- 微服务 Client 调用
+- Client 微服务调用
 
 ```
 $dialer = new \Mix\JsonRpc\Client\Dialer([
