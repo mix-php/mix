@@ -43,11 +43,6 @@ class Registrar
     /**
      * @var string
      */
-    protected $nodeFormat = '/mix/node/%s/%s';
-
-    /**
-     * @var string
-     */
     protected $serviceFormat = '%s/%s/%s';
 
     /**
