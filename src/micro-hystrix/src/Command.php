@@ -19,7 +19,7 @@ class Command
      * 超时时间, 单位: 秒
      * @var float
      */
-    protected $timeout = 1.0;
+    protected $timeout = 5.0;
 
     /**
      * 最大并发数，超过并发返回错误, 0=关闭
