@@ -106,8 +106,12 @@ class Application
     /**
      * Application constructor.
      * @param array $config
+     * @param string $event
+     * @param string $error
+     * @throws \PhpDocReader\AnnotationException
+     * @throws \ReflectionException
      */
-    public function __construct(array $config)
+    public function __construct(array $config, string $event = 'event', string $error = 'error')
     {
         // 注入
         BeanInjector::inject($this, $config);
@@ -119,8 +123,8 @@ class Application
         }
         $this->context = new ApplicationContext($this->beans);
         // 加载核心库
-        $this->dispatcher = $this->context->get('event');
-        $this->error      = $this->context->get('error');
+        $this->dispatcher = $this->context->get($event);
+        $this->error      = $this->context->get($error);
         // 加载命令
         if ($this->commandPath != '') {
             $this->commands = ConfigHelper::each($this->commandPath);
