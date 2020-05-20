@@ -31,7 +31,7 @@ class Router extends \Mix\Route\Router
     {
         $services = [];
         foreach ($this->materials as $material) {
-            $regular = $material[0];
+            list($regular, , , $pattern) = $material;
             $slice   = explode(' ', $regular);
             $path    = substr($slice[1], 0, -3);
             $slice   = array_filter(explode('\/', strtolower($path)));
@@ -53,9 +53,9 @@ class Router extends \Mix\Route\Router
                     array_pop($slice);
                     $name = implode('.', $slice);
             }
-            $services[] = $version . $name;
+            $services[$version . $name][] = $pattern;
         }
-        return array_unique($services);
+        return $services;
     }
 
     /**

@@ -78,19 +78,19 @@ class Router implements \Mix\Http\Server\ServerHandlerInterface
     protected function merge(array $rules, array $middleware): array
     {
         $data = [];
-        foreach ($rules as $url => $rule) {
+        foreach ($rules as $pattern => $rule) {
             $rule['middleware'] = $rule['middleware'] ?? [];
             if (($gRules = current($rule)) && is_array($gRules) && !is_callable($gRules, true)) {
                 // 分组处理
-                foreach ($gRules as $gUrl => $gRule) {
-                    $gUrl                = substr_replace($gUrl, $url . '/', strpos($gUrl, '/'), 1);
+                foreach ($gRules as $gPattern => $gRule) {
+                    $gPattern            = substr_replace($gPattern, $pattern . '/', strpos($gPattern, '/'), 1);
                     $gRule['middleware'] = $gRule['middleware'] ?? [];
                     $gRule['middleware'] = array_merge($middleware, $rule['middleware'], $gRule['middleware']);
-                    $data[$gUrl]         = $gRule;
+                    $data[$gPattern]     = $gRule;
                 }
             } else {
                 $rule['middleware'] = array_merge($middleware, $rule['middleware']);
-                $data[$url]         = $rule;
+                $data[$pattern]     = $rule;
             }
         }
         return $data;
@@ -104,15 +104,15 @@ class Router implements \Mix\Http\Server\ServerHandlerInterface
     protected function convert(array $rules): array
     {
         $materials = [];
-        foreach ($rules as $rule => $route) {
-            if ($blank = strpos($rule, ' ')) {
-                $method = substr($rule, 0, $blank);
-                $method = "(?:{$method}) ";
-                $rule   = substr($rule, $blank + 1);
+        foreach ($rules as $pattern => $route) {
+            if ($blank = strpos($pattern, ' ')) {
+                $method  = substr($pattern, 0, $blank);
+                $method  = "(?:{$method}) ";
+                $pattern = substr($pattern, $blank + 1);
             } else {
                 $method = '(?:GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS) ';
             }
-            $fragment = explode('/', $rule);
+            $fragment = explode('/', $pattern);
             $var      = [];
             foreach ($fragment as $k => $v) {
                 preg_match('/{([\w-]+)}/i', $v, $matches);
@@ -128,8 +128,8 @@ class Router implements \Mix\Http\Server\ServerHandlerInterface
                 }
                 $var[] = $fname;
             }
-            $pattern     = '/^' . $method . implode('\/', $fragment) . '$/i';
-            $materials[] = [$pattern, $route, $var];
+            $regular     = '/^' . $method . implode('\/', $fragment) . '$/i';
+            $materials[] = [$regular, $route, $var, $pattern];
         }
         return $materials;
     }
@@ -171,8 +171,8 @@ class Router implements \Mix\Http\Server\ServerHandlerInterface
         // 由于路由歧义，会存在多条路由规则都可匹配的情况
         $result = [];
         foreach ($this->materials as $item) {
-            list($pattern, $route, $var) = $item;
-            if (preg_match($pattern, "{$method} {$pathinfo}", $matches)) {
+            list($regular, $route, $var) = $item;
+            if (preg_match($regular, "{$method} {$pathinfo}", $matches)) {
                 $params = [];
                 // 提取路由查询参数
                 foreach ($var as $k => $v) {
