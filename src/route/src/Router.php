@@ -106,13 +106,14 @@ class Router implements \Mix\Http\Server\ServerHandlerInterface
         $materials = [];
         foreach ($rules as $pattern => $route) {
             if ($blank = strpos($pattern, ' ')) {
-                $method  = substr($pattern, 0, $blank);
-                $method  = "(?:{$method}) ";
-                $pattern = substr($pattern, $blank + 1);
+                $method = substr($pattern, 0, $blank);
+                $method = "(?:{$method}) ";
+                $path   = substr($pattern, $blank + 1);
             } else {
                 $method = '(?:GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS) ';
+                $path   = $pattern;
             }
-            $fragment = explode('/', $pattern);
+            $fragment = explode('/', $path);
             $var      = [];
             foreach ($fragment as $k => $v) {
                 preg_match('/{([\w-]+)}/i', $v, $matches);

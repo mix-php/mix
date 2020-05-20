@@ -38,17 +38,19 @@ class ServiceFactory
      */
     public function createServiceFromAPI(\Mix\Http\Server\Server $server, \Mix\Route\Router $router, string $namespace = 'php.micro.api', ?string $version = null)
     {
-        $serviceFactory = new ServiceFactory();
-        $nodeFactory    = new NodeFactory();
-        $services       = [];
-        foreach ($router->services() as $name) {
+        $serviceFactory  = new ServiceFactory();
+        $endpointFactory = new EndpointFactory();
+        $nodeFactory     = new NodeFactory();
+        $services        = [];
+        foreach ($router->services() as $name => $patterns) {
             $name    = sprintf('%s.%s', $namespace, $name);
             $service = $serviceFactory->createService($name, $version);
-            $node    = $nodeFactory->createNode($name, sprintf('%s:%d', ServiceHelper::localIP(), $server->port));
+            foreach ($patterns as $pattern) {
+                $endpoint = $endpointFactory->createEndpoint($pattern);
+                $service->withEndpoint($endpoint);
+            }
+            $node = $nodeFactory->createNode($name, sprintf('%s:%d', ServiceHelper::localIP(), $server->port));
             $node->withMetadata('registry', 'etcd');
-            $node->withMetadata('protocol', 'json');
-            $node->withMetadata('server', 'json');
-            $node->withMetadata('transport', 'http');
             $service->withNode($node);
             $services[] = $service;
         }
@@ -68,14 +70,15 @@ class ServiceFactory
         $serviceFactory = new ServiceFactory();
         $nodeFactory    = new NodeFactory();
         $services       = [];
-        foreach ($router->services() as $name) {
+        foreach ($router->services() as $name => $patterns) {
             $name    = sprintf('%s.%s', $namespace, $name);
             $service = $serviceFactory->createService($name, $version);
-            $node    = $nodeFactory->createNode($name, sprintf('%s:%d', ServiceHelper::localIP(), $server->port));
+            foreach ($patterns as $pattern) {
+                $endpoint = $endpointFactory->createEndpoint($pattern);
+                $service->withEndpoint($endpoint);
+            }
+            $node = $nodeFactory->createNode($name, sprintf('%s:%d', ServiceHelper::localIP(), $server->port));
             $node->withMetadata('registry', 'etcd');
-            $node->withMetadata('protocol', 'html');
-            $node->withMetadata('server', 'html');
-            $node->withMetadata('transport', 'http');
             $service->withNode($node);
             $services[] = $service;
         }

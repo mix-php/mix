@@ -70,7 +70,7 @@ class Registrar
         $service = $this->service;
         $reslut  = $client->grant($this->ttl);
         $leaseID = $this->leaseID = (int)$reslut['ID'];
-        $client->put(sprintf($this->serviceFormat, $service->getName(), $service->getID()), json_encode($service), ['lease' => $leaseID]);
+        $client->put(sprintf($this->serviceFormat, $service->getName(), $service->getID()), json_encode($service, JSON_UNESCAPED_SLASHES), ['lease' => $leaseID]);
         $this->timer and $this->timer->clear();
         $this->timer = $this->keepAlive();
     }
