@@ -13,11 +13,10 @@ interface ConfiguratorInterface
 
     /**
      * Listen
-     * @param EventDispatcherInterface $dispatcher
      * @throws \RuntimeException
      * @throws \GuzzleHttp\Exception\BadResponseException
      */
-    public function listen(EventDispatcherInterface $dispatcher);
+    public function listen();
 
     /**
      * Sync to config-server
