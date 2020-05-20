@@ -51,6 +51,12 @@ class Configurator implements ConfiguratorInterface
     public $interval = 5;
 
     /**
+     * 事件调度器
+     * @var EventDispatcherInterface
+     */
+    public $dispatcher;
+
+    /**
      * @var Client
      */
     protected $client;
@@ -94,14 +100,16 @@ class Configurator implements ConfiguratorInterface
 
     /**
      * Listen
-     * @param EventDispatcherInterface $dispatcher
      * @throws \RuntimeException
      * @throws \GuzzleHttp\Exception\BadResponseException
      */
-    public function listen(EventDispatcherInterface $dispatcher)
+    public function listen()
     {
         if (isset($this->listenTimer)) {
             throw new \RuntimeException('Already listening');
+        }
+        if (!$this->dispatcher) {
+            throw new \RuntimeException('Property dispatcher cannot be empty');
         }
         // 拉取全量
         $lastConfig = $this->all();
@@ -109,7 +117,7 @@ class Configurator implements ConfiguratorInterface
             $event        = new PutEvent();
             $event->key   = $key;
             $event->value = $value;
-            $dispatcher->dispatch($event);
+            $this->dispatcher->dispatch($event);
         }
         // 定时监听
         $timer    = Timer::new();
@@ -121,7 +129,7 @@ class Configurator implements ConfiguratorInterface
                 $event        = new PutEvent();
                 $event->key   = $key;
                 $event->value = $value;
-                $dispatcher->dispatch($event);
+                $this->dispatcher->dispatch($event);
             }
             // delete
             $deleteKvs = array_diff_assoc($lastConfig, $config);
@@ -131,7 +139,7 @@ class Configurator implements ConfiguratorInterface
                 }
                 $event      = new DeleteEvent();
                 $event->key = $key;
-                $dispatcher->dispatch($event);
+                $this->dispatcher->dispatch($event);
             }
         };
         $timer->tick($this->interval * 1000, $callback);
