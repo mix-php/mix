@@ -3,9 +3,7 @@
 namespace Mix\Micro\Etcd\Factory;
 
 use Mix\Micro\Etcd\Service\Service;
-use Mix\Micro\Etcd\Service\ServiceBundle;
 use Mix\Micro\Register\Helper\ServiceHelper;
-use Mix\Micro\Register\ServiceInterface;
 
 /**
  * Class ServiceFactory
@@ -18,9 +16,9 @@ class ServiceFactory
      * Create service
      * @param string $name
      * @param string|null $version
-     * @return ServiceInterface
+     * @return Service
      */
-    public function createService(string $name, ?string $version = null): ServiceInterface
+    public function createService(string $name, string $version = null): Service
     {
         if (is_null($version)) {
             $version = 'latest';
@@ -29,14 +27,15 @@ class ServiceFactory
     }
 
     /**
-     * Create service bundle form api
+     * Create service bundle form http
+     * @param string $namespace
      * @param \Mix\Http\Server\Server $server
      * @param \Mix\Route\Router $router
-     * @param string $namespace
      * @param string|null $version
+     * @param array $metadata
      * @return ServiceInterface[]
      */
-    public function createServiceFromAPI(\Mix\Http\Server\Server $server, \Mix\Route\Router $router, string $namespace = 'php.micro.api', ?string $version = null)
+    public function createServiceFromHTTP(string $namespace = 'php.micro.api', \Mix\Http\Server\Server $server, \Mix\Route\Router $router, string $version = null, array $metadata = [])
     {
         $serviceFactory  = new ServiceFactory();
         $endpointFactory = new EndpointFactory();
@@ -51,34 +50,9 @@ class ServiceFactory
             }
             $node = $nodeFactory->createNode($name, sprintf('%s:%d', ServiceHelper::localIP(), $server->port));
             $node->withMetadata('registry', 'etcd');
-            $service->withNode($node);
-            $services[] = $service;
-        }
-        return $services;
-    }
-
-    /**
-     * Create service bundle form web
-     * @param \Mix\Http\Server\Server $server
-     * @param \Mix\Route\Router $router
-     * @param string $namespace
-     * @param string|null $version
-     * @return ServiceInterface[]
-     */
-    public function createServiceFromWeb(\Mix\Http\Server\Server $server, \Mix\Route\Router $router, string $namespace = 'php.micro.web', ?string $version = null)
-    {
-        $serviceFactory = new ServiceFactory();
-        $nodeFactory    = new NodeFactory();
-        $services       = [];
-        foreach ($router->services() as $name => $patterns) {
-            $name    = sprintf('%s.%s', $namespace, $name);
-            $service = $serviceFactory->createService($name, $version);
-            foreach ($patterns as $pattern) {
-                $endpoint = $endpointFactory->createEndpoint($pattern);
-                $service->withEndpoint($endpoint);
+            foreach ($metadata as $key => $value) {
+                $node->withMetadata($key, $value);
             }
-            $node = $nodeFactory->createNode($name, sprintf('%s:%d', ServiceHelper::localIP(), $server->port));
-            $node->withMetadata('registry', 'etcd');
             $service->withNode($node);
             $services[] = $service;
         }
@@ -89,9 +63,10 @@ class ServiceFactory
      * Create service bundle form json-rpc
      * @param \Mix\Grpc\Server $server
      * @param string|null $version
+     * @param array $metadata
      * @return ServiceInterface[]
      */
-    public function createServiceFromGrpc(\Mix\Grpc\Server $server, ?string $version = null)
+    public function createServiceFromGrpc(\Mix\Grpc\Server $server, string $version = null, array $metadata = [])
     {
         $serviceFactory  = new ServiceFactory();
         $endpointFactory = new EndpointFactory();
@@ -143,9 +118,10 @@ class ServiceFactory
      * Create service bundle form json-rpc
      * @param \Mix\JsonRpc\Server $server
      * @param string|null $version
+     * @param array $metadata
      * @return ServiceInterface[]
      */
-    public function createServiceFromJsonRpc(\Mix\JsonRpc\Server $server, ?string $version = null)
+    public function createServiceFromJsonRpc(\Mix\JsonRpc\Server $server, string $version = null, array $metadata = [])
     {
         $serviceFactory  = new ServiceFactory();
         $endpointFactory = new EndpointFactory();

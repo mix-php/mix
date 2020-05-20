@@ -2,6 +2,7 @@
 
 namespace Mix\Micro\Register;
 
+use Mix\Micro\Options;
 use Mix\Micro\Register\Exception\NotFoundException;
 
 /**
@@ -11,6 +12,13 @@ use Mix\Micro\Register\Exception\NotFoundException;
 interface RegistryInterface
 {
 
+    /**
+     * Extract
+     * @param Options $options
+     * @return ServiceInterface[]
+     */
+    public function extract(Options $options);
+    
     /**
      * Get Service
      * @param string $name

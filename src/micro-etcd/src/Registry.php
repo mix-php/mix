@@ -5,6 +5,7 @@ namespace Mix\Micro\Etcd;
 use Mix\Micro\Etcd\Client\Client;
 use Mix\Micro\Etcd\Exception\UnavailableException;
 use Mix\Micro\Etcd\Factory\ServiceBundleFactory;
+use Mix\Micro\Etcd\Factory\ServiceFactory;
 use Mix\Micro\Etcd\LoadBalancer\LoadBalancerInterface;
 use Mix\Micro\Etcd\LoadBalancer\RoundRobinBalancer;
 use Mix\Micro\Etcd\Monitor\Monitor;
@@ -124,6 +125,26 @@ class Registry implements RegistryInterface
     protected function getDefaultLoadBalancer()
     {
         return new RoundRobinBalancer();
+    }
+
+    /**
+     * Extract
+     * @param \Mix\Micro\Options $options
+     * @return ServiceInterface[]
+     */
+    public function extract(\Mix\Micro\Options $options)
+    {
+        $factory = new ServiceFactory();
+        if ($options->server instanceof \Mix\Http\Server\Server && $options->router) {
+            return $factory->createServiceFromHTTP($options->name, $options->server, $options->router, $options->version, $options->metadata);
+        }
+        if ($options->server instanceof \Mix\Grpc\Server) {
+            return $factory->createServiceFromGrpc($options->server, $options->version, $options->metadata);
+        }
+        if ($options->server instanceof \Mix\JsonRpc\Server) {
+            return $factory->createServiceFromJsonRpc($options->server, $options->version, $options->metadata);
+        }
+        return [];
     }
 
     /**
