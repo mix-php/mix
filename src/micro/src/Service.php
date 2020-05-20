@@ -49,7 +49,7 @@ class Service
                 $timer->clear();
             });
 
-            $services = $registry->extract($options);
+            $services = $registry->extract($this->options);
             $registry->register(...$services);
 
             if ($logger) {
