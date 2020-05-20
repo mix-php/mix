@@ -2,8 +2,6 @@
 
 namespace Mix\Micro\Config;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
-
 /**
  * Interface ConfiguratorInterface
  * @package Mix\Micro\Config
@@ -14,7 +12,6 @@ interface ConfiguratorInterface
     /**
      * Listen
      * @throws \RuntimeException
-     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function listen();
 
@@ -37,7 +34,6 @@ interface ConfiguratorInterface
     /**
      * All
      * @return string[]
-     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function all();
 
