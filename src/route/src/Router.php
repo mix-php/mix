@@ -232,7 +232,7 @@ class Router implements \Mix\Http\Server\ServerHandlerInterface
         $dispatcher = new MiddlewareDispatcher($result->getMiddleware(), $process, $request, $response);
         $response   = $dispatcher->dispatch();
         /** @var Response $response */
-        $response->end();
+        $response->send();
     }
 
     /**
@@ -248,7 +248,7 @@ class Router implements \Mix\Http\Server\ServerHandlerInterface
             ->withContentType('text/plain')
             ->withBody($body)
             ->withStatus(404)
-            ->end();
+            ->send();
     }
 
     /**
@@ -267,7 +267,7 @@ class Router implements \Mix\Http\Server\ServerHandlerInterface
             ->withContentType('application/json', 'utf-8')
             ->withBody($body)
             ->withStatus(500)
-            ->end();
+            ->send();
     }
 
 }

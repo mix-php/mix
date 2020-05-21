@@ -270,7 +270,7 @@ class Server implements \Mix\Http\Server\ServerHandlerInterface
         }
 
         /** @var Response $response */
-        $response->end();
+        $response->send();
     }
 
     /**
@@ -280,7 +280,7 @@ class Server implements \Mix\Http\Server\ServerHandlerInterface
      */
     public function show404(\Throwable $exception, Response $response)
     {
-        return $response->withStatus(404)->end();
+        return $response->withStatus(404)->send();
     }
 
     /**
@@ -290,7 +290,7 @@ class Server implements \Mix\Http\Server\ServerHandlerInterface
      */
     public function show500(\Throwable $exception, Response $response)
     {
-        return $response->withStatus(500)->end();
+        return $response->withStatus(500)->send();
     }
 
     /**

@@ -21,7 +21,7 @@ final class MainTest extends TestCase
                 $conn->send($out);
                 $conn->close();
 
-                //$response->end();
+                //$response->send();
             });
             go(function () use ($server) {
                 $server->start();

@@ -246,7 +246,7 @@ class Server implements \Mix\Http\Server\ServerHandlerInterface, \Mix\Server\Ser
             $httpResponse->withBody($body)
                 ->withContentType('application/json')
                 ->withStatus(200)
-                ->end();
+                ->send();
             return;
         }
 
@@ -262,7 +262,7 @@ class Server implements \Mix\Http\Server\ServerHandlerInterface, \Mix\Server\Ser
         $httpResponse->withBody($body)
             ->withContentType('application/json')
             ->withStatus(200)
-            ->end();
+            ->send();
     }
 
     /**
@@ -313,7 +313,7 @@ class Server implements \Mix\Http\Server\ServerHandlerInterface, \Mix\Server\Ser
         $contentType = $request->getHeaderLine('Content-Type');
         $method      = $request->getMethod();
         if (strpos($contentType, 'application/json') === false || $method != 'POST') {
-            $response->withStatus(500)->end();
+            $response->withStatus(500)->send();
             return;
         }
         $this->callHTTP($request, $response);

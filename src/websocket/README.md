@@ -26,7 +26,7 @@ $server->handle('/websocket', function (\Mix\Http\Message\ServerRequest $request
     $conn->send($out);
     $conn->close();
 
-    $response->end();
+    $response->send();
 });
 $server->start();
 ```

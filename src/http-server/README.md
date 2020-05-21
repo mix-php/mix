@@ -20,7 +20,7 @@ composer require mix/http-server
 $server = new Mix\Http\Server\Server('0.0.0.0', 9596, false, false);
 $server->handle('/', function (\Mix\Http\Message\ServerRequest $request, \Mix\Http\Message\Response $response) {
     $response->withBody(new \Mix\Http\Message\Stream\ContentStream('hello, world!'));
-    $response->end();
+    $response->send();
 });
 $server->start();
 ```

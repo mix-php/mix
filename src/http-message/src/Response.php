@@ -183,9 +183,9 @@ class Response extends Message implements ResponseInterface
     }
 
     /**
-     * 发送Http响应体，并结束请求处理
+     * 发送响应体，并结束当前请求
      */
-    public function end()
+    public function send()
     {
         // websocket upgrade 不处理
         if ($this->getStatusCode() == 101) {
