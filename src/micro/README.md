@@ -16,7 +16,12 @@ composer require mix/micro
 
 ## 概述
 
+在很多 Swoole 框架自建微服务生态的时候，我认为微服务生态要是能与主流生态直接无缝通信可能更具有实用价值，Mix 从 V2.1 开始完全切换为单线程协程，这一特性非常适合微服务的打造，同时 Mix 一直都是 Go 风格框架，因此我决定将微服务融入 go-micro 生态，让 Mix 框架用户能与 go-micro 编写的微服务直接代码级无缝通信，并且能直接使用 go-micro 运行时工具包的网关、代理、Dashboard 等全部微服务治理基础设施，让 PHP 与 Go 能一起开发高性能微服务，取长补短。
 
+- Mix Micro：动态语言，开发效率高，view 模板渲染更加适合，单线程协程没有锁的烦恼，try/catch 不用忍受 go 大量 err 处理的烦恼，更加完善的 OOP 让业务封装更加人性。
+- Go Micro: 静态语言，编译时即可过滤大量代码问题，CPU 密集型计算更加擅长，原生的协程库生态更加丰富。
+
+基于以上 Mix 打造了可独立使用的 [Mix Micro](https://github.com/mix-php/micro) 同时还提供了包含大量代码的 [Mix Micro Skeleton](https://github.com/mix-php/mix-micro-skeleton) 微服务开发骨架。
 
 支持的服务器
 
