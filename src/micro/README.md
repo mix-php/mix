@@ -82,7 +82,7 @@ Micro::service(
 
 ```php
 [2020-05-21 21:01:18] API.INFO: Server started [0.0.0.0:51438]
-[2020-05-21 21:01:18] API.INFO: Register service [php.micro.api.greeter-2938109e-9b63-11ea-80bd-000057bdb82e]
+[2020-05-21 21:01:18] API.INFO: Register service [php.micro.grpc.greeter-2938109e-9b63-11ea-80bd-000057bdb82e]
 ```
 
 启动后的微服务可使用 [Micro](https://micro.mu/docs/runtime.html) 工具包 API Gateway、Web Dashboard、Web Proxy 等多种微服务管理工具，也可在 PHP 代码中使用 [Mix gRPC](https://github.com/mix-php/grpc) 的 Client 直接调用 [go-micro](https://github.com/micro/go-micro) 编写的微服务。

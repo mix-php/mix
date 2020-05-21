@@ -2,6 +2,8 @@
 
 namespace Mix\Micro\Config;
 
+use Psr\EventDispatcher\EventDispatcherInterface;
+
 /**
  * Interface ConfigInterface
  * @package Mix\Micro\Config
@@ -11,9 +13,10 @@ interface ConfigInterface
 
     /**
      * Listen
+     * @param EventDispatcherInterface $dispatcher
      * @throws \RuntimeException
      */
-    public function listen();
+    public function listen(EventDispatcherInterface $dispatcher);
 
     /**
      * Sync to config-server

@@ -51,12 +51,6 @@ class Config implements ConfigInterface
     public $interval = 5;
 
     /**
-     * 事件调度器
-     * @var EventDispatcherInterface
-     */
-    public $dispatcher;
-
-    /**
      * @var Client
      */
     protected $client;
@@ -100,15 +94,16 @@ class Config implements ConfigInterface
 
     /**
      * Listen
+     * @param EventDispatcherInterface $dispatcher
      * @throws \RuntimeException
      * @throws \GuzzleHttp\Exception\BadResponseException
      */
-    public function listen()
+    public function listen(EventDispatcherInterface $dispatcher)
     {
         if (isset($this->listenTimer)) {
             throw new \RuntimeException('Already listening');
         }
-        if (!$this->dispatcher) {
+        if (!$dispatcher) {
             throw new \RuntimeException('Property dispatcher cannot be empty');
         }
         // 拉取全量
@@ -117,11 +112,11 @@ class Config implements ConfigInterface
             $event        = new PutEvent();
             $event->key   = $key;
             $event->value = $value;
-            $this->dispatcher->dispatch($event);
+            $dispatcher->dispatch($event);
         }
         // 定时监听
         $timer    = Timer::new();
-        $callback = function () use (&$lastConfig) {
+        $callback = function () use (&$lastConfig, $dispatcher) {
             $config = $this->all();
             // put
             $putKvs = array_diff_assoc($config, $lastConfig);
@@ -129,7 +124,7 @@ class Config implements ConfigInterface
                 $event        = new PutEvent();
                 $event->key   = $key;
                 $event->value = $value;
-                $this->dispatcher->dispatch($event);
+                $dispatcher->dispatch($event);
             }
             // delete
             $deleteKvs = array_diff_assoc($lastConfig, $config);
@@ -139,7 +134,7 @@ class Config implements ConfigInterface
                 }
                 $event      = new DeleteEvent();
                 $event->key = $key;
-                $this->dispatcher->dispatch($event);
+                $dispatcher->dispatch($event);
             }
         };
         $timer->tick($this->interval * 1000, $callback);
