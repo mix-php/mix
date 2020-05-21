@@ -47,11 +47,7 @@
 
 微服务方面采用的其他 Swoole 框架没有走的创新道路，在现有全部语言种只有 java spring cloud, golang go-micro 两大微服务生态最为成熟，由于 Mix 一直是类 golang 风格框架，加上单进程协程的独特优点，我们实现的 [go-micro](https://github.com/micro/go-micro) 的代码级互通，并可以使用 [micro runtime](https://micro.mu/docs/runtime.html) 工具包的网关、代理、Dashboard 等全部微服务治理基础设施，这意味着 PHP 能与 Go 一同无缝打造高性能 RPC 服务网格，加上 mix = beego + go-micro 两大框架的功能集合，因此采用 mix 开发的单体应用能在无需大量修改业务代码的情况下低成本升级到微服务。
 
-- [Mix gRPC](https://github.com/mix-php/grpc)
-- [Mix JSON-RPC](https://github.com/mix-php/json-rpc)
-- [Mix Micro Etcd](https://github.com/mix-php/micro-etcd)
-- [Mix Micro Hystrix](https://github.com/mix-php/micro-hystrix)
-- [Mix Tracing Zipkin](https://github.com/mix-php/tracing-zipkin)
+- [Mix Micro](https://github.com/mix-php/micro)：与 go-micro 生态深度集成的 php 微服务开发框架
 
 ## 框架定位
 

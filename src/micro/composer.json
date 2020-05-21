@@ -1,9 +1,10 @@
 {
   "name": "mix/micro",
-  "description": "Microservice launcher",
+  "description": "PHP microservice development framework deeply integrated with go-micro ecology",
   "type": "library",
   "keywords": [
     "mix",
+    "micro",
     "microservice"
   ],
   "homepage": "http://www.mixphp.cn/",
@@ -24,7 +25,6 @@
     "mix/http-server": "~2.2.0",
     "mix/micro-register": "~2.2.0",
     "mix/micro-config": "~2.2.0",
-    "mix/micro-hystrix": "~2.2.0",
     "mix/micro-etcd": "~2.2.0",
     "mix/micro-route": "~2.2.0"
   },
