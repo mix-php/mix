@@ -2,6 +2,7 @@
 
 namespace Mix\Micro;
 
+use Mix\Micro\Config\ConfigInterface;
 use Mix\Micro\Register\RegistryInterface;
 use Psr\Log\LoggerInterface;
 
@@ -49,6 +50,11 @@ class Options
     public $registry;
 
     /**
+     * @var ConfigInterface
+     */
+    public $config;
+
+    /**
      * @var \Mix\Http\Server\Server|\Mix\Grpc\Server|\Mix\JsonRpc\Server
      */
     public $server;
@@ -57,5 +63,10 @@ class Options
      * @var \Mix\Micro\Route\Router
      */
     public $router;
+
+    /**
+     * @var bool 
+     */
+    public $signal = true;
 
 }

@@ -2,6 +2,7 @@
 
 namespace Mix\Micro;
 
+use Mix\Micro\Config\ConfigInterface;
 use Mix\Micro\Register\RegistryInterface;
 use Psr\Log\LoggerInterface;
 
@@ -83,6 +84,18 @@ class Micro
     }
 
     /**
+     * Config
+     * @param ConfigInterface $config
+     * @return \Closure
+     */
+    public static function config(ConfigInterface $config)
+    {
+        return function (Options $options) use ($config) {
+            $options->config = $config;
+        };
+    }
+
+    /**
      * Server
      * @param \Mix\Http\Server\Server|\Mix\Grpc\Server|\Mix\JsonRpc\Server $server
      * @return \Closure
@@ -107,6 +120,18 @@ class Micro
     {
         return function (Options $options) use ($router) {
             $options->router = $router;
+        };
+    }
+
+    /**
+     * Signal
+     * @param bool $open
+     * @return \Closure
+     */
+    public static function signal(bool $open)
+    {
+        return function (Options $options) use ($open) {
+            $options->signal = $open;
         };
     }
 

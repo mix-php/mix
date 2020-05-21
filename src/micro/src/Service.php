@@ -3,6 +3,7 @@
 namespace Mix\Micro;
 
 use Mix\Concurrent\Timer;
+use Mix\Helper\ProcessHelper;
 
 /**
  * Class Service
@@ -36,6 +37,26 @@ class Service
      */
     public function run()
     {
+        // 捕获信号
+        $this->options->signal and ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], function ($signal) {
+            $logger   = $this->options->logger;
+            $registry = $this->options->registry;
+            $config   = $this->options->config;
+            $server   = $this->options->server;
+
+            if ($logger) {
+                $logger->info('Received signal [{signal}]', ['signal' => $signal]);
+                $logger->info('Server shutdown');
+            }
+
+            $registry and $registry->close();
+            $config and $config->close();
+            $server and $server->shutdown();
+
+            ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], null);
+        });
+
+        // 服务注册
         $timer = $this->timer = Timer::new();
         $timer->tick(100, function () use ($timer) {
             $server   = $this->options->server;

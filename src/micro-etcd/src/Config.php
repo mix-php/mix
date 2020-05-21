@@ -4,16 +4,16 @@ namespace Mix\Micro\Etcd;
 
 use Mix\Concurrent\Timer;
 use Mix\Micro\Etcd\Client\Client;
-use Mix\Micro\Config\ConfiguratorInterface;
+use Mix\Micro\Config\ConfigInterface;
 use Mix\Micro\Config\Event\DeleteEvent;
 use Mix\Micro\Config\Event\PutEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Class Configurator
+ * Class Config
  * @package Mix\Micro\Etcd
  */
-class Configurator implements ConfiguratorInterface
+class Config implements ConfigInterface
 {
 
     /**
