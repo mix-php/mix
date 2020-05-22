@@ -237,7 +237,7 @@ class Server implements \Mix\Http\Server\ServerHandlerInterface
             'application/grpc+json',
         ]) ? true : false;
         if (!$ok || $method != 'POST') {
-            $this->show500(new \RuntimeException('Invalid request'), $response);
+            $this->error500(new \RuntimeException('Invalid request'), $response)->send();
             return;
         }
 
@@ -253,11 +253,11 @@ class Server implements \Mix\Http\Server\ServerHandlerInterface
         try {
             $response = $dispatcher->dispatch();
         } catch (NotFoundException $ex) {
-            $this->show404($ex, $response);
+            $this->error404($ex, $response)->send();
             return;
         } catch (\Throwable $ex) {
             // 500 处理
-            $this->show500($ex, $response);
+            $this->error500($ex, $response)->send();
             // 抛出错误，记录日志
             throw $ex;
         }
@@ -277,20 +277,22 @@ class Server implements \Mix\Http\Server\ServerHandlerInterface
      * 404 处理
      * @param \Throwable $exception
      * @param Response $response
+     * @return Response
      */
-    public function show404(\Throwable $exception, Response $response)
+    public function error404(\Throwable $exception, Response $response): Response
     {
-        return $response->withStatus(404)->send();
+        return $response->withStatus(404);
     }
 
     /**
      * 500 处理
      * @param \Throwable $exception
      * @param Response $response
+     * @return Response
      */
-    public function show500(\Throwable $exception, Response $response)
+    public function error500(\Throwable $exception, Response $response): Response
     {
-        return $response->withStatus(500)->send();
+        return $response->withStatus(500);
     }
 
     /**

@@ -208,7 +208,7 @@ class Router implements \Mix\Http\Server\ServerHandlerInterface
             $result = $this->match($request->getMethod(), $request->getServerParams()['path_info'] ?: '/');
         } catch (NotFoundException $ex) {
             // 404 处理
-            $this->show404($ex, $response);
+            $this->error404($ex, $response)->send();
             return;
         }
         // 保存路由参数
@@ -223,7 +223,7 @@ class Router implements \Mix\Http\Server\ServerHandlerInterface
                 $response = call_user_func($result->getCallback(), $request, $response);
             } catch (\Throwable $ex) {
                 // 500 处理
-                $this->show500($ex, $response);
+                $this->error500($ex, $response)->send();
                 // 抛出错误，记录日志
                 throw $ex;
             }
@@ -239,24 +239,25 @@ class Router implements \Mix\Http\Server\ServerHandlerInterface
      * 404 处理
      * @param \Throwable $exception
      * @param Response $response
+     * @return Response
      */
-    public function show404(\Throwable $exception, Response $response)
+    public function error404(\Throwable $exception, Response $response): Response
     {
         $content = '404 Not Found';
         $body    = (new StreamFactory())->createStream($content);
         return $response
             ->withContentType('text/plain')
             ->withBody($body)
-            ->withStatus(404)
-            ->send();
+            ->withStatus(404);
     }
 
     /**
      * 500 处理
      * @param \Throwable $exception
      * @param Response $response
+     * @return Response
      */
-    public function show500(\Throwable $exception, Response $response)
+    public function error500(\Throwable $exception, Response $response): Response
     {
         $content = [
             'message' => $e->getMessage(),
@@ -266,8 +267,7 @@ class Router implements \Mix\Http\Server\ServerHandlerInterface
         return $response
             ->withContentType('application/json', 'utf-8')
             ->withBody($body)
-            ->withStatus(500)
-            ->send();
+            ->withStatus(500);
     }
 
 }
