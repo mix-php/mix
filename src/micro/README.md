@@ -70,6 +70,8 @@ $config->listen($eventDispatcher); // PSR-14 Event Dispatcher
 
 ### 执行一个微服务
 
+启动后会自动监听 SIGINT, SIGTERM, SIGQUIT 信号，自动优雅停止，如果想自己处理信号，传入 `Micro::signal(false)` 配置
+
 ```php
 use Mix\Micro\Micro;
 
