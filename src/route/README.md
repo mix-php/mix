@@ -12,7 +12,7 @@ composer require mix/route
 
 文档：
 
-- https://www.kancloud.cn/onanying/mixphp2-1/1255263
+- https://www.kancloud.cn/onanying/mixphp2-2/1708702
 
 ## License
 

@@ -12,7 +12,7 @@ composer require mix/bean
 
 文档：
 
-- https://www.kancloud.cn/onanying/mixphp2-1/1259824
+- https://www.kancloud.cn/onanying/mixphp2-2/1708689
 
 ## License
 

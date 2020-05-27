@@ -12,7 +12,7 @@ composer require mix/session
 
 文档：
 
-- https://www.kancloud.cn/onanying/mixphp2-1/1255269
+- https://www.kancloud.cn/onanying/mixphp2-2/1708710
 
 ## License
 

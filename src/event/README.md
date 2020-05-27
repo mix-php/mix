@@ -12,7 +12,7 @@ composer require mix/event
 
 文档：
 
-- https://www.kancloud.cn/onanying/mixphp2-1/1516793
+- https://www.kancloud.cn/onanying/mixphp2-2/1708690
 
 ## License
 

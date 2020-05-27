@@ -12,9 +12,8 @@ composer require mix/http-message
 
 文档：
 
-- 请求：https://www.kancloud.cn/onanying/mixphp2-1/1255264
-- 响应：https://www.kancloud.cn/onanying/mixphp2-1/1255265
-
+- 请求：https://www.kancloud.cn/onanying/mixphp2-2/1708704
+- 响应：https://www.kancloud.cn/onanying/mixphp2-2/1708706
 
 ## License
 

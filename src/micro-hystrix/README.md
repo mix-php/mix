@@ -10,6 +10,10 @@
 composer require mix/micro-hystrix
 ```
 
+文档：
+
+- https://www.kancloud.cn/onanying/mixphp2-2/1712343
+
 ## License
 
 Apache License Version 2.0, http://www.apache.org/licenses/

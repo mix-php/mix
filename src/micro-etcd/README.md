@@ -14,6 +14,11 @@ composer require mix/micro-etcd
 
 - V3
 
+文档：
+
+- 服务注册：https://www.kancloud.cn/onanying/mixphp2-2/1712341
+- 配置中心：https://www.kancloud.cn/onanying/mixphp2-2/1712342
+
 ## License
 
 Apache License Version 2.0, http://www.apache.org/licenses/

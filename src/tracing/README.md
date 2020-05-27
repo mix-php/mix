@@ -10,6 +10,10 @@
 composer require mix/tracing
 ```
 
+文档：
+
+- https://www.kancloud.cn/onanying/mixphp2-2/1712344
+
 ## License
 
 Apache License Version 2.0, http://www.apache.org/licenses/
