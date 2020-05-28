@@ -8,7 +8,7 @@ PHP microservice development framework deeply integrated with go-micro ecology
 
 要求：
 
-- Swoole >= 4.4.4
+- Swoole >= 4.5.0
 
 ```
 composer require mix/micro

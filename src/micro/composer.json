@@ -17,6 +17,7 @@
   ],
   "require": {
     "php": ">=7.2.0",
+    "ext-swoole": ">=4.5.0",
     "psr/log": "~1.0",
     "mix/concurrent": "~2.2.0",
     "mix/helper": "~2.2.0",
