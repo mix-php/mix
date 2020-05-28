@@ -6,6 +6,8 @@
 
 安装：
 
+- Swoole >= 4.4.4: https://wiki.swoole.com/#/environment
+
 ```
 composer require mix/http-server
 ```

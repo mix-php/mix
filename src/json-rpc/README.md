@@ -4,7 +4,9 @@
 
 ## Usage
 
-- 安装
+安装：
+
+- Swoole >= 4.4.4: https://wiki.swoole.com/#/environment
 
 ```
 composer require mix/json-rpc

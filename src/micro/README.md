@@ -8,7 +8,7 @@ PHP microservice development framework deeply integrated with go-micro ecology
 
 要求：
 
-- Swoole >= 4.5.0
+- Swoole >= 4.5.0: https://wiki.swoole.com/#/environment
 
 ```
 composer require mix/micro
@@ -39,10 +39,6 @@ composer require mix/micro
 - [Mix Tracing Zipkin](https://github.com/mix-php/tracing-zipkin) `需单独安装` 
 
 ## 使用
-
-### 安装 Swoole
-
-- Swoole >= 4.4.4: https://wiki.swoole.com/#/environment
 
 ### 创建一个 gRPC 服务器
 

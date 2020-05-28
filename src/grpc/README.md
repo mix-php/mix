@@ -6,6 +6,10 @@ gRPC library based on Swoole coroutine, including protoc code generator, server,
 
 ## 安装
 
+要求：
+
+- Swoole >= 4.4.4: https://wiki.swoole.com/#/environment
+
 ```
 composer require mix/grpc
 ```
@@ -26,11 +30,6 @@ composer require mix/grpc
 这一切让 PHP 编写 gRPC 和 Golang 一样方便快捷，同时性能强劲。
 
 ## 使用
-
-### 安装 Swoole
-
-- Swoole >= 4.4.4: https://wiki.swoole.com/#/environment
-
 
 ### 下载 protoc 与相关 plugin
 
