@@ -8,7 +8,4 @@
 - [ALL] Coroutine\Server $reuse_port 在 4.4.4 或更高版本中可用
 - [HTTP] Coroutine\Http\Request->rawContent 在 4.4.1 才解决内存溢出问题
 - [Micro] 4.5.0 才解决 http_compression = false 的问题 https://github.com/swoole/swoole-src/issues/3256
-
-待变更
-
-- [HTTP2] https://github.com/swoole/swoole-src/issues/2837#issuecomment-618308281
+- [HTTP2] 4.5.0 才解决 open_http2_protocol Server Keep-Alive shutdown 问题 https://github.com/swoole/swoole-src/issues/2837#issuecomment-618308281
