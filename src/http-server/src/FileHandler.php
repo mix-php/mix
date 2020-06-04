@@ -37,13 +37,10 @@ class FileHandler implements ServerHandlerInterface
     {
         $path = $request->getUri()->getPath();
         $file = sprintf('%s%s', $this->dir, $path);
-        var_dump($file);
         if (!is_file($file)) {
             $this->error404(new NotFoundException('Not Found (#404)'), $response)->send();
             return;
         }
-        $mime = mime_content_type($file);
-        $response->withContentType($mime);
         $response->getSwooleResponse()->sendfile($file);
     }
 
