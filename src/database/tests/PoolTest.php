@@ -5,7 +5,8 @@ use PHPUnit\Framework\TestCase;
 
 final class PoolTest extends TestCase
 {
-
+    
+    // 功能测试
     public function test(): void
     {
         $_this = $this;
@@ -27,6 +28,17 @@ final class PoolTest extends TestCase
             $_this->assertTrue($duration - 4 < 1 && $duration - 4 >= 0);
         };
         run($func);
+    }
+
+    // 测试协程外部析构
+    public function testDestruct(): void
+    {
+        $_this = $this;
+        $func  = function () use ($_this) {
+            $GLOBALS['conn'] = conn();
+        };
+        run($func);
+        $_this->assertTrue(true);
     }
 
 }
