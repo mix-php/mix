@@ -96,7 +96,7 @@ class Driver
             $this->dsn,
             $this->username,
             $this->password,
-            $this->options + $this->defaultOptions
+            $this->options()
         );
     }
 
