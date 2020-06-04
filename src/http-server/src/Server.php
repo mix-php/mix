@@ -101,7 +101,6 @@ class Server
     public function start(ServerHandlerInterface $handler = null)
     {
         if (!is_null($handler)) {
-            $this->callbacks = [];
             $this->handle('/', [$handler, 'handleHTTP']);
         }
         $server     = $this->swooleServer = new \Swoole\Coroutine\Http\Server($this->host, $this->port, $this->ssl, $this->reusePort);
@@ -175,6 +174,16 @@ class Server
             }
             throw new \Swoole\Exception($errMsg, $errCode);
         }
+    }
+
+    /**
+     * Create file server
+     * @param string $dir
+     * @return FileHandler
+     */
+    public static function fileServer(string $dir): FileHandler
+    {
+        return new FileHandler($dir);
     }
 
 }
