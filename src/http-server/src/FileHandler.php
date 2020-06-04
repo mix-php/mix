@@ -37,10 +37,20 @@ class FileHandler implements ServerHandlerInterface
     {
         $path = $request->getUri()->getPath();
         $file = sprintf('%s%s', $this->dir, $path);
-        if (!is_file($file)) {
+
+        if (!file_exists($file)) {
             $this->error404(new NotFoundException('Not Found (#404)'), $response)->send();
             return;
         }
+
+        // 防止相对路径攻击
+        // 如：/static/../../foo.php
+        $realpath = (string)realpath($file);
+        if ($this->dir !== substr($realpath, 0, strlen($this->dir))) {
+            $this->error404(new NotFoundException('Not Found (#404)'), $response)->send();
+            return;
+        }
+
         $response->getSwooleResponse()->sendfile($file);
     }
 

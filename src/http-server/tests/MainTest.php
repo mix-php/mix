@@ -28,7 +28,7 @@ final class MainTest extends TestCase
             $body    = $resp->getBody()->__toString();
 
             $_this->assertContains('hello, world!', $body);
-            
+
             $server->shutdown();
         };
         run($func);
