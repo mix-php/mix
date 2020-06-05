@@ -1,0 +1,26 @@
+{
+  "name": "mix/runtime",
+  "description": "Runtime library",
+  "type": "library",
+  "keywords": [
+    "mix",
+    "runtime"
+  ],
+  "homepage": "http://www.mixphp.cn/",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "liu,jian",
+      "email": "coder.keda@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.2.0",
+    "ext-swoole": ">=4.4.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mix\\": "src/"
+    }
+  }
+}
