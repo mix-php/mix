@@ -170,7 +170,7 @@ class Session
     public function get(string $name, $default = null)
     {
         // 更新生存时间
-        $this->handler->expire($this->maxLifetime);
+        $this->handler->expire($this->getId(), $this->maxLifetime);
         // 设置/更新cookie
         $factory = new CookieFactory();
         $cookie  = $factory->createCookie($this->name, $this->id, time() + $this->maxLifetime);
