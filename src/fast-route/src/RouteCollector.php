@@ -2,6 +2,9 @@
 
 namespace Mix\FastRoute;
 
+use FastRoute\RouteParser;
+use FastRoute\DataGenerator;
+
 /**
  * Class RouteCollector
  * @package Mix\FastRoute
@@ -10,29 +13,37 @@ class RouteCollector
 {
 
     /**
-     * @var \FastRoute\RouteCollector
+     * @var RouteParser
      */
-    protected $collector;
+    protected $routeParser;
+
+    /**
+     * @var DataGenerator
+     */
+    protected $dataGenerator;
 
     /**
      * @var string
      */
-    protected $currentGroupPrefix = '';
+    protected $currentGroupPrefix;
 
     /**
      * @var array
      */
-    protected $currentGroupMiddleware = [];
+    protected $currentGroupMiddleware;
 
     /**
-     * Constructs a route collector.
+     * RouteCollector constructor.
      *
      * @param RouteParser $routeParser
      * @param DataGenerator $dataGenerator
      */
     public function __construct(RouteParser $routeParser, DataGenerator $dataGenerator)
     {
-        $this->collector = new \FastRoute\RouteCollector($routeParser, $dataGenerator);
+        $this->routeParser            = $routeParser;
+        $this->dataGenerator          = $dataGenerator;
+        $this->currentGroupPrefix     = '';
+        $this->currentGroupMiddleware = [];
     }
 
     /**
@@ -47,7 +58,13 @@ class RouteCollector
      */
     public function route($httpMethod, string $route, callable $handler, array $middleware = [])
     {
-        $this->collector->addRoute($httpMethod, $route, [$handler, array_merge($this->currentGroupMiddleware, $middleware)]);
+        $route      = $this->currentGroupPrefix . $route;
+        $routeDatas = $this->routeParser->parse($route);
+        foreach ((array)$httpMethod as $method) {
+            foreach ($routeDatas as $routeData) {
+                $this->dataGenerator->addRoute($method, $routeData, [$handler, array_merge($this->currentGroupMiddleware, $middleware)]);
+            }
+        }
     }
 
     /**
@@ -58,13 +75,18 @@ class RouteCollector
      * @param string $prefix
      * @param callable $callback
      */
-    public function group($prefix, callable $callback, array $middleware = [])
+    public function group(string $prefix, callable $callback, array $middleware = [])
     {
-        $this->currentGroupPrefix     = $prefix;
+        $currentGroupMiddleware       = $this->currentGroupMiddleware;
         $this->currentGroupMiddleware = $middleware;
+
+        $previousGroupPrefix      = $this->currentGroupPrefix;
+        $this->currentGroupPrefix = $previousGroupPrefix . $prefix;
+
         $callback($this);
-        $this->currentGroupPrefix     = '';
-        $this->currentGroupMiddleware = [];
+
+        $this->currentGroupMiddleware = $currentGroupMiddleware;
+        $this->currentGroupPrefix     = $previousGroupPrefix;
     }
 
     /**
@@ -158,7 +180,7 @@ class RouteCollector
      */
     public function getData()
     {
-        return $this->collector->getData();
+        return $this->dataGenerator->getData();
     }
 
 }

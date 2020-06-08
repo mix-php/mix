@@ -3,8 +3,10 @@
 namespace Mix\FastRoute;
 
 use FastRoute\Dispatcher;
+use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
+use Mix\Http\Server\Middleware\MiddlewareDispatcher;
 use Mix\Http\Server\ServerHandlerInterface;
 use Mix\FastRoute\Exception\NotFoundException;
 
@@ -75,7 +77,7 @@ class Router implements ServerHandlerInterface
             }
             $result = $this->dispatcher->dispatch($request->getMethod(), $request->getServerParams()['path_info'] ?: '/');
             switch ($result[0]) {
-                case FastRoute\Dispatcher::FOUND:
+                case \FastRoute\Dispatcher::FOUND:
                     list($handler, $middleware) = $result[1];
                     $vars       = $result[2];
                     $middleware = array_merge($this->middleware, $middleware);
