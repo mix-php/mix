@@ -17,7 +17,7 @@ final class MainTest extends TestCase
             $callback   = function (\Mix\FastRoute\RouteCollector $collector) {
                 $collector->get('/foo', [new Controller, 'foo'], []);
                 $collector->group('/foo1', function (\Mix\FastRoute\RouteCollector $collector) {
-                    $collector->get('/bar', [new Controller, 'bar'], []);
+                    $collector->post('/bar/{id}', [new Controller, 'bar'], []);
                 }, []);
             };
             $router     = new \Mix\FastRoute\Router($middleware);
@@ -35,7 +35,7 @@ final class MainTest extends TestCase
             $resp = $client->get('http://127.0.0.1:9596/foo');
             $_this->assertContains('foo', $resp->getBody()->getContents());
 
-            $resp = $client->get('http://127.0.0.1:9596/foo1/bar');
+            $resp = $client->post('http://127.0.0.1:9596/foo1/bar/123');
             $_this->assertContains('bar', $resp->getBody()->getContents());
             
             $server->shutdown();

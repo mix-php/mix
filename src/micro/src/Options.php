@@ -4,6 +4,7 @@ namespace Mix\Micro;
 
 use Mix\Micro\Config\ConfigInterface;
 use Mix\Micro\Register\RegistryInterface;
+use Mix\Micro\Route\RouterInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -60,7 +61,7 @@ class Options
     public $server;
 
     /**
-     * @var \Mix\Micro\Route\Router
+     * @var RouterInterface
      */
     public $router;
 

@@ -1,4 +1,4 @@
-## Mix Route
+## Mix Fast Route
 
 基于 fast-route 的路由库，遵循 PSR-7 / PSR-15 标准
 
@@ -9,12 +9,12 @@ Routing library based on Fast-Route, following PSR-7 / PSR-15 standard
 安装：
 
 ```
-composer require mix/route
+composer require mix/fast-route
 ```
 
 文档：
 
-- https://www.kancloud.cn/onanying/mixphp2-2/1708702
+- 
 
 ## License
 

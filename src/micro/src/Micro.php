@@ -4,6 +4,7 @@ namespace Mix\Micro;
 
 use Mix\Micro\Config\ConfigInterface;
 use Mix\Micro\Register\RegistryInterface;
+use Mix\Micro\Route\RouterInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -113,10 +114,10 @@ class Micro
 
     /**
      * Router
-     * @param \Mix\Micro\Route\Router $router
+     * @param RouterInterface $router
      * @return \Closure
      */
-    public static function router(\Mix\Micro\Route\Router $router)
+    public static function router(RouterInterface $router)
     {
         return function (Options $options) use ($router) {
             $options->router = $router;

@@ -8,6 +8,7 @@ use Mix\Http\Message\ServerRequest;
 /**
  * Class Router
  * @package Mix\Micro\Route
+ * @deprecated 废弃，请使用 FastRoute 替代
  */
 class Router extends \Mix\Route\Router
 {

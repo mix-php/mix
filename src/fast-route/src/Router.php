@@ -7,8 +7,9 @@ use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Server\Middleware\MiddlewareDispatcher;
-use Mix\Http\Server\ServerHandlerInterface;
 use Mix\FastRoute\Exception\NotFoundException;
+use Mix\Http\Server\ServerHandlerInterface;
+use Mix\Micro\Route\RouterInterface;
 
 /**
  * Class Router
@@ -31,6 +32,11 @@ class Router implements ServerHandlerInterface
      * @var Dispatcher
      */
     protected $dispatcher;
+
+    /**
+     * @var array
+     */
+    protected $data = [];
 
     /**
      * Router constructor.
@@ -59,7 +65,32 @@ class Router implements ServerHandlerInterface
             new $options['routeParser'], new $options['dataGenerator']
         );
         $routeDefinitionCallback($routeCollector);
-        $this->dispatcher = new $options['dispatcher']($routeCollector->getData());
+        $this->data       = $routeCollector->getData();
+        $this->dispatcher = new $options['dispatcher']($this->data);
+    }
+
+    /**
+     * 获取 url 规则映射的全部 service 名称
+     *
+     * Url                  Service
+     * /                    index
+     * /foo                 foo
+     * /foo/bar             foo
+     * /foo/bar/baz         foo
+     * /foo/bar/baz/cat     foo.bar
+     * /v1/foo/bar          v1.foo
+     * /v1/foo/bar/baz      v1.foo
+     * /v1/foo/bar/baz/cat  v1.foo.bar
+     *
+     * @return string[]
+     */
+    public function services()
+    {
+        foreach ($this->data as $datum) {
+            foreach ($datum as $method => $item) {
+                
+            }
+        }
     }
 
     /**
@@ -70,6 +101,19 @@ class Router implements ServerHandlerInterface
      */
     public function handleHTTP(ServerRequest $request, Response $response)
     {
+        // 支持 micro web 的代理
+        // micro web 代理无法将 /foo/ 后面的杠传递过来
+        $basePath   = $request->getHeaderLine('x-micro-web-base-path');
+        $isMicroWeb = $basePath ? true : false;
+        if ($isMicroWeb) {
+            $uri = $request->getUri();
+            $uri->withPath(sprintf('%s%s', $basePath, $uri->getPath() == '/' ? '' : $uri->getPath()));
+            $serverParams                = $request->getServerParams();
+            $serverParams['request_uri'] = sprintf('%s%s', $basePath, $serverParams['request_uri'] == '/' ? '' : $serverParams['request_uri']);
+            $serverParams['path_info']   = sprintf('%s%s', $basePath, $serverParams['path_info'] == '/' ? '' : $serverParams['path_info']);
+            $request->withServerParams($serverParams);
+        }
+
         // 路由匹配
         try {
             if (!isset($this->dispatcher)) {
@@ -94,6 +138,7 @@ class Router implements ServerHandlerInterface
         foreach ($vars as $key => $value) {
             $request->withAttribute($key, $value);
         }
+
         // 通过中间件执行
         $process    = function (ServerRequest $request, Response $response) use ($handler) {
             try {
