@@ -67,7 +67,6 @@ class Router implements ServerHandlerInterface
         $routeDefinitionCallback($routeCollector);
         $this->data       = $routeCollector->getData();
         $this->dispatcher = new $options['dispatcher']($this->data);
-        var_dump($this->services());
     }
 
     /**
