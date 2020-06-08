@@ -67,6 +67,7 @@ class Router implements ServerHandlerInterface
         $routeDefinitionCallback($routeCollector);
         $this->data       = $routeCollector->getData();
         $this->dispatcher = new $options['dispatcher']($this->data);
+        var_dump($this->services());
     }
 
     /**
@@ -86,11 +87,52 @@ class Router implements ServerHandlerInterface
      */
     public function services()
     {
+        $urls = [];
         foreach ($this->data as $datum) {
             foreach ($datum as $method => $item) {
-                
+                foreach ($item as $key => $value) {
+                    $url = $key;
+                    if (is_numeric($key)) {
+                        $url = $value['regex'];
+                    }
+                    $urls[] = $url;
+                }
             }
         }
+
+        $services = [];
+        foreach ($urls as $url) {
+            $tmp   = str_replace('^/', '*', $url);
+            $slice = array_filter(explode('/', strtolower($tmp)));
+            foreach ($slice as $key => $value) {
+                if (!preg_match('/^[a-z0-9]+$/i', $value) && strpos($value, ')') === false) {
+                    $slice[$key] = '';
+                }
+            }
+            $slice = array_filter($slice);
+
+            $version = '';
+            if (isset($slice[0]) && stripos($slice[0], 'v') === 0) {
+                $version = array_shift($slice) . '.';
+            }
+
+            switch (count($slice)) {
+                case 0:
+                    $name = 'index';
+                    break;
+                case 1:
+                case 2:
+                case 3:
+                    $name = array_shift($slice);
+                    break;
+                default:
+                    array_pop($slice);
+                    array_pop($slice);
+                    $name = implode('.', $slice);
+            }
+            $services[$version . $name][] = $url;
+        }
+        return $services;
     }
 
     /**
