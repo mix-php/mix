@@ -23,7 +23,6 @@
     "ext-pdo": "*",
     "ext-redis": "*",
     "ext-mbstring": "*",
-    "ext-grpc": ">=1.25.0",
     "firebase/php-jwt": "^5.0",
     "php-di/phpdoc-reader": "~2.1",
     "psr/http-message": "^1.0",
@@ -43,7 +42,8 @@
     "openzipkin/zipkin": "^1.3",
     "google/protobuf": "^3.11",
     "monolog/monolog": "^2.0",
-    "hassankhan/config": "^2.1"
+    "hassankhan/config": "^2.1",
+    "nikic/fast-route": "^1.3"
   },
   "replace": {
     "mix/bean": "self.version",
@@ -62,6 +62,7 @@
     "mix/session": "self.version",
     "mix/console": "self.version",
     "mix/route": "self.version",
+    "mix/fast-route": "self.version",
     "mix/view": "self.version",
     "mix/server": "self.version",
     "mix/http-message": "self.version",
@@ -98,6 +99,7 @@
       "Mix\\Redis\\": "src/redis/src/",
       "Mix\\Redis\\Subscribe\\": "src/redis-subscribe/src/",
       "Mix\\Route\\": "src/route/src/",
+      "Mix\\FastRoute\\": "src/fast-route/src/",
       "Mix\\Server\\": "src/server/src/",
       "Mix\\Session\\": "src/session/src/",
       "Mix\\Validate\\": "src/validate/src/",
