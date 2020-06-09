@@ -78,6 +78,7 @@
     "mix/micro-register": "self.version",
     "mix/micro-etcd": "self.version",
     "mix/micro-route": "self.version",
+    "mix/micro-server": "self.version",
     "mix/tracing": "self.version",
     "mix/tracing-zipkin": "self.version"
   },
@@ -115,6 +116,7 @@
       "Mix\\Micro\\Register\\": "src/micro-register/src/",
       "Mix\\Micro\\Etcd\\": "src/micro-etcd/src/",
       "Mix\\Micro\\Route\\": "src/micro-route/src/",
+      "Mix\\Micro\\Server\\": "src/micro-server/src/",
       "Mix\\Tracing\\": "src/tracing/src/",
       "Mix\\Tracing\\Zipkin\\": "src/tracing-zipkin/src/"
     },
