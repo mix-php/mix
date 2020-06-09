@@ -1,6 +1,8 @@
 ## Mix Micro Route
 
-支持微服务注册和 micro web 的路由器
+微服务路由库通用接口
+
+Common interface for microservice route library
 
 ## Usage
 

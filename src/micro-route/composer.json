@@ -1,6 +1,6 @@
 {
   "name": "mix/micro-route",
-  "description": "Router supporting microservice registration and micro web",
+  "description": "Common interface for microservice route library",
   "type": "library",
   "keywords": [
     "mix",
