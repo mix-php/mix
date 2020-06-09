@@ -56,7 +56,7 @@ class RouteCollector
      * @param callable $handler
      * @param array $middleware
      */
-    public function route($httpMethod, string $route, callable $handler, array $middleware = [])
+    public function route($httpMethod, string $route, $handler, array $middleware = [])
     {
         $route      = $this->currentGroupPrefix . $route;
         $routeDatas = $this->routeParser->parse($route);
@@ -98,7 +98,7 @@ class RouteCollector
      * @param callable $handler
      * @param array $middleware
      */
-    public function get(string $route, callable $handler, array $middleware = [])
+    public function get(string $route, $handler, array $middleware = [])
     {
         $this->route('GET', $route, $handler, $middleware);
     }
@@ -112,7 +112,7 @@ class RouteCollector
      * @param callable $handler
      * @param array $middleware
      */
-    public function post(string $route, callable $handler, array $middleware = [])
+    public function post(string $route, $handler, array $middleware = [])
     {
         $this->route('POST', $route, $handler, $middleware);
     }
@@ -126,7 +126,7 @@ class RouteCollector
      * @param callable $handler
      * @param array $middleware
      */
-    public function put(string $route, callable $handler, array $middleware = [])
+    public function put(string $route, $handler, array $middleware = [])
     {
         $this->route('PUT', $route, $handler, $middleware);
     }
@@ -140,7 +140,7 @@ class RouteCollector
      * @param callable $handler
      * @param array $middleware
      */
-    public function delete(string $route, callable $handler, array $middleware = [])
+    public function delete(string $route, $handler, array $middleware = [])
     {
         $this->route('DELETE', $route, $handler, $middleware);
     }
@@ -154,7 +154,7 @@ class RouteCollector
      * @param callable $handler
      * @param array $middleware
      */
-    public function patch(string $route, callable $handler, array $middleware = [])
+    public function patch(string $route, $handler, array $middleware = [])
     {
         $this->route('PATCH', $route, $handler, $middleware);
     }
@@ -168,7 +168,7 @@ class RouteCollector
      * @param callable $handler
      * @param array $middleware
      */
-    public function head(string $route, callable $handler, array $middleware = [])
+    public function head(string $route, $handler, array $middleware = [])
     {
         $this->route('HEAD', $route, $handler, $middleware);
     }

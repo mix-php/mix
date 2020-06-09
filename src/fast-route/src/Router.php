@@ -15,7 +15,7 @@ use Mix\Micro\Route\RouterInterface;
  * Class Router
  * @package Mix\FastRoute
  */
-class Router implements ServerHandlerInterface
+class Router implements ServerHandlerInterface, RouterInterface
 {
 
     /**
@@ -82,26 +82,26 @@ class Router implements ServerHandlerInterface
      * /v1/foo/bar/baz      v1.foo
      * /v1/foo/bar/baz/cat  v1.foo.bar
      *
-     * @return string[]
+     * @return string[][] [name => [pattern,...]]
      */
     public function services()
     {
-        $urls = [];
+        $patterns = [];
         foreach ($this->data as $datum) {
             foreach ($datum as $method => $item) {
                 foreach ($item as $key => $value) {
-                    $url = $key;
+                    $pattern = $key;
                     if (is_numeric($key)) {
-                        $url = $value['regex'];
+                        $pattern = $value['regex'];
                     }
-                    $urls[] = $url;
+                    $patterns[] = $pattern;
                 }
             }
         }
 
         $services = [];
-        foreach ($urls as $url) {
-            $tmp   = str_replace('^/', '*', $url);
+        foreach ($patterns as $pattern) {
+            $tmp   = str_replace('^/', '*', $pattern);
             $slice = array_filter(explode('/', strtolower($tmp)));
             foreach ($slice as $key => $value) {
                 if (!preg_match('/^[a-z0-9]+$/i', $value) && strpos($value, ')') === false) {
@@ -129,7 +129,7 @@ class Router implements ServerHandlerInterface
                     array_pop($slice);
                     $name = implode('.', $slice);
             }
-            $services[$version . $name][] = $url;
+            $services[$version . $name][] = $pattern;
         }
         return $services;
     }
@@ -163,6 +163,9 @@ class Router implements ServerHandlerInterface
             switch ($result[0]) {
                 case \FastRoute\Dispatcher::FOUND:
                     list($handler, $middleware) = $result[1];
+                    if (!$handler instanceof \Closure && !is_object($handler[0])) {
+                        $handler[0] = new $handler[0];
+                    }
                     $vars       = $result[2];
                     $middleware = array_merge($this->middleware, $middleware);
                     break;

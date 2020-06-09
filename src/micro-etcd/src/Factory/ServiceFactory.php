@@ -4,6 +4,7 @@ namespace Mix\Micro\Etcd\Factory;
 
 use Mix\Micro\Etcd\Service\Service;
 use Mix\Micro\Register\Helper\ServiceHelper;
+use Mix\Micro\Route\RouterInterface;
 
 /**
  * Class ServiceFactory
@@ -35,7 +36,7 @@ class ServiceFactory
      * @param array $metadata
      * @return ServiceInterface[]
      */
-    public function createServiceFromHTTP(string $namespace = 'php.micro.api', \Mix\Http\Server\Server $server, \Mix\Route\Router $router, string $version = null, array $metadata = [])
+    public function createServiceFromHTTP(string $namespace = 'php.micro.api', \Mix\Http\Server\Server $server, RouterInterface $router, string $version = null, array $metadata = [])
     {
         $serviceFactory  = new ServiceFactory();
         $endpointFactory = new EndpointFactory();

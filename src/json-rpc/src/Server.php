@@ -101,7 +101,7 @@ class Server implements \Mix\Http\Server\ServerHandlerInterface, \Mix\Server\Ser
 
     /**
      * 获取全部 service 名称
-     * @return string[] [name => [class,...]]
+     * @return string[][] [name => [class,...]]
      */
     public function services()
     {

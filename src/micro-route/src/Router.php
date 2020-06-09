@@ -26,7 +26,7 @@ class Router extends \Mix\Route\Router
      * /v1/foo/bar/baz      v1.foo
      * /v1/foo/bar/baz/cat  v1.foo.bar
      *
-     * @return string[]
+     * @return string[][] [name => [pattern,...]]
      */
     public function services()
     {

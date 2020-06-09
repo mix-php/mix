@@ -24,6 +24,7 @@
     "psr/event-dispatcher": "^1.0",
     "mix/micro-config": "~2.2.0",
     "mix/micro-register": "~2.2.0",
+    "mix/micro-route": "~2.2.0",
     "mix/concurrent": "~2.2.0",
     "mix/guzzle": "~2.2.0",
     "hassankhan/config": "^2.1"
