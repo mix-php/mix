@@ -13,13 +13,15 @@ use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Message\Stream\ContentStream;
 use Mix\Http\Server\Middleware\MiddlewareDispatcher;
+use Mix\Http\Server\ServerHandlerInterface;
+use Mix\Micro\Server\ServerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class Server
  * @package Mix\Grpc
  */
-class Server implements \Mix\Http\Server\ServerHandlerInterface
+class Server implements ServerHandlerInterface, ServerInterface
 {
 
     /**
@@ -95,6 +97,24 @@ class Server implements \Mix\Http\Server\ServerHandlerInterface
     public function set(array $options)
     {
         $this->options = $options;
+    }
+
+    /**
+     * Host
+     * @return string
+     */
+    public function host()
+    {
+        return $this->host;
+    }
+
+    /**
+     * Port
+     * @return int
+     */
+    public function port()
+    {
+        return $this->port;
     }
 
     /**

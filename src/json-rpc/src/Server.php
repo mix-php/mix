@@ -12,6 +12,7 @@ use Mix\JsonRpc\Message\Request;
 use Mix\JsonRpc\Message\Response;
 use Mix\JsonRpc\Middleware\MiddlewareDispatcher;
 use Mix\JsonRpc\Middleware\MiddlewareInterface;
+use Mix\Micro\Server\ServerInterface;
 use Mix\Server\Connection;
 use Mix\Server\Exception\ReceiveException;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -21,7 +22,7 @@ use Swoole\Coroutine\Channel;
  * Class Server
  * @package Mix\JsonRpc
  */
-class Server implements \Mix\Http\Server\ServerHandlerInterface, \Mix\Server\ServerHandlerInterface
+class Server implements \Mix\Http\Server\ServerHandlerInterface, \Mix\Server\ServerHandlerInterface, ServerInterface
 {
 
     /**
@@ -97,6 +98,24 @@ class Server implements \Mix\Http\Server\ServerHandlerInterface, \Mix\Server\Ser
     public function set(array $options)
     {
         $this->options = $options;
+    }
+
+    /**
+     * Host
+     * @return string
+     */
+    public function host()
+    {
+        return $this->host;
+    }
+
+    /**
+     * Port
+     * @return int
+     */
+    public function port()
+    {
+        return $this->port;
     }
 
     /**

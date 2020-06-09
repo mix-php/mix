@@ -25,7 +25,7 @@ composer require mix/micro
 
 支持的服务器
 
-- [Mix gRPC](https://github.com/mix-php/grpc)
+- [Mix gRPC](https://github.com/mix-php/grpc) 
 - [Mix JSON-RPC](https://github.com/mix-php/json-rpc)
 - [Mix Http Server](https://github.com/mix-php/http-server)
 
@@ -35,8 +35,8 @@ composer require mix/micro
 
 其他微服务治理组件
 
-- [Mix Micro Hystrix](https://github.com/mix-php/micro-hystrix) `需单独安装`
-- [Mix Tracing Zipkin](https://github.com/mix-php/tracing-zipkin) `需单独安装` 
+- [Mix Micro Hystrix](https://github.com/mix-php/micro-hystrix) 
+- [Mix Tracing Zipkin](https://github.com/mix-php/tracing-zipkin) 
 
 ## 使用
 

@@ -2,6 +2,7 @@
 
 namespace Mix\Micro;
 
+use http\Exception\InvalidArgumentException;
 use Mix\Concurrent\Timer;
 use Mix\Helper\ProcessHelper;
 
@@ -63,7 +64,7 @@ class Service
             $registry = $this->options->registry;
             $logger   = $this->options->logger;
 
-            if (!$server->port) {
+            if (!$server->port()) {
                 return;
             }
             xdefer(function () use ($timer) {
@@ -74,14 +75,18 @@ class Service
             $registry->register(...$services);
 
             if ($logger) {
-                $logger->info(sprintf('Server started [%s:%d]', $server->host, $server->port));
+                $logger->info(sprintf('Server started [%s:%d]', $server->host(), $server->port()));
                 foreach ($services as $service) {
                     $logger->info(sprintf('Register service [%s]', $service->getID()));
                 }
             }
         });
 
-        $this->options->server->start($this->options->router);
+        $server = $this->options->server;
+        if (!method_exists($server, 'start')) {
+            throw new \BadMethodCallException('Server start method invalid');
+        }
+        $server->start($this->options->router);
     }
 
     /**

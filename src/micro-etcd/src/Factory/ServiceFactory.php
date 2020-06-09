@@ -5,6 +5,7 @@ namespace Mix\Micro\Etcd\Factory;
 use Mix\Micro\Etcd\Service\Service;
 use Mix\Micro\Register\Helper\ServiceHelper;
 use Mix\Micro\Route\RouterInterface;
+use Mix\Micro\Server\ServerInterface;
 
 /**
  * Class ServiceFactory
@@ -30,13 +31,13 @@ class ServiceFactory
     /**
      * Create service bundle form http
      * @param string $namespace
-     * @param \Mix\Http\Server\Server $server
-     * @param \Mix\Route\Router $router
+     * @param ServerInterface $server
+     * @param RouterInterface $router
      * @param string|null $version
      * @param array $metadata
      * @return ServiceInterface[]
      */
-    public function createServiceFromHTTP(string $namespace = 'php.micro.api', \Mix\Http\Server\Server $server, RouterInterface $router, string $version = null, array $metadata = [])
+    public function createServiceFromHTTP(string $namespace = 'php.micro.api', ServerInterface $server, RouterInterface $router, string $version = null, array $metadata = [])
     {
         $serviceFactory  = new ServiceFactory();
         $endpointFactory = new EndpointFactory();
@@ -49,7 +50,7 @@ class ServiceFactory
                 $endpoint = $endpointFactory->createEndpoint($pattern);
                 $service->withEndpoint($endpoint);
             }
-            $node = $nodeFactory->createNode($name, sprintf('%s:%d', ServiceHelper::localIP(), $server->port));
+            $node = $nodeFactory->createNode($name, sprintf('%s:%d', ServiceHelper::localIP(), $server->port()));
             $node->withMetadata('registry', 'etcd');
             foreach ($metadata as $key => $value) {
                 $node->withMetadata($key, $value);
@@ -62,12 +63,12 @@ class ServiceFactory
 
     /**
      * Create service bundle form json-rpc
-     * @param \Mix\Grpc\Server $server
+     * @param ServerInterface $server
      * @param string|null $version
      * @param array $metadata
      * @return ServiceInterface[]
      */
-    public function createServiceFromGrpc(\Mix\Grpc\Server $server, string $version = null, array $metadata = [])
+    public function createServiceFromGrpc(ServerInterface $server, string $version = null, array $metadata = [])
     {
         $serviceFactory  = new ServiceFactory();
         $endpointFactory = new EndpointFactory();
@@ -104,7 +105,7 @@ class ServiceFactory
                     $service->withEndpoint($endpoint);
                 }
             }
-            $node = $nodeFactory->createNode($name, sprintf('%s:%d', ServiceHelper::localIP(), $server->port));
+            $node = $nodeFactory->createNode($name, sprintf('%s:%d', ServiceHelper::localIP(), $server->port()));
             $node->withMetadata('registry', 'etcd');
             $node->withMetadata('protocol', 'grpc');
             $node->withMetadata('server', 'grpc');
@@ -117,12 +118,12 @@ class ServiceFactory
 
     /**
      * Create service bundle form json-rpc
-     * @param \Mix\JsonRpc\Server $server
+     * @param ServerInterface $server
      * @param string|null $version
      * @param array $metadata
      * @return ServiceInterface[]
      */
-    public function createServiceFromJsonRpc(\Mix\JsonRpc\Server $server, string $version = null, array $metadata = [])
+    public function createServiceFromJsonRpc(ServerInterface $server, string $version = null, array $metadata = [])
     {
         $serviceFactory  = new ServiceFactory();
         $endpointFactory = new EndpointFactory();
@@ -147,7 +148,7 @@ class ServiceFactory
                     $service->withEndpoint($endpoint);
                 }
             }
-            $node = $nodeFactory->createNode($name, sprintf('%s:%d', ServiceHelper::localIP(), $server->port));
+            $node = $nodeFactory->createNode($name, sprintf('%s:%d', ServiceHelper::localIP(), $server->port()));
             $node->withMetadata('registry', 'etcd');
             $node->withMetadata('protocol', 'json');
             $node->withMetadata('server', 'json');

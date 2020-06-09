@@ -5,6 +5,7 @@ namespace Mix\Micro;
 use Mix\Micro\Config\ConfigInterface;
 use Mix\Micro\Register\RegistryInterface;
 use Mix\Micro\Route\RouterInterface;
+use Mix\Micro\Server\ServerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -56,7 +57,7 @@ class Options
     public $config;
 
     /**
-     * @var \Mix\Http\Server\Server|\Mix\Grpc\Server|\Mix\JsonRpc\Server
+     * @var ServerInterface
      */
     public $server;
 

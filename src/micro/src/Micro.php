@@ -5,6 +5,7 @@ namespace Mix\Micro;
 use Mix\Micro\Config\ConfigInterface;
 use Mix\Micro\Register\RegistryInterface;
 use Mix\Micro\Route\RouterInterface;
+use Mix\Micro\Server\ServerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -98,15 +99,11 @@ class Micro
 
     /**
      * Server
-     * @param \Mix\Http\Server\Server|\Mix\Grpc\Server|\Mix\JsonRpc\Server $server
+     * @param ServerInterface $server
      * @return \Closure
-     * @throws \InvalidArgumentException
      */
-    public static function server($server)
+    public static function server(ServerInterface $server)
     {
-        if (!($server instanceof \Mix\Http\Server\Server) && !($server instanceof \Mix\Grpc\Server) && !($server instanceof \Mix\JsonRpc\Server)) {
-            throw new \InvalidArgumentException('$server type is not supported');
-        }
         return function (Options $options) use ($server) {
             $options->server = $server;
         };

@@ -6,6 +6,7 @@ use Mix\Http\Message\Factory\ResponseFactory;
 use Mix\Http\Message\Factory\ServerRequestFactory;
 use Mix\Http\Server\Event\HandledEvent;
 use Mix\Http\Server\Helper\ServerHelper;
+use Mix\Micro\Server\ServerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
@@ -15,7 +16,7 @@ use Swoole\Http\Response;
  * @package Mix\Http\Server
  * @author liu,jian <coder.keda@gmail.com>
  */
-class Server
+class Server implements ServerInterface
 {
 
     /**
@@ -81,6 +82,33 @@ class Server
     public function set(array $options)
     {
         $this->options = $options;
+    }
+
+    /**
+     * Host
+     * @return string
+     */
+    public function host()
+    {
+        return $this->host;
+    }
+
+    /**
+     * Port
+     * @return int
+     */
+    public function port()
+    {
+        return $this->port;
+    }
+
+    /**
+     * 获取全部 service 名称
+     * @return string[][] [name => [class,...]]
+     */
+    public function services()
+    {
+        return [];
     }
 
     /**
