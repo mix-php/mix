@@ -14,7 +14,7 @@ composer require mix/fast-route
 
 文档：
 
-- 
+- https://www.kancloud.cn/onanying/mixphp2-2/1758040
 
 ## License
 

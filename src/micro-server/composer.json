@@ -1,5 +1,5 @@
 {
-  "name": "mix/micro-route",
+  "name": "mix/micro-server",
   "description": "Common interface for microservice server library",
   "type": "library",
   "keywords": [
