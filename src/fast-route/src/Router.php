@@ -144,14 +144,13 @@ class Router implements ServerHandlerInterface
     {
         // 支持 micro web 的代理
         // micro web 代理无法将 /foo/ 后面的杠传递过来
-        $basePath   = $request->getHeaderLine('x-micro-web-base-path');
-        $isMicroWeb = $basePath ? true : false;
-        if ($isMicroWeb) {
+        $microBasePath = $request->getHeaderLine('x-micro-web-base-path');
+        if ($microBasePath) {
             $uri = $request->getUri();
-            $uri->withPath(sprintf('%s%s', $basePath, $uri->getPath() == '/' ? '' : $uri->getPath()));
+            $uri->withPath(sprintf('%s%s', $microBasePath, $uri->getPath() == '/' ? '' : $uri->getPath()));
             $serverParams                = $request->getServerParams();
-            $serverParams['request_uri'] = sprintf('%s%s', $basePath, $serverParams['request_uri'] == '/' ? '' : $serverParams['request_uri']);
-            $serverParams['path_info']   = sprintf('%s%s', $basePath, $serverParams['path_info'] == '/' ? '' : $serverParams['path_info']);
+            $serverParams['request_uri'] = sprintf('%s%s', $microBasePath, $serverParams['request_uri'] == '/' ? '' : $serverParams['request_uri']);
+            $serverParams['path_info']   = sprintf('%s%s', $microBasePath, $serverParams['path_info'] == '/' ? '' : $serverParams['path_info']);
             $request->withServerParams($serverParams);
         }
 
