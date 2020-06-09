@@ -26,9 +26,10 @@ class BeanInjector
                 if (array_values($value) === $value) {
                     // 非关联数组
                     foreach ($value as $subNumberKey => $subValue) {
-                        if (isset($subValue['ref'])) {
-                            $config[$key][$subNumberKey] = static::build($beanFactory, $subValue);
+                        if (!(is_array($subValue) && isset($subValue['ref']))) {
+                            continue;
                         }
+                        $config[$key][$subNumberKey] = static::build($beanFactory, $subValue);
                     }
                 } else {
                     // 引用依赖

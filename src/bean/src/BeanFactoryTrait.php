@@ -126,7 +126,7 @@ Trait BeanFactoryTrait
             $constructorArgs = $coverConstructorArgs + $constructorArgs;
             // 支持构造参数中的数组参数中的ref的依赖引用
             foreach ($constructorArgs as $key => $arg) {
-                if (is_null($arg) || is_scalar($arg)) {
+                if (!(is_array($arg) && isset($arg['ref']))) {
                     continue;
                 }
                 $constructorArgs[$key] = BeanInjector::build($this, $arg);
