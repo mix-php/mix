@@ -40,17 +40,19 @@ class Router implements ServerHandlerInterface, RouterInterface
 
     /**
      * Router constructor.
+     * @param callable|null $routeDefinitionCallback
      * @param array $middleware
      */
-    public function __construct(array $middleware = [])
+    public function __construct(callable $routeDefinitionCallback = null, array $middleware = [])
     {
-        $this->middleware = $middleware;
-        $this->options    = [
+        $this->options = [
             'routeParser'    => 'FastRoute\\RouteParser\\Std',
             'dataGenerator'  => 'FastRoute\\DataGenerator\\GroupCountBased',
             'dispatcher'     => 'FastRoute\\Dispatcher\\GroupCountBased',
             'routeCollector' => 'Mix\\FastRoute\\RouteCollector',
         ];
+        $routeDefinitionCallback and $this->parse($routeDefinitionCallback);
+        $this->middleware = $middleware;
     }
 
     /**
