@@ -96,9 +96,9 @@ class Connection
      */
     protected function recv(float $timeout = -1)
     {
-        $data = $this->driver->instance()->recv($timeout);
+        $client = $this->driver->instance();
+        $data   = $client->recv($timeout);
         if ($data === false) { // 接收失败
-            $client = $this->client;
             throw new \Swoole\Exception($client->errMsg, $client->errCode);
         }
         if ($data === "") { // 连接关闭
@@ -116,10 +116,11 @@ class Connection
      */
     protected function send(string $data)
     {
-        $len  = strlen($data);
-        $size = $this->driver->instance()->send($data);
+        $len    = strlen($data);
+        $client = $this->driver->instance();
+        $size   = $client->send($data);
         if ($size === false) {
-            throw new \Swoole\Exception($this->client->errMsg, $this->client->errCode);
+            throw new \Swoole\Exception($client->errMsg, $client->errCode);
         }
         if ($len !== $size) {
             throw new \Swoole\Exception('The sending data is incomplete, it may be that the socket has been closed by the peer.');

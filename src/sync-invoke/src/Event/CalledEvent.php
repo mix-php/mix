@@ -4,6 +4,7 @@ namespace Mix\SyncInvoke\Event;
 
 /**
  * Class CalledEvent
+ * Server Event
  * @package Mix\SyncInvoke\Event
  */
 class CalledEvent
