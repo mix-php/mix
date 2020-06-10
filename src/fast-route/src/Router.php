@@ -21,12 +21,12 @@ class Router implements ServerHandlerInterface, RouterInterface
     /**
      * @var array
      */
-    protected $middleware;
+    protected $options;
 
     /**
      * @var array
      */
-    protected $options;
+    protected $middleware;
 
     /**
      * @var Dispatcher
