@@ -5,10 +5,10 @@ namespace Mix\Time;
 use Swoole\Coroutine\Channel;
 
 /**
- * Class Timer
+ * Class Ticker
  * @package Mix\Time
  */
-class Timer
+class Ticker
 {
 
     /**
@@ -34,7 +34,7 @@ class Timer
     {
         $this->duration = $duration;
         $this->channel  = new Channel();
-        $this->timerId  = \Swoole\Timer::after($duration, function () {
+        $this->timerId  = \Swoole\Timer::tick($duration, function () {
             $this->timerChannel->push(microtime(true));
         });
     }
@@ -50,21 +50,6 @@ class Timer
         \Swoole\Timer::clear($this->timerId);
         $this->timerId = null;
         $this->timerChannel->close();
-    }
-
-    /**
-     * Reset
-     * @param int $duration
-     */
-    public function reset(int $duration)
-    {
-        if (!$this->timerId) {
-            throw new \RuntimeException('Notify has stopped');
-        }
-        \Swoole\Timer::clear($this->timerId);
-        $this->timerId = \Swoole\Timer::after($duration, function () {
-            $this->timerChannel->push(microtime(true));
-        });
     }
 
     /**

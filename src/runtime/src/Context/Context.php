@@ -15,15 +15,6 @@ class Context
     protected $valueContext;
 
     /**
-     * New
-     * @return static
-     */
-    public static function new()
-    {
-        return new static();
-    }
-
-    /**
      * Get ValueContext
      * @return ValueContext
      */

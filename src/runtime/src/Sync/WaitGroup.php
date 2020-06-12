@@ -7,7 +7,6 @@ use Swoole\Coroutine\Channel;
 /**
  * Class WaitGroup
  * @package Mix\Sync
- * @author liu,jian <coder.keda@gmail.com>
  */
 class WaitGroup
 {
