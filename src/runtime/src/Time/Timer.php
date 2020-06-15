@@ -32,9 +32,9 @@ class Timer
      */
     public function __construct(int $duration)
     {
-        $this->duration = $duration;
-        $this->channel  = new Channel();
-        $this->timerId  = \Swoole\Timer::after($duration, function () {
+        $this->duration     = $duration;
+        $this->timerChannel = new Channel();
+        $this->timerId      = \Swoole\Timer::after($duration, function () {
             $this->timerChannel->push(microtime(true));
         });
     }
