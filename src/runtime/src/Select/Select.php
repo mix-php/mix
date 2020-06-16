@@ -15,7 +15,7 @@ use Mix\Coroutine\Channel;
 class Select
 {
 
-    const RETURN = true;
+    const BREAK = 'BREAK';
 
     /**
      * @var Clauses
@@ -25,7 +25,7 @@ class Select
     /**
      * @var bool
      */
-    protected $return = false;
+    protected $break = false;
 
     /**
      * @var \Swoole\Coroutine\Channel
@@ -159,17 +159,17 @@ class Select
                 $statement = $case['statement'];
                 if ($clause instanceof Pop && !$clause->channel()->isEmpty()) {
                     $processe = function () use ($clause, $statement) {
-                        $value        = $clause->run();
-                        $return       = call_user_func($statement, $value);
-                        $this->return = $return ? true : false;
+                        $value       = $clause->run();
+                        $break       = call_user_func($statement, $value);
+                        $this->break = $break == static::BREAK ? true : false;
                     };
                     break;
                 }
                 if ($clause instanceof Push && !$clause->channel()->isFull()) {
                     $processe = function () use ($clause, $statement) {
                         $clause->run();
-                        $return       = call_user_func($statement);
-                        $this->return = $return ? true : false;
+                        $break       = call_user_func($statement);
+                        $this->break = $break == static::BREAK ? true : false;
                     };
                     break;
                 }
@@ -185,9 +185,9 @@ class Select
     /**
      * @return bool
      */
-    public function return()
+    public function break()
     {
-        return $this->return;
+        return $this->break;
     }
 
     /**

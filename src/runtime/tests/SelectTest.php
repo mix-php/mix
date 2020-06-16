@@ -50,7 +50,7 @@ final class SelectTest extends TestCase
 
             $c1 = new \Mix\Coroutine\Channel();
             $c2 = new \Mix\Coroutine\Channel();
-            
+
             (new Select(
                 Select::case(Select::pop($c1), function ($value) use (&$result) {
                     $result = $value;
@@ -128,6 +128,34 @@ final class SelectTest extends TestCase
             }
 
             $_this->assertEquals($result, [0, 1, 3, 5, 7]);
+        };
+        run($func);
+    }
+
+    // 中断循环
+    public function testE(): void
+    {
+        $_this = $this;
+        $func  = function () use ($_this) {
+            $result = [];
+
+            $c1 = new \Mix\Coroutine\Channel();
+            $timer = new Timer(10 * Time::MILLISECOND);
+
+            for ($i = 0; $i < 10; $i++) {
+                if ((new Select(
+                    Select::case(Select::pop($c1), function ($value) {
+                    }),
+                    Select::case(Select::pop($timer->channel()), function ($value) use(&$result, $i) {
+                        $result[] = $i;
+                        return Select::BREAK;
+                    })
+                ))->run()->break()) {
+                    break; // or return
+                }
+            }
+
+            $_this->assertEquals($result, [0]);
         };
         run($func);
     }

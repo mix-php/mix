@@ -2,7 +2,7 @@
 
 namespace Mix\Time;
 
-use Swoole\Coroutine\Channel;
+use Mix\Coroutine\Channel;
 
 /**
  * Class Ticker
