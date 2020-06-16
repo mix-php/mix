@@ -50,6 +50,7 @@ final class SelectTest extends TestCase
 
             $c1 = new \Mix\Coroutine\Channel();
             $c2 = new \Mix\Coroutine\Channel();
+            
             (new Select(
                 Select::case(Select::pop($c1), function ($value) use (&$result) {
                     $result = $value;

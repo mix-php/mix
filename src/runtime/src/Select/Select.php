@@ -18,9 +18,9 @@ class Select
     const RETURN = true;
 
     /**
-     * @var Options
+     * @var Clauses
      */
-    protected $options;
+    protected $clauses;
 
     /**
      * @var bool
@@ -34,12 +34,12 @@ class Select
 
     /**
      * Select constructor.
-     * @param \Closure ...$options
+     * @param \Closure ...$clauses
      */
-    public function __construct(\Closure ...$options)
+    public function __construct(\Closure ...$clauses)
     {
-        $this->options = new Options();
-        foreach ($options as $option) {
+        $this->options = new Clauses();
+        foreach ($clauses as $option) {
             call_user_func($option, $this->options);
         }
     }
@@ -52,8 +52,8 @@ class Select
      */
     public static function case(ClauseIntercase $clause, \Closure $statement): \Closure
     {
-        return function (Options $options) use ($clause, $statement) {
-            $options->cases[] = [
+        return function (Clauses $clauses) use ($clause, $statement) {
+            $clauses->cases[] = [
                 'clause'    => $clause,
                 'statement' => $statement,
             ];
@@ -67,8 +67,8 @@ class Select
      */
     public static function default(\Closure $statement): \Closure
     {
-        return function (Options $options) use ($statement) {
-            $options->default = $statement;
+        return function (Clauses $clauses) use ($statement) {
+            $clauses->default = $statement;
         };
     }
 
@@ -96,10 +96,10 @@ class Select
      */
     public function run()
     {
-        $options = $this->options;
+        $clauses = $this->options;
 
         $processes = [];
-        foreach ($options->cases as $case) {
+        foreach ($clauses->cases as $case) {
             /** @var ClauseIntercase $clause */
             $clause    = $case['clause'];
             $statement = $case['statement'];
@@ -124,35 +124,36 @@ class Select
             return $this;
         }
 
-        if ($options->default) {
-            call_user_func($options->default);
+        if ($clauses->default) {
+            call_user_func($clauses->default);
             return $this;
         }
 
         // 阻塞，直到某个通信可以运行
         // 没有可运行的通信才会执行到这里
-        $this->waitAndRun();
+        $this->wait();
+
         return $this;
     }
 
     /**
      * Wait and run
      */
-    protected function waitAndRun()
+    protected function wait()
     {
         $this->waitChannel = $waitChannel = new \Swoole\Coroutine\Channel(); // 必须是 Swoole 的 Channel
-        $options           = $this->options;
+        $clauses           = $this->options;
         $processe          = null;
 
-        foreach ($options->cases as $case) {
+        foreach ($clauses->cases as $case) {
             /** @var ClauseIntercase $clause */
             $clause = $case['clause'];
             $clause->channel()->addNotifier($waitChannel);
         }
-        
+
         while (true) {
             $waitChannel->pop();
-            foreach ($options->cases as $case) {
+            foreach ($clauses->cases as $case) {
                 /** @var ClauseIntercase $clause */
                 $clause    = $case['clause'];
                 $statement = $case['statement'];
@@ -196,8 +197,8 @@ class Select
     {
         $waitChannel = $this->waitChannel;
         if ($waitChannel) {
-            $options = $this->options;
-            foreach ($options->cases as $case) {
+            $clauses = $this->options;
+            foreach ($clauses->cases as $case) {
                 /** @var ClauseIntercase $clause */
                 $clause = $case['clause'];
                 $clause->channel()->delNotifier($waitChannel);

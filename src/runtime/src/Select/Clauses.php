@@ -3,10 +3,10 @@
 namespace Mix\Select;
 
 /**
- * Class Options
+ * Class Clauses
  * @package Mix\Select
  */
-class Options
+class Clauses
 {
 
     /**
