@@ -16,13 +16,13 @@ final class SelectTest extends TestCase
         $_this = $this;
         $func  = function () use ($_this) {
             $result = [];
+
+            $c1 = new \Mix\Coroutine\Channel();
+            $c2 = new \Mix\Coroutine\Channel();
+            $c1->push(1);
+            $c2->push(2);
+
             while (true) {
-
-                $c1 = new \Mix\Coroutine\Channel();
-                $c1->push(1);
-                $c2 = new \Mix\Coroutine\Channel();
-                $c2->push(2);
-
                 (new Select(
                     Select::case(Select::pop($c1), function ($value) use (&$result) {
                         $result[$value] = "";
@@ -31,11 +31,11 @@ final class SelectTest extends TestCase
                         $result[$value] = "";
                     })
                 ))->run();
-
                 if (count($result) == 2) {
                     break;
                 }
             }
+
             $_this->assertEquals(count($result), 2);
         };
         run($func);
@@ -125,7 +125,7 @@ final class SelectTest extends TestCase
                     })
                 ))->run();
             }
-            
+
             $_this->assertEquals($result, [0, 1, 3, 5, 7]);
         };
         run($func);
