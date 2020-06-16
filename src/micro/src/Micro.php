@@ -20,6 +20,17 @@ class Micro
      * @param \Closure ...$options
      * @return Service
      */
+    public static function newService(\Closure ...$options): Service
+    {
+        return new Service(...$options);
+    }
+
+    /**
+     * New Service
+     * @param \Closure ...$options
+     * @return Service
+     * @deprecated 废弃，采用 newService 取代
+     */
     public static function service(\Closure ...$options): Service
     {
         return new Service(...$options);

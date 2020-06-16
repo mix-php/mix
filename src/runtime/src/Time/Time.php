@@ -14,4 +14,24 @@ class Time
     const MINUTE = 60 * self::SECOND;
     const HOUR = 60 * self::MINUTE;
 
+    /**
+     * New ticker
+     * @param int $duration 单位：ms
+     * @return Ticker
+     */
+    public static function newTicker(int $duration)
+    {
+        return new Ticker($duration);
+    }
+
+    /**
+     * New timer
+     * @param int $duration 单位：ms
+     * @return Ticker
+     */
+    public static function newTimer(int $duration)
+    {
+        return new Timer($duration);
+    }
+
 }
