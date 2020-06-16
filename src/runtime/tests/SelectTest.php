@@ -106,4 +106,29 @@ final class SelectTest extends TestCase
         run($func);
     }
 
+    // 不带 default, case 的 pop、push 各一个
+    public function testD(): void
+    {
+        $_this = $this;
+        $func  = function () use ($_this) {
+            $result = [];
+
+            $c1 = new \Mix\Coroutine\Channel();
+            $c1->push(0);
+
+            for ($i = 0; $i < 10; $i++) {
+                (new Select(
+                    Select::case(Select::pop($c1), function ($value) use (&$result) {
+                        $result[] = $value;
+                    }),
+                    Select::case(Select::push($c1, $i), function () {
+                    })
+                ))->run();
+            }
+            
+            $_this->assertEquals($result, [0, 1, 3, 5, 7]);
+        };
+        run($func);
+    }
+
 }

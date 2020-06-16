@@ -22,14 +22,17 @@ class Channel extends \Swoole\Coroutine\Channel
      */
     public function push($data, $timeout = null)
     {
-        if ($this->isFull()) {
+        $isFull = $this->isFull();
+        if ($isFull) { // 执行过程中变满
             foreach ($this->notifies as $channel) {
                 $channel->push(true);
             }
         }
         $result = parent::push($data, $timeout);
-        foreach ($this->notifies as $channel) {
-            $channel->push(true);
+        if (!$isFull) {
+            foreach ($this->notifies as $channel) {
+                $channel->push(true);
+            }
         }
         return $result;
     }
@@ -41,10 +44,11 @@ class Channel extends \Swoole\Coroutine\Channel
      */
     public function pop($timeout = null)
     {
+        $result = parent::pop($timeout);
         foreach ($this->notifies as $channel) {
             $channel->push(true);
         }
-        return parent::pop($timeout);
+        return $result;
     }
 
     /**

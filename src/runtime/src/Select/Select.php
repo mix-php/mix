@@ -130,6 +130,7 @@ class Select
         }
 
         // 阻塞，直到某个通信可以运行
+        // 没有可运行的通信才会执行到这里
         $this->waitAndRun();
         return $this;
     }
@@ -141,30 +142,32 @@ class Select
     {
         $this->waitChannel = $waitChannel = new \Swoole\Coroutine\Channel(); // 必须是 Swoole 的 Channel
         $options           = $this->options;
+        $processe          = null;
+
         foreach ($options->cases as $case) {
             /** @var ClauseIntercase $clause */
             $clause = $case['clause'];
             $clause->channel()->addNotifier($waitChannel);
         }
-        $processe = null;
+        
         while (true) {
             $waitChannel->pop();
             foreach ($options->cases as $case) {
                 /** @var ClauseIntercase $clause */
                 $clause    = $case['clause'];
                 $statement = $case['statement'];
-                if ($clause instanceof Push && !$clause->channel()->isFull()) {
-                    $processe = function () use ($clause, $statement) {
-                        $clause->run();
-                        $return       = call_user_func($statement);
-                        $this->return = $return ? true : false;
-                    };
-                    break;
-                }
                 if ($clause instanceof Pop && !$clause->channel()->isEmpty()) {
                     $processe = function () use ($clause, $statement) {
                         $value        = $clause->run();
                         $return       = call_user_func($statement, $value);
+                        $this->return = $return ? true : false;
+                    };
+                    break;
+                }
+                if ($clause instanceof Push && !$clause->channel()->isFull()) {
+                    $processe = function () use ($clause, $statement) {
+                        $clause->run();
+                        $return       = call_user_func($statement);
                         $this->return = $return ? true : false;
                     };
                     break;
@@ -174,6 +177,7 @@ class Select
                 break;
             }
         }
+
         call_user_func($processe);
     }
 

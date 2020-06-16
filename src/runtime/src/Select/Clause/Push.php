@@ -37,7 +37,7 @@ class Push implements ClauseIntercase
      * Channel
      * @return Channel
      */
-    public function channel()
+    public function channel(): Channel
     {
         return $this->clauseChannel;
     }
