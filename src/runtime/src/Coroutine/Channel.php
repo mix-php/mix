@@ -22,10 +22,16 @@ class Channel extends \Swoole\Coroutine\Channel
      */
     public function push($data, $timeout = null)
     {
+        if ($this->isFull()) {
+            foreach ($this->notifies as $channel) {
+                $channel->push(true);
+            }
+        }
+        $result = parent::push($data, $timeout);
         foreach ($this->notifies as $channel) {
             $channel->push(true);
         }
-        return parent::push($data, $timeout);
+        return $result;
     }
 
     /**

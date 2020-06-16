@@ -191,11 +191,13 @@ class Select
     public function __destruct()
     {
         $waitChannel = $this->waitChannel;
-        $options     = $this->options;
-        foreach ($options->cases as $case) {
-            /** @var ClauseIntercase $clause */
-            $clause = $case['clause'];
-            $clause->channel()->delNotifier($waitChannel);
+        if ($waitChannel) {
+            $options = $this->options;
+            foreach ($options->cases as $case) {
+                /** @var ClauseIntercase $clause */
+                $clause = $case['clause'];
+                $clause->channel()->delNotifier($waitChannel);
+            }
         }
     }
 
