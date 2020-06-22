@@ -15,24 +15,41 @@ class Renderer
     /**
      * @var string
      */
+    protected $__dir__;
+
+    /**
+     * @var string
+     */
     public $title;
 
     /**
+     * Renderer constructor.
+     * @param string $dir
+     */
+    public function __construct(string $dir)
+    {
+        $this->__dir__ = $dir;
+    }
+
+    /**
      * 渲染视图
-     * @param $__dir__
      * @param $__template__
      * @param $__data__
      * @return string
      */
-    public function render($__dir__, $__template__, $__data__)
+    public function render($__template__, $__data__)
     {
-        $__viewdir__ = $__dir__; // 兼容老版本
+        // 兼容老版本
+        if (func_num_args() == 3) {
+            list($__viewdir__, $__template__, $__data__) = func_get_args();
+        }
+
         // 传入变量
         extract($__data__);
         // 生成视图
-        $__filepath__ = $__dir__ . DIRECTORY_SEPARATOR . str_replace('.', DIRECTORY_SEPARATOR, $__template__) . '.php';
+        $__filepath__ = $this->__dir__ . DIRECTORY_SEPARATOR . str_replace('.', DIRECTORY_SEPARATOR, $__template__) . '.php';
         if (!is_file($__filepath__)) {
-            throw new ViewException("视图文件不存在：{$__filepath__}");
+            throw new ViewException("View file does not exist: {$__filepath__}");
         }
         ob_start();
         include $__filepath__;

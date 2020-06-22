@@ -44,8 +44,8 @@ class View
             $renderer = new Renderer();
             return $renderer->render($this->dir, $template, $data);
         }
-        $renderer        = new Renderer();
-        $data['content'] = $renderer->render($this->dir, $template, $data);
+        $renderer        = new Renderer($this->dir);
+        $data['content'] = $renderer->render($template, $data);
         return $renderer->render($this->dir, "layouts.{$layout}", $data);
     }
 
