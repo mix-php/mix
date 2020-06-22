@@ -46,3 +46,58 @@ if (!function_exists('println')) {
         echo implode(' ', $slice) . PHP_EOL;
     }
 }
+
+if (!function_exists('select')) {
+    
+    define ('SELECT_BREAK', 'BREAK');
+
+    /**
+     * @param Closure ...$clauses
+     * @return \Mix\Select\Select
+     */
+    function select(\Closure ...$clauses): \Mix\Select\Select
+    {
+        return new \Mix\Select\Select(...$clauses);
+    }
+
+    /**
+     * @param \Mix\Select\Clause\ClauseIntercase $clause
+     * @param Closure $statement
+     * @return Closure
+     */
+    function select_case(Mix\Select\Clause\ClauseIntercase $clause, \Closure $statement): \Closure
+    {
+        return \Mix\Select\Select::case($clause, $statement);
+    }
+
+    /**
+     * @param Closure $statement
+     * @return Closure
+     */
+    function select_default(\Closure $statement): \Closure
+    {
+        return \Mix\Select\Select::default($statement);
+    }
+
+    /**
+     * @param \Mix\Coroutine\Channel $channel
+     * @return \Mix\Select\Clause\ClauseIntercase
+     */
+    function select_pop(\Mix\Coroutine\Channel $channel): Mix\Select\Clause\ClauseIntercase
+    {
+        return \Mix\Select\Select::pop($channel);
+    }
+
+    /**
+     * @param \Mix\Coroutine\Channel $channel
+     * @param $value
+     * @return \Mix\Select\Clause\ClauseIntercase
+     */
+    function select_push(\Mix\Coroutine\Channel $channel, $value): Mix\Select\Clause\ClauseIntercase
+    {
+        return \Mix\Select\Select::push($channel, $value);
+    }
+
+}
+
+

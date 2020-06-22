@@ -4,13 +4,12 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 
 use Mix\Time\Time;
-use Mix\Select\Select;
 
 final class ContextTest extends TestCase
 {
 
     // 测试 CancelContext
-    public function testA(): void
+    public function testCancelContext(): void
     {
         $_this = $this;
         $func  = function () use ($_this) {
@@ -21,13 +20,13 @@ final class ContextTest extends TestCase
                 while (true) {
                     Time::sleep(1 * Time::MILLISECOND);
 
-                    if ((new Select(
-                        Select::case(Select::pop($ctx->done()), function ($value) {
-                            return Select::BREAK;
+                    if (select(
+                        select_case(select_pop($ctx->done()), function ($value) {
+                            return SELECT_BREAK;
                         }),
-                        Select::default(function () {
+                        select_default(function () {
                         })
-                    ))->run()->break()) {
+                    )->run()->break()) {
                         $_this->assertTrue(true);
                         return;
                     }
