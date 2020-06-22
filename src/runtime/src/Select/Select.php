@@ -23,9 +23,9 @@ class Select
     protected $clauses;
 
     /**
-     * @var bool
+     * @var mixed
      */
-    protected $break = false;
+    protected $return;
 
     /**
      * @var \Swoole\Coroutine\Channel
@@ -106,15 +106,13 @@ class Select
             if ($clause instanceof Push && !$clause->channel()->isFull()) {
                 $processes[] = function () use ($clause, $statement) {
                     $clause->run();
-                    $return       = call_user_func($statement);
-                    $this->return = $return ? true : false;
+                    $this->return = call_user_func($statement);
                 };
             }
             if ($clause instanceof Pop && !$clause->channel()->isEmpty()) {
                 $processes[] = function () use ($clause, $statement) {
                     $value        = $clause->run();
-                    $return       = call_user_func($statement, $value);
-                    $this->return = $return ? true : false;
+                    $this->return = call_user_func($statement, $value);
                 };
             }
         }
@@ -159,17 +157,15 @@ class Select
                 $statement = $case['statement'];
                 if ($clause instanceof Pop && !$clause->channel()->isEmpty()) {
                     $processe = function () use ($clause, $statement) {
-                        $value       = $clause->run();
-                        $break       = call_user_func($statement, $value);
-                        $this->break = $break == static::BREAK ? true : false;
+                        $value        = $clause->run();
+                        $this->return = call_user_func($statement, $value);
                     };
                     break;
                 }
                 if ($clause instanceof Push && !$clause->channel()->isFull()) {
                     $processe = function () use ($clause, $statement) {
                         $clause->run();
-                        $break       = call_user_func($statement);
-                        $this->break = $break == static::BREAK ? true : false;
+                        $this->return = call_user_func($statement);
                     };
                     break;
                 }
@@ -187,7 +183,7 @@ class Select
      */
     public function break()
     {
-        return $this->break;
+        return $this->return == static::BREAK;
     }
 
     /**
