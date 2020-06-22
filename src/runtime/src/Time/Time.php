@@ -34,4 +34,13 @@ class Time
         return new Timer($duration);
     }
 
+    /**
+     * Sleep
+     * @param int $duration 单位：ms
+     */
+    public static function sleep(int $duration)
+    {
+        \Swoole\Coroutine::sleep($duration * 1000);
+    }
+
 }

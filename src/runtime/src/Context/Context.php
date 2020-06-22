@@ -2,6 +2,8 @@
 
 namespace Mix\Context;
 
+use Mix\Coroutine\Channel;
+
 /**
  * Class Context
  * @package Mix\Context
@@ -10,20 +12,39 @@ class Context
 {
 
     /**
+     * 类型
+     */
+    const TYPE_VALUE = 0;
+    const TYPE_CANCEL = 1;
+
+    /**
      * @var ValueContext
      */
     protected $valueContext;
 
     /**
-     * Get ValueContext
-     * @return ValueContext
+     * @var CancelContext
      */
-    protected function getValueContext()
+    protected $cancelContext;
+
+    /**
+     * Get ValueContext
+     * @return object
+     */
+    protected function context(int $type)
     {
-        if (!isset($this->valueContext)) {
-            $this->valueContext = new ValueContext();
+        switch ($type) {
+            case static::TYPE_VALUE:
+                $property = 'valueContext';
+                break;
+            case static::TYPE_CANCEL:
+                $property = 'cancelContext';
+                break;
         }
-        return $this->valueContext;
+        if (!isset($this->$property)) {
+            $this->$property = new ValueContext();
+        }
+        return $this->$property;
     }
 
     /**
@@ -33,7 +54,9 @@ class Context
      */
     public function withValue(string $key, $value)
     {
-        $this->getValueContext()->withValue($key, $value);
+        /** @var ValueContext $context */
+        $context = $this->context(static::TYPE_VALUE);
+        $context->withValue($key, $value);
     }
 
     /**
@@ -44,7 +67,31 @@ class Context
      */
     public function value(string $key)
     {
-        return $this->getValueContext()->value($key);
+        /** @var ValueContext $context */
+        $context = $this->context(static::TYPE_VALUE);
+        return $context->value($key);
+    }
+
+    /**
+     *
+     * @return \Closure
+     */
+    public function withCancel(): \Closure
+    {
+        /** @var CancelContext $context */
+        $context = $this->context(static::TYPE_CANCEL);
+        return $context->cancel();
+    }
+
+    /**
+     * Done
+     * @return Channel
+     */
+    public function done(): Channel
+    {
+        /** @var CancelContext $context */
+        $context = $this->context(static::TYPE_CANCEL);
+        return $context->channel();
     }
 
 }
