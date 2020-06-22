@@ -33,19 +33,19 @@ class View
 
     /**
      * 渲染视图 (包含布局)
-     * @param string $name
+     * @param string $template
      * @param array $data
      * @return string
      */
-    public function render(string $name, array $data = []): string
+    public function render(string $template, array $data = []): string
     {
         $layout = $this->layout;
         if (!$layout) {
             $renderer = new Renderer();
-            return $renderer->render($this->dir, $name, $data);
+            return $renderer->render($this->dir, $template, $data);
         }
         $renderer        = new Renderer();
-        $data['content'] = $renderer->render($this->dir, $name, $data);
+        $data['content'] = $renderer->render($this->dir, $template, $data);
         return $renderer->render($this->dir, "layouts.{$layout}", $data);
     }
 
