@@ -36,13 +36,15 @@ class Context
         switch ($type) {
             case static::TYPE_VALUE:
                 $property = 'valueContext';
+                $class    = ValueContext::class;
                 break;
             case static::TYPE_CANCEL:
                 $property = 'cancelContext';
+                $class    = CancelContext::class;
                 break;
         }
         if (!isset($this->$property)) {
-            $this->$property = new ValueContext();
+            $this->$property = new $class();
         }
         return $this->$property;
     }

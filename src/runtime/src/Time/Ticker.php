@@ -17,7 +17,7 @@ class Ticker
     protected $timerId;
 
     /**
-     * @var int 单位：ms
+     * @var int 单位：Millisecond
      */
     protected $duration;
 
@@ -28,7 +28,7 @@ class Ticker
 
     /**
      * Timer constructor.
-     * @param int $duration 单位：ms
+     * @param int $duration 单位：Millisecond
      */
     public function __construct(int $duration)
     {

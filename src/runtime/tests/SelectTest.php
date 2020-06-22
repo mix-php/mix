@@ -4,7 +4,6 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 
 use Mix\Select\Select;
-use Mix\Time\Timer;
 use Mix\Time\Time;
 
 final class SelectTest extends TestCase
@@ -79,7 +78,7 @@ final class SelectTest extends TestCase
             $c2 = new \Mix\Coroutine\Channel();
 
             xgo(function () use ($c1, $c2) {
-                $timer = new Timer(10 * Time::MILLISECOND);
+                $timer = Time::newTimer(10 * Time::MILLISECOND);
                 for ($i = 0; $i < 3; $i++) {
                     $timer->channel()->pop();
                     $timer->reset(10 * Time::MILLISECOND);
@@ -139,14 +138,14 @@ final class SelectTest extends TestCase
         $func  = function () use ($_this) {
             $result = [];
 
-            $c1 = new \Mix\Coroutine\Channel();
-            $timer = new Timer(10 * Time::MILLISECOND);
+            $c1    = new \Mix\Coroutine\Channel();
+            $timer = Time::newTimer(10 * Time::MILLISECOND);
 
             for ($i = 0; $i < 10; $i++) {
                 if ((new Select(
                     Select::case(Select::pop($c1), function ($value) {
                     }),
-                    Select::case(Select::pop($timer->channel()), function ($value) use(&$result, $i) {
+                    Select::case(Select::pop($timer->channel()), function ($value) use (&$result, $i) {
                         $result[] = $i;
                         return Select::BREAK;
                     })

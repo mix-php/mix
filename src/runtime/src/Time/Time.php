@@ -16,7 +16,7 @@ class Time
 
     /**
      * New ticker
-     * @param int $duration 单位：ms
+     * @param int $duration 单位：Millisecond
      * @return Ticker
      */
     public static function newTicker(int $duration)
@@ -26,7 +26,7 @@ class Time
 
     /**
      * New timer
-     * @param int $duration 单位：ms
+     * @param int $duration 单位：Millisecond
      * @return Ticker
      */
     public static function newTimer(int $duration)
@@ -36,11 +36,11 @@ class Time
 
     /**
      * Sleep
-     * @param int $duration 单位：ms
+     * @param int $duration 单位：Millisecond
      */
     public static function sleep(int $duration)
     {
-        \Swoole\Coroutine::sleep($duration * 1000);
+        usleep($duration * 1000);
     }
 
 }

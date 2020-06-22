@@ -28,7 +28,7 @@ class Timer
 
     /**
      * Timer constructor.
-     * @param int $duration 单位：ms
+     * @param int $duration 单位：Millisecond
      */
     public function __construct(int $duration)
     {
