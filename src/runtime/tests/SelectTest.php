@@ -191,11 +191,41 @@ final class SelectTest extends TestCase
     {
         $_this = $this;
         $func  = function () use ($_this) {
-            $c1    = new \Mix\Coroutine\Channel();
-            $timer = Time::newTimer(1 * Time::MILLISECOND);
+            $result = [];
+            $c1     = new \Mix\Coroutine\Channel();
+            $timer  = Time::newTimer(1 * Time::MILLISECOND);
 
             xgo(function () use ($c1, $timer) {
                 $timer->channel()->pop();
+                $c1->close();
+            });
+
+            while (true) {
+                if ((new Select(
+                    Select::case(Select::pop($c1), function ($value) use (&$result) {
+                        $result[] = $value;
+                        if ($result === [false, false]) {
+                            return Select::BREAK;
+                        }
+                    })
+                ))->run()->break()) {
+                    break;
+                }
+            }
+
+            $_this->assertEquals($result, [false, false]);
+        };
+        run($func);
+    }
+
+    // 没有定时器
+    public function testH()
+    {
+        $_this = $this;
+        $func  = function () use ($_this) {
+            $c1 = new \Mix\Coroutine\Channel();
+
+            xgo(function () use ($c1) {
                 $c1->close();
             });
 
@@ -207,6 +237,5 @@ final class SelectTest extends TestCase
         };
         run($func);
     }
-
 
 }

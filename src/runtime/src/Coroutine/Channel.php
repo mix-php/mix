@@ -65,7 +65,7 @@ class Channel extends \Swoole\Coroutine\Channel
         $this->closed = true;
         $result       = parent::close();
         foreach ($this->notifies as $channel) {
-            $channel->push(true);
+            $channel->close();
         }
         return $result;
     }

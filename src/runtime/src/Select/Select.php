@@ -96,20 +96,20 @@ class Select
      */
     public function run()
     {
-        $clauses = $this->options;
-
+        $clauses   = $this->options;
         $processes = [];
+
         foreach ($clauses->cases as $case) {
             /** @var ClauseIntercase $clause */
             $clause    = $case['clause'];
             $statement = $case['statement'];
-            if ($clause instanceof Push && !$clause->channel()->isFull()) {
+            if ($clause instanceof Push && (!$clause->channel()->isFull() || $clause->channel()->isClosed())) {
                 $processes[] = function () use ($clause, $statement) {
-                    $clause->run();
-                    $this->return = call_user_func($statement);
+                    $value        = $clause->run();
+                    $this->return = call_user_func($statement, $value);
                 };
             }
-            if ($clause instanceof Pop && !$clause->channel()->isEmpty()) {
+            if ($clause instanceof Pop && (!$clause->channel()->isEmpty() || $clause->channel()->isClosed())) {
                 $processes[] = function () use ($clause, $statement) {
                     $value        = $clause->run();
                     $this->return = call_user_func($statement, $value);
@@ -141,7 +141,7 @@ class Select
     {
         $this->waitChannel = $waitChannel = new \Swoole\Coroutine\Channel(); // 必须是 Swoole 的 Channel
         $clauses           = $this->options;
-        $processe          = null;
+        $processes         = [];
 
         foreach ($clauses->cases as $case) {
             /** @var ClauseIntercase $clause */
@@ -155,27 +155,28 @@ class Select
                 /** @var ClauseIntercase $clause */
                 $clause    = $case['clause'];
                 $statement = $case['statement'];
-                if ($clause instanceof Pop && (!$clause->channel()->isEmpty() || $clause->channel()->isClosed())) {
-                    $processe = function () use ($clause, $statement) {
+                if ($clause instanceof Push && (!$clause->channel()->isFull() || $clause->channel()->isClosed())) {
+                    $processes[] = function () use ($clause, $statement) {
                         $value        = $clause->run();
                         $this->return = call_user_func($statement, $value);
                     };
-                    break;
                 }
-                if ($clause instanceof Push && (!$clause->channel()->isFull() || $clause->channel()->isClosed())) {
-                    $processe = function () use ($clause, $statement) {
-                        $clause->run();
-                        $this->return = call_user_func($statement);
+                if ($clause instanceof Pop && (!$clause->channel()->isEmpty() || $clause->channel()->isClosed())) {
+                    $processes[] = function () use ($clause, $statement) {
+                        $value        = $clause->run();
+                        $this->return = call_user_func($statement, $value);
                     };
+                }
+                if (!empty($processes)) {
                     break;
                 }
             }
-            if ($processe) {
+            if (!empty($processes)) {
                 break;
             }
         }
 
-        call_user_func($processe);
+        call_user_func($processes[array_rand($processes)]);
     }
 
     /**
