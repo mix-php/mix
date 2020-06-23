@@ -159,4 +159,31 @@ final class SelectTest extends TestCase
         run($func);
     }
 
+    // 函数版本
+    public function testF(): void
+    {
+        $_this = $this;
+        $func  = function () use ($_this) {
+            $result = [];
+
+            $c1 = new \Mix\Coroutine\Channel();
+            $c1->push(0);
+
+            for ($i = 0; $i < 10; $i++) {
+                select(
+                    select_case(select_pop($c1), function ($value) use (&$result) {
+                        $result[] = $value;
+                    }),
+                    select_case(select_push($c1, $i), function () {
+                    }),
+                    select_default(function () {
+                    })
+                )->run();
+            }
+
+            $_this->assertEquals($result, [0, 1, 3, 5, 7]);
+        };
+        run($func);
+    }
+
 }
