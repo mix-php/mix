@@ -15,6 +15,11 @@ class Channel extends \Swoole\Coroutine\Channel
     protected $notifies = [];
 
     /**
+     * @var bool
+     */
+    protected $closed = false;
+
+    /**
      * Push
      * @param $data
      * @param null $timeout
@@ -49,6 +54,28 @@ class Channel extends \Swoole\Coroutine\Channel
             $channel->push(true);
         }
         return $result;
+    }
+
+    /**
+     * Close
+     * @return bool
+     */
+    public function close()
+    {
+        $this->closed = true;
+        $result       = parent::close();
+        foreach ($this->notifies as $channel) {
+            $channel->push(true);
+        }
+        return $result;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isClosed()
+    {
+        return $this->closed;
     }
 
     /**

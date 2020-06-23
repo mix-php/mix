@@ -186,4 +186,27 @@ final class SelectTest extends TestCase
         run($func);
     }
 
+    // 通道 close
+    public function testG()
+    {
+        $_this = $this;
+        $func  = function () use ($_this) {
+            $c1    = new \Mix\Coroutine\Channel();
+            $timer = Time::newTimer(1 * Time::MILLISECOND);
+
+            xgo(function () use ($c1, $timer) {
+                $timer->channel()->pop();
+                $c1->close();
+            });
+
+            (new Select(
+                Select::case(Select::pop($c1), function ($value) use ($_this) {
+                    $_this->assertEquals($value, false);
+                })
+            ))->run();
+        };
+        run($func);
+    }
+
+
 }

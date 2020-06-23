@@ -27,7 +27,7 @@ class Time
     /**
      * New timer
      * @param int $duration 单位：Millisecond
-     * @return Ticker
+     * @return Timer
      */
     public static function newTimer(int $duration)
     {

@@ -155,14 +155,14 @@ class Select
                 /** @var ClauseIntercase $clause */
                 $clause    = $case['clause'];
                 $statement = $case['statement'];
-                if ($clause instanceof Pop && !$clause->channel()->isEmpty()) {
+                if ($clause instanceof Pop && (!$clause->channel()->isEmpty() || $clause->channel()->isClosed())) {
                     $processe = function () use ($clause, $statement) {
                         $value        = $clause->run();
                         $this->return = call_user_func($statement, $value);
                     };
                     break;
                 }
-                if ($clause instanceof Push && !$clause->channel()->isFull()) {
+                if ($clause instanceof Push && (!$clause->channel()->isFull() || $clause->channel()->isClosed())) {
                     $processe = function () use ($clause, $statement) {
                         $clause->run();
                         $this->return = call_user_func($statement);
