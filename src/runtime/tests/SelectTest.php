@@ -121,7 +121,7 @@ final class SelectTest extends TestCase
                     Select::case(Select::pop($c1), function ($value) use (&$result) {
                         $result[] = $value;
                     }),
-                    Select::case(Select::push($c1, $i), function () {
+                    Select::case(Select::push($c1, $i), function ($value) {
                     })
                 ))->run();
             }
@@ -174,7 +174,7 @@ final class SelectTest extends TestCase
                     select_case(select_pop($c1), function ($value) use (&$result) {
                         $result[] = $value;
                     }),
-                    select_case(select_push($c1, $i), function () {
+                    select_case(select_push($c1, $i), function ($value) {
                     }),
                     select_default(function () {
                     })
