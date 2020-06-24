@@ -218,7 +218,7 @@ final class SelectTest extends TestCase
         run($func);
     }
 
-    // 没有定时器
+    // 没有定时器, close
     public function testH()
     {
         $_this = $this;
@@ -237,5 +237,25 @@ final class SelectTest extends TestCase
         };
         run($func);
     }
+
+    /*
+
+    // 死锁 (Fatal error 无法捕获)
+    public function testI()
+    {
+        $_this = $this;
+        $func  = function () use ($_this) {
+            $c1 = new \Mix\Coroutine\Channel();
+
+            (new Select(
+                Select::case(Select::pop($c1), function ($value) use ($_this) {
+                    $_this->assertEquals($value, false);
+                })
+            ))->run();
+        };
+        run($func);
+    }
+
+    */
 
 }
