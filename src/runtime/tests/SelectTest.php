@@ -78,10 +78,10 @@ final class SelectTest extends TestCase
             $c2 = new \Mix\Coroutine\Channel();
 
             xgo(function () use ($c1, $c2) {
-                $timer = Time::newTimer(10 * Time::MILLISECOND);
+                $timer = Time::newTimer(1 * Time::MILLISECOND);
                 for ($i = 0; $i < 3; $i++) {
                     $timer->channel()->pop();
-                    $timer->reset(10 * Time::MILLISECOND);
+                    $timer->reset(1 * Time::MILLISECOND);
 
                     if ($i % 2 == 0) {
                         $c1->push(1);
@@ -139,7 +139,7 @@ final class SelectTest extends TestCase
             $result = [];
 
             $c1    = new \Mix\Coroutine\Channel();
-            $timer = Time::newTimer(10 * Time::MILLISECOND);
+            $timer = Time::newTimer(1 * Time::MILLISECOND);
 
             for ($i = 0; $i < 10; $i++) {
                 if ((new Select(
