@@ -237,7 +237,7 @@ abstract class AbstractConnection
         list($usec, $sec) = explode(" ", microtime());
         return ((float)$usec + (float)$sec);
     }
-    
+
     /**
      * 调度事件
      * @param string $sql
@@ -441,12 +441,13 @@ abstract class AbstractConnection
      * 批量插入
      * @param string $table
      * @param array $data
+     * @param string $insert
      * @return $this
      */
-    public function batchInsert(string $table, array $data)
+    public function batchInsert(string $table, array $data, string $insert = 'INSERT INTO')
     {
         $keys   = array_keys($data[0]);
-        $sql    = "INSERT INTO `{$table}` (`" . implode('`, `', $keys) . "`) VALUES ";
+        $sql    = "{$insert} `{$table}` (`" . implode('`, `', $keys) . "`) VALUES ";
         $values = [];
         $subSql = [];
         foreach ($data as $item) {
