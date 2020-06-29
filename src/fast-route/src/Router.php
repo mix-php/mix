@@ -229,8 +229,8 @@ class Router implements ServerHandlerInterface, RouterInterface
     public function error500(\Throwable $exception, Response $response): Response
     {
         $content = [
-            'message' => $e->getMessage(),
-            'code'    => $e->getCode(),
+            'message' => $exception->getMessage(),
+            'code'    => $exception->getCode(),
         ];
         $body    = (new StreamFactory())->createStream(json_encode($content, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         return $response
