@@ -71,7 +71,7 @@ $config->listen($eventDispatcher); // PSR-14 Event Dispatcher
 ```php
 use Mix\Micro\Micro;
 
-Micro::service(
+Micro::newService(
     Micro::server($server),
     Micro::registry($registry),
     Micro::config($config),
