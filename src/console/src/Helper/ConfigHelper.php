@@ -14,7 +14,7 @@ class ConfigHelper
      * @param string $path
      * @return array
      */
-    public static function each(string $path)
+    public static function each(string $path): array
     {
         if (is_file($path)) {
             return include $path;
