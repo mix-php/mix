@@ -3,6 +3,7 @@
 namespace Mix\FastRoute;
 
 use FastRoute\Dispatcher;
+use Mix\FastRoute\Helper\ConfigHelper;
 use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
@@ -40,10 +41,10 @@ class Router implements ServerHandlerInterface, RouterInterface
 
     /**
      * Router constructor.
-     * @param callable|null $routeDefinitionCallback
+     * @param string|callable|null $routeDefinition callback or file path or null
      * @param array $middleware
      */
-    public function __construct(callable $routeDefinitionCallback = null, array $middleware = [])
+    public function __construct($routeDefinition = null, array $middleware = [])
     {
         $this->options = [
             'routeParser'    => 'FastRoute\\RouteParser\\Std',
@@ -51,7 +52,14 @@ class Router implements ServerHandlerInterface, RouterInterface
             'dispatcher'     => 'FastRoute\\Dispatcher\\GroupCountBased',
             'routeCollector' => 'Mix\\FastRoute\\RouteCollector',
         ];
-        $routeDefinitionCallback and $this->parse($routeDefinitionCallback);
+
+        if (is_string($routeDefinition)) {
+            $this->load($routeDefinition);
+        }
+        if ($routeDefinition instanceof \Closure) {
+            $this->parse($routeDefinition);
+        }
+
         $this->middleware = $middleware;
     }
 
@@ -67,6 +75,30 @@ class Router implements ServerHandlerInterface, RouterInterface
             new $options['routeParser'], new $options['dataGenerator']
         );
         $routeDefinitionCallback($routeCollector);
+        $this->data       = $routeCollector->getData();
+        $this->dispatcher = new $options['dispatcher']($this->data);
+    }
+
+    /**
+     * Load
+     * @param string $path file or dir
+     * @throws \RuntimeException
+     */
+    public function load(string $path)
+    {
+        $callbacks = ConfigHelper::each($path);
+
+        $options = $this->options;
+        /** @var RouteCollector $routeCollector */
+        $routeCollector = new $options['routeCollector'](
+            new $options['routeParser'], new $options['dataGenerator']
+        );
+        foreach ($callbacks as $callback) {
+            if (!($callback instanceof \Closure)) {
+                throw new \RuntimeException(sprintf('Invalid route configuration: %s', $path));
+            }
+            $callback($routeCollector);
+        }
         $this->data       = $routeCollector->getData();
         $this->dispatcher = new $options['dispatcher']($this->data);
     }
