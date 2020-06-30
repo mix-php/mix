@@ -187,10 +187,14 @@ class Message implements MessageInterface
     public function withHeader($name, $value)
     {
         $name = strtolower($name);
-        if (is_string($value)) {
-            $this->headers[$name] = [$value];
+        if (is_scalar($value)) {
+            $this->headers[$name] = [(string)$value];
         } else if (is_array($value)) {
-            $this->headers[$name] = $value;
+            $header = [];
+            foreach ($value as $v) {
+                array_push($header, (string)$v);
+            }
+            $this->headers[$name] = $header;
         } else {
             throw new \InvalidArgumentException('Header value can only be of type string');
         }
@@ -217,11 +221,11 @@ class Message implements MessageInterface
     {
         $name   = strtolower($name);
         $header = $this->getHeader($name);
-        if (is_string($value)) {
-            array_push($header, $value);
+        if (is_scalar($value)) {
+            array_push($header, (string)$value);
         } else if (is_array($value)) {
             foreach ($value as $v) {
-                array_push($header, $v);
+                array_push($header, (string)$v);
             }
         } else {
             throw new \InvalidArgumentException('Header value can only be of type string');
