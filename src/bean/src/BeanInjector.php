@@ -61,7 +61,7 @@ class BeanInjector
         if (method_exists('Swoole\Runtime', 'getHookFlags')) {
             $flags = \Swoole\Runtime::getHookFlags();
         }
-        $isSwoole and \Swoole\Runtime::enableCoroutine($flags ^ 256); // 256 = SWOOLE_HOOK_FILE
+        $isSwoole and \Swoole\Runtime::enableCoroutine($flags == 0 ? $flags : $flags ^ 256); // 256 = SWOOLE_HOOK_FILE
 
         foreach ($properties as $name => $value) {
             // 注释类型检测
