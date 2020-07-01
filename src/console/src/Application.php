@@ -317,7 +317,12 @@ class Application
         // 命令行选项效验
         $this->validateOptions($command);
         // 协程执行
-        list($enable, $options) = $this->coroutine;
+        if (isset($this->coroutine['enable'])) {
+            $enable  = $this->coroutine['enable'];
+            $options = $this->coroutine['options'] ?? [];
+        } else {
+            list($enable, $options) = $this->coroutine;
+        }
         if ($enable) {
             // 环境效验
             if (!extension_loaded('swoole') || !class_exists(\Swoole\Coroutine\Scheduler::class)) {
