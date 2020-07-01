@@ -321,6 +321,7 @@ class Application
             $enable  = $this->coroutine['enable'];
             $options = $this->coroutine['options'] ?? [];
         } else {
+            // 兼容老版本
             list($enable, $options) = $this->coroutine;
         }
         if ($enable) {
