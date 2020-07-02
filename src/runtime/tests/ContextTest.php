@@ -33,6 +33,39 @@ final class ContextTest extends TestCase
                 }
             });
 
+            Time::sleep(1 * Time::MILLISECOND);
+            $cancel();
+        };
+        run($func);
+    }
+
+    // 测试 TimeoutContext
+    public function testTimeoutContext(): void
+    {
+        $_this = $this;
+        $func  = function () use ($_this) {
+            $num    = 0;
+            $ctx    = new Mix\Context\Context();
+            $cancel = $ctx->withTimeout(3 * Time::MILLISECOND);
+
+            xgo(function () use ($ctx, $_this, &$num) {
+                while (true) {
+                    Time::sleep(1 * Time::MILLISECOND);
+
+                    if (select(
+                        select_case(select_pop($ctx->done()), function ($value) {
+                            return SELECT_BREAK;
+                        }),
+                        select_default(function () use (&$num) {
+                            $num++;
+                        })
+                    )->run()->break()) {
+                        $_this->assertEquals($num, 2);
+                        return;
+                    }
+                }
+            });
+
             Time::sleep(10 * Time::MILLISECOND);
             $cancel();
         };

@@ -16,6 +16,7 @@ class Context
      */
     const TYPE_VALUE = 0;
     const TYPE_CANCEL = 1;
+    const TYPE_TIMEOUT = 2;
 
     /**
      * @var ValueContext
@@ -28,10 +29,17 @@ class Context
     protected $cancelContext;
 
     /**
-     * Get ValueContext
-     * @return object
+     * @var TimeoutContext
      */
-    protected function context(int $type)
+    protected $timeoutContext;
+
+    /**
+     * Get ValueContext
+     * @param int $type
+     * @param mixed ...$args
+     * @return mixed
+     */
+    protected function context(int $type, ...$args)
     {
         switch ($type) {
             case static::TYPE_VALUE:
@@ -42,9 +50,13 @@ class Context
                 $property = 'cancelContext';
                 $class    = CancelContext::class;
                 break;
+            case static::TYPE_TIMEOUT:
+                $property = 'timeoutContext';
+                $class    = TimeoutContext::class;
+                break;
         }
         if (!isset($this->$property)) {
-            $this->$property = new $class();
+            $this->$property = new $class(...$args);
         }
         return $this->$property;
     }
@@ -75,13 +87,25 @@ class Context
     }
 
     /**
-     *
+     * With cancel
      * @return \Closure
      */
     public function withCancel(): \Closure
     {
         /** @var CancelContext $context */
         $context = $this->context(static::TYPE_CANCEL);
+        return $context->cancel();
+    }
+
+    /**
+     * With timeout
+     * @param int $duration 单位：Millisecond
+     * @return \Closure
+     */
+    public function withTimeout(int $duration): \Closure
+    {
+        /** @var TimeoutContext $context */
+        $context = $this->context(static::TYPE_TIMEOUT, $duration);
         return $context->cancel();
     }
 
