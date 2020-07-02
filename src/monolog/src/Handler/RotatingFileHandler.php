@@ -44,19 +44,14 @@ class RotatingFileHandler extends \Monolog\Handler\RotatingFileHandler
      */
     public function __construct(string $filename, int $maxFiles = 0, $level = Logger::DEBUG, bool $bubble = true, ?int $filePermission = null, bool $useLocking = false)
     {
-        $this->filename       = Utils::canonicalizePath($filename);
-        $this->maxFiles       = $maxFiles;
-        $this->filenameFormat = '{filename}-{date}';
-        $this->dateFormat     = static::FILE_PER_DAY;
+        parent::__construct($filename, $maxFiles, $level, $bubble, $filePermission, $useLocking);
 
-        $this->nextRotation = date_create_immutable(date('Y-m-d H:i:s', filemtime($this->filename)));
-        if ($this->nextRotation < new \DateTimeImmutable('today')) {
-            $this->rotate();
-        } else {
-            $this->nextRotation = new \DateTimeImmutable('tomorrow');
+        if ($mtime = @filemtime($this->filename)) {
+            $this->nextRotation = date_create_immutable(date('Y-m-d H:i:s', $mtime));
+            if ($this->nextRotation < new \DateTimeImmutable('today')) {
+                $this->rotate();
+            }
         }
-
-        parent::__construct($this->getTimedFilename(), $level, $bubble, $filePermission, $useLocking);
     }
 
     /**
@@ -102,13 +97,14 @@ class RotatingFileHandler extends \Monolog\Handler\RotatingFileHandler
         // rotate
         if ($this->nextRotation->getTimestamp() < filemtime($this->filename)) {
             $lock = sprintf('%s.lock', $this->filename);
-            $file = fopen($lock, 'w+');
-            if (flock($file, LOCK_EX)) {
-                @rename($this->filename, $this->getMtimeFilename());
-                flock($file, LOCK_UN);
+            if ($file = @fopen($lock, 'w+')) {
+                if (flock($file, LOCK_EX)) {
+                    @rename($this->filename, $this->getMtimeFilename());
+                    flock($file, LOCK_UN);
+                }
+                fclose($file);
+                @unlink($lock);
             }
-            fclose($file);
-            @unlink($lock);
         }
         $this->nextRotation = new \DateTimeImmutable('tomorrow');
 
