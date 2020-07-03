@@ -13,15 +13,15 @@ final class ContextTest extends TestCase
     {
         $_this = $this;
         $func  = function () use ($_this) {
-            $ctx    = new Mix\Context\Context();
-            $cancel = $ctx->withCancel();
+            $ctx       = new Mix\Context\Context();
+            $cancelCtx = $ctx->withCancel();
 
-            xgo(function () use ($ctx, $_this) {
+            xgo(function () use ($cancelCtx, $_this) {
                 while (true) {
                     Time::sleep(1 * Time::MILLISECOND);
 
                     if (select(
-                        select_case(select_pop($ctx->done()), function ($value) {
+                        select_case(select_pop($cancelCtx->done()), function ($value) {
                             return SELECT_BREAK;
                         }),
                         select_default(function () {
@@ -34,7 +34,7 @@ final class ContextTest extends TestCase
             });
 
             Time::sleep(1 * Time::MILLISECOND);
-            $cancel();
+            $cancelCtx->cancel();
         };
         run($func);
     }
@@ -44,30 +44,30 @@ final class ContextTest extends TestCase
     {
         $_this = $this;
         $func  = function () use ($_this) {
-            $num    = 0;
-            $ctx    = new Mix\Context\Context();
-            $cancel = $ctx->withTimeout(3 * Time::MILLISECOND);
+            $num        = 0;
+            $ctx        = new Mix\Context\Context();
+            $timeoutCtx = $ctx->withTimeout(3 * Time::MILLISECOND);
 
-            xgo(function () use ($ctx, $_this, &$num) {
+            xgo(function () use ($timeoutCtx, $_this, &$num) {
                 while (true) {
-                    Time::sleep(1 * Time::MILLISECOND);
+                    Time::sleep(1 * Time::MILLISECOND); // 这里实际基本等于两倍
 
                     if (select(
-                        select_case(select_pop($ctx->done()), function ($value) {
+                        select_case(select_pop($timeoutCtx->done()), function ($value) use (&$num) {
                             return SELECT_BREAK;
                         }),
                         select_default(function () use (&$num) {
-                            $num++;
+                            ++$num;
                         })
                     )->run()->break()) {
-                        $_this->assertEquals($num, 2);
+                        $_this->assertTrue($num <= 2); // 毫秒sleep不准，会小于2
                         return;
                     }
                 }
             });
 
             Time::sleep(10 * Time::MILLISECOND);
-            $cancel();
+            $timeoutCtx->cancel();
         };
         run($func);
     }

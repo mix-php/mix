@@ -9,13 +9,8 @@ use Mix\Time\Time;
  * Class TimeoutContext
  * @package Mix\Context
  */
-class TimeoutContext
+class TimeoutContext extends CancelContext
 {
-
-    /**
-     * @var Channel
-     */
-    protected $channel;
 
     /**
      * @var int 单位：Millisecond
@@ -29,36 +24,37 @@ class TimeoutContext
 
     /**
      * TimeoutContext constructor.
+     * @param Context $parent
      * @param int $duration 单位：Millisecond
      */
-    public function __construct(int $duration)
+    public function __construct(Context $parent, int $duration)
     {
-        $this->channel  = new Channel();
+        parent::__construct($parent);
+
         $this->duration = $duration;
         $this->timer    = Time::newTimer($duration);
         xgo(function () {
-            $this->timer->channel();
-            $this->channel->push(new \stdClass());
+            if (!$this->timer->channel()->pop()) {
+                return;
+            }
+            $this->cancel();
         });
     }
 
     /**
      * Cancel
-     * @return \Closure
      */
-    public function cancel(): \Closure
+    public function cancel()
     {
-        return function () {
-            $this->timer->stop();
-            $this->channel->push(new \stdClass());
-        };
+        $this->timer->stop();
+        parent::cancel();
     }
 
     /**
-     * Channel
+     * Done
      * @return Channel
      */
-    public function channel(): Channel
+    public function done(): Channel
     {
         return $this->channel;
     }

@@ -8,8 +8,13 @@ use Mix\Coroutine\Channel;
  * Class CancelContext
  * @package Mix\Context
  */
-class CancelContext
+class CancelContext extends Context
 {
+
+    /**
+     * @var Context
+     */
+    protected $parent;
 
     /**
      * @var Channel
@@ -18,28 +23,48 @@ class CancelContext
 
     /**
      * CancelContext constructor.
+     * @param Context $parent
      */
-    public function __construct()
+    public function __construct(Context $parent)
     {
+        $this->parent  = $parent;
         $this->channel = new Channel();
     }
 
     /**
-     * Cancel
-     * @return \Closure
+     * With value
+     * @param string $key
+     * @param $value
      */
-    public function cancel(): \Closure
+    public function withValue(string $key, $value)
     {
-        return function () {
-            $this->channel->push(new \stdClass());
-        };
+        $this->parent->withValue($key, $value);
     }
 
     /**
-     * Channel
+     * Get value
+     * @param string $key
+     * @return mixed
+     * @throws \InvalidArgumentException
+     */
+    public function value(string $key)
+    {
+        return $this->parent->value($key);
+    }
+
+    /**
+     * Cancel
+     */
+    public function cancel()
+    {
+        $this->channel->push(new \stdClass());
+    }
+
+    /**
+     * Done
      * @return Channel
      */
-    public function channel(): Channel
+    public function done(): Channel
     {
         return $this->channel;
     }

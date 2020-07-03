@@ -40,7 +40,7 @@ class Time
      */
     public static function sleep(int $duration)
     {
-        usleep($duration * 1000);
+        \Swoole\Coroutine\System::sleep($duration / 1000);
     }
 
 }
