@@ -35,6 +35,11 @@ class RotatingFileHandler extends \Monolog\Handler\RotatingFileHandler
 {
 
     /**
+     * @var \DateTimeImmutable|null
+     */
+    protected $initMtime = null;
+
+    /**
      * @param string $filename
      * @param int $maxFiles The maximal amount of files to keep (0 means unlimited)
      * @param string|int $level The minimum logging level at which this handler will be triggered
@@ -47,10 +52,8 @@ class RotatingFileHandler extends \Monolog\Handler\RotatingFileHandler
         parent::__construct($filename, $maxFiles, $level, $bubble, $filePermission, $useLocking);
 
         if ($mtime = @filemtime($this->filename)) {
-            $this->nextRotation = date_create_immutable(date('Y-m-d H:i:s', $mtime));
-            if ($this->nextRotation < new \DateTimeImmutable('today')) {
-                $this->rotate();
-            }
+            $this->initMtime = date_create_immutable(date('Y-m-d H:i:s', $mtime));
+            $this->rotate();
         }
     }
 
@@ -73,12 +76,12 @@ class RotatingFileHandler extends \Monolog\Handler\RotatingFileHandler
     /**
      * @return string
      */
-    protected function getMtimeFilename(): string
+    protected function getTimedFilenameBy(\DateTimeImmutable $dateTime): string
     {
         $fileInfo      = pathinfo($this->filename);
         $timedFilename = str_replace(
             ['{filename}', '{date}'],
-            [$fileInfo['filename'], date($this->dateFormat, filemtime($this->filename))],
+            [$fileInfo['filename'], date($this->dateFormat, $dateTime->getTimestamp())],
             $fileInfo['dirname'] . '/' . $this->filenameFormat
         );
 
@@ -95,18 +98,19 @@ class RotatingFileHandler extends \Monolog\Handler\RotatingFileHandler
     protected function rotate(): void
     {
         // rotate
-        if ($this->nextRotation->getTimestamp() < filemtime($this->filename)) {
+        if (($this->initMtime && $this->initMtime < new \DateTimeImmutable('today')) || $this->nextRotation < new \DateTimeImmutable('tomorrow')) {
             $lock = sprintf('%s.lock', $this->filename);
             if ($file = @fopen($lock, 'w+')) {
                 if (flock($file, LOCK_EX)) {
-                    @rename($this->filename, $this->getMtimeFilename());
+                    @rename($this->filename, $this->getTimedFilenameBy($this->initMtime ?: $this->nextRotation));
                     flock($file, LOCK_UN);
                 }
                 fclose($file);
                 @unlink($lock);
             }
+            $this->nextRotation = new \DateTimeImmutable('tomorrow');
+            $this->initMtime    = null;
         }
-        $this->nextRotation = new \DateTimeImmutable('tomorrow');
 
         // skip GC of old logs if files are unlimited
         if (0 === $this->maxFiles) {
