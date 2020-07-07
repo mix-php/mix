@@ -98,11 +98,25 @@ class RotatingFileHandler extends \Monolog\Handler\RotatingFileHandler
     protected function rotate(): void
     {
         // rotate
-        if (($this->initMtime && $this->initMtime < new \DateTimeImmutable('today')) || $this->nextRotation < new \DateTimeImmutable('tomorrow')) {
+        $mtime    = @filemtime($this->filename);
+        $today    = new \DateTimeImmutable('today');
+        $tomorrow = new \DateTimeImmutable('tomorrow');
+        // 条件1：处理其他进程已经轮转过的情况
+        // 条件2：处理启动时轮转
+        // 条件3：处理执行中轮转
+        if (
+            $mtime < $today->getTimestamp() &&
+            (($this->initMtime && $this->initMtime < $today) ||
+                ($this->nextRotation < $tomorrow))
+        ) {
             $lock = sprintf('%s.lock', $this->filename);
             if ($file = @fopen($lock, 'w+')) {
-                if (flock($file, LOCK_EX)) {
-                    @rename($this->filename, $this->getTimedFilenameBy($this->initMtime ?: $this->nextRotation));
+                if (flock($file, LOCK_EX | LOCK_NB)) {
+                    $filename = $this->getTimedFilenameBy($this->initMtime ?: $this->nextRotation);
+                    if (!file_exists($filename)) {
+                        @rename($this->filename, $filename);
+                        usleep(100000); // 锁定一会，好让同时穿透过来的其他轮转请求失效
+                    }
                     flock($file, LOCK_UN);
                 }
                 fclose($file);
