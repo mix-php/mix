@@ -35,11 +35,6 @@ class RotatingFileHandler extends \Monolog\Handler\RotatingFileHandler
 {
 
     /**
-     * @var \DateTimeImmutable|null
-     */
-    protected $initMtime = null;
-
-    /**
      * @param string $filename
      * @param int $maxFiles The maximal amount of files to keep (0 means unlimited)
      * @param string|int $level The minimum logging level at which this handler will be triggered
@@ -52,7 +47,7 @@ class RotatingFileHandler extends \Monolog\Handler\RotatingFileHandler
         parent::__construct($filename, $maxFiles, $level, $bubble, $filePermission, $useLocking);
 
         if ($mtime = @filemtime($this->filename)) {
-            $this->initMtime = date_create_immutable(date('Y-m-d H:i:s', $mtime));
+            $this->nextRotation = date_create_immutable(date('Y-m-d H:i:s', $mtime));
             $this->rotate();
         }
     }
@@ -100,19 +95,14 @@ class RotatingFileHandler extends \Monolog\Handler\RotatingFileHandler
         // rotate
         $today    = new \DateTimeImmutable('today');
         $tomorrow = new \DateTimeImmutable('tomorrow');
-        // 条件1：处理启动时轮转
-        // 条件2：处理执行中轮转
-        if (
-            ($this->initMtime && $this->initMtime < $today) ||
-            $this->nextRotation < $tomorrow
-        ) {
+        if ($this->nextRotation < $today || $this->nextRotation < $tomorrow) {
             if ($file = @fopen($this->filename, 'r+')) {
                 // 条件2：处理其他进程已经轮转过的情况
                 if (
                     flock($file, LOCK_EX) &&
                     @filemtime($this->filename) < $today->getTimestamp()
                 ) {
-                    $filename = $this->getTimedFilenameBy($this->initMtime ?: $this->nextRotation);
+                    $filename = $this->getTimedFilenameBy($this->nextRotation);
                     if (!file_exists($filename)) {
                         @copy($this->filename, $filename);
                         ftruncate($file, 0);
@@ -122,7 +112,6 @@ class RotatingFileHandler extends \Monolog\Handler\RotatingFileHandler
                 fclose($file);
             }
             $this->nextRotation = new \DateTimeImmutable('tomorrow');
-            $this->initMtime    = null;
         }
 
         // skip GC of old logs if files are unlimited
