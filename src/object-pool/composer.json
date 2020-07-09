@@ -1,10 +1,11 @@
 {
-  "name": "mix/pool",
-  "description": "Swoole-based connection pool library",
+  "name": "mix/object-pool",
+  "description": "Swoole-based object pool library",
   "type": "library",
   "keywords": [
     "mix",
     "swoole",
+    "object-pool",
     "connection-pool"
   ],
   "homepage": "http://www.mixphp.cn/",
@@ -24,7 +25,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Mix\\Pool\\": "src/"
+      "Mix\\ObjectPool\\": "src/"
     }
   }
 }

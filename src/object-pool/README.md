@@ -1,13 +1,13 @@
-## Mix Pool
+## Mix Object Pool
 
-基于 Swoole 的通用连接池库
+基于 Swoole 的通用对象池库
 
 ## Usage
 
 安装：
 
 ```
-composer require mix/pool
+composer require mix/object-pool
 ```
 
 ## License

@@ -1,10 +1,10 @@
 <?php
 
-namespace Mix\Pool;
+namespace Mix\ObjectPool;
 
 /**
  * Trait ObjectTrait
- * @package Mix\Pool
+ * @package Mix\ObjectPool
  * @author liu,jian <coder.keda@gmail.com>
  */
 trait ObjectTrait

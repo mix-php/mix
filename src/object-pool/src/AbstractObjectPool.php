@@ -1,15 +1,15 @@
 <?php
 
-namespace Mix\Pool;
+namespace Mix\ObjectPool;
 
 use Mix\Bean\BeanInjector;
-use Mix\Pool\Event\DiscardedEvent;
+use Mix\ObjectPool\Event\DiscardedEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Swoole\Coroutine\Channel;
 
 /**
  * Class AbstractObjectPool
- * @package Mix\Pool
+ * @package Mix\ObjectPool
  * @author liu,jian <coder.keda@gmail.com>
  */
 abstract class AbstractObjectPool

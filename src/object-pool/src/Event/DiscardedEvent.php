@@ -1,10 +1,10 @@
 <?php
 
-namespace Mix\Pool\Event;
+namespace Mix\ObjectPool\Event;
 
 /**
  * Class DiscardedEvent
- * @package Mix\Pool\Event
+ * @package Mix\ObjectPool\Event
  */
 class DiscardedEvent
 {

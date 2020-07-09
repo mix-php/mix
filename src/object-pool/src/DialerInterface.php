@@ -1,10 +1,10 @@
 <?php
 
-namespace Mix\Pool;
+namespace Mix\ObjectPool;
 
 /**
  * Interface DialerInterface
- * @package Mix\Pool
+ * @package Mix\ObjectPool
  * @author liu,jian <coder.keda@gmail.com>
  */
 interface DialerInterface
