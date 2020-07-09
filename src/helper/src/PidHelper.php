@@ -2,8 +2,6 @@
 
 namespace Mix\Helper;
 
-use Mix\Helper\ProcessHelper;
-
 /**
  * Class PidHelper
  * @package Mix\Console
@@ -19,7 +17,7 @@ class PidHelper
      */
     public static function write(string $file): bool
     {
-        return file_put_contents($file, ProcessHelper::getPid(), LOCK_EX) ? true : false;
+        return file_put_contents($file, getmypid(), LOCK_EX) ? true : false;
     }
 
     /**
@@ -33,7 +31,7 @@ class PidHelper
             return false;
         }
         $pid = file_get_contents($file);
-        if (!is_numeric($pid) || !ProcessHelper::kill($pid, 0)) {
+        if (!is_numeric($pid) || !posix_kill($pid, 0)) {
             return false;
         }
         return $pid;

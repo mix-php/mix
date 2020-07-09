@@ -7,6 +7,7 @@ use Mix\Concurrent\Coroutine;
 /**
  * ProcessHelper类
  * @author liu,jian <coder.keda@gmail.com>
+ * @deprecated 废除，请使用 mix/runtime 替代
  */
 class ProcessHelper
 {
