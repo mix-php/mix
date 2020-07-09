@@ -1,18 +1,18 @@
 <?php
 
-namespace Mix\CoroutinePool;
+namespace Mix\WorkerPool;
 
-use Mix\CoroutinePool\Exception\TypeException;
+use Mix\Time\Time;
+use Mix\WorkerPool\Exception\TypeException;
 use Swoole\Coroutine\Channel;
-use Mix\Time\Timer;
 use Mix\Coroutine\Coroutine;
 
 /**
- * Class Dispatcher
- * @package Mix\CoroutinePool
+ * Class WorkerDispatcher
+ * @package Mix\WorkerPool
  * @author liu,jian <coder.keda@gmail.com>
  */
-class Dispatcher
+class WorkerDispatcher
 {
 
     /**
@@ -93,16 +93,20 @@ class Dispatcher
         });
         Coroutine::create(function () {
             $this->quit->pop();
-            $timer = new Timer();
-            $timer->tick(100, function () use ($timer) {
-                if ($this->jobQueue->stats()['queue_num'] > 0) {
+            $ticker = Time::newTicker(100 * Time::MILLISECOND);
+            Coroutine::create(function () use ($ticker) {
+                while (true) {
+                    $ticker->channel()->pop();
+                    if ($this->jobQueue->stats()['queue_num'] > 0) {
+                        continue;
+                    }
+                    $ticker->stop();
+                    foreach ($this->workers as $worker) {
+                        $worker->stop();
+                    }
+                    $this->jobQueue->close();
                     return;
                 }
-                $timer->clear();
-                foreach ($this->workers as $worker) {
-                    $worker->stop();
-                }
-                $this->jobQueue->close();
             });
         });
     }

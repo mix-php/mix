@@ -4,6 +4,7 @@ namespace Mix\Context;
 
 use Mix\Coroutine\Channel;
 use Mix\Time\Time;
+use Mix\Coroutine\Coroutine;
 
 /**
  * Class TimeoutContext
@@ -33,7 +34,7 @@ class TimeoutContext extends CancelContext
 
         $this->duration = $duration;
         $this->timer    = Time::newTimer($duration);
-        xgo(function () {
+        Coroutine::create(function () {
             if (!$this->timer->channel()->pop()) {
                 return;
             }

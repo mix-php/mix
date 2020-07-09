@@ -1,13 +1,13 @@
 <?php
 
-namespace Mix\CoroutinePool;
+namespace Mix\WorkerPool;
 
 use Swoole\Coroutine\Channel;
 use Mix\Coroutine\Coroutine;
 
 /**
  * Class AbstractWorker
- * @package Mix\CoroutinePool
+ * @package Mix\WorkerPool
  * @author liu,jian <coder.keda@gmail.com>
  */
 abstract class AbstractWorker

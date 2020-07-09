@@ -2,13 +2,14 @@
 
 namespace Mix\Signal;
 
+use Mix\Coroutine\Coroutine;
 use Swoole\Coroutine\Channel;
 
 /**
- * Class Notify
+ * Class SignalNotify
  * @package Mix\Signal
  */
-class Notify
+class SignalNotify
 {
 
     /**
@@ -31,7 +32,9 @@ class Notify
         $this->signals       = $signals;
         foreach ($signals as $signal) {
             \Swoole\Process::signal($signal, function ($signal) {
-                $this->signalChannel->push($signal);
+                Coroutine::create(function () use ($signal) {
+                    $this->signalChannel->push($signal);
+                });
             });
         }
     }
