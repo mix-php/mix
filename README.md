@@ -1,3 +1,5 @@
+> OpenMix 出品：http://www.openmix.org
+
 <br>
 
 <p align="center">
