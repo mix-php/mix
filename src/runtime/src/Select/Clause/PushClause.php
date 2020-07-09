@@ -6,10 +6,10 @@ use Mix\Select\Clause\ClauseIntercase;
 use Mix\Coroutine\Channel;
 
 /**
- * Class Pop
+ * Class PushClause
  * @package Mix\Select\Clause
  */
-class Pop implements ClauseIntercase
+class PushClause implements ClauseIntercase
 {
 
     /**
@@ -18,13 +18,19 @@ class Pop implements ClauseIntercase
     protected $clauseChannel;
 
     /**
+     * @var mixed
+     */
+    protected $value;
+
+    /**
      * Push constructor.
      * @param Channel $channel
      * @param $value
      */
-    public function __construct(Channel $channel)
+    public function __construct(Channel $channel, $value)
     {
         $this->clauseChannel = $channel;
+        $this->value         = $value;
     }
 
     /**
@@ -41,7 +47,7 @@ class Pop implements ClauseIntercase
      */
     public function run()
     {
-        return $this->clauseChannel->pop();
+        return $this->clauseChannel->push($this->value);
     }
 
 }

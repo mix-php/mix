@@ -4,8 +4,8 @@ namespace Mix\Select;
 
 use Mix\Coroutine\Coroutine;
 use Mix\Select\Clause\ClauseIntercase;
-use Mix\Select\Clause\Pop;
-use Mix\Select\Clause\Push;
+use Mix\Select\Clause\PopClause;
+use Mix\Select\Clause\PushClause;
 use Mix\Coroutine\Channel;
 
 /**
@@ -78,7 +78,7 @@ class Select
      */
     public static function pop(Channel $channel): ClauseIntercase
     {
-        return new Pop($channel);
+        return new PopClause($channel);
     }
 
     /**
@@ -87,7 +87,7 @@ class Select
      */
     public static function push(Channel $channel, $value): ClauseIntercase
     {
-        return new Push($channel, $value);
+        return new PushClause($channel, $value);
     }
 
     /**
