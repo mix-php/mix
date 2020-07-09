@@ -2,9 +2,9 @@
 
 namespace Mix\Micro;
 
-use http\Exception\InvalidArgumentException;
-use Mix\Concurrent\Timer;
-use Mix\Helper\ProcessHelper;
+use Mix\Signal\SignalNotify;
+use Mix\Time\Ticker;
+use Mix\Time\Time;
 
 /**
  * Class Service
@@ -19,9 +19,9 @@ class Service
     protected $options;
 
     /**
-     * @var Timer
+     * @var Ticker
      */
-    protected $timer;
+    protected $ticker;
 
     /**
      * Service constructor.
@@ -39,62 +39,68 @@ class Service
     public function run()
     {
         // 捕获信号
-        $this->options->signal and ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], function ($signal) {
-            $logger   = $this->options->logger;
-            $registry = $this->options->registry;
-            $config   = $this->options->config;
-            $server   = $this->options->server;
+        if ($this->options->signal) {
+            $notify = new SignalNotify(SIGINT, SIGTERM, SIGQUIT);
+            xgo(function () use ($notify) {
+                $signal = $notify->channel()->pop();
 
-            if ($logger) {
-                $logger->info('Received signal [{signal}]', ['signal' => $signal]);
-                $logger->info('Server shutdown');
-            }
+                $logger   = $this->options->logger;
+                $registry = $this->options->registry;
+                $config   = $this->options->config;
+                $server   = $this->options->server;
+                if ($logger) {
+                    $logger->info('Received signal [{signal}]', ['signal' => $signal]);
+                    $logger->info('Server shutdown');
+                }
+                $registry and $registry->close();
+                $config and $config->close();
+                $server and $server->shutdown();
 
-            $registry and $registry->close();
-            $config and $config->close();
-            $server and $server->shutdown();
+                $this->ticker and $this->ticker->stop();
 
-            ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], null);
-        });
+                $notify->stop();
+            });
+        }
 
         // 服务注册
-        $timer = $this->timer = Timer::new();
-        $timer->tick(100, function () use ($timer) {
-            $server   = $this->options->server;
-            $registry = $this->options->registry;
-            $logger   = $this->options->logger;
-
-            if (!$server->port()) {
-                return;
-            }
-            xdefer(function () use ($timer) {
-                $timer->clear();
+        $ticker = $this->ticker = Time::newTicker(100 * Time::MILLISECOND);
+        xgo(function () use ($ticker) {
+            xdefer(function () use ($ticker) {
+                $ticker->stop();
             });
-
-            $services = $registry->extract($this->options);
-            $registry->register(...$services);
-
-            if ($logger) {
-                $logger->info(sprintf('Server started [%s:%d]', $server->host(), $server->port()));
-                foreach ($services as $service) {
-                    $logger->info(sprintf('Register service [%s]', $service->getID()));
+            while (true) {
+                $ts = $ticker->channel()->pop();
+                if (!$ts) {
+                    return;
                 }
+
+                $server   = $this->options->server;
+                $registry = $this->options->registry;
+                $logger   = $this->options->logger;
+
+                if (!$server->port()) {
+                    continue;
+                }
+
+                $services = $registry->extract($this->options);
+                $registry->register(...$services);
+
+                if ($logger) {
+                    $logger->info(sprintf('Server started [%s:%d]', $server->host(), $server->port()));
+                    foreach ($services as $service) {
+                        $logger->info(sprintf('Register service [%s]', $service->getID()));
+                    }
+                }
+
+                return;
             }
         });
 
         $server = $this->options->server;
         if (!method_exists($server, 'start')) {
-            throw new \BadMethodCallException('Server start method invalid');
+            throw new \BadMethodCallException('Server start method not found');
         }
         $server->start($this->options->router);
-    }
-
-    /**
-     * destruct
-     */
-    public function __destruct()
-    {
-        $this->timer and $this->timer->clear();
     }
 
 }
