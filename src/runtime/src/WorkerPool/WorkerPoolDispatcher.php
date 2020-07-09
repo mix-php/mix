@@ -8,11 +8,11 @@ use Swoole\Coroutine\Channel;
 use Mix\Coroutine\Coroutine;
 
 /**
- * Class WorkerDispatcher
+ * Class WorkerPoolDispatcher
  * @package Mix\WorkerPool
  * @author liu,jian <coder.keda@gmail.com>
  */
-class WorkerDispatcher
+class WorkerPoolDispatcher
 {
 
     /**
