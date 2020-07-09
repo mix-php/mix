@@ -24,7 +24,7 @@
     "psr/event-dispatcher": "^1.0",
     "mix/bean": "~2.2.0",
     "mix/server": "~2.2.0",
-    "mix/pool": "~2.2.0"
+    "mix/object-pool": "~2.2.0"
   },
   "require-dev": {
     "swoole/ide-helper": "dev-master"

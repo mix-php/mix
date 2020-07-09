@@ -3,7 +3,7 @@
 namespace Mix\Database\Pool;
 
 use Mix\Database\Driver;
-use Mix\Pool\AbstractObjectPool;
+use Mix\ObjectPool\AbstractObjectPool;
 
 /**
  * Class ConnectionPool

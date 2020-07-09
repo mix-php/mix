@@ -2,7 +2,7 @@
 
 namespace Mix\SyncInvoke\Client\Pool;
 
-use Mix\Pool\AbstractObjectPool;
+use Mix\ObjectPool\AbstractObjectPool;
 use Mix\SyncInvoke\Client\Dialer;
 
 /**

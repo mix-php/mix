@@ -3,7 +3,7 @@
 namespace Mix\Redis;
 
 use Mix\Bean\BeanInjector;
-use Mix\Pool\ObjectTrait;
+use Mix\ObjectPool\ObjectTrait;
 
 /**
  * Class Driver

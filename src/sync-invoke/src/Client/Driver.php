@@ -2,7 +2,7 @@
 
 namespace Mix\SyncInvoke\Client;
 
-use Mix\Pool\ObjectTrait;
+use Mix\ObjectPool\ObjectTrait;
 use Mix\SyncInvoke\Constants;
 use Swoole\Coroutine\Client;
 

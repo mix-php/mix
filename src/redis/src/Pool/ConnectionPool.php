@@ -3,7 +3,7 @@
 namespace Mix\Redis\Pool;
 
 use Mix\Redis\Driver;
-use Mix\Pool\AbstractObjectPool;
+use Mix\ObjectPool\AbstractObjectPool;
 
 /**
  * Class ConnectionPool

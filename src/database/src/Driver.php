@@ -2,7 +2,7 @@
 
 namespace Mix\Database;
 
-use Mix\Pool\ObjectTrait;
+use Mix\ObjectPool\ObjectTrait;
 
 /**
  * Class Driver

@@ -3,7 +3,7 @@
 namespace Mix\Redis\Pool;
 
 use Mix\Bean\BeanInjector;
-use Mix\Pool\DialerInterface;
+use Mix\ObjectPool\DialerInterface;
 use Mix\Redis\Connection;
 use Mix\Redis\Driver;
 use Psr\EventDispatcher\EventDispatcherInterface;

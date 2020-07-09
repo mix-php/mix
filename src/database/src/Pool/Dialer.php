@@ -4,7 +4,7 @@ namespace Mix\Database\Pool;
 
 use Mix\Bean\BeanInjector;
 use Mix\Database\Driver;
-use Mix\Pool\DialerInterface;
+use Mix\ObjectPool\DialerInterface;
 
 /**
  * Class Dialer

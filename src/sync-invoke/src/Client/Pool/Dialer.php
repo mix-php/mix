@@ -3,7 +3,7 @@
 namespace Mix\SyncInvoke\Client\Pool;
 
 use Mix\Bean\BeanInjector;
-use Mix\Pool\DialerInterface;
+use Mix\ObjectPool\DialerInterface;
 use Mix\SyncInvoke\Client\Connection;
 use Mix\SyncInvoke\Client\Driver;
 
