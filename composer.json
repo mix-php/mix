@@ -98,7 +98,7 @@
       "Mix\\Http\\Message\\": "src/http-message/src/",
       "Mix\\Http\\Server\\": "src/http-server/src/",
       "Mix\\Monolog\\": "src/monolog/src/",
-      "Mix\\Pool\\": "src/pool/src/",
+      "Mix\\ObjectPool\\": "src/object-pool/src/",
       "Mix\\Redis\\": "src/redis/src/",
       "Mix\\Redis\\Subscribe\\": "src/redis-subscribe/src/",
       "Mix\\Route\\": "src/route/src/",
