@@ -27,8 +27,8 @@ class Notify
      */
     public function __construct(int ...$signals)
     {
-        $this->channel = new Channel();
-        $this->signals = $signals;
+        $this->signalChannel = new Channel();
+        $this->signals       = $signals;
         foreach ($signals as $signal) {
             \Swoole\Process::signal($signal, function ($signal) {
                 $this->signalChannel->push($signal);

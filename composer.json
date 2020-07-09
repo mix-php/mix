@@ -101,6 +101,7 @@
       "Mix\\Redis\\Subscribe\\": "src/redis-subscribe/src/",
       "Mix\\Route\\": "src/route/src/",
       "Mix\\FastRoute\\": "src/fast-route/src/",
+      "Mix\\Runtime\\": "src/runtime/src/",
       "Mix\\Server\\": "src/server/src/",
       "Mix\\Session\\": "src/session/src/",
       "Mix\\Validate\\": "src/validate/src/",
@@ -124,6 +125,7 @@
       "src/console/src/Mix.php"
     ],
     "files": [
+      "src/runtime/src/functions.php",
       "src/concurrent/src/functions.php",
       "src/console/src/functions.php"
     ]
