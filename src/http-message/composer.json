@@ -22,7 +22,7 @@
     "ext-swoole": ">=4.4.4",
     "psr/http-message": "^1.0",
     "psr/http-factory": "^1.0",
-    "mix/context": "~2.2.0"
+    "mix/runtime": "~2.2.0"
   },
   "autoload": {
     "psr-4": {
