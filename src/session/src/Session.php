@@ -5,6 +5,7 @@ namespace Mix\Session;
 use Mix\Http\Message\Factory\CookieFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
+use Mix\Session\Handler\HandlerInterface;
 
 /**
  * Class Session
@@ -16,7 +17,7 @@ class Session
 
     /**
      * 处理者
-     * @var SessionHandlerInterface
+     * @var HandlerInterface
      */
     public $handler;
 
@@ -86,9 +87,9 @@ class Session
 
     /**
      * Session constructor.
-     * @param SessionHandlerInterface $handler
+     * @param HandlerInterface $handler
      */
-    public function __construct(SessionHandlerInterface $handler)
+    public function __construct(HandlerInterface $handler)
     {
         $this->handler = $handler;
     }

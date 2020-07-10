@@ -1,13 +1,13 @@
 <?php
 
-namespace Mix\Session;
+namespace Mix\Session\Handler;
 
 /**
  * Interface SessionHandlerInterface
- * @package Mix\Session
+ * @package Mix\Session\Handler
  * @author liu,jian <coder.keda@gmail.com>
  */
-interface SessionHandlerInterface
+interface HandlerInterface
 {
 
     /**

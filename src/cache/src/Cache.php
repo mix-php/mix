@@ -2,6 +2,7 @@
 
 namespace Mix\Cache;
 
+use Mix\Cache\Handler\HandlerInterface;
 use Psr\SimpleCache\CacheInterface;
 
 /**
@@ -14,15 +15,15 @@ class Cache implements CacheInterface
 
     /**
      * 处理器
-     * @var CacheHandlerInterface
+     * @var HandlerInterface
      */
     public $handler;
 
     /**
      * Cache constructor.
-     * @param CacheHandlerInterface $handler
+     * @param HandlerInterface $handler
      */
-    public function __construct(CacheHandlerInterface $handler)
+    public function __construct(HandlerInterface $handler)
     {
         $this->handler = $handler;
     }

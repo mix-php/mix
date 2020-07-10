@@ -1,15 +1,13 @@
 <?php
 
-namespace Mix\Cache;
+namespace Mix\Cache\Handler;
 
-use Mix\Cache\Handler\HandlerInterface;
 use Mix\Redis\Redis;
 
 /**
  * Class RedisHandler
- * @package Mix\Cache
+ * @package Mix\Cache\Handler
  * @author liu,jian <coder.keda@gmail.com>
- * @deprecated 废弃，请使用 Handler 目录内的 Handler Class
  */
 class RedisHandler implements HandlerInterface
 {

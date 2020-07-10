@@ -1,13 +1,13 @@
 <?php
 
-namespace Mix\Cache;
+namespace Mix\Cache\Handler;
 
 /**
- * Interface CacheHandlerInterface
- * @package Mix\Cache
+ * Interface HandlerInterface
+ * @package Mix\Cache\Handler
  * @author liu,jian <coder.keda@gmail.com>
  */
-interface CacheHandlerInterface
+interface HandlerInterface
 {
 
     /**

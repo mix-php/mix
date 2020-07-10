@@ -1,14 +1,11 @@
 <?php
 
-namespace Mix\Cache;
-
-use Mix\Cache\Handler\HandlerInterface;
+namespace Mix\Cache\Handler;
 
 /**
  * Class FileHandler
- * @package Mix\Cache
+ * @package Mix\Cache\Handler
  * @author liu,jian <coder.keda@gmail.com>
- * @deprecated 废弃，请使用 Handler 目录内的 Handler Class
  */
 class FileHandler implements HandlerInterface
 {
