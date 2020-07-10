@@ -26,7 +26,7 @@
     "mix/micro-register": "~2.2.0",
     "mix/micro-route": "~2.2.0",
     "mix/micro-server": "~2.2.0",
-    "mix/concurrent": "~2.2.0",
+    "mix/runtime": "~2.2.0",
     "mix/guzzle": "~2.2.0",
     "hassankhan/config": "^2.1"
   },

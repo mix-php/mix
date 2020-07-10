@@ -2,7 +2,6 @@
 
 namespace Mix\Micro\Etcd\Monitor;
 
-use Mix\Concurrent\Timer;
 use Mix\Micro\Etcd\Client\Client;
 use Mix\Micro\Etcd\Client\Watcher;
 use Mix\Micro\Etcd\Service\Endpoint;
@@ -12,6 +11,8 @@ use Mix\Micro\Etcd\Service\Response;
 use Mix\Micro\Etcd\Service\Service;
 use Mix\Micro\Etcd\Service\Value;
 use Mix\Micro\Register\Exception\NotFoundException;
+use Mix\Time\Ticker;
+use Mix\Time\Time;
 
 /**
  * Class Monitor
@@ -51,9 +52,9 @@ class Monitor
     protected $services = [];
 
     /**
-     * @var Timer
+     * @var Ticker
      */
-    protected $timer;
+    protected $ticker;
 
     /**
      * @var Watcher
@@ -118,17 +119,22 @@ class Monitor
         $this->watcher = $watcher;
 
         $this->pull();
-        $timer = Timer::new();
-        $timer->tick($this->idle * 1000, function () {
-            // 超过 4/5 的生存时间没有获取服务就停止监听器
-            if (time() - $this->lastTime > $this->idle / 5 * 4) {
-                unset($this->monitors[$this->name]);
-                $this->close();
-                return;
+        $this->ticker = Time::newTicker(($this->idle * 1000) * Time::MILLISECOND);
+        xgo(function () {
+            while (true) {
+                $ts = $this->ticker->channel()->pop();
+                if (!$ts) {
+                    return;
+                }
+                // 超过 4/5 的生存时间没有获取服务就停止监听器
+                if (time() - $this->lastTime > $this->idle / 5 * 4) {
+                    unset($this->monitors[$this->name]);
+                    $this->close();
+                    continue;
+                }
+                $this->pull();
             }
-            $this->pull();
         });
-        $this->timer = $timer;
     }
 
     /**
@@ -239,7 +245,7 @@ class Monitor
     public function close()
     {
         $this->watcher->close();
-        $this->timer->clear();
+        $this->ticker->stop();
     }
 
 }

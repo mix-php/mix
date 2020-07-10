@@ -2,11 +2,12 @@
 
 namespace Mix\Micro\Etcd;
 
-use Mix\Concurrent\Timer;
 use Mix\Micro\Etcd\Client\Client;
 use Mix\Micro\Config\ConfigInterface;
 use Mix\Micro\Config\Event\DeleteEvent;
 use Mix\Micro\Config\Event\PutEvent;
+use Mix\Time\Ticker;
+use Mix\Time\Time;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -61,9 +62,9 @@ class Config implements ConfigInterface
     protected $listenCallback;
 
     /**
-     * @var Timer
+     * @var Ticker
      */
-    protected $listenTimer;
+    protected $listenTicker;
 
     /**
      * Configurator constructor.
@@ -100,7 +101,7 @@ class Config implements ConfigInterface
      */
     public function listen(EventDispatcherInterface $dispatcher)
     {
-        if (isset($this->listenTimer)) {
+        if (isset($this->listenTicker)) {
             throw new \RuntimeException('Already listening');
         }
         if (!$dispatcher) {
@@ -115,7 +116,7 @@ class Config implements ConfigInterface
             $dispatcher->dispatch($event);
         }
         // 定时监听
-        $timer    = Timer::new();
+        $ticker   = Time::newTicker(($this->interval * 1000) * Time::MILLISECOND);
         $callback = function () use (&$lastConfig, $dispatcher) {
             $config = $this->all();
             // put
@@ -137,9 +138,17 @@ class Config implements ConfigInterface
                 $dispatcher->dispatch($event);
             }
         };
-        $timer->tick($this->interval * 1000, $callback);
+        xgo(function () use ($ticker, $callback) {
+            while (true) {
+                $ts = $ticker->channel()->pop();
+                if (!$ts) {
+                    return;
+                }
+                call_user_func($callback);
+            }
+        });
         $this->listenCallback = $callback;
-        $this->listenTimer    = $timer;
+        $this->listenTicker   = $ticker;
     }
 
     /**
@@ -226,7 +235,7 @@ class Config implements ConfigInterface
      */
     public function close()
     {
-        $this->listenTimer and $this->listenTimer->clear();
+        $this->listenTicker and $this->listenTicker->stop();
     }
 
 }

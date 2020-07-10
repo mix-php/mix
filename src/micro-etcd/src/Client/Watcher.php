@@ -2,7 +2,7 @@
 
 namespace Mix\Micro\Etcd\Client;
 
-use Mix\Concurrent\Timer;
+use Mix\Time\Time;
 
 /**
  * Class Watcher
@@ -175,26 +175,29 @@ EOF;
      */
     public function close()
     {
-        $client       = $this->swooleClient;
+        $client       = &$this->swooleClient;
         $this->closed = true;
         if (!$this->watching) {
             return;
         }
         if (!isset($client)) {
             // 等待 go 执行一会，当 close 在刚 forever 执行后就被立即调用的时候
-            $timer        = Timer::new();
-            $timer->count = 0;
-            $timer->tick(500, function () use ($timer) {
-                if (isset($client)) {
-                    $client->close();
-                    $timer->clear();
-                    return;
+            $ticker = Time::newTicker(500 * Time::MILLISECOND);
+            xgo(function () use ($ticker, &$client) {
+                $count = 0;
+                while (true) {
+                    $ticker->channel()->pop();
+                    if (isset($client)) {
+                        $client->close();
+                        $ticker->stop();
+                        return;
+                    }
+                    if ($count >= 6) {
+                        $ticker->stop();
+                        return;
+                    }
+                    $count++;
                 }
-                if ($timer->count >= 6) {
-                    $timer->clear();
-                    return;
-                }
-                $timer->count++;
             });
             return;
         }

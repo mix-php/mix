@@ -3,10 +3,11 @@
 namespace Mix\Micro\Etcd\Register;
 
 use Mix\Micro\Etcd\Client\Client;
-use Mix\Concurrent\Timer;
 use Mix\Micro\Etcd\Service\Service;
 use Mix\Micro\Register\Exception\NotFoundException;
 use Mix\Micro\Register\ServiceInterface;
+use Mix\Time\Ticker;
+use Mix\Time\Time;
 
 /**
  * Class Registrar
@@ -36,9 +37,9 @@ class Registrar
     protected $leaseID;
 
     /**
-     * @var Timer
+     * @var Ticker
      */
-    protected $timer;
+    protected $ticker;
 
     /**
      * @var string
@@ -71,8 +72,8 @@ class Registrar
         $reslut  = $client->grant($this->ttl);
         $leaseID = $this->leaseID = (int)$reslut['ID'];
         $client->put(sprintf($this->serviceFormat, $service->getName(), $service->getID()), json_encode($service, JSON_UNESCAPED_SLASHES), ['lease' => $leaseID]);
-        $this->timer and $this->timer->clear();
-        $this->timer = $this->keepAlive();
+        $this->ticker and $this->ticker->stop();
+        $this->ticker = $this->keepAlive();
     }
 
     /**
@@ -80,7 +81,7 @@ class Registrar
      */
     public function deregister()
     {
-        $this->timer->clear();
+        $this->ticker->stop();
         try {   // 忽略异常
             $this->client->revoke($this->leaseID);
         } catch (\Throwable $throwable) {
@@ -89,20 +90,26 @@ class Registrar
 
     /**
      * Keep alive
-     * @return Timer
+     * @return Ticker
      */
     protected function keepAlive()
     {
-        $timer = Timer::new();
-        $timer->tick($this->ttl * 1000 / 5 * 4, function () {
-            try {
-                // 当 lease 失效时，由于返回结果缺少 ttl，所以会抛出异常
-                $this->client->keepAlive($this->leaseID);
-            } catch (NotFoundException $ex) {
-                $this->register();
+        $ticker = Time::newTicker(($this->ttl * 1000 / 5 * 4) * Time::MILLISECOND);
+        xgo(function () use ($ticker) {
+            while (true) {
+                $ts = $ticker->channel()->pop();
+                if (!$ts) {
+                    return;
+                }
+                try {
+                    // 当 lease 失效时，由于返回结果缺少 ttl，所以会抛出异常
+                    $this->client->keepAlive($this->leaseID);
+                } catch (NotFoundException $ex) {
+                    $this->register();
+                }
             }
         });
-        return $timer;
+        return $ticker;
     }
 
 }
