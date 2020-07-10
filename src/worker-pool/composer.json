@@ -1,0 +1,29 @@
+{
+  "name": "mix/worker-pool",
+  "description": "Swoole-based worker pool library",
+  "type": "library",
+  "keywords": [
+    "mix",
+    "swoole",
+    "worker-pool",
+    "coroutine-pool"
+  ],
+  "homepage": "http://www.mixphp.cn/",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "liu,jian",
+      "email": "coder.keda@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0",
+    "ext-swoole": ">=4.4.4",
+    "mix/runtime": "~2.2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mix\\WorkerPool\\": "src/"
+    }
+  }
+}
