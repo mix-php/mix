@@ -3,11 +3,11 @@
 namespace Mix\Cache\Handler;
 
 /**
- * Class FileHandler
+ * Class FilesystemHandler
  * @package Mix\Cache\Handler
  * @author liu,jian <coder.keda@gmail.com>
  */
-class FileHandler implements HandlerInterface
+class FilesystemHandler implements HandlerInterface
 {
 
     /**
