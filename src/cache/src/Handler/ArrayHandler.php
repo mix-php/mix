@@ -12,7 +12,7 @@ class ArrayHandler implements HandlerInterface
     /**
      * @var array
      */
-    public $storage = [];
+    protected $storage = [];
 
     /**
      * 获取缓存
