@@ -14,7 +14,7 @@ composer require mix/monolog
 
 ```
 $logger  = new \Mix\Monolog\Logger('API', [new \Mix\Monolog\Handler\ConsoleHandler], [new \Monolog\Processor\PsrLogMessageProcessor]);
-$handler = new RotatingFileHandler(sprintf('%s/runtime/logs/api.log', $basePath), 7);
+$handler = new \Mix\Monolog\Handler\RotatingFileHandler(sprintf('%s/runtime/logs/api.log', $basePath), 7);
 $logger->pushHandler($handler);
 ```
 
