@@ -23,7 +23,19 @@ class ListenerProvider implements ListenerProviderInterface
      */
     public function __construct(ListenerInterface ...$listeners)
     {
-        $this->listeners = $listeners;
+        /*重组事件的 数组格式 event为key listeners组成的索引数组为value*/
+        $tmpListenerEvents = [];
+        foreach ($listeners as $listener){
+            $events = $listener->events();
+            foreach ($events as $event) {
+                if(array_key_exists($event, $tmpListenerEvents)){
+                    array_push($tmpListenerEvents[$event], $listener);
+                    continue;
+                }
+                $tmpListenerEvents[$event][] = $listener;
+            }
+        }
+        $this->listeners = $tmpListenerEvents;
     }
 
     /**
@@ -36,11 +48,10 @@ class ListenerProvider implements ListenerProviderInterface
     public function getListenersForEvent(object $event): iterable
     {
         $class    = get_class($event);
+        $listeners = $this->listeners[$class];
         $iterable = [];
-        foreach ($this->listeners as $listener) {
-            if (in_array($class, $listener->events())) {
-                $iterable[] = [$listener, 'process'];
-            }
+        foreach ($listeners as $listener) {
+            $iterable[] = [$listener, 'process'];
         }
         return $iterable;
     }
