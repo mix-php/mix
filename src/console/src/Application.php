@@ -106,12 +106,12 @@ class Application
     /**
      * Application constructor.
      * @param array $config
-     * @param string $dispatcher
-     * @param string $error
+     * @param string $dispatcherName
+     * @param string $errorName
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
      */
-    public function __construct(array $config, string $dispatcher = 'dispatcher', string $error = 'error')
+    public function __construct(array $config, string $dispatcherName = 'dispatcher', string $errorName = 'error')
     {
         // 注入
         BeanInjector::inject($this, $config);
@@ -123,8 +123,8 @@ class Application
         }
         $this->context = new ApplicationContext($this->beans);
         // 加载核心库
-        $this->dispatcher = $this->context->get($dispatcher);
-        $this->error      = $this->context->get($error);
+        $this->dispatcher = $this->context->get($dispatcherName);
+        $this->error      = $this->context->get($errorName);
         // 加载命令
         if ($this->commandPath != '') {
             $this->commands = ConfigHelper::each($this->commandPath);
