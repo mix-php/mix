@@ -60,8 +60,8 @@ class Application
      * @var array
      */
     public $coroutine = [
-        true,
-        [
+        'enable'  => true,
+        'options' => [
             'max_coroutine' => 300000,
             'hook_flags'    => 1879048191, // SWOOLE_HOOK_ALL
         ],
