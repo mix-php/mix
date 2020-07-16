@@ -220,7 +220,7 @@ class QueryBuilder
 
     /**
      * 预处理
-     * @return ConnectionInterface
+     * @return Connection
      */
     public function prepare()
     {
@@ -295,6 +295,25 @@ class QueryBuilder
     public function first()
     {
         return $this->prepare()->queryOne();
+    }
+
+    /**
+     * 返回单个值
+     * @param string $field
+     * @return mixed
+     * @throws \PDOException
+     */
+    public function value(string $field)
+    {
+        $result = $this->prepare()->queryOne();
+        if (empty($result)) {
+            return $result;
+        }
+        $isArray = is_array($result);
+        if (($isArray && !isset($result[$field])) || (!$isObject && !isset($result->$field))) {
+            throw new \PDOException(sprintf('Field %s not found', $field));
+        }
+        return $isArray ? $result[$field] : $result->$field;
     }
 
 }
