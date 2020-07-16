@@ -17,4 +17,18 @@ final class FetchTest extends TestCase
         run($func);
     }
 
+    public function testValueEx(): void
+    {
+        $_this = $this;
+        $func  = function () use ($_this) {
+            $conn = conn();
+            try {
+                $result = $conn->table('users')->value('text123');
+            } catch (\Throwable $exception) {
+                $_this->assertContains(get_class($exception), \PDOException::class);
+            }
+        };
+        run($func);
+    }
+
 }

@@ -310,7 +310,7 @@ class QueryBuilder
             return $result;
         }
         $isArray = is_array($result);
-        if (($isArray && !isset($result[$field])) || (!$isObject && !isset($result->$field))) {
+        if (($isArray && !isset($result[$field])) || (!$isArray && !isset($result->$field))) {
             throw new \PDOException(sprintf('Field %s not found', $field));
         }
         return $isArray ? $result[$field] : $result->$field;
