@@ -20,17 +20,25 @@ namespace GuzzleHttp\Handler {
         }
     }
 
+}
+
+namespace GuzzleHttp\Psr7 {
+
     /**
-     * 重写系统方法
+     * 重写写系统方法，使其失效
      */
-    if (!function_exists('Monolog\Handler\fopen')) {
-        function fopen($filename, $mode, $use_include_path = null, $context = null)
+    if (!function_exists('GuzzleHttp\Psr7\set_error_handler')) {
+        function set_error_handler($call)
         {
-            $fp = @\fopen($filename, $mode, $use_include_path, $context);
-            if ($fp === false) {
-                throw new \RuntimeException(sprintf('fopen(%s): failed to open stream', $filename));
-            }
-            return $fp;
+        }
+    }
+
+    /**
+     * 重写系统方法，使其失效
+     */
+    if (!function_exists('GuzzleHttp\Psr7\restore_error_handler')) {
+        function restore_error_handler()
+        {
         }
     }
 

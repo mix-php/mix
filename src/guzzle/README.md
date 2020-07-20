@@ -4,10 +4,12 @@
 
 ## 安装
 
-支持的 Guzzle 版本，安装后 Guzzle 会切换为以下版本：
+支持的 Guzzle 版本 (安装后 Guzzle 会切换为以下版本)：
 
 - guzzle-6.4
 - guzzle-6.5
+
+注意：`error_reporting` 设置的错误级别，不可屏蔽 `E_WARNING` 类型，并且你使用的框架应该具备将 `E_WARNING` 转换为抛出异常的能力。
 
 使用 Composer 安装：
 

@@ -15,8 +15,7 @@ use GuzzleHttp\Handler\StreamHandler;
  */
 function choose_handler()
 {
-    $handler = new StreamHandler();
-    return $handler;
+    return new StreamHandler();
 }
 
 /**
