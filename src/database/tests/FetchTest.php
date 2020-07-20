@@ -25,7 +25,7 @@ final class FetchTest extends TestCase
             try {
                 $result = $conn->table('users')->value('text123');
             } catch (\Throwable $exception) {
-                $_this->assertContains(get_class($exception), \PDOException::class);
+                $_this->assertEquals(get_class($exception), \PDOException::class);
             }
         };
         run($func);

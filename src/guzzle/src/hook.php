@@ -1,4 +1,3 @@
 <?php
 
-require __DIR__ . "/hook/default.php";
-require __DIR__ . "/hook/error.php";
+// 保留该文件，兼容老版本
