@@ -125,7 +125,9 @@
       "Mix\\Tracing\\Zipkin\\": "src/tracing-zipkin/src/"
     },
     "classmap": [
-      "src/console/src/Mix.php"
+      "src/console/src/Mix.php",
+      "src/guzzle/src/hook/Handler/CurlHandler.php",
+      "src/guzzle/src/hook/Handler/StreamHandler.php"
     ],
     "files": [
       "src/runtime/src/functions.php",

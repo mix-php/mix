@@ -27,8 +27,8 @@
       "Mix\\Guzzle\\": "src/"
     },
     "classmap": [
-      "src/hook/Handler/StreamHandler.php",
-      "src/hook/Handler/CurlHandler.php"
+      "src/hook/Handler/CurlHandler.php",
+      "src/hook/Handler/StreamHandler.php"
     ]
   }
 }
