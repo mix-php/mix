@@ -9,12 +9,12 @@ final class ContextTest extends TestCase
 {
 
     // 测试 ValueContext
-    public function testWithValue()
+    public function testWithValue(): void
     {
         $ctx = new Mix\Context\Context();
         $ctx->withValue('foo', 'bar');
         $value = $ctx->value('foo');
-        $this->assertEquals($val, 'var');
+        $this->assertEquals('bar', $value);
     }
 
     // 测试 CancelContext
