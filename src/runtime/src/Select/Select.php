@@ -103,13 +103,13 @@ class Select
             /** @var ClauseIntercase $clause */
             $clause    = $case['clause'];
             $statement = $case['statement'];
-            if ($clause instanceof Push && (!$clause->channel()->isFull() || $clause->channel()->isClosed())) {
+            if ($clause instanceof PushClause && (!$clause->channel()->isFull() || $clause->channel()->isClosed())) {
                 $processes[] = function () use ($clause, $statement) {
                     $value        = $clause->run();
                     $this->return = call_user_func($statement, $value);
                 };
             }
-            if ($clause instanceof Pop && (!$clause->channel()->isEmpty() || $clause->channel()->isClosed())) {
+            if ($clause instanceof PopClause && (!$clause->channel()->isEmpty() || $clause->channel()->isClosed())) {
                 $processes[] = function () use ($clause, $statement) {
                     $value        = $clause->run();
                     $this->return = call_user_func($statement, $value);
@@ -155,13 +155,13 @@ class Select
                 /** @var ClauseIntercase $clause */
                 $clause    = $case['clause'];
                 $statement = $case['statement'];
-                if ($clause instanceof Push && (!$clause->channel()->isFull() || $clause->channel()->isClosed())) {
+                if ($clause instanceof PushClause && (!$clause->channel()->isFull() || $clause->channel()->isClosed())) {
                     $processes[] = function () use ($clause, $statement) {
                         $value        = $clause->run();
                         $this->return = call_user_func($statement, $value);
                     };
                 }
-                if ($clause instanceof Pop && (!$clause->channel()->isEmpty() || $clause->channel()->isClosed())) {
+                if ($clause instanceof PopClause && (!$clause->channel()->isEmpty() || $clause->channel()->isClosed())) {
                     $processes[] = function () use ($clause, $statement) {
                         $value        = $clause->run();
                         $this->return = call_user_func($statement, $value);
