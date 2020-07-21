@@ -8,8 +8,17 @@ use Mix\Time\Time;
 final class ContextTest extends TestCase
 {
 
+    // 测试 ValueContext
+    public function testWithValue()
+    {
+        $ctx = new Mix\Context\Context();
+        $ctx->withValue('foo', 'bar');
+        $value = $ctx->value('foo');
+        $this->assertEquals($val, 'var');
+    }
+
     // 测试 CancelContext
-    public function testCancelContext(): void
+    public function testWithCancel(): void
     {
         $_this = $this;
         $func  = function () use ($_this) {
@@ -40,7 +49,7 @@ final class ContextTest extends TestCase
     }
 
     // 测试 TimeoutContext
-    public function testTimeoutContext(): void
+    public function testWithTimeout(): void
     {
         $_this = $this;
         $func  = function () use ($_this) {
