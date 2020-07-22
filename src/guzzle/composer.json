@@ -29,6 +29,9 @@
     "classmap": [
       "src/hook/Handler/CurlHandler.php",
       "src/hook/Handler/StreamHandler.php"
+    ],
+    "files": [
+      "src/hook/functions.php"
     ]
   }
 }
