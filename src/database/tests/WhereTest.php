@@ -124,6 +124,20 @@ final class WhereTest extends TestCase
             $_this->assertContains("SELECT * FROM users WHERE (id = 1 OR id = 2) OR num < 1000", $sql);
 
             $result = $conn->table('users')
+                ->where(['merge', [['id', '=', 1], ['id', '=', 2]]])
+                ->where(['num', '<', 1000])
+                ->get();
+            $sql    = $conn->getLastSql();
+            $_this->assertContains("SELECT * FROM users WHERE (id = 1 AND id = 2) AND num < 1000", $sql);
+
+            $result = $conn->table('users')
+                ->where(['merge', [['id', '=', 1], ['id', '=', 2]]])
+                ->where(['or', ['num', '<', 1000]])
+                ->get();
+            $sql    = $conn->getLastSql();
+            $_this->assertContains("SELECT * FROM users WHERE (id = 1 AND id = 2) OR num < 1000", $sql);
+
+            $result = $conn->table('users')
                 ->where(['merge', [['id', '=', 1], ['and', ['id', '=', 2]]]])
                 ->where(['num', '<', 1000])
                 ->get();
