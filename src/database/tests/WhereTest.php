@@ -155,7 +155,7 @@ final class WhereTest extends TestCase
     }
 
     // 批量条件顺序异常
-    public function testMultiExpression(): void
+    public function testMultiException(): void
     {
         $_this = $this;
         $func  = function () use ($_this) {
