@@ -61,7 +61,7 @@
 
 ## 性能测试
 
-- [PHP7.3+Swoole4.4 / Go1.13 / MixPHP2.2 性能对比](https://zhuanlan.zhihu.com/p/162998384)
+- [PHP7.3+Swoole4.4 / Go1.13 / MixPHP2.2 / Beego1.12 性能对比](https://zhuanlan.zhihu.com/p/162998384)
 - [MixPHP 并发性能全面对比测试](http://www.jianshu.com/p/f769b6be1caf)
 
 ## 开发文档
