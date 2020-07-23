@@ -70,7 +70,7 @@ class BuildHelper
             // php switch continue 非常奇葩，所以用 if else
             if ($length == 2) {
                 // 子条件
-                if (in_array($item[0], ['or', 'and']) && is_array($item[1])) {
+                if (in_array($item[0], ['or', 'and', 'merge']) && is_array($item[1])) {
                     list($symbol, $subWhere) = $item;
                     if (!static::isMulti($subWhere)) {
                         $subWhere = [$subWhere];
@@ -79,7 +79,17 @@ class BuildHelper
                     if (count($subWhere) > 1) {
                         $subSql = "({$subSql})";
                     }
-                    $sql    .= " " . strtoupper($symbol) . " {$subSql}";
+                    if ($symbol == 'merge') {
+                        $sql = $subSql;
+                        if ($key != 0) {
+                            throw new \PDOException(sprintf('This where only be the first: %s', json_encode($item)));
+                        }
+                    } else {
+                        $sql .= " " . strtoupper($symbol) . " {$subSql}";
+                        if ($key == 0) {
+                            throw new \PDOException(sprintf('This where can\'t be the first: %s', json_encode($item)));
+                        }
+                    }
                     $params = array_merge($params, $subParams);
                     continue;
                 }

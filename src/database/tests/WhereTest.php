@@ -11,7 +11,8 @@ final class WhereTest extends TestCase
     {
         $_this = $this;
         $func  = function () use ($_this) {
-            $conn   = conn();
+            $conn = conn();
+
             $result = $conn->table('users')
                 ->where(['id', 'in', [2, 3]])
                 ->get();
@@ -26,7 +27,8 @@ final class WhereTest extends TestCase
     {
         $_this = $this;
         $func  = function () use ($_this) {
-            $conn   = conn();
+            $conn = conn();
+
             $result = $conn->table('users')
                 ->where([['id', '=', 1], ['or', ['id', 'in', [2, 3]]]])
                 ->get();
@@ -40,7 +42,8 @@ final class WhereTest extends TestCase
     {
         $_this = $this;
         $func  = function () use ($_this) {
-            $conn   = conn();
+            $conn = conn();
+
             $result = $conn->table('users')
                 ->where(['id', '=', 1])
                 ->get();
@@ -68,7 +71,8 @@ final class WhereTest extends TestCase
     {
         $_this = $this;
         $func  = function () use ($_this) {
-            $conn   = conn();
+            $conn = conn();
+
             $result = $conn->table('users')
                 ->where(['id', '=', 1])
                 ->where(['or', ['id', '=', 2]])
@@ -98,6 +102,80 @@ final class WhereTest extends TestCase
         run($func);
     }
 
+    // (id = 1 OR id = 2) AND num < 1000
+    public function testFirstMultiAny(): void
+    {
+        $_this = $this;
+        $func  = function () use ($_this) {
+            $conn = conn();
+
+            $result = $conn->table('users')
+                ->where(['merge', [['id', '=', 1], ['or', ['id', '=', 2]]]])
+                ->where(['num', '<', 1000])
+                ->get();
+            $sql    = $conn->getLastSql();
+            $_this->assertContains("SELECT * FROM users WHERE (id = 1 OR id = 2) AND num < 1000", $sql);
+
+            $result = $conn->table('users')
+                ->where(['merge', [['id', '=', 1], ['or', ['id', '=', 2]]]])
+                ->where(['or', ['num', '<', 1000]])
+                ->get();
+            $sql    = $conn->getLastSql();
+            $_this->assertContains("SELECT * FROM users WHERE (id = 1 OR id = 2) OR num < 1000", $sql);
+
+            $result = $conn->table('users')
+                ->where(['merge', [['id', '=', 1], ['and', ['id', '=', 2]]]])
+                ->where(['num', '<', 1000])
+                ->get();
+            $sql    = $conn->getLastSql();
+            $_this->assertContains("SELECT * FROM users WHERE (id = 1 AND id = 2) AND num < 1000", $sql);
+
+            $result = $conn->table('users')
+                ->where(['merge', [['id', '=', 1], ['and', ['id', '=', 2]]]])
+                ->where(['or', ['num', '<', 1000]])
+                ->get();
+            $sql    = $conn->getLastSql();
+            $_this->assertContains("SELECT * FROM users WHERE (id = 1 AND id = 2) OR num < 1000", $sql);
+        };
+        run($func);
+    }
+
+    // 批量条件顺序异常
+    public function testMultiExpression(): void
+    {
+        $_this = $this;
+        $func  = function () use ($_this) {
+            $conn = conn();
+
+            try {
+                $conn->table('users')
+                    ->where(['num', '<', 1000])
+                    ->where(['merge', [['id', '=', 1], ['or', ['id', '=', 2]]]])
+                    ->get();
+            } catch (\Throwable $ex) {
+                $_this->assertContains('This where only be the first', $ex->getMessage());
+            }
+
+            try {
+                $conn->table('users')
+                    ->where(['and', [['id', '=', 1], ['or', ['id', '=', 2]]]])
+                    ->where(['num', '<', 1000])
+                    ->get();
+            } catch (\Throwable $ex) {
+                $_this->assertContains('This where can\'t be the first', $ex->getMessage());
+            }
+
+            try {
+                $conn->table('users')
+                    ->where(['foo', [['id', '=', 1], ['or', ['id', '=', 2]]]])
+                    ->get();
+            } catch (\Throwable $ex) {
+                $_this->assertContains('Invalid where format', $ex->getMessage());
+            }
+        };
+        run($func);
+    }
+
     // 当参数为空但未使用 is null 时抛出异常
     // ['foo', '=', null]
     public function testNull(): void
@@ -105,6 +183,7 @@ final class WhereTest extends TestCase
         $_this = $this;
         $func  = function () use ($_this) {
             $conn = conn();
+
             try {
                 $result = $conn->table('users')->where([
                     ['id', '=', null],
@@ -123,6 +202,7 @@ final class WhereTest extends TestCase
         $_this = $this;
         $func  = function () use ($_this) {
             $conn = conn();
+
             try {
                 $result = $conn->table('users')->where([
                     [1, '=', 'id'],
@@ -139,8 +219,8 @@ final class WhereTest extends TestCase
     {
         $_this = $this;
         $func  = function () use ($_this) {
-            $conn   = conn();
-            
+            $conn = conn();
+
             $result = $conn->table('users')->where([
                 ['id', '>', \Mix\Database\Database::raw('MOD(5,2)')],
             ])->first();
