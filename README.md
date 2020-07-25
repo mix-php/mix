@@ -45,6 +45,8 @@
 
 采用和 Golang 类似的高度灵活的开发方式，框架只提供底层库，而与具体功能相关的代码都在项目库中实现，用户能更加细粒度的修改每一处细节。
 
+如果说 Hyperf 是 Swoole 技术圈的 Java 框架，那 Mix 就是 Golang 框架。
+
 ## 微服务
 
 微服务方面我们激进的选择了和其他 Swoole 框架截然不同的路径，在现有流行语言中只有 java spring cloud, golang go-micro 两大微服务生态最为成熟，由于 Mix 一直是类 golang 风格框架，加上单进程协程的独特优点，我们实现了 [go-micro](https://github.com/micro/go-micro) 的代码级互通，并可以使用 [micro runtime](https://micro.mu/docs/runtime.html) 工具包的网关、代理、Dashboard 等全部微服务治理基础设施，这意味着 PHP 能与 Go 一同无缝打造高性能 RPC 服务网格，加上 Mix = beego + go-micro 两大框架的功能集合，因此采用 Mix 开发的单体应用能在无需大量修改业务代码的情况下低成本升级到微服务。
