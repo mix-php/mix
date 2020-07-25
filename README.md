@@ -63,6 +63,7 @@
 
 ## 性能测试
 
+- [MixPHP 2.2 / Beego 1.12 数据库查询性能对比](https://zhuanlan.zhihu.com/p/163700975)
 - [PHP7.3+Swoole4.4 / Go1.13 / MixPHP2.2 / Beego1.12 性能对比](https://zhuanlan.zhihu.com/p/162998384)
 - [MixPHP 并发性能全面对比测试](http://www.jianshu.com/p/f769b6be1caf)
 
