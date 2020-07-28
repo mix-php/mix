@@ -6,18 +6,17 @@ use PHPUnit\Framework\TestCase;
 final class PoolTest extends TestCase
 {
 
-    // 功能测试
-    public function test(): void
+    public function testMaxOpen(): void
     {
         $_this = $this;
         $func  = function () use ($_this) {
             $redis = redis();
-            $max   = $redis->maxActive * 2;
+            $max   = $redis->maxOpen * 2;
             $time  = time();
             $chan  = new \Swoole\Coroutine\Channel();
             for ($i = 0; $i < $max; $i++) {
                 go(function () use ($redis, $chan) {
-                    $redis->blPop('foo_list', 2);
+                    $redis->blPop('foo_list', 1);
                     $chan->push(true);
                 });
             }
@@ -25,7 +24,44 @@ final class PoolTest extends TestCase
                 $chan->pop();
             }
             $duration = time() - $time;
-            $_this->assertTrue($duration - 4 < 1 && $duration - 4 >= 0);
+            $_this->assertTrue($duration - 2 < 1 && $duration - 2 >= 0);
+        };
+        run($func);
+    }
+
+    public function testMaxLifetime(): void
+    {
+        $_this = $this;
+        $func  = function () use ($_this) {
+            $redis              = redis();
+            $redis->maxLifetime = 1;
+
+            $conn = $redis->borrow();
+            $id   = spl_object_hash($conn);
+            $conn = null;
+            sleep(1);
+            $conn = $redis->borrow();
+            $id1  = spl_object_hash($conn);
+
+            $_this->assertNotEquals($id, $id1);
+        };
+        run($func);
+    }
+
+    public function testWaitTimeout(): void
+    {
+        $_this = $this;
+        $func  = function () use ($_this) {
+            $redis              = redis();
+            $redis->maxOpen     = 1;
+            $redis->waitTimeout = 0.001;
+
+            $conn = $redis->borrow();
+            try {
+                $redis->borrow();
+            } catch (\Throwable $exception) {
+                $_this->assertContains('Wait timeout', $exception->getMessage());
+            }
         };
         run($func);
     }

@@ -17,13 +17,13 @@ final class PoolTest extends TestCase
 
             $dialer = new \Mix\SyncInvoke\Client\Dialer();
             $client = $dialer->dial(9505);
-            $max    = $client->maxActive * 2;
+            $max    = $client->maxOpen * 2;
             $time   = time();
             $chan   = new \Swoole\Coroutine\Channel();
             for ($i = 0; $i < $max; $i++) {
                 go(function () use ($client, $chan) {
                     $client->invoke(function () {
-                        sleep(2);
+                        sleep(1);
                         return [1, 2, 3];
                     });
                     $chan->push(true);
@@ -33,7 +33,7 @@ final class PoolTest extends TestCase
                 $chan->pop();
             }
             $duration = time() - $time;
-            $_this->assertTrue($duration - 4 < 1 && $duration - 4 >= 0);
+            $_this->assertTrue($duration - 2 < 1 && $duration - 2 >= 0);
             $server->shutdown();
         };
         run($func);

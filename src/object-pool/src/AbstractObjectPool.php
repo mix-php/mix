@@ -3,6 +3,7 @@
 namespace Mix\ObjectPool;
 
 use Mix\ObjectPool\Event\DiscardedEvent;
+use Mix\ObjectPool\Exception\WaitTimeoutException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Swoole\Coroutine\Channel;
 
@@ -216,6 +217,7 @@ abstract class AbstractObjectPool
     /**
      * 弹出连接
      * @return mixed
+     * @throws WaitTimeoutException
      */
     protected function pop()
     {
@@ -223,7 +225,11 @@ abstract class AbstractObjectPool
         if ($this->waitTimeout) {
             $timeout = $this->waitTimeout;
         }
-        return $this->queue->pop($timeout);
+        $object = $this->queue->pop($timeout);
+        if (!$object) {
+            throw new WaitTimeoutException(sprintf('Wait timeout: %fs', $timeout));
+        }
+        return $object;
     }
 
     /**

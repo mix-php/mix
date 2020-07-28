@@ -5,19 +5,18 @@ use PHPUnit\Framework\TestCase;
 
 final class PoolTest extends TestCase
 {
-    
-    // 功能测试
-    public function test(): void
+
+    public function testMaxOpen(): void
     {
         $_this = $this;
         $func  = function () use ($_this) {
             $db   = db();
-            $max  = $db->maxActive * 2;
+            $max  = $db->maxOpen * 2;
             $time = time();
             $chan = new \Swoole\Coroutine\Channel();
             for ($i = 0; $i < $max; $i++) {
                 go(function () use ($db, $chan) {
-                    $db->prepare('select sleep(2)')->queryAll();
+                    $db->prepare('select sleep(1)')->queryAll();
                     $chan->push(true);
                 });
             }
@@ -25,7 +24,44 @@ final class PoolTest extends TestCase
                 $chan->pop();
             }
             $duration = time() - $time;
-            $_this->assertTrue($duration - 4 < 1 && $duration - 4 >= 0);
+            $_this->assertTrue($duration - 2 < 1 && $duration - 2 >= 0);
+        };
+        run($func);
+    }
+
+    public function testMaxLifetime(): void
+    {
+        $_this = $this;
+        $func  = function () use ($_this) {
+            $db              = db();
+            $db->maxLifetime = 1;
+
+            $conn = $db->borrow();
+            $id   = spl_object_hash($conn);
+            $conn = null;
+            sleep(1);
+            $conn = $db->borrow();
+            $id1  = spl_object_hash($conn);
+
+            $_this->assertNotEquals($id, $id1);
+        };
+        run($func);
+    }
+
+    public function testWaitTimeout(): void
+    {
+        $_this = $this;
+        $func  = function () use ($_this) {
+            $db              = db();
+            $db->maxOpen     = 1;
+            $db->waitTimeout = 0.001;
+
+            $conn = $db->borrow();
+            try {
+                $db->borrow();
+            } catch (\Throwable $exception) {
+                $_this->assertContains('Wait timeout', $exception->getMessage());
+            }
         };
         run($func);
     }
