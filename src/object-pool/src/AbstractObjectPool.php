@@ -20,20 +20,20 @@ abstract class AbstractObjectPool
      * @deprecated 废弃，使用 maxOpen 取代
      * @var int
      */
-    public $maxActive = 5;
+    public $maxActive = 4;
 
     /**
      * 最大活跃数
      * "0" 为不限制
      * @var int
      */
-    public $maxOpen = 5;
+    public $maxOpen = 4;
 
     /**
      * 最多可空闲数
      * @var int
      */
-    public $maxIdle = 5;
+    public $maxIdle = 4;
 
     /**
      * 连接可复用的最长时间
