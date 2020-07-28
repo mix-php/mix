@@ -106,7 +106,7 @@ abstract class AbstractConnection
      * @param \Throwable $e
      * @return bool
      */
-    protected static function isDisconnectException(\Throwable $e)
+    protected static function isDisconnectException(\Throwable $ex)
     {
         $disconnectMessages = [
             'server has gone away',
@@ -121,7 +121,7 @@ abstract class AbstractConnection
             'Resource deadlock avoided',
             'failed with errno',
         ];
-        $errorMessage       = $e->getMessage();
+        $errorMessage       = $ex->getMessage();
         foreach ($disconnectMessages as $message) {
             if (false !== stripos($errorMessage, $message)) {
                 return true;

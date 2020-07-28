@@ -52,6 +52,36 @@ abstract class AbstractConnection implements ConnectionInterface
     }
 
     /**
+     * 重新连接
+     * @throws \RedisException
+     */
+    protected function reconnect()
+    {
+        $this->close();
+        $this->connect();
+    }
+
+    /**
+     * 判断是否为断开连接异常
+     * @param \Throwable $e
+     * @return bool
+     */
+    protected static function isDisconnectException(\Throwable $ex)
+    {
+        $disconnectMessages = [
+            'failed with errno',
+            'connection lost',
+        ];
+        $errorMessage       = $ex->getMessage();
+        foreach ($disconnectMessages as $message) {
+            if (false !== stripos($errorMessage, $message)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * 调度事件
      * @param string $command
      * @param array $arguments
