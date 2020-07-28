@@ -19,8 +19,7 @@
   "require": {
     "php": ">=7.0.0",
     "ext-swoole": ">=4.4.4",
-    "psr/event-dispatcher": "^1.0",
-    "mix/bean": "~2.2.0"
+    "psr/event-dispatcher": "^1.0"
   },
   "autoload": {
     "psr-4": {

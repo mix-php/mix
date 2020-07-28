@@ -34,14 +34,36 @@ class Client
     /**
      * 最大连接数
      * @var int
+     * @deprecated 废弃，使用 maxOpen 取代
      */
-    public $maxActive = 5;
+    public $maxActive = 8;
+
+    /**
+     * 最大活跃数
+     * "0" 为不限制
+     * @var int
+     */
+    public $maxOpen = 8;
 
     /**
      * 最多可空闲连接数
      * @var int
      */
-    public $maxIdle = 5;
+    public $maxIdle = 8;
+
+    /**
+     * 连接可复用的最长时间
+     * "0" 为不限制
+     * @var int
+     */
+    public $maxLifetime = 0;
+
+    /**
+     * 等待新连接超时时间
+     * "0" 为不限制
+     * @var float
+     */
+    public $waitTimeout = 0.0;
 
     /**
      * 事件调度器
@@ -50,6 +72,7 @@ class Client
     public $dispatcher;
 
     /**
+     * 连接池
      * @var ConnectionPool
      */
     protected $pool;
@@ -68,16 +91,20 @@ class Client
         $this->timeout       = $timeout;
         $this->invokeTimeout = $invokeTimeout;
 
-        $pool             = new ConnectionPool([
-            'dialer' => new Dialer([
+        $this->maxOpen = &$this->maxActive; // 兼容旧版
+
+        $pool              = new ConnectionPool(
+            new Dialer([
                 'port'    => $this->port,
                 'timeout' => $this->timeout,
-            ]),
-        ]);
-        $pool->maxActive  = &$this->maxActive;
-        $pool->maxIdle    = &$this->maxIdle;
-        $pool->dispatcher = &$this->dispatcher;
-        $this->pool       = $pool;
+            ])
+        );
+        $pool->maxOpen     = &$this->maxOpen;
+        $pool->maxIdle     = &$this->maxIdle;
+        $pool->maxLifetime = &$this->maxLifetime;
+        $pool->waitTimeout = &$this->waitTimeout;
+        $pool->dispatcher  = &$this->dispatcher;
+        $this->pool        = $pool;
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace Mix\ObjectPool;
 
-use Mix\Bean\BeanInjector;
 use Mix\ObjectPool\Event\DiscardedEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Swoole\Coroutine\Channel;
@@ -16,24 +15,30 @@ abstract class AbstractObjectPool
 {
 
     /**
-     * 最大活跃数
-     * @deprecated 废弃，使用 maxOpen 取代
-     * @var int
+     * 拨号器
+     * @var DialerInterface
      */
-    public $maxActive = 4;
+    protected $dialer;
+
+    /**
+     * 最大活跃数
+     * @var int
+     * @deprecated 废弃，使用 maxOpen 取代
+     */
+    public $maxActive = 8;
 
     /**
      * 最大活跃数
      * "0" 为不限制
      * @var int
      */
-    public $maxOpen = 4;
+    public $maxOpen = 8;
 
     /**
      * 最多可空闲数
      * @var int
      */
-    public $maxIdle = 4;
+    public $maxIdle = 8;
 
     /**
      * 连接可复用的最长时间
@@ -48,12 +53,6 @@ abstract class AbstractObjectPool
      * @var float
      */
     public $waitTimeout = 0.0;
-
-    /**
-     * 拨号器
-     * @var DialerInterface
-     */
-    public $dialer;
 
     /**
      * 事件调度器
@@ -75,15 +74,15 @@ abstract class AbstractObjectPool
 
     /**
      * AbstractObjectPool constructor.
-     * @param array $config
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
+     * @param DialerInterface $dialer
      */
-    public function __construct(array $config = [])
+    public function __construct(DialerInterface $dialer)
     {
-        BeanInjector::inject($this, $config);
+        $this->dialer = $dialer;
+
         // 创建连接队列
         $this->queue = new Channel($this->maxIdle);
+
         // 兼容旧版属性
         if (isset($config['maxActive'])) {
             $this->maxOpen = $this->maxActive;
