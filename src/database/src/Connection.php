@@ -89,8 +89,8 @@ class Connection extends AbstractConnection
         try {
             // 执行父类方法
             return call_user_func_array("parent::{$name}", $arguments);
-        } catch (\Throwable $e) {
-            if (static::isDisconnectException($e) && !$this->inTransaction()) {
+        } catch (\Throwable $ex) {
+            if (static::isDisconnectException($ex) && !$this->inTransaction()) {
                 // 断开连接异常处理
                 $this->reconnect();
                 // 重新执行方法
@@ -99,48 +99,9 @@ class Connection extends AbstractConnection
                 // 丢弃连接
                 $this->driver->__discard();
                 // 抛出其他异常
-                throw $e;
+                throw $ex;
             }
         }
-    }
-
-    /**
-     * 判断是否为断开连接异常
-     * @param \Throwable $e
-     * @return bool
-     */
-    protected static function isDisconnectException(\Throwable $e)
-    {
-        $disconnectMessages = [
-            'server has gone away',
-            'no connection to the server',
-            'Lost connection',
-            'is dead or not enabled',
-            'Error while sending',
-            'decryption failed or bad record mac',
-            'server closed the connection unexpectedly',
-            'SSL connection has been closed unexpectedly',
-            'Error writing data to the connection',
-            'Resource deadlock avoided',
-            'failed with errno',
-        ];
-        $errorMessage       = $e->getMessage();
-        foreach ($disconnectMessages as $message) {
-            if (false !== stripos($errorMessage, $message)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 重新连接
-     * @throws \PDOException
-     */
-    protected function reconnect()
-    {
-        $this->close();
-        $this->connect();
     }
 
     /**

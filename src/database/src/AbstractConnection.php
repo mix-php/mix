@@ -52,8 +52,14 @@ abstract class AbstractConnection
     protected $values = [];
 
     /**
+     * 回收数据
+     * @var array [$sql, $params, $values]
+     */
+    protected $recycleData = [];
+
+    /**
      * 查询数据
-     * @var array
+     * @var array [$sql, $params, $values, $time]
      */
     protected $queryData = [];
 
@@ -82,6 +88,46 @@ abstract class AbstractConnection
     {
         $this->statement = null;
         $this->driver->close();
+    }
+
+    /**
+     * 重新连接
+     * @throws \PDOException
+     */
+    protected function reconnect()
+    {
+        $this->close();
+        $this->connect();
+        $this->recycle();
+    }
+
+    /**
+     * 判断是否为断开连接异常
+     * @param \Throwable $e
+     * @return bool
+     */
+    protected static function isDisconnectException(\Throwable $e)
+    {
+        $disconnectMessages = [
+            'server has gone away',
+            'no connection to the server',
+            'Lost connection',
+            'is dead or not enabled',
+            'Error while sending',
+            'decryption failed or bad record mac',
+            'server closed the connection unexpectedly',
+            'SSL connection has been closed unexpectedly',
+            'Error writing data to the connection',
+            'Resource deadlock avoided',
+            'failed with errno',
+        ];
+        $errorMessage       = $e->getMessage();
+        foreach ($disconnectMessages as $message) {
+            if (false !== stripos($errorMessage, $message)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -223,9 +269,18 @@ abstract class AbstractConnection
      */
     protected function clear()
     {
-        $this->sql    = '';
-        $this->params = [];
-        $this->values = [];
+        $this->recycleData = [$this->sql, $this->params, $this->values];
+        $this->sql         = '';
+        $this->params      = [];
+        $this->values      = [];
+    }
+
+    /**
+     * 回收清扫的查询数据，用于重连后恢复查询
+     */
+    protected function recycle()
+    {
+        list($this->sql, $this->params, $this->values) = $this->recycleData;
     }
 
     /**
@@ -276,12 +331,12 @@ abstract class AbstractConnection
         } finally {
             $time               = round((static::microtime() - $microtime) * 1000, 2);
             $this->queryData[3] = $time;
+
             $this->clear();
 
             $log = $this->getLastLog();
             $this->dispatch($log['sql'], $log['bindings'], $log['time'], $error ?? null);
         }
-        // 返回
         return $success;
     }
 

@@ -30,15 +30,4 @@ final class PoolTest extends TestCase
         run($func);
     }
 
-    // 测试协程外部析构
-    public function testDestruct(): void
-    {
-        $_this = $this;
-        $func  = function () use ($_this) {
-            $GLOBALS['conn'] = conn();
-        };
-        run($func);
-        $_this->assertTrue(true);
-    }
-
 }
