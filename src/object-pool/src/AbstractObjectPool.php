@@ -43,6 +43,13 @@ abstract class AbstractObjectPool
     public $maxLifetime = 0;
 
     /**
+     * 等待新连接超时时间
+     * "0" 为不限制
+     * @var float
+     */
+    public $waitTimeout = 0.0;
+
+    /**
      * 拨号器
      * @var DialerInterface
      */
@@ -213,7 +220,11 @@ abstract class AbstractObjectPool
      */
     protected function pop()
     {
-        return $this->queue->pop();
+        $timeout = -1;
+        if ($this->waitTimeout) {
+            $timeout = $this->waitTimeout;
+        }
+        return $this->queue->pop($timeout);
     }
 
     /**
