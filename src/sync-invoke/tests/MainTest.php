@@ -11,7 +11,7 @@ final class MainTest extends TestCase
         $_this = $this;
         $func  = function () use ($_this) {
             $server = new \Mix\SyncInvoke\Server(9505, true);
-            xgo(function () use ($server) {
+            go(function () use ($server) {
                 $server->start();
             });
 
