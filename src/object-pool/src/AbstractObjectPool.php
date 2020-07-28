@@ -17,15 +17,30 @@ abstract class AbstractObjectPool
 
     /**
      * 最大活跃数
+     * @deprecated 废弃，使用 maxOpen 取代
      * @var int
      */
     public $maxActive = 5;
+
+    /**
+     * 最大活跃数
+     * "0" 为不限制
+     * @var int
+     */
+    public $maxOpen = 5;
 
     /**
      * 最多可空闲数
      * @var int
      */
     public $maxIdle = 5;
+
+    /**
+     * 连接可复用的最长时间
+     * "0" 为不限制
+     * @var int
+     */
+    public $maxLifetime = 0;
 
     /**
      * 拨号器
@@ -62,6 +77,10 @@ abstract class AbstractObjectPool
         BeanInjector::inject($this, $config);
         // 创建连接队列
         $this->queue = new Channel($this->maxIdle);
+        // 兼容旧版属性
+        if (isset($config['maxActive'])) {
+            $this->maxOpen = $this->maxActive;
+        }
     }
 
     /**
@@ -72,8 +91,10 @@ abstract class AbstractObjectPool
     {
         // 连接创建时会挂起当前协程，导致 actives 未增加，因此需先 actives++ 连接创建成功后 actives--
         $closure            = function () {
-            $connection       = $this->dialer->dial();
-            $connection->pool = $this;
+            /** @var ObjectTrait $connection */
+            $connection             = $this->dialer->dial();
+            $connection->pool       = $this;
+            $connection->createTime = time();
             return $connection;
         };
         $id                 = spl_object_hash($closure);
@@ -92,7 +113,9 @@ abstract class AbstractObjectPool
      */
     public function borrow()
     {
-        if ($this->getIdleNumber() > 0 || $this->getTotalNumber() >= $this->maxActive) {
+        /** @var ObjectTrait $connection */
+        $connection = null;
+        if ($this->getIdleNumber() > 0 || ($this->maxOpen && $this->getTotalNumber() >= $this->maxOpen)) {
             // 队列有连接，从队列取
             // 达到最大连接数，从队列取
             $connection = $this->pop();
@@ -103,6 +126,13 @@ abstract class AbstractObjectPool
         // 登记, 队列中出来的也需要登记，因为有可能是 discard 中创建的新连接
         $id                 = spl_object_hash($connection);
         $this->actives[$id] = ''; // 不可保存外部连接的引用，否则导致外部连接不析构
+
+        // 检查最大生命周期
+        if ($this->maxLifetime && $connection->createTime + $this->maxLifetime <= time()) {
+            $this->discard($connection);
+            return $this->borrow();
+        }
+
         // 返回
         return $connection;
     }

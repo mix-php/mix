@@ -16,6 +16,11 @@ trait ObjectTrait
     public $pool;
 
     /**
+     * @var int
+     */
+    public $createTime = 0;
+
+    /**
      * 丢弃连接
      * @return bool
      */
