@@ -10,7 +10,7 @@ class Mix
     /**
      * @var string
      */
-    public static $version = '2.2.7';
+    public static $version = '2.2.9';
 
     /**
      * @var \Mix\Console\Application
