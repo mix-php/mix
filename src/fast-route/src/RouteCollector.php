@@ -54,13 +54,29 @@ class RouteCollector
      * @param string|string[] $httpMethod
      * @param string $route
      * @param callable $handler
-     * @param array $middleware
+     * @param string[] $middleware
+     * @deprecated 废弃，请使用 match 替代
      */
     public function route($httpMethod, string $route, $handler, array $middleware = [])
     {
+        $this->match((array)$httpMethod, $route, $handler, $middleware);
+    }
+
+    /**
+     * Adds a route to the collection.
+     *
+     * The syntax used in the $route string depends on the used route parser.
+     *
+     * @param string[] $httpMethod
+     * @param string $route
+     * @param callable $handler
+     * @param string[] $middleware
+     */
+    public function match(array $httpMethod, string $route, $handler, array $middleware = [])
+    {
         $route      = $this->currentGroupPrefix . $route;
         $routeDatas = $this->routeParser->parse($route);
-        foreach ((array)$httpMethod as $method) {
+        foreach ($httpMethod as $method) {
             foreach ($routeDatas as $routeData) {
                 $this->dataGenerator->addRoute($method, $routeData, [$handler, array_merge($this->currentGroupMiddleware, $middleware)]);
             }
@@ -74,6 +90,7 @@ class RouteCollector
      *
      * @param string $prefix
      * @param callable $callback
+     * @param string[] $middleware
      */
     public function group(string $prefix, callable $callback, array $middleware = [])
     {
@@ -90,17 +107,31 @@ class RouteCollector
     }
 
     /**
+     * Adds a Any route to the collection
+     *
+     * This is simply an alias of $this->addRoute('*', $route, $handler)
+     *
+     * @param string $route
+     * @param callable $handler
+     * @param string[] $middleware
+     */
+    public function any(string $route, $handler, array $middleware = [])
+    {
+        $this->match(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'], $route, $handler, $middleware);
+    }
+
+    /**
      * Adds a GET route to the collection
      *
      * This is simply an alias of $this->addRoute('GET', $route, $handler)
      *
      * @param string $route
      * @param callable $handler
-     * @param array $middleware
+     * @param string[] $middleware
      */
     public function get(string $route, $handler, array $middleware = [])
     {
-        $this->route('GET', $route, $handler, $middleware);
+        $this->match(['GET'], $route, $handler, $middleware);
     }
 
     /**
@@ -110,11 +141,11 @@ class RouteCollector
      *
      * @param string $route
      * @param callable $handler
-     * @param array $middleware
+     * @param string[] $middleware
      */
     public function post(string $route, $handler, array $middleware = [])
     {
-        $this->route('POST', $route, $handler, $middleware);
+        $this->match(['POST'], $route, $handler, $middleware);
     }
 
     /**
@@ -124,11 +155,11 @@ class RouteCollector
      *
      * @param string $route
      * @param callable $handler
-     * @param array $middleware
+     * @param string[] $middleware
      */
     public function put(string $route, $handler, array $middleware = [])
     {
-        $this->route('PUT', $route, $handler, $middleware);
+        $this->match(['PUT'], $route, $handler, $middleware);
     }
 
     /**
@@ -138,11 +169,11 @@ class RouteCollector
      *
      * @param string $route
      * @param callable $handler
-     * @param array $middleware
+     * @param string[] $middleware
      */
     public function delete(string $route, $handler, array $middleware = [])
     {
-        $this->route('DELETE', $route, $handler, $middleware);
+        $this->match(['DELETE'], $route, $handler, $middleware);
     }
 
     /**
@@ -152,11 +183,11 @@ class RouteCollector
      *
      * @param string $route
      * @param callable $handler
-     * @param array $middleware
+     * @param string[] $middleware
      */
     public function patch(string $route, $handler, array $middleware = [])
     {
-        $this->route('PATCH', $route, $handler, $middleware);
+        $this->match(['PATCH'], $route, $handler, $middleware);
     }
 
     /**
@@ -166,11 +197,25 @@ class RouteCollector
      *
      * @param string $route
      * @param callable $handler
-     * @param array $middleware
+     * @param string[] $middleware
      */
     public function head(string $route, $handler, array $middleware = [])
     {
-        $this->route('HEAD', $route, $handler, $middleware);
+        $this->match(['HEAD'], $route, $handler, $middleware);
+    }
+
+    /**
+     * Adds a OPTIONS route to the collection
+     *
+     * This is simply an alias of $this->addRoute('OPTIONS', $route, $handler)
+     *
+     * @param string $route
+     * @param callable $handler
+     * @param string[] $middleware
+     */
+    public function options(string $route, $handler, array $middleware = [])
+    {
+        $this->match(['OPTIONS'], $route, $handler, $middleware);
     }
 
     /**
