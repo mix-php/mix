@@ -64,6 +64,11 @@ class QueryBuilder
     protected $_limit = 0;
 
     /**
+     * @var string
+     */
+    protected $_lock = '';
+
+    /**
      * QueryBuilder constructor.
      * @param Connection $connection
      */
@@ -219,6 +224,26 @@ class QueryBuilder
     }
 
     /**
+     * 意向排它锁
+     * @return $this
+     */
+    public function lockForUpdate()
+    {
+        $this->_lock = 'FOR UPDATE';
+        return $this;
+    }
+
+    /**
+     * 意向共享锁
+     * @return $this
+     */
+    public function sharedLock()
+    {
+        $this->_lock = 'LOCK IN SHARE MODE';
+        return $this;
+    }
+
+    /**
      * 预处理
      * @return Connection
      */
@@ -274,6 +299,10 @@ class QueryBuilder
         // limit and offset
         if ($this->_limit > 0) {
             $sql[] = ['LIMIT :__offset, :__limit', 'params' => ['__offset' => $this->_offset, '__limit' => $this->_limit]];
+        }
+        // lock
+        if ($this->_lock) {
+            $sql[] = [$this->_lock];
         }
         // 返回
         return $this->connection->prepare($sql);
