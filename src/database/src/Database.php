@@ -107,7 +107,7 @@ class Database
                 'username' => $this->username,
                 'password' => $this->password,
                 'options'  => $this->options,
-            ]),
+            ])
         );
         $pool->maxOpen     = &$this->maxOpen;
         $pool->maxIdle     = &$this->maxIdle;
