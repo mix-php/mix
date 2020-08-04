@@ -230,6 +230,7 @@ abstract class AbstractConnection
 
     /**
      * 构建查询
+     * @throws \PDOException
      */
     protected function build()
     {
@@ -245,21 +246,37 @@ abstract class AbstractConnection
             }
             // 有参数
             list($sql, $params) = $this->bindArrayParams($this->sql, $this->params);
-            $this->statement = $this->driver->instance()->prepare($sql);
+            $statement = $this->driver->instance()->prepare($sql);
+            if (!$statement) {
+                throw new \PDOException('PDO prepare failed');
+            }
+            $this->statement = $statement;
             $this->queryData = [$sql, $params, [], 0]; // 必须在 bindParam 前，才能避免类型被转换
             foreach ($params as $key => &$value) {
-                $this->statement->bindParam($key, $value);
+                if (!$this->statement->bindParam($key, $value)) {
+                    throw new \PDOException('PDOStatement bindParam failed');
+                }
             }
         } elseif (!empty($this->values)) {
             // 批量插入
-            $this->statement = $this->driver->instance()->prepare($this->sql);
+            $statement = $this->driver->instance()->prepare($this->sql);
+            if (!$statement) {
+                throw new \PDOException('PDO prepare failed');
+            }
+            $this->statement = $statement;
             $this->queryData = [$this->sql, [], $this->values, 0];
             foreach ($this->values as $key => $value) {
-                $this->statement->bindValue($key + 1, $value);
+                if (!$this->statement->bindValue($key + 1, $value)) {
+                    throw new \PDOException('PDOStatement bindValue failed');
+                }
             }
         } else {
             // 无参数
-            $this->statement = $this->driver->instance()->prepare($this->sql);
+            $statement = $this->driver->instance()->prepare($this->sql);
+            if (!$statement) {
+                throw new \PDOException('PDO prepare failed');
+            }
+            $this->statement = $statement;
             $this->queryData = [$this->sql, [], [], 0];
         }
     }
