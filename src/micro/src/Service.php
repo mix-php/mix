@@ -40,7 +40,7 @@ class Service
     {
         // 捕获信号
         if ($this->options->signal) {
-            $notify = new SignalNotify(SIGINT, SIGTERM, SIGQUIT);
+            $notify = new SignalNotify(SIGHUP, SIGINT, SIGTERM);
             xgo(function () use ($notify) {
                 $signal = $notify->channel()->pop();
 
