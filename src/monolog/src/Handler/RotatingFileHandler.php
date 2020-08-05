@@ -107,8 +107,8 @@ class RotatingFileHandler extends \Monolog\Handler\RotatingFileHandler
                         @copy($this->filename, $filename);
                         ftruncate($file, 0);
                     }
-                    flock($file, LOCK_UN);
                 }
+                flock($file, LOCK_UN);
                 fclose($file);
             }
             $this->nextRotation = new \DateTimeImmutable('tomorrow');
