@@ -84,24 +84,24 @@ class Application
      * @var array
      */
     public $beans = [];
+    
+    /**
+     * Error
+     * @var Error
+     */
+    public $error;
+
+    /**
+     * EventDispatcher
+     * @var EventDispatcherInterface
+     */
+    public $dispatcher;
 
     /**
      * 是否为单命令
      * @var bool
      */
     protected $isSingleCommand = false;
-
-    /**
-     * Error
-     * @var Error
-     */
-    protected $error;
-
-    /**
-     * EventDispatcher
-     * @var EventDispatcherInterface
-     */
-    protected $dispatcher;
 
     /**
      * Application constructor.

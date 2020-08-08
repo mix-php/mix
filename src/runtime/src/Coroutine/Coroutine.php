@@ -23,15 +23,11 @@ class Coroutine
                 // 执行闭包
                 call_user_func_array($callback, $params);
             } catch (\Throwable $e) {
-                $isMix = class_exists(\Mix::class);
                 // 错误处理
-                if (!$isMix) {
+                if (!class_exists(\Mix::class)) {
                     throw $e;
                 }
-                // Mix错误处理
-                /** @var \Mix\Console\Error $error */
-                $error = \Mix::$app->context->get('error');
-                $error->handleException($e);
+                \Mix::$app->error->handleException($e);
             }
         });
     }
@@ -48,15 +44,11 @@ class Coroutine
                 // 执行闭包
                 call_user_func($callback);
             } catch (\Throwable $e) {
-                $isMix = class_exists(\Mix::class);
                 // 错误处理
-                if (!$isMix) {
+                if (!class_exists(\Mix::class)) {
                     throw $e;
                 }
-                // Mix错误处理
-                /** @var \Mix\Console\Error $error */
-                $error = \Mix::$app->context->get('error');
-                $error->handleException($e);
+                \Mix::$app->error->handleException($e);
             }
         });
     }
