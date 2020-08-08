@@ -96,22 +96,7 @@ class Error
      */
     public function appException($ex)
     {
-        $event = new HandleExceptionEvent();
-        $this->dispatch($event);
-        // handle
         $this->handleException($ex);
-    }
-
-    /**
-     * Dispatch
-     * @param object $event
-     */
-    protected function dispatch(object $event)
-    {
-        if (!isset($this->dispatcher)) {
-            return;
-        }
-        $this->dispatcher->dispatch($event);
     }
 
     /**
@@ -197,14 +182,31 @@ class Error
      */
     public function handleException(\Throwable $ex)
     {
-        // 日志处理
+        // 命令处理异常
         if ($ex instanceof NotFoundException) {
-            // 打印到屏幕
             println($ex->getMessage());
             return;
         }
+
         // 输出日志
         $this->log($ex);
+
+        // event dispatch
+        $event            = new HandleExceptionEvent();
+        $event->exception = $ex;
+        $this->dispatch($event);
+    }
+
+    /**
+     * Dispatch
+     * @param object $event
+     */
+    protected function dispatch(object $event)
+    {
+        if (!isset($this->dispatcher)) {
+            return;
+        }
+        $this->dispatcher->dispatch($event);
     }
 
     /**
