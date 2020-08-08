@@ -13,8 +13,14 @@ use Psr\Http\Message\UploadedFileInterface;
  * @package Mix\Validate
  * @author liu,jian <coder.keda@gmail.com>
  */
-class BaseValidator
+abstract class BaseValidator
 {
+
+    /**
+     * 严格模式
+     * @var bool
+     */
+    public $strict;
 
     /**
      * 必填字段
@@ -107,7 +113,7 @@ class BaseValidator
         $this->errors    = [];
         $this->_settings = [];
         // 验证
-        if ($this->required() && $this->scalar() && !(is_null($this->attributeValue) || $this->attributeValue === '')) {
+        if ($this->required() && $this->scalar() && !(is_null($this->attributeValue) || (!$this->strict && $this->attributeValue === ''))) {
             // 预处理
             foreach ($this->options as $name => $option) {
                 if (!in_array($name, $this->_enabledOptions)) {
@@ -183,7 +189,7 @@ class BaseValidator
     protected function required()
     {
         $value = $this->attributeValue;
-        if ($this->isRequired && (is_null($value) || $value === '')) {
+        if ($this->isRequired && (is_null($value) || (!$this->strict && $value === ''))) {
             // 设置错误消息
             $defaultMessage = "{$this->attribute}不能为空.";
             $this->setError(__FUNCTION__, $defaultMessage);

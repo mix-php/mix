@@ -11,7 +11,7 @@ use Psr\Http\Message\UploadedFileInterface;
  * @package Mix\Validate
  * @author liu,jian <coder.keda@gmail.com>
  */
-class Validator implements \JsonSerializable
+abstract class Validator implements \JsonSerializable
 {
 
     /**
@@ -23,6 +23,11 @@ class Validator implements \JsonSerializable
      * @var UploadedFileInterface[]
      */
     public $uploadedFiles = [];
+
+    /**
+     * @var bool
+     */
+    public $strict = false;
 
     /**
      * @var string
@@ -59,13 +64,15 @@ class Validator implements \JsonSerializable
      * Validator constructor.
      * @param array $attributes
      * @param UploadedFileInterface[] $uploadedFiles
+     * @param bool $strict
      */
-    public function __construct(array $attributes, array $uploadedFiles = [])
+    public function __construct(array $attributes, array $uploadedFiles = [], $strict = false)
     {
         // 为了效验对象数组类型，使用BeanInjector
         BeanInjector::inject($this, [
             'attributes'    => $attributes,
             'uploadedFiles' => $uploadedFiles,
+            'strict'        => $strict,
         ]);
     }
 
@@ -148,6 +155,7 @@ class Validator implements \JsonSerializable
             // 实例化
             $validatorClass           = $this->_validators[$validatorType];
             $validator                = new $validatorClass([
+                'strict'         => $this->strict,
                 'isRequired'     => in_array($attribute, $scenario['required']),
                 'options'        => $rule,
                 'attribute'      => $attribute,
