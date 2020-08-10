@@ -25,11 +25,6 @@ abstract class Validator implements \JsonSerializable
     public $uploadedFiles = [];
 
     /**
-     * @var bool
-     */
-    public $strict = false;
-
-    /**
      * @var string
      */
     protected $_scenario = '';
@@ -64,15 +59,13 @@ abstract class Validator implements \JsonSerializable
      * Validator constructor.
      * @param array $attributes
      * @param UploadedFileInterface[] $uploadedFiles
-     * @param bool $strict
      */
-    public function __construct(array $attributes, array $uploadedFiles = [], $strict = false)
+    public function __construct(array $attributes, array $uploadedFiles = [])
     {
         // 为了效验对象数组类型，使用BeanInjector
         BeanInjector::inject($this, [
             'attributes'    => $attributes,
             'uploadedFiles' => $uploadedFiles,
-            'strict'        => $strict,
         ]);
     }
 
@@ -155,7 +148,6 @@ abstract class Validator implements \JsonSerializable
             // 实例化
             $validatorClass           = $this->_validators[$validatorType];
             $validator                = new $validatorClass([
-                'strict'         => $this->strict,
                 'isRequired'     => in_array($attribute, $scenario['required']),
                 'options'        => $rule,
                 'attribute'      => $attribute,
