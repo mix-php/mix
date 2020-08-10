@@ -1,11 +1,10 @@
 <?php
 
-namespace Mix\Process;
+namespace Mix\Console;
 
 /**
  * Class Process
- * @package Mix\Process
- * @deprecated 废弃，使用 Mix\Console\Process 取代
+ * @package Mix\Console
  */
 class Process
 {
