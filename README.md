@@ -1,4 +1,4 @@
-> OpenMix 出品：http://www.openmix.org
+> OpenMix 出品：http://openmix.org
 
 <br>
 
