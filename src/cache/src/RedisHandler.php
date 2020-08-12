@@ -95,7 +95,7 @@ class RedisHandler implements HandlerInterface
     {
         $iterator = null;
         while (true) {
-            $keys = $this->redis->scan($iterator, "{$this->keyPrefix}*");
+            $keys = $this->redis->scan($iterator, "{$this->keyPrefix}*", 1000);
             if ($keys === false) {
                 return true;
             }
