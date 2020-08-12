@@ -90,17 +90,24 @@ class RedisHandler implements HandlerInterface
     /**
      * 清除缓存
      * @return bool
+     * @throws \RedisClusterException
      */
     public function clear()
     {
         $iterator = null;
         while (true) {
+            $lastIterator = $iterator;
+
             $keys = $this->redis->scan($iterator, "{$this->keyPrefix}*", 1000);
             if ($keys === false) {
                 return true;
             }
             foreach ($keys as $key) {
                 $this->redis->del($key);
+            }
+
+            if ($lastIterator === $iterator) {
+                throw new \RedisClusterException('Iterator error: Redis cluster mode does not support scan');
             }
         }
         return true;
