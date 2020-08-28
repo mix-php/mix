@@ -23,6 +23,10 @@
 - `V2.1`: 基于 Swoole 4.4+ 单线程协程 PHP 框架 
 - `V2.2`: 基于 Swoole 4.4+ 单线程协程 PHP 微服务框架 🆕
 
+## 与 Mix Go 的关系
+
+[Mix Go](https://github.com/mix-go/mix) 设计哲学与 Mix PHP 几乎完全一致，PHP 的用户可以非常容易的切换到 Mix Go 进行开发，达到学一会二的效果，[OpenMix](http://openmix.org) 可能是现在唯一一个打造跨语言框架的开源机构。
+
 ## 与传统 MVC 框架比较
 
 传统框架大部分都是在 HTTP 领域开发，而 Mix 能开发 HTTP、WebSocket、TCP、UDP、RPC 几乎全部互联网领域。
