@@ -26,14 +26,14 @@ abstract class AbstractObjectPool
      * "0" 为不限制，默认等于cpu数量
      * @var int
      */
-    protected $maxOpen = 0;
+    protected $maxOpen = -1;
 
     /**
      * 最多可空闲数
      * 默认等于cpu数量
      * @var int
      */
-    protected $maxIdle = 0;
+    protected $maxIdle = -1;
 
     /**
      * 连接可复用的最长时间
