@@ -21,14 +21,23 @@ class Dialer
     /**
      * 最大连接数
      * @var int
+     * @deprecated 废弃，使用 maxOpen 取代
      */
-    public $maxActive = 10;
+    public $maxActive = -1;
+
+    /**
+     * 最大活跃数
+     * "0" 为不限制，默认等于cpu数量
+     * @var int
+     */
+    public $maxOpen = -1;
 
     /**
      * 最多可空闲连接数
+     * 默认等于cpu数量
      * @var int
      */
-    public $maxIdle = 5;
+    public $maxIdle = -1;
 
     /**
      * 事件调度器
@@ -54,9 +63,7 @@ class Dialer
      */
     public function dial(string $dsn, string $username, string $password): Database
     {
-        $db             = new Database($dsn, $username, $password, $this->options);
-        $db->maxActive  = $this->maxActive;
-        $db->maxIdle    = $this->maxIdle;
+        $db             = new Database($dsn, $username, $password, $this->options, $this->maxOpen, $this->maxIdle);
         $db->dispatcher = $this->dispatcher;
         return $db;
     }

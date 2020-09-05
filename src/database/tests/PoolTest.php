@@ -11,7 +11,7 @@ final class PoolTest extends TestCase
         $_this = $this;
         $func  = function () use ($_this) {
             $db   = db();
-            $max  = $db->maxOpen * 2;
+            $max  = swoole_cpu_num() * 2;
             $time = time();
             $chan = new \Swoole\Coroutine\Channel();
             for ($i = 0; $i < $max; $i++) {
@@ -33,8 +33,8 @@ final class PoolTest extends TestCase
     {
         $_this = $this;
         $func  = function () use ($_this) {
-            $db              = db();
-            $db->maxLifetime = 1;
+            $db = db();
+            $db->setMaxLifetime(1);
 
             $conn = $db->borrow();
             $id   = spl_object_hash($conn);
@@ -52,9 +52,9 @@ final class PoolTest extends TestCase
     {
         $_this = $this;
         $func  = function () use ($_this) {
-            $db              = db();
-            $db->maxOpen     = 1;
-            $db->waitTimeout = 0.001;
+            $db = db();
+            $db->setMaxOpen(1);
+            $db->setWaitTimeout(0.001);
 
             $conn = $db->borrow();
             try {

@@ -23,37 +23,31 @@ abstract class AbstractObjectPool
 
     /**
      * 最大活跃数
-     * @var int
-     * @deprecated 废弃，使用 maxOpen 取代
-     */
-    public $maxActive = 8;
-
-    /**
-     * 最大活跃数
-     * "0" 为不限制
+     * "0" 为不限制，默认等于cpu数量
      * @var int
      */
-    public $maxOpen = 8;
+    protected $maxOpen = 0;
 
     /**
      * 最多可空闲数
+     * 默认等于cpu数量
      * @var int
      */
-    public $maxIdle = 8;
+    protected $maxIdle = 0;
 
     /**
      * 连接可复用的最长时间
      * "0" 为不限制
      * @var int
      */
-    public $maxLifetime = 0;
+    protected $maxLifetime = 0;
 
     /**
      * 等待新连接超时时间
      * "0" 为不限制
      * @var float
      */
-    public $waitTimeout = 0.0;
+    protected $waitTimeout = 0.0;
 
     /**
      * 事件调度器
@@ -76,18 +70,27 @@ abstract class AbstractObjectPool
     /**
      * AbstractObjectPool constructor.
      * @param DialerInterface $dialer
+     * @param int $maxOpen
+     * @param int $maxIdle
+     * @param int $maxLifetime
+     * @param float $waitTimeout
      */
-    public function __construct(DialerInterface $dialer)
+    public function __construct(DialerInterface $dialer, int $maxOpen = -1, int $maxIdle = -1, int $maxLifetime = 0, float $waitTimeout = 0.0)
     {
-        $this->dialer = $dialer;
-
+        $this->dialer      = $dialer;
+        $this->maxOpen     = $maxOpen;
+        $this->maxIdle     = $maxIdle;
+        $this->maxLifetime = $maxLifetime;
+        $this->waitTimeout = $waitTimeout;
+        // 默认连接池数量等于 cpu 数量
+        if ($maxOpen == -1) {
+            $this->maxOpen = swoole_cpu_num();
+        }
+        if ($maxIdle == -1) {
+            $this->maxIdle = swoole_cpu_num();
+        }
         // 创建连接队列
         $this->queue = new Channel($this->maxIdle);
-
-        // 兼容旧版属性
-        if (isset($config['maxActive'])) {
-            $this->maxOpen = $this->maxActive;
-        }
     }
 
     /**
