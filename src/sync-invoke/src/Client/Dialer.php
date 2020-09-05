@@ -27,14 +27,23 @@ class Dialer
     /**
      * 最大连接数
      * @var int
+     * @deprecated 废弃，使用 maxOpen 取代
      */
-    public $maxActive = 5;
+    public $maxActive = -1;
+
+    /**
+     * 最大活跃数
+     * "0" 为不限制，默认等于cpu数量
+     * @var int
+     */
+    public $maxOpen = -1;
 
     /**
      * 最多可空闲连接数
+     * 默认等于cpu数量
      * @var int
      */
-    public $maxIdle = 5;
+    public $maxIdle = -1;
 
     /**
      * 事件调度器
@@ -62,9 +71,7 @@ class Dialer
      */
     public function dial(int $port)
     {
-        $client             = new Client($port, $this->timeout, $this->invokeTimeout);
-        $client->maxActive  = $this->maxActive;
-        $client->maxIdle    = $this->maxIdle;
+        $client             = new Client($port, $this->timeout, $this->invokeTimeout, $this->maxOpen, $this->maxIdle);
         $client->dispatcher = $this->dispatcher;
         return $client;
     }
