@@ -11,7 +11,7 @@ final class PoolTest extends TestCase
         $_this = $this;
         $func  = function () use ($_this) {
             $redis = redis();
-            $max   = $redis->maxOpen * 2;
+            $max   = swoole_cpu_num() * 2;
             $time  = time();
             $chan  = new \Swoole\Coroutine\Channel();
             for ($i = 0; $i < $max; $i++) {
@@ -33,8 +33,8 @@ final class PoolTest extends TestCase
     {
         $_this = $this;
         $func  = function () use ($_this) {
-            $redis              = redis();
-            $redis->maxLifetime = 1;
+            $redis = redis();
+            $redis->setMaxLifetime(1);
 
             $conn = $redis->borrow();
             $id   = spl_object_hash($conn);
@@ -52,9 +52,9 @@ final class PoolTest extends TestCase
     {
         $_this = $this;
         $func  = function () use ($_this) {
-            $redis              = redis();
-            $redis->maxOpen     = 1;
-            $redis->waitTimeout = 0.001;
+            $redis = redis();
+            $redis->setMaxOpen(1);
+            $redis->setWaitTimeout(0.001);
 
             $conn = $redis->borrow();
             try {
