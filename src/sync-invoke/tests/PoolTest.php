@@ -17,7 +17,7 @@ final class PoolTest extends TestCase
 
             $dialer = new \Mix\SyncInvoke\Client\Dialer();
             $client = $dialer->dial(9505);
-            $max    = $client->maxOpen * 2;
+            $max    = swoole_cpu_num() * 2;
             $time   = time();
             $chan   = new \Swoole\Coroutine\Channel();
             for ($i = 0; $i < $max; $i++) {
