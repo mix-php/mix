@@ -15,6 +15,7 @@ class Client
 {
 
     /**
+     * Port
      * @var int
      */
     protected $port;
@@ -42,6 +43,7 @@ class Client
      * 最大活跃数
      * "0" 为不限制，默认等于cpu数量
      * @var int
+     * @deprecated 应该设置为 protected，为了向下兼容而保留 public
      */
     public $maxOpen = -1;
 
@@ -49,6 +51,7 @@ class Client
      * 最多可空闲连接数
      * 默认等于cpu数量
      * @var int
+     * @deprecated 应该设置为 protected，为了向下兼容而保留 public
      */
     public $maxIdle = -1;
 
@@ -56,6 +59,7 @@ class Client
      * 连接可复用的最长时间
      * "0" 为不限制
      * @var int
+     * @deprecated 应该设置为 protected，为了向下兼容而保留 public
      */
     public $maxLifetime = 0;
 
@@ -63,6 +67,7 @@ class Client
      * 等待新连接超时时间
      * "0" 为不限制
      * @var float
+     * @deprecated 应该设置为 protected，为了向下兼容而保留 public
      */
     public $waitTimeout = 0.0;
 

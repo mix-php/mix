@@ -49,6 +49,7 @@ class Database
      * 最大活跃数
      * "0" 为不限制，默认等于cpu数量
      * @var int
+     * @deprecated 应该设置为 protected，为了向下兼容而保留 public
      */
     public $maxOpen = -1;
 
@@ -56,6 +57,7 @@ class Database
      * 最多可空闲连接数
      * 默认等于cpu数量
      * @var int
+     * @deprecated 应该设置为 protected，为了向下兼容而保留 public
      */
     public $maxIdle = -1;
 
@@ -63,6 +65,7 @@ class Database
      * 连接可复用的最长时间
      * "0" 为不限制
      * @var int
+     * @deprecated 应该设置为 protected，为了向下兼容而保留 public
      */
     public $maxLifetime = 0;
 
@@ -70,6 +73,7 @@ class Database
      * 等待新连接超时时间
      * "0" 为不限制
      * @var float
+     * @deprecated 应该设置为 protected，为了向下兼容而保留 public
      */
     public $waitTimeout = 0.0;
 
@@ -91,10 +95,15 @@ class Database
      * @param string $username
      * @param string $password
      * @param array $options
+     * @param int $maxOpen
+     * @param int $maxIdle
+     * @param int $maxLifetime
+     * @param float $waitTimeout
      * @throws \PhpDocReader\AnnotationException
      * @throws \ReflectionException
      */
-    public function __construct(string $dsn, string $username, string $password, array $options = [], int $maxOpen = -1, int $maxIdle = -1, int $maxLifetime = 0, float $waitTimeout = 0.0)
+    public function __construct(string $dsn, string $username, string $password, array $options = [],
+                                int $maxOpen = -1, int $maxIdle = -1, int $maxLifetime = 0, float $waitTimeout = 0.0)
     {
         $this->dsn         = $dsn;
         $this->username    = $username;
