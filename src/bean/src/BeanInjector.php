@@ -56,7 +56,7 @@ class BeanInjector
     public static function inject($object, array $properties)
     {
         // 解决 BeanInjector 使用了 PhpDocReader UseStatementParser::getFileContent 获取注释类型时使用了 file 操作，会导致 SWOOLE_HOOK_FILE 切换协程，使单例失效
-        $isSwoole = extension_loaded('swoole');
+        $isSwoole = extension_loaded('swoole') and class_exists('Swoole\Runtime');
         $flags    = 1879048191; // 1879048191 = SWOOLE_HOOK_ALL
         if (method_exists('Swoole\Runtime', 'getHookFlags')) {
             $flags = \Swoole\Runtime::getHookFlags();
