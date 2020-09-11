@@ -1,4 +1,4 @@
-> OpenMix 出品：http://openmix.org
+> OpenMix 出品：https://openmix.org
 
 <br>
 
@@ -75,7 +75,7 @@
 
 MixPHP开发指南：
 
-- http://doc.mixphp.cn
+- https://openmix.org/mix-php/doc
 - https://www.kancloud.cn/onanying/mixphp2-2/content
 
 ## 环境要求
