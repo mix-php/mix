@@ -27,7 +27,7 @@ class Router implements ServerHandlerInterface, RouterInterface
     /**
      * @var array
      */
-    protected $middleware;
+    protected $globalMiddleware;
 
     /**
      * @var Dispatcher
@@ -42,9 +42,9 @@ class Router implements ServerHandlerInterface, RouterInterface
     /**
      * Router constructor.
      * @param string|callable|null $routeDefinition callback or file path or null
-     * @param array $middleware
+     * @param array $globalMiddleware
      */
-    public function __construct($routeDefinition = null, array $middleware = [])
+    public function __construct($routeDefinition = null, array $globalMiddleware = [])
     {
         $this->options = [
             'routeParser'    => 'FastRoute\\RouteParser\\Std',
@@ -60,7 +60,7 @@ class Router implements ServerHandlerInterface, RouterInterface
             $this->parse($routeDefinition);
         }
 
-        $this->middleware = $middleware;
+        $this->globalMiddleware = $globalMiddleware;
     }
 
     /**
@@ -188,6 +188,17 @@ class Router implements ServerHandlerInterface, RouterInterface
             $request->withServerParams($serverParams);
         }
 
+        // 调用全局中间件
+        $process    = function (ServerRequest $request, Response $response) {
+            return $response;
+        };
+        $dispatcher = new MiddlewareDispatcher($this->globalMiddleware, $process, $request, $response);
+        $response   = $dispatcher->dispatch();
+        if ($response->getBody()) {
+            $response->send();
+            return;
+        }
+
         // 路由匹配
         try {
             if (!isset($this->dispatcher)) {
@@ -200,8 +211,7 @@ class Router implements ServerHandlerInterface, RouterInterface
                     if (!$handler instanceof \Closure && !is_object($handler[0])) {
                         $handler[0] = new $handler[0];
                     }
-                    $vars       = $result[2];
-                    $middleware = array_merge($this->middleware, $middleware);
+                    $vars = $result[2];
                     break;
                 default:
                     throw new NotFoundException('Not Found (#404)');
@@ -232,7 +242,7 @@ class Router implements ServerHandlerInterface, RouterInterface
         };
         $dispatcher = new MiddlewareDispatcher($middleware, $process, $request, $response);
         $response   = $dispatcher->dispatch();
-        /** @var Response $response */
+
         $response->send();
     }
 
