@@ -33,6 +33,10 @@ composer require mix/micro
 
 - [Mix Micro Etcd](https://github.com/mix-php/micro-etcd)
 
+支持的网关
+
+- [Micro](https://github.com/micro/micro) v1, v2
+
 其他微服务治理组件
 
 - [Mix Micro Hystrix](https://github.com/mix-php/micro-hystrix) 
