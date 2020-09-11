@@ -189,11 +189,17 @@ class Router implements ServerHandlerInterface, RouterInterface
         }
 
         // 调用全局中间件
-        $process    = function (ServerRequest $request, Response $response) {
-            return $response;
-        };
-        $dispatcher = new MiddlewareDispatcher($this->globalMiddleware, $process, $request, $response);
-        $response   = $dispatcher->dispatch();
+        try {
+            $process    = function (ServerRequest $request, Response $response) {
+                return $response;
+            };
+            $dispatcher = new MiddlewareDispatcher($this->globalMiddleware, $process, $request, $response);
+            $response   = $dispatcher->dispatch();
+        } catch (\Throwable $ex) {
+            // 500 处理
+            $this->error500($ex, $response)->send();
+            throw $ex;
+        }
         if ($response->getBody()) {
             $response->send();
             return;
@@ -227,21 +233,19 @@ class Router implements ServerHandlerInterface, RouterInterface
         }
 
         // 通过中间件执行
-        $process    = function (ServerRequest $request, Response $response) use ($handler) {
-            try {
+        try {
+            $process    = function (ServerRequest $request, Response $response) use ($handler) {
                 // 构造方法内的参数是为了方便继承封装使用
                 // 为了支持 \Closure 移除了构造方法传参数，为路由支持 websocket
-                $response = call_user_func($handler, $request, $response);
-            } catch (\Throwable $ex) {
-                // 500 处理
-                $this->error500($ex, $response)->send();
-                // 抛出错误，记录日志
-                throw $ex;
-            }
-            return $response;
-        };
-        $dispatcher = new MiddlewareDispatcher($middleware, $process, $request, $response);
-        $response   = $dispatcher->dispatch();
+                return call_user_func($handler, $request, $response);
+            };
+            $dispatcher = new MiddlewareDispatcher($middleware, $process, $request, $response);
+            $response   = $dispatcher->dispatch();
+        } catch (\Throwable $ex) {
+            // 500 处理
+            $this->error500($ex, $response)->send();
+            throw $ex;
+        }
 
         $response->send();
     }
