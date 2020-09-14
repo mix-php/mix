@@ -73,8 +73,6 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
 
         $contentType = $serverRequest->getHeaderLine('content-type');
         $isFormJson  = strpos($contentType, 'application/json') === false ? false : true;
-        // $isFormUrlencoded = strpos($contentType, 'application/x-www-form-urlencoded') === false ? false : true;
-        // $isFormData       = strpos($contentType, 'multipart/form-data') === false ? false : true;
 
         $body = (new StreamFactory())->createStreamFromResource($request);
         $serverRequest->withBody($body);
@@ -89,11 +87,15 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $uploadedFileFactory = new UploadedFileFactory;
         $streamFactory       = new StreamFactory();
         foreach ($request->files ?? [] as $name => $file) {
-            // 注意：当httpServer的handle内开启协程时，handle方法会先于Callback执行完，
-            // 这时临时文件会在还没处理完成就被删除，所以这里生成新文件，在UploadedFile析构时删除该文件
+            // swoole 概率性出现 files 存在，但是 file 内无数据的情况
+            if (!isset($file['error']) || !isset($file['size']) || !isset($file['name']) || !isset($file['type'])) {
+                continue;
+            }
             if ($file['error'] !== 0) {
                 continue;
             }
+            // 注意：当httpServer的handle内开启协程时，handle方法会先于Callback执行完，
+            // 这时临时文件会在还没处理完成就被删除，所以这里生成新文件，在UploadedFile析构时删除该文件
             $tmpfile = $file['tmp_name'] . '.mix';
             move_uploaded_file($file['tmp_name'], $tmpfile);
             $uploadedFiles[$name] = $uploadedFileFactory->createUploadedFile(
@@ -112,7 +114,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
             $parsedBody = is_null($json) ? [] : (array)$json;
         }
         $serverRequest->withParsedBody($parsedBody);
-        
+
         $serverRequest->withContext(new Context());
 
         return $serverRequest;
