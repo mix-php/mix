@@ -8,7 +8,7 @@
     "worker-pool",
     "coroutine-pool"
   ],
-  "homepage": "http://www.mixphp.cn/",
+  "homepage": "https://openmix.org/",
   "license": "Apache-2.0",
   "authors": [
     {

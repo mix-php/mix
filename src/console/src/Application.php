@@ -191,7 +191,7 @@ class Application
         println('');
         println("Run '{$script}" . ($this->isSingleCommand ? '' : ' COMMAND') . " --help' for more information on a command.");
         println('');
-        println("Developed with Mix PHP framework. (mixphp.cn)");
+        println("Developed with Mix PHP framework. (openmix.org/mix-php)");
     }
 
     /**
@@ -204,7 +204,7 @@ class Application
         println("Usage: {$script} {$command} [opt...]");
         $this->printCommandOptions();
         println('');
-        println("Developed with Mix PHP framework. (mixphp.cn)");
+        println("Developed with Mix PHP framework. (openmix.org/mix-php)");
     }
 
     /**
