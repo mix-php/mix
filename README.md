@@ -3,7 +3,7 @@
 <br>
 
 <p align="center">
-<img src="http://mixphp.cn/static/image/logo_php.png" width="120" alt="MixPHP">
+<img src="https://openmix.org/static/image/logo_php.png" width="120" alt="MixPHP">
 </p>
 
 <p align="center">高性能 • 轻量级 • 命令行</p>
