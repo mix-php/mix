@@ -25,7 +25,7 @@
 
 ## 与 Mix Go 的关系
 
-[Mix Go](https://github.com/mix-go/mix) 设计哲学与 Mix PHP 几乎完全一致，PHP 的用户可以非常容易的切换到 Mix Go 进行开发，达到学一会二的效果，[OpenMix](http://openmix.org) 可能是现在唯一一个打造跨语言框架的开源机构。
+[MixGo](https://github.com/mix-go/mix) 设计哲学与 MixPHP 几乎完全一致，PHP 的用户可以非常容易的切换到 MixGo 进行开发，达到学一会二的效果，[OpenMix](http://openmix.org) 可能是现在唯一一个打造跨语言框架的开源机构。
 
 ## 与传统 MVC 框架比较
 
