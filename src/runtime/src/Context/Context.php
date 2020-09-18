@@ -25,6 +25,16 @@ class Context
     }
 
     /**
+     * 使用静态方法创建实例
+     * @return $this
+     * @deprecated 废弃，请直接使用 new
+     */
+    public static function new()
+    {
+        return new static();
+    }
+
+    /**
      * With value
      * @param string $key
      * @param $value
