@@ -1,10 +1,10 @@
-## Guzzle
+## Mix Guzzle
 
 支持 Swoole 协程的 Guzzle, 可 Hook 第三方库
 
 ## 安装
 
-> 注意：安装后整个项目的 Guzzle 默认 CurlHandler 将会替换为该项目内的 StreamHandler
+> 注意：安装后整个项目的 Guzzle 默认 CurlHandler 将会替换为该项目的 StreamHandler，同时因为重写了 fopen 的逻辑因此支持 PHP 调低错误级别。
 
 使用 Composer 安装：
 
@@ -23,6 +23,8 @@ $response = $client->get('https://www.baidu.com/');
 
 
 也可以手动指定 `handler` 如下：
+
+> Guzzle 自带的 StreamHandler 在 fopen 请求 url 失败时会默认抛出警告，但是他使用了 set_error_handler 
 
 ```php
 $handler = new \Mix\Guzzle\Handler\StreamHandler();
