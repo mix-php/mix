@@ -84,7 +84,7 @@ class Application
      * @var array
      */
     public $beans = [];
-    
+
     /**
      * Error
      * @var Error
@@ -330,7 +330,9 @@ class Application
                 throw new \RuntimeException('Application has coroutine enabled, require swoole extension >= v4.4 to run. install: https://www.swoole.com/');
             }
             // 触发执行命令前置事件
-            $this->dispatcher->dispatch(new CommandBeforeExecuteEvent($class));
+            $event          = new CommandBeforeExecuteEvent();
+            $event->command = $class;
+            $this->dispatcher->dispatch($event);
             // 协程执行
             $scheduler = new \Swoole\Coroutine\Scheduler;
             $scheduler->set($options);
@@ -349,7 +351,9 @@ class Application
             return;
         }
         // 触发执行命令前置事件
-        $this->dispatcher->dispatch(new CommandBeforeExecuteEvent($class));
+        $event          = new CommandBeforeExecuteEvent();
+        $event->command = $class;
+        $this->dispatcher->dispatch($event);
         // 普通执行
         $this->callMethod($class, $method);
     }

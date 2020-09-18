@@ -14,13 +14,4 @@ class CommandBeforeExecuteEvent
      */
     public $command;
 
-    /**
-     * CommandBeforeExecuteEvent constructor.
-     * @param string $command
-     */
-    public function __construct(string $command)
-    {
-        $this->command = $command;
-    }
-
 }
