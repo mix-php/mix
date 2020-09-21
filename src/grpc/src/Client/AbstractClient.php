@@ -48,6 +48,9 @@ abstract class AbstractClient
         $body    = GrpcHelper::serialize($request);
         $timeout = $options['timeout'] ?? 5.0;
         $resp    = $conn->request('POST', $path, $headers, $body, $timeout);
+        if ($resp->statusCode != 200) {
+            throw new InvokeException(sprintf('Response status code: %d', $resp->statusCode));
+        }
         GrpcHelper::deserialize($response, $resp->data);
         return $response;
     }

@@ -264,14 +264,14 @@ class Server implements ServerHandlerInterface, ServerInterface
         $request->withContext(new Context());
 
         // 通过中间件执行
-        $process    = function (ServerRequest $request, Response $response) {
-            return $this->call($request, $response);
-        };
-        $middleware = $this->middleware;
-        array_unshift($middleware, ProxyMiddleware::class);
-        $dispatcher = new MiddlewareDispatcher($middleware, $process, $request, $response);
         try {
-            $response = $dispatcher->dispatch();
+            $process    = function (ServerRequest $request, Response $response) {
+                return $this->call($request, $response);
+            };
+            $middleware = $this->middleware;
+            array_unshift($middleware, ProxyMiddleware::class);
+            $dispatcher = new MiddlewareDispatcher($middleware, $process, $request, $response);
+            $response   = $dispatcher->dispatch();
         } catch (NotFoundException $ex) {
             $this->error404($ex, $response)->send();
             return;
