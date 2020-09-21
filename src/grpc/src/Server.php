@@ -250,16 +250,34 @@ class Server implements ServerHandlerInterface, ServerInterface
     {
         $method      = $request->getMethod();
         $contentType = $request->getHeaderLine('Content-Type');
-        $ok          = in_array($contentType, [
-            'application/grpc',
-            'application/json',
-            'application/grpc+proto',
-            'application/grpc+json',
-        ]) ? true : false;
-        if (!$ok || $method != 'POST') {
+        $isGrpc      = in_array($contentType, [
+            'application/grpc', // micro v1 and raw grpc
+            'application/json', // micro v1 proxy
+            'application/grpc+proto', // micro v2
+            'application/grpc+json', // micro v2 proxy
+        ]);
+        if (!$isGrpc || $method != 'POST') {
             $this->error500(new \RuntimeException('Invalid request'), $response)->send();
             return;
         }
+
+        $trailerFunc = function (ServerRequest $request, \Mix\Http\Message\Response $response, \Throwable $ex = null) {
+            if (!in_array($request->getHeaderLine('Content-Type'), [
+                'application/grpc',
+                'application/grpc+proto',
+            ])) {
+                return;
+            }
+            $response->withHeader('trailer', 'grpc-status, grpc-message');
+            $swooleResponse = $response->getSwooleResponse();
+            if (!is_null($ex)) {
+                $swooleResponse->trailer('grpc-status', $ex->getCode());
+                $swooleResponse->trailer('grpc-message', $ex->getMessage());
+            } else {
+                $swooleResponse->trailer('grpc-status', 0);
+                $swooleResponse->trailer('grpc-message', '');
+            }
+        };
 
         $request->withContext(new Context());
 
@@ -272,21 +290,17 @@ class Server implements ServerHandlerInterface, ServerInterface
             array_unshift($middleware, ProxyMiddleware::class);
             $dispatcher = new MiddlewareDispatcher($middleware, $process, $request, $response);
             $response   = $dispatcher->dispatch();
+            $trailerFunc($request, $response);
         } catch (NotFoundException $ex) {
+            $trailerFunc($request, $response, $ex);
             $this->error404($ex, $response)->send();
             return;
         } catch (\Throwable $ex) {
             // 500 处理
+            $trailerFunc($request, $response, $ex);
             $this->error500($ex, $response)->send();
             // 抛出错误，记录日志
             throw $ex;
-        }
-
-        if (strpos($response->getHeaderLine('Content-Type'), 'application/grpc') === 0) {
-            $response->withHeader('trailer', 'grpc-status, grpc-message');
-            $swooleResponse = $response->getSwooleResponse();
-            $swooleResponse->trailer('grpc-status', 0);
-            $swooleResponse->trailer('grpc-message', '');
         }
 
         /** @var Response $response */
