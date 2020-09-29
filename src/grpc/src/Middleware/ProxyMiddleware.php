@@ -121,7 +121,7 @@ class ProxyMiddleware implements MiddlewareInterface
             $microService = $request->getHeaderLine('micro-service');
             $microMethod  = $request->getHeaderLine('micro-method');
         }
-        
+
         // v2
         // uri: /php.micro.grpc.greeter.Say/Hello
         $isV2 = $contentType == 'application/grpc+json' && $path !== '/' ? true : false;
@@ -149,7 +149,7 @@ class ProxyMiddleware implements MiddlewareInterface
             $request->withHeader('Content-Type', 'application/grpc');
             $request->withUri($uri);
 
-            $response = $handler->handle($request);
+            $response = $handler->handle($request); // 执行服务
 
             $protobuf = $response->getBody()->getContents();
             $json     = static::protobufToJson(GrpcHelper::unpack($protobuf), $microService, $microMethod);

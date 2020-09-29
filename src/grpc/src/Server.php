@@ -189,6 +189,7 @@ class Server implements ServerHandlerInterface, ServerInterface
         if (!isset($this->callables[$path])) {
             throw new NotFoundException('Invalid uri');
         }
+        $response->withContentType('application/grpc');
 
         list($class, $method, $service, $endpoint) = $this->callables[$path];
 
@@ -208,9 +209,7 @@ class Server implements ServerHandlerInterface, ServerInterface
 
         $content = GrpcHelper::serialize($rpcResponse);
         $body    = (new StreamFactory())->createStream($content);
-        $response->withBody($body)
-            ->withContentType('application/grpc')
-            ->withStatus(200);
+        $response->withBody($body)->withStatus(200);
 
         return $response;
     }
@@ -271,7 +270,7 @@ class Server implements ServerHandlerInterface, ServerInterface
             $response->withHeader('trailer', 'grpc-status, grpc-message');
             $swooleResponse = $response->getSwooleResponse();
             if (!is_null($ex)) {
-                $swooleResponse->trailer('grpc-status', $ex->getCode());
+                $swooleResponse->trailer('grpc-status', $ex->getCode() == 0 ? -1 : $ex->getCode());
                 $swooleResponse->trailer('grpc-message', $ex->getMessage());
             } else {
                 $swooleResponse->trailer('grpc-status', 0);
@@ -296,9 +295,9 @@ class Server implements ServerHandlerInterface, ServerInterface
             $this->error404($ex, $response)->send();
             return;
         } catch (\Throwable $ex) {
-            // 500 处理
+            // grpc错误传递处理
             $trailerFunc($request, $response, $ex);
-            $this->error500($ex, $response)->send();
+            $response->withStatus(200)->send();
             // 抛出错误，记录日志
             throw $ex;
         }
