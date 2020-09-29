@@ -297,6 +297,10 @@ abstract class AbstractConnection
      */
     protected function recycle()
     {
+        // beginTransaction 异常时没有数据
+        if (empty($this->recycleData)) {
+            return;
+        }
         list($this->sql, $this->params, $this->values) = $this->recycleData;
     }
 
