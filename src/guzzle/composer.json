@@ -17,7 +17,8 @@
     }
   ],
   "require": {
-    "guzzlehttp/guzzle": "^6.0"
+    "guzzlehttp/guzzle": "^6.0",
+    "ezimuel/ringphp": "^1.1.2"
   },
   "require-dev": {
     "phpunit/phpunit": "^7.0.0"
@@ -28,7 +29,9 @@
     },
     "classmap": [
       "src/hook/Handler/CurlHandler.php",
-      "src/hook/Handler/StreamHandler.php"
+      "src/hook/Handler/StreamHandler.php",
+      "src/hook/Handler/Ring/CurlHandler.php",
+      "src/hook/Handler/Ring/StreamHandler.php"
     ],
     "files": [
       "src/hook/functions.php"

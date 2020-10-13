@@ -1,10 +1,10 @@
 ## Mix Guzzle
 
-支持 Swoole 协程的 Guzzle, 可 Hook 第三方库
+支持 Swoole 协程的 Guzzle, 可无感 Hook 第三方库
 
 ## 安装
 
-> 注意：安装后整个项目的 Guzzle 默认 CurlHandler 将会替换为该项目的 StreamHandler，同时因为重写了 fopen 的逻辑因此支持 PHP 调低错误级别。
+> 注意：安装后整个项目的 Guzzle 默认 CurlHandler 将会替换为该项目的 StreamHandler，实现了无感 Hook，同时因为重写了 fopen 的逻辑因此支持 PHP 调低错误级别。
 
 使用 Composer 安装：
 
@@ -34,6 +34,30 @@ $client  = new \GuzzleHttp\Client([
 ]);
 ```
 
+### `Elasticsearch PHP` 支持
+
+> 安装后 GuzzleHttp\Ring 的 CurlHandler 将会替换为该项目的 Ring\StreamHandler，实现了无感 Hook
+
+同样根据 [Elasticsearch PHP](https://github.com/elastic/elasticsearch-php) 官方文档使用即可：
+
+```php
+use GuzzleHttp\Ring\Client\StreamHandler;
+use Elasticsearch\ClientBuilder;
+
+$handler = new StreamHandler([
+  'status' => 200,
+  'transfer_stats' => [
+     'total_time' => 100
+  ],
+  'body' => fopen('somefile.json'),
+  'effective_url' => 'localhost'
+]);
+$builder = ClientBuilder::create();
+$builder->setHosts(['somehost']);
+$builder->setHandler($handler);
+$client = $builder->build();
+```
+
 ## 原理
 
 因为 Swoole 的 Hook 只支持 PHP Stream，Guzzle 库默认是使用 CURL 扩展，而 Swoole 不支持在协程中使用 CURL，因此本库将 Guzzle 默认的 CurlHandler 替换为 StreamHandler，并做了一些协程优化处理，让依赖 Guzzle 的第三方库无需修改代码即可使用 Swoole 协程。
@@ -46,6 +70,7 @@ $client  = new \GuzzleHttp\Client([
 
 - [alibabacloud/client](https://github.com/aliyun/openapi-sdk-php-client)
 - [TencentCloud/tencentcloud-sdk-php](https://github.com/TencentCloud/tencentcloud-sdk-php)
+- [elastic/elasticsearch-php](https://github.com/elastic/elasticsearch-php)
 
 ## License
 
