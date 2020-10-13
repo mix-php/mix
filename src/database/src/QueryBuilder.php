@@ -298,7 +298,7 @@ class QueryBuilder
         }
         // limit and offset
         if ($this->_limit > 0) {
-            $sql[] = ['LIMIT :__offset, :__limit', 'params' => ['__offset' => $this->_offset, '__limit' => $this->_limit]];
+            $sql[] = ['LIMIT :__offset, :__limit', 'params' => ['__offset' => (int)$this->_offset, '__limit' => (int)$this->_limit]];
         }
         // lock
         if ($this->_lock) {
