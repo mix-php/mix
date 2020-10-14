@@ -36,22 +36,15 @@ $client  = new \GuzzleHttp\Client([
 
 > 安装后 GuzzleHttp\Ring 的 CurlHandler 将会替换为该项目的 Ring\StreamHandler，实现了无感 Hook
 
-同样根据 [Elasticsearch PHP](https://github.com/elastic/elasticsearch-php) 官方文档使用即可：
+根据 [Elasticsearch PHP](https://github.com/elastic/elasticsearch-php) 官方文档使用即可：
 
 ```php
 use GuzzleHttp\Ring\Client\StreamHandler;
 use Elasticsearch\ClientBuilder;
 
-$handler = new StreamHandler([
-  'status' => 200,
-  'transfer_stats' => [
-     'total_time' => 100
-  ],
-  'body' => fopen('somefile.json'),
-  'effective_url' => 'localhost'
-]);
+$handler = new StreamHandler();
 $builder = ClientBuilder::create();
-$builder->setHosts(['somehost']);
+$builder->setHosts(['127.0.0.1:9200']);
 $builder->setHandler($handler);
 $client = $builder->build();
 ```
