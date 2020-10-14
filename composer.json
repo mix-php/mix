@@ -36,6 +36,7 @@
     "opis/closure": "^3.5",
     "funkjedi/composer-include-files": "^1.0",
     "guzzlehttp/guzzle": ">=6.4,<=6.5",
+    "ezimuel/ringphp": "^1.1.2",
     "ramsey/uuid": "^3.9",
     "start-point/etcd-php": "^1.1",
     "mix/opentracing": "^1.0",
@@ -127,11 +128,12 @@
     "classmap": [
       "src/console/src/Mix.php",
       "src/guzzle/src/hook/Handler/CurlHandler.php",
-      "src/guzzle/src/hook/Handler/StreamHandler.php"
+      "src/guzzle/src/hook/Handler/StreamHandler.php",
+      "src/guzzle/src/hook/Handler/Ring/CurlHandler.php",
+      "src/guzzle/src/hook/Handler/Ring/StreamHandler.php"
     ],
     "files": [
       "src/runtime/src/functions.php",
-      "src/concurrent/src/functions.php",
       "src/console/src/functions.php"
     ]
   }
