@@ -24,9 +24,53 @@ class StreamHandler
         $this->options = $options;
     }
 
+    /**
+     * Add
+     * Creates a URL string from a request.
+     *
+     * If the "url" key is present on the request, it is returned, otherwise
+     * the url is built up based on the scheme, host, uri, and query_string
+     * request values.
+     *
+     * @param array $request Request to get the URL from
+     *
+     * @return string Returns the request URL as a string.
+     * @throws \InvalidArgumentException if no Host header is present.
+     */
+    public static function url(array $request)
+    {
+        if (isset($request['url'])) {
+            return $request['url'];
+        }
+
+        $uri = (isset($request['scheme'])
+                ? $request['scheme'] : 'http') . '://';
+
+        if ($host = Core::header($request, 'host')) {
+            $uri .= $host;
+        } else {
+            throw new \InvalidArgumentException('No Host header was provided');
+        }
+
+        if (isset($request['client']['curl'][3])) { // Add
+            $port = $request['client']['curl'][3];
+            $uri  .= ":$port";
+        }
+
+        if (isset($request['uri'])) {
+            $uri .= $request['uri'];
+        }
+
+        if (isset($request['query_string'])) {
+            $uri .= '?' . $request['query_string'];
+        }
+
+        return $uri;
+    }
+
     public function __invoke(array $request)
     {
-        $url = Core::url($request);
+        $url = static::url($request); // Alter
         Core::doSleep($request);
 
         try {
@@ -45,11 +89,14 @@ class StreamHandler
         $this->lastHeaders = null;
         $parts             = explode(' ', array_shift($hdrs), 3);
         $response          = [
-            'version'       => substr($parts[0], 5),
-            'status'        => $parts[1],
-            'reason'        => isset($parts[2]) ? $parts[2] : null,
-            'headers'       => Core::headersFromLines($hdrs),
-            'effective_url' => $url,
+            'version'        => substr($parts[0], 5),
+            'status'         => $parts[1],
+            'reason'         => isset($parts[2]) ? $parts[2] : null,
+            'headers'        => Core::headersFromLines($hdrs),
+            'effective_url'  => $url,
+            'transfer_stats' => [ // add
+                'total_time' => -1,
+            ],
         ];
 
         $stream = $this->checkDecode($request, $response, $stream);
@@ -409,7 +456,7 @@ class StreamHandler
                 }
 
                 // 重写
-                $resource          = @fopen($url, 'r', null, $context);
+                $resource = @fopen($url, 'r', null, $context);
                 if ($resource === false) {
                     throw new \RuntimeException(sprintf('Error creating resource: %s', $url));
                 }
