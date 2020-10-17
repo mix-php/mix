@@ -53,6 +53,18 @@ abstract class AbstractWorker
      */
     public function start()
     {
+        $this->consume();
+        Coroutine::create(function () {
+            $this->quit->pop();
+            $this->jobChannel->close();
+        });
+    }
+
+    /**
+     * 消费任务
+     */
+    protected function consume()
+    {
         Coroutine::create(function () {
             while (true) {
                 $this->workerPool->push($this->jobChannel);
@@ -60,12 +72,13 @@ abstract class AbstractWorker
                 if ($data === false) {
                     return;
                 }
-                $this->handle($data);
+                try {
+                    $this->handle($data);
+                } catch (\Throwable $exception) {
+                    $this->consume();
+                    throw $exception;
+                }
             }
-        });
-        Coroutine::create(function () {
-            $this->quit->pop();
-            $this->jobChannel->close();
         });
     }
 
