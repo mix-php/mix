@@ -9,24 +9,35 @@ use Swoole\Coroutine\Channel;
 use Mix\Coroutine\Coroutine;
 
 /**
- * Class WorkerPoolDispatcher
+ * Class WorkerDispatcher
  * @package Mix\WorkerPool
  * @author liu,jian <coder.keda@gmail.com>
- * @deprecated 废弃，请使用 WorkerDispatcher 取代
  */
-class WorkerPoolDispatcher
+class WorkerDispatcher
 {
 
     /**
      * @var Channel
      */
-    public $jobQueue;
+    protected $jobQueue;
 
     /**
      * 最大工人数
      * @var int
      */
-    public $maxWorkers;
+    protected $maxWorkers;
+
+    /**
+     * 工作类
+     * @var string
+     */
+    protected $workerClass;
+
+    /**
+     * 工作类构造参数
+     * @var array
+     */
+    protected $constructorArgs;
 
     /**
      * 工作池
@@ -48,40 +59,49 @@ class WorkerPoolDispatcher
     protected $quit;
 
     /**
-     * Dispatcher constructor.
+     * WorkerDispatcher constructor.
      * @param Channel $jobQueue
      * @param int $maxWorkers
+     * @param string $workerClass
+     * @param array $constructorArgs
+     * @throws TypeException
      */
-    public function __construct(Channel $jobQueue, int $maxWorkers)
+    public function __construct(Channel $jobQueue, int $maxWorkers, string $workerClass, array $constructorArgs = [])
     {
-        $this->jobQueue   = $jobQueue;
-        $this->maxWorkers = $maxWorkers;
-        $this->workerPool = new Channel($this->maxWorkers);
-        $this->quit       = new Channel();
+        $this->jobQueue        = $jobQueue;
+        $this->maxWorkers      = $maxWorkers;
+        $this->workerClass     = $workerClass;
+        $this->constructorArgs = $constructorArgs;
+        $this->workerPool      = new Channel($this->maxWorkers);
+        $this->quit            = new Channel();
+
+        if (!is_subclass_of($workerClass, AbstractWorker::class)) {
+            throw new TypeException("{$workerClass} type is not '" . AbstractWorker::class . "'");
+        }
     }
 
     /**
      * 启动
-     * @param string $worker
+     * 阻塞代码，直到任务全部执行完成并且全部 Worker 停止
      */
-    public function start(string $worker)
+    public function run()
     {
-        if (!is_subclass_of($worker, AbstractWorker::class)) {
-            throw new TypeException("{$worker} type is not '" . AbstractWorker::class . "'");
-        }
+        $waitGroup   = new WaitGroup();
+        $workerClass = $this->workerClass;
         for ($i = 0; $i < $this->maxWorkers; $i++) {
             /** @var AbstractWorker $worker */
-            $worker          = new $worker($this->workerPool, new WaitGroup());
+            $worker          = new $workerClass($this->workerPool, $waitGroup);
             $this->workers[] = $worker;
-            $worker->start();
+            $worker->run();
         }
         $this->dispatch();
+        $waitGroup->wait();
     }
 
     /**
      * 派遣
      */
-    public function dispatch()
+    protected function dispatch()
     {
         Coroutine::create(function () {
             while (true) {
