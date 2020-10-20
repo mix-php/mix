@@ -41,7 +41,9 @@ class CommandInvoker
         $this->connection     = $connection;
         $this->resultChannel  = new Channel();
         $this->messageChannel = new Channel(100);
-        xgo([$this, 'receive'], $connection);
+        \Swoole\Coroutine::create(function () use ($connection) {
+            $this->receive($connection);
+        });
     }
 
     /**

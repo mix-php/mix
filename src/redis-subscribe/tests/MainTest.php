@@ -18,8 +18,8 @@ final class MainTest extends TestCase
             go(function () {
                 $redis = new \Redis();
                 $redis->connect('127.0.0.1', 6379);
-                $redis->publish('foo', 'foo');
-                $redis->publish('foo1', 'foo1');
+                $redis->publish('foo', 'foodata');
+                $redis->publish('foo1', 'foo1data');
             });
 
             $chan = $sub->channel();
@@ -32,9 +32,10 @@ final class MainTest extends TestCase
                     }
                     break;
                 }
-                $this->assertEquals($data, 'foo1');
+                $this->assertEquals($data->payload, 'foo1data');
                 break;
             }
+            $sub->close();
         };
         run($func);
     }

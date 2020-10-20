@@ -30,6 +30,11 @@ class Connection
     protected $client;
 
     /**
+     * @var bool
+     */
+    protected $closed = false;
+
+    /**
      * EOF
      */
     const EOF = "\r\n";
@@ -90,7 +95,7 @@ class Connection
      */
     public function close()
     {
-        if (!$this->client->close()) {
+        if (!$this->closed && !$this->client->close()) {
             $errMsg  = $this->client->errMsg;
             $errCode = $this->client->errCode;
             if ($errMsg == '' && $errCode == 0) {
@@ -98,6 +103,7 @@ class Connection
             }
             throw new \Swoole\Exception($errMsg, $errCode);
         }
+        $this->closed = true;
     }
 
 }
