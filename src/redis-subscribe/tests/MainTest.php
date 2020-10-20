@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 final class MainTest extends TestCase
 {
 
-    public function testServerClient(): void
+    public function test(): void
     {
         $_this = $this;
         $func  = function () use ($_this) {
