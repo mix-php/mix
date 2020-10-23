@@ -72,7 +72,7 @@ abstract class AbstractWorker
     {
         $this->waitGroup->add(1);
         Coroutine::create(function () {
-            \Swoole\Coroutine::defer(function () {
+            Coroutine::defer(function () {
                 $this->waitGroup->done();
             });
             while (true) {
