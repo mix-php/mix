@@ -5,8 +5,8 @@ namespace Mix\WorkerPool;
 use Mix\Sync\WaitGroup;
 use Mix\Time\Time;
 use Mix\WorkerPool\Exception\TypeException;
+use Swoole\Coroutine;
 use Swoole\Coroutine\Channel;
-use Mix\Coroutine\Coroutine;
 
 /**
  * Class WorkerPoolDispatcher

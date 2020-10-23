@@ -3,8 +3,8 @@
 namespace Mix\WorkerPool;
 
 use Mix\Sync\WaitGroup;
+use Swoole\Coroutine;
 use Swoole\Coroutine\Channel;
-use Mix\Coroutine\Coroutine;
 
 /**
  * Class AbstractWorker
@@ -70,18 +70,6 @@ abstract class AbstractWorker
      */
     public function run()
     {
-        $this->consume();
-        Coroutine::create(function () {
-            $this->quit->pop();
-            $this->jobChannel->close();
-        });
-    }
-
-    /**
-     * 消费任务
-     */
-    protected function consume()
-    {
         $this->waitGroup->add(1);
         Coroutine::create(function () {
             \Swoole\Coroutine::defer(function () {
@@ -93,13 +81,12 @@ abstract class AbstractWorker
                 if ($data === false) {
                     return;
                 }
-                try {
-                    $this->handle($data);
-                } catch (\Throwable $exception) {
-                    $this->consume();
-                    throw $exception;
-                }
+                $this->handle($data);
             }
+        });
+        Coroutine::create(function () {
+            $this->quit->pop();
+            $this->jobChannel->close();
         });
     }
 
