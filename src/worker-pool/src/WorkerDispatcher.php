@@ -63,10 +63,10 @@ class WorkerDispatcher
      * @param Channel $jobQueue
      * @param int $maxWorkers
      * @param string $workerClass
-     * @param array $constructorArgs
+     * @param mixed ...$constructorArgs
      * @throws TypeException
      */
-    public function __construct(Channel $jobQueue, int $maxWorkers, string $workerClass, array $constructorArgs = [])
+    public function __construct(Channel $jobQueue, int $maxWorkers, string $workerClass, ...$constructorArgs)
     {
         $this->jobQueue        = $jobQueue;
         $this->maxWorkers      = $maxWorkers;
@@ -90,7 +90,7 @@ class WorkerDispatcher
         $workerClass = $this->workerClass;
         for ($i = 0; $i < $this->maxWorkers; $i++) {
             /** @var AbstractWorker $worker */
-            $worker          = new $workerClass(...$this->constructorArgs);
+            $worker = new $workerClass(...$this->constructorArgs);
             $worker->init($i, $this->workerPool, $waitGroup);
             $this->workers[] = $worker;
             $worker->run();

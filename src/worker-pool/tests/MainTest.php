@@ -16,7 +16,7 @@ final class MainTest extends TestCase
             $maxWorkers = 20;
             $maxQueue   = 10;
             $jobQueue   = new Channel($maxQueue);
-            $dispatcher = new WorkerDispatcher($jobQueue, $maxWorkers, FooWorker::class, [123]);
+            $dispatcher = new WorkerDispatcher($jobQueue, $maxWorkers, FooWorker::class, 123);
 
             go(function () use ($jobQueue, $dispatcher) {
                 // 投放任务
@@ -75,7 +75,7 @@ class FooWorker extends AbstractWorker
      */
     public function do($data)
     {
-        usleep(100000); // 测试队列消费缓慢的情况
+        usleep(10000); // 测试队列消费缓慢的情况
     }
 
 }
