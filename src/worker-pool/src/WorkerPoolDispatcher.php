@@ -91,6 +91,9 @@ class WorkerPoolDispatcher
                     return;
                 }
                 $jobChannel = $this->workerPool->pop();
+                if ($jobChannel === false) {
+                    return;
+                }
                 $jobChannel->push($data);
             }
         });
