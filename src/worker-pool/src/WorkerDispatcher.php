@@ -90,7 +90,7 @@ class WorkerDispatcher
         $workerClass = $this->workerClass;
         for ($i = 0; $i < $this->maxWorkers; $i++) {
             /** @var AbstractWorker $worker */
-            $worker          = new $workerClass(...$this->constructorArgs);
+            $worker = new $workerClass(...$this->constructorArgs);
             $worker->init($i, $this->workerPool, $waitGroup);
             $this->workers[] = $worker;
             $worker->run();

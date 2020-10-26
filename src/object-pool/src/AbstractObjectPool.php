@@ -5,6 +5,7 @@ namespace Mix\ObjectPool;
 use Mix\ObjectPool\Event\DiscardedEvent;
 use Mix\ObjectPool\Exception\WaitTimeoutException;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Swoole\Coroutine;
 use Swoole\Coroutine\Channel;
 
 /**
@@ -208,7 +209,7 @@ abstract class AbstractObjectPool
     protected function push($connection)
     {
         // 解决对象在协程外部析构导致的: Swoole\Error: API must be called in the coroutine
-        if (\Swoole\Coroutine::getCid() == -1) {
+        if (Coroutine::getCid() == -1) {
             return false;
         }
         if ($this->getIdleNumber() < $this->maxIdle) {
