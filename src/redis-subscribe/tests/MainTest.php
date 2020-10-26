@@ -8,8 +8,7 @@ final class MainTest extends TestCase
 
     public function test(): void
     {
-        $_this = $this;
-        $func  = function () use ($_this) {
+        $func = function () {
             $sub = new \Mix\Redis\Subscribe\Subscriber('127.0.0.1', 6379, '', 5);
             $sub->subscribe('foo', 'bar'); // 订阅失败将抛出异常
             $sub->subscribe('foo1', 'bar1');
