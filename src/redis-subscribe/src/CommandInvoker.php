@@ -3,6 +3,7 @@
 namespace Mix\Redis\Subscribe;
 
 use Swoole\Timer;
+use Swoole\Coroutine;
 use Swoole\Coroutine\Channel;
 
 /**
@@ -41,7 +42,7 @@ class CommandInvoker
         $this->connection     = $connection;
         $this->resultChannel  = new Channel();
         $this->messageChannel = new Channel(100);
-        \Swoole\Coroutine::create(function () use ($connection) {
+        Coroutine::create(function () use ($connection) {
             $this->receive($connection);
         });
     }
