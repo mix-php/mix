@@ -71,7 +71,8 @@ class WorkerPoolDispatcher
         }
         for ($i = 0; $i < $this->maxWorkers; $i++) {
             /** @var AbstractWorker $worker */
-            $worker          = new $worker($this->workerPool, new WaitGroup());
+            $worker = new $worker();
+            $worker->init($i, $this->workerPool, new WaitGroup());
             $this->workers[] = $worker;
             $worker->start();
         }

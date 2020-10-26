@@ -15,6 +15,11 @@ abstract class AbstractWorker
 {
 
     /**
+     * @var int
+     */
+    public $workerID;
+
+    /**
      * 工作池
      * @var Channel
      */
@@ -38,12 +43,14 @@ abstract class AbstractWorker
     protected $quit;
 
     /**
-     * AbstractWorker constructor.
+     * Init
+     * @param int $workerID
      * @param Channel $workerPool
      * @param WaitGroup $waitGroup
      */
-    public function __construct(Channel $workerPool, WaitGroup $waitGroup)
+    public function init(int $workerID, Channel $workerPool, WaitGroup $waitGroup)
     {
+        $this->workerID   = $workerID;
         $this->workerPool = $workerPool;
         $this->waitGroup  = $waitGroup;
         $this->jobChannel = new Channel();
@@ -54,7 +61,7 @@ abstract class AbstractWorker
      * 处理
      * @param $data
      */
-    abstract public function handle($data);
+    abstract public function do($data);
 
     /**
      * 启动
@@ -81,7 +88,7 @@ abstract class AbstractWorker
                 if ($data === false) {
                     return;
                 }
-                $this->handle($data);
+                $this->do($data);
             }
         });
         Coroutine::create(function () {

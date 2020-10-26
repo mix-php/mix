@@ -16,7 +16,7 @@ final class MainTest extends TestCase
             $maxWorkers = 20;
             $maxQueue   = 10;
             $jobQueue   = new Channel($maxQueue);
-            $dispatcher = new WorkerDispatcher($jobQueue, $maxWorkers, FooWorker::class);
+            $dispatcher = new WorkerDispatcher($jobQueue, $maxWorkers, FooWorker::class, [123]);
 
             go(function () use ($jobQueue, $dispatcher) {
                 // 投放任务
@@ -59,23 +59,21 @@ final class MainTest extends TestCase
 class FooWorker extends AbstractWorker
 {
 
+    public $foo;
+
     /**
      * FooWorker constructor.
-     * @param Channel $workerPool
-     * @param WaitGroup $waitGroup
+     * @param null $foo
      */
-    public function __construct(Channel $workerPool, WaitGroup $waitGroup)
+    public function __construct($foo = null)
     {
-        parent::__construct($workerPool, $waitGroup);
-        // 实例化一些需重用的对象
-        // ...
+        $this->foo = $foo;
     }
 
     /**
-     * 处理
      * @param $data
      */
-    public function handle($data)
+    public function do($data)
     {
         usleep(100000); // 测试队列消费缓慢的情况
     }
