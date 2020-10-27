@@ -5,6 +5,7 @@ namespace Mix\Database;
 use Mix\Database\Pool\ConnectionPool;
 use Mix\Database\Pool\Dialer;
 use Mix\Database\Query\Expression;
+use Mix\ObjectPool\Exception\WaitTimeoutException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -186,6 +187,7 @@ class Database
     /**
      * Borrow connection
      * @return Connection
+     * @throws WaitTimeoutException
      */
     public function borrow(): Connection
     {

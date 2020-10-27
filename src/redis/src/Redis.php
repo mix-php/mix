@@ -2,6 +2,7 @@
 
 namespace Mix\Redis;
 
+use Mix\ObjectPool\Exception\WaitTimeoutException;
 use Mix\Redis\Pool\ConnectionPool;
 use Mix\Redis\Pool\Dialer;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -215,6 +216,7 @@ class Redis implements ConnectionInterface
     /**
      * Borrow connection
      * @return Connection
+     * @throws WaitTimeoutException
      */
     public function borrow(): Connection
     {

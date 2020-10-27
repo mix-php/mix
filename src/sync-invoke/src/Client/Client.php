@@ -2,6 +2,7 @@
 
 namespace Mix\SyncInvoke\Client;
 
+use Mix\ObjectPool\Exception\WaitTimeoutException;
 use Mix\SyncInvoke\Client\Pool\ConnectionPool;
 use Mix\SyncInvoke\Client\Pool\Dialer;
 use Mix\SyncInvoke\Exception\InvokeException;
@@ -176,6 +177,7 @@ class Client
     /**
      * Borrow connection
      * @return Connection
+     * @throws WaitTimeoutException
      */
     public function borrow(): Connection
     {

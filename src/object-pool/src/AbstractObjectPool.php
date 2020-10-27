@@ -121,6 +121,7 @@ abstract class AbstractObjectPool
     /**
      * 借用连接
      * @return object
+     * @throws WaitTimeoutException
      */
     public function borrow()
     {
