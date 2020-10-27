@@ -2,8 +2,6 @@
 
 namespace Mix\Helper;
 
-use Mix\Concurrent\Coroutine;
-
 /**
  * ProcessHelper类
  * @author liu,jian <coder.keda@gmail.com>
@@ -76,10 +74,7 @@ class ProcessHelper
                 continue;
             }
             \Swoole\Process::signal($signal, function ($signal) use ($callback, $enableCoroutine) {
-                if ($enableCoroutine) {
-                    // 创建协程
-                    Coroutine::create($callback, $signal);
-                } else {
+                $func = function () use ($callback, $signal) {
                     try {
                         // 执行闭包
                         call_user_func($callback, $signal);
@@ -94,6 +89,11 @@ class ProcessHelper
                         $error = \Mix::$app->context->get('error');
                         $error->handleException($e);
                     }
+                };
+                if ($enableCoroutine) {
+                    \Swoole\Coroutine::create($func);
+                } else {
+                    $func();
                 }
             });
         }
