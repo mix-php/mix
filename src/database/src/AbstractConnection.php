@@ -499,15 +499,16 @@ abstract class AbstractConnection
      * 插入
      * @param string $table
      * @param array $data
+     * @param string $insert
      * @return $this
      */
-    public function insert(string $table, array $data)
+    public function insert(string $table, array $data, string $insert = 'INSERT INTO')
     {
         $keys   = array_keys($data);
         $fields = array_map(function ($key) {
             return ":{$key}";
         }, $keys);
-        $sql    = "INSERT INTO `{$table}` (`" . implode('`, `', $keys) . "`) VALUES (" . implode(', ', $fields) . ")";
+        $sql    = "{$insert} `{$table}` (`" . implode('`, `', $keys) . "`) VALUES (" . implode(', ', $fields) . ")";
         $this->prepare($sql);
         $this->bindParams($data);
         return $this;
