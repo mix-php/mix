@@ -218,4 +218,13 @@ class Response extends Message implements ResponseInterface
         $this->swooleResponse->end($content);
     }
 
+    /**
+     * 发送文件
+     * @param string $filename
+     */
+    public function sendFile(string $filename)
+    {
+        $this->swooleResponse->sendfile($filename);
+    }
+
 }

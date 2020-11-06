@@ -8,10 +8,10 @@ use Mix\Http\Message\ServerRequest;
 use Mix\Http\Server\Exception\NotFoundException;
 
 /**
- * Class FileHandler
+ * Class FileServer
  * @package Mix\Http\Server
  */
-class FileHandler implements ServerHandlerInterface
+class FileServer implements ServerHandlerInterface
 {
 
     /**
