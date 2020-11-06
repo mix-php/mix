@@ -207,11 +207,12 @@ class Server implements ServerInterface
     /**
      * Create file server
      * @param string $dir
+     * @param string $stripPrefix
      * @return FileHandler
      */
-    public static function fileServer(string $dir): FileHandler
+    public static function fileServer(string $dir, string $stripPrefix = ''): FileHandler
     {
-        return new FileHandler($dir);
+        return new FileHandler($dir, $stripPrefix);
     }
 
 }

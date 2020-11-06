@@ -20,12 +20,19 @@ class FileHandler implements ServerHandlerInterface
     protected $dir;
 
     /**
+     * @var string
+     */
+    protected $stripPrefix;
+
+    /**
      * FileHandler constructor.
      * @param string $dir
+     * @param string $stripPrefix
      */
-    public function __construct(string $dir)
+    public function __construct(string $dir, string $stripPrefix = '')
     {
-        $this->dir = $dir;
+        $this->dir         = $dir;
+        $this->stripPrefix = $stripPrefix;
     }
 
     /**
@@ -36,8 +43,10 @@ class FileHandler implements ServerHandlerInterface
     public function handleHTTP(ServerRequest $request, Response $response)
     {
         $path = $request->getUri()->getPath();
+        if (strpos($path, $this->stripPrefix) === 0) {
+            $path = substr($path, strlen($this->stripPrefix));
+        }
         $file = sprintf('%s%s', $this->dir, $path);
-
         if (!file_exists($file)) {
             $this->error404(new NotFoundException('Not Found (#404)'), $response)->send();
             return;
