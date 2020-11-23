@@ -7,6 +7,7 @@ use Mix\ObjectPool\Exception\WaitTimeoutException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Swoole\Coroutine;
 use Swoole\Coroutine\Channel;
+use Swoole\Exception;
 
 /**
  * Class AbstractObjectPool
@@ -223,6 +224,7 @@ abstract class AbstractObjectPool
      * 弹出连接
      * @return mixed
      * @throws WaitTimeoutException
+     * @throws Exception
      */
     protected function pop()
     {
@@ -231,8 +233,11 @@ abstract class AbstractObjectPool
             $timeout = $this->waitTimeout;
         }
         $object = $this->queue->pop($timeout);
-        if (!$object && $timeout != -1) {
-            throw new WaitTimeoutException(sprintf('Wait timeout: %fs', $timeout));
+        if (!$object) {
+            if ($timeout != -1) {
+                throw new WaitTimeoutException(sprintf('Wait timeout: %fs', $timeout));
+            }
+            throw new Exception('Channel a deadlock');
         }
         return $object;
     }
