@@ -231,7 +231,7 @@ abstract class AbstractObjectPool
             $timeout = $this->waitTimeout;
         }
         $object = $this->queue->pop($timeout);
-        if (!$object && $this->queue->errCode == -1) {
+        if (!$object && $timeout != -1) {
             throw new WaitTimeoutException(sprintf('Wait timeout: %fs', $timeout));
         }
         return $object;
