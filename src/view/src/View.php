@@ -41,12 +41,12 @@ class View
     {
         $layout = $this->layout;
         if (!$layout) {
-            $renderer = new Renderer();
-            return $renderer->render($this->dir, $template, $data);
+            $renderer = new Renderer($this->dir);
+            return $renderer->render($template, $data);
         }
         $renderer        = new Renderer($this->dir);
         $data['content'] = $renderer->render($template, $data);
-        return $renderer->render($this->dir, "layouts.{$layout}", $data);
+        return $renderer->render("layouts.{$layout}", $data);
     }
 
 }
