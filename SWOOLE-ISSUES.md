@@ -8,3 +8,4 @@
 - [Micro] 4.5.0 才解决 http_compression = false 的问题 https://github.com/swoole/swoole-src/issues/3256
 - [HTTP2] 4.5.0 才解决 open_http2_protocol Server Keep-Alive shutdown 问题 https://github.com/swoole/swoole-src/issues/2837#issuecomment-618308281
 - [Signal] 发现 signal 之前执行 fopen 和其他文件操作，因为是串行，会导致 signal 失效，Swoole >= 4.5.3 已经解决该问题
+- [Hook] >= 4.5.4 SWOOLE_HOOK_ALL 被修改为默认包含了 SWOOLE_HOOK_CURL
