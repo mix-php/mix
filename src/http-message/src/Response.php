@@ -34,6 +34,11 @@ class Response extends Message implements ResponseInterface
     protected $cookies = [];
 
     /**
+     * @var bool
+     */
+    protected $sended = false;
+
+    /**
      * Response constructor.
      * @param int $code
      * @param string $reasonPhrase
@@ -184,11 +189,13 @@ class Response extends Message implements ResponseInterface
 
     /**
      * 发送响应体，并结束当前请求
+     * @return bool
      */
     public function send()
     {
         // websocket upgrade 不处理
-        if ($this->getStatusCode() == 101) {
+        // 已经发送过的不处理
+        if ($this->getStatusCode() == 101 || $this->sended) {
             return;
         }
 
@@ -213,18 +220,23 @@ class Response extends Message implements ResponseInterface
         $status = $this->getStatusCode();
         $this->swooleResponse->status($status);
 
-        $body    = $this->getBody();
-        $content = $body ? $body->getContents() : null;
-        $this->swooleResponse->end($content);
+        $body         = $this->getBody();
+        $content      = $body ? $body->getContents() : null;
+        $result       = $this->swooleResponse->end($content);
+        $this->sended = true;
+        return $result;
     }
 
     /**
      * 发送文件
      * @param string $filename
+     * @return bool
      */
     public function sendFile(string $filename)
     {
-        $this->swooleResponse->sendfile($filename);
+        $result       = $this->swooleResponse->sendfile($filename);
+        $this->sended = true;
+        return $result;
     }
 
 }
