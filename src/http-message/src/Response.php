@@ -234,6 +234,11 @@ class Response extends Message implements ResponseInterface
      */
     public function sendFile(string $filename)
     {
+        $headers = $this->getHeaders();
+        foreach ($headers as $name => $value) {
+            $this->swooleResponse->header($name, implode(',', $value));
+        }
+
         $result       = $this->swooleResponse->sendfile($filename);
         $this->sended = true;
         return $result;
