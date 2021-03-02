@@ -64,11 +64,19 @@ class BeanInjector
         $canRuntime and \Swoole\Runtime::enableCoroutine($flags == 0 ? $flags : $flags ^ 256); // 256 = SWOOLE_HOOK_FILE
 
         foreach ($properties as $name => $value) {
-            // 注释类型检测
+            // 属性存在检测
             $class      = get_class($object);
             $reflection = new \ReflectionClass($class);
             if (!$reflection->hasProperty($name)) {
                 throw new InjectException(sprintf('Undefined property: %s::$%s', $class, $name));
+            }
+
+            // 注释类型检测
+            // php8不检查
+            if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+                // 导入
+                $object->$name = $value;
+                continue;
             }
             $property      = $reflection->getProperty($name);
             $reader        = new PhpDocReader();
