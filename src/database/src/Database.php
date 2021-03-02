@@ -211,22 +211,24 @@ class Database
      * 插入
      * @param string $table
      * @param array $data
+     * @param string $insert
      * @return Connection
      */
-    public function insert(string $table, array $data): Connection
+    public function insert(string $table, array $data, string $insert = 'INSERT INTO'): Connection
     {
-        return $this->borrow()->insert($table, $data);
+        return $this->borrow()->insert($table, $data, $insert);
     }
 
     /**
      * 批量插入
      * @param string $table
      * @param array $data
+     * @param string $insert
      * @return Connection
      */
-    public function batchInsert(string $table, array $data): Connection
+    public function batchInsert(string $table, array $data, string $insert = 'INSERT INTO'): Connection
     {
-        return $this->borrow()->batchInsert($table, $data);
+        return $this->borrow()->batchInsert($table, $data, $insert);
     }
 
     /**
