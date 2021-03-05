@@ -226,6 +226,10 @@ class Router implements ServerHandlerInterface, RouterInterface
             // 404 处理
             $this->error404($ex, $response)->send();
             return;
+        } catch (\Throwable $ex) {
+            // 500 处理
+            $this->error500($ex, $response)->send();
+            throw $ex;
         }
         // 保存路由参数
         foreach ($vars as $key => $value) {
