@@ -188,23 +188,6 @@ class Router implements ServerHandlerInterface, RouterInterface
             $request->withServerParams($serverParams);
         }
 
-        // 调用全局中间件
-        try {
-            $process    = function (ServerRequest $request, Response $response) {
-                return $response;
-            };
-            $dispatcher = new MiddlewareDispatcher($this->globalMiddleware, $process, $request, $response);
-            $response   = $dispatcher->dispatch();
-        } catch (\Throwable $ex) {
-            // 500 处理
-            $this->error500($ex, $response)->send();
-            throw $ex;
-        }
-        if ($response->getBody()) {
-            $response->send();
-            return;
-        }
-
         // 路由匹配
         try {
             if (!isset($this->dispatcher)) {
@@ -217,9 +200,21 @@ class Router implements ServerHandlerInterface, RouterInterface
                     if (!$handler instanceof \Closure && !is_object($handler[0])) {
                         $handler[0] = new $handler[0];
                     }
-                    $vars = $result[2];
+                    $vars       = $result[2];
+                    $middleware = array_merge($this->globalMiddleware, $middleware);
                     break;
                 default:
+                    // 调用全局中间件
+                    $process    = function (ServerRequest $request, Response $response) {
+                        return $response;
+                    };
+                    $dispatcher = new MiddlewareDispatcher($this->globalMiddleware, $process, $request, $response);
+                    $response   = $dispatcher->dispatch();
+                    if ($response->getBody()) {
+                        $response->send();
+                        return;
+                    }
+                    // 404
                     throw new NotFoundException('Not Found (#404)');
             }
         } catch (NotFoundException $ex) {
