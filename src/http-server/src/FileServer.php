@@ -43,7 +43,7 @@ class FileServer implements ServerHandlerInterface
     public function handleHTTP(ServerRequest $request, Response $response)
     {
         $path = $request->getUri()->getPath();
-        if (strpos($path, $this->stripPrefix) === 0) {
+        if ($this->stripPrefix && strpos($path, $this->stripPrefix) === 0) {
             $path = substr($path, strlen($this->stripPrefix));
         }
         $file = sprintf('%s%s', $this->dir, $path);
