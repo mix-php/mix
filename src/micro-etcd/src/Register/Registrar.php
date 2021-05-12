@@ -69,8 +69,8 @@ class Registrar
     {
         $client  = $this->client;
         $service = $this->service;
-        $reslut  = $client->grant($this->ttl);
-        $leaseID = $this->leaseID = (int)$reslut['ID'];
+        $result  = $client->grant($this->ttl);
+        $leaseID = $this->leaseID = (int)$result['ID'];
         $client->put(sprintf($this->serviceFormat, $service->getName(), $service->getID()), json_encode($service, JSON_UNESCAPED_SLASHES), ['lease' => $leaseID]);
         $this->ticker and $this->ticker->stop();
         $this->ticker = $this->keepAlive();
