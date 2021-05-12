@@ -94,6 +94,11 @@ class Connection
         // 但在 4.4.13 ~ 4.4.14 当 server->shutdown 执行后或者 response->recv 失败后再 close 会抛出 http response is unavailable 致命错误
         // 忽略异常，但是在 4.4.13 ~ 4.4.14 server->shutdown 时依然是无法 close 连接的，需升级 Swoole 版本
         try {
+            // 丢弃socket缓冲区的消息，避免 ngx 抛出 104: Connection reset by peer
+            $limit = 10;
+            while ($limit-- && $this->swooleResponse->recv(0.01)) {
+            }
+
             if ($this->swooleResponse->close()) {
                 return;
             }
