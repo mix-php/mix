@@ -24,6 +24,11 @@ class Connection
     public $connectionManager;
 
     /**
+     * @var bool
+     */
+    protected $receiving = false;
+
+    /**
      * Connection constructor.
      * @param \Swoole\Http\Response $response
      * @param ConnectionManager $connectionManager
@@ -44,7 +49,9 @@ class Connection
      */
     public function recv(float $timeout = -1)
     {
-        $frame = $this->swooleResponse->recv($timeout);
+        $this->receiving = true;
+        $frame           = $this->swooleResponse->recv($timeout);
+        $this->receiving = false;
         if ($frame === false) { // 接收失败
             $this->close(); // 需要移除管理器内的连接，所以还要 close
             $errCode = swoole_last_error();
@@ -95,8 +102,11 @@ class Connection
         // 忽略异常，但是在 4.4.13 ~ 4.4.14 server->shutdown 时依然是无法 close 连接的，需升级 Swoole 版本
         try {
             // 丢弃socket缓冲区的消息，避免 ngx 抛出 104: Connection reset by peer
-            $limit = 10;
-            while ($limit-- && $this->swooleResponse->recv(0.01)) {
+            // 避免出现: Uncaught Swoole\Error: Socket#7 has already been bound to another coroutine#7, reading of the same socket in coroutine#8 at the same time is not allowed
+            if (!$this->receiving) {
+                $limit = 10;
+                while ($limit-- && $this->swooleResponse->recv(0.01)) {
+                }
             }
 
             if ($this->swooleResponse->close()) {
