@@ -18,7 +18,7 @@ trait Router
     protected $dispatcher;
 
     /**
-     * @var array
+     * @var Route[]
      */
     protected $routes;
 
@@ -29,9 +29,9 @@ trait Router
 
     /**
      * @param \Closure ...$handlers
-     * @return RouterInterface
+     * @return
      */
-    public function Use(\Closure ...$handlers): RouterInterface
+    public function use(\Closure ...$handlers): Router
     {
         $this->handlers = array_merge($this->handlers, $handlers);
     }
@@ -39,33 +39,20 @@ trait Router
     /**
      * @param string $path
      * @param \Closure ...$handlers
-     * @return RouterInterface
+     * @return Route
      */
-    public function get(string $path, \Closure ...$handlers): RouterInterface
+    public function handleClosure(string $path, \Closure ...$handlers): Route
     {
-        $this->addRoute('GET', $path, ...$handlers);
-    }
-
-    /**
-     * @param string $method
-     * @param string $path
-     * @param \Closure ...$handlers
-     * @return RouterInterface
-     */
-    public function addRoute(string $method, string $path, \Closure ...$handlers): RouterInterface
-    {
-        $this->routes[] = function (RouteCollector $r) use ($method, $path, $handlers) {
-            $r->addRoute($method, $path, function (Context $ctx) use ($handlers) {
-                $this->runHandlers(array_merge($this->handlers, $handlers), $ctx);
-            });
-        };
+        $route = new Route($this, $path, array_merge($this->handlers, $handlers));
+        $this->routes[] = $route;
+        return $route;
     }
 
     protected function startDispatcher(): void
     {
         $this->dispatcher = \FastRoute\simpleDispatcher(function (RouteCollector $r) {
             foreach ($this->routes as $route) {
-                $route($r);
+                $route->handler()($r);
             }
         });
     }
@@ -115,9 +102,8 @@ trait Router
 
     /**
      * @param array $handlers
-     * @return array
      */
-    protected function addAbortHandler(array &$handlers)
+    protected function addAbortHandler(array &$handlers): void
     {
         $handler = function (Context $ctx) {
             try {
