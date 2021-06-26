@@ -11,7 +11,7 @@ use FastRoute\Dispatcher;
 class Engine implements RouterInterface
 {
 
-    use RouterTrait;
+    use Router;
 
     /**
      * @var Context

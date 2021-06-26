@@ -39,4 +39,17 @@ class Context
         return $ctx;
     }
 
+    public function next(): void
+    {
+
+    }
+
+    /**
+     * @throws Abort
+     */
+    public function abort(): void
+    {
+        throw new Abort();
+    }
+
 }

@@ -9,7 +9,7 @@ use FastRoute\RouteCollector;
  * Trait RouterTrait
  * @package Mix\Vega
  */
-trait RouterTrait
+trait Router
 {
 
     /**
@@ -33,7 +33,7 @@ trait RouterTrait
      */
     public function Use(\Closure ...$handlers): RouterInterface
     {
-        $this->$handlers = array_merge($this->handlers, $handlers);
+        $this->handlers = array_merge($this->handlers, $handlers);
     }
 
     /**
@@ -106,9 +106,26 @@ trait RouterTrait
      */
     protected function runHandlers($handlers, Context $ctx): void
     {
-        foreach ($handlers as $handler) {
-            $handler($ctx);
+        $this->addAbortHandler($handlers);
+        $next = null;
+        foreach (array_reverse($handlers) as $handler) {
+            
         }
+    }
+
+    /**
+     * @param array $handlers
+     * @return array
+     */
+    protected function addAbortHandler(array &$handlers)
+    {
+        $handler = function (Context $ctx) {
+            try {
+                $ctx->next();
+            } catch (Abort $abort) {
+            }
+        };
+        array_push($handlers, $handler);
     }
 
 }
