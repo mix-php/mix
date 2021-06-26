@@ -9,7 +9,7 @@ REPOS=$@
 
 function split()
 {
-    SHA1=`./bin/splitsh-lite --prefix=$1`
+    SHA1=`./bin/splitsh-lite-linux-amd64 --prefix=$1`
     git push $2 "$SHA1:refs/heads/$CURRENT_BRANCH" -f
 }
 
@@ -25,7 +25,7 @@ if [[ $# -eq 0 ]]; then
 fi
 
 for REPO in $REPOS ; do
-    remote $REPO https://github.com/mix-php/$REPO.git
+    remote $REPO git@github.com:hyperf/$REPO.git
 
     split "src/$REPO" $REPO
 done

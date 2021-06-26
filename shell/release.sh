@@ -40,7 +40,7 @@ do
 
         if [[ $(git log --pretty="%d" -n 1 | grep tag --count) -eq 0 ]]; then
             echo "Releasing $REMOTE"
-            git tag $VERSION
+            git tag $VERSION || true
             git push origin --tags
         fi
     )
