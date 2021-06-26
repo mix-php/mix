@@ -1,6 +1,6 @@
 {
   "name": "mix/http-message",
-  "description": "Http message library based on PSR-7 / PSR-17 standard, support Swoole",
+  "description": "Http message library based on PSR-7 / PSR-17 standard, support Swoole, WorkerMan",
   "type": "library",
   "keywords": [
     "mix",
@@ -9,7 +9,7 @@
     "message",
     "psr"
   ],
-  "homepage": "https://openmix.org/",
+  "homepage": "https://openmix.org/mix-php",
   "license": "Apache-2.0",
   "authors": [
     {
@@ -21,8 +21,7 @@
     "php": ">=7.0.0",
     "ext-swoole": ">=4.4.4",
     "psr/http-message": "^1.0",
-    "psr/http-factory": "^1.0",
-    "mix/runtime": "~2.2.0"
+    "psr/http-factory": "^1.0"
   },
   "autoload": {
     "psr-4": {

@@ -3,7 +3,6 @@
 namespace Mix\Http\Message;
 
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -37,7 +36,7 @@ class Request extends Message implements RequestInterface
     public function __construct(string $method, UriInterface $uri)
     {
         $this->method = $method;
-        $this->uri    = $uri;
+        $this->uri = $uri;
     }
 
     /**
