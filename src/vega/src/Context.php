@@ -36,13 +36,13 @@ class Context
      * @param \Swoole\Http\Response $response
      * @return Context
      */
-    public static function bySwoole(\Swoole\Http\Request $request, \Swoole\Http\Response $response): Context
+    public static function fromSwoole(\Swoole\Http\Request $request, \Swoole\Http\Response $response): Context
     {
         $ctx = new static();
         $requestFactory = new ServerRequestFactory();
         $responseFactory = new ResponseFactory();
-        $ctx->request = $requestFactory->createServerRequestBySwoole($request);
-        $ctx->response = $responseFactory->createResponseBySwoole($response);
+        $ctx->request = $requestFactory->createServerRequestFromSwoole($request);
+        $ctx->response = $responseFactory->createResponseFromSwoole($response);
         return $ctx;
     }
 

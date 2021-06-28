@@ -99,9 +99,7 @@ trait Router
                 $handler = $routeInfo[1];
                 $vars = $routeInfo[2];
                 // with $vars
-                foreach ($vars as $key => $val) {
-                    $ctx->request->withAttribute($key, $val);
-                }
+                $ctx->request->withQueryParams($vars);
                 // call $handler
                 $handler($ctx);
                 break;

@@ -30,7 +30,7 @@ class Engine
                  * @var $response \Swoole\Http\Response
                  */
                 list($request, $response) = $args;
-                $ctx = Context::bySwoole($request, $response);
+                $ctx = Context::fromSwoole($request, $response);
                 $this->dispatch($request->server['request_method'], $request->server['path_info'] ?: '/', $ctx);
             } elseif (static::isWorkerMan($args)) {
 
