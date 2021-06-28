@@ -41,7 +41,7 @@ trait Router
      * @param \Closure ...$handlers
      * @return Route
      */
-    public function handleClosure(string $path, \Closure ...$handlers): Route
+    public function handleF(string $path, \Closure ...$handlers): Route
     {
         $route = new Route($this, $path, array_merge($this->handlers, $handlers));
         $this->routes[] = $route;
@@ -63,7 +63,7 @@ trait Router
      * @param Context $ctx
      * @throws Exception
      */
-    public function dispatch(string $method, string $uri, Context $ctx)
+    protected function dispatch(string $method, string $uri, Context $ctx)
     {
         $routeInfo = $this->dispatcher->dispatch($method, $uri);
         switch ($routeInfo[0]) {
@@ -88,16 +88,21 @@ trait Router
     }
 
     /**
-     * @param $handlers
+     * @param array $handlers
      * @param Context $ctx
      */
-    protected function runHandlers($handlers, Context $ctx): void
+    protected function runHandlers(array $handlers, Context $ctx): void
     {
-        $this->addAbortHandler($handlers);
-        $next = null;
-        foreach (array_reverse($handlers) as $handler) {
-            
+        if (empty($handlers)) {
+            return;
         }
+
+        $this->addAbortHandler($handlers);
+
+        $arr = array_reverse($handlers);
+        $handler = array_pop($arr);
+        $ctx->withHandlers($arr);
+        $handler();
     }
 
     /**

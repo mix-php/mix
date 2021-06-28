@@ -25,6 +25,11 @@ class Context
     public $response;
 
     /**
+     * @var \Closure[]
+     */
+    protected $handlers = [];
+
+    /**
      * @param \Swoole\Http\Request $request
      * @param \Swoole\Http\Response $response
      * @return Context
@@ -39,9 +44,24 @@ class Context
         return $ctx;
     }
 
+    /**
+     * @param array $handlers
+     */
+    public function withHandlers(array $handlers)
+    {
+        $this->handlers = $handlers;
+    }
+
+    /**
+     * @throws Exception
+     */
     public function next(): void
     {
-
+        if (count($this->handlers) == 0) {
+            throw new Exception('There is no handler that can be executed');
+        }
+        $handler = array_pop($this->handlers);
+        $handler();
     }
 
     /**
