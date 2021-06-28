@@ -3,7 +3,6 @@
 namespace Mix\Http\Message\Factory;
 
 use Mix\Http\Message\Request;
-use Mix\Http\Message\Stream\ContentStream;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 

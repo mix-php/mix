@@ -10,7 +10,7 @@ use Psr\Http\Message\StreamInterface;
  * @package Mix\Http\Message\Stream
  * @author liu,jian <coder.keda@gmail.com>
  */
-class ContentStream implements StreamInterface
+class StringStream implements StreamInterface
 {
 
     /**

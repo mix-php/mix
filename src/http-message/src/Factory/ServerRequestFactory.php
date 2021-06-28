@@ -2,12 +2,7 @@
 
 namespace Mix\Http\Message\Factory;
 
-use Mix\Context\Context;
 use Mix\Http\Message\ServerRequest;
-use Mix\Http\Message\Stream\ContentStream;
-use Mix\Http\Message\Stream\FileStream;
-use Mix\Http\Message\Upload\UploadedFile;
-use Mix\Http\Message\Uri\Uri;
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -49,16 +44,16 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      * @param \Swoole\Http\Request $request
      * @return ServerRequestInterface
      */
-    public function createServerRequestFromSwoole(\Swoole\Http\Request $request): ServerRequestInterface
+    public function createServerRequestBySwoole(\Swoole\Http\Request $request): ServerRequestInterface
     {
         list($scheme, $protocolVersion) = explode('/', $request->server['server_protocol']);
-        $method        = $request->server['request_method'] ?? '';
-        $scheme        = strtolower($scheme);
-        $host          = $request->header['host'] ?? '';
+        $method = $request->server['request_method'] ?? '';
+        $scheme = strtolower($scheme);
+        $host = $request->header['host'] ?? '';
         $requestestUri = $request->server['request_uri'] ?? '';
-        $queryString   = $request->server['query_string'] ?? '';
-        $uri           = $scheme . '://' . $host . $requestestUri . ($queryString ? "?{$queryString}" : '');
-        $serverParams  = $request->server ?? [];
+        $queryString = $request->server['query_string'] ?? '';
+        $uri = $scheme . '://' . $host . $requestestUri . ($queryString ? "?{$queryString}" : '');
+        $serverParams = $request->server ?? [];
 
         /** @var ServerRequest $serverRequest */
         $serverRequest = $this->createServerRequest($method, $uri, $serverParams);
@@ -72,7 +67,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         }
 
         $contentType = $serverRequest->getHeaderLine('content-type');
-        $isFormJson  = strpos($contentType, 'application/json') === false ? false : true;
+        $isFormJson = strpos($contentType, 'application/json') === false ? false : true;
 
         $body = (new StreamFactory())->createStreamFromResource($request);
         $serverRequest->withBody($body);
@@ -83,9 +78,9 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $queryParams = $request->get ?? [];
         $serverRequest->withQueryParams($queryParams);
 
-        $uploadedFiles       = [];
+        $uploadedFiles = [];
         $uploadedFileFactory = new UploadedFileFactory;
-        $streamFactory       = new StreamFactory();
+        $streamFactory = new StreamFactory();
         foreach ($request->files ?? [] as $name => $file) {
             // swoole 概率性出现 files 存在，但是 file 内无数据的情况
             if (!isset($file['error']) || !isset($file['size']) || !isset($file['name']) || !isset($file['type'])) {
@@ -110,12 +105,10 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
 
         $parsedBody = $request->post ?? []; // swoole 本身能解析 application/x-www-form-urlencoded multipart/form-data 全部的 method
         if ($isFormJson) {
-            $json       = json_decode($request->rawContent(), false, 512); // assoc = false 为了保留 {} 不被转换为 []
+            $json = json_decode($request->rawContent(), false, 512); // assoc = false 为了保留 {} 不被转换为 []
             $parsedBody = is_null($json) ? [] : (array)$json;
         }
         $serverRequest->withParsedBody($parsedBody);
-
-        $serverRequest->withContext(new Context());
 
         return $serverRequest;
     }
