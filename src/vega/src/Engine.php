@@ -2,8 +2,6 @@
 
 namespace Mix\Vega;
 
-use FastRoute\Dispatcher;
-
 /**
  * Class Engine
  * @package Mix\Vega

@@ -53,6 +53,13 @@ $http_worker->count = 4;
 Workerman\Worker::runAll();
 ```
 
+访问测试
+
+~~~
+% curl  http://0.0.0.0:9501/hello
+hello, world!
+~~~
+
 ## License
 
 Apache License Version 2.0, http://www.apache.org/licenses/
