@@ -38,7 +38,7 @@ trait Reader
      * @param string $key
      * @return array
      */
-    public function existGet(string $key): array
+    public function existsGet(string $key): array
     {
     }
 
@@ -74,7 +74,7 @@ trait Reader
      * @param string $key
      * @return array
      */
-    public function existPost(string $key): array
+    public function existsPost(string $key): array
     {
     }
 
