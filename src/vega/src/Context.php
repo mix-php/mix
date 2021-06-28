@@ -15,6 +15,7 @@ class Context
 {
 
     use Writer;
+    use Reader;
 
     /**
      * @var Response

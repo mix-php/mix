@@ -2,7 +2,6 @@
 
 namespace Mix\Http\Message;
 
-use Mix\Http\Message\Cookie\Cookie;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -179,13 +178,13 @@ class Response extends Message implements ResponseInterface
 
     /**
      * 重定向
-     * @param string $url
-     * @param int $status
+     * @param string $location
+     * @param int $code
      * @return static
      */
-    public function redirect(string $url, int $status = 302)
+    public function redirect(string $location, int $code = 302)
     {
-        return $this->withHeader('Location', $url)->withStatus($status);
+        return $this->withHeader('Location', $location)->withStatus($code);
     }
 
     /**

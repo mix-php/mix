@@ -2,6 +2,9 @@
 
 namespace Mix\Vega;
 
+use Mix\Http\Message\Cookie;
+use Mix\Http\Message\Response;
+use Mix\Http\Message\ServerRequest;
 use Mix\Http\Message\Stream\StringStream;
 
 /**
@@ -10,6 +13,16 @@ use Mix\Http\Message\Stream\StringStream;
  */
 trait Writer
 {
+
+    /**
+     * @var Response
+     */
+    public $response;
+
+    /**
+     * @var ServerRequest
+     */
+    public $request;
 
     /**
      * @param int $code
@@ -81,6 +94,47 @@ trait Writer
     protected static function jsonMarshal($data): string
     {
         return json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    }
+
+    /**
+     * @param int $code
+     */
+    public function status(int $code): void
+    {
+        $this->response->withStatus($code);
+    }
+
+    /**
+     * @param string $key
+     * @param string $value
+     */
+    public function setHeader(string $key, string $value): void
+    {
+        $this->response->withHeader($key, $value);
+    }
+
+    /**
+     * @param string $name
+     * @param string $value
+     * @param int $expire
+     * @param string $path
+     * @param string $domain
+     * @param bool $secure
+     * @param bool $httpOnly
+     */
+    public function setCookie(string $name, string $value, int $expire = 0, string $path = '/', string $domain = '', bool $secure = false, bool $httpOnly = false): void
+    {
+        $cookie = new Cookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
+        $this->response->withAddedCookie($cookie);
+    }
+
+    /**
+     * @param string $location
+     * @param int $code
+     */
+    public function redirect(string $location, int $code = 302): void
+    {
+        $this->response->redirect($location, $code);
     }
 
 }
