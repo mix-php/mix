@@ -35,7 +35,7 @@ class ResponseFactory implements ResponseFactoryInterface
      * @param \Swoole\Http\Response $response
      * @return ResponseInterface
      */
-    public function createResponseBySwoole(\Swoole\Http\Response $resp): ResponseInterface
+    public function createResponseFromSwoole(\Swoole\Http\Response $resp): ResponseInterface
     {
         /** @var Response $response */
         $response = $this->createResponse();

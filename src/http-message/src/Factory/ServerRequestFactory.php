@@ -44,7 +44,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      * @param \Swoole\Http\Request $request
      * @return ServerRequestInterface
      */
-    public function createServerRequestBySwoole(\Swoole\Http\Request $request): ServerRequestInterface
+    public function createServerRequestFromSwoole(\Swoole\Http\Request $request): ServerRequestInterface
     {
         list($scheme, $protocolVersion) = explode('/', $request->server['server_protocol']);
         $method = $request->server['request_method'] ?? '';
@@ -66,10 +66,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
             $serverRequest->withHeader($name, $value);
         }
 
-        $contentType = $serverRequest->getHeaderLine('content-type');
-        $isFormJson = strpos($contentType, 'application/json') === false ? false : true;
-
-        $body = (new StreamFactory())->createStreamFromResource($request);
+        $body = (new StreamFactory())->createStreamFromResource($request); // 减少内存占用
         $serverRequest->withBody($body);
 
         $cookieParams = $request->cookie ?? [];
@@ -104,10 +101,6 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $serverRequest->withUploadedFiles($uploadedFiles);
 
         $parsedBody = $request->post ?? []; // swoole 本身能解析 application/x-www-form-urlencoded multipart/form-data 全部的 method
-        if ($isFormJson) {
-            $json = json_decode($request->rawContent(), false, 512); // assoc = false 为了保留 {} 不被转换为 []
-            $parsedBody = is_null($json) ? [] : (array)$json;
-        }
         $serverRequest->withParsedBody($parsedBody);
 
         return $serverRequest;
