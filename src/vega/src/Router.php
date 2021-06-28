@@ -7,7 +7,7 @@ use FastRoute\RouteCollector;
 use Mix\Http\Message\Stream\StringStream;
 
 /**
- * Trait RouterTrait
+ * Trait Router
  * @package Mix\Vega
  */
 trait Router

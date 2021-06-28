@@ -14,7 +14,7 @@ composer require mix/vega
 
 配置路由
 
-```
+```php
 $vega = new Mix\Vega\Engine();
 $vega->handleF('/hello', function (Context $ctx) {
     $ctx->string(200, 'hello, world!');
