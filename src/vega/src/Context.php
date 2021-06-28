@@ -76,7 +76,7 @@ class Context
             throw new Exception('There is no handler that can be executed');
         }
         $handler = array_pop($this->handlers);
-        $handler();
+        $handler($this);
     }
 
     /**

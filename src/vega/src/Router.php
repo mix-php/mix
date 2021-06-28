@@ -82,11 +82,19 @@ trait Router
         switch ($routeInfo[0]) {
             case \FastRoute\Dispatcher::NOT_FOUND:
                 // ... 404 Not Found
-                throw new Exception('404 Not Found', 404);
+                $handler = function (Context $ctx) {
+                    throw new Exception('404 Not Found', 404);
+                };
+                $this->runHandlers(array_merge($this->handlers, [$handler]), $ctx);
+                break;
             case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-                $allowedMethods = $routeInfo[1];
+                // $allowedMethods = $routeInfo[1];
                 // ... 405 Method Not Allowed
-                throw new Exception('405 Method Not Allowed', 405);
+                $handler = function (Context $ctx) {
+                    throw new Exception('405 Method Not Allowed', 405);
+                };
+                $this->runHandlers(array_merge($this->handlers, [$handler]), $ctx);
+                break;
             case \FastRoute\Dispatcher::FOUND:
                 $handler = $routeInfo[1];
                 $vars = $routeInfo[2];
@@ -110,19 +118,18 @@ trait Router
             return;
         }
 
-        $this->add404Handler($handlers);
-        $this->addAbortHandler($handlers);
+        $this->append404Handler($handlers);
+        $this->appendAbortHandler($handlers);
 
-        $arr = array_reverse($handlers);
-        $handler = array_pop($arr);
-        $ctx->withHandlers($arr);
+        $handler = array_pop($handlers);
+        $ctx->withHandlers($handlers);
         $handler($ctx);
     }
 
     /**
      * @param array $handlers
      */
-    protected function addAbortHandler(array &$handlers): void
+    protected function appendAbortHandler(array &$handlers): void
     {
         $handler = function (Context $ctx) {
             try {
@@ -136,8 +143,8 @@ trait Router
                 if ($message != '') {
                     $body = new StringStream($message);
                     $ctx->response->withBody($body);
+                    $ctx->response->send();
                 }
-                $ctx->response->send();
             }
         };
         array_push($handlers, $handler);
@@ -146,7 +153,7 @@ trait Router
     /**
      * @param array $handlers
      */
-    protected function add404Handler(array &$handlers): void
+    protected function append404Handler(array &$handlers): void
     {
         $handler = function (Context $ctx) {
             try {
