@@ -22,7 +22,8 @@
   },
   "require-dev": {
     "swoole/ide-helper": "dev-master",
-    "workerman/workerman": "^4.0"
+    "workerman/workerman": "^4.0",
+    "phpunit/phpunit": "^9.5"
   },
   "autoload": {
     "psr-4": {

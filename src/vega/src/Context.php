@@ -6,6 +6,7 @@ use Mix\Http\Message\Factory\ResponseFactory;
 use Mix\Http\Message\Factory\ServerRequestFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
+use Mix\Http\Message\Stream\StringStream;
 
 /**
  * Class Context
@@ -39,17 +40,24 @@ class Context
         $ctx = new static();
         $requestFactory = new ServerRequestFactory();
         $responseFactory = new ResponseFactory();
-        $ctx->request = $requestFactory->createServerRequestFromSwoole($request);
-        $ctx->response = $responseFactory->createResponseFromSwoole($response);
+        $ctx->request = $requestFactory->createServerRequestBySwoole($request);
+        $ctx->response = $responseFactory->createResponseBySwoole($response);
         return $ctx;
     }
 
-    /**
-     * @param array $handlers
-     */
-    public function withHandlers(array $handlers)
+    public function string(string $content)
     {
-        $this->handlers = $handlers;
+        $body = new StringStream($content);
+        $this->response->withBody($body);
+        $this->response->send();
+    }
+
+    /**
+     * @throws Abort
+     */
+    public function abort(): void
+    {
+        throw new Abort();
     }
 
     /**
@@ -65,11 +73,11 @@ class Context
     }
 
     /**
-     * @throws Abort
+     * @param array $handlers
      */
-    public function abort(): void
+    public function withHandlers(array $handlers)
     {
-        throw new Abort();
+        $this->handlers = $handlers;
     }
 
 }

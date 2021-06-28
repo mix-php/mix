@@ -8,7 +8,7 @@ use FastRoute\Dispatcher;
  * Class Engine
  * @package Mix\Vega
  */
-class Engine implements RouterInterface
+class Engine
 {
 
     use Router;
@@ -33,7 +33,7 @@ class Engine implements RouterInterface
                  */
                 list($request, $response) = $args;
                 $ctx = Context::bySwoole($request, $response);
-                $this->dispatch($request->getMethod(), $request->getServerParams()['path_info'] ?: '/', $ctx);
+                $this->dispatch($request->server['request_method'], $request->server['path_info'] ?: '/', $ctx);
             } elseif (static::isWorkerMan($args)) {
 
             } else {

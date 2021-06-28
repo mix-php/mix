@@ -91,7 +91,7 @@ trait Router
      * @param array $handlers
      * @param Context $ctx
      */
-    protected function runHandlers(array $handlers, Context $ctx): void
+    public function runHandlers(array $handlers, Context $ctx): void
     {
         if (empty($handlers)) {
             return;
@@ -102,7 +102,7 @@ trait Router
         $arr = array_reverse($handlers);
         $handler = array_pop($arr);
         $ctx->withHandlers($arr);
-        $handler();
+        $handler($ctx);
     }
 
     /**

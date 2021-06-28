@@ -12,7 +12,7 @@ class Route
 {
 
     /**
-     * @var Router
+     * @var Engine
      */
     protected $router;
 
@@ -36,7 +36,7 @@ class Route
      * @param string $path
      * @param array $handlers
      */
-    public function __construct(Router $router, string $path, array $handlers)
+    public function __construct(Engine $router, string $path, array $handlers)
     {
         $this->router = $router;
         $this->path = $path;
