@@ -143,6 +143,8 @@ trait Router
                 if ($message != '') {
                     $body = new StringStream($message);
                     $ctx->response->withBody($body);
+                }
+                if ($code || $message) {
                     $ctx->response->send();
                 }
             }
@@ -160,7 +162,7 @@ trait Router
                 $ctx->next();
             } catch (Exception $ex) {
                 if (in_array($ex->getCode(), [404, 405]) == 404 && in_array($ex->getMessage(), ['404 Not Found', '405 Method Not Allowed'])) {
-                    $ctx->abortWithException($ex->getCode(), $ex);
+                    $ctx->abortWithStatusException($ex->getCode(), $ex);
                 }
             }
         };

@@ -17,7 +17,7 @@ composer require mix/vega
 ```
 $vega = new Mix\Vega\Engine();
 $vega->handleF('/hello', function (Context $ctx) {
-    $ctx->string('hello, world!');
+    $ctx->string(200, 'hello, world!');
 })->methods('GET');
 ```
 
@@ -56,7 +56,7 @@ Workerman\Worker::runAll();
 访问测试
 
 ~~~
-% curl  http://0.0.0.0:9501/hello
+% curl http://0.0.0.0:9501/hello
 hello, world!
 ~~~
 

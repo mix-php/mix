@@ -12,7 +12,7 @@ final class RunTest extends TestCase
     {
         $vega = new Engine();
         $vega->handleF('/hello', function (Context $ctx) {
-            $ctx->string('hello, world!');
+            $ctx->string(200, 'hello, world!');
         })->methods('GET');
         swoole_run($vega);
     }
