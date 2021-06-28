@@ -45,7 +45,7 @@ class Response extends Message implements ResponseInterface
      */
     public function __construct(int $code = 200, string $reasonPhrase = '')
     {
-        $this->statusCode   = $code;
+        $this->statusCode = $code;
         $this->reasonPhrase = $reasonPhrase;
     }
 
@@ -104,7 +104,7 @@ class Response extends Message implements ResponseInterface
      */
     public function withStatus($code, $reasonPhrase = '')
     {
-        $this->statusCode   = $code;
+        $this->statusCode = $code;
         $this->reasonPhrase = $reasonPhrase;
         return $this;
     }
@@ -143,8 +143,9 @@ class Response extends Message implements ResponseInterface
      */
     public function withCookies(array $cookies)
     {
+        $this->cookies = [];
         foreach ($cookies as $cookie) {
-            $this->withCookie($cookie);
+            $this->withAddedCookie($cookie);
         }
         return $this;
     }
@@ -155,7 +156,7 @@ class Response extends Message implements ResponseInterface
      * @param $value
      * @return static
      */
-    public function withCookie(Cookie $cookie)
+    public function withAddedCookie(Cookie $cookie)
     {
         $this->cookies[] = $cookie;
         return $this;
@@ -220,9 +221,9 @@ class Response extends Message implements ResponseInterface
         $status = $this->getStatusCode();
         $this->swooleResponse->status($status);
 
-        $body         = $this->getBody();
-        $content      = $body ? $body->getContents() : null;
-        $result       = $this->swooleResponse->end($content);
+        $body = $this->getBody();
+        $content = $body ? $body->getContents() : null;
+        $result = $this->swooleResponse->end($content);
         $this->sended = true;
         return $result;
     }
@@ -239,7 +240,7 @@ class Response extends Message implements ResponseInterface
             $this->swooleResponse->header($name, implode(',', $value));
         }
 
-        $result       = $this->swooleResponse->sendfile($filename);
+        $result = $this->swooleResponse->sendfile($filename);
         $this->sended = true;
         return $result;
     }
