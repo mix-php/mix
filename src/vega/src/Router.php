@@ -4,6 +4,7 @@ namespace Mix\Vega;
 
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
+use Mix\Http\Message\Stream\StringStream;
 
 /**
  * Trait RouterTrait
@@ -42,6 +43,18 @@ trait Router
      * @return Route
      */
     public function handleF(string $path, \Closure ...$handlers): Route
+    {
+        $route = new Route($this, $path, array_merge($this->handlers, $handlers));
+        $this->routes[] = $route;
+        return $route;
+    }
+
+    /**
+     * @param string $path
+     * @param callable ...$handlers
+     * @return Route
+     */
+    public function handleC(string $path, callable ...$handlers): Route
     {
         $route = new Route($this, $path, array_merge($this->handlers, $handlers));
         $this->routes[] = $route;
@@ -97,6 +110,7 @@ trait Router
             return;
         }
 
+        $this->add404Handler($handlers);
         $this->addAbortHandler($handlers);
 
         $arr = array_reverse($handlers);
@@ -114,6 +128,33 @@ trait Router
             try {
                 $ctx->next();
             } catch (Abort $abort) {
+                $code = $abort->getCode();
+                $message = $abort->getMessage();
+                if ($code != 0) {
+                    $ctx->response->withStatus($code);
+                }
+                if ($message != '') {
+                    $body = new StringStream($message);
+                    $ctx->response->withBody($body);
+                }
+                $ctx->response->send();
+            }
+        };
+        array_push($handlers, $handler);
+    }
+
+    /**
+     * @param array $handlers
+     */
+    protected function add404Handler(array &$handlers): void
+    {
+        $handler = function (Context $ctx) {
+            try {
+                $ctx->next();
+            } catch (Exception $ex) {
+                if (in_array($ex->getCode(), [404, 405]) == 404 && in_array($ex->getMessage(), ['404 Not Found', '405 Method Not Allowed'])) {
+                    $ctx->abortWithException($ex->getCode(), $ex);
+                }
             }
         };
         array_push($handlers, $handler);

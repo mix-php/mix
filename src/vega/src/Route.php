@@ -33,10 +33,11 @@ class Route
 
     /**
      * Route constructor.
+     * @param $router
      * @param string $path
      * @param array $handlers
      */
-    public function __construct(Engine $router, string $path, array $handlers)
+    public function __construct($router, string $path, array $handlers)
     {
         $this->router = $router;
         $this->path = $path;

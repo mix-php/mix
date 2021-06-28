@@ -53,11 +53,18 @@ class Context
     }
 
     /**
-     * @throws Abort
      */
     public function abort(): void
     {
         throw new Abort();
+    }
+
+    /**
+     * @param int $code
+     */
+    public function abortWithException(int $code, \Throwable $ex)
+    {
+        throw new Abort($ex->getMessage(), $code);
     }
 
     /**
