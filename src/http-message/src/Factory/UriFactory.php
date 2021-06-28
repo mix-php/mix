@@ -2,7 +2,7 @@
 
 namespace Mix\Http\Message\Factory;
 
-use Mix\Http\Message\Uri\Uri;
+use Mix\Http\Message\Uri;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
 

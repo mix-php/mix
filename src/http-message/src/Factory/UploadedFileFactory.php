@@ -2,7 +2,7 @@
 
 namespace Mix\Http\Message\Factory;
 
-use Mix\Http\Message\Upload\UploadedFile;
+use Mix\Http\Message\UploadedFile;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UploadedFileInterface;

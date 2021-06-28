@@ -2,7 +2,7 @@
 
 namespace Mix\Http\Message\Factory;
 
-use Mix\Http\Message\Cookie\Cookie;
+use Mix\Http\Message\Cookie;
 
 /**
  * Class CookieFactory
