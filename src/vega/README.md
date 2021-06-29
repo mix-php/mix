@@ -266,6 +266,19 @@ $vega->handleF('/jsonp', function (Mix\Vega\Context $ctx) {
 
 ## 设置中间件
 
+给某个路由配置中间件，可配置多个
+
+```php
+$vega = new Mix\Vega\Engine();
+$func = function (Mix\Vega\Context $ctx) {
+    // do something
+    $ctx->next();
+};
+$vega->handleF('/hello', $func, function (Mix\Vega\Context $ctx) {
+    $ctx->string(200, 'hello, world!');
+})->methods('GET');
+```
+
 配置全局中间件，即便没有匹配到路由也会执行
 
 ```php
@@ -291,19 +304,6 @@ $vega->use(function (Mix\Vega\Context $ctx) {
     $ctx->next();
     // do something
 });
-```
-
-给某个路由配置中间件
-
-```php
-$vega = new Mix\Vega\Engine();
-$func = function (Mix\Vega\Context $ctx) {
-    // do something
-    $ctx->next();
-};
-$vega->handleF('/hello', $func, function (Mix\Vega\Context $ctx) {
-    $ctx->string(200, 'hello, world!');
-})->methods('GET');
 ```
 
 ### 404 自定义
