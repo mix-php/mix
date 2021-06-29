@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "592c1e0d80315401059fb4d1c50efb6d",
+    "content-hash": "92c76a8607db93775b052fe85478d866",
     "packages": [
         {
             "name": "mix/http-message",
@@ -121,6 +121,57 @@
                 "source": "https://github.com/mix-php/runtime/tree/v2.2.14"
             },
             "time": "2020-09-18T03:15:48+00:00"
+        },
+        {
+            "name": "mix/view",
+            "version": "v2.2.17",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/view.git",
+                "reference": "060186688f07048022a31113bbf8cb094a8ea08f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/view/zipball/060186688f07048022a31113bbf8cb094a8ea08f",
+                "reference": "060186688f07048022a31113bbf8cb094a8ea08f",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\View\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "View library, reference Yii2",
+            "homepage": "https://openmix.org/",
+            "keywords": [
+                "mix",
+                "view"
+            ],
+            "support": {
+                "issues": "https://github.com/mix-php/view/issues",
+                "source": "https://github.com/mix-php/view/tree/v2.2.17"
+            },
+            "time": "2020-12-08T06:38:39+00:00"
         },
         {
             "name": "nikic/fast-route",

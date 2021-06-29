@@ -2,6 +2,8 @@
 
 namespace Mix\Vega;
 
+use Mix\Vega\Exception\RuntimeException;
+
 /**
  * Trait Store
  * @package Mix\Vega
@@ -35,13 +37,13 @@ trait Store
     /**
      * @param string $key
      * @return mixed
-     * @throws Exception
+     * @throws RuntimeException
      */
     public function mustGet(string $key)
     {
         $value = $this->get($key);
         if (is_null($value)) {
-            throw new Exception(sprintf('Key %s not found', $key));
+            throw new RuntimeException(sprintf('Key %s not found', $key));
         }
         return $value;
     }

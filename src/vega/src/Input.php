@@ -4,6 +4,7 @@ namespace Mix\Vega;
 
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
+use Mix\Vega\Exception\RuntimeException;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
 
@@ -95,13 +96,13 @@ trait Input
     /**
      * @param string $name
      * @return UploadedFileInterface
-     * @throws Exception
+     * @throws RuntimeException
      */
     public function formFile(string $name): UploadedFileInterface
     {
         $files = $this->request->getUploadedFiles();
         if (empty($files)) {
-            throw new Exception('No uploaded files were found');
+            throw new RuntimeException('No uploaded files were found');
         }
         return array_shift($files);
     }

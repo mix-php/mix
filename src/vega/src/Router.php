@@ -5,6 +5,7 @@ namespace Mix\Vega;
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 use Mix\Http\Message\Stream\StringStream;
+use Mix\Vega\Exception\NotFoundException;
 
 /**
  * Trait Router
@@ -74,7 +75,7 @@ trait Router
      * @param string $method
      * @param string $uri
      * @param Context $ctx
-     * @throws Exception
+     * @throws NotFoundException
      */
     protected function dispatch(string $method, string $uri, Context $ctx)
     {
@@ -83,7 +84,7 @@ trait Router
             case \FastRoute\Dispatcher::NOT_FOUND:
                 // ... 404 Not Found
                 $handler = function (Context $ctx) {
-                    throw new Exception('404 Not Found', 404);
+                    throw new NotFoundException('404 Not Found', 404);
                 };
                 $this->runHandlers(array_merge($this->handlers, [$handler]), $ctx);
                 break;
@@ -91,7 +92,7 @@ trait Router
                 // $allowedMethods = $routeInfo[1];
                 // ... 405 Method Not Allowed
                 $handler = function (Context $ctx) {
-                    throw new Exception('405 Method Not Allowed', 405);
+                    throw new NotFoundException('405 Method Not Allowed', 405);
                 };
                 $this->runHandlers(array_merge($this->handlers, [$handler]), $ctx);
                 break;
@@ -158,7 +159,7 @@ trait Router
         $handler = function (Context $ctx) {
             try {
                 $ctx->next();
-            } catch (Exception $ex) {
+            } catch (NotFoundException $ex) {
                 if (in_array($ex->getCode(), [404, 405]) == 404 && in_array($ex->getMessage(), ['404 Not Found', '405 Method Not Allowed'])) {
                     $ctx->abortWithStatusException($ex->getCode(), $ex);
                 }

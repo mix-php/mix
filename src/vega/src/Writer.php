@@ -6,6 +6,9 @@ use Mix\Http\Message\Cookie;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Message\Stream\StringStream;
+use Mix\Vega\Exception\RuntimeException;
+use Mix\View\Exception\ViewException;
+use Mix\View\Renderer;
 
 /**
  * Trait Writer
@@ -25,6 +28,11 @@ trait Writer
     public $request;
 
     /**
+     * @var Renderer
+     */
+    public $renderer;
+
+    /**
      * @param int $code
      * @param string $format
      * @param ...$values
@@ -34,6 +42,22 @@ trait Writer
     {
         $this->response->withStatus($code);
         $body = new StringStream(sprintf($format, ...$values));
+        $this->response->withBody($body);
+        return $this->response->send();
+    }
+
+    /**
+     * @param int $code
+     * @param string $name
+     * @param array $data
+     * @return bool
+     * @throws ViewException
+     */
+    public function HTML(int $code, string $name, array $data): bool
+    {
+        $body = new StringStream($this->renderer->render($name, $data));
+        $this->response->withContentType('text/html');
+        $this->response->withStatus($code);
         $this->response->withBody($body);
         return $this->response->send();
     }
@@ -86,13 +110,13 @@ trait Writer
     /**
      * @param $data
      * @return string
-     * @throws Exception
+     * @throws RuntimeException
      */
     protected static function jsonMarshal($data): string
     {
         $result = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         if ($result === false) {
-            throw new Exception('json_encode failed');
+            throw new RuntimeException('json_encode failed');
         }
         return $result;
     }

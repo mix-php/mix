@@ -33,17 +33,13 @@ class Renderer
 
     /**
      * 渲染视图
-     * @param $__template__
-     * @param $__data__
+     * @param string $__template__
+     * @param array $__data__
      * @return string
+     * @throws ViewException
      */
-    public function render($__template__, $__data__)
+    public function render(string $__template__, array $__data__):string
     {
-        // 兼容老版本
-        if (func_num_args() == 3) {
-            list($__viewdir__, $__template__, $__data__) = func_get_args();
-        }
-
         // 传入变量
         extract($__data__);
         // 生成视图

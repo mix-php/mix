@@ -6,6 +6,7 @@ use Mix\Http\Message\Factory\ResponseFactory;
 use Mix\Http\Message\Factory\ServerRequestFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
+use Mix\View\Renderer;
 
 /**
  * Class Context
@@ -29,6 +30,11 @@ class Context
     public $request;
 
     /**
+     * @var Renderer
+     */
+    public $renderer;
+
+    /**
      * @var \Closure[]
      */
     protected $handlers = [];
@@ -38,13 +44,14 @@ class Context
      * @param \Swoole\Http\Response $response
      * @return Context
      */
-    public static function fromSwoole(\Swoole\Http\Request $request, \Swoole\Http\Response $response): Context
+    public static function fromSwoole(\Swoole\Http\Request $request, \Swoole\Http\Response $response, Renderer $renderer): Context
     {
         $ctx = new static();
         $requestFactory = new ServerRequestFactory();
         $responseFactory = new ResponseFactory();
         $ctx->request = $requestFactory->createServerRequestFromSwoole($request);
         $ctx->response = $responseFactory->createResponseFromSwoole($response);
+        $ctx->renderer = $renderer;
         return $ctx;
     }
 
@@ -53,13 +60,14 @@ class Context
      * @param \Workerman\Connection\TcpConnection $connection
      * @return Context
      */
-    public static function fromWorkerMan(\Workerman\Protocols\Http\Request $request, \Workerman\Connection\TcpConnection $connection): Context
+    public static function fromWorkerMan(\Workerman\Protocols\Http\Request $request, \Workerman\Connection\TcpConnection $connection, Renderer $renderer): Context
     {
         $ctx = new static();
         $requestFactory = new ServerRequestFactory();
         $responseFactory = new ResponseFactory();
         $ctx->request = $requestFactory->createServerRequestFromWorkerMan($request);
         $ctx->response = $responseFactory->createResponseFromWorkerMan($connection);
+        $ctx->renderer = $renderer;
         return $ctx;
     }
 

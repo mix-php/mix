@@ -2,6 +2,9 @@
 
 namespace Mix\Vega;
 
+use Mix\Vega\Exception\RuntimeException;
+use Mix\View\Renderer;
+
 /**
  * Class Engine
  * @package Mix\Vega
@@ -17,6 +20,19 @@ class Engine
     protected $context;
 
     /**
+     * @var Renderer
+     */
+    protected $htmlRender;
+
+    /**
+     * Engine constructor.
+     */
+    public function __construct()
+    {
+        $this->setHTMLPath(__DIR__);
+    }
+
+    /**
      * @return \Closure
      */
     public function handler(): \Closure
@@ -30,7 +46,7 @@ class Engine
                  * @var $response \Swoole\Http\Response
                  */
                 list($request, $response) = $args;
-                $ctx = Context::fromSwoole($request, $response);
+                $ctx = Context::fromSwoole($request, $response, $this->htmlRender);
                 $this->dispatch($request->server['request_method'], $request->server['path_info'] ?: '/', $ctx);
             } elseif (static::isWorkerMan($args)) {
                 /**
@@ -38,10 +54,10 @@ class Engine
                  * @var $request \Workerman\Protocols\Http\Request
                  */
                 list($connection, $request) = $args;
-                $ctx = Context::fromWorkerMan($request, $connection);
+                $ctx = Context::fromWorkerMan($request, $connection, $this->htmlRender);
                 $this->dispatch($request->method(), $request->path(), $ctx);
             } else {
-                throw new Exception('The current usage scenario is not supported');
+                throw new RuntimeException('The current usage scenario is not supported');
             }
         };
     }
@@ -76,6 +92,14 @@ class Engine
             return true;
         }
         return false;
+    }
+
+    /**
+     * @param string $path
+     */
+    public function setHTMLPath(string $path): void
+    {
+        $this->htmlRender = new Renderer($path);
     }
 
 }
