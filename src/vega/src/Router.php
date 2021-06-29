@@ -99,7 +99,7 @@ trait Router
                 $handler = $routeInfo[1];
                 $vars = $routeInfo[2];
                 // with $vars
-                $ctx->request->withQueryParams($vars);
+                $ctx->request->withRouteParams($vars);
                 // call $handler
                 $handler($ctx);
                 break;

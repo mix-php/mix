@@ -14,8 +14,9 @@ use Mix\Http\Message\ServerRequest;
 class Context
 {
 
+    use Store;
+    use Input;
     use Writer;
-    use Reader;
 
     /**
      * @var Response

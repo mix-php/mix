@@ -43,7 +43,7 @@ trait Writer
      * @param $data
      * @return bool
      */
-    public function json(int $code, $data): bool
+    public function JSON(int $code, $data): bool
     {
         $body = new StringStream(static::jsonMarshal($data));
         $this->response->withContentType('application/json');
@@ -57,7 +57,7 @@ trait Writer
      * @param $data
      * @return bool
      */
-    public function jsonp(int $code, $data): bool
+    public function JSONP(int $code, $data): bool
     {
         $callback = $this->defaultQuery('callback', '');
         if ($callback == '') {
@@ -80,20 +80,21 @@ trait Writer
      */
     public function defaultQuery(string $key, string $default): string
     {
-        $value = $this->request->getQueryParams()[$key] ?? '';
-        if ($value) {
-            return $value;
-        }
-        return $default;
+        return $this->request->getQueryParams()[$key] ?? $default;
     }
 
     /**
      * @param $data
      * @return string
+     * @throws Exception
      */
     protected static function jsonMarshal($data): string
     {
-        return json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $result = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        if ($result === false) {
+            throw new Exception('json_encode failed');
+        }
+        return $result;
     }
 
     /**
