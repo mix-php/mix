@@ -40,6 +40,11 @@ class ServerRequest extends Request implements ServerRequestInterface
     protected $queryParams = [];
 
     /**
+     * @var array
+     */
+    protected $routeParams = [];
+
+    /**
      * @var UploadedFileInterface[]
      */
     protected $uploadedFiles = [];
@@ -62,8 +67,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function __construct(string $method, UriInterface $uri, array $serverParams = [])
     {
-        $this->method = $method;
-        $this->uri = $uri;
+        parent::__construct($method, $uri);
         $this->serverParams = $serverParams;
     }
 
@@ -204,6 +208,27 @@ class ServerRequest extends Request implements ServerRequestInterface
     {
         $this->queryParams = $query;
         $this->attributes = $query + $this->attributes;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRouteParams()
+    {
+        return $this->routeParams;
+    }
+
+    /**
+     * @param array $params Array of query string arguments, typically from
+     *     $_GET.
+     * @return static
+     */
+    public function withRouteParams(array $params)
+    {
+        $this->routeParams = $params;
+        $this->queryParams = $params + $this->queryParams;
+        $this->attributes = $params + $this->attributes;
         return $this;
     }
 

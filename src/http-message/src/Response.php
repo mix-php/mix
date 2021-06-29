@@ -227,7 +227,7 @@ class Response extends Message implements ResponseInterface
      * 发送响应体，并结束当前请求
      * @return bool
      */
-    public function send()
+    public function send(): bool
     {
         // 已经发送过的不处理
         if ($this->sended) {
@@ -251,7 +251,7 @@ class Response extends Message implements ResponseInterface
      * @param string $filename
      * @return bool
      */
-    public function sendFile(string $filename)
+    public function sendFile(string $filename): bool
     {
         if ($this->isSwoole()) {
             return $this->swooleSendFile($filename);
@@ -263,7 +263,7 @@ class Response extends Message implements ResponseInterface
     /**
      * @return bool
      */
-    protected function swooleSend()
+    protected function swooleSend(): bool
     {
         $headers = $this->getHeaders();
         foreach ($headers as $name => $value) {
@@ -295,7 +295,7 @@ class Response extends Message implements ResponseInterface
     /**
      * @return bool
      */
-    protected function workerManSend()
+    protected function workerManSend(): bool
     {
         $headers = $this->getHeaders();
         $cookies = $this->getCookies();
@@ -326,7 +326,7 @@ class Response extends Message implements ResponseInterface
      * @param string $filename
      * @return bool
      */
-    protected function swooleSendFile(string $filename)
+    protected function swooleSendFile(string $filename): bool
     {
         $headers = $this->getHeaders();
         foreach ($headers as $name => $value) {
@@ -343,7 +343,7 @@ class Response extends Message implements ResponseInterface
      * @param string $filename
      * @return bool
      */
-    protected function workerManSendFile(string $filename)
+    protected function workerManSendFile(string $filename): bool
     {
         $headers = $this->getHeaders();
 

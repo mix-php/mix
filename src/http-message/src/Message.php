@@ -160,7 +160,7 @@ class Message implements MessageInterface
      * 获取全部 Header, 按行排列 (k=>v)
      * @return string[]
      */
-    public function getHeaderLines()
+    public function getHeadersLine()
     {
         $headerLines = [];
         foreach ($this->getHeaders() as $name => $header) {
