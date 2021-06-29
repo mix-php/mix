@@ -127,10 +127,10 @@ trait Router
             return;
         }
 
-        $this->append404Handler($handlers);
-        $this->appendAbortHandler($handlers);
+        $this->unshift404Handler($handlers);
+        $this->unshiftAbortHandler($handlers);
 
-        $handler = array_pop($handlers);
+        $handler = array_shift($handlers);
         $ctx->withHandlers($handlers);
         $handler($ctx);
     }
@@ -138,7 +138,7 @@ trait Router
     /**
      * @param array $handlers
      */
-    protected function appendAbortHandler(array &$handlers): void
+    protected function unshiftAbortHandler(array &$handlers): void
     {
         $handler = function (Context $ctx) {
             try {
@@ -158,13 +158,13 @@ trait Router
                 }
             }
         };
-        array_push($handlers, $handler);
+        array_unshift($handlers, $handler);
     }
 
     /**
      * @param array $handlers
      */
-    protected function append404Handler(array &$handlers): void
+    protected function unshift404Handler(array &$handlers): void
     {
         $handler = function (Context $ctx) {
             try {
@@ -175,7 +175,7 @@ trait Router
                 }
             }
         };
-        array_push($handlers, $handler);
+        array_unshift($handlers, $handler);
     }
 
 }

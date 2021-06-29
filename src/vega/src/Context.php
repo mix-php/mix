@@ -6,6 +6,7 @@ use Mix\Http\Message\Factory\ResponseFactory;
 use Mix\Http\Message\Factory\ServerRequestFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
+use Mix\Vega\Exception\RuntimeException;
 use Mix\View\Renderer;
 
 /**
@@ -103,14 +104,14 @@ class Context
     }
 
     /**
-     * @throws Exception
+     * @throws RuntimeException
      */
     public function next(): void
     {
         if (count($this->handlers) == 0) {
-            throw new Exception('There is no handler that can be executed');
+            throw new RuntimeException('There is no handler that can be executed');
         }
-        $handler = array_pop($this->handlers);
+        $handler = array_shift($this->handlers);
         $handler($this);
     }
 
