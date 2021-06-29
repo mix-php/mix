@@ -20,6 +20,11 @@ class ServerRequest extends Request implements ServerRequestInterface
     protected $swooleRequest;
 
     /**
+     * @var \Workerman\Protocols\Http\Request
+     */
+    protected $workerManRequest;
+
+    /**
      * @var array
      */
     protected $serverParams = [];
@@ -57,8 +62,8 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function __construct(string $method, UriInterface $uri, array $serverParams = [])
     {
-        $this->method       = $method;
-        $this->uri          = $uri;
+        $this->method = $method;
+        $this->uri = $uri;
         $this->serverParams = $serverParams;
     }
 
@@ -79,6 +84,17 @@ class ServerRequest extends Request implements ServerRequestInterface
     public function withSwooleRequest(\Swoole\Http\Request $request)
     {
         $this->swooleRequest = $request;
+        return $this;
+    }
+
+    /**
+     * With swoole request
+     * @param \Workerman\Protocols\Http\Request $request
+     * @return $this
+     */
+    public function withWorkerManRequest(\Workerman\Protocols\Http\Request $request)
+    {
+        $this->workerManRequest = $request;
         return $this;
     }
 
@@ -141,7 +157,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     public function withCookieParams(array $cookies)
     {
         $this->cookieParams = $cookies;
-        $this->attributes   = $cookies + $this->attributes;
+        $this->attributes = $cookies + $this->attributes;
         return $this;
     }
 
@@ -187,7 +203,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     public function withQueryParams(array $query)
     {
         $this->queryParams = $query;
-        $this->attributes  = $query + $this->attributes;
+        $this->attributes = $query + $this->attributes;
         return $this;
     }
 

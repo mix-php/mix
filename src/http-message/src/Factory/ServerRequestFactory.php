@@ -5,6 +5,7 @@ namespace Mix\Http\Message\Factory;
 use Mix\Http\Message\ServerRequest;
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UriInterface;
 
 /**
  * Class ServerRequestFactory
@@ -66,7 +67,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
             $serverRequest->withHeader($name, $value);
         }
 
-        $body = (new StreamFactory())->createStreamFromResource($request); // 减少内存占用
+        $body = (new StreamFactory())->createStreamFromSwoole($request); // 减少内存占用
         $serverRequest->withBody($body);
 
         $cookieParams = $request->cookie ?? [];
@@ -101,6 +102,72 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $serverRequest->withUploadedFiles($uploadedFiles);
 
         $parsedBody = $request->post ?? []; // swoole 本身能解析 application/x-www-form-urlencoded multipart/form-data 全部的 method
+        $serverRequest->withParsedBody($parsedBody);
+
+        return $serverRequest;
+    }
+
+    /**
+     * Create a new server request.
+     *
+     * @param \Workerman\Protocols\Http\Request $request
+     * @return ServerRequestInterface
+     */
+    public function createServerRequestFromWorkerMan(\Workerman\Protocols\Http\Request $request): ServerRequestInterface
+    {
+        $protocolVersion = $request->protocolVersion();
+        $method = $request->method();
+        $scheme = 'http';
+        $host = $request->host();
+        $uri = $scheme . '://' . $host . $request->uri();
+        $serverParams = [];
+
+        /** @var ServerRequest $serverRequest */
+        $serverRequest = $this->createServerRequest($method, $uri, $serverParams);
+        $serverRequest->withWorkerManRequest($request);
+        $serverRequest->withProtocolVersion($protocolVersion);
+        $serverRequest->withRequestTarget($uri);
+
+        $headers = $request->header();
+        foreach ($headers as $name => $value) {
+            $serverRequest->withHeader($name, $value);
+        }
+
+        $body = (new StreamFactory())->createStreamFromWorkerMan($request); // 减少内存占用
+        $serverRequest->withBody($body);
+
+        $cookieParams = $request->cookie();
+        $serverRequest->withCookieParams($cookieParams);
+
+        $queryParams = $request->get();
+        $serverRequest->withQueryParams($queryParams);
+
+        $uploadedFiles = [];
+        $uploadedFileFactory = new UploadedFileFactory;
+        $streamFactory = new StreamFactory();
+        foreach ($request->file() as $name => $file) {
+            // swoole 概率性出现 files 存在，但是 file 内无数据的情况
+            if (!isset($file['error']) || !isset($file['size']) || !isset($file['name']) || !isset($file['type'])) {
+                continue;
+            }
+            if ($file['error'] !== 0) {
+                continue;
+            }
+            // 注意：当httpServer的handle内开启协程时，handle方法会先于Callback执行完，
+            // 这时临时文件会在还没处理完成就被删除，所以这里生成新文件，在UploadedFile析构时删除该文件
+            $tmpfile = $file['tmp_name'] . '.mix';
+            move_uploaded_file($file['tmp_name'], $tmpfile);
+            $uploadedFiles[$name] = $uploadedFileFactory->createUploadedFile(
+                $streamFactory->createStreamFromFile($tmpfile),
+                $file['size'],
+                $file['error'],
+                $file['name'],
+                $file['type']
+            );
+        }
+        $serverRequest->withUploadedFiles($uploadedFiles);
+
+        $parsedBody = $request->post(); // swoole 本身能解析 application/x-www-form-urlencoded multipart/form-data 全部的 method
         $serverRequest->withParsedBody($parsedBody);
 
         return $serverRequest;

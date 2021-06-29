@@ -18,6 +18,11 @@ class Response extends Message implements ResponseInterface
     protected $swooleResponse;
 
     /**
+     * @var \Workerman\Connection\TcpConnection
+     */
+    protected $workerManConnection;
+
+    /**
      * @var int
      */
     protected $statusCode = 200;
@@ -66,6 +71,37 @@ class Response extends Message implements ResponseInterface
     {
         $this->swooleResponse = $response;
         return $this;
+    }
+
+    /**
+     * Get WorkerMan Connection
+     * @return \Workerman\Connection\TcpConnection
+     */
+    public function getWorkerManConnection()
+    {
+        return $this->workerManConnection;
+    }
+
+    /**
+     * With WorkerMan Connection
+     * @param \Workerman\Connection\TcpConnection $conn
+     * @return $this
+     */
+    public function withWorkerManConnection(\Workerman\Connection\TcpConnection $conn)
+    {
+        $this->workerManConnection = $conn;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSwoole(): bool
+    {
+        if (isset($this->swooleResponse)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -193,17 +229,46 @@ class Response extends Message implements ResponseInterface
      */
     public function send()
     {
-        // websocket upgrade 不处理
         // 已经发送过的不处理
-        if ($this->getStatusCode() == 101 || $this->sended) {
-            return;
+        if ($this->sended) {
+            return false;
         }
 
+        // websocket upgrade 不处理
+        if ($this->getStatusCode() == 101) {
+            return true;
+        }
+
+        if ($this->isSwoole()) {
+            return $this->swooleSend();
+        } else {
+            return $this->workerManSend();
+        }
+    }
+
+    /**
+     * 发送文件
+     * @param string $filename
+     * @return bool
+     */
+    public function sendFile(string $filename)
+    {
+        if ($this->isSwoole()) {
+            return $this->swooleSendFile($filename);
+        } else {
+            return $this->workerManSendFile($filename);
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    protected function swooleSend()
+    {
         $headers = $this->getHeaders();
         foreach ($headers as $name => $value) {
             $this->swooleResponse->header($name, implode(',', $value));
         }
-
         $cookies = $this->getCookies();
         foreach ($cookies as $cookie) {
             $this->swooleResponse->cookie(
@@ -219,20 +284,49 @@ class Response extends Message implements ResponseInterface
 
         $status = $this->getStatusCode();
         $this->swooleResponse->status($status);
-
         $body = $this->getBody();
-        $content = $body ? $body->getContents() : null;
+        $content = $body ? $body->getContents() : '';
         $result = $this->swooleResponse->end($content);
+
         $this->sended = true;
         return $result;
     }
 
     /**
-     * 发送文件
+     * @return bool
+     */
+    protected function workerManSend()
+    {
+        $headers = $this->getHeaders();
+        $cookies = $this->getCookies();
+
+        $status = $this->getStatusCode();
+        $body = $this->getBody();
+        $content = $body ? $body->getContents() : '';
+
+        $response = new \Workerman\Protocols\Http\Response($status, $headers, $content);
+        foreach ($cookies as $cookie) {
+            $response->cookie(
+                $cookie->getName(),
+                $cookie->getValue(),
+                $cookie->getExpire(),
+                $cookie->getPath(),
+                $cookie->getDomain(),
+                $cookie->getSecure(),
+                $cookie->getHttpOnly()
+            );
+        }
+        $result = $this->workerManConnection->send($response);
+
+        $this->sended = true;
+        return $result;
+    }
+
+    /**
      * @param string $filename
      * @return bool
      */
-    public function sendFile(string $filename)
+    protected function swooleSendFile(string $filename)
     {
         $headers = $this->getHeaders();
         foreach ($headers as $name => $value) {
@@ -240,6 +334,22 @@ class Response extends Message implements ResponseInterface
         }
 
         $result = $this->swooleResponse->sendfile($filename);
+
+        $this->sended = true;
+        return $result;
+    }
+
+    /**
+     * @param string $filename
+     * @return bool
+     */
+    protected function workerManSendFile(string $filename)
+    {
+        $headers = $this->getHeaders();
+
+        $response = (new \Workerman\Protocols\Http\Response(200, $headers))->withFile($filename);
+        $result = $this->workerManConnection->send($response);
+
         $this->sended = true;
         return $result;
     }

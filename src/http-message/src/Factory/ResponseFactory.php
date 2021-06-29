@@ -43,4 +43,18 @@ class ResponseFactory implements ResponseFactoryInterface
         return $response;
     }
 
+    /**
+     * Create a new ResponseInterface.
+     *
+     * @param \Workerman\Connection\TcpConnection $conn
+     * @return ResponseInterface
+     */
+    public function createResponseFromWorkerMan(\Workerman\Connection\TcpConnection $conn): ResponseInterface
+    {
+        /** @var Response $response */
+        $response = $this->createResponse();
+        $response->withWorkerManConnection($conn);
+        return $response;
+    }
+
 }
