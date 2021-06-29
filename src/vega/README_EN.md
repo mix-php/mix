@@ -87,7 +87,7 @@ Request to test
 hello, world!
 ~~~
 
-## 路由配置
+## Route configure
 
 Configure the `Closure` route
 
@@ -129,7 +129,7 @@ $vega->handleF('hello', function (Mix\Vega\Context $ctx) {
 })->methods('GET', 'POST');
 ```
 
-## Router prefix (grouping)
+## Route prefix (group)
 
 ```php
 $vega = new Mix\Vega\Engine();
