@@ -129,13 +129,13 @@ trait Input
 
     /**
      * @return object
-     * @throws Exception
+     * @throws RuntimeException
      */
     public function mustGetJSON(): object
     {
         $result = $this->getJSON();
         if (is_null($result)) {
-            throw new Exception('The body is not a valid JSON format');
+            throw new RuntimeException('The body is not a valid JSON format');
         }
         return $result;
     }
