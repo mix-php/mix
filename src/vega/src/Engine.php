@@ -29,7 +29,7 @@ class Engine
      */
     public function __construct()
     {
-        $this->setHTMLPath(__DIR__);
+        $this->withHTMLPath(__DIR__);
     }
 
     /**
@@ -97,7 +97,7 @@ class Engine
     /**
      * @param string $path
      */
-    public function setHTMLPath(string $path): void
+    public function withHTMLPath(string $path): void
     {
         $this->htmlRender = new Renderer($path);
     }

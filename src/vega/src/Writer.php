@@ -56,7 +56,7 @@ trait Writer
     public function HTML(int $code, string $name, array $data): bool
     {
         $body = new StringStream($this->renderer->render($name, $data));
-        $this->response->withContentType('text/html');
+        $this->response->withContentType('text/html', 'utf-8');
         $this->response->withStatus($code);
         $this->response->withBody($body);
         return $this->response->send();
@@ -70,7 +70,7 @@ trait Writer
     public function JSON(int $code, $data): bool
     {
         $body = new StringStream(static::jsonMarshal($data));
-        $this->response->withContentType('application/json');
+        $this->response->withContentType('application/json', 'utf-8');
         $this->response->withStatus($code);
         $this->response->withBody($body);
         return $this->response->send();
@@ -91,7 +91,7 @@ trait Writer
         $json = static::jsonMarshal($data);
         $javascript = sprintf('%s(%s)', $callback, $json);
         $body = new StringStream($javascript);
-        $this->response->withContentType('application/javascript');
+        $this->response->withContentType('application/javascript', 'utf-8');
         $this->response->withStatus($code);
         $this->response->withBody($body);
         return $this->response->send();

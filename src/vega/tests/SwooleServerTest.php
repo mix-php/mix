@@ -14,24 +14,65 @@ final class SwooleServerTest extends TestCase
 
         $vega = new Engine();
 
+        // view
+        $vega->withHTMLPath(__DIR__ . '/views');
+
+        // 中间件
         $vega->use(function (Context $ctx) use ($_this) {
             $_this->assertTrue(true);
             $ctx->next();
         });
 
+        // 多个方法
         $vega->handleF('/hello', function (Context $ctx) use ($_this) {
             $_this->assertEquals($ctx->uri()->__toString(), 'http://0.0.0.0:9501/hello');
             $ctx->string(200, 'hello, world!');
         })->methods('GET', 'POST');
 
-        $sub = $vega->pathPrefix('/foo');
-        $sub->handleF('/hello', function (Context $ctx) use ($_this) {
+        // 分组
+        $subrouter = $vega->pathPrefix('/foo');
+        $subrouter->handleF('/hello', function (Context $ctx) use ($_this) {
             $_this->assertEquals($ctx->uri()->__toString(), 'http://0.0.0.0:9501/foo/hello');
             $ctx->string(200, 'hello, world!');
         })->methods('GET');
-        $sub->handleF('/hello1', function (Context $ctx) use ($_this) {
+        $subrouter->handleF('/hello1', function (Context $ctx) use ($_this) {
             $_this->assertEquals($ctx->uri()->__toString(), 'http://0.0.0.0:9501/foo/hello1');
             $ctx->string(200, 'hello, world!');
+        })->methods('GET');
+
+        // 获取参数
+        // curl http://0.0.0.0:9501/users/1000?name=keda
+        $vega->handleF('/users/{id}', function (Context $ctx) use ($_this) {
+            $id = $ctx->param('id');
+            $name = $ctx->query('name');
+            $_this->assertEquals($id, '1000');
+            $_this->assertEquals($name, 'keda');
+            $ctx->string(200, 'hello, world!');
+        })->methods('GET', 'POST');
+
+        // POST发送JSON
+        // curl -H "Content-Type: application/json" -X POST -d '{"user_id": "123", "coin":100}' "http://0.0.0.0:9501/users"
+        $vega->handleF('/users', function (Context $ctx) use ($_this) {
+            $obj = $ctx->mustGetJSON();
+            $_this->assertEquals($obj->user_id, '123');
+            $_this->assertEquals($obj->coin, 100);
+            $ctx->JSON(200, [
+                'code' => 0,
+                'message' => 'ok'
+            ]);
+        })->methods('POST');
+
+        // 视图
+        // curl http://0.0.0.0:9501/html
+        $vega->handleF('/html', function (Context $ctx) {
+            $ctx->HTML(200, 'foo', [
+                'id' => 1000,
+                'name' => '小明',
+                'friends' => [
+                    '小花',
+                    '小红'
+                ]
+            ]);
         })->methods('GET');
 
         swoole_run($vega);
