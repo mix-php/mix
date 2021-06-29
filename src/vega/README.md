@@ -29,6 +29,9 @@ composer require mix/vega
 Swoole 多进程 (异步) 中使用
 
 ```php
+<?php
+require __DIR__ . '/vendor/autoload.php';
+
 $vega = new Mix\Vega\Engine();
 $vega->handleF('/hello', function (Mix\Vega\Context $ctx) {
     $ctx->string(200, 'hello, world!');
@@ -42,6 +45,8 @@ $http->start();
 Swoole 单进程 (协程) 中使用
 
 ```php
+<?php
+require __DIR__ . '/vendor/autoload.php';
 
 Swoole\Coroutine\run(function () {
     $vega = new Mix\Vega\Engine();
@@ -58,6 +63,9 @@ Swoole\Coroutine\run(function () {
 WorkerMan 中使用
 
 ```php
+<?php
+require __DIR__ . '/vendor/autoload.php';
+
 $vega = new Mix\Vega\Engine();
 $vega->handleF('/hello', function (Mix\Vega\Context $ctx) {
     $ctx->string(200, 'hello, world!');
