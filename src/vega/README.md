@@ -238,13 +238,13 @@ $vega->handleF('/users', function (Mix\Vega\Context $ctx) {
 })->methods('POST');
 ```
 
-`mustGetJSON` 自带有效性检查，以下代码等用于上面
+`mustGetJSON` 自带有效性检查，以下代码等同于上面
 
 ```php
 $vega = new Mix\Vega\Engine();
 $vega->handleF('/users', function (Mix\Vega\Context $ctx) {
     $obj = $ctx->mustGetJSON();
-     var_dump($obj);
+    var_dump($obj);
     $ctx->JSON(200, [
         'code' => 0,
         'message' => 'ok'
