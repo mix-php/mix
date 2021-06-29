@@ -2,9 +2,9 @@
 
 [中文](https://github.com/mix-php/vega) | English
 
-Vega is a CLI HTTP web framework written in PHP support Swoole, WorkerMan
+Vega is a CLI HTTP web framework written in PHP support Swoole, Workerman
 
-Vega 是一个用 PHP 编写的 CLI HTTP 网络框架，支持 Swoole、WorkerMan
+Vega 是一个用 PHP 编写的 CLI HTTP 网络框架，支持 Swoole、Workerman
 
 ## Overview
 
@@ -63,7 +63,7 @@ Swoole\Coroutine\run(function () {
 });
 ```
 
-WorkerMan
+Used in the Workerman
 
 ```php
 <?php
@@ -267,6 +267,37 @@ $vega->handleF('/jsonp', function (Mix\Vega\Context $ctx) {
 })->methods('GET');
 ```
 
+## HTML 视图渲染
+
+创建视图文件 `foo.php`
+
+```php
+<p>id: <?= $id ?>, name: <?= $name ?></p>
+<p>friends:</p>
+<ul>
+    <?php foreach($friends as $name): ?>
+        <li><?= $name ?></li>
+    <?php endforeach; ?>
+</ul>
+```
+
+配置视图路径，并响应html
+
+```php
+$vega = new Mix\Vega\Engine();
+$vega->withHTMLRoot('/data/project/views');
+$vega->handleF('/html', function (Mix\Vega\Context $ctx) {
+    $ctx->HTML(200, 'foo', [
+        'id' => 1000,
+        'name' => '小明',
+        'friends' => [
+            '小花',
+            '小红'
+        ]
+    ]);
+})->methods('GET');
+```
+
 ## 设置中间件
 
 给某个路由配置中间件，可配置多个
@@ -335,37 +366,6 @@ $vega->use(function (Mix\Vega\Context $ctx) {
         $ctx->abort();
     }
 });
-```
-
-## HTML 视图渲染
-
-创建视图文件 `foo.php`
-
-```php
-<p>id: <?= $id ?>, name: <?= $name ?></p>
-<p>friends:</p>
-<ul>
-    <?php foreach($friends as $name): ?>
-        <li><?= $name ?></li>
-    <?php endforeach; ?>
-</ul>
-```
-
-配置视图路径，并响应html
-
-```php
-$vega = new Mix\Vega\Engine();
-$vega->withHTMLRoot('/data/project/views');
-$vega->handleF('/html', function (Mix\Vega\Context $ctx) {
-    $ctx->HTML(200, 'foo', [
-        'id' => 1000,
-        'name' => '小明',
-        'friends' => [
-            '小花',
-            '小红'
-        ]
-    ]);
-})->methods('GET');
 ```
 
 ## License
