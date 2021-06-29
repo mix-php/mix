@@ -86,7 +86,7 @@ hello, world!
 
 ## 路由配置
 
-配置闭包路由
+配置 `Closure` 闭包路由
 
 ```php
 $vega = new Mix\Vega\Engine();
