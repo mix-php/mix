@@ -22,7 +22,7 @@ final class SwooleServerTest extends TestCase
         $vega->handleF('/hello', function (Context $ctx) use ($_this) {
             $_this->assertEquals($ctx->uri()->__toString(), 'http://0.0.0.0:9501/hello');
             $ctx->string(200, 'hello, world!');
-        })->methods('GET');
+        })->methods('GET', 'POST');
 
         $sub = $vega->pathPrefix('/foo');
         $sub->handleF('/hello', function (Context $ctx) use ($_this) {
