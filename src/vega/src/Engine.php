@@ -33,7 +33,13 @@ class Engine
                 $ctx = Context::fromSwoole($request, $response);
                 $this->dispatch($request->server['request_method'], $request->server['path_info'] ?: '/', $ctx);
             } elseif (static::isWorkerMan($args)) {
-
+                /**
+                 * @var $connection \Workerman\Connection\TcpConnection
+                 * @var $request \Workerman\Protocols\Http\Request
+                 */
+                list($connection, $request) = $args;
+                $ctx = Context::fromWorkerMan($request, $connection);
+                $this->dispatch($request->method(), $request->path(), $ctx);
             } else {
                 throw new Exception('The current usage scenario is not supported');
             }
@@ -65,8 +71,8 @@ class Engine
         if (count($args) != 2) {
             return false;
         }
-        list($connection, $data) = $args;
-        if ($connection instanceof \Workerman\Connection\TcpConnection && $data instanceof \Workerman\Protocols\Http\Request) {
+        list($connection, $request) = $args;
+        if ($connection instanceof \Workerman\Connection\TcpConnection && $request instanceof \Workerman\Protocols\Http\Request) {
             return true;
         }
         return false;

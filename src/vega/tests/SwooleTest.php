@@ -5,10 +5,10 @@ use PHPUnit\Framework\TestCase;
 use Mix\Vega\Engine;
 use Mix\Vega\Context;
 
-final class RunTest extends TestCase
+final class SwooleTest extends TestCase
 {
 
-    public function testSwoole(): void
+    public function test(): void
     {
         $vega = new Engine();
         $vega->handleF('/hello', function (Context $ctx) {

@@ -48,6 +48,21 @@ class Context
     }
 
     /**
+     * @param \Workerman\Protocols\Http\Request $request
+     * @param \Workerman\Connection\TcpConnection $connection
+     * @return Context
+     */
+    public static function fromWorkerMan(\Workerman\Protocols\Http\Request $request, \Workerman\Connection\TcpConnection $connection): Context
+    {
+        $ctx = new static();
+        $requestFactory = new ServerRequestFactory();
+        $responseFactory = new ResponseFactory();
+        $ctx->request = $requestFactory->createServerRequestFromWorkerMan($request);
+        $ctx->response = $responseFactory->createResponseFromWorkerMan($connection);
+        return $ctx;
+    }
+
+    /**
      */
     public function abort(): void
     {
