@@ -101,7 +101,7 @@ trait Input
     {
         $files = $this->request->getUploadedFiles();
         if (empty($files)) {
-            throw new Exception('No files have been uploaded');
+            throw new Exception('No uploaded files were found');
         }
         return array_shift($files);
     }
@@ -149,10 +149,18 @@ trait Input
     }
 
     /**
+     * X-Forwarded-For X-Real-IP
      * @return string
      */
     public function clientIP(): string
     {
+        $rorwarded = $this->request->getHeaderLine('x-forwarded-for') ?? '';
+        $real = $this->request->getHeaderLine('x-real-ip') ?? '';
+        if ($rorwarded == '') {
+            return $real;
+        }
+        list($first) = explode(',', $rorwarded, 2);
+        return $first;
     }
 
     /**
@@ -160,6 +168,7 @@ trait Input
      */
     public function remoteIP(): string
     {
+        return $this->request->getHeaderLine('remote_addr') ?? '';
     }
 
     /**
@@ -167,6 +176,7 @@ trait Input
      */
     public function contentType(): string
     {
+        return $this->request->getHeaderLine('content-type');
     }
 
     /**
@@ -175,6 +185,7 @@ trait Input
      */
     public function header(string $key): string
     {
+        return $this->request->getHeaderLine($key);
     }
 
     /**
@@ -183,6 +194,7 @@ trait Input
      */
     public function cookie(string $name): string
     {
+        return $this->request->getCookieParams()[$name] ?? '';
     }
 
     /**
