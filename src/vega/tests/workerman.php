@@ -23,6 +23,15 @@ $vega->handleF('/hello', function (Context $ctx) {
     $ctx->string(200, 'hello, world!');
 })->methods('GET', 'POST');
 
+// handleC
+// curl "http://0.0.0.0:2345/hello1"
+class Hello {
+    public function index(Mix\Vega\Context $ctx) {
+        $ctx->string(200, 'hello, world!');
+    }
+}
+$vega->handleC('/hello1', [new Hello(), 'index'])->methods('GET');
+
 // 分组
 // curl "http://0.0.0.0:2345/foo/hello"
 $subrouter = $vega->pathPrefix('/foo');

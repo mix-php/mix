@@ -54,7 +54,7 @@ trait Input
      * $ctx->GetQuery("lastname") == ''
      * $ctx->GetQuery("id") == null
      * @param string $key
-     * @return mixed|null
+     * @return string|null
      */
     public function getQuery(string $key)
     {
@@ -86,7 +86,7 @@ trait Input
      * $ctx->getPostForm("lastname") == ''
      * $ctx->getPostForm("id") == null
      * @param string $key
-     * @return mixed|null
+     * @return string|null
      */
     public function getPostForm(string $key)
     {
