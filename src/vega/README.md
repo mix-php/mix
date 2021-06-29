@@ -6,7 +6,7 @@ Mix Vega 是一个用 PHP 编写的 HTTP 网络框架，支持 Swoole、WorkerMa
 
 ## Overview
 
-Vega 是 [MixPHP](https://github.com/mix-php/mix) `V3+` 内置的最核心的组件 (可独立使用)，与 golang [gin](https://github.com/gin-gonic/gin) 定位完全一致，它包含 Web 应用处理的大量功能 (数据落地除外)，包括：路由、渲染、参数获取、中间件、文件上传处理等；具有 CLI 模式下强大的兼容性，同时支持 Swoole、WorkerMan, 并且支持 Swoole 的多种进程模型。
+Vega 是 [MixPHP](https://github.com/mix-php/mix) `V3+` 内置的最核心的组件 (可独立使用)，参考 golang [gin](https://github.com/gin-gonic/gin) [mux](https://github.com/gorilla/mux) 开发，它包含 Web 应用处理的大量功能 (数据落地除外)，包括：路由、渲染、参数获取、中间件、文件上传处理等；具有 CLI 模式下强大的兼容性，同时支持 Swoole、WorkerMan, 并且支持 Swoole 的多种进程模型。
 
 ## Installation
 

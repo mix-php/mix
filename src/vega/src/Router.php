@@ -33,9 +33,10 @@ trait Router
      * @param \Closure ...$handlers
      * @return
      */
-    public function use(\Closure ...$handlers): Router
+    public function use(\Closure ...$handlers): Engine
     {
         $this->handlers = array_merge($this->handlers, $handlers);
+        return $this;
     }
 
     /**
@@ -60,6 +61,15 @@ trait Router
         $route = new Route($this, $path, array_merge($this->handlers, $handlers));
         $this->routes[] = $route;
         return $route;
+    }
+
+    /**
+     * @param string $prefix
+     * @return Subrouter
+     */
+    public function pathPrefix(string $prefix): Subrouter
+    {
+        return new Subrouter($prefix, $this);
     }
 
     protected function startDispatcher(): void
