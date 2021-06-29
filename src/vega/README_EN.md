@@ -1,6 +1,6 @@
 # Mix Vega
 
-中文 | [English](https://github.com/mix-php/vega/blob/master/README_EN.md)
+[中文](https://github.com/mix-php/vega) | English
 
 Vega is a CLI HTTP web framework written in PHP support Swoole, WorkerMan
 
@@ -8,18 +8,20 @@ Vega 是一个用 PHP 编写的 CLI HTTP 网络框架，支持 Swoole、WorkerMa
 
 ## Overview
 
-Vega 是 [MixPHP](https://github.com/mix-php/mix) `V3+` 内置的最核心的组件 (可独立使用)，参考
-golang [gin](https://github.com/gin-gonic/gin) [mux](https://github.com/gorilla/mux) 开发，它包含 Web 应用处理的大量功能 (数据库处理除外)
-，包括：路由、渲染、参数获取、中间件、文件上传处理等；具有 CLI 模式下强大的兼容性，同时支持 Swoole、WorkerMan, 并且支持 Swoole 的多种进程模型。
+Vega is the core component of [MixPHP](https://github.com/mix-php/mix) `V3+` (which can be used independently). It is
+developed by referring to golang [gin](https://github.com/gin-gonic/gin) [mux](https://github.com/gorilla/mux). It
+contains a lot of functions for Web application processing (excluding database processing), including: routing,
+rendering, parameter acquisition, middleware, file upload processing, strong compatibility with CLI mode, and support
+for Swoole, Workerman, and Swoole's various process models.
 
-**推荐搭配以下数据库使用：**
+**Recommended with the following databases:**
 
 - https://github.com/top-think/think-orm
 - https://github.com/illuminate/database
 
 ## Installation
 
-> 需要先安装 [Swoole](https://wiki.swoole.com/#/environment) 或者 [WorkerMan](http://doc.workerman.net/install/requirement.html)
+> Need to install [Swoole](https://wiki.swoole.com/#/environment) or [WorkerMan](http://doc.workerman.net/install/requirement.html)
 
 ```
 composer require mix/vega
@@ -27,7 +29,7 @@ composer require mix/vega
 
 ## Quick start
 
-Swoole 多进程 (异步) 中使用
+Swoole is used in multiple (asynchronous) processes
 
 ```php
 <?php
@@ -43,7 +45,7 @@ $http->on('Request', $vega->handler());
 $http->start();
 ```
 
-Swoole 单进程 (协程) 中使用
+Swoole is used in a single process (coroutine)
 
 ```php
 <?php
@@ -61,7 +63,7 @@ Swoole\Coroutine\run(function () {
 });
 ```
 
-WorkerMan 中使用
+WorkerMan
 
 ```php
 <?php
@@ -78,7 +80,7 @@ $http_worker->count = 4;
 Workerman\Worker::runAll();
 ```
 
-访问测试
+Request to test
 
 ~~~
 % curl http://0.0.0.0:9501/hello
@@ -87,7 +89,7 @@ hello, world!
 
 ## 路由配置
 
-配置 `Closure` 闭包路由
+Configure the `Closure` route
 
 ```php
 $vega = new Mix\Vega\Engine();
@@ -96,7 +98,7 @@ $vega->handleF('/hello', function (Mix\Vega\Context $ctx) {
 })->methods('GET');
 ```
 
-配置 `callable` 路由
+Configure the `callable` route
 
 ```php
 class Hello {
@@ -108,7 +110,7 @@ $vega = new Mix\Vega\Engine();
 $vega->handleC('/hello', [new Hello(), 'index'])->methods('GET');
 ```
 
-配置路由变量
+Configure Routing Variables
 
 ```php
 $vega = new Mix\Vega\Engine();
@@ -118,7 +120,7 @@ $vega->handleF('/users/{id}', function (Mix\Vega\Context $ctx) {
 })->methods('GET');
 ```
 
-配置多个 `method`
+Configure multiple `method`
 
 ```php
 $vega = new Mix\Vega\Engine();
@@ -127,7 +129,7 @@ $vega->handleF('hello', function (Mix\Vega\Context $ctx) {
 })->methods('GET', 'POST');
 ```
 
-## 路由前缀 (分组)
+## Router prefix (grouping)
 
 ```php
 $vega = new Mix\Vega\Engine();
