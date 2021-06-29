@@ -15,7 +15,7 @@ final class SwooleServerTest extends TestCase
         $vega = new Engine();
 
         // view
-        $vega->withHTMLPath(__DIR__ . '/views');
+        $vega->withHTMLRoot(__DIR__ . '/views');
 
         // 中间件
         $vega->use(function (Context $ctx) use ($_this) {

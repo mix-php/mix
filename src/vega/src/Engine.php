@@ -29,7 +29,7 @@ class Engine
      */
     public function __construct()
     {
-        $this->withHTMLPath(__DIR__);
+        $this->withHTMLRoot(__DIR__);
     }
 
     /**
@@ -95,11 +95,11 @@ class Engine
     }
 
     /**
-     * @param string $path
+     * @param string $dir
      */
-    public function withHTMLPath(string $path): void
+    public function withHTMLRoot(string $dir): void
     {
-        $this->htmlRender = new Renderer($path);
+        $this->htmlRender = new Renderer($dir);
     }
 
 }

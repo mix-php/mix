@@ -6,8 +6,67 @@ use Mix\Vega\Engine;
 use Mix\Vega\Context;
 
 $vega = new Engine();
+
+// view
+$vega->withHTMLRoot(__DIR__ . '/views');
+
+// 中间件
+$vega->use(function (Context $ctx) {
+    var_dump('first exec');
+    $ctx->next();
+});
+
+// 多个方法
+// curl "http://0.0.0.0:2345/hello"
 $vega->handleF('/hello', function (Context $ctx) {
+    var_dump($ctx->uri()->__toString());
     $ctx->string(200, 'hello, world!');
+})->methods('GET', 'POST');
+
+// 分组
+// curl "http://0.0.0.0:2345/foo/hello"
+$subrouter = $vega->pathPrefix('/foo');
+$subrouter->handleF('/hello', function (Context $ctx) {
+    var_dump($ctx->uri()->__toString());
+    $ctx->string(200, 'hello, world!');
+})->methods('GET');
+// curl "http://0.0.0.0:2345/foo/hello1"
+$subrouter->handleF('/hello1', function (Context $ctx) {
+    var_dump($ctx->uri()->__toString());
+    $ctx->string(200, 'hello, world!');
+})->methods('GET');
+
+// 获取参数
+// curl "http://0.0.0.0:2345/users/1000?name=keda"
+$vega->handleF('/users/{id}', function (Context $ctx) {
+    $id = $ctx->param('id');
+    $name = $ctx->query('name');
+    var_dump($id, $name);
+    $ctx->string(200, 'hello, world!');
+})->methods('GET', 'POST');
+
+// POST发送JSON
+// curl -H "Content-Type: application/json" -X POST -d '{"user_id": "123", "coin":100}' "http://0.0.0.0:2345/users"
+$vega->handleF('/users', function (Context $ctx) {
+    $obj = $ctx->mustGetJSON();
+    var_dump($obj);
+    $ctx->JSON(200, [
+        'code' => 0,
+        'message' => 'ok'
+    ]);
+})->methods('POST');
+
+// 视图
+// curl http://0.0.0.0:2345/html
+$vega->handleF('/html', function (Context $ctx) {
+    $ctx->HTML(200, 'foo', [
+        'id' => 1000,
+        'name' => '小明',
+        'friends' => [
+            '小花',
+            '小红'
+        ]
+    ]);
 })->methods('GET');
 
 $http_worker = new Workerman\Worker("http://0.0.0.0:2345");
