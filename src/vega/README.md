@@ -16,7 +16,7 @@ Vega 是 [MixPHP](https://github.com/mix-php/mix) `V3+` 内置的最核心的组
 golang [gin](https://github.com/gin-gonic/gin) [mux](https://github.com/gorilla/mux) 开发，它包含 Web 应用处理的大量功能 (数据库处理除外)
 ，包括：路由、渲染、参数获取、中间件、文件上传处理等；具有 CLI 模式下强大的兼容性，同时支持 Swoole、WorkerMan, 并且支持 Swoole 的多种进程模型。
 
-**推荐搭配以下下数据库使用：**
+**推荐搭配以下数据库使用：**
 
 - https://github.com/top-think/think-orm
 - https://github.com/illuminate/database
