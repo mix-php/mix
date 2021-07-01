@@ -2,9 +2,9 @@
 
 中文 | [English](https://github.com/mix-php/vega/blob/master/README_EN.md)
 
-Vega is a CLI HTTP web framework written in PHP support Swoole, WorkerMan
+Vega is a CLI mode HTTP web framework written in PHP support Swoole, WorkerMan
 
-Vega 是一个用 PHP 编写的 CLI HTTP 网络框架，支持 Swoole、WorkerMan
+Vega 是一个用 PHP 编写的 CLI 模式 HTTP 网络框架，支持 Swoole、WorkerMan
 
 ## Overview
 
