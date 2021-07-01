@@ -2,15 +2,9 @@
 
 namespace Mix\Database;
 
-use Mix\Database\Event\ExecutedEvent;
-use Mix\Database\Helper\BuildHelper;
-use Mix\Database\Query\Expression;
-use Psr\EventDispatcher\EventDispatcherInterface;
-
 /**
  * Class AbstractConnection
  * @package Mix\Database
- * @author liu,jian <coder.keda@gmail.com>
  */
 abstract class AbstractConnection
 {
@@ -19,19 +13,13 @@ abstract class AbstractConnection
      * 驱动
      * @var Driver
      */
-    public $driver;
-
-    /**
-     * 事件调度器
-     * @var EventDispatcherInterface
-     */
-    public $dispatcher;
+    protected $driver;
 
     /**
      * PDOStatement
      * @var \PDOStatement
      */
-    protected $statement;
+    public $statement;
 
     /**
      * sql
@@ -121,7 +109,7 @@ abstract class AbstractConnection
             'Resource deadlock avoided',
             'failed with errno',
         ];
-        $errorMessage       = $ex->getMessage();
+        $errorMessage = $ex->getMessage();
         foreach ($disconnectMessages as $message) {
             if (false !== stripos($errorMessage, $message)) {
                 return true;
@@ -131,48 +119,18 @@ abstract class AbstractConnection
     }
 
     /**
-     * 构建查询片段
-     * @param array $item
-     * @return string|bool
-     */
-    protected function buildQueryFragment(array $item)
-    {
-        if (isset($item['if']) && $item['if'] == false) {
-            return false;
-        }
-        if (isset($item['params'])) {
-            $this->bindParams($item['params']);
-        }
-        return array_shift($item);
-    }
-
-    /**
-     * 准备执行语句
-     * @param string|array $sql
+     * 执行原生SQL
+     * @param string $sql
      * @return $this
      */
-    public function prepare($sql)
+    public function raw(string $sql)
     {
         // 清扫数据
-        $this->sql    = '';
+        $this->sql = '';
         $this->params = [];
         $this->values = [];
-        // 字符串构建
-        if (is_string($sql)) {
-            $this->sql = $sql;
-        }
-        // 数组构建
-        if (is_array($sql)) {
-            $fragments = [];
-            foreach ($sql as $item) {
-                $fragment = $this->buildQueryFragment($item);
-                if ($fragment) {
-                    $fragments[] = $fragment;
-                }
-            }
-            $this->sql = implode(' ', $fragments);
-        }
         // 保存SQL
+        $this->sql = $sql;
         $this->queryData = [$this->sql, [], [], 0];
         // 返回
         return $this;
@@ -232,15 +190,15 @@ abstract class AbstractConnection
      * 构建查询
      * @throws \PDOException
      */
-    protected function build()
+    protected function prepare()
     {
         if (!empty($this->params)) {
             // 准备与参数绑定
             // 原始方法
             foreach ($this->params as $key => $item) {
-                if ($item instanceof Expression) {
+                if ($item instanceof Expr) {
                     unset($this->params[$key]);
-                    $key       = substr($key, 0, 1) == ':' ? $key : ":{$key}";
+                    $key = substr($key, 0, 1) == ':' ? $key : ":{$key}";
                     $this->sql = str_replace($key, $item->getValue(), $this->sql);
                 }
             }
@@ -287,9 +245,9 @@ abstract class AbstractConnection
     protected function clear()
     {
         $this->recycleData = [$this->sql, $this->params, $this->values];
-        $this->sql         = '';
-        $this->params      = [];
-        $this->values      = [];
+        $this->sql = '';
+        $this->params = [];
+        $this->values = [];
     }
 
     /**
@@ -315,26 +273,6 @@ abstract class AbstractConnection
     }
 
     /**
-     * 调度事件
-     * @param string $sql
-     * @param array $bindings
-     * @param float $time
-     * @param string|null $error
-     */
-    protected function dispatch(string $sql, array $bindings, float $time, string $error = null)
-    {
-        if (!$this->dispatcher) {
-            return;
-        }
-        $event           = new ExecutedEvent();
-        $event->sql      = $sql;
-        $event->bindings = $bindings;
-        $event->time     = $time;
-        $event->error    = $error;
-        $this->dispatcher->dispatch($event);
-    }
-
-    /**
      * 执行SQL语句
      * @return bool
      */
@@ -342,15 +280,15 @@ abstract class AbstractConnection
     {
         $microtime = static::microtime();
         try {
-            $this->build();
+            $this->prepare();
             $success = $this->statement->execute();
         } catch (\Throwable $ex) {
             $message = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
-            $code    = $ex->getCode();
-            $error   = sprintf('[%d] %s', $code, $message);
+            $code = $ex->getCode();
+            $error = sprintf('[%d] %s', $code, $message);
             throw $ex;
         } finally {
-            $time               = round((static::microtime() - $microtime) * 1000, 2);
+            $time = round((static::microtime() - $microtime) * 1000, 2);
             $this->queryData[3] = $time;
 
             $this->clear();
@@ -444,7 +382,7 @@ abstract class AbstractConnection
      */
     public function getLastSql(): string
     {
-        $sql    = '';
+        $sql = '';
         $params = $values = [];
         !empty($this->queryData) and list($sql, $params, $values) = $this->queryData;
         if (empty($params) && empty($values)) {
@@ -468,14 +406,14 @@ abstract class AbstractConnection
      */
     public function getLastLog(): array
     {
-        $sql    = '';
+        $sql = '';
         $params = $values = [];
-        $time   = 0;
+        $time = 0;
         !empty($this->queryData) and list($sql, $params, $values, $time) = $this->queryData;
         return [
-            'sql'      => $sql,
+            'sql' => $sql,
             'bindings' => $values ?: $params,
-            'time'     => $time,
+            'time' => $time,
         ];
     }
 
@@ -504,12 +442,12 @@ abstract class AbstractConnection
      */
     public function insert(string $table, array $data, string $insert = 'INSERT INTO')
     {
-        $keys   = array_keys($data);
+        $keys = array_keys($data);
         $fields = array_map(function ($key) {
             return ":{$key}";
         }, $keys);
-        $sql    = "{$insert} `{$table}` (`" . implode('`, `', $keys) . "`) VALUES (" . implode(', ', $fields) . ")";
-        $this->prepare($sql);
+        $sql = "{$insert} `{$table}` (`" . implode('`, `', $keys) . "`) VALUES (" . implode(', ', $fields) . ")";
+        $this->raw($sql);
         $this->bindParams($data);
         return $this;
     }
@@ -523,8 +461,8 @@ abstract class AbstractConnection
      */
     public function batchInsert(string $table, array $data, string $insert = 'INSERT INTO')
     {
-        $keys   = array_keys($data[0]);
-        $sql    = "{$insert} `{$table}` (`" . implode('`, `', $keys) . "`) VALUES ";
+        $keys = array_keys($data[0]);
+        $sql = "{$insert} `{$table}` (`" . implode('`, `', $keys) . "`) VALUES ";
         $values = [];
         $subSql = [];
         foreach ($data as $item) {
@@ -532,59 +470,18 @@ abstract class AbstractConnection
             foreach ($keys as $key) {
                 $value = $item[$key];
                 // 原始方法
-                if ($value instanceof Expression) {
+                if ($value instanceof Expr) {
                     $placeholder[] = $value->getValue();
                     continue;
                 }
-                $values[]      = $value;
+                $values[] = $value;
                 $placeholder[] = '?';
             }
             $subSql[] = "(" . implode(', ', $placeholder) . ")";
         }
         $sql .= implode(', ', $subSql);
-        $this->prepare($sql);
+        $this->raw($sql);
         $this->bindValues($values);
-        return $this;
-    }
-
-    /**
-     * 更新
-     * @param string $table
-     * @param array $data
-     * @param array $where
-     * @return $this
-     */
-    public function update(string $table, array $data, array $where)
-    {
-        if (!BuildHelper::isMulti($where)) {
-            $where = [$where];
-        }
-        list($dataSql, $dataParams) = BuildHelper::data($data);
-        list($whereSql, $whereParams) = BuildHelper::where($where);
-        $this->prepare([
-            ["UPDATE `{$table}`"],
-            ["SET {$dataSql}", 'params' => $dataParams],
-            ["WHERE {$whereSql}", 'params' => $whereParams],
-        ]);
-        return $this;
-    }
-
-    /**
-     * 删除
-     * @param string $table
-     * @param array $where
-     * @return $this
-     */
-    public function delete(string $table, array $where)
-    {
-        if (!BuildHelper::isMulti($where)) {
-            $where = [$where];
-        }
-        list($sql, $params) = BuildHelper::where($where);
-        $this->prepare([
-            ["DELETE FROM `{$table}`"],
-            ["WHERE {$sql}", 'params' => $params],
-        ]);
         return $this;
     }
 
@@ -595,49 +492,23 @@ abstract class AbstractConnection
      */
     public function transaction(\Closure $closure)
     {
-        $this->beginTransaction();
+        $tx = $this->beginTransaction();
         try {
             call_user_func($closure, $this);
-            $this->commit();
+            $tx->commit();
         } catch (\Throwable $ex) {
-            $this->rollBack();
+            $tx->rollBack();
             throw $ex;
         }
     }
 
     /**
-     * 开始事务
-     * @return $this
+     * @return Transaction
      * @throws \PDOException
      */
-    public function beginTransaction()
+    public function beginTransaction(): Transaction
     {
-        if (!$this->driver->instance()->beginTransaction()) {
-            throw new \PDOException('Begin transaction failed');
-        }
-        return $this;
-    }
-
-    /**
-     * 提交事务
-     * @throws \PDOException
-     */
-    public function commit()
-    {
-        if (!$this->driver->instance()->commit()) {
-            throw new \PDOException('Commit transaction failed');
-        }
-    }
-
-    /**
-     * 回滚事务
-     * @throws \PDOException
-     */
-    public function rollback()
-    {
-        if (!$this->driver->instance()->rollBack()) {
-            throw new \PDOException('Rollback transaction failed');
-        }
+        return new Transaction($this->driver);
     }
 
     /**

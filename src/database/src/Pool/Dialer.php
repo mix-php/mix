@@ -2,7 +2,6 @@
 
 namespace Mix\Database\Pool;
 
-use Mix\Bean\BeanInjector;
 use Mix\Database\Driver;
 use Mix\ObjectPool\DialerInterface;
 
@@ -17,40 +16,44 @@ class Dialer implements DialerInterface
      * 数据源格式
      * @var string
      */
-    public $dsn = '';
+    protected $dsn = '';
 
     /**
      * 数据库用户名
      * @var string
      */
-    public $username = 'root';
+    protected $username = 'root';
 
-    /*
+    /**
      * 数据库密码
+     * @var string
      */
-    public $password = '';
+    protected $password = '';
 
     /**
      * 驱动连接选项
      * @var array
      */
-    public $options = [];
+    protected $options = [];
 
     /**
      * Dialer constructor.
-     * @param array $config
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
+     * @param string $dsn
+     * @param string $username
+     * @param string $password
+     * @param array $options
      */
-    public function __construct(array $config = [])
+    public function __construct(string $dsn, string $username, string $password, array $options = [])
     {
-        BeanInjector::inject($this, $config);
+        $this->dsn = $dsn;
+        $this->username = $username;
+        $this->password = $username;
+        $this->options = $options;
     }
 
     /**
      * Dial
      * @return Driver
-     * @throws \PDOException
      */
     public function dial()
     {

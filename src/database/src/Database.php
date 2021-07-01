@@ -4,9 +4,7 @@ namespace Mix\Database;
 
 use Mix\Database\Pool\ConnectionPool;
 use Mix\Database\Pool\Dialer;
-use Mix\Database\Query\Expression;
 use Mix\ObjectPool\Exception\WaitTimeoutException;
-use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class Database
@@ -40,49 +38,39 @@ class Database
     protected $options = [];
 
     /**
-     * 最大连接数
-     * @var int
-     * @deprecated 废弃，使用 maxOpen 取代
-     */
-    public $maxActive = -1;
-
-    /**
      * 最大活跃数
-     * "0" 为不限制，默认等于cpu数量
+     * 0 = 不限制
+     * -1 = 不开启
      * @var int
-     * @deprecated 应该设置为 protected，为了向下兼容而保留 public
      */
-    public $maxOpen = -1;
+    protected $maxOpen = -1;
 
     /**
      * 最多可空闲连接数
-     * 默认等于cpu数量
+     * 0 = 不限制
+     * -1 = 不开启
      * @var int
-     * @deprecated 应该设置为 protected，为了向下兼容而保留 public
      */
-    public $maxIdle = -1;
+    protected $maxIdle = -1;
 
     /**
      * 连接可复用的最长时间
-     * "0" 为不限制
+     * 0 = 不限制
      * @var int
-     * @deprecated 应该设置为 protected，为了向下兼容而保留 public
      */
-    public $maxLifetime = 0;
+    protected $maxLifetime = 0;
 
     /**
      * 等待新连接超时时间
-     * "0" 为不限制
+     * 0 = 不限制
      * @var float
-     * @deprecated 应该设置为 protected，为了向下兼容而保留 public
      */
-    public $waitTimeout = 0.0;
+    protected $waitTimeout = 0.0;
 
     /**
-     * 事件调度器
-     * @var EventDispatcherInterface
+     * @var Driver
      */
-    public $dispatcher;
+    protected $dialer;
 
     /**
      * 连接池
@@ -100,88 +88,98 @@ class Database
      * @param int $maxIdle
      * @param int $maxLifetime
      * @param float $waitTimeout
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
      */
     public function __construct(string $dsn, string $username, string $password, array $options = [],
                                 int $maxOpen = -1, int $maxIdle = -1, int $maxLifetime = 0, float $waitTimeout = 0.0)
     {
-        $this->dsn         = $dsn;
-        $this->username    = $username;
-        $this->password    = $password;
-        $this->options     = $options;
-        $this->maxOpen     = $maxOpen;
-        $this->maxIdle     = $maxIdle;
+        $this->dsn = $dsn;
+        $this->username = $username;
+        $this->password = $password;
+        $this->options = $options;
+        $this->maxOpen = $maxOpen;
+        $this->maxIdle = $maxIdle;
         $this->maxLifetime = $maxLifetime;
         $this->waitTimeout = $waitTimeout;
-        $this->pool        = $this->createPool();
+
+        if ($maxOpen > 0 && $maxIdle > 0) {
+            $this->createPool();
+        } else {
+            $this->driver = new Driver(
+                $this->dsn,
+                $this->username,
+                $this->password,
+                $this->options
+            );
+        }
     }
 
-    /**
-     * @return ConnectionPool
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
-     */
     protected function createPool()
     {
-        $pool             = new ConnectionPool(
-            new Dialer([
-                'dsn'      => $this->dsn,
-                'username' => $this->username,
-                'password' => $this->password,
-                'options'  => $this->options,
-            ]),
+        if ($this->driver) {
+            $this->driver->close();
+            $this->driver = null;
+        }
+
+        $pool = new ConnectionPool(
+            new Dialer(
+                $this->dsn,
+                $this->username,
+                $this->password,
+                $this->options
+            ),
             $this->maxOpen,
             $this->maxIdle,
             $this->maxLifetime,
             $this->waitTimeout
         );
-        $pool->dispatcher = &$this->dispatcher;
-        return $pool;
+        $this->pool = $pool;
     }
 
     /**
      * @param int $maxOpen
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
+     * @param int $maxIdle
+     */
+    public function startPool(int $maxOpen, int $maxIdle)
+    {
+        $this->maxOpen = $maxOpen;
+        $this->maxIdle = $maxIdle;
+        $this->createPool();
+    }
+
+    /**
+     * @param int $maxOpen
      */
     public function setMaxOpen(int $maxOpen)
     {
         $this->maxOpen = $maxOpen;
-        $this->pool    = $this->createPool();
+        $this->createPool();
     }
 
     /**
      * @param int $maxIdle
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
      */
     public function setMaxIdle(int $maxIdle)
     {
         $this->maxIdle = $maxIdle;
-        $this->pool    = $this->createPool();
+        $this->createPool();
     }
 
     /**
      * @param int $maxLifetime
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
      */
     public function setMaxLifetime(int $maxLifetime)
     {
         $this->maxLifetime = $maxLifetime;
-        $this->pool        = $this->createPool();
+        $this->createPool();
     }
 
     /**
      * @param float $waitTimeout
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
      */
     public function setWaitTimeout(float $waitTimeout)
     {
         $this->waitTimeout = $waitTimeout;
-        $this->pool        = $this->createPool();
+        $this->createPool();
     }
 
     /**
@@ -189,22 +187,25 @@ class Database
      * @return Connection
      * @throws WaitTimeoutException
      */
-    public function borrow(): Connection
+    protected function borrow(): Connection
     {
-        $driver           = $this->pool->borrow();
-        $conn             = new Connection($driver);
-        $conn->dispatcher = $this->dispatcher;
+        if ($this->pool) {
+            $driver = $this->pool->borrow();
+            $conn = new Connection($driver);
+        } else {
+            $conn = new Connection($this->driver);
+        }
         return $conn;
     }
 
     /**
      * 准备执行语句
-     * @param string|array $sql
+     * @param string $sql
      * @return Connection
      */
-    public function prepare($sql): Connection
+    public function raw(string $sql): Connection
     {
-        return $this->borrow()->prepare($sql);
+        return $this->borrow()->raw($sql);
     }
 
     /**
@@ -232,43 +233,20 @@ class Database
     }
 
     /**
-     * 更新
-     * @param string $table
-     * @param array $data
-     * @param array $where
-     * @return Connection
-     */
-    public function update(string $table, array $data, array $where): Connection
-    {
-        return $this->borrow()->update($table, $data, $where);
-    }
-
-    /**
-     * 删除
-     * @param string $table
-     * @param array $where
-     * @return Connection
-     */
-    public function delete(string $table, array $where): Connection
-    {
-        return $this->borrow()->delete($table, $where);
-    }
-
-    /**
      * 自动事务
      * @param \Closure $closure
      * @throws \Throwable
      */
     public function transaction(\Closure $closure)
     {
-        return $this->borrow()->transaction($closure);
+        $this->borrow()->transaction($closure);
     }
 
     /**
      * 开始事务
-     * @return Connection
+     * @return Transaction
      */
-    public function beginTransaction(): Connection
+    public function beginTransaction(): Transaction
     {
         return $this->borrow()->beginTransaction();
     }
@@ -281,16 +259,6 @@ class Database
     public function table(string $table): QueryBuilder
     {
         return $this->borrow()->table($table);
-    }
-
-    /**
-     * 返回一个RawQuery对象，对象的值将不经过参数绑定，直接解释为SQL的一部分，适合传递数据库原生函数
-     * @param string $value
-     * @return Expression
-     */
-    public static function raw(string $value): Expression
-    {
-        return new Expression($value);
     }
 
 }

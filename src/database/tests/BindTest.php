@@ -11,7 +11,7 @@ final class BindTest extends TestCase
         $_this = $this;
         $func  = function () use ($_this) {
             $conn   = conn();
-            $result = $conn->prepare('select * from users where id = ? or id = ?')->bindValues([1, 2])->queryAll();
+            $result = $conn->raw('select * from users where id = ? or id = ?')->bindValues([1, 2])->queryAll();
             $_this->assertTrue(!empty($result));
         };
         run($func);

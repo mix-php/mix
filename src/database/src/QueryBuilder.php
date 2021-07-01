@@ -7,197 +7,197 @@ use Mix\Database\Helper\BuildHelper;
 /**
  * Class QueryBuilder
  * @package Mix\Database
- * @author liu,jian <coder.keda@gmail.com>
  */
 class QueryBuilder
 {
 
     /**
      * 连接
-     * @var ConnectionInterface
+     * @var Connection
      */
-    public $connection;
+    public $conn;
 
     /**
      * @var string
      */
-    protected $_table = '';
+    protected $table = '';
 
     /**
      * @var array
      */
-    protected $_select = [];
+    protected $select = [];
 
     /**
      * @var array
      */
-    protected $_join = [];
+    protected $join = [];
 
     /**
      * @var array
      */
-    protected $_where = [];
+    protected $where = [];
 
     /**
      * @var array
      */
-    protected $_orderBy = [];
+    protected $order = [];
 
     /**
      * @var array
      */
-    protected $_groupBy = [];
+    protected $group = [];
 
     /**
      * @var array
      */
-    protected $_having = [];
+    protected $having = [];
 
     /**
      * @var int
      */
-    protected $_offset = 0;
+    protected $offset = 0;
 
     /**
      * @var int
      */
-    protected $_limit = 0;
+    protected $limit = 0;
 
     /**
      * @var string
      */
-    protected $_lock = '';
+    protected $lock = '';
 
     /**
      * QueryBuilder constructor.
-     * @param Connection $connection
+     * @param Connection $conn
      */
-    public function __construct(Connection $connection)
+    public function __construct(Connection $conn)
     {
-        $this->connection = $connection;
+        $this->conn = $conn;
     }
 
     /**
-     * table
      * @param string $table
      * @return $this
      */
     public function table(string $table)
     {
-        $this->_table = $table;
+        $this->table = $table;
         return $this;
     }
 
     /**
-     * select
-     * @param mixed ...$fields
+     * @param string ...$fields
      * @return $this
      */
-    public function select(...$fields)
+    public function select(string ...$fields)
     {
-        $this->_select = array_merge($this->_select, $fields);
+        $this->select = array_merge($this->select, $fields);
         return $this;
     }
 
     /**
-     * join
      * @param string $table
-     * @param array $on
+     * @param string $on
+     * @param ...$args
      * @return $this
      */
-    public function join(string $table, array $on)
+    public function join(string $table, string $on, ...$args)
     {
-        array_push($this->_join, ['INNER JOIN', $table, $on]);
+        array_push($this->join, ['INNER JOIN', $table, $on, $args]);
         return $this;
     }
 
     /**
-     * leftJoin
      * @param string $table
-     * @param array $on
+     * @param string $on
+     * @param ...$args
      * @return $this
      */
-    public function leftJoin(string $table, array $on)
+    public function leftJoin(string $table, string $on, ...$args)
     {
-        array_push($this->_join, ['LEFT JOIN', $table, $on]);
+        array_push($this->join, ['LEFT JOIN', $table, $on, $args]);
         return $this;
     }
 
     /**
-     * rightJoin
      * @param string $table
-     * @param array $on
+     * @param string $on
+     * @param ...$args
      * @return $this
      */
-    public function rightJoin(string $table, array $on)
+    public function rightJoin(string $table, string $on, ...$args)
     {
-        array_push($this->_join, ['RIGHT JOIN', $table, $on]);
+        array_push($this->join, ['RIGHT JOIN', $table, $on, $args]);
         return $this;
     }
 
     /**
-     * fullJoin
      * @param string $table
-     * @param array $on
+     * @param string $on
+     * @param ...$args
      * @return $this
      */
-    public function fullJoin(string $table, array $on)
+    public function fullJoin(string $table, string $on, ...$args)
     {
-        array_push($this->_join, ['FULL JOIN', $table, $on]);
+        array_push($this->join, ['FULL JOIN', $table, $on, $args]);
         return $this;
     }
 
     /**
-     * where
-     * @param array $where
+     * @param string $expr
+     * @param ...$args
      * @return $this
      */
-    public function where(array $where)
+    public function where(string $expr, ...$args)
     {
-        if (!BuildHelper::isMulti($where)) {
-            array_push($this->_where, $where);
-        } else {
-            $this->_where = array_merge($this->_where, $where);
-        }
+        array_push($this->where, ['AND', $expr, $args]);
         return $this;
     }
 
     /**
-     * orderBy
+     * @param string $expr
+     * @param ...$args
+     * @return $this
+     */
+    public function or(string $expr, ...$args)
+    {
+        array_push($this->where, ['OR', $expr, $args]);
+        return $this;
+    }
+
+    /**
      * @param string $field
      * @param string $order
      * @return $this
      */
-    public function orderBy(string $field, string $order)
+    public function order(string $field, string $order)
     {
         if (!in_array($order, ['asc', 'desc'])) {
             throw new \RuntimeException('Sort can only be asc or desc.');
         }
-        array_push($this->_orderBy, [$field, strtoupper($order)]);
+        array_push($this->order, [$field, strtoupper($order)]);
         return $this;
     }
 
     /**
-     * groupBy
-     * @param mixed ...$fields
+     * @param string ...$fields
      * @return $this
      */
-    public function groupBy(...$fields)
+    public function group(string ...$fields)
     {
-        $this->_groupBy = array_merge($this->_groupBy, $fields);
+        $this->group = array_merge($this->group, $fields);
         return $this;
     }
 
     /**
-     * having
-     * @param $field
-     * @param $operator
-     * @param $condition
+     * @param string $expr
+     * @param ...$args
      * @return $this
      */
-    public function having($field, $operator, $condition)
+    public function having(string $expr, ...$args)
     {
-        array_push($this->_having, [$field, $operator, $condition]);
+        array_push($this->having, [$expr, $args]);
         return $this;
     }
 
@@ -208,7 +208,7 @@ class QueryBuilder
      */
     public function offset(int $length)
     {
-        $this->_offset = $length;
+        $this->offset = $length;
         return $this;
     }
 
@@ -219,7 +219,7 @@ class QueryBuilder
      */
     public function limit(int $length)
     {
-        $this->_limit = $length;
+        $this->limit = $length;
         return $this;
     }
 
@@ -229,7 +229,7 @@ class QueryBuilder
      */
     public function lockForUpdate()
     {
-        $this->_lock = 'FOR UPDATE';
+        $this->lock = 'FOR UPDATE';
         return $this;
     }
 
@@ -239,7 +239,7 @@ class QueryBuilder
      */
     public function sharedLock()
     {
-        $this->_lock = 'LOCK IN SHARE MODE';
+        $this->lock = 'LOCK IN SHARE MODE';
         return $this;
     }
 
@@ -247,65 +247,65 @@ class QueryBuilder
      * 预处理
      * @return Connection
      */
-    public function prepare()
+    protected function prepare()
     {
-        $sql = [];
+        $sqls = [];
         // select
-        if ($this->_select) {
-            $select = implode(', ', $this->_select);
-            $sql[]  = ["SELECT {$select}"];
+        if ($this->select) {
+            $select = implode(', ', $this->select);
+            $sqls[] = ["SELECT {$select}"];
         } else {
-            $sql[] = ["SELECT *"];
+            $sqls[] = ["SELECT *"];
         }
         // table
-        if ($this->_table) {
-            $sql[] = ["FROM {$this->_table}"];
+        if ($this->table) {
+            $sqls[] = ["FROM {$this->table}"];
         }
-        if ($this->_join) {
-            foreach ($this->_join as $item) {
+        if ($this->join) {
+            foreach ($this->join as $item) {
                 list($type, $table, $on) = $item;
                 $condition = BuildHelper::joinOn($on);
-                $sql[]     = ["{$type} {$table} ON {$condition}"];
+                $sqls[] = ["{$type} {$table} ON {$condition}"];
             }
         }
         // where
-        if ($this->_where) {
-            list($subSql, $subParams) = BuildHelper::where($this->_where);
-            $sql[] = ["WHERE {$subSql}", 'params' => $subParams];
+        if ($this->where) {
+            list($subSql, $subParams) = BuildHelper::where($this->where);
+            $sqls[] = ["WHERE {$subSql}", 'params' => $subParams];
         }
-        // groupBy
-        if ($this->_groupBy) {
-            $sql[] = ["GROUP BY " . implode(', ', $this->_groupBy)];
+        // group
+        if ($this->group) {
+            $sqls[] = ["GROUP BY " . implode(', ', $this->group)];
         }
         // having
-        if ($this->_having) {
+        if ($this->having) {
             $subSql = [];
-            foreach ($this->_having as $item) {
+            foreach ($this->having as $item) {
                 list($field, $operator, $condition) = $item;
                 $subSql[] = "{$field} {$operator} {$condition}";
             }
             $subSql = count($subSql) == 1 ? array_pop($subSql) : implode(' AND ', $subSql);
-            $sql[]  = ["HAVING {$subSql}"];
+            $sqls[] = ["HAVING {$subSql}"];
         }
-        // orderBy
-        if ($this->_orderBy) {
+        // order
+        if ($this->order) {
             $subSql = [];
-            foreach ($this->_orderBy as $item) {
+            foreach ($this->order as $item) {
                 list($field, $order) = $item;
                 $subSql[] = "{$field} {$order}";
             }
-            $sql[] = ["ORDER BY " . implode(', ', $subSql)];
+            $sqls[] = ["ORDER BY " . implode(', ', $subSql)];
         }
         // limit and offset
-        if ($this->_limit > 0) {
-            $sql[] = ['LIMIT :__offset, :__limit', 'params' => ['__offset' => $this->_offset, '__limit' => $this->_limit]];
+        if ($this->limit > 0) {
+            $sqls[] = ['LIMIT :__offset, :__limit', 'params' => ['__offset' => $this->offset, '__limit' => $this->limit]];
         }
         // lock
-        if ($this->_lock) {
-            $sql[] = [$this->_lock];
+        if ($this->lock) {
+            $sqls[] = [$this->lock];
         }
         // 返回
-        return $this->connection->prepare($sql);
+        return $this->conn->raw($sqls);
     }
 
     /**
@@ -343,6 +343,47 @@ class QueryBuilder
             throw new \PDOException(sprintf('Field %s not found', $field));
         }
         return $isArray ? $result[$field] : $result->$field;
+    }
+
+    /**
+     * 更新
+     * @param array $data
+     * @return $this
+     */
+    public function updates(array $data)
+    {
+        if (!BuildHelper::isMulti($where)) {
+            $where = [$where];
+        }
+        list($dataSql, $dataParams) = BuildHelper::data($data);
+        list($whereSql, $whereParams) = BuildHelper::where($where);
+        $sqls = [
+            ["UPDATE `{$table}`"],
+            ["SET {$dataSql}", 'params' => $dataParams],
+            ["WHERE {$whereSql}", 'params' => $whereParams],
+        ];
+        $this->conn->raw();
+        return $this;
+    }
+
+    /**
+     * @param string $field
+     * @param $value
+     */
+    public function update(string $field, $value)
+    {
+
+    }
+
+    /**
+     * 删除
+     * @param string $table
+     * @param array $where
+     * @return Connection
+     */
+    public function delete()
+    {
+        return $this->conn->delete($table, $where);
     }
 
 }

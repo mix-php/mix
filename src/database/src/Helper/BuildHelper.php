@@ -2,7 +2,7 @@
 
 namespace Mix\Database\Helper;
 
-use Mix\Database\Query\Expression;
+use Mix\Database\Query\Expr;
 
 /**
  * Class BuildHelper
@@ -111,7 +111,7 @@ class BuildHelper
                 $in      = in_array(strtoupper($operator), ['IN', 'NOT IN']);
                 $between = in_array(strtoupper($operator), ['BETWEEN', 'NOT BETWEEN']);
                 if (
-                    (is_string($field) || $field instanceof Expression) && is_string($operator) && (is_scalar($condition) || $condition instanceof Expression) ||
+                    (is_string($field) || $field instanceof Expr) && is_string($operator) && (is_scalar($condition) || $condition instanceof Expr) ||
                     (is_string($field) && ($in || $between) && is_array($condition))
                 ) {
                     $subSql   = '';

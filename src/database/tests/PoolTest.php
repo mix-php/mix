@@ -16,7 +16,7 @@ final class PoolTest extends TestCase
             $chan = new \Swoole\Coroutine\Channel();
             for ($i = 0; $i < $max; $i++) {
                 go(function () use ($db, $chan) {
-                    $db->prepare('select sleep(1)')->queryAll();
+                    $db->raw('select sleep(1)')->queryAll();
                     $chan->push(true);
                 });
             }

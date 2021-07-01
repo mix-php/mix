@@ -18,7 +18,7 @@
     }
   ],
   "require": {
-    "php": ">=7.0.0",
+    "php": ">=7.2.0",
     "ext-pdo": "*",
     "mix/object-pool": "~2.2.0"
   },

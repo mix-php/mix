@@ -5,7 +5,6 @@ namespace Mix\Database;
 /**
  * Class Connection
  * @package Mix\Database
- * @author liu,jian <coder.keda@gmail.com>
  */
 class Connection extends AbstractConnection
 {
@@ -69,10 +68,10 @@ class Connection extends AbstractConnection
 
     /**
      * 开始事务
-     * @return $this
+     * @return Transaction
      * @throws \PDOException
      */
-    public function beginTransaction()
+    public function beginTransaction(): Transaction
     {
         return $this->call(__FUNCTION__);
     }

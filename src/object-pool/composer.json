@@ -8,7 +8,7 @@
     "object-pool",
     "connection-pool"
   ],
-  "homepage": "https://openmix.org/",
+  "homepage": "https://openmix.org/mix-php",
   "license": "Apache-2.0",
   "authors": [
     {
@@ -17,8 +17,7 @@
     }
   ],
   "require": {
-    "php": ">=7.0.0",
-    "ext-swoole": ">=4.4.4",
+    "php": ">=7.2.0",
     "psr/event-dispatcher": "^1.0"
   },
   "autoload": {

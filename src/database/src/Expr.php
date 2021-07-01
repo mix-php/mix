@@ -1,13 +1,12 @@
 <?php
 
-namespace Mix\Database\Query;
+namespace Mix\Database;
 
 /**
- * Class Expression
- * @package Mix\Database\Query
- * @author ihipop@gmail.com @ 19-3-28 上午10:36 For mix-v2
+ * Class Expr
+ * @package Mix\Database
  */
-class Expression
+class Expr
 {
 
     /**
