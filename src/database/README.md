@@ -1,18 +1,18 @@
 ## Mix Database
 
-基于 Swoole 的协程数据库组件，内置连接池，可独立使用
+Simple database for use in multiple execution environments, with support for FPM, Swoole, Workerman, and optional pools
 
-## Usage
+可使用在多种执行环境的简易数据库，支持 FPM、Swoole、WorkerMan，可选的池
 
-安装：
+## Installation
 
 ```
 composer require mix/database
 ```
 
-文档：
+## Quick start
 
-- https://www.kancloud.cn/onanying/mixphp2-2/1712317
+
 
 ## License
 

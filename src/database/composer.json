@@ -1,14 +1,15 @@
 {
   "name": "mix/database",
-  "description": "Coroutine database library based on Swoole, built-in connection pool",
+  "description": "Simple database for use in multiple execution environments, with support for FPM, Swoole, Workerman, and optional pools",
   "type": "library",
   "keywords": [
     "mix",
     "database",
     "mysql",
-    "swoole"
+    "swoole",
+    "workerman"
   ],
-  "homepage": "https://openmix.org/",
+  "homepage": "https://openmix.org/mix-php",
   "license": "Apache-2.0",
   "authors": [
     {
@@ -19,9 +20,6 @@
   "require": {
     "php": ">=7.0.0",
     "ext-pdo": "*",
-    "ext-swoole": ">=4.4.4",
-    "psr/event-dispatcher": "^1.0",
-    "mix/bean": "~2.2.0",
     "mix/object-pool": "~2.2.0"
   },
   "require-dev": {
