@@ -103,11 +103,11 @@ class Connection extends AbstractConnection
         }
     }
 
-    /**
-     * 析构
-     */
     public function __destruct()
     {
+        if (!$this->driver) {
+            return;
+        }
         if ($this->inTransaction()) {
             $this->driver->__discard();
             $this->driver = null;

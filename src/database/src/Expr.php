@@ -10,41 +10,32 @@ class Expr
 {
 
     /**
-     * The value of the expression.
-     *
-     * @var mixed
+     * @var string
      */
-    protected $value;
+    protected $expr;
 
     /**
-     * Create a new raw query expression.
-     *
-     * @param  mixed $value
-     *
-     * @return void
+     * @var array
      */
-    public function __construct($value)
+    protected $args;
+
+    /**
+     * Expr constructor.
+     * @param string $expr
+     * @param ...$args
+     */
+    public function __construct(string $expr, ...$args)
     {
-        $this->value = $value;
+        $this->expr = $expr;
+        $this->args = $args;
     }
 
     /**
-     * Get the value of the expression.
-     *
-     * @return mixed
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     * Get the value of the expression.
-     *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return (string)$this->getValue();
+        return vsprintf(str_replace('?', "'%s'", $this->expr), $this->args);
     }
+
 }

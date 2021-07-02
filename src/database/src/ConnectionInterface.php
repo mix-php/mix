@@ -34,8 +34,6 @@ interface ConnectionInterface
 
     public function getRowCount(): int;
 
-    public function getLastSql(): string;
-
-    public function getLastLog(): array;
+    public function getQueryLog(): array;
 
 }

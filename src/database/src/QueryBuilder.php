@@ -68,6 +68,16 @@ class QueryBuilder
     protected $lock = '';
 
     /**
+     * @var array
+     */
+    protected $update;
+
+    /**
+     * @var bool
+     */
+    protected $delete;
+
+    /**
      * QueryBuilder constructor.
      * @param ConnectionInterface $conn
      */
@@ -244,49 +254,89 @@ class QueryBuilder
     }
 
     /**
-     * 预处理
-     * @return Connection
+     * @param string $index
+     * @param array $data
+     * @return ConnectionInterface
      */
-    protected function prepare()
+    protected function exec(string $index, array $data = []): ConnectionInterface
     {
-        $sqls = [];
+        $sqls = $values = [];
+
         // select
         if ($this->select) {
             $select = implode(', ', $this->select);
-            $sqls[] = ["SELECT {$select}"];
+            $sqls[] = "SELECT {$select}";
         } else {
-            $sqls[] = ["SELECT *"];
+            $sqls[] = "SELECT *";
         }
+
+        // delete
+        if ($index == 'DELETE') {
+            $sqls[] = "DELETE";
+        }
+
         // table
         if ($this->table) {
-            $sqls[] = ["FROM {$this->table}"];
-        }
-        if ($this->join) {
-            foreach ($this->join as $item) {
-                list($type, $table, $on) = $item;
-                $condition = BuildHelper::joinOn($on);
-                $sqls[] = ["{$type} {$table} ON {$condition}"];
+            // update
+            if ($index == 'UPDATE') {
+                $set = [];
+                foreach ($data as $k => $v) {
+                    if ($v instanceof Expr) {
+                        array_push($set, $v->__toString());
+                    } else {
+                        $set[] = "$k = ?";
+                        array_push($values, $v);
+                    }
+                }
+                $sqls[] = "UPDATE SET " . implode(', ', $set) . " FROM {$this->table}";
+            } else {
+                $sqls[] = "FROM {$this->table}";
             }
         }
+
+        // join
+        if ($this->join) {
+            foreach ($this->join as $item) {
+                list($keyword, $table, $on, $args) = $item;
+                $sqls[] = "{$keyword} {$table} ON {$on}";
+                array_push($values, ...$args);
+            }
+        }
+
         // where
         if ($this->where) {
-            list($subSql, $subParams) = BuildHelper::where($this->where);
-            $sqls[] = ["WHERE {$subSql}", 'params' => $subParams];
+            foreach ($this->where as $key => $item) {
+                list($keyword, $expr, $args) = $item;
+
+                // in 处理
+
+
+                if ($key == 0) {
+                    $sqls[] = "{$expr}";
+                } else {
+                    $sqls[] = "{$keyword} {$expr}";
+                }
+                array_push($values, ...$args);
+            }
         }
+
         // group
         if ($this->group) {
-            $sqls[] = ["GROUP BY " . implode(', ', $this->group)];
+            $sqls[] = "GROUP BY " . implode(', ', $this->group);
         }
+
         // having
         if ($this->having) {
             $subSql = [];
             foreach ($this->having as $item) {
-                list($field, $operator, $condition) = $item;
-                $subSql[] = "{$field} {$operator} {$condition}";
+                list($expr, $args) = $item;
+                $subSql[] = "$expr";
+                array_push($values, ...$args);
             }
             $subSql = count($subSql) == 1 ? array_pop($subSql) : implode(' AND ', $subSql);
-            $sqls[] = ["HAVING {$subSql}"];
+            $sqls[] = "HAVING {$subSql}";
         }
+
         // order
         if ($this->order) {
             $subSql = [];
@@ -294,18 +344,25 @@ class QueryBuilder
                 list($field, $order) = $item;
                 $subSql[] = "{$field} {$order}";
             }
-            $sqls[] = ["ORDER BY " . implode(', ', $subSql)];
+            $sqls[] = "ORDER BY " . implode(', ', $subSql);
         }
+
         // limit and offset
         if ($this->limit > 0) {
-            $sqls[] = ['LIMIT :__offset, :__limit', 'params' => ['__offset' => $this->offset, '__limit' => $this->limit]];
+            $sqls[] = 'LIMIT ?, ?';
+            array_push($values, $this->offset, $this->limit);
         }
+
         // lock
         if ($this->lock) {
-            $sqls[] = [$this->lock];
+            $sqls[] = $this->lock;
         }
+
+        // 聚合
+        $sql = implode(' ', $sqls);
+
         // 返回
-        return $this->conn->raw($sqls);
+        return $this->conn->raw($sql, ...$values);
     }
 
     /**
@@ -314,7 +371,7 @@ class QueryBuilder
      */
     public function get()
     {
-        return $this->prepare()->queryAll();
+        return $this->exec('SELECT')->queryAll();
     }
 
     /**
@@ -323,7 +380,7 @@ class QueryBuilder
      */
     public function first()
     {
-        return $this->prepare()->queryOne();
+        return $this->exec('SELECT')->queryOne();
     }
 
     /**
@@ -334,7 +391,7 @@ class QueryBuilder
      */
     public function value(string $field)
     {
-        $result = $this->prepare()->queryOne();
+        $result = $this->exec('SELECT')->queryOne();
         if (empty($result)) {
             return $result;
         }
@@ -346,24 +403,12 @@ class QueryBuilder
     }
 
     /**
-     * 更新
      * @param array $data
-     * @return $this
+     * @return ConnectionInterface
      */
-    public function updates(array $data)
+    public function updates(array $data): ConnectionInterface
     {
-        if (!BuildHelper::isMulti($where)) {
-            $where = [$where];
-        }
-        list($dataSql, $dataParams) = BuildHelper::data($data);
-        list($whereSql, $whereParams) = BuildHelper::where($where);
-        $sqls = [
-            ["UPDATE `{$table}`"],
-            ["SET {$dataSql}", 'params' => $dataParams],
-            ["WHERE {$whereSql}", 'params' => $whereParams],
-        ];
-        $this->conn->raw();
-        return $this;
+        return $this->exec('UPDATE', $data);
     }
 
     /**
@@ -373,7 +418,9 @@ class QueryBuilder
      */
     public function update(string $field, $value): ConnectionInterface
     {
-
+        return $this->exec('UPDATE', [
+            $field => $value
+        ]);
     }
 
     /**
@@ -381,7 +428,8 @@ class QueryBuilder
      */
     public function delete(): ConnectionInterface
     {
-
+        $this->delete = true;
+        return $this->exec('DELETE');
     }
 
 }

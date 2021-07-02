@@ -156,54 +156,33 @@ abstract class AbstractConnection implements ConnectionInterface
     }
 
     /**
-     * 绑定数组参数
-     * @param $sql
-     * @param $params
-     * @return array
-     */
-    protected function bindArrayParams($sql, $params)
-    {
-        foreach ($params as $key => $item) {
-            if (is_array($item)) {
-                unset($params[$key]);
-                $key = substr($key, 0, 1) == ':' ? $key : ":{$key}";
-                $sql = str_replace($key, implode(', ', $this->quotes($item)), $sql);
-            }
-        }
-        return [$sql, $params];
-    }
-
-    /**
      * 构建查询
      * @throws \PDOException
      */
     protected function prepare()
     {
-        if (!empty($this->params)) {
-            // 准备与参数绑定
-            // 原始方法
-            foreach ($this->params as $key => $item) {
-                if ($item instanceof Expr) {
-                    unset($this->params[$key]);
-                    $key = substr($key, 0, 1) == ':' ? $key : ":{$key}";
-                    $this->sql = str_replace($key, $item->getValue(), $this->sql);
+        if (!empty($this->params)) { // 参数绑定
+            // 支持 insert 里面带函数
+            foreach ($this->params as $k => $v) {
+                if ($v instanceof Expr) {
+                    unset($this->params[$k]);
+                    $k = substr($k, 0, 1) == ':' ? $k : ":{$k}";
+                    $this->sql = str_replace($k, $v->__toString(), $this->sql);
                 }
             }
-            // 有参数
-            list($sql, $params) = $this->bindArrayParams($this->sql, $this->params);
-            $statement = $this->driver->instance()->prepare($sql);
+
+            $statement = $this->driver->instance()->prepare($this->sql);
             if (!$statement) {
                 throw new \PDOException('PDO prepare failed');
             }
             $this->statement = $statement;
-            $this->sqlData = [$sql, $params, [], 0]; // 必须在 bindParam 前，才能避免类型被转换
-            foreach ($params as $key => &$value) {
+            $this->sqlData = [$this->sql, $this->params, [], 0]; // 必须在 bindParam 前，才能避免类型被转换
+            foreach ($this->params as $key => &$value) {
                 if (!$this->statement->bindParam($key, $value)) {
                     throw new \PDOException('PDOStatement bindParam failed');
                 }
             }
-        } elseif (!empty($this->values)) {
-            // 批量插入
+        } elseif (!empty($this->values)) { // 值绑定
             $statement = $this->driver->instance()->prepare($this->sql);
             if (!$statement) {
                 throw new \PDOException('PDO prepare failed');
@@ -215,8 +194,7 @@ abstract class AbstractConnection implements ConnectionInterface
                     throw new \PDOException('PDOStatement bindValue failed');
                 }
             }
-        } else {
-            // 无参数
+        } else { // 无参数
             $statement = $this->driver->instance()->prepare($this->sql);
             if (!$statement) {
                 throw new \PDOException('PDO prepare failed');
@@ -504,7 +482,7 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function beginTransaction(): Transaction
     {
-        return new Transaction($this->driver);
+        return new Transaction($this->driver, $this->logger);
     }
 
     /**
