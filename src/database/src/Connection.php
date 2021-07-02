@@ -96,7 +96,7 @@ class Connection extends AbstractConnection
                 return $this->call($name, $arguments);
             } else {
                 // 丢弃连接
-                $this->driver->__discard();
+                $this->driver and $this->driver->__discard();
                 // 抛出其他异常
                 throw $ex;
             }

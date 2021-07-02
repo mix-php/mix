@@ -66,6 +66,11 @@ class QueryBuilder
     protected $lock = '';
 
     /**
+     * @var \Closure
+     */
+    protected $debugFunc;
+
+    /**
      * @var array
      */
     protected $update;
@@ -252,11 +257,21 @@ class QueryBuilder
     }
 
     /**
+     * @param \Closure $func
+     * @return $this
+     */
+    public function debug(\Closure $func): QueryBuilder
+    {
+        $this->debugFunc = $func;
+        return $this;
+    }
+
+    /**
      * @param string $index
      * @param array $data
      * @return ConnectionInterface
      */
-    protected function exec(string $index, array $data = []): ConnectionInterface
+    protected function raw(string $index, array $data = []): ConnectionInterface
     {
         $sqls = $values = [];
 
@@ -303,6 +318,7 @@ class QueryBuilder
 
         // where
         if ($this->where) {
+            $sqls[] = "WHERE";
             foreach ($this->where as $key => $item) {
                 list($keyword, $expr, $args) = $item;
 
@@ -359,8 +375,17 @@ class QueryBuilder
         // 聚合
         $sql = implode(' ', $sqls);
 
-        // 返回
-        return $this->conn->raw($sql, ...$values);
+        // debug & 执行
+        try {
+            $conn = $this->conn->raw($sql, ...$values);
+        } catch (\Throwable $ex) {
+            throw $ex;
+        } finally {
+            $func = $this->debugFunc;
+            $func and $func($this->conn);
+        }
+
+        return $conn;
     }
 
     /**
@@ -369,7 +394,7 @@ class QueryBuilder
      */
     public function get()
     {
-        return $this->exec('SELECT')->queryAll();
+        return $this->raw('SELECT')->queryAll();
     }
 
     /**
@@ -378,7 +403,7 @@ class QueryBuilder
      */
     public function first()
     {
-        return $this->exec('SELECT')->queryOne();
+        return $this->raw('SELECT')->queryOne();
     }
 
     /**
@@ -389,7 +414,7 @@ class QueryBuilder
      */
     public function value(string $field)
     {
-        $result = $this->exec('SELECT')->queryOne();
+        $result = $this->raw('SELECT')->queryOne();
         if (empty($result)) {
             return $result;
         }
@@ -406,7 +431,7 @@ class QueryBuilder
      */
     public function updates(array $data): ConnectionInterface
     {
-        return $this->exec('UPDATE', $data);
+        return $this->raw('UPDATE', $data);
     }
 
     /**
@@ -416,7 +441,7 @@ class QueryBuilder
      */
     public function update(string $field, $value): ConnectionInterface
     {
-        return $this->exec('UPDATE', [
+        return $this->raw('UPDATE', [
             $field => $value
         ]);
     }
@@ -427,7 +452,7 @@ class QueryBuilder
     public function delete(): ConnectionInterface
     {
         $this->delete = true;
-        return $this->exec('DELETE');
+        return $this->raw('DELETE');
     }
 
 }

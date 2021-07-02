@@ -6,6 +6,16 @@ use PHPUnit\Framework\TestCase;
 final class WhereTest extends TestCase
 {
 
+    public function testIn(): void
+    {
+        $result = db()->table('users')->where('id IN (?)', [1, 2])->debug(function (\Mix\Database\ConnectionInterface $conn) {
+            $log = $conn->getQueryLog();
+            var_dump($log);
+        })->get();
+        var_dump($result);
+    }
+
+    /*
     // ['id', 'in', [2, 3]]
     public function testIn(): void
     {
@@ -261,5 +271,5 @@ final class WhereTest extends TestCase
         };
         run($func);
     }
-
+    */
 }

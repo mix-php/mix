@@ -23,7 +23,8 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `news`;
 CREATE TABLE `news` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `key` varchar(100) NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `content` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
@@ -31,7 +32,7 @@ CREATE TABLE `news` (
 -- Records of news
 -- ----------------------------
 BEGIN;
-INSERT INTO `news` VALUES (1, '222');
+INSERT INTO `news` VALUES (1, '标题1', '内容1');
 COMMIT;
 
 -- ----------------------------
@@ -40,10 +41,10 @@ COMMIT;
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `text` varchar(255) NOT NULL DEFAULT '',
-  `num` int(10) unsigned NOT NULL,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `balance` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=159 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of users

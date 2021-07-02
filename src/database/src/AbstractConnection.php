@@ -52,9 +52,14 @@ abstract class AbstractConnection implements ConnectionInterface
 
     /**
      * 查询数据
-     * @var array [$sql, $params, $values, $time]
+     * @var array [$sql, $params, $values, $time, $lastInsertId]
      */
     protected $sqlData = [];
+
+    /**
+     * @var array
+     */
+    protected $options = [];
 
     /**
      * AbstractConnection constructor.
@@ -64,6 +69,7 @@ abstract class AbstractConnection implements ConnectionInterface
     public function __construct(Driver $driver, ?LoggerInterface $logger)
     {
         $this->driver = $driver;
+        $this->options = $driver->options();
         $this->logger = $logger;
     }
 
@@ -139,7 +145,7 @@ abstract class AbstractConnection implements ConnectionInterface
 
         // 保存SQL
         $this->sql = $sql;
-        $this->sqlData = [$this->sql, [], $args, 0];
+        $this->sqlData = [$this->sql, [], $args, 0, ''];
 
         // 执行
         return $this->exec();
@@ -176,7 +182,7 @@ abstract class AbstractConnection implements ConnectionInterface
                 throw new \PDOException('PDO prepare failed');
             }
             $this->statement = $statement;
-            $this->sqlData = [$this->sql, $this->params, [], 0]; // 必须在 bindParam 前，才能避免类型被转换
+            $this->sqlData = [$this->sql, $this->params, [], 0, '']; // 必须在 bindParam 前，才能避免类型被转换
             foreach ($this->params as $key => &$value) {
                 if (!$this->statement->bindParam($key, $value)) {
                     throw new \PDOException('PDOStatement bindParam failed');
@@ -188,7 +194,7 @@ abstract class AbstractConnection implements ConnectionInterface
                 throw new \PDOException('PDO prepare failed');
             }
             $this->statement = $statement;
-            $this->sqlData = [$this->sql, [], $this->values, 0];
+            $this->sqlData = [$this->sql, [], $this->values, 0, ''];
             foreach ($this->values as $key => $value) {
                 if (!$this->statement->bindValue($key + 1, $value)) {
                     throw new \PDOException('PDOStatement bindValue failed');
@@ -200,7 +206,7 @@ abstract class AbstractConnection implements ConnectionInterface
                 throw new \PDOException('PDO prepare failed');
             }
             $this->statement = $statement;
-            $this->sqlData = [$this->sql, [], [], 0];
+            $this->sqlData = [$this->sql, [], [], 0, ''];
         }
     }
 
@@ -252,10 +258,12 @@ abstract class AbstractConnection implements ConnectionInterface
                 throw new \PDOException(sprintf('%s %d %s', $flag, $code, $message), $code);
             }
         } catch (\Throwable $ex) {
+            throw $ex;
         } finally {
             // 记录执行时间
             $time = round((static::microtime() - $beginTime) * 1000, 2);
             $this->sqlData[3] = $time;
+            $this->sqlData[4] = $this->driver->instance()->lastInsertId();
 
             $this->clear();
 
@@ -270,6 +278,7 @@ abstract class AbstractConnection implements ConnectionInterface
             );
         }
 
+        // 执行完立即回收
         if (get_called_class() != Transaction::class) {
             $this->driver->__return();
             $this->driver = null;
@@ -284,7 +293,6 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function query(): \PDOStatement
     {
-        $this->exec();
         return $this->statement;
     }
 
@@ -295,8 +303,7 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function queryOne(int $fetchStyle = null)
     {
-        $this->exec();
-        $fetchStyle = $fetchStyle ?: $this->driver->options()[\PDO::ATTR_DEFAULT_FETCH_MODE];
+        $fetchStyle = $fetchStyle ?: $this->options[\PDO::ATTR_DEFAULT_FETCH_MODE];
         return $this->statement->fetch($fetchStyle);
     }
 
@@ -307,8 +314,7 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function queryAll(int $fetchStyle = null): array
     {
-        $this->exec();
-        $fetchStyle = $fetchStyle ?: $this->driver->options()[\PDO::ATTR_DEFAULT_FETCH_MODE];
+        $fetchStyle = $fetchStyle ?: $this->options[\PDO::ATTR_DEFAULT_FETCH_MODE];
         return $this->statement->fetchAll($fetchStyle);
     }
 
@@ -319,7 +325,6 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function queryColumn(int $columnNumber = 0): array
     {
-        $this->exec();
         $column = [];
         while ($row = $this->statement->fetchColumn($columnNumber)) {
             $column[] = $row;
@@ -333,7 +338,6 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function queryScalar()
     {
-        $this->exec();
         return $this->statement->fetchColumn();
     }
 
@@ -407,7 +411,7 @@ abstract class AbstractConnection implements ConnectionInterface
                 $value = $item[$key];
                 // 原始方法
                 if ($value instanceof Expr) {
-                    $placeholder[] = $value->getValue();
+                    $placeholder[] = $value->__toString();
                     continue;
                 }
                 $values[] = $value;

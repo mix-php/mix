@@ -82,6 +82,10 @@ class Database
      * @var LoggerInterface
      */
     protected $logger;
+    /**
+     * @var Driver
+     */
+    protected $driver;
 
     /**
      * Database constructor.
