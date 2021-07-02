@@ -373,22 +373,6 @@ abstract class AbstractConnection implements ConnectionInterface
     }
 
     /**
-     * 给字符串加单引号
-     * @param array|string $var
-     * @return array|string
-     */
-    protected function quotes($var)
-    {
-        if (is_array($var)) {
-            foreach ($var as $k => $v) {
-                $var[$k] = $this->quotes($v);
-            }
-            return $var;
-        }
-        return is_string($var) ? $this->driver->instance()->quote($var) : $var;
-    }
-
-    /**
      * @param string $table
      * @param array $data
      * @param string $insert
