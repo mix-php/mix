@@ -8,11 +8,13 @@ final class WhereTest extends TestCase
 
     public function testIn(): void
     {
-        $result = db()->table('users')->where('id IN (?)', [1, 2])->debug(function (\Mix\Database\ConnectionInterface $conn) {
+        $_this = $this;
+        db()->table('users')->where('id IN (?) or id IN (?)', [1, 2], [3, 4])->debug(function (\Mix\Database\ConnectionInterface $conn) use ($_this) {
             $log = $conn->getQueryLog();
-            var_dump($log);
+            $sql = "SELECT * FROM users WHERE id IN (1, 2) or id IN (3, 4)";
+            $_this->assertEquals($log['sql'], $sql);
+            $_this->assertEquals($log['bindings'], []);
         })->get();
-        var_dump($result);
     }
 
     /*
