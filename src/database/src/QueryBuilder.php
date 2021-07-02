@@ -330,7 +330,7 @@ class QueryBuilder
                                 $value = "'$value'";
                             }
                         }
-                        $expr = preg_replace('/\?/', implode(', ', $arg), $expr, 1);
+                        $expr = preg_replace('/\?/', implode(',', $arg), $expr, 1);
                     }
                 }
 

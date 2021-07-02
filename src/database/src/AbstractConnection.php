@@ -279,9 +279,9 @@ abstract class AbstractConnection implements ConnectionInterface
         }
 
         // 执行完立即回收
-        if (get_called_class() != Transaction::class) {
+        if ($this->driver->pool && get_called_class() != Transaction::class) {
             $this->driver->__return();
-            $this->driver = null;
+            $this->driver = new EmptyDriver();
         }
 
         return $this;

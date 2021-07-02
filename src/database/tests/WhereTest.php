@@ -2,19 +2,38 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Mix\Database\ConnectionInterface;
 
 final class WhereTest extends TestCase
 {
 
+    public function testEqual(): void
+    {
+        $_this = $this;
+        db()->table('users')
+            ->where('id = ? or id = ?', 1, 2)
+            ->debug(function (ConnectionInterface $conn) use ($_this) {
+                $log = $conn->getQueryLog();
+                $sql = "SELECT * FROM users WHERE id IN (1,2) or id IN (3,4)";
+                var_dump($log);
+//                $_this->assertEquals($log['sql'], $sql);
+//                $_this->assertEquals($log['bindings'], []);
+            })
+            ->get();
+    }
+
     public function testIn(): void
     {
         $_this = $this;
-        db()->table('users')->where('id IN (?) or id IN (?)', [1, 2], [3, 4])->debug(function (\Mix\Database\ConnectionInterface $conn) use ($_this) {
-            $log = $conn->getQueryLog();
-            $sql = "SELECT * FROM users WHERE id IN (1, 2) or id IN (3, 4)";
-            $_this->assertEquals($log['sql'], $sql);
-            $_this->assertEquals($log['bindings'], []);
-        })->get();
+        db()->table('users')
+            ->where('id IN (?) or id IN (?)', [1, 2], [3, 4])
+            ->debug(function (ConnectionInterface $conn) use ($_this) {
+                $log = $conn->getQueryLog();
+                $sql = "SELECT * FROM users WHERE id IN (1,2) or id IN (3,4)";
+                $_this->assertEquals($log['sql'], $sql);
+                $_this->assertEquals($log['bindings'], []);
+            })
+            ->get();
     }
 
     /*
