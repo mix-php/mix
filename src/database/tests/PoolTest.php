@@ -26,7 +26,7 @@ final class PoolTest extends TestCase
             $duration = time() - $time;
             $_this->assertTrue($duration - 2 <= 1 && $duration - 2 >= 0);
         };
-        run($func);
+        swoole_run($func);
     }
 
     public function testMaxLifetime(): void
@@ -45,7 +45,7 @@ final class PoolTest extends TestCase
 
             $_this->assertNotEquals($id, $id1);
         };
-        run($func);
+        swoole_run($func);
     }
 
     public function testWaitTimeout(): void
@@ -63,7 +63,7 @@ final class PoolTest extends TestCase
                 $_this->assertContains('Wait timeout', $exception->getMessage());
             }
         };
-        run($func);
+        swoole_run($func);
     }
 
 }

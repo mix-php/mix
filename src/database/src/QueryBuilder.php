@@ -323,7 +323,7 @@ class QueryBuilder
                 list($keyword, $expr, $args) = $item;
 
                 // in 处理
-                foreach ($args as $arg) {
+                foreach ($args as $k => $arg) {
                     if (is_array($arg)) {
                         foreach ($arg as &$value) {
                             if (is_string($value)) {
@@ -331,6 +331,7 @@ class QueryBuilder
                             }
                         }
                         $expr = preg_replace('/\?/', implode(',', $arg), $expr, 1);
+                        unset($args[$k]);
                     }
                 }
 

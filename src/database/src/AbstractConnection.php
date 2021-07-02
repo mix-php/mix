@@ -133,10 +133,10 @@ abstract class AbstractConnection implements ConnectionInterface
 
     /**
      * @param string $sql
-     * @param ...$args
+     * @param ...$values
      * @return ConnectionInterface
      */
-    public function raw(string $sql, ...$args): ConnectionInterface
+    public function raw(string $sql, ...$values): ConnectionInterface
     {
         // 清扫数据
         $this->sql = '';
@@ -145,7 +145,8 @@ abstract class AbstractConnection implements ConnectionInterface
 
         // 保存SQL
         $this->sql = $sql;
-        $this->sqlData = [$this->sql, [], $args, 0, ''];
+        $this->values = $values;
+        $this->sqlData = [$this->sql, [], $values, 0, ''];
 
         // 执行
         return $this->exec();

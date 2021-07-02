@@ -216,12 +216,12 @@ class Database
 
     /**
      * @param string $sql
-     * @param ...$args
+     * @param ...$values
      * @return ConnectionInterface
      */
-    public function raw(string $sql, ...$args): ConnectionInterface
+    public function raw(string $sql, ...$values): ConnectionInterface
     {
-        return $this->borrow()->raw($sql, ...$args);
+        return $this->borrow()->raw($sql, ...$values);
     }
 
     /**
