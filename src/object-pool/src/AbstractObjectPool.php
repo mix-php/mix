@@ -2,9 +2,7 @@
 
 namespace Mix\ObjectPool;
 
-use Mix\ObjectPool\Event\DiscardedEvent;
 use Mix\ObjectPool\Exception\WaitTimeoutException;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Swoole\Coroutine;
 use Swoole\Coroutine\Channel;
 use Swoole\Exception;
@@ -12,7 +10,6 @@ use Swoole\Exception;
 /**
  * Class AbstractObjectPool
  * @package Mix\ObjectPool
- * @author liu,jian <coder.keda@gmail.com>
  */
 abstract class AbstractObjectPool
 {
@@ -52,12 +49,6 @@ abstract class AbstractObjectPool
     protected $waitTimeout = 0.0;
 
     /**
-     * 事件调度器
-     * @var EventDispatcherInterface
-     */
-    public $dispatcher;
-
-    /**
      * 连接队列
      * @var Channel
      */
@@ -79,9 +70,9 @@ abstract class AbstractObjectPool
      */
     public function __construct(DialerInterface $dialer, int $maxOpen = -1, int $maxIdle = -1, int $maxLifetime = 0, float $waitTimeout = 0.0)
     {
-        $this->dialer      = $dialer;
-        $this->maxOpen     = $maxOpen;
-        $this->maxIdle     = $maxIdle;
+        $this->dialer = $dialer;
+        $this->maxOpen = $maxOpen;
+        $this->maxIdle = $maxIdle;
         $this->maxLifetime = $maxLifetime;
         $this->waitTimeout = $waitTimeout;
         // 默认连接池数量等于 cpu 数量
@@ -102,14 +93,14 @@ abstract class AbstractObjectPool
     protected function createConnection()
     {
         // 连接创建时会挂起当前协程，导致 actives 未增加，因此需先 actives++ 连接创建成功后 actives--
-        $closure            = function () {
+        $closure = function () {
             /** @var ObjectTrait $connection */
-            $connection             = $this->dialer->dial();
-            $connection->pool       = $this;
+            $connection = $this->dialer->dial();
+            $connection->pool = $this;
             $connection->createTime = time();
             return $connection;
         };
-        $id                 = spl_object_hash($closure);
+        $id = spl_object_hash($closure);
         $this->actives[$id] = '';
         try {
             $connection = call_user_func($closure);
@@ -137,7 +128,7 @@ abstract class AbstractObjectPool
             $connection = $this->createConnection();
         }
         // 登记, 队列中出来的也需要登记，因为有可能是 discard 中创建的新连接
-        $id                 = spl_object_hash($connection);
+        $id = spl_object_hash($connection);
         $this->actives[$id] = ''; // 不可保存外部连接的引用，否则导致外部连接不析构
 
         // 检查最大生命周期
@@ -183,11 +174,7 @@ abstract class AbstractObjectPool
         // 移除登记
         unset($this->actives[$id]); // 注意：必须是先减 actives，否则会 maxActive - maxIdle <= 1 时会阻塞
         // 入列一个新连接替代丢弃的连接
-        $result = $this->push($this->createConnection());
-        // 触发事件
-        $this->dispatch(new DiscardedEvent($connection));
-        // 返回
-        return $result;
+        return $this->push($this->createConnection());
     }
 
     /**
@@ -197,8 +184,8 @@ abstract class AbstractObjectPool
     public function stats()
     {
         return [
-            'total'  => $this->getTotalNumber(),
-            'idle'   => $this->getIdleNumber(),
+            'total' => $this->getTotalNumber(),
+            'idle' => $this->getIdleNumber(),
             'active' => $this->getActiveNumber(),
         ];
     }
@@ -268,18 +255,6 @@ abstract class AbstractObjectPool
     protected function getTotalNumber()
     {
         return $this->getIdleNumber() + $this->getActiveNumber();
-    }
-
-    /**
-     * Dispatch
-     * @param object $event
-     */
-    protected function dispatch(object $event)
-    {
-        if (!$this->dispatcher) {
-            return;
-        }
-        $this->dispatcher and $this->dispatcher->dispatch($event);
     }
 
 }

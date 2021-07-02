@@ -5,7 +5,6 @@ namespace Mix\ObjectPool;
 /**
  * Trait ObjectTrait
  * @package Mix\ObjectPool
- * @author liu,jian <coder.keda@gmail.com>
  */
 trait ObjectTrait
 {

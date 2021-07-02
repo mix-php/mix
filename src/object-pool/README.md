@@ -1,10 +1,10 @@
 ## Mix Object Pool
 
-基于 Swoole 的通用对象池库
+Swoole-based object pool, connection pool
 
-## Usage
+基于 Swoole 的对象池、连接池
 
-安装：
+## Installation
 
 ```
 composer require mix/object-pool

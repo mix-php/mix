@@ -46,8 +46,8 @@ class Driver
      * @var array
      */
     protected $defaultOptions = [
-        \PDO::ATTR_EMULATE_PREPARES   => false,
-        \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
+        \PDO::ATTR_EMULATE_PREPARES => false,
+        \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
         \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
     ];
 
@@ -61,10 +61,10 @@ class Driver
      */
     public function __construct(string $dsn, string $username, string $password, array $options)
     {
-        $this->dsn      = $dsn;
+        $this->dsn = $dsn;
         $this->username = $username;
         $this->password = $password;
-        $this->options  = $options;
+        $this->options = $options;
         $this->connect();
     }
 
@@ -72,7 +72,7 @@ class Driver
      * Get instance
      * @return \PDO
      */
-    public function instance()
+    public function instance(): \PDO
     {
         return $this->pdo;
     }
@@ -81,7 +81,7 @@ class Driver
      * Get options
      * @return array
      */
-    public function options()
+    public function options(): array
     {
         return $this->options + $this->defaultOptions;
     }
@@ -90,7 +90,7 @@ class Driver
      * Connect
      * @throws \PDOException
      */
-    public function connect()
+    public function connect(): void
     {
         $this->pdo = new \PDO(
             $this->dsn,
@@ -103,7 +103,7 @@ class Driver
     /**
      * Close
      */
-    public function close()
+    public function close(): void
     {
         $this->pdo = null;
     }

@@ -2,8 +2,6 @@
 
 namespace Mix\Database;
 
-use Mix\Database\Helper\BuildHelper;
-
 /**
  * Class QueryBuilder
  * @package Mix\Database

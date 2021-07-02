@@ -71,7 +71,7 @@ abstract class AbstractConnection implements ConnectionInterface
      * 连接
      * @throws \PDOException
      */
-    public function connect()
+    public function connect(): void
     {
         $this->driver->connect();
     }
@@ -79,7 +79,7 @@ abstract class AbstractConnection implements ConnectionInterface
     /**
      * 关闭连接
      */
-    public function close()
+    public function close(): void
     {
         $this->statement = null;
         $this->driver->close();
@@ -89,7 +89,7 @@ abstract class AbstractConnection implements ConnectionInterface
      * 重新连接
      * @throws \PDOException
      */
-    protected function reconnect()
+    protected function reconnect(): void
     {
         $this->close();
         $this->connect();
@@ -231,7 +231,7 @@ abstract class AbstractConnection implements ConnectionInterface
      * 获取当前时间, 单位: 秒, 粒度: 微秒
      * @return float
      */
-    protected static function microtime()
+    protected static function microtime(): float
     {
         list($usec, $sec) = explode(" ", microtime());
         return ((float)$usec + (float)$sec);
@@ -260,7 +260,7 @@ abstract class AbstractConnection implements ConnectionInterface
             $this->clear();
 
             // print
-            $log = $this->getLastLog();
+            $log = $this->getQueryLog();
             $this->logger and $this->logger->trace(
                 $time,
                 $log['sql'],

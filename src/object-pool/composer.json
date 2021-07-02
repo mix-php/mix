@@ -1,6 +1,6 @@
 {
   "name": "mix/object-pool",
-  "description": "Swoole-based object pool library",
+  "description": "Swoole-based object pool, connection pool",
   "type": "library",
   "keywords": [
     "mix",
@@ -17,8 +17,7 @@
     }
   ],
   "require": {
-    "php": ">=7.2.0",
-    "psr/event-dispatcher": "^1.0"
+    "php": ">=7.2.0"
   },
   "autoload": {
     "psr-4": {
