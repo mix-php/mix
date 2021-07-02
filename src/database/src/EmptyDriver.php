@@ -6,7 +6,7 @@ namespace Mix\Database;
  * Class EmptyDriver
  * @package Mix\Database
  */
-class EmptyDriver extends Driver
+class EmptyDriver
 {
 
     protected $errorMessage = 'The connection has been returned to the pool, the current operation cannot be performed';

@@ -105,9 +105,11 @@ class Connection extends AbstractConnection
 
     public function __destruct()
     {
-        if (!$this->driver) {
+        if (!$this->driver || $this->driver instanceof EmptyDriver) {
             return;
         }
+
+        // 回收
         if ($this->inTransaction()) {
             $this->driver->__discard();
             $this->driver = null;

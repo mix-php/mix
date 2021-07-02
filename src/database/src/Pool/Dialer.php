@@ -47,7 +47,7 @@ class Dialer implements DialerInterface
     {
         $this->dsn = $dsn;
         $this->username = $username;
-        $this->password = $username;
+        $this->password = $password;
         $this->options = $options;
     }
 
