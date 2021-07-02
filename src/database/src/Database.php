@@ -89,33 +89,20 @@ class Database
      * @param string $username
      * @param string $password
      * @param array $options
-     * @param int $maxOpen
-     * @param int $maxIdle
-     * @param int $maxLifetime
-     * @param float $waitTimeout
      */
-    public function __construct(string $dsn, string $username, string $password, array $options = [],
-                                int $maxOpen = -1, int $maxIdle = -1, int $maxLifetime = 0, float $waitTimeout = 0.0)
+    public function __construct(string $dsn, string $username, string $password, array $options = [])
     {
         $this->dsn = $dsn;
         $this->username = $username;
         $this->password = $password;
         $this->options = $options;
-        $this->maxOpen = $maxOpen;
-        $this->maxIdle = $maxIdle;
-        $this->maxLifetime = $maxLifetime;
-        $this->waitTimeout = $waitTimeout;
 
-        if ($maxOpen > 0 && $maxIdle > 0) {
-            $this->createPool();
-        } else {
-            $this->driver = new Driver(
-                $this->dsn,
-                $this->username,
-                $this->password,
-                $this->options
-            );
-        }
+        $this->driver = new Driver(
+            $this->dsn,
+            $this->username,
+            $this->password,
+            $this->options
+        );
     }
 
     protected function createPool()
@@ -154,8 +141,11 @@ class Database
     /**
      * @param int $maxOpen
      */
-    public function setMaxOpen(int $maxOpen)
+    public function setMaxOpenConns(int $maxOpen)
     {
+        if ($this->maxOpen == $maxOpen) {
+            return;
+        }
         $this->maxOpen = $maxOpen;
         $this->createPool();
     }
@@ -163,8 +153,11 @@ class Database
     /**
      * @param int $maxIdle
      */
-    public function setMaxIdle(int $maxIdle)
+    public function setMaxIdleConns(int $maxIdle)
     {
+        if ($this->maxIdle == $maxIdle) {
+            return;
+        }
         $this->maxIdle = $maxIdle;
         $this->createPool();
     }
@@ -172,8 +165,11 @@ class Database
     /**
      * @param int $maxLifetime
      */
-    public function setMaxLifetime(int $maxLifetime)
+    public function SetConnMaxLifetime(int $maxLifetime)
     {
+        if ($this->maxLifetime == $maxLifetime) {
+            return;
+        }
         $this->maxLifetime = $maxLifetime;
         $this->createPool();
     }
@@ -181,8 +177,11 @@ class Database
     /**
      * @param float $waitTimeout
      */
-    public function setWaitTimeout(float $waitTimeout)
+    public function setPoolWaitTimeout(float $waitTimeout)
     {
+        if ($this->waitTimeout == $waitTimeout) {
+            return;
+        }
         $this->waitTimeout = $waitTimeout;
         $this->createPool();
     }

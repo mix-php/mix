@@ -1,8 +1,8 @@
 ## Mix Database
 
-Simple database for use in multiple execution environments, with support for FPM, Swoole, Workerman, and optional pools
+Simple database for use in multiple execution environments, with support for FPM, Swoole, Workerman, and optional connection pool (coroutine)
 
-可使用在多种执行环境的简易数据库，支持 FPM、Swoole、WorkerMan，可选的池
+可在各种环境使用的轻量数据库，支持 FPM、Swoole、WorkerMan，可选的连接池 (协程)
 
 ## 技术交流
 

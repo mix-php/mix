@@ -53,7 +53,7 @@ final class PoolTest extends TestCase
         $_this = $this;
         $func  = function () use ($_this) {
             $db = db();
-            $db->setMaxOpen(1);
+            $db->setMaxOpenConns(1);
             $db->setWaitTimeout(0.001);
 
             $conn = $db->borrow();
