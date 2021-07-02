@@ -356,30 +356,6 @@ abstract class AbstractConnection implements ConnectionInterface
     }
 
     /**
-     * 返回最后的SQL语句
-     * @return string
-     */
-    public function getLastSql(): string
-    {
-        $sql = '';
-        $params = $values = [];
-        !empty($this->sqlData) and list($sql, $params, $values) = $this->sqlData;
-        if (empty($params) && empty($values)) {
-            return $sql;
-        }
-        $values = $this->quotes($values);
-        $params = $this->quotes($params);
-        // 先处理 values，避免 params 中包含 ? 号污染结果
-        $sql = vsprintf(str_replace('?', '%s', $sql), $values);
-        // 处理 params
-        foreach ($params as $key => $value) {
-            $key = substr($key, 0, 1) == ':' ? $key : ":{$key}";
-            $sql = str_replace($key, $value, $sql);
-        }
-        return $sql;
-    }
-
-    /**
      * 获取最后的日志
      * @return array
      */
