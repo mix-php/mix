@@ -13,7 +13,7 @@ class QueryBuilder
 
     /**
      * 连接
-     * @var Connection
+     * @var ConnectionInterface
      */
     public $conn;
 
@@ -69,9 +69,9 @@ class QueryBuilder
 
     /**
      * QueryBuilder constructor.
-     * @param Connection $conn
+     * @param ConnectionInterface $conn
      */
-    public function __construct(Connection $conn)
+    public function __construct(ConnectionInterface $conn)
     {
         $this->conn = $conn;
     }
@@ -80,7 +80,7 @@ class QueryBuilder
      * @param string $table
      * @return $this
      */
-    public function table(string $table)
+    public function table(string $table): QueryBuilder
     {
         $this->table = $table;
         return $this;
@@ -90,7 +90,7 @@ class QueryBuilder
      * @param string ...$fields
      * @return $this
      */
-    public function select(string ...$fields)
+    public function select(string ...$fields): QueryBuilder
     {
         $this->select = array_merge($this->select, $fields);
         return $this;
@@ -102,7 +102,7 @@ class QueryBuilder
      * @param ...$args
      * @return $this
      */
-    public function join(string $table, string $on, ...$args)
+    public function join(string $table, string $on, ...$args): QueryBuilder
     {
         array_push($this->join, ['INNER JOIN', $table, $on, $args]);
         return $this;
@@ -114,7 +114,7 @@ class QueryBuilder
      * @param ...$args
      * @return $this
      */
-    public function leftJoin(string $table, string $on, ...$args)
+    public function leftJoin(string $table, string $on, ...$args): QueryBuilder
     {
         array_push($this->join, ['LEFT JOIN', $table, $on, $args]);
         return $this;
@@ -126,7 +126,7 @@ class QueryBuilder
      * @param ...$args
      * @return $this
      */
-    public function rightJoin(string $table, string $on, ...$args)
+    public function rightJoin(string $table, string $on, ...$args): QueryBuilder
     {
         array_push($this->join, ['RIGHT JOIN', $table, $on, $args]);
         return $this;
@@ -138,7 +138,7 @@ class QueryBuilder
      * @param ...$args
      * @return $this
      */
-    public function fullJoin(string $table, string $on, ...$args)
+    public function fullJoin(string $table, string $on, ...$args): QueryBuilder
     {
         array_push($this->join, ['FULL JOIN', $table, $on, $args]);
         return $this;
@@ -149,7 +149,7 @@ class QueryBuilder
      * @param ...$args
      * @return $this
      */
-    public function where(string $expr, ...$args)
+    public function where(string $expr, ...$args): QueryBuilder
     {
         array_push($this->where, ['AND', $expr, $args]);
         return $this;
@@ -160,7 +160,7 @@ class QueryBuilder
      * @param ...$args
      * @return $this
      */
-    public function or(string $expr, ...$args)
+    public function or(string $expr, ...$args): QueryBuilder
     {
         array_push($this->where, ['OR', $expr, $args]);
         return $this;
@@ -171,7 +171,7 @@ class QueryBuilder
      * @param string $order
      * @return $this
      */
-    public function order(string $field, string $order)
+    public function order(string $field, string $order): QueryBuilder
     {
         if (!in_array($order, ['asc', 'desc'])) {
             throw new \RuntimeException('Sort can only be asc or desc.');
@@ -184,7 +184,7 @@ class QueryBuilder
      * @param string ...$fields
      * @return $this
      */
-    public function group(string ...$fields)
+    public function group(string ...$fields): QueryBuilder
     {
         $this->group = array_merge($this->group, $fields);
         return $this;
@@ -195,7 +195,7 @@ class QueryBuilder
      * @param ...$args
      * @return $this
      */
-    public function having(string $expr, ...$args)
+    public function having(string $expr, ...$args): QueryBuilder
     {
         array_push($this->having, [$expr, $args]);
         return $this;
@@ -206,7 +206,7 @@ class QueryBuilder
      * @param int $length
      * @return $this
      */
-    public function offset(int $length)
+    public function offset(int $length): QueryBuilder
     {
         $this->offset = $length;
         return $this;
@@ -217,7 +217,7 @@ class QueryBuilder
      * @param int $length
      * @return $this
      */
-    public function limit(int $length)
+    public function limit(int $length): QueryBuilder
     {
         $this->limit = $length;
         return $this;
@@ -227,7 +227,7 @@ class QueryBuilder
      * 意向排它锁
      * @return $this
      */
-    public function lockForUpdate()
+    public function lockForUpdate(): QueryBuilder
     {
         $this->lock = 'FOR UPDATE';
         return $this;
@@ -237,7 +237,7 @@ class QueryBuilder
      * 意向共享锁
      * @return $this
      */
-    public function sharedLock()
+    public function sharedLock(): QueryBuilder
     {
         $this->lock = 'LOCK IN SHARE MODE';
         return $this;
@@ -369,21 +369,19 @@ class QueryBuilder
     /**
      * @param string $field
      * @param $value
+     * @return ConnectionInterface
      */
-    public function update(string $field, $value)
+    public function update(string $field, $value): ConnectionInterface
     {
 
     }
 
     /**
-     * 删除
-     * @param string $table
-     * @param array $where
-     * @return Connection
+     * @return ConnectionInterface
      */
-    public function delete()
+    public function delete(): ConnectionInterface
     {
-        return $this->conn->delete($table, $where);
+
     }
 
 }

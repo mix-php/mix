@@ -59,9 +59,9 @@ class Connection extends AbstractConnection
 
     /**
      * 执行SQL语句
-     * @return bool
+     * @return ConnectionInterface
      */
-    public function execute(): bool
+    public function exec(): ConnectionInterface
     {
         return $this->call(__FUNCTION__);
     }
@@ -110,9 +110,11 @@ class Connection extends AbstractConnection
     {
         if ($this->inTransaction()) {
             $this->driver->__discard();
+            $this->driver = null;
             return;
         }
         $this->driver->__return();
+        $this->driver = null;
     }
 
 }

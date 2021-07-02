@@ -79,6 +79,11 @@ class Database
     protected $pool;
 
     /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * Database constructor.
      * @param string $dsn
      * @param string $username
@@ -183,6 +188,14 @@ class Database
     }
 
     /**
+     * @param LoggerInterface $logger
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
+    /**
      * Borrow connection
      * @return Connection
      * @throws WaitTimeoutException
@@ -191,21 +204,21 @@ class Database
     {
         if ($this->pool) {
             $driver = $this->pool->borrow();
-            $conn = new Connection($driver);
+            $conn = new Connection($driver, $this->logger);
         } else {
-            $conn = new Connection($this->driver);
+            $conn = new Connection($this->driver, $this->logger);
         }
         return $conn;
     }
 
     /**
-     * 准备执行语句
      * @param string $sql
-     * @return Connection
+     * @param ...$args
+     * @return ConnectionInterface
      */
-    public function raw(string $sql): Connection
+    public function raw(string $sql, ...$args): ConnectionInterface
     {
-        return $this->borrow()->raw($sql);
+        return $this->borrow()->raw($sql, ...$args);
     }
 
     /**
@@ -213,9 +226,9 @@ class Database
      * @param string $table
      * @param array $data
      * @param string $insert
-     * @return Connection
+     * @return ConnectionInterface
      */
-    public function insert(string $table, array $data, string $insert = 'INSERT INTO'): Connection
+    public function insert(string $table, array $data, string $insert = 'INSERT INTO'): ConnectionInterface
     {
         return $this->borrow()->insert($table, $data, $insert);
     }
@@ -225,9 +238,9 @@ class Database
      * @param string $table
      * @param array $data
      * @param string $insert
-     * @return Connection
+     * @return ConnectionInterface
      */
-    public function batchInsert(string $table, array $data, string $insert = 'INSERT INTO'): Connection
+    public function batchInsert(string $table, array $data, string $insert = 'INSERT INTO'): ConnectionInterface
     {
         return $this->borrow()->batchInsert($table, $data, $insert);
     }

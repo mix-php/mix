@@ -6,7 +6,7 @@ namespace Mix\Database;
  * Class AbstractConnection
  * @package Mix\Database
  */
-abstract class AbstractConnection
+abstract class AbstractConnection implements ConnectionInterface
 {
 
     /**
@@ -14,6 +14,11 @@ abstract class AbstractConnection
      * @var Driver
      */
     protected $driver;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
 
     /**
      * PDOStatement
@@ -49,15 +54,17 @@ abstract class AbstractConnection
      * 查询数据
      * @var array [$sql, $params, $values, $time]
      */
-    protected $queryData = [];
+    protected $sqlData = [];
 
     /**
      * AbstractConnection constructor.
      * @param Driver $driver
+     * @param LoggerInterface|null $logger
      */
-    public function __construct(Driver $driver)
+    public function __construct(Driver $driver, ?LoggerInterface $logger)
     {
         $this->driver = $driver;
+        $this->logger = $logger;
     }
 
     /**
@@ -119,43 +126,23 @@ abstract class AbstractConnection
     }
 
     /**
-     * 执行原生SQL
      * @param string $sql
-     * @return $this
+     * @param ...$args
+     * @return ConnectionInterface
      */
-    public function raw(string $sql)
+    public function raw(string $sql, ...$args): ConnectionInterface
     {
         // 清扫数据
         $this->sql = '';
         $this->params = [];
         $this->values = [];
+
         // 保存SQL
         $this->sql = $sql;
-        $this->queryData = [$this->sql, [], [], 0];
-        // 返回
-        return $this;
-    }
+        $this->sqlData = [$this->sql, [], $args, 0];
 
-    /**
-     * 绑定参数
-     * @param array $data
-     * @return $this
-     */
-    public function bindParams(array $data)
-    {
-        $this->params = array_merge($this->params, $data);
-        return $this;
-    }
-
-    /**
-     * 绑定值
-     * @param array $data
-     * @return $this
-     */
-    public function bindValues(array $data)
-    {
-        $this->values = array_merge($this->values, $data);
-        return $this;
+        // 执行
+        return $this->exec();
     }
 
     /**
@@ -209,7 +196,7 @@ abstract class AbstractConnection
                 throw new \PDOException('PDO prepare failed');
             }
             $this->statement = $statement;
-            $this->queryData = [$sql, $params, [], 0]; // 必须在 bindParam 前，才能避免类型被转换
+            $this->sqlData = [$sql, $params, [], 0]; // 必须在 bindParam 前，才能避免类型被转换
             foreach ($params as $key => &$value) {
                 if (!$this->statement->bindParam($key, $value)) {
                     throw new \PDOException('PDOStatement bindParam failed');
@@ -222,7 +209,7 @@ abstract class AbstractConnection
                 throw new \PDOException('PDO prepare failed');
             }
             $this->statement = $statement;
-            $this->queryData = [$this->sql, [], $this->values, 0];
+            $this->sqlData = [$this->sql, [], $this->values, 0];
             foreach ($this->values as $key => $value) {
                 if (!$this->statement->bindValue($key + 1, $value)) {
                     throw new \PDOException('PDOStatement bindValue failed');
@@ -235,7 +222,7 @@ abstract class AbstractConnection
                 throw new \PDOException('PDO prepare failed');
             }
             $this->statement = $statement;
-            $this->queryData = [$this->sql, [], [], 0];
+            $this->sqlData = [$this->sql, [], [], 0];
         }
     }
 
@@ -273,30 +260,44 @@ abstract class AbstractConnection
     }
 
     /**
-     * 执行SQL语句
-     * @return bool
+     * @return ConnectionInterface
      */
-    public function execute(): bool
+    public function exec(): ConnectionInterface
     {
-        $microtime = static::microtime();
+        $beginTime = static::microtime();
+
         try {
             $this->prepare();
             $success = $this->statement->execute();
+            if (!$success) {
+                list($flag, $code, $message) = $this->statement->errorInfo();
+                throw new \PDOException(sprintf('%s %d %s', $flag, $code, $message), $code);
+            }
         } catch (\Throwable $ex) {
-            $message = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
-            $code = $ex->getCode();
-            $error = sprintf('[%d] %s', $code, $message);
-            throw $ex;
         } finally {
-            $time = round((static::microtime() - $microtime) * 1000, 2);
-            $this->queryData[3] = $time;
+            // 记录执行时间
+            $time = round((static::microtime() - $beginTime) * 1000, 2);
+            $this->sqlData[3] = $time;
 
             $this->clear();
 
+            // print
             $log = $this->getLastLog();
-            $this->dispatch($log['sql'], $log['bindings'], $log['time'], $error ?? null);
+            $this->logger and $this->logger->trace(
+                $time,
+                $log['sql'],
+                $log['bindings'],
+                $this->getRowCount(),
+                $ex ?? null
+            );
         }
-        return $success;
+
+        if (get_called_class() != Transaction::class) {
+            $this->driver->__return();
+            $this->driver = null;
+        }
+
+        return $this;
     }
 
     /**
@@ -305,7 +306,7 @@ abstract class AbstractConnection
      */
     public function query(): \PDOStatement
     {
-        $this->execute();
+        $this->exec();
         return $this->statement;
     }
 
@@ -316,7 +317,7 @@ abstract class AbstractConnection
      */
     public function queryOne(int $fetchStyle = null)
     {
-        $this->execute();
+        $this->exec();
         $fetchStyle = $fetchStyle ?: $this->driver->options()[\PDO::ATTR_DEFAULT_FETCH_MODE];
         return $this->statement->fetch($fetchStyle);
     }
@@ -328,7 +329,7 @@ abstract class AbstractConnection
      */
     public function queryAll(int $fetchStyle = null): array
     {
-        $this->execute();
+        $this->exec();
         $fetchStyle = $fetchStyle ?: $this->driver->options()[\PDO::ATTR_DEFAULT_FETCH_MODE];
         return $this->statement->fetchAll($fetchStyle);
     }
@@ -340,7 +341,7 @@ abstract class AbstractConnection
      */
     public function queryColumn(int $columnNumber = 0): array
     {
-        $this->execute();
+        $this->exec();
         $column = [];
         while ($row = $this->statement->fetchColumn($columnNumber)) {
             $column[] = $row;
@@ -354,7 +355,7 @@ abstract class AbstractConnection
      */
     public function queryScalar()
     {
-        $this->execute();
+        $this->exec();
         return $this->statement->fetchColumn();
     }
 
@@ -384,7 +385,7 @@ abstract class AbstractConnection
     {
         $sql = '';
         $params = $values = [];
-        !empty($this->queryData) and list($sql, $params, $values) = $this->queryData;
+        !empty($this->sqlData) and list($sql, $params, $values) = $this->sqlData;
         if (empty($params) && empty($values)) {
             return $sql;
         }
@@ -404,22 +405,22 @@ abstract class AbstractConnection
      * 获取最后的日志
      * @return array
      */
-    public function getLastLog(): array
+    public function getQueryLog(): array
     {
         $sql = '';
         $params = $values = [];
         $time = 0;
-        !empty($this->queryData) and list($sql, $params, $values, $time) = $this->queryData;
+        !empty($this->sqlData) and list($sql, $params, $values, $time) = $this->sqlData;
         return [
+            'time' => $time,
             'sql' => $sql,
             'bindings' => $values ?: $params,
-            'time' => $time,
         ];
     }
 
     /**
      * 给字符串加单引号
-     * @param $var
+     * @param array|string $var
      * @return array|string
      */
     protected function quotes($var)
@@ -434,32 +435,29 @@ abstract class AbstractConnection
     }
 
     /**
-     * 插入
      * @param string $table
      * @param array $data
      * @param string $insert
-     * @return $this
+     * @return ConnectionInterface
      */
-    public function insert(string $table, array $data, string $insert = 'INSERT INTO')
+    public function insert(string $table, array $data, string $insert = 'INSERT INTO'): ConnectionInterface
     {
         $keys = array_keys($data);
         $fields = array_map(function ($key) {
             return ":{$key}";
         }, $keys);
         $sql = "{$insert} `{$table}` (`" . implode('`, `', $keys) . "`) VALUES (" . implode(', ', $fields) . ")";
-        $this->raw($sql);
-        $this->bindParams($data);
-        return $this;
+        $this->params = array_merge($this->params, $data);
+        return $this->raw($sql);
     }
 
     /**
-     * 批量插入
      * @param string $table
      * @param array $data
      * @param string $insert
-     * @return $this
+     * @return ConnectionInterface
      */
-    public function batchInsert(string $table, array $data, string $insert = 'INSERT INTO')
+    public function batchInsert(string $table, array $data, string $insert = 'INSERT INTO'): ConnectionInterface
     {
         $keys = array_keys($data[0]);
         $sql = "{$insert} `{$table}` (`" . implode('`, `', $keys) . "`) VALUES ";
@@ -480,9 +478,7 @@ abstract class AbstractConnection
             $subSql[] = "(" . implode(', ', $placeholder) . ")";
         }
         $sql .= implode(', ', $subSql);
-        $this->raw($sql);
-        $this->bindValues($values);
-        return $this;
+        return $this->raw($sql, ...$values);
     }
 
     /**
@@ -494,7 +490,7 @@ abstract class AbstractConnection
     {
         $tx = $this->beginTransaction();
         try {
-            call_user_func($closure, $this);
+            call_user_func($closure, $tx);
             $tx->commit();
         } catch (\Throwable $ex) {
             $tx->rollBack();
