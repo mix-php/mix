@@ -235,21 +235,11 @@ abstract class AbstractConnection implements ConnectionInterface
     }
 
     /**
-     * 获取当前时间, 单位: 秒, 粒度: 微秒
-     * @return float
-     */
-    protected static function microtime(): float
-    {
-        list($usec, $sec) = explode(" ", microtime());
-        return ((float)$usec + (float)$sec);
-    }
-
-    /**
      * @return ConnectionInterface
      */
     public function exec(): ConnectionInterface
     {
-        $beginTime = static::microtime();
+        $beginTime = microtime(true);
 
         try {
             $this->prepare();
@@ -262,7 +252,7 @@ abstract class AbstractConnection implements ConnectionInterface
             throw $ex;
         } finally {
             // 记录执行时间
-            $time = round((static::microtime() - $beginTime) * 1000, 2);
+            $time = round((microtime(true) - $beginTime) * 1000, 2);
             $this->sqlData[3] = $time;
             $this->sqlData[4] = $this->driver->instance()->lastInsertId();
 

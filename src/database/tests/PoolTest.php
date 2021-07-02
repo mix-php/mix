@@ -12,8 +12,8 @@ final class PoolTest extends TestCase
         $func = function () use ($_this) {
             $db = db();
             $max = swoole_cpu_num() * 2;
-            $db->startPool($max, $max);
-            $time = time();
+            $db->startPool($max / 2, $max / 2);
+            $time = microtime(true);
             $chan = new \Swoole\Coroutine\Channel();
             for ($i = 0; $i < $max; $i++) {
                 go(function () use ($db, $chan) {
@@ -24,8 +24,8 @@ final class PoolTest extends TestCase
             for ($i = 0; $i < $max; $i++) {
                 $chan->pop();
             }
-            $duration = time() - $time;
-            $_this->assertTrue($duration == 1 || $duration == 2);
+            $duration = microtime(true) - $time;
+            $_this->assertTrue($duration >= 2 || $duration <= 3);
         };
         swoole_co_run($func);
     }
