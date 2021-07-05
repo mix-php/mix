@@ -289,7 +289,7 @@ $db->where('id = ?', 1)->delete();
 获取影响行数
 
 ```php
-$rowsAffected = $db->where('id = ?', 1)->update('name', 'foo1')->getRowCount();
+$rowsAffected = $db->where('id = ?', 1)->delete()->getRowCount();
 ```
 
 ## 原生 Raw
