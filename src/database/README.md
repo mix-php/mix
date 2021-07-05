@@ -55,7 +55,7 @@ $db->table('users')->where('id = ?', 1)->update('name', 'foo1');
 $db->table('users')->where('id = ?', 1)->delete();
 ```
 
-## 启动连接池
+## 启动连接池 Pool
 
 在 `Swoole` 协程环境中，启动连接池
 
@@ -292,6 +292,16 @@ $db->where('id = ?', 1)->delete();
 $rowsAffected = $db->where('id = ?', 1)->update('name', 'foo1')->getRowCount();
 ```
 
+## 原生 Raw
+
+```php
+$db->raw('SELECT * FROM users WHERE id = ?', 1)->first();
+```
+
+```php
+$db->exec('DELETE FROM users WHERE id = ?', 1)->getRowCount();
+```
+
 ## 事物 Transaction
 
 手动事务
@@ -321,16 +331,6 @@ $db->transaction(function (Mix\Database\Transaction $tx) {
     ];
     $tx->insert('users', $data);
 });
-```
-
-## 原生
-
-```php
-$db->raw('SELECT * FROM users WHERE id = ?', 1)->first();
-```
-
-```php
-$db->exec('DELETE FROM users WHERE id = ?', 1)->getRowCount();
 ```
 
 ## 调试 Debug
