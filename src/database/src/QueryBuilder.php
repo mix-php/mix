@@ -3,17 +3,11 @@
 namespace Mix\Database;
 
 /**
- * Class QueryBuilder
+ * Trait QueryBuilder
  * @package Mix\Database
  */
-class QueryBuilder
+trait QueryBuilder
 {
-
-    /**
-     * 连接
-     * @var ConnectionInterface
-     */
-    public $conn;
 
     /**
      * @var string
@@ -66,34 +60,10 @@ class QueryBuilder
     protected $lock = '';
 
     /**
-     * @var \Closure
-     */
-    protected $debugFunc;
-
-    /**
-     * @var array
-     */
-    protected $update;
-
-    /**
-     * @var bool
-     */
-    protected $delete;
-
-    /**
-     * QueryBuilder constructor.
-     * @param ConnectionInterface $conn
-     */
-    public function __construct(ConnectionInterface $conn)
-    {
-        $this->conn = $conn;
-    }
-
-    /**
      * @param string $table
      * @return $this
      */
-    public function table(string $table): QueryBuilder
+    public function table(string $table): ConnectionInterface
     {
         $this->table = $table;
         return $this;
@@ -103,7 +73,7 @@ class QueryBuilder
      * @param string ...$fields
      * @return $this
      */
-    public function select(string ...$fields): QueryBuilder
+    public function select(string ...$fields): ConnectionInterface
     {
         $this->select = array_merge($this->select, $fields);
         return $this;
@@ -112,70 +82,70 @@ class QueryBuilder
     /**
      * @param string $table
      * @param string $on
-     * @param ...$args
+     * @param ...$values
      * @return $this
      */
-    public function join(string $table, string $on, ...$args): QueryBuilder
+    public function join(string $table, string $on, ...$values): ConnectionInterface
     {
-        array_push($this->join, ['INNER JOIN', $table, $on, $args]);
+        array_push($this->join, ['INNER JOIN', $table, $on, $values]);
         return $this;
     }
 
     /**
      * @param string $table
      * @param string $on
-     * @param ...$args
+     * @param ...$values
      * @return $this
      */
-    public function leftJoin(string $table, string $on, ...$args): QueryBuilder
+    public function leftJoin(string $table, string $on, ...$values): ConnectionInterface
     {
-        array_push($this->join, ['LEFT JOIN', $table, $on, $args]);
+        array_push($this->join, ['LEFT JOIN', $table, $on, $values]);
         return $this;
     }
 
     /**
      * @param string $table
      * @param string $on
-     * @param ...$args
+     * @param ...$values
      * @return $this
      */
-    public function rightJoin(string $table, string $on, ...$args): QueryBuilder
+    public function rightJoin(string $table, string $on, ...$values): ConnectionInterface
     {
-        array_push($this->join, ['RIGHT JOIN', $table, $on, $args]);
+        array_push($this->join, ['RIGHT JOIN', $table, $on, $values]);
         return $this;
     }
 
     /**
      * @param string $table
      * @param string $on
-     * @param ...$args
+     * @param ...$values
      * @return $this
      */
-    public function fullJoin(string $table, string $on, ...$args): QueryBuilder
+    public function fullJoin(string $table, string $on, ...$values): ConnectionInterface
     {
-        array_push($this->join, ['FULL JOIN', $table, $on, $args]);
+        array_push($this->join, ['FULL JOIN', $table, $on, $values]);
         return $this;
     }
 
     /**
      * @param string $expr
-     * @param ...$args
+     * @param ...$values
      * @return $this
      */
-    public function where(string $expr, ...$args): QueryBuilder
+    public function where(string $expr, ...$values): ConnectionInterface
     {
-        array_push($this->where, ['AND', $expr, $args]);
+        array_push($this->where, ['AND', $expr, $values]);
         return $this;
     }
 
     /**
      * @param string $expr
-     * @param ...$args
+     * @param ...$values
      * @return $this
      */
-    public function or(string $expr, ...$args): QueryBuilder
+    public function or(string $expr, ...$values): ConnectionInterface
     {
-        array_push($this->where, ['OR', $expr, $args]);
+        array_push($this->where, ['OR', $expr, $values]);
         return $this;
     }
 
@@ -184,7 +154,7 @@ class QueryBuilder
      * @param string $order
      * @return $this
      */
-    public function order(string $field, string $order): QueryBuilder
+    public function order(string $field, string $order): ConnectionInterface
     {
         if (!in_array($order, ['asc', 'desc'])) {
             throw new \RuntimeException('Sort can only be asc or desc.');
@@ -197,7 +167,7 @@ class QueryBuilder
      * @param string ...$fields
      * @return $this
      */
-    public function group(string ...$fields): QueryBuilder
+    public function group(string ...$fields): ConnectionInterface
     {
         $this->group = array_merge($this->group, $fields);
         return $this;
@@ -205,12 +175,12 @@ class QueryBuilder
 
     /**
      * @param string $expr
-     * @param ...$args
+     * @param ...$values
      * @return $this
      */
-    public function having(string $expr, ...$args): QueryBuilder
+    public function having(string $expr, ...$values): ConnectionInterface
     {
-        array_push($this->having, [$expr, $args]);
+        array_push($this->having, [$expr, $values]);
         return $this;
     }
 
@@ -219,7 +189,7 @@ class QueryBuilder
      * @param int $length
      * @return $this
      */
-    public function offset(int $length): QueryBuilder
+    public function offset(int $length): ConnectionInterface
     {
         $this->offset = $length;
         return $this;
@@ -230,7 +200,7 @@ class QueryBuilder
      * @param int $length
      * @return $this
      */
-    public function limit(int $length): QueryBuilder
+    public function limit(int $length): ConnectionInterface
     {
         $this->limit = $length;
         return $this;
@@ -240,7 +210,7 @@ class QueryBuilder
      * 意向排它锁
      * @return $this
      */
-    public function lockForUpdate(): QueryBuilder
+    public function lockForUpdate(): ConnectionInterface
     {
         $this->lock = 'FOR UPDATE';
         return $this;
@@ -250,28 +220,18 @@ class QueryBuilder
      * 意向共享锁
      * @return $this
      */
-    public function sharedLock(): QueryBuilder
+    public function sharedLock(): ConnectionInterface
     {
         $this->lock = 'LOCK IN SHARE MODE';
         return $this;
     }
 
     /**
-     * @param \Closure $func
-     * @return $this
-     */
-    public function debug(\Closure $func): QueryBuilder
-    {
-        $this->debugFunc = $func;
-        return $this;
-    }
-
-    /**
      * @param string $index
      * @param array $data
-     * @return ConnectionInterface
+     * @return array
      */
-    protected function raw(string $index, array $data = []): ConnectionInterface
+    protected function build(string $index, array $data = []): array
     {
         $sqls = $values = [];
 
@@ -310,9 +270,9 @@ class QueryBuilder
         // join
         if ($this->join) {
             foreach ($this->join as $item) {
-                list($keyword, $table, $on, $args) = $item;
+                list($keyword, $table, $on, $vals) = $item;
                 $sqls[] = "{$keyword} {$table} ON {$on}";
-                array_push($values, ...$args);
+                array_push($values, ...$vals);
             }
         }
 
@@ -320,18 +280,18 @@ class QueryBuilder
         if ($this->where) {
             $sqls[] = "WHERE";
             foreach ($this->where as $key => $item) {
-                list($keyword, $expr, $args) = $item;
+                list($keyword, $expr, $vals) = $item;
 
                 // in 处理
-                foreach ($args as $k => $arg) {
-                    if (is_array($arg)) {
-                        foreach ($arg as &$value) {
+                foreach ($vals as $k => $val) {
+                    if (is_array($val)) {
+                        foreach ($val as &$value) {
                             if (is_string($value)) {
                                 $value = "'$value'";
                             }
                         }
-                        $expr = preg_replace('/\?/', implode(',', $arg), $expr, 1);
-                        unset($args[$k]);
+                        $expr = preg_replace('/\?/', implode(',', $val), $expr, 1);
+                        unset($vals[$k]);
                     }
                 }
 
@@ -340,7 +300,7 @@ class QueryBuilder
                 } else {
                     $sqls[] = "{$keyword} {$expr}";
                 }
-                array_push($values, ...$args);
+                array_push($values, ...$vals);
             }
         }
 
@@ -353,9 +313,9 @@ class QueryBuilder
         if ($this->having) {
             $subSql = [];
             foreach ($this->having as $item) {
-                list($expr, $args) = $item;
+                list($expr, $vals) = $item;
                 $subSql[] = "$expr";
-                array_push($values, ...$args);
+                array_push($values, ...$vals);
             }
             $subSql = count($subSql) == 1 ? array_pop($subSql) : implode(' AND ', $subSql);
             $sqls[] = "HAVING {$subSql}";
@@ -382,87 +342,20 @@ class QueryBuilder
             $sqls[] = $this->lock;
         }
 
+        // clear
+        $this->table = '';
+        $this->select = [];
+        $this->join = [];
+        $this->where = [];
+        $this->order = [];
+        $this->group = [];
+        $this->having = [];
+        $this->offset = 0;
+        $this->limit = 0;
+        $this->lock = '';
+
         // 聚合
-        $sql = implode(' ', $sqls);
-
-        // debug & 执行
-        try {
-            $conn = $this->conn->raw($sql, ...$values);
-        } catch (\Throwable $ex) {
-            throw $ex;
-        } finally {
-            $func = $this->debugFunc;
-            $func and $func($this->conn);
-        }
-
-        return $conn;
-    }
-
-    /**
-     * 返回多行
-     * @return array
-     */
-    public function get()
-    {
-        return $this->raw('SELECT')->queryAll();
-    }
-
-    /**
-     * 返回一行
-     * @return mixed
-     */
-    public function first()
-    {
-        return $this->raw('SELECT')->queryOne();
-    }
-
-    /**
-     * 返回单个值
-     * @param string $field
-     * @return mixed
-     * @throws \PDOException
-     */
-    public function value(string $field)
-    {
-        $result = $this->raw('SELECT')->queryOne();
-        if (empty($result)) {
-            return $result;
-        }
-        $isArray = is_array($result);
-        if (($isArray && !isset($result[$field])) || (!$isArray && !isset($result->$field))) {
-            throw new \PDOException(sprintf('Field %s not found', $field));
-        }
-        return $isArray ? $result[$field] : $result->$field;
-    }
-
-    /**
-     * @param array $data
-     * @return ConnectionInterface
-     */
-    public function updates(array $data): ConnectionInterface
-    {
-        return $this->raw('UPDATE', $data);
-    }
-
-    /**
-     * @param string $field
-     * @param $value
-     * @return ConnectionInterface
-     */
-    public function update(string $field, $value): ConnectionInterface
-    {
-        return $this->raw('UPDATE', [
-            $field => $value
-        ]);
-    }
-
-    /**
-     * @return ConnectionInterface
-     */
-    public function delete(): ConnectionInterface
-    {
-        $this->delete = true;
-        return $this->raw('DELETE');
+        return [implode(' ', $sqls), $values];
     }
 
 }

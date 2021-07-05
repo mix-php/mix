@@ -23,6 +23,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `news`;
 CREATE TABLE `news` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(11) unsigned NOT NULL,
   `title` varchar(100) NOT NULL,
   `content` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
@@ -32,7 +33,7 @@ CREATE TABLE `news` (
 -- Records of news
 -- ----------------------------
 BEGIN;
-INSERT INTO `news` VALUES (1, '标题1', '内容1');
+INSERT INTO `news` VALUES (1, 2, '标题1', '内容1');
 COMMIT;
 
 -- ----------------------------

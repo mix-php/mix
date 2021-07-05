@@ -9,6 +9,8 @@ namespace Mix\Database;
 abstract class AbstractConnection implements ConnectionInterface
 {
 
+    use QueryBuilder;
+
     /**
      * 驱动
      * @var Driver
@@ -24,7 +26,7 @@ abstract class AbstractConnection implements ConnectionInterface
      * PDOStatement
      * @var \PDOStatement
      */
-    public $statement;
+    protected $statement;
 
     /**
      * sql
@@ -57,9 +59,15 @@ abstract class AbstractConnection implements ConnectionInterface
     protected $sqlData = [];
 
     /**
+     * 为了在归还后不需要使用 Driver
      * @var array
      */
     protected $options = [];
+
+    /**
+     * @var \Closure
+     */
+    protected $debugFunc;
 
     /**
      * AbstractConnection constructor.
@@ -149,17 +157,17 @@ abstract class AbstractConnection implements ConnectionInterface
         $this->sqlData = [$this->sql, [], $values, 0, ''];
 
         // 执行
-        return $this->exec();
+        return $this->execute();
     }
 
     /**
-     * 返回当前PDO连接是否在事务内（在事务内的连接回池会造成下次开启事务产生错误）
-     * @return bool
+     * @param string $sql
+     * @param ...$values
+     * @return ConnectionInterface
      */
-    public function inTransaction(): bool
+    public function exec(string $sql, ...$values): ConnectionInterface
     {
-        $pdo = $this->driver->instance();
-        return (bool)($pdo ? $pdo->inTransaction() : false);
+        $this->raw($sql, ...$values);
     }
 
     /**
@@ -220,6 +228,7 @@ abstract class AbstractConnection implements ConnectionInterface
         $this->sql = '';
         $this->params = [];
         $this->values = [];
+        $this->debugFunc = null;
     }
 
     /**
@@ -237,7 +246,7 @@ abstract class AbstractConnection implements ConnectionInterface
     /**
      * @return ConnectionInterface
      */
-    public function exec(): ConnectionInterface
+    public function execute(): ConnectionInterface
     {
         $beginTime = microtime(true);
 
@@ -256,7 +265,9 @@ abstract class AbstractConnection implements ConnectionInterface
             $this->sqlData[3] = $time;
             $this->sqlData[4] = $this->driver->instance()->lastInsertId();
 
-            $this->clear();
+            // debug
+            $debug = $this->debugFunc;
+            $debug and $debug($this);
 
             // print
             $log = $this->getQueryLog();
@@ -267,6 +278,8 @@ abstract class AbstractConnection implements ConnectionInterface
                 $this->getRowCount(),
                 $ex ?? null
             );
+
+            $this->clear();
         }
 
         // 执行完立即回收
@@ -279,10 +292,111 @@ abstract class AbstractConnection implements ConnectionInterface
     }
 
     /**
-     * 返回结果集
-     * @return \PDOStatement
+     * @param \Closure $func
+     * @return $this
      */
-    public function query(): \PDOStatement
+    public function debug(\Closure $func): ConnectionInterface
+    {
+        $this->debugFunc = $func;
+        return $this;
+    }
+
+    /**
+     * 返回多行
+     * @return array
+     */
+    public function get(): array
+    {
+        if (!$this->sql) {
+            list($sql, $values) = $this->build('SELECT');
+            $this->raw($sql, ...$values);
+        }
+        return $this->queryAll();
+    }
+
+    /**
+     * 返回一行
+     * @return array|object
+     */
+    public function first()
+    {
+        if (!$this->sql) {
+            list($sql, $values) = $this->build('SELECT');
+            $this->raw($sql, ...$values);
+        }
+        return $this->queryOne();
+    }
+
+    /**
+     * 返回单个值
+     * @param string $field
+     * @return mixed
+     * @throws \PDOException
+     */
+    public function value(string $field)
+    {
+        if (!$this->sql) {
+            list($sql, $values) = $this->build('SELECT');
+            $this->raw($sql, ...$values);
+        }
+        $result = $this->queryOne();
+        if (empty($result)) {
+            throw new \PDOException(sprintf('Field %s not found', $field));
+        }
+        $isArray = is_array($result);
+        if (($isArray && !isset($result[$field])) || (!$isArray && !isset($result->$field))) {
+            throw new \PDOException(sprintf('Field %s not found', $field));
+        }
+        return $isArray ? $result[$field] : $result->$field;
+    }
+
+    /**
+     * @param array $data
+     * @return ConnectionInterface
+     */
+    public function updates(array $data): ConnectionInterface
+    {
+        list($sql, $values) = $this->build('UPDATE', $data);
+        return $this->raw($sql, ...$values);
+    }
+
+    /**
+     * @param string $field
+     * @param $value
+     * @return ConnectionInterface
+     */
+    public function update(string $field, $value): ConnectionInterface
+    {
+        list($sql, $values) = $this->build('UPDATE', [
+            $field => $value
+        ]);
+        return $this->raw($sql, ...$values);
+    }
+
+    /**
+     * @return ConnectionInterface
+     */
+    public function delete(): ConnectionInterface
+    {
+        list($sql, $values) = $this->build('DELETE');
+        return $this->raw($sql, ...$values);
+    }
+
+    /**
+     * 返回当前PDO连接是否在事务内（在事务内的连接回池会造成下次开启事务产生错误）
+     * @return bool
+     */
+    public function inTransaction(): bool
+    {
+        $pdo = $this->driver->instance();
+        return (bool)($pdo ? $pdo->inTransaction() : false);
+    }
+
+    /**
+     * 返回结果集
+     * @return \PDOStatement|null
+     */
+    public function getStatement(): ?\PDOStatement
     {
         return $this->statement;
     }
@@ -438,16 +552,6 @@ abstract class AbstractConnection implements ConnectionInterface
     public function beginTransaction(): Transaction
     {
         return new Transaction($this->driver, $this->logger);
-    }
-
-    /**
-     * 启动查询生成器
-     * @param string $table
-     * @return QueryBuilder
-     */
-    public function table(string $table): QueryBuilder
-    {
-        return (new QueryBuilder($this))->table($table);
     }
 
 }

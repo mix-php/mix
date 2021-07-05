@@ -225,6 +225,16 @@ class Database
     }
 
     /**
+     * @param string $sql
+     * @param ...$values
+     * @return ConnectionInterface
+     */
+    public function exec(string $sql, ...$values): ConnectionInterface
+    {
+        return $this->borrow()->exec($sql, ...$values);
+    }
+
+    /**
      * 插入
      * @param string $table
      * @param array $data
@@ -270,9 +280,9 @@ class Database
     /**
      * 启动查询生成器
      * @param string $table
-     * @return QueryBuilder
+     * @return ConnectionInterface
      */
-    public function table(string $table): QueryBuilder
+    public function table(string $table): ConnectionInterface
     {
         return $this->borrow()->table($table);
     }

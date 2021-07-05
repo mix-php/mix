@@ -9,26 +9,71 @@ namespace Mix\Database;
 interface ConnectionInterface
 {
 
-    public function inTransaction(): bool;
+    public function raw(string $sql, ...$values): ConnectionInterface;
 
-    public function query(): \PDOStatement;
+    public function exec(string $sql, ...$values): ConnectionInterface;
+
+    public function table(string $table): ConnectionInterface;
+
+    public function select(string ...$fields): ConnectionInterface;
+
+    public function join(string $table, string $on, ...$values): ConnectionInterface;
+
+    public function leftJoin(string $table, string $on, ...$values): ConnectionInterface;
+
+    public function rightJoin(string $table, string $on, ...$values): ConnectionInterface;
+
+    public function fullJoin(string $table, string $on, ...$values): ConnectionInterface;
+
+    public function where(string $expr, ...$values): ConnectionInterface;
+
+    public function or(string $expr, ...$values): ConnectionInterface;
+
+    public function order(string $field, string $order): ConnectionInterface;
+
+    public function group(string ...$fields): ConnectionInterface;
+
+    public function having(string $expr, ...$values): ConnectionInterface;
+
+    public function offset(int $length): ConnectionInterface;
+
+    public function limit(int $length): ConnectionInterface;
+
+    public function lockForUpdate(): ConnectionInterface;
+
+    public function sharedLock(): ConnectionInterface;
+
+    public function debug(\Closure $func): ConnectionInterface;
+
+    /**
+     * 返回多行
+     * @return array
+     */
+    public function get(): array;
 
     /**
      * 返回一行
-     * @param int $fetchStyle
      * @return array|object
      */
-    public function queryOne(int $fetchStyle = null);
-
-    public function queryAll(int $fetchStyle = null): array;
-
-    public function queryColumn(int $columnNumber = 0): array;
+    public function first();
 
     /**
-     * 返回一个标量值
+     * 返回单个值
+     * @param string $field
      * @return mixed
+     * @throws \PDOException
      */
-    public function queryScalar();
+    public function value(string $field);
+
+    public function updates(array $data): ConnectionInterface;
+
+    public function update(string $field, $value): ConnectionInterface;
+
+    public function delete(): ConnectionInterface;
+
+    public function inTransaction(): bool;
+
+    public function getStatement(): ?\PDOStatement;
 
     public function getLastInsertId(): string;
 

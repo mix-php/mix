@@ -61,7 +61,7 @@ class Connection extends AbstractConnection
      * 执行SQL语句
      * @return ConnectionInterface
      */
-    public function exec(): ConnectionInterface
+    public function execute(): ConnectionInterface
     {
         return $this->call(__FUNCTION__);
     }
