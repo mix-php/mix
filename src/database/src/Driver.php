@@ -25,8 +25,8 @@ class Driver
      */
     public $username = 'root';
 
-    /*
-     * 数据库密码
+    /**
+     * @var string
      */
     public $password = '';
 
