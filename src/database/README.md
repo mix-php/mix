@@ -51,6 +51,16 @@ $db->table('users')->where('id = ?', 1)->update('name', 'foo1');
 $db->table('users')->where('id = ?', 1)->delete();
 ```
 
+## 启动连接池
+
+在 `Swoole` 协程环境中，启动连接池
+
+```php
+$maxOpen = 50;
+$maxIdle = 20;
+$db->startPool($maxOpen, $maxIdle);
+```
+
 ## 创建 Insert
 
 创建
