@@ -9,6 +9,8 @@ namespace Mix\Database;
 interface ConnectionInterface
 {
 
+    public function debug(\Closure $func): ConnectionInterface;
+
     public function raw(string $sql, ...$values): ConnectionInterface;
 
     public function exec(string $sql, ...$values): ConnectionInterface;
@@ -43,8 +45,6 @@ interface ConnectionInterface
 
     public function sharedLock(): ConnectionInterface;
 
-    public function debug(\Closure $func): ConnectionInterface;
-
     /**
      * 返回多行
      * @return array
@@ -73,7 +73,16 @@ interface ConnectionInterface
 
     public function inTransaction(): bool;
 
-    public function getStatement(): ?\PDOStatement;
+    /**
+     * 自动事务
+     * @param \Closure $closure
+     * @throws \Throwable
+     */
+    public function transaction(\Closure $closure);
+
+    public function beginTransaction(): Transaction;
+
+    public function statement(): \PDOStatement;
 
     public function getLastInsertId(): string;
 

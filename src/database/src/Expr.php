@@ -17,17 +17,17 @@ class Expr
     /**
      * @var array
      */
-    protected $args;
+    protected $values;
 
     /**
      * Expr constructor.
      * @param string $expr
-     * @param ...$args
+     * @param ...$values
      */
-    public function __construct(string $expr, ...$args)
+    public function __construct(string $expr, ...$values)
     {
         $this->expr = $expr;
-        $this->args = $args;
+        $this->values = $values;
     }
 
     /**
@@ -35,7 +35,7 @@ class Expr
      */
     public function __toString(): string
     {
-        return vsprintf(str_replace('?', "'%s'", $this->expr), $this->args);
+        return vsprintf(str_replace('?', "'%s'", $this->expr), $this->values);
     }
 
 }

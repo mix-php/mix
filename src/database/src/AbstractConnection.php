@@ -383,20 +383,10 @@ abstract class AbstractConnection implements ConnectionInterface
     }
 
     /**
-     * 返回当前PDO连接是否在事务内（在事务内的连接回池会造成下次开启事务产生错误）
-     * @return bool
-     */
-    public function inTransaction(): bool
-    {
-        $pdo = $this->driver->instance();
-        return (bool)($pdo ? $pdo->inTransaction() : false);
-    }
-
-    /**
      * 返回结果集
-     * @return \PDOStatement|null
+     * @return \PDOStatement
      */
-    public function getStatement(): ?\PDOStatement
+    public function statement(): \PDOStatement
     {
         return $this->statement;
     }
@@ -526,6 +516,16 @@ abstract class AbstractConnection implements ConnectionInterface
         }
         $sql .= implode(', ', $subSql);
         return $this->raw($sql, ...$values);
+    }
+
+    /**
+     * 返回当前PDO连接是否在事务内（在事务内的连接回池会造成下次开启事务产生错误）
+     * @return bool
+     */
+    public function inTransaction(): bool
+    {
+        $pdo = $this->driver->instance();
+        return (bool)($pdo ? $pdo->inTransaction() : false);
     }
 
     /**

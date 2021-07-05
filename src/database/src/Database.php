@@ -134,11 +134,15 @@ class Database
     /**
      * @param int $maxOpen
      * @param int $maxIdle
+     * @param int $maxLifetime
+     * @param float $waitTimeout
      */
-    public function startPool(int $maxOpen, int $maxIdle)
+    public function startPool(int $maxOpen, int $maxIdle, int $maxLifetime = 0, float $waitTimeout = 0.0)
     {
         $this->maxOpen = $maxOpen;
         $this->maxIdle = $maxIdle;
+        $this->maxLifetime = $maxLifetime;
+        $this->waitTimeout = $waitTimeout;
         $this->createPool();
     }
 

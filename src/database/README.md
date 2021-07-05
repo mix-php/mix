@@ -105,9 +105,29 @@ $data = [
 $db->batchInsert('users', $data);
 ```
 
+使用函数创建
+
+```php
+$data = [
+    'name' => 'foo',
+    'balance' => 0,
+    'add_time' => new Mix\Database\Expr('CURRENT_TIMESTAMP()'),
+];
+$db->insert('users', $data);
+```
+
 ## 查询 Select
 
-### where
+### 获取结果
+
+|  方法名称   | 描述  |
+|  ----  | ----  |
+| get(): array  | 获取多行 |
+| first(): array or object  | 获取第一行 |
+| value(string $field): mixed  | 获取第一行某个字段 |
+| statement(): \PDOStatement  | 获取原始结果集 |
+
+### Where
 
 #### AND
 
@@ -210,40 +230,117 @@ $db->table('news')
 ### Join
 
 ```php
-$db = new Mix\Database\Database('mysql:host=127.0.0.1;port=3306;charset=utf8;dbname=test', 'root', '***');
 $db->table('news AS n')
     ->select('n.*, u.name')
     ->join('users AS u', 'n.uid = u.id')
     ->get();
 ```
 
-### 获取结果集
-
-`table` 触发
-
-|  方法名称   | 描述  |
-|  ----  | ----  |
-| get(): array  | 获取多行 |
-| first(): mixed  | 获取第一行 |
-| value(string $field): mixed  | 获取第一行某个字段 |
-
-`raw` 触发
-
-|  方法名称   | 描述  |
-|  ----  | ----  |
-| get(): array  | 获取多行 |
-| first(): mixed  | 获取第一行 |
-| value(string $field): mixed  | 获取第一行某个字段 |
-
 ## 更新 Update
+
+更新单个字段
+
+```php
+$db->where('id = ?', 1)->update('name', 'foo1');
+```
+
+获取影响行数
+
+```php
+$rowsAffected = $db->where('id = ?', 1)->update('name', 'foo1')->getRowCount();
+```
+
+更新多个字段
+
+```php
+$data = [
+    'name' => 'foo1'
+];
+$db->where('id = ?', 1)->updates($data);
+```
+
+使用函数更新
+
+```php
+$data = [
+    'add_time' => new Mix\Database\Expr('CURRENT_TIMESTAMP()'),
+];
+$db->where('id = ?', 1)->updates($data);
+```
 
 ## 删除 Delete
 
+删除
+
+```php
+$db->where('id = ?', 1)->delete();
+```
+
+获取影响行数
+
+```php
+$rowsAffected = $db->where('id = ?', 1)->update('name', 'foo1')->getRowCount();
+```
+
 ## 事物 Transaction
+
+手动事务
+
+```php
+$tx = $db->beginTransaction();
+try {
+    $data = [
+        'name' => 'foo',
+        'balance' => 0,
+    ];
+    $tx->insert('users', $data);
+    $tx->commit();
+} catch (\Throwable $ex) {
+    $tx->rollback();
+    throw $ex;
+}
+```
+
+自动事务，执行异常自动回滚并抛出异常
+
+```php
+$db->transaction(function (Mix\Database\Transaction $tx) {
+    $data = [
+        'name' => 'foo',
+        'balance' => 0,
+    ];
+    $tx->insert('users', $data);
+});
+```
 
 ## 调试 Debug
 
+```php
+$db->table('users')
+    ->where('id = ?', 1)
+    ->debug(function (Mix\Database\ConnectionInterface $conn) {
+        var_dump($conn->getQueryLog());
+        // array, fields: time, sql, bindings
+    })
+    ->get();
+```
+
 ## 日志 Logger
+
+配置日志记录器，配置后全部SQL信息都会被打印
+
+```php
+$db->setLogger($logger);
+```
+
+`$logger` 需实现 `Mix\Database\LoggerInterface`
+
+```php
+interface LoggerInterface
+{
+    public function trace(float $time, string $sql, array $bindings, int $rowCount, ?\Throwable $exception);
+}
+```
 
 ## License
 
