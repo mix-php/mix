@@ -60,9 +60,11 @@ $db->table('users')->where('id = ?', 1)->delete();
 在 `Swoole` 协程环境中，启动连接池
 
 ```php
-$maxOpen = 50;
-$maxIdle = 20;
-$db->startPool($maxOpen, $maxIdle);
+$maxOpen = 50;        // 最大开启连接数
+$maxIdle = 20;        // 最大闲置连接数
+$maxLifetime = 3600;  // 连接的最长生命周期
+$waitTimeout = 0.0;   // 从池获取连接等待的时间, 0为一直等待
+$db->startPool($maxOpen, $maxIdle, $maxLifetime, $waitTimeout);
 ```
 
 ## 创建 Insert
