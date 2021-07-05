@@ -1,4 +1,4 @@
-## Mix Database
+# Mix Database
 
 Simple database for use in multiple execution environments, with support for FPM, Swoole, Workerman, and optional
 connection pool (coroutine)
@@ -21,7 +21,11 @@ composer require mix/database
 ## Quick start
 
 ```php
-$db = new Mix\Database\Database('mysql:host=127.0.0.1;port=3306;charset=utf8;dbname=test', 'root', '***');
+$db = new Mix\Database\Database(
+    'mysql:host=127.0.0.1;port=3306;charset=utf8;dbname=test', 
+    'root', 
+    '***'
+);
 ```
 
 创建
