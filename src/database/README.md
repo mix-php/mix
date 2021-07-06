@@ -113,7 +113,7 @@ $data = [
         'name' => 'foo',
         'balance' => 0,
     ],
-      [
+    [
         'name' => 'foo1',
         'balance' => 0,
     ]
@@ -148,115 +148,77 @@ $db->insert('users', $data);
 #### AND
 
 ```php
-$db->table('users')
-    ->where('id = ? AND name = ?', 1, 'foo')
-    ->get();
+$db->table('users')->where('id = ? AND name = ?', 1, 'foo')->get();
 ```
 
 ```php
-$db->table('users')
-    ->where('id = ?', 1)
-    ->where('name = ?', 'foo')
-    ->get();
+$db->table('users')->where('id = ?', 1)->where('name = ?', 'foo')->get();
 ```
 
 #### OR
 
 ```php
-$db->table('users')
-    ->where('id = ? OR id = ?', 1, 2)
-    ->get();
+$db->table('users')->where('id = ? OR id = ?', 1, 2)->get();
 ```
 
 ```php
-$db->table('users')
-    ->where('id = ?', 1)
-    ->or('id = ?', 2)
-    ->get();
+$db->table('users')->where('id = ?', 1)->or('id = ?', 2)->get();
 ```
 
 #### IN
 
 ```php
-$db->table('users')
-    ->where('id IN (?)', [1, 2])
-    ->get();
+$db->table('users')->where('id IN (?)', [1, 2])->get();
 ```
 
 ```php
-$db->table('users')
-    ->where('id NOT IN (?)', [1, 2])
-    ->get();
+$db->table('users')->where('id NOT IN (?)', [1, 2])->get();
 ```
 
 ### Select 
 
 ```php
-$db->table('users')
-    ->select('id, name')
-    ->get();
+$db->table('users')->select('id, name')->get();
 ```
 
 ```php
-$db->table('users')
-    ->select('id', 'name')
-    ->get();
+$db->table('users')->select('id', 'name')->get();
 ```
 
 ```php
-$db->table('users')
-    ->select('name AS n')
-    ->get();
+$db->table('users')->select('name AS n')->get();
 ```
 
 ### Order
 
 ```php
-$db->table('users')
-    ->order('id', 'desc')
-    ->get();
+$db->table('users')->order('id', 'desc')->get();
 ```
 
 ```php
-$db->table('users')
-    ->order('id', 'desc')
-    ->order('name', 'aes')
-    ->get();
+$db->table('users')->order('id', 'desc')->order('name', 'aes')->get();
 ```
 
 ### Limit
 
 ```php
-$db->table('users')
-    ->offset(10)
-    ->limit(5)
-    ->get();
+$db->table('users')->offset(10)->limit(5)->get();
 ```
 
 ### Group & Having
 
 ```php
-$db->table('news')
-    ->select('id, COUNT(*) AS total')
-    ->group('id')
-    ->having('COUNT(*) > ?', 10)
-    ->get();
+$db->table('news')->select('id, COUNT(*) AS total')->group('id')->having('COUNT(*) > ?', 10)->get();
 ```
 
 ### Join
 
 ```php
-$db->table('news AS n')
-    ->select('n.*, u.name')
-    ->join('users AS u', 'n.uid = u.id')
-    ->get();
+$db->table('news AS n')->select('n.*, u.name')->join('users AS u', 'n.uid = u.id')->get();
 ```
 
 ```php
-$db->table('news AS n')
-    ->select('n.*, u.name')
-    ->leftJoin('users AS u', 'n.uid = u.id AND u.balance > ?', 10)
-    ->get();
+$db->table('news AS n')->select('n.*, u.name')->leftJoin('users AS u', 'n.uid = u.id AND u.balance > ?', 10)->get();
 ```
 
 ## 更新 Update
