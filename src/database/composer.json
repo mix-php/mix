@@ -20,7 +20,7 @@
   "require": {
     "php": ">=7.2.0",
     "ext-pdo": "*",
-    "mix/object-pool": "~2.2.0"
+    "mix/object-pool": "^3.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^7.0.0"
