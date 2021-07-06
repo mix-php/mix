@@ -116,7 +116,7 @@ class Database
             $this->driver = null;
         }
 
-        $pool = new ConnectionPool(
+        $this->pool = new ConnectionPool(
             new Dialer(
                 $this->dsn,
                 $this->username,
@@ -128,7 +128,6 @@ class Database
             $this->maxLifetime,
             $this->waitTimeout
         );
-        $this->pool = $pool;
     }
 
     /**
@@ -173,7 +172,7 @@ class Database
     /**
      * @param int $maxLifetime
      */
-    public function SetConnMaxLifetime(int $maxLifetime)
+    public function setConnMaxLifetime(int $maxLifetime)
     {
         if ($this->maxLifetime == $maxLifetime) {
             return;
@@ -192,6 +191,17 @@ class Database
         }
         $this->waitTimeout = $waitTimeout;
         $this->createPool();
+    }
+
+    /**
+     * @return array
+     */
+    public function poolStats(): array
+    {
+        if (!$this->pool) {
+            return [];
+        }
+        return $this->pool->stats();
     }
 
     /**
@@ -216,6 +226,15 @@ class Database
             $conn = new Connection($this->driver, $this->logger);
         }
         return $conn;
+    }
+
+    /**
+     * @param \Closure $func
+     * @return ConnectionInterface
+     */
+    public function debug(\Closure $func): ConnectionInterface
+    {
+        return $this->borrow()->debug($func);
     }
 
     /**

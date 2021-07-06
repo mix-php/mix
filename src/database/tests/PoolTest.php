@@ -6,6 +6,26 @@ use PHPUnit\Framework\TestCase;
 final class PoolTest extends TestCase
 {
 
+    public function testConnReturn(): void
+    {
+        $_this = $this;
+        $func = function () use ($_this) {
+            $db = db();
+            $db->startPool(1, 1);
+            for ($i = 0; $i < 100; $i++) {
+                go(function () use ($db, $i) {
+                    $stat = $db->raw('select sleep(0.1)')->statement();
+                    while ($row = $stat->fetch()) {
+                        usleep(100000);
+                    }
+                    // echo sprintf("%d: %s\n", $i, json_encode($db->poolStats()));
+                });
+            }
+            $_this->assertTrue(true);
+        };
+        swoole_co_run($func);
+    }
+
     public function testMaxOpen(): void
     {
         $_this = $this;

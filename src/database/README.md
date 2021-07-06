@@ -67,6 +67,12 @@ $waitTimeout = 0.0;   // 从池获取连接等待的时间, 0为一直等待
 $db->startPool($maxOpen, $maxIdle, $maxLifetime, $waitTimeout);
 ```
 
+连接池统计
+
+```php
+$db->poolStats(); // array, fields: total, idle, active
+```
+
 ## 创建 Insert
 
 创建
@@ -271,12 +277,30 @@ $rowsAffected = $db->where('id = ?', 1)->update('name', 'foo1')->rowCount();
 
 ```php
 $data = [
-    'name' => 'foo1'
+    'name' => 'foo1',
+    'balance' => 100,
+];
+$db->where('id = ?', 1)->updates($data);
+```
+
+使用表达式更新
+
+```php
+$db->where('id = ?', 1)->update('balance', new Mix\Database\Expr('balance + ?', 1));
+```
+
+```php
+$data = [
+    'balance' => new Mix\Database\Expr('balance + ?', 1),
 ];
 $db->where('id = ?', 1)->updates($data);
 ```
 
 使用函数更新
+
+```php
+$db->where('id = ?', 1)->update('add_time', new Mix\Database\Expr('CURRENT_TIMESTAMP()'));
+```
 
 ```php
 $data = [
@@ -343,12 +367,11 @@ $db->transaction(function (Mix\Database\Transaction $tx) {
 ## 调试 Debug
 
 ```php
-$db->table('users')
-    ->where('id = ?', 1)
-    ->debug(function (Mix\Database\ConnectionInterface $conn) {
-        var_dump($conn->queryLog());
-        // array, fields: time, sql, bindings
+$db->debug(function (Mix\Database\ConnectionInterface $conn) {
+        var_dump($conn->queryLog()); // array, fields: time, sql, bindings
     })
+    ->table('users')
+    ->where('id = ?', 1)
     ->get();
 ```
 
