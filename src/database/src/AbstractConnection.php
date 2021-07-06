@@ -165,15 +165,10 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function raw(string $sql, ...$values): ConnectionInterface
     {
-        // 清扫数据
-        $this->sql = '';
-        $this->params = [];
-        $this->values = [];
-
         // 保存SQL
         $this->sql = $sql;
         $this->values = $values;
-        $this->sqlData = [$this->sql, [], $values, 0, ''];
+        $this->sqlData = [$this->sql, $this->params, $this->values, 0, ''];
 
         // 执行
         return $this->execute();
@@ -244,7 +239,7 @@ abstract class AbstractConnection implements ConnectionInterface
     protected function prepare()
     {
         if (!empty($this->params)) { // 参数绑定
-            // 支持 insert 里面带函数
+            // 支持insert里面带函数
             foreach ($this->params as $k => $v) {
                 if ($v instanceof Expr) {
                     unset($this->params[$k]);
@@ -252,7 +247,6 @@ abstract class AbstractConnection implements ConnectionInterface
                     $this->sql = str_replace($k, $v->__toString(), $this->sql);
                 }
             }
-
             $statement = $this->driver->instance()->prepare($this->sql);
             if (!$statement) {
                 throw new \PDOException('PDO prepare failed');
