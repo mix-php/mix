@@ -171,7 +171,7 @@ $db->table('users')->where('id IN (?)', [1, 2])->get();
 $db->table('users')->where('id NOT IN (?)', [1, 2])->get();
 ```
 
-### Select 
+### Select
 
 ```php
 $db->table('users')->select('id, name')->get();
@@ -192,10 +192,14 @@ $db->table('users')->order('id', 'desc')->get();
 ```
 
 ```php
-$db->table('users')->order('id', 'desc')->order('name', 'aes')->get();
+$db->table('users')->order('id', 'desc')->order('name', 'asc')->get();
 ```
 
 ### Limit
+
+```php
+$db->table('users')->limit(5)->get();
+```
 
 ```php
 $db->table('users')->offset(10)->limit(5)->get();
@@ -204,7 +208,11 @@ $db->table('users')->offset(10)->limit(5)->get();
 ### Group & Having
 
 ```php
-$db->table('news')->select('id, COUNT(*) AS total')->group('id')->having('COUNT(*) > ?', 10)->get();
+$db->table('news')->select('uid, COUNT(*) AS total')->group('uid')->having('COUNT(*) > ?', 0)->get();
+```
+
+```php
+$db->table('news')->select('uid, COUNT(*) AS total')->group('uid')->having('COUNT(*) > ? AND COUNT(*) < ?', 0, 10)->get();
 ```
 
 ### Join

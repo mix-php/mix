@@ -181,7 +181,7 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function exec(string $sql, ...$values): ConnectionInterface
     {
-        $this->raw($sql, ...$values);
+        return $this->raw($sql, ...$values);
     }
 
     /**
@@ -254,7 +254,7 @@ abstract class AbstractConnection implements ConnectionInterface
             $this->statement = $statement;
             $this->sqlData = [$this->sql, $this->params, [], 0, '']; // 必须在 bindParam 前，才能避免类型被转换
             foreach ($this->params as $key => &$value) {
-                if (!$this->statement->bindParam($key, $value)) {
+                if (!$this->statement->bindParam($key, $value, static::bindType($value))) {
                     throw new \PDOException('PDOStatement bindParam failed');
                 }
             }
@@ -266,7 +266,7 @@ abstract class AbstractConnection implements ConnectionInterface
             $this->statement = $statement;
             $this->sqlData = [$this->sql, [], $this->values, 0, ''];
             foreach ($this->values as $key => $value) {
-                if (!$this->statement->bindValue($key + 1, $value)) {
+                if (!$this->statement->bindValue($key + 1, $value, static::bindType($value))) {
                     throw new \PDOException('PDOStatement bindValue failed');
                 }
             }
@@ -278,6 +278,29 @@ abstract class AbstractConnection implements ConnectionInterface
             $this->statement = $statement;
             $this->sqlData = [$this->sql, [], [], 0, ''];
         }
+    }
+
+    /**
+     * @param $value
+     * @return int
+     */
+    protected static function bindType($value): int
+    {
+        switch (gettype($value)) {
+            case 'boolean':
+                $type = \PDO::PARAM_BOOL;
+                break;
+            case 'NULL':
+                $type = \PDO::PARAM_NULL;
+                break;
+            case 'integer':
+                $type = \PDO::PARAM_INT;
+                break;
+            default:
+                $type = \PDO::PARAM_STR;
+                break;
+        }
+        return $type;
     }
 
     protected function clear()
@@ -305,7 +328,7 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function get(): array
     {
-        if (!$this->sql) {
+        if ($this->table) {
             list($sql, $values) = $this->build('SELECT');
             $this->raw($sql, ...$values);
         }
@@ -318,7 +341,7 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function first()
     {
-        if (!$this->sql) {
+        if ($this->table) {
             list($sql, $values) = $this->build('SELECT');
             $this->raw($sql, ...$values);
         }
@@ -333,7 +356,7 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function value(string $field)
     {
-        if (!$this->sql) {
+        if ($this->table) {
             list($sql, $values) = $this->build('SELECT');
             $this->raw($sql, ...$values);
         }
