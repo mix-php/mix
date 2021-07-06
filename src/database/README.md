@@ -299,7 +299,7 @@ $db->raw('SELECT * FROM users WHERE id = ?', 1)->first();
 $db->exec('DELETE FROM users WHERE id = ?', 1)->rowCount();
 ```
 
-## 事物 Transaction
+## 事务 Transaction
 
 手动事务
 
