@@ -84,10 +84,10 @@ interface ConnectionInterface
 
     public function statement(): \PDOStatement;
 
-    public function getLastInsertId(): string;
+    public function lastInsertId(): string;
 
-    public function getRowCount(): int;
+    public function rowCount(): int;
 
-    public function getQueryLog(): array;
+    public function queryLog(): array;
 
 }

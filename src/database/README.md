@@ -1,9 +1,9 @@
 # Mix Database
 
-Simple database for use in multiple execution environments, with support for FPM, Swoole, Workerman, and optional
+Simple database for use in multiple execution environments, with support for FPM, Swoole, WorkerMan, and optional
 connection pool (coroutine)
 
-可在各种环境使用的轻量数据库，支持 FPM、Swoole、WorkerMan，可选的连接池 (协程)
+可在各种环境中使用的轻量数据库，支持 FPM、Swoole、WorkerMan，可选的连接池 (协程)
 
 ## 技术交流
 
@@ -86,7 +86,7 @@ $data = [
     'name' => 'foo',
     'balance' => 0,
 ];
-$insertId = $db->insert('users', $data)->getLastInsertId();
+$insertId = $db->insert('users', $data)->lastInsertId();
 ```
 
 替换创建
@@ -257,7 +257,7 @@ $db->where('id = ?', 1)->update('name', 'foo1');
 获取影响行数
 
 ```php
-$rowsAffected = $db->where('id = ?', 1)->update('name', 'foo1')->getRowCount();
+$rowsAffected = $db->where('id = ?', 1)->update('name', 'foo1')->rowCount();
 ```
 
 更新多个字段
@@ -289,7 +289,7 @@ $db->where('id = ?', 1)->delete();
 获取影响行数
 
 ```php
-$rowsAffected = $db->where('id = ?', 1)->delete()->getRowCount();
+$rowsAffected = $db->where('id = ?', 1)->delete()->rowCount();
 ```
 
 ## 原生 Raw
@@ -299,7 +299,7 @@ $db->raw('SELECT * FROM users WHERE id = ?', 1)->first();
 ```
 
 ```php
-$db->exec('DELETE FROM users WHERE id = ?', 1)->getRowCount();
+$db->exec('DELETE FROM users WHERE id = ?', 1)->rowCount();
 ```
 
 ## 事物 Transaction
@@ -339,7 +339,7 @@ $db->transaction(function (Mix\Database\Transaction $tx) {
 $db->table('users')
     ->where('id = ?', 1)
     ->debug(function (Mix\Database\ConnectionInterface $conn) {
-        var_dump($conn->getQueryLog());
+        var_dump($conn->queryLog());
         // array, fields: time, sql, bindings
     })
     ->get();
@@ -347,7 +347,7 @@ $db->table('users')
 
 ## 日志 Logger
 
-配置日志记录器，配置后全部SQL信息都会被打印
+日志记录器，配置后可打印全部SQL信息
 
 ```php
 $db->setLogger($logger);

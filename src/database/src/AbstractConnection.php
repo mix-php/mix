@@ -440,7 +440,7 @@ abstract class AbstractConnection implements ConnectionInterface
      * 返回最后插入行的ID或序列值
      * @return string
      */
-    public function getLastInsertId(): string
+    public function lastInsertId(): string
     {
         return $this->driver->instance()->lastInsertId();
     }
@@ -449,16 +449,16 @@ abstract class AbstractConnection implements ConnectionInterface
      * 返回受上一个 SQL 语句影响的行数
      * @return int
      */
-    public function getRowCount(): int
+    public function rowCount(): int
     {
         return $this->statement->rowCount();
     }
 
     /**
-     * 获取最后的日志
+     * 获取查询日志
      * @return array
      */
-    public function getQueryLog(): array
+    public function queryLog(): array
     {
         $sql = '';
         $params = $values = [];
