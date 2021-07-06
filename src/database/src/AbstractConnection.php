@@ -59,15 +59,21 @@ abstract class AbstractConnection implements ConnectionInterface
     protected $sqlData = [];
 
     /**
-     * 为了在归还后不需要使用 Driver
+     * execute 立即归还缓存处理
      * @var array
      */
     protected $options = [];
 
     /**
+     * execute 立即归还缓存处理
+     * @var string
+     */
+    protected $lastInsertId = '';
+
+    /**
      * @var \Closure
      */
-    protected $debugFunc;
+    protected $debug;
 
     /**
      * AbstractConnection constructor.
@@ -77,8 +83,8 @@ abstract class AbstractConnection implements ConnectionInterface
     public function __construct(Driver $driver, ?LoggerInterface $logger)
     {
         $this->driver = $driver;
-        $this->options = $driver->options();
         $this->logger = $logger;
+        $this->options = $driver->options();
     }
 
     /**
@@ -111,8 +117,21 @@ abstract class AbstractConnection implements ConnectionInterface
     }
 
     /**
+     * 回收清扫的查询数据，用于重连后恢复查询
+     */
+    protected function recycle()
+    {
+        // beginTransaction 异常时没有数据
+        if (empty($this->recycleData)) {
+            return;
+        }
+
+        list($this->sql, $this->params, $this->values) = $this->recycleData;
+    }
+
+    /**
      * 判断是否为断开连接异常
-     * @param \Throwable $e
+     * @param \Throwable $ex
      * @return bool
      */
     protected static function isDisconnectException(\Throwable $ex)
@@ -171,9 +190,57 @@ abstract class AbstractConnection implements ConnectionInterface
     }
 
     /**
-     * 构建查询
-     * @throws \PDOException
+     * @return ConnectionInterface
+     * @throws \Throwable
      */
+    public function execute(): ConnectionInterface
+    {
+        $beginTime = microtime(true);
+
+        try {
+            $this->prepare();
+            $success = $this->statement->execute();
+            if (!$success) {
+                list($flag, $code, $message) = $this->statement->errorInfo();
+                throw new \PDOException(sprintf('%s %d %s', $flag, $code, $message), $code);
+            }
+        } catch (\Throwable $ex) {
+            throw $ex;
+        } finally {
+            // 记录执行时间
+            $time = round((microtime(true) - $beginTime) * 1000, 2);
+            $this->sqlData[3] = $time;
+            $this->sqlData[4] = $this->driver->instance()->lastInsertId();
+
+            // debug
+            $debug = $this->debug;
+            $debug and $debug($this);
+
+            // print
+            $log = $this->queryLog();
+            $this->logger and $this->logger->trace(
+                $time,
+                $log['sql'],
+                $log['bindings'],
+                $this->rowCount(),
+                $ex ?? null
+            );
+
+            $this->clear();
+        }
+
+        // 回收前缓存
+        $this->lastInsertId = $this->driver->instance()->lastInsertId();
+
+        // 执行完立即回收
+        if ($this->driver->pool && get_called_class() != Transaction::class) {
+            $this->driver->__return();
+            $this->driver = new EmptyDriver();
+        }
+
+        return $this;
+    }
+
     protected function prepare()
     {
         if (!empty($this->params)) { // 参数绑定
@@ -219,76 +286,13 @@ abstract class AbstractConnection implements ConnectionInterface
         }
     }
 
-    /**
-     * 清扫构建查询数据
-     */
     protected function clear()
     {
         $this->recycleData = [$this->sql, $this->params, $this->values];
         $this->sql = '';
         $this->params = [];
         $this->values = [];
-        $this->debugFunc = null;
-    }
-
-    /**
-     * 回收清扫的查询数据，用于重连后恢复查询
-     */
-    protected function recycle()
-    {
-        // beginTransaction 异常时没有数据
-        if (empty($this->recycleData)) {
-            return;
-        }
-        list($this->sql, $this->params, $this->values) = $this->recycleData;
-    }
-
-    /**
-     * @return ConnectionInterface
-     */
-    public function execute(): ConnectionInterface
-    {
-        $beginTime = microtime(true);
-
-        try {
-            $this->prepare();
-            $success = $this->statement->execute();
-            if (!$success) {
-                list($flag, $code, $message) = $this->statement->errorInfo();
-                throw new \PDOException(sprintf('%s %d %s', $flag, $code, $message), $code);
-            }
-        } catch (\Throwable $ex) {
-            throw $ex;
-        } finally {
-            // 记录执行时间
-            $time = round((microtime(true) - $beginTime) * 1000, 2);
-            $this->sqlData[3] = $time;
-            $this->sqlData[4] = $this->driver->instance()->lastInsertId();
-
-            // debug
-            $debug = $this->debugFunc;
-            $debug and $debug($this);
-
-            // print
-            $log = $this->getQueryLog();
-            $this->logger and $this->logger->trace(
-                $time,
-                $log['sql'],
-                $log['bindings'],
-                $this->getRowCount(),
-                $ex ?? null
-            );
-
-            $this->clear();
-        }
-
-        // 执行完立即回收
-        if ($this->driver->pool && get_called_class() != Transaction::class) {
-            $this->driver->__return();
-            $this->driver = new EmptyDriver();
-        }
-
-        return $this;
+        $this->debug = null;
     }
 
     /**
@@ -297,7 +301,7 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function debug(\Closure $func): ConnectionInterface
     {
-        $this->debugFunc = $func;
+        $this->debug = $func;
         return $this;
     }
 
@@ -442,7 +446,7 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function lastInsertId(): string
     {
-        return $this->driver->instance()->lastInsertId();
+        return $this->lastInsertId;
     }
 
     /**

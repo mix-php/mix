@@ -9,80 +9,41 @@ namespace Mix\Database;
 class Connection extends AbstractConnection
 {
 
-    /**
-     * 返回结果集
-     * @return \PDOStatement
-     */
-    public function query(): \PDOStatement
-    {
-        return $this->call(__FUNCTION__);
-    }
-
-    /**
-     * 返回一行
-     * @param int $fetchStyle
-     * @return array|object
-     */
     public function queryOne(int $fetchStyle = null)
     {
         return $this->call(__FUNCTION__, func_get_args());
     }
 
-    /**
-     * 返回多行
-     * @param int $fetchStyle
-     * @return array
-     */
     public function queryAll(int $fetchStyle = null): array
     {
         return $this->call(__FUNCTION__, func_get_args());
     }
 
-    /**
-     * 返回一列 (默认第一列)
-     * @param int $columnNumber
-     * @return array
-     */
     public function queryColumn(int $columnNumber = 0): array
     {
         return $this->call(__FUNCTION__, func_get_args());
     }
 
-    /**
-     * 返回一个标量值
-     * @return mixed
-     */
     public function queryScalar()
     {
         return $this->call(__FUNCTION__);
     }
 
-    /**
-     * 执行SQL语句
-     * @return ConnectionInterface
-     */
     public function execute(): ConnectionInterface
     {
         return $this->call(__FUNCTION__);
     }
 
-    /**
-     * 开始事务
-     * @return Transaction
-     * @throws \PDOException
-     */
     public function beginTransaction(): Transaction
     {
         return $this->call(__FUNCTION__);
     }
 
-    /**
-     * 执行方法
-     * @param $name
-     * @param array $arguments
-     * @return mixed
-     * @throws \Throwable
-     */
+    public function rowCount(): int
+    {
+        return $this->call(__FUNCTION__);
+    }
+
     protected function call($name, $arguments = [])
     {
         try {

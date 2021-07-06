@@ -71,8 +71,6 @@ interface ConnectionInterface
 
     public function delete(): ConnectionInterface;
 
-    public function inTransaction(): bool;
-
     /**
      * 自动事务
      * @param \Closure $closure

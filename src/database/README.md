@@ -246,6 +246,13 @@ $db->table('news AS n')
     ->get();
 ```
 
+```php
+$db->table('news AS n')
+    ->select('n.*, u.name')
+    ->leftJoin('users AS u', 'n.uid = u.id AND u.balance > ?', 10)
+    ->get();
+```
+
 ## 更新 Update
 
 更新单个字段
