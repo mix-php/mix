@@ -236,11 +236,13 @@ trait QueryBuilder
         $sqls = $values = [];
 
         // select
-        if ($this->select) {
-            $select = implode(', ', $this->select);
-            $sqls[] = "SELECT {$select}";
-        } else {
-            $sqls[] = "SELECT *";
+        if ($index == 'SELECT') {
+            if ($this->select) {
+                $select = implode(', ', $this->select);
+                $sqls[] = "SELECT {$select}";
+            } else {
+                $sqls[] = "SELECT *";
+            }
         }
 
         // delete
@@ -255,13 +257,13 @@ trait QueryBuilder
                 $set = [];
                 foreach ($data as $k => $v) {
                     if ($v instanceof Expr) {
-                        array_push($set, $v->__toString());
+                        array_push($set, "$k = {$v->__toString()}");
                     } else {
                         $set[] = "$k = ?";
                         array_push($values, $v);
                     }
                 }
-                $sqls[] = "UPDATE SET " . implode(', ', $set) . " FROM {$this->table}";
+                $sqls[] = "UPDATE {$this->table} SET " . implode(', ', $set);
             } else {
                 $sqls[] = "FROM {$this->table}";
             }

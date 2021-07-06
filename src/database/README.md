@@ -222,13 +222,13 @@ $db->table('news AS n')->select('n.*, u.name')->leftJoin('users AS u', 'n.uid = 
 更新单个字段
 
 ```php
-$db->where('id = ?', 1)->update('name', 'foo1');
+$db->table('users')->where('id = ?', 1)->update('name', 'foo1');
 ```
 
 获取影响行数
 
 ```php
-$rowsAffected = $db->where('id = ?', 1)->update('name', 'foo1')->rowCount();
+$rowsAffected = $db->table('users')->where('id = ?', 1)->update('name', 'foo1')->rowCount();
 ```
 
 更新多个字段
@@ -238,33 +238,33 @@ $data = [
     'name' => 'foo1',
     'balance' => 100,
 ];
-$db->where('id = ?', 1)->updates($data);
+$db->table('users')->where('id = ?', 1)->updates($data);
 ```
 
 使用表达式更新
 
 ```php
-$db->where('id = ?', 1)->update('balance', new Mix\Database\Expr('balance + ?', 1));
+$db->table('users')->where('id = ?', 1)->update('balance', new Mix\Database\Expr('balance + ?', 1));
 ```
 
 ```php
 $data = [
     'balance' => new Mix\Database\Expr('balance + ?', 1),
 ];
-$db->where('id = ?', 1)->updates($data);
+$db->table('users')->where('id = ?', 1)->updates($data);
 ```
 
 使用函数更新
 
 ```php
-$db->where('id = ?', 1)->update('add_time', new Mix\Database\Expr('CURRENT_TIMESTAMP()'));
+$db->table('users')->where('id = ?', 1)->update('add_time', new Mix\Database\Expr('CURRENT_TIMESTAMP()'));
 ```
 
 ```php
 $data = [
     'add_time' => new Mix\Database\Expr('CURRENT_TIMESTAMP()'),
 ];
-$db->where('id = ?', 1)->updates($data);
+$db->table('users')->where('id = ?', 1)->updates($data);
 ```
 
 ## 删除 Delete
@@ -272,13 +272,13 @@ $db->where('id = ?', 1)->updates($data);
 删除
 
 ```php
-$db->where('id = ?', 1)->delete();
+$db->table('users')->where('id = ?', 1)->delete();
 ```
 
 获取影响行数
 
 ```php
-$rowsAffected = $db->where('id = ?', 1)->delete()->rowCount();
+$rowsAffected = $db->table('users')->where('id = ?', 1)->delete()->rowCount();
 ```
 
 ## 原生 Raw

@@ -35,7 +35,11 @@ class Expr
      */
     public function __toString(): string
     {
-        return vsprintf(str_replace('?', "'%s'", $this->expr), $this->values);
+        $expr = $this->expr;
+        foreach ($this->values as $value) {
+            $expr = preg_replace('/\?/', is_string($value) ? "'%s'" : "%s", $expr, 1);
+        }
+        return vsprintf($expr, $this->values);
     }
 
 }

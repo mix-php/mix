@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 final class InsertTest extends TestCase
 {
 
-    public function testInsert(): void
+    public function test(): void
     {
         $db = db();
 
