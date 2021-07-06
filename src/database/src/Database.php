@@ -40,7 +40,7 @@ class Database
     /**
      * 最大活跃数
      * 0 = 不限制
-     * -1 = 不开启
+     * -1 = cpu数量
      * @var int
      */
     protected $maxOpen = -1;
@@ -48,7 +48,7 @@ class Database
     /**
      * 最多可空闲连接数
      * 0 = 不限制
-     * -1 = 不开启
+     * -1 = cpu数量
      * @var int
      */
     protected $maxIdle = -1;
