@@ -30,8 +30,8 @@ final class InsertTest extends TestCase
         $this->assertGreaterThan(0, (int)$id);
 
         $data = [
-            'name' => 'foo',
-            'balance' => 0,
+            'name' => 'foo4',
+            'balance' => 4,
             'add_time' => new Mix\Database\Expr('CURRENT_TIMESTAMP()'),
         ];
         $db->insert('users', $data);

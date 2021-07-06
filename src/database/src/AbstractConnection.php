@@ -212,14 +212,16 @@ abstract class AbstractConnection implements ConnectionInterface
             $debug and $debug($this);
 
             // print
-            $log = $this->queryLog();
-            $this->logger and $this->logger->trace(
-                $time,
-                $log['sql'],
-                $log['bindings'],
-                $this->rowCount(),
-                $ex ?? null
-            );
+            if ($this->logger) {
+                $log = $this->queryLog();
+                $this->logger->trace(
+                    $log['time'],
+                    $log['sql'],
+                    $log['bindings'],
+                    $this->rowCount(),
+                    $ex ?? null
+                );
+            }
 
             $this->clear();
         }
