@@ -98,7 +98,7 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function watch(string ...$keys): Multi
     {
-        $this->__call('watch', $keys);
+        $this->__call('watch', [$keys]);
 
         $driver = $this->driver;
         $this->driver = null; // 使其在析构时不回收
