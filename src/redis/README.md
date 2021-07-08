@@ -49,6 +49,8 @@ $rds->poolStats(); // array, fields: total, idle, active
 
 Multi
 
+事务块内的多条命令会按照先后顺序被放进一个队列当中，最后由exec命令原子性(atomic)地执行。
+
 ```php
 $tx = $rds->multi();
 $tx->set('foo', 'bar');
@@ -58,6 +60,8 @@ $ret = $tx->exec();
 
 Pipeline
 
+客户端将执行的命令写入到缓冲中，最后由exec命令一次性发送给redis执行返回。
+
 ```php
 $tx = $rds->pipeline();
 $tx->set('foo', 'bar');
@@ -65,7 +69,9 @@ $tx->set('foo1', 'bar1');
 $ret = $tx->exec();
 ```
 
-## Watch
+## Transaction Watch
+
+监听值的变化，如果执行时有变化则事务失败，无变化则事务成功。
 
 ```php
 $tx = $rds->watch('foo');
