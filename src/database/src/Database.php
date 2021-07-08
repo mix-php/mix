@@ -39,30 +39,28 @@ class Database
 
     /**
      * 最大活跃数
-     * 0 = 不限制
-     * -1 = cpu数量
+     * "0" 为不限制，"-1" 等于cpu数量
      * @var int
      */
     protected $maxOpen = -1;
 
     /**
      * 最多可空闲连接数
-     * 0 = 不限制
-     * -1 = cpu数量
+     * "-1" 等于cpu数量
      * @var int
      */
     protected $maxIdle = -1;
 
     /**
      * 连接可复用的最长时间
-     * 0 = 不限制
+     * "0" 为不限制
      * @var int
      */
     protected $maxLifetime = 0;
 
     /**
      * 等待新连接超时时间
-     * 0 = 不限制
+     * "0" 为不限制
      * @var float
      */
     protected $waitTimeout = 0.0;
@@ -82,6 +80,7 @@ class Database
      * @var LoggerInterface
      */
     protected $logger;
+
     /**
      * @var Driver
      */
