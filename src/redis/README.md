@@ -45,7 +45,7 @@ $rds->startPool($maxOpen, $maxIdle, $maxLifetime, $waitTimeout);
 $rds->poolStats(); // array, fields: total, idle, active
 ```
 
-## Multi & Pipeline
+## Transaction Multi & Pipeline
 
 Multi
 
