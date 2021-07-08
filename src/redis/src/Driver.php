@@ -82,7 +82,7 @@ class Driver
      * Get instance
      * @return \Redis
      */
-    public function instance()
+    public function instance(): \Redis
     {
         return $this->redis;
     }

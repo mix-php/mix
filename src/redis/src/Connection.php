@@ -48,17 +48,17 @@ class Connection extends AbstractConnection
 
     public function __destruct()
     {
-        if (!$this->driver) {
+        if (!$this->driver || $this->driver instanceof EmptyDriver) {
             return;
         }
 
         if ($this->inTransaction()) {
             $this->driver->__discard();
-            $this->driver = null;
+            $this->driver = new EmptyDriver();
             return;
         }
         $this->driver->__return();
-        $this->driver = null;
+        $this->driver = new EmptyDriver();
     }
 
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace Mix\Database;
+namespace Mix\Redis;
 
 /**
  * Class EmptyDriver
- * @package Mix\Database
+ * @package Mix\Redis
  */
 class EmptyDriver
 {
@@ -15,12 +15,7 @@ class EmptyDriver
     {
     }
 
-    public function instance(): \PDO
-    {
-        throw new \RuntimeException($this->errorMessage);
-    }
-
-    public function options(): array
+    public function instance(): \Redis
     {
         throw new \RuntimeException($this->errorMessage);
     }

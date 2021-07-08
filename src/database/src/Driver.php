@@ -86,7 +86,7 @@ class Driver
      * Connect
      * @throws \PDOException
      */
-    public function connect(): void
+    public function connect()
     {
         $this->pdo = new \PDO(
             $this->dsn,
@@ -99,7 +99,7 @@ class Driver
     /**
      * Close
      */
-    public function close(): void
+    public function close()
     {
         $this->pdo = null;
     }

@@ -73,11 +73,11 @@ class Connection extends AbstractConnection
         // 回收
         if ($this->inTransaction()) {
             $this->driver->__discard();
-            $this->driver = null;
+            $this->driver = new EmptyDriver();
             return;
         }
         $this->driver->__return();
-        $this->driver = null;
+        $this->driver = new EmptyDriver();
     }
 
 }
