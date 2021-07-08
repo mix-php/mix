@@ -14,27 +14,24 @@ class Driver
     use ObjectTrait;
 
     /**
-     * 数据源格式
      * @var string
      */
-    public $dsn = '';
-
-    /**
-     * 数据库用户名
-     * @var string
-     */
-    public $username = 'root';
+    protected $dsn = '';
 
     /**
      * @var string
      */
-    public $password = '';
+    protected $username = 'root';
 
     /**
-     * 驱动连接选项
+     * @var string
+     */
+    protected $password = '';
+
+    /**
      * @var array
      */
-    public $options = [];
+    protected $options = [];
 
     /**
      * @var \PDO

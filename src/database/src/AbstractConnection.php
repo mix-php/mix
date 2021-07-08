@@ -230,7 +230,7 @@ abstract class AbstractConnection implements ConnectionInterface
         $this->lastInsertId = $this->driver->instance()->lastInsertId();
 
         // 执行完立即回收
-        if ($this->driver->pool && get_called_class() != Transaction::class) {
+        if ($this->driver->pool && $this instanceof Transaction) {
             $this->driver->__return();
             $this->driver = new EmptyDriver();
         }
@@ -563,7 +563,7 @@ abstract class AbstractConnection implements ConnectionInterface
             call_user_func($closure, $tx);
             $tx->commit();
         } catch (\Throwable $ex) {
-            $tx->rollBack();
+            $tx->rollback();
             throw $ex;
         }
     }
