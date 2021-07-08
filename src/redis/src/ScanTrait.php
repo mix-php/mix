@@ -10,14 +10,6 @@ trait ScanTrait
 {
 
     /**
-     * Call
-     * @param $command
-     * @param $arguments
-     * @return mixed
-     */
-    abstract function __call($command, $arguments);
-
-    /**
      * 遍历key
      * @param $iterator
      * @param string $pattern

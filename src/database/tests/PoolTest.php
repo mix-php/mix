@@ -45,7 +45,7 @@ final class PoolTest extends TestCase
                 $chan->pop();
             }
             $duration = microtime(true) - $time;
-            $_this->assertTrue($duration >= 2 || $duration <= 3);
+            $_this->assertTrue($duration >= 2 && $duration <= 3);
         };
         swoole_co_run($func);
     }

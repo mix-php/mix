@@ -6,29 +6,47 @@ use PHPUnit\Framework\TestCase;
 final class PoolTest extends TestCase
 {
 
+    public function testConnReturn(): void
+    {
+        $_this = $this;
+        $func = function () use ($_this) {
+            $rds = redis();
+            $rds->startPool(1, 1);
+            for ($i = 0; $i < 10; $i++) {
+                go(function () use ($rds, $i) {
+                    $rds->blPop('foo_list', 1);
+                });
+            }
+            $_this->assertTrue(true);
+        };
+        swoole_co_run($func);
+    }
+
     public function testMaxOpen(): void
     {
         $_this = $this;
-        $func  = function () use ($_this) {
-            $redis = redis();
-            $max   = swoole_cpu_num() * 2;
-            $time  = time();
-            $chan  = new \Swoole\Coroutine\Channel();
+        $func = function () use ($_this) {
+            $rds = redis();
+            $max = swoole_cpu_num() * 2;
+            $rds->startPool($max / 2, $max / 2);
+            $time = microtime(true);
+            $chan = new \Swoole\Coroutine\Channel();
             for ($i = 0; $i < $max; $i++) {
-                go(function () use ($redis, $chan) {
-                    $redis->blPop('foo_list', 1);
+                go(function () use ($rds, $chan) {
+                    $rds->blPop('foo_list', 1);
                     $chan->push(true);
                 });
             }
             for ($i = 0; $i < $max; $i++) {
                 $chan->pop();
             }
-            $duration = time() - $time;
-            $_this->assertTrue($duration - 2 <= 1 && $duration - 2 >= 0);
+            $duration = microtime(true) - $time;
+            $_this->assertTrue($duration >= 2 && $duration <= 3);
         };
-        run($func);
+        swoole_co_run($func);
     }
 
+    /*
     public function testMaxLifetime(): void
     {
         $_this = $this;
@@ -65,5 +83,6 @@ final class PoolTest extends TestCase
         };
         run($func);
     }
+    */
 
 }

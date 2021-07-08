@@ -8,58 +8,32 @@ final class MainTest extends TestCase
 
     public function testGetSet(): void
     {
-        $_this = $this;
-        $func  = function () use ($_this) {
-            $redis = redis();
-            $redis->set('foo', 'bar');
-            $result = $redis->get('foo');
-            $_this->assertContains('bar', $result);
-        };
-        run($func);
+        $rds = redis();
+
+        $rds->set('foo', 'bar');
+        $result = $rds->get('foo');
+        $this->assertEquals('bar', $result);
+
+        $rds->del('foo');
+        $result = $rds->get('foo');
+        $this->assertEquals(false, $result);
     }
 
     public function testMulti(): void
     {
-        $_this = $this;
-        $func  = function () use ($_this) {
-            $redis = redis();
-            $conn  = $redis->multi();
-            $conn->set('foo2', "bar2");
-            $conn->incr('foo1');
-            $conn->incr('foo1');
-            $result = $conn->exec();
-            $_this->assertEquals(count($result), 3);
-        };
-        run($func);
-    }
+        $rds = redis();
 
-    public function testMultiEx(): void
-    {
-        $_this = $this;
-        $func  = function () use ($_this) {
-            $redis = redis();
-            $redis->multi();
-            $e = null;
-            try {
-                $redis->exec();
-            } catch (\Throwable $ex) {
-                $e = $ex;
-            }
-            $_this->assertNotNull($e);
-        };
-        run($func);
-    }
+        $tx = $rds->multi();
+        $tx->set('foo2', "bar2");
+        $tx->del('foo1');
+        $tx->incr('foo1');
+        $tx->incr('foo1');
+        $result = $tx->exec();
 
-    public function testDialer(): void
-    {
-        $_this = $this;
-        $func  = function () use ($_this) {
-            $redis = (new \Mix\Redis\Dialer())->dial(REDIS_HOST, REDIS_PORT, REDIS_PASSWORD, REDIS_DATABASE);
-            $redis->set('foo', 'bar');
-            $result = $redis->get('foo');
-            $_this->assertContains('bar', $result);
-        };
-        run($func);
+        $value = $rds->get('foo1');
+        $this->assertEquals(2, $value);
+
+        $this->assertEquals([true, 1, 1, 2], $result);
     }
 
 }
