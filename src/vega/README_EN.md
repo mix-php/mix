@@ -17,6 +17,7 @@ for Swoole, WorkerMan, and Swoole's various process models.
 **Recommended with the following databases:**
 
 - https://github.com/mix-php/database
+- https://github.com/mix-php/redis
 - https://github.com/top-think/think-orm
 - https://github.com/illuminate/database
 

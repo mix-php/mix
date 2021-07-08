@@ -15,6 +15,7 @@ golang [gin](https://github.com/gin-gonic/gin) [mux](https://github.com/gorilla/
 **推荐搭配以下数据库使用：**
 
 - https://github.com/mix-php/database
+- https://github.com/mix-php/redis
 - https://github.com/top-think/think-orm
 - https://github.com/illuminate/database
 
