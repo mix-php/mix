@@ -8,7 +8,6 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 /**
  * Class AbstractConnection
  * @package Mix\Redis
- * @author liu,jian <coder.keda@gmail.com>
  */
 abstract class AbstractConnection implements ConnectionInterface
 {

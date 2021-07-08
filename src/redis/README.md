@@ -1,18 +1,26 @@
 ## Mix Redis
 
-基于 Swoole 的协程 Redis 组件，内置连接池，可独立使用
+redis for use in multiple execution environments, with support for FPM, CLI, Swoole, WorkerMan, and optional
+connection pool (coroutine)
 
-## Usage
+可在各种环境中使用的 redis，支持 FPM、CLI、Swoole、WorkerMan，可选的连接池 (协程)
 
-安装：
+## 技术交流
+
+知乎：https://www.zhihu.com/people/onanying    
+官方QQ群：[284806582](https://shang.qq.com/wpa/qunwpa?idkey=b3a8618d3977cda4fed2363a666b081a31d89e3d31ab164497f53b72cf49968a)
+, [825122875](http://shang.qq.com/wpa/qunwpa?idkey=d2908b0c7095fc7ec63a2391fa4b39a8c5cb16952f6cfc3f2ce4c9726edeaf20)
+敲门暗号：redis
+
+## Installation
 
 ```
 composer require mix/redis
 ```
 
-文档：
+## Quick start
 
-- https://www.kancloud.cn/onanying/mixphp2-2/1712321
+
 
 ## License
 

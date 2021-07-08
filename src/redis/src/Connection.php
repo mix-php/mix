@@ -5,12 +5,11 @@ namespace Mix\Redis;
 /**
  * Class Connection
  * @package Mix\Redis
- * @author liu,jian <coder.keda@gmail.com>
  */
 class Connection extends AbstractConnection
 {
 
-    use ReferenceTrait;
+    use ScanTrait;
 
     /**
      * @var string

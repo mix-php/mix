@@ -14,7 +14,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 class Redis implements ConnectionInterface
 {
 
-    use ReferenceTrait;
+    use ScanTrait;
 
     /**
      * 主机

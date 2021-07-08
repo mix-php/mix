@@ -3,10 +3,10 @@
 namespace Mix\Redis;
 
 /**
- * Trait ReferenceTrait
+ * Trait ScanTrait
  * @package Mix\Redis
  */
-trait ReferenceTrait
+trait ScanTrait
 {
 
     /**
