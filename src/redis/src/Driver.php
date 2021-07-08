@@ -2,7 +2,6 @@
 
 namespace Mix\Redis;
 
-use Mix\Bean\BeanInjector;
 use Mix\ObjectPool\ObjectTrait;
 
 /**
@@ -11,51 +10,45 @@ use Mix\ObjectPool\ObjectTrait;
  */
 class Driver
 {
-    
+
     use ObjectTrait;
 
     /**
-     * 主机
      * @var string
      */
-    public $host = '';
+    protected $host = '';
 
     /**
-     * 端口
      * @var int
      */
-    public $port = 6379;
+    protected $port = 6379;
 
     /**
-     * 密码
      * @var string
      */
-    public $password = '';
+    protected $password = '';
 
     /**
-     * 数据库
      * @var int
      */
-    public $database = 0;
+    protected $database = 0;
 
     /**
-     * 超时
      * @var float
      */
-    public $timeout = 5.0;
+    protected $timeout = 5.0;
 
     /**
-     * 重连间隔
      * @var int
      */
-    public $retryInterval = 0;
+    protected $retryInterval = 0;
 
     /**
      * 读取超时
      * phpredis >= 3.1.3
      * @var int
      */
-    public $readTimeout = -1;
+    protected $readTimeout = -1;
 
     /**
      * @var \Redis
@@ -64,11 +57,25 @@ class Driver
 
     /**
      * Driver constructor.
-     * @param array $config
+     * @param string $host
+     * @param int $port
+     * @param string $password
+     * @param int $database
+     * @param float $timeout
+     * @param int $retryInterval
+     * @param int $readTimeout
+     * @throws \RedisException
      */
-    public function __construct(array $config = [])
+    public function __construct(string $host, int $port, string $password, int $database = 0, float $timeout = 5.0, int $retryInterval = 0, int $readTimeout = -1)
     {
-        BeanInjector::inject($this, $config);
+        $this->host = $host;
+        $this->port = $port;
+        $this->password = $password;
+        $this->database = $database;
+        $this->timeout = $timeout;
+        $this->retryInterval = $retryInterval;
+        $this->readTimeout = $readTimeout;
+        $this->connect();
     }
 
     /**
@@ -86,7 +93,7 @@ class Driver
      */
     public function connect()
     {
-        $redis  = new \Redis();
+        $redis = new \Redis();
         $result = $redis->connect($this->host, $this->port, $this->timeout, null, $this->retryInterval);
         if ($result === false) {
             throw new \RedisException(sprintf('Redis connect failed (host: %s, port: %s)', $this->host, $this->port));

@@ -11,11 +11,11 @@ trait ScanTrait
 
     /**
      * Call
-     * @param $name
+     * @param $command
      * @param $arguments
      * @return mixed
      */
-    abstract function __call($name, $arguments);
+    abstract function __call($command, $arguments);
 
     /**
      * 遍历key

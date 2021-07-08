@@ -60,55 +60,48 @@ class Redis implements ConnectionInterface
     protected $readTimeout = -1;
 
     /**
-     * 最大连接数
-     * @var int
-     * @deprecated 废弃，使用 maxOpen 取代
-     */
-    public $maxActive = -1;
-
-    /**
      * 最大活跃数
-     * "0" 为不限制，默认等于cpu数量
+     * "0" 为不限制，"-1" 等于cpu数量
      * @var int
-     * @deprecated 应该设置为 protected，为了向下兼容而保留 public
      */
-    public $maxOpen = -1;
+    protected $maxOpen = -1;
 
     /**
      * 最多可空闲连接数
-     * 默认等于cpu数量
+     * "-1" 等于cpu数量
      * @var int
-     * @deprecated 应该设置为 protected，为了向下兼容而保留 public
      */
-    public $maxIdle = -1;
+    protected $maxIdle = -1;
 
     /**
      * 连接可复用的最长时间
      * "0" 为不限制
      * @var int
-     * @deprecated 应该设置为 protected，为了向下兼容而保留 public
      */
-    public $maxLifetime = 0;
+    protected $maxLifetime = 0;
 
     /**
      * 等待新连接超时时间
      * "0" 为不限制
      * @var float
-     * @deprecated 应该设置为 protected，为了向下兼容而保留 public
      */
-    public $waitTimeout = 0.0;
-
-    /**
-     * 事件调度器
-     * @var EventDispatcherInterface
-     */
-    public $dispatcher;
+    protected $waitTimeout = 0.0;
 
     /**
      * 连接池
      * @var ConnectionPool
      */
     protected $pool;
+
+    /**
+     * @var Driver
+     */
+    protected $driver;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
 
     /**
      * Redis constructor.
@@ -118,99 +111,134 @@ class Redis implements ConnectionInterface
      * @param int $database
      * @param float $timeout
      * @param int $retryInterval
-     * @param float $readTimeout
-     * @param int $maxOpen
-     * @param int $maxIdle
-     * @param int $maxLifetime
-     * @param float $waitTimeout
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
+     * @param float|int $readTimeout
+     * @throws \RedisException
      */
-    public function __construct(string $host, int $port = 6379, string $password = '', int $database = 0, float $timeout = 5.0, int $retryInterval = 0, float $readTimeout = -1,
-                                int $maxOpen = -1, int $maxIdle = -1, int $maxLifetime = 0, float $waitTimeout = 0.0)
+    public function __construct(string $host, int $port = 6379, string $password = '', int $database = 0, float $timeout = 5.0, int $retryInterval = 0, float $readTimeout = -1)
     {
-        $this->host          = $host;
-        $this->port          = $port;
-        $this->password      = $password;
-        $this->database      = $database;
-        $this->timeout       = $timeout;
+        $this->host = $host;
+        $this->port = $port;
+        $this->password = $password;
+        $this->database = $database;
+        $this->timeout = $timeout;
         $this->retryInterval = $retryInterval;
-        $this->readTimeout   = $readTimeout;
-        $this->maxOpen       = $maxOpen;
-        $this->maxIdle       = $maxIdle;
-        $this->maxLifetime   = $maxLifetime;
-        $this->waitTimeout   = $waitTimeout;
-        $this->pool          = $this->createPool();
+        $this->readTimeout = $readTimeout;
+
+        $this->driver = new Driver(
+            $this->host,
+            $this->port,
+            $this->password,
+            $this->database,
+            $this->timeout,
+            $this->retryInterval,
+            $this->readTimeout
+        );
     }
 
-    /**
-     * @return ConnectionPool
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
-     */
     protected function createPool()
     {
-        $pool             = new ConnectionPool(
-            new Dialer([
-                'host'          => $this->host,
-                'port'          => $this->port,
-                'password'      => $this->password,
-                'database'      => $this->database,
-                'timeout'       => $this->timeout,
-                'retryInterval' => $this->retryInterval,
-                'readTimeout'   => $this->readTimeout,
-            ]),
+        if ($this->driver) {
+            $this->driver->close();
+            $this->driver = null;
+        }
+
+        $this->pool = new ConnectionPool(
+            new Dialer(
+                $this->host,
+                $this->port,
+                $this->password,
+                $this->database,
+                $this->timeout,
+                $this->retryInterval,
+                $this->readTimeout
+            ),
             $this->maxOpen,
             $this->maxIdle,
             $this->maxLifetime,
             $this->waitTimeout
         );
-        $pool->dispatcher = &$this->dispatcher;
-        return $pool;
     }
 
     /**
      * @param int $maxOpen
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
+     * @param int $maxIdle
+     * @param int $maxLifetime
+     * @param float $waitTimeout
      */
-    public function setMaxOpen(int $maxOpen)
+    public function startPool(int $maxOpen, int $maxIdle, int $maxLifetime = 0, float $waitTimeout = 0.0)
     {
         $this->maxOpen = $maxOpen;
-        $this->pool    = $this->createPool();
+        $this->maxIdle = $maxIdle;
+        $this->maxLifetime = $maxLifetime;
+        $this->waitTimeout = $waitTimeout;
+        $this->createPool();
+    }
+
+    /**
+     * @param int $maxOpen
+     */
+    public function setMaxOpenConns(int $maxOpen)
+    {
+        if ($this->maxOpen == $maxOpen) {
+            return;
+        }
+        $this->maxOpen = $maxOpen;
+        $this->createPool();
     }
 
     /**
      * @param int $maxIdle
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
      */
-    public function setMaxIdle(int $maxIdle)
+    public function setMaxIdleConns(int $maxIdle)
     {
+        if ($this->maxIdle == $maxIdle) {
+            return;
+        }
         $this->maxIdle = $maxIdle;
-        $this->pool    = $this->createPool();
+        $this->createPool();
     }
 
     /**
      * @param int $maxLifetime
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
      */
-    public function setMaxLifetime(int $maxLifetime)
+    public function setConnMaxLifetime(int $maxLifetime)
     {
+        if ($this->maxLifetime == $maxLifetime) {
+            return;
+        }
         $this->maxLifetime = $maxLifetime;
-        $this->pool        = $this->createPool();
+        $this->createPool();
     }
 
     /**
      * @param float $waitTimeout
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
      */
-    public function setWaitTimeout(float $waitTimeout)
+    public function setPoolWaitTimeout(float $waitTimeout)
     {
+        if ($this->waitTimeout == $waitTimeout) {
+            return;
+        }
         $this->waitTimeout = $waitTimeout;
-        $this->pool        = $this->createPool();
+        $this->createPool();
+    }
+
+    /**
+     * @return array
+     */
+    public function poolStats(): array
+    {
+        if (!$this->pool) {
+            return [];
+        }
+        return $this->pool->stats();
+    }
+
+    /**
+     * @param LoggerInterface $logger
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
     }
 
     /**
@@ -218,47 +246,52 @@ class Redis implements ConnectionInterface
      * @return Connection
      * @throws WaitTimeoutException
      */
-    public function borrow(): Connection
+    protected function borrow(): Connection
     {
-        $driver           = $this->pool->borrow();
-        $conn             = new Connection($driver);
-        $conn->dispatcher = $this->dispatcher;
+        if ($this->pool) {
+            $driver = $this->pool->borrow();
+            $conn = new Connection($driver, $this->logger);
+        } else {
+            $conn = new Connection($this->driver, $this->logger);
+        }
         return $conn;
     }
 
     /**
-     * Multi
-     * @param int $mode
-     * @return Connection
+     * @param string ...$keys
+     * @return Multi
      */
-    public function multi($mode = \Redis::MULTI): Connection
+    public function watch(string ...$keys): Multi
     {
-        $conn = $this->borrow();
-        $conn->__call(__FUNCTION__, [$mode]);
-        return $conn;
+        return $this->borrow()->watch(...$keys);
     }
 
     /**
-     * Disable exec
-     * @return array
-     * @deprecated 不可直接使用，请在 multi 返回的连接中使用
+     * @return Multi
      */
-    public function exec()
+    public function multi(): Multi
     {
-        throw new \RedisException('Exec unavailable, please use in the connection returned by multi');
+        return $this->borrow()->multi();
+    }
+
+    /**
+     * @return Pipeline
+     */
+    public function pipeline(): Pipeline
+    {
+        return $this->borrow()->pipeline();
     }
 
     /**
      * Call
-     * @param $name
+     * @param $command
      * @param $arguments
      * @return mixed
      * @throws \RedisException
-     * @throws \Throwable
      */
-    public function __call($name, $arguments)
+    public function __call($command, $arguments)
     {
-        return $this->borrow()->__call($name, $arguments);
+        return $this->borrow()->__call($command, $arguments);
     }
 
 }

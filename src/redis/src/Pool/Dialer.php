@@ -2,9 +2,7 @@
 
 namespace Mix\Redis\Pool;
 
-use Mix\Bean\BeanInjector;
 use Mix\ObjectPool\DialerInterface;
-use Mix\Redis\Connection;
 use Mix\Redis\Driver;
 
 /**
@@ -59,32 +57,38 @@ class Dialer implements DialerInterface
 
     /**
      * Dialer constructor.
-     * @param array $config
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
+     * @param string $host
+     * @param int $port
+     * @param string $password
+     * @param float $timeout
+     * @param int $retryInterval
+     * @param int $readTimeout
      */
-    public function __construct(array $config = [])
+    public function __construct(string $host, int $port, string $password, int $database = 0, float $timeout = 5.0, int $retryInterval = 0, int $readTimeout = -1)
     {
-        BeanInjector::inject($this, $config);
+        $this->host = $host;
+        $this->port = $port;
+        $this->password = $password;
+        $this->database = $database;
+        $this->timeout = $timeout;
+        $this->retryInterval = $retryInterval;
+        $this->readTimeout = $readTimeout;
     }
 
     /**
-     * Dial
-     * @return Connection
+     * @return Driver
      */
     public function dial()
     {
-        $conn = new Driver([
-            'host'          => $this->host,
-            'port'          => $this->port,
-            'password'      => $this->password,
-            'database'      => $this->database,
-            'timeout'       => $this->timeout,
-            'retryInterval' => $this->retryInterval,
-            'readTimeout'   => $this->readTimeout,
-        ]);
-        $conn->connect();
-        return $conn;
+        return new Driver(
+            $this->host,
+            $this->port,
+            $this->password,
+            $this->database,
+            $this->timeout,
+            $this->retryInterval,
+            $this->readTimeout
+        );
     }
 
 }

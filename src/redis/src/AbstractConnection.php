@@ -2,9 +2,6 @@
 
 namespace Mix\Redis;
 
-use Mix\Redis\Event\CalledEvent;
-use Psr\EventDispatcher\EventDispatcherInterface;
-
 /**
  * Class AbstractConnection
  * @package Mix\Redis
@@ -12,25 +9,27 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 abstract class AbstractConnection implements ConnectionInterface
 {
 
-    /**
-     * 驱动
-     * @var Driver
-     */
-    public $driver;
+    use ScanTrait;
 
     /**
-     * 事件调度器
-     * @var EventDispatcherInterface
+     * @var Driver
      */
-    public $dispatcher;
+    protected $driver;
+
+    /**
+     * @var LoggerInterface|null
+     */
+    protected $logger;
 
     /**
      * AbstractConnection constructor.
      * @param Driver $driver
+     * @param LoggerInterface|null $logger
      */
-    public function __construct(Driver $driver)
+    public function __construct(Driver $driver, ?LoggerInterface $logger)
     {
         $this->driver = $driver;
+        $this->logger = $logger;
     }
 
     /**
@@ -62,7 +61,7 @@ abstract class AbstractConnection implements ConnectionInterface
 
     /**
      * 判断是否为断开连接异常
-     * @param \Throwable $e
+     * @param \Throwable $ex
      * @return bool
      */
     protected static function isDisconnectException(\Throwable $ex)
@@ -71,7 +70,7 @@ abstract class AbstractConnection implements ConnectionInterface
             'failed with errno',
             'connection lost',
         ];
-        $errorMessage       = $ex->getMessage();
+        $errorMessage = $ex->getMessage();
         foreach ($disconnectMessages as $message) {
             if (false !== stripos($errorMessage, $message)) {
                 return true;
@@ -81,33 +80,49 @@ abstract class AbstractConnection implements ConnectionInterface
     }
 
     /**
-     * 调度事件
-     * @param string $command
-     * @param array $arguments
-     * @param float $time
-     * @param string|null $error
+     * @return array
      */
-    protected function dispatch(string $command, array $arguments, float $time, string $error = null)
+    public function exec()
     {
-        if (!$this->dispatcher) {
-            return;
-        }
-        $event            = new CalledEvent();
-        $event->command   = $command;
-        $event->arguments = $arguments;
-        $event->time      = $time;
-        $event->error     = $error;
-        $this->dispatcher->dispatch($event);
+        throw new \RedisException('Start the transaction using the multi pipeline method');
+    }
+
+    public function unwatch()
+    {
+        throw new \RedisException('Not implemented');
     }
 
     /**
-     * 获取当前时间, 单位: 秒, 粒度: 微秒
-     * @return float
+     * @param string ...$keys
+     * @return Multi
      */
-    protected static function microtime()
+    public function watch(string ...$keys): Multi
     {
-        list($usec, $sec) = explode(" ", microtime());
-        return ((float)$usec + (float)$sec);
+        $this->__call('watch', $keys);
+
+        $driver = $this->driver;
+        $this->driver = null; // 使其在析构时不回收
+        return new Multi($driver, $this->logger, true);
+    }
+
+    /**
+     * @return Multi
+     */
+    public function multi(): Multi
+    {
+        $driver = $this->driver;
+        $this->driver = null; // 使其在析构时不回收
+        return new Multi($driver, $this->logger);
+    }
+
+    /**
+     * @return Pipeline
+     */
+    public function pipeline(): Pipeline
+    {
+        $driver = $this->driver;
+        $this->driver = null; // 使其在析构时不回收
+        return new Pipeline($driver, $this->logger);
     }
 
     /**
@@ -115,21 +130,31 @@ abstract class AbstractConnection implements ConnectionInterface
      * @param string $command
      * @param array $arguments
      * @return mixed
+     * @throws \Throwable
      */
     public function __call(string $command, array $arguments = [])
     {
-        $microtime = static::microtime();
+        $beginTime = microtime(true);
+
         try {
             $result = call_user_func_array([$this->driver->instance(), $command], $arguments);
         } catch (\Throwable $ex) {
-            $message = sprintf('%s %s in %s on line %s', $ex->getMessage(), get_class($ex), $ex->getFile(), $ex->getLine());
-            $code    = $ex->getCode();
-            $error   = sprintf('[%d] %s', $code, $message);
             throw $ex;
         } finally {
-            $time = round((static::microtime() - $microtime) * 1000, 2);
-            $this->dispatch($command, $arguments, $time, $error ?? null);
+            // 记录执行时间
+            $time = round((microtime(true) - $beginTime) * 1000, 2);
+
+            // print
+            if ($this->logger) {
+                $this->logger->trace(
+                    $time,
+                    $command,
+                    $arguments,
+                    $ex ?? null
+                );
+            }
         }
+
         return $result;
     }
 

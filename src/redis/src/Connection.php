@@ -9,29 +9,30 @@ namespace Mix\Redis;
 class Connection extends AbstractConnection
 {
 
-    use ScanTrait;
-
     /**
-     * @var string
+     * @return bool
      */
-    protected $lastCommand = '';
+    protected function inTransaction(): bool
+    {
+        if ($this instanceof Multi) {
+            return true;
+        }
+        return false;
+    }
 
     /**
-     * 执行命令
-     * @param $name
+     * @param string $name
      * @param array $arguments
      * @return mixed
      * @throws \RedisException
-     * @throws \Throwable
      */
     public function __call($name, $arguments = [])
     {
-        $this->lastCommand = $name;
         try {
             // 执行父类命令
             return parent::__call($name, $arguments);
         } catch (\Throwable $ex) {
-            if (static::isDisconnectException($ex) && !in_array(strtolower($this->lastCommand), ['multi', 'exec'])) {
+            if (static::isDisconnectException($ex) && !$this->inTransaction()) {
                 // 断开连接异常处理
                 $this->reconnect();
                 // 重新执行命令
@@ -45,16 +46,19 @@ class Connection extends AbstractConnection
         }
     }
 
-    /**
-     * 析构
-     */
     public function __destruct()
     {
-        if (in_array(strtolower($this->lastCommand), ['multi', 'exec'])) {
+        if (!$this->driver) {
+            return;
+        }
+
+        if ($this->inTransaction()) {
             $this->driver->__discard();
+            $this->driver = null;
             return;
         }
         $this->driver->__return();
+        $this->driver = null;
     }
 
 }

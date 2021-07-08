@@ -22,6 +22,30 @@ composer require mix/redis
 
 
 
+## Start Pool
+
+在 `Swoole` 协程环境中，启动连接池
+
+```php
+$maxOpen = 50;        // 最大开启连接数
+$maxIdle = 20;        // 最大闲置连接数
+$maxLifetime = 3600;  // 连接的最长生命周期
+$waitTimeout = 0.0;   // 从池获取连接等待的时间, 0为一直等待
+$db->startPool($maxOpen, $maxIdle, $maxLifetime, $waitTimeout);
+```
+
+连接池统计
+
+```php
+$db->poolStats(); // array, fields: total, idle, active
+```
+
+## Multi & Pipeline
+
+
+
+## Watch
+
 ## License
 
 Apache License Version 2.0, http://www.apache.org/licenses/
