@@ -20,7 +20,12 @@ composer require mix/redis
 
 ## Quick start
 
+```php
+$rds = new Mix\Redis\Redis('127.0.0.1', 6379, 'password', 0);
 
+$rds->set('foo', 'bar');
+$value = $rds->get('foo');
+```
 
 ## Start Pool
 
@@ -31,20 +36,59 @@ $maxOpen = 50;        // 最大开启连接数
 $maxIdle = 20;        // 最大闲置连接数
 $maxLifetime = 3600;  // 连接的最长生命周期
 $waitTimeout = 0.0;   // 从池获取连接等待的时间, 0为一直等待
-$db->startPool($maxOpen, $maxIdle, $maxLifetime, $waitTimeout);
+$rds->startPool($maxOpen, $maxIdle, $maxLifetime, $waitTimeout);
 ```
 
 连接池统计
 
 ```php
-$db->poolStats(); // array, fields: total, idle, active
+$rds->poolStats(); // array, fields: total, idle, active
 ```
 
 ## Multi & Pipeline
 
+Multi
 
+```php
+$tx = $rds->multi();
+$tx->set('foo', 'bar');
+$tx->set('foo1', 'bar1');
+$ret = $tx->exec();
+```
+
+Pipeline
+
+```php
+$tx = $rds->pipeline();
+$tx->set('foo', 'bar');
+$tx->set('foo1', 'bar1');
+$ret = $tx->exec();
+```
 
 ## Watch
+
+```php
+$tx = $rds->watch('foo');
+$tx->incr('foo');
+$ret = $tx->exec();
+```
+
+## Logger
+
+日志记录器，配置后可打印全部SQL信息
+
+```php
+$db->setLogger($logger);
+```
+
+`$logger` 需实现 `Mix\Redis\LoggerInterface`
+
+```php
+interface LoggerInterface
+{
+    public function trace(float $time, string $cmd, array $args, ?\Throwable $exception);
+}
+```
 
 ## License
 
