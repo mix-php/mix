@@ -144,9 +144,9 @@ $subrouter->handleF('/bar2', function (Mix\Vega\Context $ctx) {
 })->methods('GET');
 ```
 
-## 参数获取
+## Parameters
 
-### 请求参数
+### Request parameters
 
 |  方法名称   | 描述  |
 |  ----  | ----  |
@@ -168,21 +168,21 @@ $subrouter->handleF('/bar2', function (Mix\Vega\Context $ctx) {
 | $ctx->uri(): UriInterface  | 完整uri |
 | $ctx->rawData(): string  | 原始包数据 |
 
-### 客户端IP
+### IP
 
 |  方法名称   | 描述  |
 |  ----  | ----  |
 | $ctx->clientIP(): string  | 从反向代理获取用户真实IP |
 | $ctx->remoteIP(): string  | 获取远程IP |
 
-## 上传文件处理
+## Upload file processing
 
 |  方法名称   | 描述  |
 |  ----  | ----  |
 | $ctx->formFile(string $name): UploadedFileInterface  | 获取上传的第一个文件 |
 | $ctx->multipartForm(): UploadedFileInterface[]  | 获取上传的全部文件 |
 
-文件保存
+File save
 
 ```php
 $file = $ctx->formFile('img');
@@ -190,9 +190,9 @@ $targetPath = '/data/uploads/' . $file->getClientFilename();
 $file->moveTo($targetPath);
 ```
 
-## 请求上下文
+## Request context
 
-请求当中需要保存一些信息，比如：会话、JWT载荷等。
+Some information needs to be saved in the request, such as session, JWT payload, etc.
 
 |  方法名称   | 描述  |
 |  ----  | ----  |
@@ -200,9 +200,9 @@ $file->moveTo($targetPath);
 | $ctx->get(string $key): mixed or null  | 获取值 |
 | $ctx->mustGet(string $key): mixed or throws  | 获取值或抛出异常 |
 
-## 中断执行
+## Interrupt execution
 
-`abort` 执行后，会停止执行后面的全部代码，包括中间件。
+After `abort` is executed, all subsequent code, including middleware, will be stopped.
 
 ```php
 $vega = new Mix\Vega\Engine();
@@ -215,7 +215,7 @@ $vega->handleF('/users/{id}', function (Mix\Vega\Context $ctx) {
 })->methods('GET');
 ```
 
-## 响应处理
+## Response processing
 
 |  方法名称   | 描述  |
 |  ----  | ----  |
@@ -224,9 +224,9 @@ $vega->handleF('/users/{id}', function (Mix\Vega\Context $ctx) {
 | $ctx->setCookie(string $name, string $value, int $expire = 0, ...): void  | 设置cookie |
 | $ctx->redirect(string $location, int $code = 302): void  | 重定向 |
 
-## JSON 请求与输出
+## JSON request and output
 
-获取 JSON 请求数据
+Get JSON request data
 
 ```php
 $vega = new Mix\Vega\Engine();
@@ -243,7 +243,7 @@ $vega->handleF('/users', function (Mix\Vega\Context $ctx) {
 })->methods('POST');
 ```
 
-`mustGetJSON` 自带有效性检查，以下代码等同于上面
+`mustGetJSON` comes with a validity check, the following code is equivalent to the above
 
 ```php
 $vega = new Mix\Vega\Engine();
@@ -257,7 +257,7 @@ $vega->handleF('/users', function (Mix\Vega\Context $ctx) {
 })->methods('POST');
 ```
 
-### JSONP 处理
+### JSONP processing
 
 ```php
 $vega = new Mix\Vega\Engine();
@@ -269,9 +269,9 @@ $vega->handleF('/jsonp', function (Mix\Vega\Context $ctx) {
 })->methods('GET');
 ```
 
-## HTML 视图渲染
+## HTML view rendering
 
-创建视图文件 `foo.php`
+Create view file `foo.php`
 
 ```php
 <p>id: <?= $id ?>, name: <?= $name ?></p>
@@ -283,7 +283,7 @@ $vega->handleF('/jsonp', function (Mix\Vega\Context $ctx) {
 </ul>
 ```
 
-配置视图路径，并响应html
+Configure the view path and respond to html
 
 ```php
 $vega = new Mix\Vega\Engine();
@@ -300,9 +300,9 @@ $vega->handleF('/html', function (Mix\Vega\Context $ctx) {
 })->methods('GET');
 ```
 
-## 设置中间件
+## Setup middleware
 
-给某个路由配置中间件，可配置多个
+Configure middleware for a route, you can configure multiple
 
 ```php
 $vega = new Mix\Vega\Engine();
@@ -315,7 +315,7 @@ $vega->handleF('/hello', $func, function (Mix\Vega\Context $ctx) {
 })->methods('GET');
 ```
 
-配置全局中间件，即便没有匹配到路由也会执行
+Configure the global middleware, it will be executed even if the route is not matched
 
 ```php
 $vega = new Mix\Vega\Engine();
@@ -324,7 +324,7 @@ $vega->use(function (Mix\Vega\Context $ctx) {
 });
 ```
 
-前置中间件
+Before middleware
 
 ```php
 $vega->use(function (Mix\Vega\Context $ctx) {
@@ -333,7 +333,7 @@ $vega->use(function (Mix\Vega\Context $ctx) {
 });
 ```
 
-后置中间件
+After middleware
 
 ```php
 $vega->use(function (Mix\Vega\Context $ctx) {
@@ -342,7 +342,7 @@ $vega->use(function (Mix\Vega\Context $ctx) {
 });
 ```
 
-### 404 自定义
+### 404 Custom response
 
 ```php
 $vega = new Mix\Vega\Engine();
@@ -356,7 +356,7 @@ $vega->use(function (Mix\Vega\Context $ctx) {
 });
 ```
 
-### 500 全局异常捕获
+### 500 Global exception capture
 
 ```php
 $vega = new Mix\Vega\Engine();
