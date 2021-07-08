@@ -77,14 +77,14 @@ class Database
     protected $pool;
 
     /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
      * @var Driver
      */
     protected $driver;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
 
     /**
      * Database constructor.

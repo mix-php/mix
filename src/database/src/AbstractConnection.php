@@ -574,7 +574,9 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function beginTransaction(): Transaction
     {
-        return new Transaction($this->driver, $this->logger);
+        $driver = $this->driver;
+        $this->driver = null; // 使其在析构时不回收
+        return new Transaction($driver, $this->logger);
     }
 
 }
