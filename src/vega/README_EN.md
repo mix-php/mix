@@ -150,6 +150,8 @@ $subrouter->handleF('/bar2', function (Mix\Vega\Context $ctx) {
 
 |  方法名称   | 描述  |
 |  ----  | ----  |
+| $ctx->request: ServerRequestInterface | 符合PSR的请求对象 |
+| $ctx->response: ResponseInterface | 符合PSR的响应对象 |
 | $ctx->param(string $key): string  | 获取路由参数 |
 | $ctx->query(string $key): string  | 获取url参数，包含路由参数 |
 | $ctx->defaultQuery(string $key, string $default): string  | 获取url参数，可配置默认值 |
