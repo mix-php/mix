@@ -302,6 +302,16 @@ $vega->handleF('/html', function (Mix\Vega\Context $ctx) {
 })->methods('GET');
 ```
 
+## Static file handling
+
+Based on `sendfile` zero copy
+
+```php
+$vega = new Mix\Vega\Engine();
+$vega->static('/static', '/data/project/public/static');
+$vega->staticFile('/favicon.ico', '/data/project/public/favicon.ico');
+```
+
 ## Setup middleware
 
 Configure middleware for a route, you can configure multiple

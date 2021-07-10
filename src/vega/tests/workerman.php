@@ -25,11 +25,14 @@ $vega->handleF('/hello', function (Context $ctx) {
 
 // handleC
 // curl "http://0.0.0.0:2345/hello1"
-class Hello {
-    public function index(Mix\Vega\Context $ctx) {
+class Hello
+{
+    public function index(Mix\Vega\Context $ctx)
+    {
         $ctx->string(200, 'hello, world!');
     }
 }
+
 $vega->handleC('/hello1', [new Hello(), 'index'])->methods('GET');
 
 // 分组
@@ -77,6 +80,10 @@ $vega->handleF('/html', function (Context $ctx) {
         ]
     ]);
 })->methods('GET');
+
+// 静态文件
+$vega->static('/static', __DIR__ . '/public/static');
+$vega->staticFile('/favicon.ico', __DIR__ . '/public/favicon.ico');
 
 $http_worker = new Workerman\Worker("http://0.0.0.0:2345");
 $http_worker->onMessage = $vega->handler();

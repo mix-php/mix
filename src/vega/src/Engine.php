@@ -13,6 +13,7 @@ class Engine
 {
 
     use Router;
+    use StaticFile;
 
     /**
      * @var Context
@@ -95,11 +96,11 @@ class Engine
     }
 
     /**
-     * @param string $dir
+     * @param string $root
      */
-    public function withHTMLRoot(string $dir): void
+    public function withHTMLRoot(string $root)
     {
-        $this->htmlRender = new Renderer($dir);
+        $this->htmlRender = new Renderer($root);
     }
 
 }

@@ -26,11 +26,13 @@ golang [gin](https://github.com/gin-gonic/gin) [mux](https://github.com/gorilla/
 ## 技术交流
 
 知乎：https://www.zhihu.com/people/onanying    
-官方QQ群：[284806582](https://shang.qq.com/wpa/qunwpa?idkey=b3a8618d3977cda4fed2363a666b081a31d89e3d31ab164497f53b72cf49968a), [825122875](http://shang.qq.com/wpa/qunwpa?idkey=d2908b0c7095fc7ec63a2391fa4b39a8c5cb16952f6cfc3f2ce4c9726edeaf20) 敲门暗号：vega
+官方QQ群：[284806582](https://shang.qq.com/wpa/qunwpa?idkey=b3a8618d3977cda4fed2363a666b081a31d89e3d31ab164497f53b72cf49968a)
+, [825122875](http://shang.qq.com/wpa/qunwpa?idkey=d2908b0c7095fc7ec63a2391fa4b39a8c5cb16952f6cfc3f2ce4c9726edeaf20)
+敲门暗号：vega
 
 ## Installation
 
-> 需先安装 [Swoole](https://wiki.swoole.com/#/environment) 或者 [WorkerMan](http://doc.workerman.net/install/requirement.html) 
+> 需先安装 [Swoole](https://wiki.swoole.com/#/environment) 或者 [WorkerMan](http://doc.workerman.net/install/requirement.html)
 
 ```
 composer require mix/vega
@@ -307,6 +309,16 @@ $vega->handleF('/html', function (Mix\Vega\Context $ctx) {
         ]
     ]);
 })->methods('GET');
+```
+
+## 静态文件处理
+
+基于 `sendfile` 零拷贝
+
+```php
+$vega = new Mix\Vega\Engine();
+$vega->static('/static', '/data/project/public/static');
+$vega->staticFile('/favicon.ico', '/data/project/public/favicon.ico');
 ```
 
 ## 设置中间件
