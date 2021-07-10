@@ -19,7 +19,7 @@ golang [gin](https://github.com/gin-gonic/gin) [mux](https://github.com/gorilla/
 - https://github.com/top-think/think-orm
 - https://github.com/illuminate/database
 
-**推荐文章**
+**推荐文章：**
 
 - [使用 mix/vega + mix/db 进行现代化的原生 PHP 开发](https://zhuanlan.zhihu.com/p/387493850)
 

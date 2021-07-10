@@ -61,7 +61,6 @@ class UploadedFile implements UploadedFileInterface
      */
     public function __destruct()
     {
-        // TODO: Implement __destruct() method.
         // 删除上传的临时文件
         if ($this->stream instanceof FileStream) {
             $filename = $this->stream->getFilename();

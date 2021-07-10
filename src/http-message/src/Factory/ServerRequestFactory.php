@@ -89,10 +89,12 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
             }
             // 注意：当httpServer的handle内开启协程时，handle方法会先于Callback执行完，
             // 这时临时文件会在还没处理完成就被删除，所以这里生成新文件，在UploadedFile析构时删除该文件
-            $tmpfile = $file['tmp_name'] . '.mix';
-            move_uploaded_file($file['tmp_name'], $tmpfile);
+            $tmpFile = $file['tmp_name'];
+            if (rename($tmpFile, $tmpFile . '.mix')) {
+                $tmpFile .= '.mix';
+            }
             $uploadedFiles[$name] = $uploadedFileFactory->createUploadedFile(
-                $streamFactory->createStreamFromFile($tmpfile),
+                $streamFactory->createStreamFromFile($tmpFile),
                 $file['size'],
                 $file['error'],
                 $file['name'],
@@ -155,10 +157,12 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
             }
             // 注意：当httpServer的handle内开启协程时，handle方法会先于Callback执行完，
             // 这时临时文件会在还没处理完成就被删除，所以这里生成新文件，在UploadedFile析构时删除该文件
-            $tmpfile = $file['tmp_name'] . '.mix';
-            move_uploaded_file($file['tmp_name'], $tmpfile);
+            $tmpFile = $file['tmp_name'];
+            if (rename($tmpFile, $tmpFile . '.mix')) {
+                $tmpFile .= '.mix';
+            }
             $uploadedFiles[$name] = $uploadedFileFactory->createUploadedFile(
-                $streamFactory->createStreamFromFile($tmpfile),
+                $streamFactory->createStreamFromFile($tmpFile),
                 $file['size'],
                 $file['error'],
                 $file['name'],
