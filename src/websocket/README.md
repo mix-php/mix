@@ -35,6 +35,18 @@ $vega->handleFunc('/websocket', function (Mix\Vega\Context $ctx) use ($upgrader)
 })->methods('GET');
 ```
 
+获取当前连接数
+
+```php
+$total = $upgrader->connectionManager->count();
+```
+
+关闭全部连接
+
+```php
+$upgrader->destroy();
+```
+
 ## 客户端 Client
 
 可以连接任何 websocket v13 的服务器
