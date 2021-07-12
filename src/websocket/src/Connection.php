@@ -18,9 +18,9 @@ class Connection
     public $swooleResponse;
 
     /**
-     * @var ConnectionManager
+     * @var Upgrader
      */
-    public $connectionManager;
+    public $upgrader;
 
     /**
      * @var bool
@@ -30,12 +30,12 @@ class Connection
     /**
      * Connection constructor.
      * @param \Swoole\Http\Response $response
-     * @param ConnectionManager $connectionManager
+     * @param Upgrader $upgrader
      */
-    public function __construct(\Swoole\Http\Response $response, ConnectionManager $connectionManager)
+    public function __construct(\Swoole\Http\Response $response, Upgrader $upgrader)
     {
         $this->swooleResponse = $response;
-        $this->connectionManager = $connectionManager;
+        $this->upgrader = $upgrader;
     }
 
     /**
@@ -95,32 +95,30 @@ class Connection
      */
     public function close()
     {
-        $this->connectionManager->remove($this);
+        $this->upgrader->remove($this);
+
+        // 丢弃socket缓冲区的消息，避免 ngx 抛出 104: Connection reset by peer
+        // 避免出现: Uncaught Swoole\Error: Socket#7 has already been bound to another coroutine#7, reading of the same socket in coroutine#8 at the same time is not allowed
+        if (!$this->receiving) {
+            $limit = 10;
+            while ($limit-- && $this->swooleResponse->recv(0.01)) {
+            }
+        }
+
         // Swoole >= 4.4.8 才支持 close
         // 但在 4.4.13 ~ 4.4.14 当 server->shutdown 执行后或者 response->recv 失败后再 close 会抛出 http response is unavailable 致命错误
-        // 忽略异常，但是在 4.4.13 ~ 4.4.14 server->shutdown 时依然是无法 close 连接的，需升级 Swoole 版本
-        try {
-            // 丢弃socket缓冲区的消息，避免 ngx 抛出 104: Connection reset by peer
-            // 避免出现: Uncaught Swoole\Error: Socket#7 has already been bound to another coroutine#7, reading of the same socket in coroutine#8 at the same time is not allowed
-            if (!$this->receiving) {
-                $limit = 10;
-                while ($limit-- && $this->swooleResponse->recv(0.01)) {
-                }
-            }
-
-            if ($this->swooleResponse->close()) {
-                return;
-            }
-        } catch (\Throwable $ex) {
+        // 即使 try 忽略异常，在 4.4.13 ~ 4.4.14 server->shutdown 时依然是无法 close 连接的，需升级 Swoole 版本
+        if ($this->swooleResponse->close()) {
             return;
         }
+
         $socket = $this->swooleResponse->socket;
         $errMsg = $socket->errMsg;
         $errCode = $socket->errCode;
         if ($errMsg == '' && $errCode == 0) {
             return;
         }
-        if ($errMsg == 'Connection reset by peer' && in_array($errCode, [54, 104])) { // mac=54, linux=104
+        if ($errMsg == 'Connection reset by peer') {
             return;
         }
         throw new \Swoole\Exception($errMsg, $errCode);

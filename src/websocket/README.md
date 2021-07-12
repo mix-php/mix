@@ -38,13 +38,13 @@ $vega->handleFunc('/websocket', function (Mix\Vega\Context $ctx) use ($upgrader)
 获取当前连接数
 
 ```php
-$total = $upgrader->connectionManager->count();
+$total = $upgrader->count();
 ```
 
 关闭全部连接
 
 ```php
-$upgrader->destroy();
+$upgrader->closeAll();
 ```
 
 ## 客户端 Client

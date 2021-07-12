@@ -13,18 +13,7 @@ use Mix\WebSocket\Exception\UpgradeException;
 class Upgrader
 {
 
-    /**
-     * @var ConnectionManager
-     */
-    public $connectionManager;
-
-    /**
-     * Upgrader constructor.
-     */
-    public function __construct()
-    {
-        $this->connectionManager = new ConnectionManager();
-    }
+    use ConnectionManager;
 
     /**
      * Upgrade
@@ -53,18 +42,9 @@ class Upgrader
             throw new UpgradeException('Handshake failed, upgrade error');
         }
         $response->withStatus(101);
-        $connection = new Connection($swooleResponse, $this->connectionManager);
-        $this->connectionManager->add($connection);
+        $connection = new Connection($swooleResponse, $this);
+        $this->add($connection);
         return $connection;
-    }
-
-    /**
-     * Destroy
-     * @throws \Swoole\Exception
-     */
-    public function destroy()
-    {
-        $this->connectionManager->closeAll();
     }
 
 }

@@ -3,10 +3,10 @@
 namespace Mix\WebSocket;
 
 /**
- * Class ConnectionManager
+ * Trait ConnectionManager
  * @package Mix\WebSocket
  */
-class ConnectionManager
+trait ConnectionManager
 {
 
     /**
@@ -20,7 +20,7 @@ class ConnectionManager
      */
     public function add(Connection $connection)
     {
-        $id                     = spl_object_hash($connection);
+        $id = spl_object_hash($connection);
         $this->connections[$id] = $connection;
     }
 
@@ -42,7 +42,7 @@ class ConnectionManager
      * 计数
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->connections);
     }
@@ -63,7 +63,7 @@ class ConnectionManager
      * 获取全部连接
      * @return Connection[]
      */
-    public function getConnections()
+    public function getConnections(): array
     {
         return array_values($this->connections);
     }
