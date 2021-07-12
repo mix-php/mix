@@ -1,8 +1,8 @@
 ## Mix WebSocket
 
-WebSocket server and client based on Swoole coroutine
+PHP WebSocket server and client based on Swoole coroutine
 
-基于 Swoole 协程的 WebSocket 服务器与客户端
+基于 Swoole 协程的 PHP WebSocket 服务器与客户端
 
 ## Installation
 
