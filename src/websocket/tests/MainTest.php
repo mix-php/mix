@@ -14,7 +14,7 @@ final class MainTest extends TestCase
 
             $vega = new Mix\Vega\Engine();
             $vega->handleFunc('/hello', function (Mix\Vega\Context $ctx) use ($upgrader) {
-                $conn = $upgrader->Upgrade($ctx->request, $ctx->response);
+                $conn = $upgrader->upgrade($ctx->request, $ctx->response);
 
                 $in = $conn->recv();
                 $out = new \Swoole\WebSocket\Frame();

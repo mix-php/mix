@@ -12,7 +12,7 @@ composer require mix/websocket
 
 ## 服务器 Server
 
-只支持在 [MixVega](https://github.com/mix-php/vega) 中使用
+在 [Mix Vega](https://github.com/mix-php/vega) 中使用
 
 ```php
 $upgrader = new Mix\WebSocket\Upgrader();
@@ -20,7 +20,7 @@ $upgrader = new Mix\WebSocket\Upgrader();
 $vega = new Mix\Vega\Engine();
 $vega->handleFunc('/websocket', function (Mix\Vega\Context $ctx) use ($upgrader) {
      // 升级连接
-    $conn      = $upgrader->Upgrade($ctx->request, $ctx->response);
+    $conn      = $upgrader->upgrade($ctx->request, $ctx->response);
 
     // 接收数据
     $in        = $conn->recv();
@@ -33,6 +33,22 @@ $vega->handleFunc('/websocket', function (Mix\Vega\Context $ctx) use ($upgrader)
     
     $conn->close();
 })->methods('GET');
+```
+
+在 Swoole 原生中使用
+
+```php
+Swoole\Coroutine\run(function () {
+    $upgrader = new Mix\WebSocket\Upgrader();
+    $server = new Swoole\Coroutine\Http\Server('127.0.0.1', 9502, false);
+    $server->handle('/websocket', function (Swoole\Http\Request $request, Swoole\Http\Response $response) use ($upgrader) {
+        // 升级连接
+        $conn = $upgrader->upgradeRaw($request, $response);
+        
+        // ...
+    });
+    $server->start();
+});
 ```
 
 获取当前连接数
