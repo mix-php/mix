@@ -8,7 +8,6 @@ use Mix\WebSocket\Exception\ReceiveException;
 /**
  * Class Connection
  * @package Mix\WebSocket
- * @author liu,jian <coder.keda@gmail.com>
  */
 class Connection
 {
@@ -35,7 +34,7 @@ class Connection
      */
     public function __construct(\Swoole\Http\Response $response, ConnectionManager $connectionManager)
     {
-        $this->swooleResponse    = $response;
+        $this->swooleResponse = $response;
         $this->connectionManager = $connectionManager;
     }
 
@@ -50,7 +49,7 @@ class Connection
     public function recv(float $timeout = -1)
     {
         $this->receiving = true;
-        $frame           = $this->swooleResponse->recv($timeout);
+        $frame = $this->swooleResponse->recv($timeout);
         $this->receiving = false;
         if ($frame === false) { // 接收失败
             $this->close(); // 需要移除管理器内的连接，所以还要 close
@@ -64,13 +63,13 @@ class Connection
         if ($frame instanceof \Swoole\WebSocket\CloseFrame) { // CloseFrame
             $this->close(); // 需要移除管理器内的连接，所以还要 close
             $errCode = $frame->code;
-            $errMsg  = $frame->reason;
+            $errMsg = $frame->reason;
             throw new CloseFrameException($errMsg, $errCode);
         }
         if ($frame === "") { // 连接关闭
             $this->close(); // 需要移除管理器内的连接，所以还要 close
             $errCode = stripos(PHP_OS, 'Darwin') !== false ? 54 : 104; // mac=54, linux=104
-            $errMsg  = swoole_strerror($errCode, 9);
+            $errMsg = swoole_strerror($errCode, 9);
             throw new ReceiveException($errMsg, $errCode);
         }
         return $frame;
@@ -86,7 +85,7 @@ class Connection
         $result = $this->swooleResponse->push($data);
         if ($result === false) {
             $socket = $this->swooleResponse->socket;
-            throw new \Swoole\Exception($socket->errMsg ?: 'Send frame failed', $socket->errCode);
+            throw new \Swoole\Exception($socket->errMsg ?: socket_strerror($socket->errCode), $socket->errCode);
         }
     }
 
@@ -115,8 +114,8 @@ class Connection
         } catch (\Throwable $ex) {
             return;
         }
-        $socket  = $this->swooleResponse->socket;
-        $errMsg  = $socket->errMsg;
+        $socket = $this->swooleResponse->socket;
+        $errMsg = $socket->errMsg;
         $errCode = $socket->errCode;
         if ($errMsg == '' && $errCode == 0) {
             return;

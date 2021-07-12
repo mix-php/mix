@@ -1,6 +1,6 @@
 {
   "name": "mix/websocket",
-  "description": "WebSocket library based on Swoole coroutine, including server and client",
+  "description": "WebSocket server and client based on Swoole coroutine",
   "type": "library",
   "keywords": [
     "mix",
@@ -21,7 +21,6 @@
   "require": {
     "php": ">=7.0.0",
     "ext-swoole": ">=4.4.15",
-    "mix/bean": "~2.2.0",
     "mix/http-message": "~2.2.0"
   },
   "require-dev": {

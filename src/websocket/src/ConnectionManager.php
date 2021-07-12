@@ -5,7 +5,6 @@ namespace Mix\WebSocket;
 /**
  * Class ConnectionManager
  * @package Mix\WebSocket
- * @author liu,jian <coder.keda@gmail.com>
  */
 class ConnectionManager
 {

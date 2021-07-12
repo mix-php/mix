@@ -9,7 +9,6 @@ use Mix\WebSocket\Exception\UpgradeException;
 /**
  * Class Upgrader
  * @package Mix\WebSocket
- * @author liu,jian <coder.keda@gmail.com>
  */
 class Upgrader
 {
@@ -41,12 +40,15 @@ class Upgrader
             throw new UpgradeException('Handshake failed, invalid WebSocket request');
         }
         $secWebSocketKey = $request->getHeaderLine('sec-websocket-key');
-        $patten          = '#^[+/0-9A-Za-z]{21}[AQgw]==$#';
+        $patten = '#^[+/0-9A-Za-z]{21}[AQgw]==$#';
         if ($request->getHeaderLine('sec-websocket-version') != 13 || 0 === preg_match($patten, $secWebSocketKey) || 16 !== strlen(base64_decode($secWebSocketKey))) {
             throw new UpgradeException('Handshake failed, invalid WebSocket protocol v13');
         }
         // Upgrade
         $swooleResponse = $response->getSwooleResponse();
+        if (!$swooleResponse) {
+            throw new UpgradeException('Handshake failed, only the swoole coroutine environment is supported');
+        }
         if (!$swooleResponse->upgrade()) {
             throw new UpgradeException('Handshake failed, upgrade error');
         }

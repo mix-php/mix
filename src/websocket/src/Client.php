@@ -1,54 +1,56 @@
 <?php
 
-namespace Mix\WebSocket\Client;
+namespace Mix\WebSocket;
 
-use Mix\Bean\BeanInjector;
 use Mix\WebSocket\Exception\CloseFrameException;
 use Mix\WebSocket\Exception\ReceiveException;
 use Mix\WebSocket\Exception\UpgradeException;
-use Swoole\Coroutine\Http\Client;
 
 /**
- * Class Connection
- * @package Mix\WebSocket\Client
+ * Class Client
+ * @package Mix\WebSocket
  */
-class Connection
+class Client
 {
 
     /**
      * @var string
      */
-    public $url = '';
+    protected $url = '';
 
     /**
      * @var string[]
      */
-    public $headers = [];
+    protected $headers = [];
 
     /**
      * @var string[]
      */
-    public $cookies = [];
+    protected $cookies = [];
 
     /**
      * @var float
      */
-    public $timeout = 0.0;
+    protected $timeout = 5.0;
 
     /**
-     * @var Client
+     * @var \Swoole\Coroutine\Http\Client
      */
     protected $client;
 
     /**
-     * Connection constructor.
-     * @param array $config
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
+     * Client constructor.
+     * @param string $url
+     * @param array $headers
+     * @param array $cookies
+     * @param float $timeout
      */
-    public function __construct(array $config = [])
+    public function __construct(string $url, array $headers = [], array $cookies = [], float $timeout = 5.0)
     {
-        BeanInjector::inject($this, $config);
+        $this->url = $url;
+        $this->headers = $headers;
+        $this->cookies = $cookies;
+        $this->timeout = $timeout;
     }
 
     /**
@@ -71,12 +73,12 @@ class Connection
         $info = parse_url($this->url);
         $host = $info['host'] ?? '';
         $port = $info['port'] ?? null;
-        $ssl  = isset($info['scheme']) && $info['scheme'] == 'wss' ? true : false;
+        $ssl = isset($info['scheme']) && $info['scheme'] == 'wss' ? true : false;
         if ($ssl && is_null($port)) {
             $port = 443;
         }
-        $path   = ($info['path'] ?? '') . ($info['query'] ?? '') . ($info['fragment'] ?? '');
-        $client = $this->client = new Client($host, $port, $ssl);
+        $path = ($info['path'] ?? '') . ($info['query'] ?? '') . ($info['fragment'] ?? '');
+        $client = $this->client = new \Swoole\Coroutine\Http\Client($host, $port, $ssl);
         $client->set(['timeout' => $this->timeout]);
         $client->setHeaders($this->headers + $this->getDefaultHeaders());
         $client->setCookies($this->cookies);
@@ -109,13 +111,13 @@ class Connection
         if ($frame instanceof \Swoole\WebSocket\CloseFrame) { // CloseFrame
             $this->close(); // 需要移除管理器内的连接，所以还要 close
             $errCode = $frame->code;
-            $errMsg  = $frame->reason;
+            $errMsg = $frame->reason;
             throw new CloseFrameException($errMsg, $errCode);
         }
         if ($frame === "") { // 连接关闭
             $this->close(); // 需要移除管理器内的连接，所以还要 close
             $errCode = stripos(PHP_OS, 'Darwin') !== false ? 54 : 104; // mac=54, linux=104
-            $errMsg  = swoole_strerror($errCode, 9);
+            $errMsg = swoole_strerror($errCode, 9);
             throw new ReceiveException($errMsg, $errCode);
         }
         return $frame;
@@ -130,8 +132,7 @@ class Connection
     {
         $result = $this->client->push($data);
         if ($result === false) {
-            $socket = $this->swooleResponse->socket;
-            throw new \Swoole\Exception($socket->errMsg ?: 'Send frame failed', $socket->errCode);
+            throw new \Swoole\Exception(socket_strerror($this->client->errCode), $this->client->errCode);
         }
     }
 
@@ -144,8 +145,8 @@ class Connection
         if ($this->client->close()) {
             return;
         }
-        $client  = $this->client;
-        $errMsg  = $client->errMsg;
+        $client = $this->client;
+        $errMsg = $client->errMsg;
         $errCode = $client->errCode;
         if ($errMsg == '' && $errCode == 0) {
             return;
