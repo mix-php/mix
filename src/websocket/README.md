@@ -2,7 +2,7 @@
 
 WebSocket server and client based on Swoole coroutine
 
-基于 swoole 协程的 Websocket 服务器与客户端
+基于 Swoole 协程的 WebSocket 服务器与客户端
 
 ## Installation
 

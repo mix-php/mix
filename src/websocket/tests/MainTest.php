@@ -21,7 +21,6 @@ final class MainTest extends TestCase
                 $out->data = sprintf('hello, %s', $in->data);
                 $conn->send($out);
                 $conn->close();
-
             })->methods('GET');
 
             $server = new Swoole\Coroutine\Http\Server('127.0.0.1', 9502, false);
