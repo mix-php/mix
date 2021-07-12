@@ -31,12 +31,34 @@ trait Router
 
     /**
      * @param \Closure ...$handlers
-     * @return
+     * @return Engine
      */
     public function use(\Closure ...$handlers): Engine
     {
         $this->handlers = array_merge($this->handlers, $handlers);
         return $this;
+    }
+
+    /**
+     * @param string $path
+     * @param \Closure ...$handlers
+     * @return Route
+     * @deprecated
+     */
+    public function handleF(string $path, \Closure ...$handlers): Route
+    {
+        return $this->handleFunc($path, ... $handlers);
+    }
+
+    /**
+     * @param string $path
+     * @param callable ...$handlers
+     * @return Route
+     * @deprecated
+     */
+    public function handleC(string $path, callable ...$handlers): Route
+    {
+        return $this->handleCall($path, ... $handlers);
     }
 
     /**
