@@ -44,7 +44,7 @@ trait Router
      * @param \Closure ...$handlers
      * @return Route
      */
-    public function handleF(string $path, \Closure ...$handlers): Route
+    public function handleFunc(string $path, \Closure ...$handlers): Route
     {
         $route = new Route($this, $path, array_merge($this->handlers, $handlers));
         $this->routes[] = $route;
@@ -56,7 +56,7 @@ trait Router
      * @param callable ...$handlers
      * @return Route
      */
-    public function handleC(string $path, callable ...$handlers): Route
+    public function handleCall(string $path, callable ...$handlers): Route
     {
         $route = new Route($this, $path, array_merge($this->handlers, $handlers));
         $this->routes[] = $route;
@@ -65,11 +65,11 @@ trait Router
 
     /**
      * @param string $prefix
-     * @return Subrouter
+     * @return SubRouter
      */
-    public function pathPrefix(string $prefix): Subrouter
+    public function pathPrefix(string $prefix): SubRouter
     {
-        return new Subrouter($prefix, $this);
+        return new SubRouter($prefix, $this);
     }
 
     protected function startDispatcher(): void
@@ -87,7 +87,7 @@ trait Router
      * @param Context $ctx
      * @throws NotFoundException
      */
-    protected function dispatch(string $method, string $uri, Context $ctx)
+    protected function dispatch(string $method, string $uri, Context $ctx): void
     {
         $routeInfo = $this->dispatcher->dispatch($method, $uri);
         switch ($routeInfo[0]) {

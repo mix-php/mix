@@ -21,7 +21,7 @@ trait StaticFile
             $path = substr($path, 0, -1);
         }
         $pattern = $path . '/{any:.+}';
-        $this->handleF($pattern, function (Context $ctx) use ($root, $path) {
+        $this->handleFunc($pattern, function (Context $ctx) use ($root, $path) {
             $uriPath = $ctx->uri()->getPath();
             $file = sprintf('%s%s', $root, substr($uriPath, strlen($path)));
             if (!file_exists($file)) {
@@ -45,7 +45,7 @@ trait StaticFile
      */
     public function staticFile(string $path, string $file)
     {
-        $this->handleF($path, function (Context $ctx) use ($file) {
+        $this->handleFunc($path, function (Context $ctx) use ($file) {
             $ctx->response->sendFile($file);
         })->methods('GET');
     }

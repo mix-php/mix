@@ -3,10 +3,10 @@
 namespace Mix\Vega;
 
 /**
- * Class Subrouter
+ * Class SubRouter
  * @package Mix\Vega
  */
-class Subrouter
+class SubRouter
 {
 
     /**
@@ -35,9 +35,9 @@ class Subrouter
      * @param \Closure ...$handlers
      * @return Route
      */
-    public function handleF(string $path, \Closure ...$handlers): Route
+    public function handleFunc(string $path, \Closure ...$handlers): Route
     {
-        return $this->engine->handleF($this->prefix . $path, ...$handlers);
+        return $this->engine->handleFunc($this->prefix . $path, ...$handlers);
     }
 
     /**
@@ -45,9 +45,9 @@ class Subrouter
      * @param callable ...$handlers
      * @return Route
      */
-    public function handleC(string $path, callable ...$handlers): Route
+    public function handleCall(string $path, callable ...$handlers): Route
     {
-        return $this->engine->handleC($this->prefix . $path, ...$handlers);
+        return $this->engine->handleCall($this->prefix . $path, ...$handlers);
     }
 
 }
