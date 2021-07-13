@@ -3,6 +3,7 @@
 namespace Mix\Vega;
 
 use Mix\Vega\Exception\NotFoundException;
+use Mix\Vega\Exception\RuntimeException;
 
 /**
  * Trait StaticFile
@@ -30,12 +31,13 @@ trait StaticFile
 
             // 防止相对路径攻击
             // 如：/static/../../foo.php
-            $realpath = (string)realpath($file);
-            if ($root !== substr($realpath, 0, strlen($root))) {
+            $absFile = (string)realpath($file);
+            $absRoot = realpath($root);
+            if (!$absRoot || $absRoot !== substr($absFile, 0, strlen($absRoot))) {
                 throw new NotFoundException('404 Not Found', 404);
             }
 
-            $ctx->response->sendfile($realpath);
+            $ctx->response->sendfile($absFile);
         })->methods('GET');
     }
 
