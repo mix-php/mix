@@ -3,7 +3,6 @@
 namespace Mix\Vega;
 
 use Mix\Vega\Exception\NotFoundException;
-use Mix\Vega\Exception\RuntimeException;
 
 /**
  * Trait StaticFile
@@ -48,6 +47,9 @@ trait StaticFile
     public function staticFile(string $path, string $file)
     {
         $this->handleFunc($path, function (Context $ctx) use ($file) {
+            if (!file_exists($file)) {
+                throw new NotFoundException('404 Not Found', 404);
+            }
             $ctx->response->sendFile($file);
         })->methods('GET');
     }
