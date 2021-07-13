@@ -158,6 +158,20 @@ $response = $say->Hello($ctx, $request);
 var_dump($response->getMsg());
 ```
 
+设置 `headers`
+
+```php
+$ctx->setHeader('foo', 'bar');
+$response = $say->Hello($ctx, $request);
+```
+
+设置 `timeout`
+
+```php
+$ctx->setTimeout(5.0);
+$response = $say->Hello($ctx, $request);
+```
+
 ## License
 
 Apache License Version 2.0, http://www.apache.org/licenses/
