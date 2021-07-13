@@ -17,7 +17,7 @@ interface SayInterface extends Grpc\ServiceInterface
     * @param Request $request
     * @return Response
     *
-    * @throws Grpc\Exception\InvokeException
+    * @throws Grpc\Exception\RuntimeException
     */
     public function Hello(Context $context, Request $request): Response;
 }

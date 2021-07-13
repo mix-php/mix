@@ -5,7 +5,7 @@
 namespace Php\Micro\Grpc\Greeter;
 
 use Mix\Grpc;
-use Mix\Context\Context;
+use Mix\Grpc\Context;
 
 class SayClient extends Grpc\Client\AbstractClient
 {
@@ -15,7 +15,7 @@ class SayClient extends Grpc\Client\AbstractClient
     * @param array $options
     * @return Response
     *
-    * @throws Grpc\Exception\InvokeException
+    * @throws Grpc\Exception\RuntimeException
     */
     public function Hello(Context $context, Request $request, array $options = []): Response
     {

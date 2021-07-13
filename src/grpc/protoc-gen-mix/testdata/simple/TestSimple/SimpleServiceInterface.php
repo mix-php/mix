@@ -16,7 +16,7 @@ interface SimpleServiceInterface extends Grpc\ServiceInterface
     * @param SimpleMessage $in
     * @return SimpleMessage
     *
-    * @throws Grpc\Exception\InvokeException
+    * @throws Grpc\Exception\RuntimeException
     */
     public function SimpleMethod(Grpc\ContextInterface $ctx, SimpleMessage $in): SimpleMessage;
 }

@@ -2,9 +2,9 @@
 
 namespace Mix\Grpc\Client;
 
-use Mix\Context\Context;
+use Mix\Grpc\Context;
 use Google\Protobuf\Internal\Message;
-use Mix\Grpc\Exception\InvokeException;
+use Mix\Grpc\Exception\RuntimeException;
 use Mix\Grpc\Helper\GrpcHelper;
 
 /**
@@ -15,15 +15,15 @@ abstract class AbstractClient
 {
 
     /**
-     * @var Connection
+     * @var \Mix\Grpc\Client
      */
     protected $connection;
 
     /**
      * AbstractClient constructor.
-     * @param Connection $connection
+     * @param \Mix\Grpc\Client $connection
      */
-    public function __construct(Connection $connection)
+    public function __construct(\Mix\Grpc\Client $connection)
     {
         $this->connection = $connection;
     }
@@ -36,20 +36,20 @@ abstract class AbstractClient
      * @param Message $response
      * @param array $options
      * @return Message
-     * @throws InvokeException
+     * @throws RuntimeException
      */
     protected function _simpleRequest(string $path, Context $context, Message $request, Message $response, array $options): Message
     {
-        $conn    = $this->connection;
+        $conn = $this->connection;
         $headers = $options['headers'] ?? [];
         $headers += [
             'Content-Type' => 'application/grpc+proto',
         ];
-        $body    = GrpcHelper::serialize($request);
+        $body = GrpcHelper::serialize($request);
         $timeout = $options['timeout'] ?? 5.0;
-        $resp    = $conn->request('POST', $path, $headers, $body, $timeout);
+        $resp = $conn->request('POST', $path, $headers, $body, $timeout);
         if ($resp->statusCode != 200) {
-            throw new InvokeException(sprintf('Response Error: status-code: %d, grpc-status %s, grpc-message: %s', $resp->statusCode, $resp->headers['grpc-status'] ?? '', $resp->headers['grpc-message'] ?? ''));
+            throw new RuntimeException(sprintf('Response Error: status-code: %d, grpc-status %s, grpc-message: %s', $resp->statusCode, $resp->headers['grpc-status'] ?? '', $resp->headers['grpc-message'] ?? ''));
         }
         GrpcHelper::deserialize($response, $resp->data);
         return $response;

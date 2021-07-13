@@ -83,7 +83,7 @@ class Client
         $client->setHeaders($this->headers + $this->getDefaultHeaders());
         $client->setCookies($this->cookies);
         if (!$client->upgrade($path)) {
-            throw new UpgradeException(sprintf('WebSocket connect failed (%s)', $url));
+            throw new UpgradeException(sprintf('WebSocket connect failed (%s)', $this->url));
         }
         $this->client = $client;
     }

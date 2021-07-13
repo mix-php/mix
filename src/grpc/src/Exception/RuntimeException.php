@@ -3,9 +3,9 @@
 namespace Mix\Grpc\Exception;
 
 /**
- * Class InvokeException
+ * Class RuntimeException
  * @package Mix\Grpc\Exception
  */
-class InvokeException extends \Exception
+class RuntimeException extends \Exception
 {
 }

@@ -1,6 +1,6 @@
 {
   "name": "mix/grpc",
-  "description": "gRPC library based on Swoole coroutine, including protoc code generator, server, and client\n",
+  "description": "PHP gRPC based on Swoole coroutine, including protoc code generator, server, and client",
   "type": "library",
   "keywords": [
     "mix",
@@ -11,7 +11,7 @@
     "server",
     "client"
   ],
-  "homepage": "https://openmix.org/",
+  "homepage": "https://openmix.org/mix-php",
   "license": "Apache-2.0",
   "authors": [
     {
@@ -20,14 +20,9 @@
     }
   ],
   "require": {
-    "php": ">=7.0.0",
+    "php": ">=7.2.0",
     "ext-swoole": ">=4.4.4",
-    "google/protobuf": "^3.11",
-    "mix/bean": "~2.2.0",
-    "mix/runtime": "~2.2.0",
-    "mix/http-message": "~2.2.0",
-    "mix/http-server": "~2.2.0",
-    "mix/micro-server": "~2.2.0"
+    "google/protobuf": "^3.11"
   },
   "autoload": {
     "psr-4": {
