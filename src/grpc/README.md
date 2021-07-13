@@ -62,16 +62,8 @@ message Response {
 
 然后使用 protoc 生成代码：
 
-- Linux/Mac
-
 ```
 protoc --php_out=. --mix_out=. greeter.proto
-```
-
-- Win
-
-```
-protoc.exe --php_out=. --mix_out=. greeter.proto
 ```
 
 执行命令后将在当前目录生成以下文件：
@@ -125,7 +117,11 @@ class SayService implements \Php\Micro\Grpc\Greeter\SayInterface
 
 $grpc = new Mix\Grpc\Server();
 $grpc->register(SayService::class); // or $grpc->register(new SayService());
+```
 
+Swoole 多进程 (异步) 中使用
+
+```php
 $http = new Swoole\Http\Server('0.0.0.0', 9595);
 $http->set([
     'open_http2_protocol' => true,
@@ -133,6 +129,16 @@ $http->set([
 ]);
 $http->on('Request', $grpc->handler());
 $http->start();
+```
+
+Swoole 单进程 (协程) 中使用
+
+```php
+Swoole\Coroutine\run(function () use ($grpc) {
+    $server = new Swoole\Coroutine\Http\Server('0.0.0.0', 9595, false);
+    $server->handle('/', $grpc->handler());
+    $server->start();
+});
 ```
 
 ## 客户端调用一个 gRPC 服务
