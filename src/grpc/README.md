@@ -46,7 +46,7 @@ composer require mix/grpc
 
 以上 2 个二进制文件，我都帮你们编译好了，包含多个常用 OS 类型，直接下载即可：
 
-- [https://github.com/mix-php/grpc/releases/tag/binary](https://github.com/mix-php/grpc/releases/tag/binary)
+- [下载 protoc_mix_plugin](https://github.com/mix-php/grpc/releases/tag/binary) `win/macos/linux`
 
 下载完成后 linux、macOS 将二进制文件放入系统 `/usr/local/bin` 目录，win 放入 `C:\WINDOWS\system32`
 
@@ -165,7 +165,6 @@ Swoole\Coroutine\run(function () use ($grpc) {
 $client    = new Mix\Grpc\Client('127.0.0.1', 9595);
 
 $say  = new Php\Micro\Grpc\Greeter\SayClient($client);
-
 $request = new Php\Micro\Grpc\Greeter\Request();
 $request->setName('xiaoming');
 $ctx = new Mix\Grpc\Context();
@@ -174,7 +173,7 @@ $response = $say->Hello($ctx, $request);
 var_dump($response->getMsg());
 ```
 
-设置 `headers`
+设置 `header`
 
 ```php
 $ctx->setHeader('foo', 'bar');
@@ -187,6 +186,37 @@ $response = $say->Hello($ctx, $request);
 $ctx->setTimeout(5.0);
 $response = $say->Hello($ctx, $request);
 ```
+
+## FPM 如何调用 gRPC 服务
+
+像我们传统 PHP FPM 模式中，我们作为客户端调用 gRPC 比 Mix gRPC 提供的客户端要复杂很多，推荐阅读一下文章：
+
+- [gRPC入坑记](https://www.cnblogs.com/52fhy/p/11110704.html#php%E7%9B%B8%E5%85%B3%E6%94%AF%E6%8C%81)
+- [PHP中使用gRPC客户端](https://bbs.huaweicloud.com/blogs/135609)
+
+网上的文章都缺少重要的一环，就是：
+
+```
+protoc --php_out=. greeter.proto
+```
+
+命令执行时，只会生成数据结构的 class 文件，不会生成 grpc 服务的客户端 class 文件
+
+```
+service Say {
+	rpc Hello(Request) returns (Response) {}
+}
+```
+
+以上服务没有被处理，没有生成出 `SayClient.php` ，需要修改编译命令
+
+```
+protoc --php_out=. --grpc_out=. --plugin=protoc-gen-grpc=/path/grpc_php_plugin greeter.proto
+```
+
+命令中指定了一个 `grpc_php_plugin` 文件是由 [grpc/grpc](https://github.com/grpc/grpc/tree/master/src/php) 提供的源码，官方没有像 `protoc` 一样提供编译好的二进制可以下载，只能自己编译。然而这个库依赖的大量的子仓库，在国内几乎无法拉取成功，其次 win 的 cmake 编译很多人不会弄，导致大量的人无法编译出这个文件，因此我这里直接提供编译好的二进制供大家下载。
+
+- [下载 protoc_grpc_plugin](https://github.com/mix-php/grpc/releases/tag/binary) `win/macos/linux`
 
 ## License
 
