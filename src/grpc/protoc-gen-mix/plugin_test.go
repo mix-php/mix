@@ -53,7 +53,7 @@ func Test_Simple(t *testing.T) {
     if err != nil {
         t.Fatal(err)
     }
-    defer os.RemoveAll(tmpdir)
+    //defer os.RemoveAll(tmpdir)
 
     args := []string{
         "-Itestdata",

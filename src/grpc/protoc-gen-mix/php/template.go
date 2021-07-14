@@ -40,7 +40,7 @@ const phpBody = `<?php
 namespace {{ $ns.Namespace }};
 {{end}}
 use Mix\Grpc;
-use Mix\Context\Context;
+use Mix\Grpc\Context;
 {{- range $n := $ns.Import}}
 use {{ $n }};
 {{- end}}
