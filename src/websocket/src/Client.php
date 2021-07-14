@@ -5,6 +5,7 @@ namespace Mix\WebSocket;
 use Mix\WebSocket\Exception\CloseFrameException;
 use Mix\WebSocket\Exception\ReceiveException;
 use Mix\WebSocket\Exception\UpgradeException;
+use Swoole\WebSocket\Frame;
 
 /**
  * Class Client
@@ -51,13 +52,14 @@ class Client
         $this->headers = $headers;
         $this->cookies = $cookies;
         $this->timeout = $timeout;
+        $this->connect();
     }
 
     /**
-     * Get default headers
+     * default headers
      * @return array
      */
-    protected function getDefaultHeaders()
+    protected static function defaultHeaders(): array
     {
         return $defaultHeaders = [
             'User-Agent' => sprintf('Mix WebSocket/PHP %s/Swoole %s', PHP_VERSION, SWOOLE_VERSION),
@@ -68,7 +70,7 @@ class Client
      * Connect
      * @throws UpgradeException
      */
-    public function connect()
+    protected function connect(): void
     {
         $info = parse_url($this->url);
         $host = $info['host'] ?? '';
@@ -80,10 +82,10 @@ class Client
         $path = ($info['path'] ?? '') . ($info['query'] ?? '') . ($info['fragment'] ?? '');
         $client = $this->client = new \Swoole\Coroutine\Http\Client($host, $port, $ssl);
         $client->set(['timeout' => $this->timeout]);
-        $client->setHeaders($this->headers + $this->getDefaultHeaders());
+        $client->setHeaders($this->headers + static::defaultHeaders());
         $client->setCookies($this->cookies);
         if (!$client->upgrade($path)) {
-            throw new UpgradeException(sprintf('WebSocket connect failed (%s)', $this->url));
+            throw new UpgradeException(sprintf('WebSocket upgrade failed (%s)', $this->url));
         }
         $this->client = $client;
     }
@@ -91,12 +93,12 @@ class Client
     /**
      * Recv
      * @param float $timeout
-     * @return \Swoole\WebSocket\Frame
+     * @return Frame
      * @throws ReceiveException
      * @throws CloseFrameException
      * @throws \Swoole\Exception
      */
-    public function recv(float $timeout = -1)
+    public function recv(float $timeout = -1): Frame
     {
         $frame = $this->client->recv($timeout);
         if ($frame === false) { // 接收失败
@@ -125,10 +127,10 @@ class Client
 
     /**
      * Send
-     * @param \Swoole\WebSocket\Frame $data
+     * @param Frame $data
      * @throws \Swoole\Exception
      */
-    public function send(\Swoole\WebSocket\Frame $data)
+    public function send(Frame $data): void
     {
         $result = $this->client->push($data);
         if ($result === false) {
@@ -140,18 +142,19 @@ class Client
      * Close
      * @throws \Swoole\Exception
      */
-    public function close()
+    public function close(): void
     {
         if ($this->client->close()) {
             return;
         }
+
         $client = $this->client;
         $errMsg = $client->errMsg;
         $errCode = $client->errCode;
         if ($errMsg == '' && $errCode == 0) {
             return;
         }
-        if ($errMsg == 'Connection reset by peer' && in_array($errCode, [54, 104])) { // mac=54, linux=104
+        if ($errMsg == 'Connection reset by peer') {
             return;
         }
         throw new \Swoole\Exception($errMsg, $errCode);

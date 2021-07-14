@@ -13,7 +13,7 @@ final class MainTest extends TestCase
             $upgrader = new Mix\WebSocket\Upgrader();
 
             $vega = new Mix\Vega\Engine();
-            $vega->handleFunc('/hello', function (Mix\Vega\Context $ctx) use ($upgrader) {
+            $vega->handleFunc('/websocket', function (Mix\Vega\Context $ctx) use ($upgrader) {
                 $conn = $upgrader->upgrade($ctx->request, $ctx->response);
 
                 $in = $conn->recv();
@@ -29,7 +29,7 @@ final class MainTest extends TestCase
                 $server->start();
             });
 
-            $conn = new \Mix\WebSocket\Client('ws://127.0.0.1:9597/websocket');
+            $conn = new \Mix\WebSocket\Client('ws://127.0.0.1:9502/websocket');
 
             $frame = new \Swoole\WebSocket\Frame();
             $frame->data = 'xiaoming';
