@@ -51,7 +51,7 @@ abstract class AbstractClient
         if ($resp->statusCode != 200) {
             throw new RuntimeException(sprintf('Response Error: status-code: %d, grpc-status %s, grpc-message: %s', $resp->statusCode, $resp->headers['grpc-status'] ?? '', $resp->headers['grpc-message'] ?? ''));
         }
-        GrpcHelper::deserialize($response, $resp->data);
+        GrpcHelper::deserialize($response, $resp->data ?? '');
         return $response;
     }
 

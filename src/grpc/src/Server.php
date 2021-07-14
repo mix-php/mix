@@ -91,7 +91,7 @@ class Server
                 'application/grpc',
                 'application/grpc+proto',
             ])) {
-                throw new RuntimeException('', 500);
+                throw new RuntimeException('Invalid the Content-Type', 500);
             }
             if ($method != 'POST') {
                 throw new NotFoundException('', 405);
@@ -105,7 +105,7 @@ class Server
             $reflectClass = new \ReflectionClass($objectOrClass);
             $reflectMethod = $reflectClass->getMethod($method);
             $reflectParameter = $reflectMethod->getParameters()[1];
-            $rpcRequestClass = $reflectParameter->getClass()->getName();
+            $rpcRequestClass = $reflectParameter->getType()->getName();
             $rpcRequest = new $rpcRequestClass;
             GrpcHelper::deserialize($rpcRequest, $ctx->request->getContent());
 
@@ -119,17 +119,18 @@ class Server
             array_push($parameters, $ctx);
             array_push($parameters, $rpcRequest);
             $rpcResponse = call_user_func_array([$object, $method], $parameters);
-        } catch (NotFoundException | RuntimeException $ex) {
+        } catch (NotFoundException $ex) {
             $status = $ex->getCode();
             $ex = null;
         } catch (\Throwable $ex) {
+            $status = 500;
         } finally {
             $ctx->response->header('content-type', 'application/grpc');
             if (isset($rpcResponse)) {
                 $content = GrpcHelper::serialize($rpcResponse);
             }
             $ctx->response->status($status ?? 200);
-            isset($status) or static::trailerHandle($ctx->response, $ex ?? null);
+            static::trailerHandle($ctx->response, $ex ?? null);
             $ctx->response->end($content ?? '');
         }
     }
