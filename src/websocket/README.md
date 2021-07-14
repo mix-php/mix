@@ -4,6 +4,11 @@ PHP WebSocket server and client based on Swoole coroutine
 
 基于 Swoole 协程的 PHP WebSocket 服务器与客户端
 
+**推荐搭配以下数据库使用 (支持协程和连接池)：**
+
+- https://github.com/mix-php/database
+- https://github.com/mix-php/redis
+
 ## Installation
 
 ```

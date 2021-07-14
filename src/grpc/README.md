@@ -16,6 +16,11 @@ PHP gRPC based on Swoole coroutine, including protoc code generator, server, and
 
 让 PHP 编写 gRPC 和 Golang 一样方便快捷，同时性能强劲
 
+**推荐搭配以下数据库使用 (支持协程和连接池)：**
+
+- https://github.com/mix-php/database
+- https://github.com/mix-php/redis
+
 ## Installation
 
 - Swoole >= 4.4.4: https://wiki.swoole.com/#/environment
