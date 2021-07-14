@@ -62,7 +62,7 @@ $vega->handleFunc('/websocket', function (Mix\Vega\Context $ctx) use ($upgrader)
 ```php
 Swoole\Coroutine\run(function () {
     $upgrader = new Mix\WebSocket\Upgrader();
-    $server = new Swoole\Coroutine\Http\Server('127.0.0.1', 9502, false);
+    $server = new Swoole\Coroutine\Http\Server('0.0.0.0', 9502, false);
     $server->handle('/websocket', function (Swoole\Http\Request $request, Swoole\Http\Response $response) use ($upgrader) {
         // 升级连接
         $conn = $upgrader->upgradeRaw($request, $response);

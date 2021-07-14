@@ -61,7 +61,7 @@ Swoole\Coroutine\run(function () {
         $ctx->string(200, 'hello, world!');
     })->methods('GET');
     
-    $server = new Swoole\Coroutine\Http\Server('127.0.0.1', 9502, false);
+    $server = new Swoole\Coroutine\Http\Server('0.0.0.0', 9502, false);
     $server->handle('/', $vega->handler());
     $server->start();
 });
@@ -87,7 +87,7 @@ Workerman\Worker::runAll();
 Request to test
 
 ~~~
-% curl http://0.0.0.0:9501/hello
+% curl http://127.0.0.1:9501/hello
 hello, world!
 ~~~
 
