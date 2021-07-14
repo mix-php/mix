@@ -38,15 +38,15 @@ abstract class AbstractClient
      * @return Message
      * @throws RuntimeException
      */
-    protected function _simpleRequest(string $path, Context $context, Message $request, Message $response, array $options): Message
+    protected function _simpleRequest(string $path, Context $context, Message $request, Message $response): Message
     {
         $conn = $this->connection;
-        $headers = $options['headers'] ?? [];
+        $headers = $context->getHeaders();
         $headers += [
             'Content-Type' => 'application/grpc+proto',
         ];
         $body = GrpcHelper::serialize($request);
-        $timeout = $options['timeout'] ?? 5.0;
+        $timeout = $context->getTimeout();
         $resp = $conn->request('POST', $path, $headers, $body, $timeout);
         if ($resp->statusCode != 200) {
             throw new RuntimeException(sprintf('Response Error: status-code: %d, grpc-status %s, grpc-message: %s', $resp->statusCode, $resp->headers['grpc-status'] ?? '', $resp->headers['grpc-message'] ?? ''));

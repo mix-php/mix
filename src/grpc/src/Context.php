@@ -4,7 +4,6 @@ namespace Mix\Grpc;
 
 use Swoole\Http\Request;
 use Swoole\Http\Response;
-use Swoole\Coroutine\Http2\Client;
 
 class Context
 {
@@ -20,9 +19,14 @@ class Context
     public $response;
 
     /**
-     * @var Client
+     * @var array
      */
-    public $client;
+    protected $headers = [];
+
+    /**
+     * @var float
+     */
+    protected $timeout = 5.0;
 
     /**
      * @param Request $request
@@ -38,14 +42,36 @@ class Context
     }
 
     /**
-     * @param Client $client
-     * @return Context
+     * @param string $key
+     * @param string $value
      */
-    public static function fromClient(Client $client): Context
+    public function setHeader(string $key, string $value): void
     {
-        $ctx = new self();
-        $ctx->client = $client;
-        return $ctx;
+        $this->headers[$key] = $value;
+    }
+
+    /**
+     * @param float $timeout
+     */
+    public function setTimeout(float $timeout): void
+    {
+        $this->timeout = $timeout;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTimeout(): float
+    {
+        return $this->timeout;
     }
 
 }

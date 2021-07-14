@@ -17,8 +17,8 @@ class SayClient extends Grpc\Client\AbstractClient
     *
     * @throws Grpc\Exception\RuntimeException
     */
-    public function Hello(Context $context, Request $request, array $options = []): Response
+    public function Hello(Context $context, Request $request): Response
     {
-        return $this->_simpleRequest('/php.micro.grpc.greeter.Say/Hello', $context, $request, new Response(), $options);
+        return $this->_simpleRequest('/php.micro.grpc.greeter.Say/Hello', $context, $request, new Response());
     }
 }
