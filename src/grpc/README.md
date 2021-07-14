@@ -115,12 +115,12 @@ protoc --php_out=. --mix_out=. greeter.proto
 
 ```php
 // 编写一个服务，实现 protoc-gen-mix 生成的接口
-class SayService implements \Php\Micro\Grpc\Greeter\SayInterface
+class SayService implements Php\Micro\Grpc\Greeter\SayInterface
 {
 
-    public function Hello(\Mix\Context\Context $context, \Php\Micro\Grpc\Greeter\Request $request): \Php\Micro\Grpc\Greeter\Response
+    public function Hello(Mix\Grpc\Context $context, Php\Micro\Grpc\Greeter\Request $request): Php\Micro\Grpc\Greeter\Response
     {
-        $response = new \Php\Micro\Grpc\Greeter\Response();
+        $response = new Php\Micro\Grpc\Greeter\Response();
         $response->setMsg(sprintf('hello, %s', $request->getName()));
         return $response;
     }
@@ -148,6 +148,10 @@ Swoole 单进程 (协程) 中使用
 ```php
 Swoole\Coroutine\run(function () use ($grpc) {
     $server = new Swoole\Coroutine\Http\Server('0.0.0.0', 9595, false);
+    $server->set([
+      'open_http2_protocol' => true,
+      'http_compression' => false,
+    ]);
     $server->handle('/', $grpc->handler());
     $server->start();
 });

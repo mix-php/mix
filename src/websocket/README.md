@@ -6,7 +6,7 @@ PHP WebSocket server and client based on Swoole coroutine
 
 ## Overview
 
-该 WebSocket 支持处理服务器和客户端，服务器基于 Swoole 单进程协程 `Swoole\Coroutine\Http\Server` 驱动，没有 Swoole 多进程的那些复杂的作用域和生命周期概念，开发体验和 Golang 一致，简单又高效。
+该 WebSocket 支持处理服务器和客户端，服务器基于 Swoole 单进程协程 `Swoole\Coroutine\Http\Server` 驱动，没有多进程那些复杂的作用域和生命周期概念，开发体验和 Golang 一致，简单又高效。
 
 **推荐搭配以下数据库使用 (支持协程和连接池)：**
 

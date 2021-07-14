@@ -5,7 +5,7 @@
 namespace Php\Micro\Grpc\Greeter;
 
 use Mix\Grpc;
-use Mix\Context\Context;
+use Mix\Grpc\Context;
 
 interface SayInterface extends Grpc\ServiceInterface
 {
