@@ -189,7 +189,7 @@ $response = $say->Hello($ctx, $request);
 
 ## FPM 如何调用 gRPC 服务
 
-像我们传统 PHP FPM 模式中，我们作为客户端调用 gRPC 比 Mix gRPC 提供的客户端要复杂很多，推荐阅读一下文章：
+像我们传统 PHP FPM 模式中，我们作为客户端调用 gRPC 比 Mix gRPC 提供的客户端要复杂很多，但是我们也经常需要用到，比如在 thinkphp laravel 中调用 Mix gRPC 或者 Mix Go 编写的 gRPC 服务，推荐阅读以下文章：
 
 - [gRPC入坑记](https://www.cnblogs.com/52fhy/p/11110704.html#php%E7%9B%B8%E5%85%B3%E6%94%AF%E6%8C%81)
 - [PHP中使用gRPC客户端](https://bbs.huaweicloud.com/blogs/135609)
