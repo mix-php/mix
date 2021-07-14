@@ -48,7 +48,7 @@ composer require mix/grpc
 
 以上 2 个二进制文件，我都帮你们编译好了，包含多个常用 OS 类型，直接下载即可：
 
-- [下载 protoc_mix_plugin](https://github.com/mix-php/grpc/releases/tag/binary-200415) `win/macos/linux`
+- [下载 protoc_mix_plugin](https://github.com/mix-php/grpc/releases/tag/binary-210714) `win/macos/linux`
 
 下载完成后 linux、macOS 将二进制文件放入系统 `/usr/local/bin` 目录，win 放入 `C:\WINDOWS\system32`
 
@@ -218,7 +218,7 @@ protoc --php_out=. --grpc_out=. --plugin=protoc-gen-grpc=/path/grpc_php_plugin g
 
 命令中指定了一个 `grpc_php_plugin` 文件是由 [grpc/grpc](https://github.com/grpc/grpc/tree/master/src/php) 提供的源码，官方没有像 `protoc` 一样提供编译好的二进制可以下载，只能自己编译。然而这个库依赖的大量的子仓库，在国内几乎无法拉取成功，其次 win 的 cmake 编译很多人不会弄，导致大量的人无法编译出这个文件，因此我这里直接提供编译好的二进制供大家下载。
 
-- [下载 protoc_grpc_plugin](https://github.com/mix-php/grpc/releases/tag/binary-200415) `win/macos/linux`
+- [下载 protoc_grpc_plugin](https://github.com/mix-php/grpc/releases/tag/binary-210714) `win/macos/linux`
 
 ## License
 
