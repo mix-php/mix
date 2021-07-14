@@ -1,3 +1,5 @@
+> OpenMix 出品：[https://openmix.org](https://openmix.org/mix-php)
+
 # Mix Vega
 
 中文 | [English](https://github.com/mix-php/vega/blob/master/README_EN.md)

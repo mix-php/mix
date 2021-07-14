@@ -1,3 +1,5 @@
+> OpenMix 出品：[https://openmix.org](https://openmix.org/mix-php)
+
 # Mix Redis
 
 PHP Redis for use in multiple execution environments, with support for FPM, CLI, Swoole, WorkerMan, and optional
