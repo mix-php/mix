@@ -13,7 +13,7 @@ PHP WebSocket server and client based on Swoole coroutine
 - https://github.com/mix-php/database
 - https://github.com/mix-php/redis
 
-**推荐搭配以下处理 Sub：**
+**推荐搭配以下库处理 Subscribe：**
 
 - https://github.com/mix-php/redis-subscribe
 
