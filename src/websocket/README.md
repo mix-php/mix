@@ -4,10 +4,18 @@ PHP WebSocket server and client based on Swoole coroutine
 
 基于 Swoole 协程的 PHP WebSocket 服务器与客户端
 
+## Overview
+
+该 WebSocket 支持处理服务器和客户端，服务器基于 Swoole 单进程协程 `Swoole\Coroutine\Http\Server` 驱动，没有 Swoole 多进程的那些复杂的作用域和生命周期概念，开发体验和 Golang 一致，简单又高效。
+
 **推荐搭配以下数据库使用 (支持协程和连接池)：**
 
 - https://github.com/mix-php/database
 - https://github.com/mix-php/redis
+
+**推荐搭配以下处理 Sub：**
+
+- https://github.com/mix-php/redis-subscribe
 
 ## 技术交流
 
@@ -24,7 +32,7 @@ composer require mix/websocket
 
 ## 服务器 Server
 
-在 [Mix Vega](https://github.com/mix-php/vega) 中使用
+在 [Mix Vega](https://github.com/mix-php/vega) 中使用 (只支持 Swoole 单进程协程)
 
 ```php
 $upgrader = new Mix\WebSocket\Upgrader();
@@ -47,7 +55,7 @@ $vega->handleFunc('/websocket', function (Mix\Vega\Context $ctx) use ($upgrader)
 })->methods('GET');
 ```
 
-在 Swoole 原生中使用
+在 Swoole 原生中使用 (只支持单进程协程)
 
 ```php
 Swoole\Coroutine\run(function () {
