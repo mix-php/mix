@@ -61,6 +61,27 @@ $http->set([
 $http->start();
 ```
 
+开启多进程协程
+
+```php
+$http = new Swoole\Http\Server('0.0.0.0', 9501);
+$handler = $vega->handler();
+$http->on('Request', function ($req, $resp) use ($handler) {
+    static $init = false;
+    if (!$init) {
+        // 协程初始化处理
+        // ...
+        $init = true;
+    }
+    $handler($req, $resp);
+});
+$http->set([
+    'enable_coroutine' => true,
+    'worker_num' => 4,
+]);
+$http->start();
+```
+
 Swoole 单进程 (协程) 中使用
 
 ```php
