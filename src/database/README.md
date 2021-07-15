@@ -58,6 +58,7 @@ $db->table('users')->where('id = ?', 1)->delete();
 在 `Swoole` 协程环境中，启动连接池
 
 ```php
+Swoole\Runtime::enableCoroutine();
 $maxOpen = 50;        // 最大开启连接数
 $maxIdle = 20;        // 最大闲置连接数
 $maxLifetime = 3600;  // 连接的最长生命周期
