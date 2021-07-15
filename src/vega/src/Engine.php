@@ -34,13 +34,20 @@ class Engine
     }
 
     /**
+     * @param \Closure|null $init
      * @return \Closure
      */
-    public function handler(): \Closure
+    public function handler(?\Closure $init = null): \Closure
     {
         $this->startDispatcher();
 
-        return function (...$args) {
+        return function (...$args) use ($init) {
+            static $ok = false;
+            if (!$ok && $init) {
+                $init();
+                $ok = true;
+            }
+
             if (static::isSwoole($args)) {
                 /**
                  * @var $request \Swoole\Http\Request

@@ -52,6 +52,19 @@ $http->set([
 $http->start();
 ```
 
+Start a multi-process coroutine
+
+```php
+$init = function () {
+    // coroutine init
+};
+$http->on('Request', $vega->handler($init));
+$http->set([
+    'enable_coroutine' => true,
+    'worker_num' => 4,
+]);
+```
+
 Swoole is used in a single process (coroutine)
 
 ```php
