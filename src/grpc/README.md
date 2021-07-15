@@ -8,8 +8,9 @@ PHP gRPC based on Swoole coroutine, including protoc code generator, server, and
 
 ## Overview
 
-由于 PHP-FPM 的特殊生命周期，导致 PHP 的 gRPC 官方代码生成器只能生成数据结构和客户端代码，无法像 golang/node.js/python 一样能同时生成服务器代码；传统方式如果要搭建 PHP gRPC
-服务器只能借助 nginx+h2+phpfpm 来搭建，这样就不需要 server 代码了，但是短生命周期又无法很好的支持服务注册，因为这些原因导致 PHP 在 gRPC 中一直都是充当 Client 的角色，Mix gRPC 提供了基于 Swoole 的方案：
+由于 PHP-FPM 的特殊生命周期，导致 PHP 的 gRPC 官方代码生成器只能生成数据结构和客户端代码，无法像 golang/node.js/python 一样能同时生成服务器代码；传统方式如果要搭建 PHP gRPC 服务器只能借助
+nginx+h2+phpfpm 来搭建，这样就不需要 server 代码了，但是短生命周期又无法很好的支持服务注册，因为这些原因导致 PHP 在 gRPC 中一直都是充当 Client 的角色，Mix gRPC 提供了基于 Swoole
+的方案：
 
 - 使用 [Swoole](https://github.com/swoole/swoole-src) 作为 gRPC Server
 - 使用 Golang 打造的 protoc-gen-mix 来生成 service 的 server/client 代码
@@ -33,7 +34,7 @@ PHP gRPC based on Swoole coroutine, including protoc code generator, server, and
 ## Installation
 
 - Swoole >= 4.4.4: https://wiki.swoole.com/#/environment
-- 需要开启 `--enable-http2` 
+- 需要开启 `--enable-http2`
 
 ```
 composer require mix/grpc
@@ -139,9 +140,9 @@ Swoole 多进程 (异步) 中使用
 $http = new Swoole\Http\Server('0.0.0.0', 9595);
 $http->on('Request', $grpc->handler());
 $http->set([
+    'worker_num' => 4,
     'open_http2_protocol' => true,
     'http_compression' => false,
-    'worker_num' => 4,
 ]);
 $http->start();
 ```
@@ -156,9 +157,9 @@ $init = function () {
 $http->on('Request', $grpc->handler($init));
 $http->set([
     'enable_coroutine' => true,
+    'worker_num' => 4,
     'open_http2_protocol' => true,
     'http_compression' => false,
-    'worker_num' => 4,
 ]);
 ```
 
@@ -208,7 +209,8 @@ $response = $say->Hello($ctx, $request);
 
 ## FPM 如何调用 gRPC 服务
 
-像我们传统 PHP FPM 模式中，我们作为客户端调用 gRPC 比 Mix gRPC 提供的客户端要复杂很多，但是我们也经常需要用到，比如在 thinkphp laravel 中调用 Mix gRPC 或者 Mix Go 编写的 gRPC 服务，推荐阅读以下文章：
+像我们传统 PHP FPM 模式中，我们作为客户端调用 gRPC 比 Mix gRPC 提供的客户端要复杂很多，但是我们也经常需要用到，比如在 thinkphp laravel 中调用 Mix gRPC 或者 Mix Go 编写的 gRPC
+服务，推荐阅读以下文章：
 
 - [gRPC入坑记](https://www.cnblogs.com/52fhy/p/11110704.html#php%E7%9B%B8%E5%85%B3%E6%94%AF%E6%8C%81)
 - [PHP中使用gRPC客户端](https://bbs.huaweicloud.com/blogs/135609)
@@ -233,7 +235,8 @@ service Say {
 protoc --php_out=. --grpc_out=. --plugin=protoc-gen-grpc=/path/grpc_php_plugin greeter.proto
 ```
 
-命令中指定了一个 `grpc_php_plugin` 文件是由 [grpc/grpc](https://github.com/grpc/grpc/tree/master/src/php) 提供的源码，官方没有像 `protoc` 一样提供编译好的二进制可以下载，只能自己编译。然而这个库依赖的大量的子仓库，在国内几乎无法拉取成功，其次 win 的 cmake 编译很多人不会弄，导致大量的人无法编译出这个文件，因此我这里直接提供编译好的二进制供大家下载。
+命令中指定了一个 `grpc_php_plugin` 文件是由 [grpc/grpc](https://github.com/grpc/grpc/tree/master/src/php) 提供的源码，官方没有像 `protoc`
+一样提供编译好的二进制可以下载，只能自己编译。然而这个库依赖的大量的子仓库，在国内几乎无法拉取成功，其次 win 的 cmake 编译很多人不会弄，导致大量的人无法编译出这个文件，因此我这里直接提供编译好的二进制供大家下载。
 
 - [下载 protoc_grpc_plugin](https://github.com/mix-php/grpc/releases/tag/binary-210714) `win/macos/linux`
 
