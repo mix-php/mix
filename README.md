@@ -25,7 +25,7 @@ MixPHP 是一个 PHP 命令行模式开发框架；基于 `Vega` 驱动的 HTTP 
 - [mix/websocket](https://github.com/mix-php/websocket) 基于 Swoole 协程的 PHP WebSocket 服务器与客户端
 - [mix/validate](https://github.com/mix-php/validate) 基于 PSR-7 的验证库 `重构中`
 - [mix/worker-pool](https://github.com/mix-php/worker-pool) 基于 Swoole 的协程池、工作池库 `重构中`
-- [mix/redis-subscribe](https://github.com/mix-php/redis-subscribe) 基于 Swoole 协程的 Redis 原生协议订阅库 `重构中`
+- [mix/redis-subscribe](https://github.com/mix-php/redis-subscribe) 基于 Swoole 协程的 Redis 原生协议订阅库
 
 ## 快速开始
 
