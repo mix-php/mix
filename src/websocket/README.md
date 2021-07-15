@@ -41,7 +41,7 @@ $upgrader = new Mix\WebSocket\Upgrader();
 
 $vega = new Mix\Vega\Engine();
 $vega->handleFunc('/websocket', function (Mix\Vega\Context $ctx) use ($upgrader) {
-     // 升级连接
+    // 升级连接
     $conn      = $upgrader->upgrade($ctx->request, $ctx->response);
 
     // 接收数据
