@@ -104,8 +104,8 @@ protoc --php_out=. --mix_out=. greeter.proto
 ```
 "autoload-dev": {
     "psr-4": {
-        "GPBMetadata\\": "protos/GPBMetadata/",
-        "Php\\": "protos/Php/"
+        "GPBMetadata\\": "protodir/GPBMetadata/",
+        "Php\\": "protodir/Php/"
     }
 }
 ```
