@@ -142,6 +142,9 @@ $http->set([
     'http_compression' => false,
 ]);
 $http->on('Request', $grpc->handler());
+$http->set([
+    'worker_num' => 4,
+]);
 $http->start();
 ```
 
