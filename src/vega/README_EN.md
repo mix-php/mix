@@ -13,7 +13,7 @@ Vega 是一个用 PHP 编写的 CLI 模式 HTTP 网络框架，支持 Swoole、W
 Vega is the core component of [MixPHP](https://github.com/mix-php/mix) `V3+` (which can be used independently). It is
 developed by referring to golang [gin](https://github.com/gin-gonic/gin) [mux](https://github.com/gorilla/mux). It
 contains a lot of functions for Web application processing (excluding database processing), including: routing,
-rendering, parameter acquisition, middleware, file upload processing, strong compatibility with CLI mode, and support
+rendering, parameter acquisition, middleware, file uploading, static file processing, strong compatibility with CLI mode, and support
 for Swoole, WorkerMan, and Swoole's various process models.
 
 **Recommended with the following databases:**
