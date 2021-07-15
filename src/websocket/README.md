@@ -28,6 +28,8 @@ PHP WebSocket server and client based on Swoole coroutine
 
 ## Installation
 
+- Swoole >= 4.4.15: https://wiki.swoole.com/#/environment
+
 ```
 composer require mix/websocket
 ```
