@@ -46,6 +46,9 @@ $vega->handleFunc('/hello', function (Mix\Vega\Context $ctx) {
 
 $http = new Swoole\Http\Server('0.0.0.0', 9501);
 $http->on('Request', $vega->handler());
+$http->set([
+    'worker_num' => 4,
+]);
 $http->start();
 ```
 
