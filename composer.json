@@ -1,6 +1,6 @@
 {
   "name": "mix/mix",
-  "description": "Single-threaded coroutine PHP framework",
+  "description": "PHP CLI mode development framework",
   "type": "framework",
   "keywords": [
     "mix",
@@ -8,7 +8,7 @@
     "coroutine",
     "framework"
   ],
-  "homepage": "https://openmix.org/",
+  "homepage": "https://openmix.org/mix-php",
   "license": "Apache-2.0",
   "authors": [
     {
@@ -48,6 +48,7 @@
   },
   "replace": {
     "mix/runtime": "self.version",
+    "mix/vega": "self.version",
     "mix/bean": "self.version",
     "mix/concurrent": "self.version",
     "mix/context": "self.version",
@@ -88,6 +89,7 @@
   "autoload": {
     "psr-4": {
       "Mix\\": "src/runtime/src/",
+      "Mix\\Vega\\": "src/vega/src/",
       "Mix\\Auth\\": "src/auth/src/",
       "Mix\\Bean\\": "src/bean/src/",
       "Mix\\Cache\\": "src/cache/src/",
