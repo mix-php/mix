@@ -3,8 +3,9 @@
 namespace Mix\WebSocket;
 
 use Mix\WebSocket\Exception\CloseFrameException;
-use Mix\WebSocket\Exception\ReceiveException;
+use Mix\WebSocket\Exception\ReadMessageException;
 use Mix\WebSocket\Exception\UpgradeException;
+use Mix\WebSocket\Exception\WriteMessageException;
 use Swoole\WebSocket\Frame;
 
 /**
@@ -91,24 +92,22 @@ class Client
     }
 
     /**
-     * Recv
      * @param float $timeout
-     * @return Frame
-     * @throws ReceiveException
+     * @return Frame|null
+     * @throws ReadMessageException
      * @throws CloseFrameException
-     * @throws \Swoole\Exception
      */
-    public function recv(float $timeout = -1): Frame
+    public function readMessage(float $timeout = -1): ?Frame
     {
         $frame = $this->client->recv($timeout);
-        if ($frame === false) { // 接收失败
+        if (!$frame) { // 接收失败
             $this->close(); // 需要移除管理器内的连接，所以还要 close
-            $errCode = swoole_last_error();
-            if ($errCode == 0) {
-                $errCode = stripos(PHP_OS, 'Darwin') !== false ? 54 : 104;
+            $errCode = $this->client->errCode;
+            if ($errCode != 0) {
+                $errMsg = socket_strerror($errCode);
+                throw new WriteMessageException($errMsg, $errCode);
             }
-            $errMsg = swoole_strerror($errCode, 9);
-            throw new ReceiveException($errMsg, $errCode);
+            return null;
         }
         if ($frame instanceof \Swoole\WebSocket\CloseFrame) { // CloseFrame
             $this->close(); // 需要移除管理器内的连接，所以还要 close
@@ -116,25 +115,23 @@ class Client
             $errMsg = $frame->reason;
             throw new CloseFrameException($errMsg, $errCode);
         }
-        if ($frame === "") { // 连接关闭
-            $this->close(); // 需要移除管理器内的连接，所以还要 close
-            $errCode = stripos(PHP_OS, 'Darwin') !== false ? 54 : 104; // mac=54, linux=104
-            $errMsg = swoole_strerror($errCode, 9);
-            throw new ReceiveException($errMsg, $errCode);
-        }
         return $frame;
     }
 
     /**
      * Send
      * @param Frame $data
-     * @throws \Swoole\Exception
+     * @throws WriteMessageException
      */
-    public function send(Frame $data): void
+    public function writeMessage(Frame $data): void
     {
         $result = $this->client->push($data);
         if ($result === false) {
-            throw new \Swoole\Exception(socket_strerror($this->client->errCode), $this->client->errCode);
+            $errCode = $this->client->errCode;
+            if ($errCode != 0) {
+                $errMsg = socket_strerror($errCode);
+                throw new WriteMessageException($errMsg, $errCode);
+            }
         }
     }
 

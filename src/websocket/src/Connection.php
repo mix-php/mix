@@ -3,7 +3,10 @@
 namespace Mix\WebSocket;
 
 use Mix\WebSocket\Exception\CloseFrameException;
-use Mix\WebSocket\Exception\ReceiveException;
+use Mix\WebSocket\Exception\ReadMessageException;
+use Mix\WebSocket\Exception\WriteMessageException;
+use Swoole\Http\Response;
+use Swoole\WebSocket\Frame;
 
 /**
  * Class Connection
@@ -13,7 +16,7 @@ class Connection
 {
 
     /**
-     * @var \Swoole\Http\Response
+     * @var Response
      */
     public $swooleResponse;
 
@@ -29,36 +32,34 @@ class Connection
 
     /**
      * Connection constructor.
-     * @param \Swoole\Http\Response $response
+     * @param Response $response
      * @param Upgrader $upgrader
      */
-    public function __construct(\Swoole\Http\Response $response, Upgrader $upgrader)
+    public function __construct(Response $response, Upgrader $upgrader)
     {
         $this->swooleResponse = $response;
         $this->upgrader = $upgrader;
     }
 
     /**
-     * Recv
      * @param float $timeout
-     * @return \Swoole\WebSocket\Frame
-     * @throws ReceiveException
+     * @return Frame|null
+     * @throws ReadMessageException
      * @throws CloseFrameException
-     * @throws \Swoole\Exception
      */
-    public function recv(float $timeout = -1)
+    public function readMessage(float $timeout = -1): ?Frame
     {
         $this->receiving = true;
         $frame = $this->swooleResponse->recv($timeout);
         $this->receiving = false;
-        if ($frame === false) { // 接收失败
+        if ($frame === false || $frame === '') { // 接收失败
             $this->close(); // 需要移除管理器内的连接，所以还要 close
             $errCode = swoole_last_error();
-            if ($errCode == 0) {
-                $errCode = stripos(PHP_OS, 'Darwin') !== false ? 54 : 104;
+            if ($errCode != 0) {
+                $errMsg = swoole_strerror($errCode, 9);
+                throw new ReadMessageException($errMsg, $errCode);
             }
-            $errMsg = swoole_strerror($errCode, 9);
-            throw new ReceiveException($errMsg, $errCode);
+            return null;
         }
         if ($frame instanceof \Swoole\WebSocket\CloseFrame) { // CloseFrame
             $this->close(); // 需要移除管理器内的连接，所以还要 close
@@ -66,34 +67,30 @@ class Connection
             $errMsg = $frame->reason;
             throw new CloseFrameException($errMsg, $errCode);
         }
-        if ($frame === "") { // 连接关闭
-            $this->close(); // 需要移除管理器内的连接，所以还要 close
-            $errCode = stripos(PHP_OS, 'Darwin') !== false ? 54 : 104; // mac=54, linux=104
-            $errMsg = swoole_strerror($errCode, 9);
-            throw new ReceiveException($errMsg, $errCode);
-        }
         return $frame;
     }
 
     /**
-     * Send
-     * @param \Swoole\WebSocket\Frame $data
-     * @throws \Swoole\Exception
+     * @param Frame $data
+     * @throws WriteMessageException
      */
-    public function send(\Swoole\WebSocket\Frame $data)
+    public function writeMessage(Frame $data): void
     {
         $result = $this->swooleResponse->push($data);
         if ($result === false) {
             $socket = $this->swooleResponse->socket;
-            throw new \Swoole\Exception($socket->errMsg ?: socket_strerror($socket->errCode), $socket->errCode);
+            $errCode = $socket->errCode;
+            if ($errCode != 0) {
+                $errMsg = socket_strerror($errCode);
+                throw new WriteMessageException($errMsg, $errCode);
+            }
         }
     }
 
     /**
-     * Close
      * @throws \Swoole\Exception
      */
-    public function close()
+    public function close(): void
     {
         $this->upgrader->remove($this);
 
