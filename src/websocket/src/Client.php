@@ -93,11 +93,11 @@ class Client
 
     /**
      * @param float $timeout
-     * @return Frame|null
+     * @return Frame
      * @throws ReadMessageException
      * @throws CloseFrameException
      */
-    public function readMessage(float $timeout = -1): ?Frame
+    public function readMessage(float $timeout = -1): Frame
     {
         $frame = $this->client->recv($timeout);
         if (!$frame) { // 接收失败
@@ -105,9 +105,10 @@ class Client
             $errCode = $this->client->errCode;
             if ($errCode != 0) {
                 $errMsg = socket_strerror($errCode);
-                throw new WriteMessageException($errMsg, $errCode);
+                throw new ReadMessageException($errMsg, $errCode);
             }
-            return null;
+            // 连接被关闭 recv 时返回 false 并且 errCode=0
+            throw new ReadMessageException('Connection is closed');
         }
         if ($frame instanceof \Swoole\WebSocket\CloseFrame) { // CloseFrame
             $this->close(); // 需要移除管理器内的连接，所以还要 close

@@ -43,23 +43,25 @@ class Connection
 
     /**
      * @param float $timeout
-     * @return Frame|null
+     * @return Frame
      * @throws ReadMessageException
      * @throws CloseFrameException
      */
-    public function readMessage(float $timeout = -1): ?Frame
+    public function readMessage(float $timeout = -1): Frame
     {
         $this->receiving = true;
         $frame = $this->swooleResponse->recv($timeout);
         $this->receiving = false;
-        if ($frame === false || $frame === '') { // 接收失败
+        if (!$frame) { // 接收失败
             $this->close(); // 需要移除管理器内的连接，所以还要 close
+            if ($frame === '') {
+                throw new ReadMessageException('Connection is closed');
+            }
             $errCode = swoole_last_error();
             if ($errCode != 0) {
                 $errMsg = swoole_strerror($errCode, 9);
                 throw new ReadMessageException($errMsg, $errCode);
             }
-            return null;
         }
         if ($frame instanceof \Swoole\WebSocket\CloseFrame) { // CloseFrame
             $this->close(); // 需要移除管理器内的连接，所以还要 close
