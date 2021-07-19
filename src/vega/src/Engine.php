@@ -4,6 +4,7 @@ namespace Mix\Vega;
 
 use Mix\Vega\Exception\RuntimeException;
 use Mix\View\Renderer;
+use phpDocumentor\Reflection\DocBlock\Tags\Deprecated;
 
 /**
  * Class Engine
@@ -44,8 +45,10 @@ class Engine
         return function (...$args) use ($init) {
             static $ok = false;
             if (!$ok && $init) {
-                $init();
+                // 即便提前锁定，在协程中依然无法防止请求击穿后因没有init导致的异常
+                // 结论：init还是只能放到进程启动事件中处理
                 $ok = true;
+                $init();
             }
 
             if (static::isSwoole($args)) {
