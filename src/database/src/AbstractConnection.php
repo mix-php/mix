@@ -230,7 +230,8 @@ abstract class AbstractConnection implements ConnectionInterface
         $this->lastInsertId = $this->driver->instance()->lastInsertId();
 
         // 执行完立即回收
-        if ($this->driver->pool && $this instanceof Transaction) {
+        // 事务除外，事务在 commit rollback __destruct 中回收
+        if ($this->driver->pool && !$this instanceof Transaction) {
             $this->driver->__return();
             $this->driver = new EmptyDriver();
         }
