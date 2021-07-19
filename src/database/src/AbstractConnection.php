@@ -23,6 +23,11 @@ abstract class AbstractConnection implements ConnectionInterface
     protected $logger;
 
     /**
+     * @var \Closure
+     */
+    protected $debug;
+
+    /**
      * PDOStatement
      * @var \PDOStatement
      */
@@ -54,26 +59,33 @@ abstract class AbstractConnection implements ConnectionInterface
 
     /**
      * 查询数据
-     * @var array [$sql, $params, $values, $time, $lastInsertId]
+     * @var array [$sql, $params, $values, $time, $lastInsertId, $rowCount]
      */
     protected $sqlData = [];
 
     /**
-     * execute 立即归还缓存处理
+     * 归还连接前缓存处理
      * @var array
      */
     protected $options = [];
 
     /**
-     * execute 立即归还缓存处理
+     * 归还连接前缓存处理
      * @var string
      */
     protected $lastInsertId = '';
 
     /**
-     * @var \Closure
+     * 归还连接前缓存处理
+     * @var int
      */
-    protected $debug;
+    protected $rowCount = 0;
+
+    /**
+     * 立即回收连接
+     * @var bool
+     */
+    protected $immediately = false;
 
     /**
      * AbstractConnection constructor.
@@ -168,7 +180,7 @@ abstract class AbstractConnection implements ConnectionInterface
         // 保存SQL
         $this->sql = $sql;
         $this->values = $values;
-        $this->sqlData = [$this->sql, $this->params, $this->values, 0, ''];
+        $this->sqlData = [$this->sql, $this->params, $this->values, 0];
 
         // 执行
         return $this->execute();
@@ -181,6 +193,7 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function exec(string $sql, ...$values): ConnectionInterface
     {
+        $this->immediately = true;
         return $this->raw($sql, ...$values);
     }
 
@@ -205,7 +218,6 @@ abstract class AbstractConnection implements ConnectionInterface
             // 记录执行时间
             $time = round((microtime(true) - $beginTime) * 1000, 2);
             $this->sqlData[3] = $time;
-            $this->sqlData[4] = $this->driver->instance()->lastInsertId();
 
             // debug
             $debug = $this->debug;
@@ -228,10 +240,12 @@ abstract class AbstractConnection implements ConnectionInterface
 
         // 回收前缓存
         $this->lastInsertId = $this->driver->instance()->lastInsertId();
+        $this->rowCount = $this->statement->rowCount();
 
         // 执行完立即回收
+        // 只立即回收 exec 方法触发的 insert update delete 语句
         // 事务除外，事务在 commit rollback __destruct 中回收
-        if ($this->driver->pool && !$this instanceof Transaction) {
+        if ($this->driver->pool && !$this instanceof Transaction && $this->immediately) {
             $this->driver->__return();
             $this->driver = new EmptyDriver();
         }
@@ -255,7 +269,7 @@ abstract class AbstractConnection implements ConnectionInterface
                 throw new \PDOException('PDO prepare failed');
             }
             $this->statement = $statement;
-            $this->sqlData = [$this->sql, $this->params, [], 0, '']; // 必须在 bindParam 前，才能避免类型被转换
+            $this->sqlData = [$this->sql, $this->params, [], 0,]; // 必须在 bindParam 前，才能避免类型被转换
             foreach ($this->params as $key => &$value) {
                 if (!$this->statement->bindParam($key, $value, static::bindType($value))) {
                     throw new \PDOException('PDOStatement bindParam failed');
@@ -267,7 +281,7 @@ abstract class AbstractConnection implements ConnectionInterface
                 throw new \PDOException('PDO prepare failed');
             }
             $this->statement = $statement;
-            $this->sqlData = [$this->sql, [], $this->values, 0, ''];
+            $this->sqlData = [$this->sql, [], $this->values, 0];
             foreach ($this->values as $key => $value) {
                 if (!$this->statement->bindValue($key + 1, $value, static::bindType($value))) {
                     throw new \PDOException('PDOStatement bindValue failed');
@@ -279,7 +293,7 @@ abstract class AbstractConnection implements ConnectionInterface
                 throw new \PDOException('PDO prepare failed');
             }
             $this->statement = $statement;
-            $this->sqlData = [$this->sql, [], [], 0, ''];
+            $this->sqlData = [$this->sql, [], [], 0];
         }
     }
 
@@ -313,6 +327,7 @@ abstract class AbstractConnection implements ConnectionInterface
         $this->params = [];
         $this->values = [];
         $this->debug = null;
+        $this->immediately = false;
     }
 
     /**
@@ -381,7 +396,7 @@ abstract class AbstractConnection implements ConnectionInterface
     public function updates(array $data): ConnectionInterface
     {
         list($sql, $values) = $this->build('UPDATE', $data);
-        return $this->raw($sql, ...$values);
+        return $this->exec($sql, ...$values);
     }
 
     /**
@@ -394,7 +409,7 @@ abstract class AbstractConnection implements ConnectionInterface
         list($sql, $values) = $this->build('UPDATE', [
             $field => $value
         ]);
-        return $this->raw($sql, ...$values);
+        return $this->exec($sql, ...$values);
     }
 
     /**
@@ -403,15 +418,21 @@ abstract class AbstractConnection implements ConnectionInterface
     public function delete(): ConnectionInterface
     {
         list($sql, $values) = $this->build('DELETE');
-        return $this->raw($sql, ...$values);
+        return $this->exec($sql, ...$values);
     }
 
     /**
      * 返回结果集
+     * 连接会被丢弃，为了避免析构导致连接回收的问题
+     * 注意：该方法不适合高频调用
      * @return \PDOStatement
      */
     public function statement(): \PDOStatement
     {
+        // 丢弃该连接
+        $this->driver->__discard();
+        $this->driver = new EmptyDriver();
+
         return $this->statement;
     }
 
@@ -475,7 +496,7 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function rowCount(): int
     {
-        return $this->statement->rowCount();
+        return $this->rowCount;
     }
 
     /**
@@ -509,7 +530,7 @@ abstract class AbstractConnection implements ConnectionInterface
         }, $keys);
         $sql = "{$insert} `{$table}` (`" . implode('`, `', $keys) . "`) VALUES (" . implode(', ', $fields) . ")";
         $this->params = array_merge($this->params, $data);
-        return $this->raw($sql);
+        return $this->exec($sql);
     }
 
     /**
@@ -539,7 +560,7 @@ abstract class AbstractConnection implements ConnectionInterface
             $subSql[] = "(" . implode(', ', $placeholder) . ")";
         }
         $sql .= implode(', ', $subSql);
-        return $this->raw($sql, ...$values);
+        return $this->exec($sql, ...$values);
     }
 
     /**
