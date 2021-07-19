@@ -21,11 +21,14 @@ MixPHP 是一个 PHP 命令行模式开发框架；基于 `Vega` 驱动的 HTTP 
 - [mix/vega](https://github.com/mix-php/vega) PHP 编写的 CLI 模式 HTTP 网络框架，支持 Swoole、WorkerMan，与 Go 生态的 gin 定位一致
 - [mix/database](https://github.com/mix-php/database) 可在各种环境中使用的轻量数据库，支持 FPM、CLI、Swoole、WorkerMan，可选的连接池 (协程)
 - [mix/redis](https://github.com/mix-php/redis) 可在各种环境中使用的 PHP Redis，支持 FPM、CLI、Swoole、WorkerMan，可选的连接池 (协程)
+- [mix/redis-subscribe](https://github.com/mix-php/redis-subscribe) 基于 Swoole 协程的 Redis 原生协议订阅库
 - [mix/grpc](https://github.com/mix-php/grpc) 基于 Swoole 协程的 PHP gRPC 库，包含 protoc 代码生成器、服务器、客户端
 - [mix/websocket](https://github.com/mix-php/websocket) 基于 Swoole 协程的 PHP WebSocket 服务器与客户端
 - [mix/validate](https://github.com/mix-php/validate) 基于 PSR-7 的验证库 `重构中`
 - [mix/worker-pool](https://github.com/mix-php/worker-pool) 基于 Swoole 的协程池、工作池库 `重构中`
-- [mix/redis-subscribe](https://github.com/mix-php/redis-subscribe) 基于 Swoole 协程的 Redis 原生协议订阅库
+- [mix/cli](https://github.com/mix-php/cli) PHP 命令行交互指挥官 `重构中`
+- [mix/event](https://github.com/mix-php/event) 基于 PSR-14 标准的事件调度库 `重构中`
+- [mix/session](https://github.com/mix-php/session) PHP 命令行模式的 session 库 `重构中`
 
 ## 快速开始
 
