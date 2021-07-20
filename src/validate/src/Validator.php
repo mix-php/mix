@@ -68,7 +68,7 @@ abstract class Validator implements \JsonSerializable
      * 规则
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [];
     }
@@ -77,7 +77,7 @@ abstract class Validator implements \JsonSerializable
      * 场景
      * @return array
      */
-    public function scenarios()
+    public function scenarios(): array
     {
         return [];
     }
@@ -86,7 +86,7 @@ abstract class Validator implements \JsonSerializable
      * 消息
      * @return array
      */
-    public function messages()
+    public function messages(): array
     {
         return [];
     }
@@ -96,7 +96,7 @@ abstract class Validator implements \JsonSerializable
      * @param string $scenario
      * @return $this
      */
-    public function setScenario(string $scenario)
+    public function scenario(string $scenario)
     {
         $scenarios = $this->scenarios();
         if (!isset($scenarios[$scenario])) {
@@ -116,7 +116,7 @@ abstract class Validator implements \JsonSerializable
      * 验证
      * @return bool
      */
-    public function validate()
+    public function validate(): bool
     {
         if (!isset($this->scenario)) {
             throw new InvalidArgumentException("场景未设置");
@@ -167,7 +167,7 @@ abstract class Validator implements \JsonSerializable
      * 返回全部错误
      * @return array
      */
-    public function getErrors()
+    public function errors(): array
     {
         return $this->errors;
     }
@@ -176,7 +176,7 @@ abstract class Validator implements \JsonSerializable
      * 返回一条错误
      * @return string
      */
-    public function getError()
+    public function error(): string
     {
         $errors = $this->errors;
         if (empty($errors)) {
@@ -191,7 +191,7 @@ abstract class Validator implements \JsonSerializable
      * Json serialize
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $data = [];
         foreach ($this as $key => $val) {

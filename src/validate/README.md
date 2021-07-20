@@ -49,7 +49,7 @@ class UserForm extends Validator
     /**
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name'  => ['string', 'maxLength' => 25, 'filter' => ['trim']],
@@ -61,7 +61,7 @@ class UserForm extends Validator
     /**
      * @return array
      */
-    public function scenarios()
+    public function scenarios(): array
     {
         return [
             'create' => ['required' => ['name'], 'optional' => ['email', 'age']],
@@ -71,7 +71,7 @@ class UserForm extends Validator
     /**
      * @return array
      */
-    public function messages()
+    public function messages(): array
     {
         return [
             'name.required'  => '名称不能为空.',
@@ -92,8 +92,8 @@ class UserForm extends Validator
 ```php
 // 使用表单验证
 $form = new UserForm($request->getAttributes());
-if (!$form->setScenario('create')->validate()) {
-    $data = ['code' => 1, 'message' => $form->getError()];
+if (!$form->scenario('create')->validate()) {
+    $data = ['code' => 1, 'message' => $form->error()];
     $ctx->JSON(200, $data);
     return;
 }
@@ -102,15 +102,15 @@ if (!$form->setScenario('create')->validate()) {
 (new UserModel())->add($form);
 ```
 
-- `$form->getError() : string` 获取单条错误信息
-- `$form->getErrors() : array` 获取全部错误信息
+- `$form->error() : string` 获取单条错误信息
+- `$form->errors() : array` 获取全部错误信息
 
 ## 验证规则
 
 全部的验证类型与对应的验证选项如下
 
 ```php
-public function rules()
+public function rules(): array
 {
     return [
         'a' => ['integer', 'unsigned' => true, 'min' => 1, 'max' => 1000000, 'length' => 10, 'minLength' => 3, 'maxLength' => 5],
@@ -137,7 +137,7 @@ public function rules()
 该类型为用户自定义验证规则，callback 内指定一个用户自定义的方法来验证
 
 ```php
-public function check($fieldValue)
+public function check($fieldValue): bool
 {
     // 验证代码
     // ...

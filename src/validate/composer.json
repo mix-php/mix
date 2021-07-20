@@ -23,5 +23,8 @@
     "psr-4": {
       "Mix\\Validate\\": "src/"
     }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.0.0"
   }
 }
