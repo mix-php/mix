@@ -8,7 +8,7 @@ Vega is a CLI mode HTTP web framework written in PHP support Swoole, WorkerMan
 
 Vega 是一个用 PHP 编写的 CLI 模式 HTTP 网络框架，支持 Swoole、WorkerMan
 
-## Overview
+## 概述
 
 Vega 是 [MixPHP](https://github.com/mix-php/mix) `V3+` 内置的最核心的组件 (可独立使用)，参考
 golang [gin](https://github.com/gin-gonic/gin) [mux](https://github.com/gorilla/mux) 开发，它包含 Web 应用处理的大量功能 (数据库处理除外)
@@ -32,7 +32,7 @@ golang [gin](https://github.com/gin-gonic/gin) [mux](https://github.com/gorilla/
 , [825122875](http://shang.qq.com/wpa/qunwpa?idkey=d2908b0c7095fc7ec63a2391fa4b39a8c5cb16952f6cfc3f2ce4c9726edeaf20)
 敲门暗号：vega
 
-## Installation
+## 安装
 
 > 需先安装 [Swoole](https://wiki.swoole.com/#/environment) 或者 [WorkerMan](http://doc.workerman.net/install/requirement.html)
 
@@ -40,7 +40,7 @@ golang [gin](https://github.com/gin-gonic/gin) [mux](https://github.com/gorilla/
 composer require mix/vega
 ```
 
-## Quick start
+## 快速开始
 
 Swoole 多进程 (异步) 中使用
 
