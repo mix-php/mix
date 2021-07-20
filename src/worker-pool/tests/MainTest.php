@@ -1,9 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Mix\Sync\WaitGroup;
-use Mix\WorkerPool\AbstractWorker;
-use Mix\WorkerPool\WorkerDispatcher;
+use Mix\WorkerPool\WorkerPool;
 use PHPUnit\Framework\TestCase;
 use Swoole\Coroutine\Channel;
 
@@ -14,9 +12,9 @@ final class MainTest extends TestCase
     {
         $func = function () {
             $maxWorkers = 20;
-            $maxQueue   = 10;
-            $jobQueue   = new Channel($maxQueue);
-            $dispatcher = new WorkerDispatcher($jobQueue, $maxWorkers, FooWorker::class, 123);
+            $maxQueue = 10;
+            $jobQueue = new Channel($maxQueue);
+            $dispatcher = new WorkerPool($jobQueue, $maxWorkers, new FooHandler());
 
             go(function () use ($jobQueue, $dispatcher) {
                 // 投放任务
@@ -32,48 +30,12 @@ final class MainTest extends TestCase
         run($func);
     }
 
-    public function testOld(): void
-    {
-        $func = function () {
-            $maxWorkers = 20;
-            $maxQueue   = 10;
-            $jobQueue   = new Channel($maxQueue);
-            $dispatcher = new \Mix\WorkerPool\WorkerPoolDispatcher($jobQueue, $maxWorkers);
-
-            go(function () use ($jobQueue, $dispatcher) {
-                // 投放任务
-                for ($i = 0; $i < 1000; $i++) {
-                    $jobQueue->push($i);
-                }
-                // 停止
-                $dispatcher->stop();
-            });
-
-            $dispatcher->start(FooWorker::class);
-        };
-        run($func);
-    }
-
 }
 
-class FooWorker extends AbstractWorker
+class FooHandler implements \Mix\WorkerPool\RunInterface
 {
 
-    public $foo;
-
-    /**
-     * FooWorker constructor.
-     * @param null $foo
-     */
-    public function __construct($foo = null)
-    {
-        $this->foo = $foo;
-    }
-
-    /**
-     * @param $data
-     */
-    public function do($data)
+    public function do($data): void
     {
         usleep(10000); // 测试队列消费缓慢的情况
     }

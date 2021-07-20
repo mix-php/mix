@@ -2,25 +2,18 @@
 
 namespace Mix\WorkerPool;
 
-use Mix\Sync\WaitGroup;
 use Swoole\Coroutine;
 use Swoole\Coroutine\Channel;
+use Swoole\Coroutine\WaitGroup;
 
 /**
- * Class AbstractWorker
+ * Class Worker
  * @package Mix\WorkerPool
- * @author liu,jian <coder.keda@gmail.com>
  */
-abstract class AbstractWorker
+class Worker
 {
 
     /**
-     * @var int
-     */
-    public $workerID;
-
-    /**
-     * 工作池
      * @var Channel
      */
     protected $workerPool;
@@ -31,50 +24,35 @@ abstract class AbstractWorker
     protected $waitGroup;
 
     /**
-     * 任务通道
+     * @var \Closure|RunInterface
+     */
+    protected $run;
+
+    /**
      * @var Channel
      */
     protected $jobChannel;
 
     /**
-     * 退出
      * @var Channel
      */
     protected $quit;
 
     /**
-     * Init
-     * @param int $workerID
+     * Worker constructor.
      * @param Channel $workerPool
      * @param WaitGroup $waitGroup
+     * @param \Closure|RunInterface $run
      */
-    public function init(int $workerID, Channel $workerPool, WaitGroup $waitGroup)
+    public function __construct(Channel $workerPool, WaitGroup $waitGroup, $run)
     {
-        $this->workerID   = $workerID;
         $this->workerPool = $workerPool;
-        $this->waitGroup  = $waitGroup;
+        $this->waitGroup = $waitGroup;
+        $this->run = $run;
         $this->jobChannel = new Channel();
-        $this->quit       = new Channel();
+        $this->quit = new Channel();
     }
 
-    /**
-     * 处理
-     * @param $data
-     */
-    abstract public function do($data);
-
-    /**
-     * 启动
-     * @deprecated 废弃，为了兼容旧版 WorkerPoolDispatcher 而保留
-     */
-    public function start()
-    {
-        $this->run();
-    }
-
-    /**
-     * 启动
-     */
     public function run()
     {
         $this->waitGroup->add(1);
@@ -88,7 +66,13 @@ abstract class AbstractWorker
                 if ($data === false) {
                     return;
                 }
-                $this->do($data);
+                if ($this->run instanceof \Closure) {
+                    $run = $this->run;
+                    $run($data);
+                } else if ($this->run instanceof RunInterface) {
+                    $run = $this->run;
+                    $run->do($data);
+                }
             }
         });
         Coroutine::create(function () {
@@ -97,9 +81,6 @@ abstract class AbstractWorker
         });
     }
 
-    /**
-     * 停止
-     */
     public function stop()
     {
         Coroutine::create(function () {

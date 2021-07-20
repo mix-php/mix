@@ -1,4 +1,6 @@
-## Mix Validate
+> OpenMix 出品：[https://openmix.org](https://openmix.org/mix-php)
+
+# Mix Validate
 
 Validator based on PSR-7 standard
 

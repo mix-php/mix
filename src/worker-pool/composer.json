@@ -1,6 +1,6 @@
 {
   "name": "mix/worker-pool",
-  "description": "Swoole-based worker pool library",
+  "description": "Swoole-based worker pool, coroutine pool",
   "type": "library",
   "keywords": [
     "mix",
@@ -8,7 +8,7 @@
     "worker-pool",
     "coroutine-pool"
   ],
-  "homepage": "https://openmix.org/",
+  "homepage": "https://openmix.org/mix-php",
   "license": "Apache-2.0",
   "authors": [
     {
@@ -18,8 +18,7 @@
   ],
   "require": {
     "php": ">=7.0.0",
-    "ext-swoole": ">=4.4.4",
-    "mix/runtime": "~2.2.0"
+    "ext-swoole": ">=4.4.4"
   },
   "autoload": {
     "psr-4": {
