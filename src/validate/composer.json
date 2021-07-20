@@ -1,12 +1,12 @@
 {
   "name": "mix/validate",
-  "description": "Validate library, reference Yii2",
+  "description": "Validator based on PSR-7 standard",
   "type": "library",
   "keywords": [
     "mix",
     "validate"
   ],
-  "homepage": "https://openmix.org/",
+  "homepage": "https://openmix.org/mix-php",
   "license": "Apache-2.0",
   "authors": [
     {
@@ -17,8 +17,7 @@
   "require": {
     "php": ">=7.0.0",
     "ext-mbstring": "*",
-    "psr/http-message": "^1.0",
-    "mix/bean": "~2.2.0"
+    "psr/http-message": "^1.0"
   },
   "autoload": {
     "psr-4": {

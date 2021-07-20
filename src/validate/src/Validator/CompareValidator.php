@@ -3,14 +3,14 @@
 namespace Mix\Validate\Validator;
 
 /**
- * CompareValidator类
- * @author liu,jian <coder.keda@gmail.com>
+ * Class CompareValidator
+ * @package Mix\Validate\Validator
  */
 class CompareValidator extends BaseValidator
 {
 
     // 启用的选项
-    protected $_enabledOptions = ['compareAttribute'];
+    protected $enabledOptions = ['compareAttribute'];
 
     // 比较属性
     protected function compareAttribute($param)

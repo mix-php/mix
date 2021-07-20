@@ -5,17 +5,17 @@ namespace Mix\Validate\Validator;
 use Mix\Validate\Validate;
 
 /**
- * PhoneValidator类
- * @author liu,jian <coder.keda@gmail.com>
+ * Class PhoneValidator
+ * @package Mix\Validate\Validator
  */
 class PhoneValidator extends BaseValidator
 {
 
     // 初始化选项
-    protected $_initOptions = ['phone'];
+    protected $initOptions = ['phone'];
 
     // 启用的选项
-    protected $_enabledOptions = [];
+    protected $enabledOptions = [];
 
     // 类型验证
     protected function phone()

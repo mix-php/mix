@@ -3,14 +3,14 @@
 namespace Mix\Validate\Validator;
 
 /**
- * CallValidator类
- * @author liu,jian <coder.keda@gmail.com>
+ * Class CallValidator
+ * @package Mix\Validate\Validator
  */
 class CallValidator extends BaseValidator
 {
 
     // 启用的选项
-    protected $_enabledOptions = ['callback'];
+    protected $enabledOptions = ['callback'];
 
     // 回调验证
     protected function callback($param)

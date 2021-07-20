@@ -2,13 +2,11 @@
 
 namespace Mix\Validate\Validator;
 
-use Mix\Validate\Exception\InvalidArgumentException;
 use Psr\Http\Message\UploadedFileInterface;
 
 /**
  * Class FileValidator
  * @package Mix\Validate\Validator
- * @author liu,jian <coder.keda@gmail.com>
  */
 class FileValidator extends BaseValidator
 {
@@ -17,19 +15,19 @@ class FileValidator extends BaseValidator
      * 初始化选项
      * @var array
      */
-    protected $_initOptions = ['upload'];
+    protected $initOptions = ['upload'];
 
     /**
      * 启用的选项
      * @var array
      */
-    protected $_enabledOptions = ['mimes', 'maxSize'];
+    protected $enabledOptions = ['mimes', 'maxSize'];
 
     /**
      * 验证器名称
      * @var string
      */
-    protected $_name = '文件';
+    protected $name = '文件';
 
     /**
      * FileValidator constructor.
@@ -55,16 +53,16 @@ class FileValidator extends BaseValidator
             // 设置错误消息
             switch ($value->getError()) {
                 case UPLOAD_ERR_INI_SIZE:
-                    $defaultMessage = "上传的{$this->_name}大小超过了 php.ini 中 upload_max_filesize 选项限制的值.";
+                    $defaultMessage = "上传的{$this->name}大小超过了 php.ini 中 upload_max_filesize 选项限制的值.";
                     break;
                 case UPLOAD_ERR_FORM_SIZE:
-                    $defaultMessage = "上传的{$this->_name}大小超过了 HTML 表单中 MAX_FILE_SIZE 选项指定的值.";
+                    $defaultMessage = "上传的{$this->name}大小超过了 HTML 表单中 MAX_FILE_SIZE 选项指定的值.";
                     break;
                 case UPLOAD_ERR_PARTIAL:
-                    $defaultMessage = "{$this->_name}只有部分被上传.";
+                    $defaultMessage = "{$this->name}只有部分被上传.";
                     break;
                 case UPLOAD_ERR_NO_FILE:
-                    $defaultMessage = "没有{$this->_name}被上传.";
+                    $defaultMessage = "没有{$this->name}被上传.";
                     break;
                 case UPLOAD_ERR_NO_TMP_DIR:
                     $defaultMessage = '找不到临时文件夹.';

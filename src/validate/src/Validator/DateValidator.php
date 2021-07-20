@@ -5,14 +5,14 @@ namespace Mix\Validate\Validator;
 use Mix\Validate\Validate;
 
 /**
- * DateValidator类
- * @author liu,jian <coder.keda@gmail.com>
+ * Class DateValidator
+ * @package Mix\Validate\Validator
  */
 class DateValidator extends BaseValidator
 {
 
     // 启用的选项
-    protected $_enabledOptions = ['format'];
+    protected $enabledOptions = ['format'];
 
     // 格式验证
     protected function format($param)

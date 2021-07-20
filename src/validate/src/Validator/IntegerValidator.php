@@ -5,17 +5,17 @@ namespace Mix\Validate\Validator;
 use Mix\Validate\Validate;
 
 /**
- * IntegerValidator类
- * @author liu,jian <coder.keda@gmail.com>
+ * Class IntegerValidator
+ * @package Mix\Validate\Validator
  */
 class IntegerValidator extends BaseValidator
 {
 
     // 初始化选项
-    protected $_initOptions = ['integer'];
+    protected $initOptions = ['integer'];
 
     // 启用的选项
-    protected $_enabledOptions = ['unsigned', 'min', 'max', 'length', 'minLength', 'maxLength'];
+    protected $enabledOptions = ['unsigned', 'min', 'max', 'length', 'minLength', 'maxLength'];
 
     // 类型验证
     protected function integer()

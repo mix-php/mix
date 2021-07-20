@@ -2,14 +2,12 @@
 
 namespace Mix\Validate;
 
-use Mix\Bean\BeanInjector;
 use Mix\Validate\Exception\InvalidArgumentException;
 use Psr\Http\Message\UploadedFileInterface;
 
 /**
  * Class Validator
  * @package Mix\Validate
- * @author liu,jian <coder.keda@gmail.com>
  */
 abstract class Validator implements \JsonSerializable
 {
@@ -17,43 +15,43 @@ abstract class Validator implements \JsonSerializable
     /**
      * @var array
      */
-    public $attributes = [];
+    protected $attributes = [];
 
     /**
      * @var UploadedFileInterface[]
      */
-    public $uploadedFiles = [];
+    protected $uploadedFiles = [];
 
     /**
      * @var string
      */
-    protected $_scenario = '';
+    protected $scenario = '';
 
     /**
      * @var array
      */
-    protected $_validators = [
-        'integer'      => \Mix\Validate\Validator\IntegerValidator::class,
-        'double'       => \Mix\Validate\Validator\DoubleValidator::class,
-        'alpha'        => \Mix\Validate\Validator\AlphaValidator::class,
+    protected $validators = [
+        'integer' => \Mix\Validate\Validator\IntegerValidator::class,
+        'double' => \Mix\Validate\Validator\DoubleValidator::class,
+        'alpha' => \Mix\Validate\Validator\AlphaValidator::class,
         'alphaNumeric' => \Mix\Validate\Validator\AlphaNumericValidator::class,
-        'string'       => \Mix\Validate\Validator\StringValidator::class,
-        'in'           => \Mix\Validate\Validator\InValidator::class,
-        'date'         => \Mix\Validate\Validator\DateValidator::class,
-        'email'        => \Mix\Validate\Validator\EmailValidator::class,
-        'phone'        => \Mix\Validate\Validator\PhoneValidator::class,
-        'url'          => \Mix\Validate\Validator\UrlValidator::class,
-        'compare'      => \Mix\Validate\Validator\CompareValidator::class,
-        'match'        => \Mix\Validate\Validator\MatchValidator::class,
-        'call'         => \Mix\Validate\Validator\CallValidator::class,
-        'file'         => \Mix\Validate\Validator\FileValidator::class,
-        'image'        => \Mix\Validate\Validator\ImageValidator::class,
+        'string' => \Mix\Validate\Validator\StringValidator::class,
+        'in' => \Mix\Validate\Validator\InValidator::class,
+        'date' => \Mix\Validate\Validator\DateValidator::class,
+        'email' => \Mix\Validate\Validator\EmailValidator::class,
+        'phone' => \Mix\Validate\Validator\PhoneValidator::class,
+        'url' => \Mix\Validate\Validator\UrlValidator::class,
+        'compare' => \Mix\Validate\Validator\CompareValidator::class,
+        'match' => \Mix\Validate\Validator\MatchValidator::class,
+        'call' => \Mix\Validate\Validator\CallValidator::class,
+        'file' => \Mix\Validate\Validator\FileValidator::class,
+        'image' => \Mix\Validate\Validator\ImageValidator::class,
     ];
 
     /**
      * @var array
      */
-    protected $_errors = [];
+    protected $errors = [];
 
     /**
      * Validator constructor.
@@ -62,11 +60,8 @@ abstract class Validator implements \JsonSerializable
      */
     public function __construct(array $attributes, array $uploadedFiles = [])
     {
-        // 为了效验对象数组类型，使用BeanInjector
-        BeanInjector::inject($this, [
-            'attributes'    => $attributes,
-            'uploadedFiles' => $uploadedFiles,
-        ]);
+        $this->attributes = $attributes;
+        $this->uploadedFiles = $uploadedFiles;
     }
 
     /**
@@ -99,6 +94,7 @@ abstract class Validator implements \JsonSerializable
     /**
      * 设置当前场景
      * @param string $scenario
+     * @return $this
      */
     public function setScenario(string $scenario)
     {
@@ -112,7 +108,8 @@ abstract class Validator implements \JsonSerializable
         if (!isset($scenarios[$scenario]['optional'])) {
             $scenarios[$scenario]['optional'] = [];
         }
-        $this->_scenario = $scenarios[$scenario];
+        $this->scenario = $scenarios[$scenario];
+        return $this;
     }
 
     /**
@@ -121,14 +118,14 @@ abstract class Validator implements \JsonSerializable
      */
     public function validate()
     {
-        if (!isset($this->_scenario)) {
+        if (!isset($this->scenario)) {
             throw new InvalidArgumentException("场景未设置");
         }
-        $this->_errors      = [];
-        $scenario           = $this->_scenario;
+        $this->errors = [];
+        $scenario = $this->scenario;
         $scenarioAttributes = array_merge($scenario['required'], $scenario['optional']);
-        $rules              = $this->rules();
-        $messages           = $this->messages();
+        $rules = $this->rules();
+        $messages = $this->messages();
         // 判断是否定义了规则
         foreach ($scenarioAttributes as $attribute) {
             if (!isset($rules[$attribute])) {
@@ -141,29 +138,29 @@ abstract class Validator implements \JsonSerializable
                 continue;
             }
             $validatorType = array_shift($rule);
-            if (!isset($this->_validators[$validatorType])) {
+            if (!isset($this->validators[$validatorType])) {
                 throw new InvalidArgumentException("属性 {$attribute} 的验证类型 {$validatorType} 不存在");
             }
             $attributeValue = isset($this->attributes[$attribute]) ? $this->attributes[$attribute] : null;
             // 实例化
-            $validatorClass           = $this->_validators[$validatorType];
-            $validator                = new $validatorClass([
-                'isRequired'     => in_array($attribute, $scenario['required']),
-                'options'        => $rule,
-                'attribute'      => $attribute,
+            $validatorClass = $this->validators[$validatorType];
+            $validator = new $validatorClass([
+                'isRequired' => in_array($attribute, $scenario['required']),
+                'options' => $rule,
+                'attribute' => $attribute,
                 'attributeValue' => $attributeValue,
-                'messages'       => $messages,
-                'attributes'     => $this->attributes,
-                'uploadedFiles'  => $this->uploadedFiles,
+                'messages' => $messages,
+                'attributes' => $this->attributes,
+                'uploadedFiles' => $this->uploadedFiles,
             ]);
             $validator->mainValidator = $this;
             // 验证
             if (!$validator->validate()) {
                 // 记录错误消息
-                $this->_errors[$attribute] = $validator->errors;
+                $this->errors[$attribute] = $validator->errors;
             }
         }
-        return empty($this->_errors);
+        return empty($this->errors);
     }
 
     /**
@@ -172,7 +169,7 @@ abstract class Validator implements \JsonSerializable
      */
     public function getErrors()
     {
-        return $this->_errors;
+        return $this->errors;
     }
 
     /**
@@ -181,11 +178,11 @@ abstract class Validator implements \JsonSerializable
      */
     public function getError()
     {
-        $errors = $this->_errors;
+        $errors = $this->errors;
         if (empty($errors)) {
             return '';
         }
-        $item  = array_shift($errors);
+        $item = array_shift($errors);
         $error = array_shift($item);
         return $error;
     }

@@ -5,7 +5,6 @@ namespace Mix\Validate;
 /**
  * Class Validate
  * @package Mix\Validate
- * @author liu,jian <coder.keda@gmail.com>
  */
 class Validate
 {

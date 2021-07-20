@@ -3,14 +3,14 @@
 namespace Mix\Validate\Validator;
 
 /**
- * StringValidator类
- * @author liu,jian <coder.keda@gmail.com>
+ * Class StringValidator
+ * @package Mix\Validate\Validator
  */
 class StringValidator extends BaseValidator
 {
 
     // 启用的选项
-    protected $_enabledOptions = ['length', 'minLength', 'maxLength', 'filter'];
+    protected $enabledOptions = ['length', 'minLength', 'maxLength', 'filter'];
 
     // 过滤处理
     protected function filter($param)

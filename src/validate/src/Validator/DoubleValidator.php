@@ -5,17 +5,17 @@ namespace Mix\Validate\Validator;
 use Mix\Validate\Validate;
 
 /**
- * DoubleValidator类
- * @author liu,jian <coder.keda@gmail.com>
+ * Class DoubleValidator
+ * @package Mix\Validate\Validator
  */
 class DoubleValidator extends BaseValidator
 {
 
     // 初始化选项
-    protected $_initOptions = ['double'];
+    protected $initOptions = ['double'];
 
     // 启用的选项
-    protected $_enabledOptions = ['unsigned', 'min', 'max', 'length', 'minLength', 'maxLength'];
+    protected $enabledOptions = ['unsigned', 'min', 'max', 'length', 'minLength', 'maxLength'];
 
     // 类型验证
     protected function double()

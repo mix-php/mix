@@ -5,14 +5,14 @@ namespace Mix\Validate\Validator;
 use Mix\Validate\Validate;
 
 /**
- * MatchValidator类
- * @author liu,jian <coder.keda@gmail.com>
+ * Class MatchValidator
+ * @package Mix\Validate\Validator
  */
 class MatchValidator extends BaseValidator
 {
 
     // 启用的选项
-    protected $_enabledOptions = ['pattern'];
+    protected $enabledOptions = ['pattern'];
 
     // 正则验证
     protected function pattern($param)

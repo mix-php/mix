@@ -5,17 +5,17 @@ namespace Mix\Validate\Validator;
 use Mix\Validate\Validate;
 
 /**
- * AlphaNumericValidator类
- * @author liu,jian <coder.keda@gmail.com>
+ * Class AlphaNumericValidator
+ * @package Mix\Validate\Validator
  */
 class AlphaNumericValidator extends BaseValidator
 {
 
     // 初始化选项
-    protected $_initOptions = ['alphaNumeric'];
+    protected $initOptions = ['alphaNumeric'];
 
     // 启用的选项
-    protected $_enabledOptions = ['length', 'minLength', 'maxLength'];
+    protected $enabledOptions = ['length', 'minLength', 'maxLength'];
 
     // 类型验证
     protected function alphaNumeric()

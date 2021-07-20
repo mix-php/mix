@@ -2,16 +2,13 @@
 
 namespace Mix\Validate\Validator;
 
-use Mix\Bean\BeanInjector;
 use Mix\Validate\Validator;
-use Psr\Http\Message\ServerRequestInterface;
 use Mix\Validate\Exception\InvalidArgumentException;
 use Psr\Http\Message\UploadedFileInterface;
 
 /**
  * Class BaseValidator
- * @package Mix\Validate
- * @author liu,jian <coder.keda@gmail.com>
+ * @package Mix\Validate\Validator
  */
 abstract class BaseValidator
 {
@@ -74,27 +71,31 @@ abstract class BaseValidator
      * 设置
      * @var array
      */
-    protected $_settings = [];
+    protected $settings = [];
 
     /**
      * 初始化选项
      * @var array
      */
-    protected $_initOptions = [];
+    protected $initOptions = [];
 
     /**
      * 启用的选项
      * @var array
      */
-    protected $_enabledOptions = [];
+    protected $enabledOptions = [];
 
     /**
-     * Authorization constructor.
+     * BaseValidator constructor.
      * @param array $config
      */
     public function __construct(array $config)
     {
-        BeanInjector::inject($this, $config);
+        foreach ($config as $key => $value) {
+            if (isset($this->$key)) {
+                $this->$key = $value;
+            }
+        }
     }
 
     /**
@@ -104,23 +105,23 @@ abstract class BaseValidator
     public function validate()
     {
         // 清扫数据
-        $this->errors    = [];
-        $this->_settings = [];
+        $this->errors = [];
+        $this->settings = [];
         // 验证
         if ($this->required() && $this->scalar() && !(is_null($this->attributeValue) || $this->attributeValue === '')) {
             // 预处理
             foreach ($this->options as $name => $option) {
-                if (!in_array($name, $this->_enabledOptions)) {
+                if (!in_array($name, $this->enabledOptions)) {
                     throw new InvalidArgumentException("属性 {$this->attribute} 的验证选项 {$name} 不存在");
                 }
                 // 不存在的选项转为设置
                 if (!method_exists($this, $name)) {
-                    $this->_settings[$name] = $option;
+                    $this->settings[$name] = $option;
                     unset($this->options[$name]);
                 }
             }
             // 执行初始化选项验证
-            foreach ($this->_initOptions as $option) {
+            foreach ($this->initOptions as $option) {
                 $this->options = array_merge([$option => null], $this->options);
             }
             // 执行全部选项验证
