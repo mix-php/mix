@@ -34,12 +34,12 @@ $value = $rds->get('foo');
 在 `Swoole` 协程环境中，启动连接池
 
 ```php
-Swoole\Runtime::enableCoroutine();
 $maxOpen = 50;        // 最大开启连接数
 $maxIdle = 20;        // 最大闲置连接数
 $maxLifetime = 3600;  // 连接的最长生命周期
 $waitTimeout = 0.0;   // 从池获取连接等待的时间, 0为一直等待
 $rds->startPool($maxOpen, $maxIdle, $maxLifetime, $waitTimeout);
+Swoole\Runtime::enableCoroutine(); // 必须放到最后，防止触发协程调度导致异常
 ```
 
 连接池统计
