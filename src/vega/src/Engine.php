@@ -4,7 +4,6 @@ namespace Mix\Vega;
 
 use Mix\Vega\Exception\RuntimeException;
 use Mix\View\Renderer;
-use phpDocumentor\Reflection\DocBlock\Tags\Deprecated;
 
 /**
  * Class Engine
