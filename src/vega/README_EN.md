@@ -55,10 +55,11 @@ $http->start();
 Start a multi-process coroutine
 
 ```php
-$init = function () {
-    // coroutine init
-};
-$http->on('Request', $vega->handler($init));
+$http->on('Request', $vega->handler());
+$http->on('WorkerStart', function ($server, $workerId) {
+    // 协程初始化
+    // 比如：启动 mix/database mix/redis 的连接池
+});
 $http->set([
     'enable_coroutine' => true,
     'worker_num' => 4,
