@@ -59,7 +59,7 @@ abstract class AbstractConnection implements ConnectionInterface
 
     /**
      * 查询数据
-     * @var array [$sql, $params, $values, $time, $lastInsertId, $rowCount]
+     * @var array [$sql, $params, $values, $time]
      */
     protected $sqlData = [];
 
@@ -85,7 +85,7 @@ abstract class AbstractConnection implements ConnectionInterface
      * 立即回收连接
      * @var bool
      */
-    protected $immediately = false;
+    protected $return = false;
 
     /**
      * AbstractConnection constructor.
@@ -193,7 +193,7 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function exec(string $sql, ...$values): ConnectionInterface
     {
-        $this->immediately = true;
+        $this->return = true;
         return $this->raw($sql, ...$values);
     }
 
@@ -245,7 +245,7 @@ abstract class AbstractConnection implements ConnectionInterface
         // 执行完立即回收
         // 只立即回收 exec 方法触发的 insert update delete 语句
         // 事务除外，事务在 commit rollback __destruct 中回收
-        if ($this->driver->pool && !$this instanceof Transaction && $this->immediately) {
+        if ($this->driver->pool && !$this instanceof Transaction && $this->return) {
             $this->driver->__return();
             $this->driver = new EmptyDriver();
         }
@@ -327,7 +327,7 @@ abstract class AbstractConnection implements ConnectionInterface
         $this->params = [];
         $this->values = [];
         $this->debug = null;
-        $this->immediately = false;
+        $this->return = false;
     }
 
     /**
