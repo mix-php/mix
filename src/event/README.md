@@ -30,9 +30,7 @@ class DatabaseEvent
 监听器是用户编写处理事件逻辑代码的地方，`events` 方法返回一个要监听的事件类的数组，当这些事件触发时，会调用 `process` 方法
 
 ```php
-use Mix\Event\ListenerInterface;
-
-class DatabaseListener implements ListenerInterface
+class DatabaseListener implements Mix\Event\ListenerInterface
 {
 
     public function events(): array
@@ -43,7 +41,7 @@ class DatabaseListener implements ListenerInterface
         ];
     }
 
-    public function process(object $event):void
+    public function process(object $event): void
     {
         // 事件触发后，会执行该方法
     }
