@@ -119,20 +119,6 @@ abstract class AbstractConnection implements ConnectionInterface
     {
         $this->close();
         $this->connect();
-        $this->recycle();
-    }
-
-    /**
-     * 回收清扫的查询数据，用于重连后恢复查询
-     */
-    protected function recycle()
-    {
-        // beginTransaction 异常时没有数据
-        if (empty($this->recycleData)) {
-            return;
-        }
-
-        list($this->sql, $this->params, $this->values) = $this->recycleData;
     }
 
     /**
@@ -212,6 +198,10 @@ abstract class AbstractConnection implements ConnectionInterface
             $time = round((microtime(true) - $beginTime) * 1000, 2);
             $this->sqlData[3] = $time;
 
+            // 缓存常用数据，让资源可以提前回收
+            $this->lastInsertId = $this->driver->instance()->lastInsertId();
+            $this->rowCount = $this->statement->rowCount();
+
             // debug
             $debug = $this->debug;
             $debug and $debug($this);
@@ -223,23 +213,18 @@ abstract class AbstractConnection implements ConnectionInterface
                     $log['time'],
                     $log['sql'],
                     $log['bindings'],
-                    $this->statement->rowCount(),
+                    $this->rowCount(),
                     $ex ?? null
                 );
             }
+        }
 
-            // 回收前缓存
-            $this->lastInsertId = $this->driver->instance()->lastInsertId();
-            $this->rowCount = $this->statement->rowCount();
-
-            // 执行完立即回收
-            // 事务除外，事务在 commit rollback __destruct 中回收
-            if ($this->driver->pool && !$this instanceof Transaction) {
-                $this->driver->__return();
-                $this->driver = new EmptyDriver();
-            }
-
-            $this->clear();
+        // 执行完立即回收
+        // 抛出异常时不回收
+        // 事务除外，事务在 commit rollback __destruct 中回收
+        if ($this->driver->pool && !$this instanceof Transaction) {
+            $this->driver->__return();
+            $this->driver = new EmptyDriver();
         }
 
         return $this;
@@ -310,15 +295,6 @@ abstract class AbstractConnection implements ConnectionInterface
                 break;
         }
         return $type;
-    }
-
-    protected function clear()
-    {
-        $this->recycleData = [$this->sql, $this->params, $this->values];
-        $this->sql = '';
-        $this->params = [];
-        $this->values = [];
-        $this->debug = null;
     }
 
     /**
