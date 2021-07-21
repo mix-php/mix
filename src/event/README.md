@@ -51,7 +51,7 @@ class DatabaseListener implements Mix\Event\ListenerInterface
 
 ## 创建调度器
 
-创建调度器，并传入监听器
+创建调度器，并传入监听器，可传入多个
 
 ```php
 $dispatcher = new Mix\Event\EventDispatcher(new DatabaseListener());
