@@ -6,7 +6,6 @@ use Mix\ObjectPool\Exception\WaitTimeoutException;
 use Swoole\Coroutine;
 use Swoole\Coroutine\Channel;
 use Swoole\Exception;
-use Swoole\Timer;
 
 /**
  * Class AbstractObjectPool
@@ -85,14 +84,6 @@ abstract class AbstractObjectPool
         }
         // 创建连接队列
         $this->queue = new Channel($this->maxIdle);
-        // 闲置连接数量处理
-        // 废弃了以前的：归还时通道满就直接丢弃连接，因为高并发经常扎堆归还扎堆获取导致连接频繁丢弃和创建
-        Timer::tick(2000, function () {
-            $stats = $this->queue->stats();
-            if ($stats['consumer_num'] == 0 && $stats['queue_num'] == $this->maxIdle && $stats['producer_num'] > 0) {
-                $this->queue->pop(); // 丢弃
-            }
-        });
     }
 
     /**
@@ -210,7 +201,7 @@ abstract class AbstractObjectPool
         if (Coroutine::getCid() == -1) {
             return false;
         }
-        return $this->queue->push($connection);
+        return $this->queue->push($connection, 5);
     }
 
     /**
