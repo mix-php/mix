@@ -9,7 +9,6 @@ use Psr\EventDispatcher\StoppableEventInterface;
 /**
  * Class EventDispatcher
  * @package Mix\Event
- * @author liu,jian <coder.keda@gmail.com>
  */
 class EventDispatcher implements EventDispatcherInterface
 {

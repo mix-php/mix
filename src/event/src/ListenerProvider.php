@@ -7,7 +7,6 @@ use Psr\EventDispatcher\ListenerProviderInterface;
 /**
  * Class ListenerProvider
  * @package Mix\Event
- * @author liu,jian <coder.keda@gmail.com>
  */
 class ListenerProvider implements ListenerProviderInterface
 {

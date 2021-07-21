@@ -5,7 +5,6 @@ namespace Mix\Event;
 /**
  * Interface ListenerInterface
  * @package Mix\Event
- * @author liu,jian <coder.keda@gmail.com>
  */
 interface ListenerInterface
 {
@@ -20,6 +19,6 @@ interface ListenerInterface
      * 处理事件
      * @param object $event
      */
-    public function process(object $event);
+    public function process(object $event): void;
 
 }
