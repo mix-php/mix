@@ -19,13 +19,12 @@ composer require mix/worker-pool
 - 如果不想阻塞执行，可以使用 `$pool->start()` 启动
 
 ```php
-$maxWorkers = 20;
-$maxQueue = 10;
-$jobQueue = new Swoole\Coroutine\Channel($maxQueue);
-$handle = function ($data) {
+$jobQueue = new Swoole\Coroutine\Channel(200);
+$maxWorkers = 100;
+$handler = function ($data) {
     // do something
 };
-$pool = new Mix\WorkerPool\WorkerPool($jobQueue, $maxWorkers, $handle);
+$pool = new Mix\WorkerPool\WorkerPool($jobQueue, $maxWorkers, $handler);
 
 go(function () use ($jobQueue, $pool) {
     // 投放任务
@@ -101,7 +100,7 @@ $pool->run(); // 阻塞等待
 
 ## 异常处理
 
-`do` 方法中执行的代码，可能会抛出异常，必须要使用 `try/catch` 避免协程退出
+闭包或者对象 `do` 方法中执行的代码，可能会抛出异常，必须要使用 `try/catch` 避免协程退出
 
 ```php
 class FooHandler implements \Mix\WorkerPool\RunInterface

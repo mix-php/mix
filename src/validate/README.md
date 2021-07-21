@@ -37,7 +37,7 @@ class UserForm extends Validator
     public $name;
 
     /**
-     * @var int
+     * @var string
      */
     public $age;
 
