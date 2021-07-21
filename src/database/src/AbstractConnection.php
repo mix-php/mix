@@ -82,14 +82,6 @@ abstract class AbstractConnection implements ConnectionInterface
     protected $rowCount = 0;
 
     /**
-     * 立即回收连接
-     * false == 立即回收 exec 方法触发的 insert update delete 语句
-     * true == 立即回收全部
-     * @var bool
-     */
-    protected $return = true;
-
-    /**
      * AbstractConnection constructor.
      * @param Driver $driver
      * @param LoggerInterface|null $logger
@@ -195,7 +187,6 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function exec(string $sql, ...$values): ConnectionInterface
     {
-        $this->return = true;
         return $this->raw($sql, ...$values);
     }
 
@@ -232,23 +223,23 @@ abstract class AbstractConnection implements ConnectionInterface
                     $log['time'],
                     $log['sql'],
                     $log['bindings'],
-                    $this->rowCount(),
+                    $this->statement->rowCount(),
                     $ex ?? null
                 );
             }
 
+            // 回收前缓存
+            $this->lastInsertId = $this->driver->instance()->lastInsertId();
+            $this->rowCount = $this->statement->rowCount();
+
+            // 执行完立即回收
+            // 事务除外，事务在 commit rollback __destruct 中回收
+            if ($this->driver->pool && !$this instanceof Transaction) {
+                $this->driver->__return();
+                $this->driver = new EmptyDriver();
+            }
+
             $this->clear();
-        }
-
-        // 回收前缓存
-        $this->lastInsertId = $this->driver->instance()->lastInsertId();
-        $this->rowCount = $this->statement->rowCount();
-
-        // 执行完立即回收
-        // 事务除外，事务在 commit rollback __destruct 中回收
-        if ($this->driver->pool && !$this instanceof Transaction && $this->return) {
-            $this->driver->__return();
-            $this->driver = new EmptyDriver();
         }
 
         return $this;
@@ -328,7 +319,6 @@ abstract class AbstractConnection implements ConnectionInterface
         $this->params = [];
         $this->values = [];
         $this->debug = null;
-        $this->return = false;
     }
 
     /**
