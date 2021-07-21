@@ -144,7 +144,7 @@ abstract class AbstractConnection implements ConnectionInterface
             // 记录执行时间
             $time = round((microtime(true) - $beginTime) * 1000, 2);
 
-            // print
+            // logger
             if ($this->logger) {
                 $this->logger->trace(
                     $time,

@@ -199,14 +199,16 @@ abstract class AbstractConnection implements ConnectionInterface
             $this->sqlData[3] = $time;
 
             // 缓存常用数据，让资源可以提前回收
-            $this->lastInsertId = $this->driver->instance()->lastInsertId();
-            $this->rowCount = $this->statement->rowCount();
+            if (!isset($ex)) {
+                $this->lastInsertId = $this->driver->instance()->lastInsertId();
+                $this->rowCount = $this->statement->rowCount();
+            }
 
             // debug
             $debug = $this->debug;
             $debug and $debug($this);
 
-            // print
+            // logger
             if ($this->logger) {
                 $log = $this->queryLog();
                 $this->logger->trace(
