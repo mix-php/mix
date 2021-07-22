@@ -9,6 +9,6 @@ namespace Mix\Database;
 interface LoggerInterface
 {
 
-    public function trace(float $time, string $sql, array $bindings, int $rowCount, ?\Throwable $exception);
+    public function trace(float $time, string $sql, array $bindings, int $rowCount, ?\Throwable $exception): void;
 
 }

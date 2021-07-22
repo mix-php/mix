@@ -9,6 +9,6 @@ namespace Mix\Redis;
 interface LoggerInterface
 {
 
-    public function trace(float $time, string $cmd, array $args, ?\Throwable $exception);
+    public function trace(float $time, string $cmd, array $args, ?\Throwable $exception): void;
 
 }
