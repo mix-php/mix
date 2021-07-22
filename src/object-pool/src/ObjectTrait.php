@@ -23,7 +23,7 @@ trait ObjectTrait
      * 丢弃连接
      * @return bool
      */
-    public function __discard()
+    public function __discard(): bool
     {
         if (isset($this->pool)) {
             return $this->pool->discard($this);
@@ -35,7 +35,7 @@ trait ObjectTrait
      * 归还连接
      * @return bool
      */
-    public function __return()
+    public function __return(): bool
     {
         if (isset($this->pool)) {
             return $this->pool->return($this);

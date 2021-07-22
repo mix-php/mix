@@ -90,7 +90,7 @@ abstract class AbstractObjectPool
      * 创建连接
      * @return object
      */
-    protected function createConnection()
+    protected function createConnection(): object
     {
         // 连接创建时会挂起当前协程，导致 actives 未增加，因此需先 actives++ 连接创建成功后 actives--
         $closure = function () {
@@ -115,10 +115,9 @@ abstract class AbstractObjectPool
      * @return object
      * @throws WaitTimeoutException
      */
-    public function borrow()
+    public function borrow(): object
     {
         /** @var ObjectTrait $connection */
-        $connection = null;
         if ($this->getIdleNumber() > 0 || ($this->maxOpen && $this->getTotalNumber() >= $this->maxOpen)) {
             // 队列有连接，从队列取
             // 达到最大连接数，从队列取
@@ -143,10 +142,10 @@ abstract class AbstractObjectPool
 
     /**
      * 归还连接
-     * @param $connection
+     * @param object $connection
      * @return bool
      */
-    public function return(object $connection)
+    public function return(object $connection): bool
     {
         $id = spl_object_hash($connection);
         // 判断是否已释放
@@ -161,10 +160,10 @@ abstract class AbstractObjectPool
 
     /**
      * 丢弃连接
-     * @param $connection
+     * @param object $connection
      * @return bool
      */
-    public function discard(object $connection)
+    public function discard(object $connection): bool
     {
         $id = spl_object_hash($connection);
         // 判断是否已丢弃
@@ -181,7 +180,7 @@ abstract class AbstractObjectPool
      * 获取连接池的统计信息
      * @return array
      */
-    public function stats()
+    public function stats(): array
     {
         return [
             'total' => $this->getTotalNumber(),
@@ -192,10 +191,10 @@ abstract class AbstractObjectPool
 
     /**
      * 放入连接
-     * @param $connection
+     * @param object $connection
      * @return bool
      */
-    protected function push($connection)
+    protected function push(object $connection): bool
     {
         // 解决对象在协程外部析构导致的: Swoole\Error: API must be called in the coroutine
         if (Coroutine::getCid() == -1) {
@@ -206,11 +205,11 @@ abstract class AbstractObjectPool
 
     /**
      * 弹出连接
-     * @return mixed
+     * @return object
      * @throws WaitTimeoutException
      * @throws Exception
      */
-    protected function pop()
+    protected function pop(): object
     {
         $timeout = -1;
         if ($this->waitTimeout) {
@@ -230,7 +229,7 @@ abstract class AbstractObjectPool
      * 获取队列中的连接数
      * @return int
      */
-    protected function getIdleNumber()
+    protected function getIdleNumber(): int
     {
         $count = $this->queue->stats()['queue_num'];
         return $count < 0 ? 0 : $count;
@@ -240,7 +239,7 @@ abstract class AbstractObjectPool
      * 获取活跃的连接数
      * @return int
      */
-    protected function getActiveNumber()
+    protected function getActiveNumber(): int
     {
         return count($this->actives);
     }
@@ -249,7 +248,7 @@ abstract class AbstractObjectPool
      * 获取当前总连接数
      * @return int
      */
-    protected function getTotalNumber()
+    protected function getTotalNumber(): int
     {
         return $this->getIdleNumber() + $this->getActiveNumber();
     }
