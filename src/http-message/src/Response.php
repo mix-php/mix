@@ -305,7 +305,16 @@ class Response extends Message implements ResponseInterface
         $content = $body ? $body->getContents() : '';
 
         // add Date header
-        $headers['Date'] = gmdate('D, d M Y H:i:s') . ' GMT';
+        static $timer = null;
+        static $cache = '';
+        if (is_null($timer)) {
+            $func = function () use (&$cache) {
+                $cache = gmdate('D, d M Y H:i:s') . ' GMT';
+            };
+            $func();
+            $timer = \Workerman\Timer::add(1, $func);
+        }
+        $headers['Date'] = $cache;
 
         $response = new \Workerman\Protocols\Http\Response($status, $headers, $content);
         foreach ($cookies as $cookie) {
