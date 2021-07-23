@@ -55,7 +55,7 @@ class Dialer implements DialerInterface
      * Dial
      * @return Driver
      */
-    public function dial()
+    public function dial(): object
     {
         return new Driver(
             $this->dsn,

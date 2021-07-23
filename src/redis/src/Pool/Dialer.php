@@ -78,7 +78,7 @@ class Dialer implements DialerInterface
     /**
      * @return Driver
      */
-    public function dial()
+    public function dial(): object
     {
         return new Driver(
             $this->host,

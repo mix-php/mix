@@ -16,7 +16,7 @@ class ConnectionPool extends AbstractObjectPool
      * 借用连接
      * @return Driver
      */
-    public function borrow()
+    public function borrow(): object
     {
         return parent::borrow();
     }

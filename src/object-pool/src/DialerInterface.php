@@ -13,6 +13,6 @@ interface DialerInterface
      * 拨号
      * @return object
      */
-    public function dial();
+    public function dial(): object;
 
 }
