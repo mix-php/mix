@@ -11,6 +11,7 @@ final class SwooleServerTest extends TestCase
     public function test(): void
     {
         $_this = $this;
+        $_this->assertTrue(true);
 
         $vega = new Engine();
 
@@ -26,8 +27,15 @@ final class SwooleServerTest extends TestCase
         // 多个方法
         $vega->handle('/hello', function (Context $ctx) use ($_this) {
             $_this->assertEquals($ctx->uri()->__toString(), 'http://0.0.0.0:9501/hello');
+            if ($ctx->request->getMethod() == 'POST') {
+                $_this->assertEquals($ctx->postForm('user'), 'abc');
+                $_this->assertEquals($ctx->postForm('password'), '123');
+            }
             $ctx->string(200, 'hello, world!');
         })->methods('GET', 'POST');
+
+        // callable
+        $vega->handle('/hello1', [new Hello(), 'index'])->methods('GET');
 
         // 分组
         $subrouter = $vega->pathPrefix('/foo');
@@ -78,4 +86,12 @@ final class SwooleServerTest extends TestCase
         swoole_run($vega);
     }
 
+}
+
+class Hello
+{
+    public function index(Mix\Vega\Context $ctx)
+    {
+        $ctx->string(200, 'hello, world!');
+    }
 }

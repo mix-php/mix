@@ -9,7 +9,8 @@ final class SwooleCurlTest extends TestCase
     public function test(): void
     {
         exec('curl http://0.0.0.0:9501/hello');
-        exec('curl -X POST http://0.0.0.0:9501/hello');
+        exec('curl -d \'user=abc&password=123\' -X POST http://0.0.0.0:9501/hello');
+        exec('curl http://0.0.0.0:9501/hello1');
         exec('curl http://0.0.0.0:9501/foo/hello');
         exec('curl http://0.0.0.0:9501/foo/hello1');
         exec('curl http://0.0.0.0:9501/users/1000?name=keda');
