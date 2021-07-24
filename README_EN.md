@@ -65,8 +65,8 @@ OpenMix also has Golang ecological framework
 
 ## Old version documentation
 
-- `V1` https://www.kancloud.cn/onanying/mixphp1/content
-- `V2` https://www.kancloud.cn/onanying/mixphp2/content
+- `V1.*` https://www.kancloud.cn/onanying/mixphp1/content
+- `V2.0` https://www.kancloud.cn/onanying/mixphp2/content
 - `V2.1` https://www.kancloud.cn/onanying/mixphp2-1/content
 - `V2.2` https://www.kancloud.cn/onanying/mixphp2-2/content
 
