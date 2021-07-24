@@ -33,7 +33,7 @@ composer require mix/vega
 
 ## Quick start
 
-Swoole is used in multiple (asynchronous) processes
+- Swoole is used in multiple (asynchronous) processes
 
 ```php
 <?php
@@ -66,7 +66,7 @@ $http->set([
 ]);
 ```
 
-Swoole is used in a single process (coroutine)
+- Swoole is used in a single process (coroutine)
 
 ```php
 <?php
@@ -84,7 +84,7 @@ Swoole\Coroutine\run(function () {
 });
 ```
 
-Used in the WorkerMan
+- Used in the WorkerMan
 
 ```php
 <?php
@@ -99,6 +99,19 @@ $http_worker = new Workerman\Worker("http://0.0.0.0:2345");
 $http_worker->onMessage = $vega->handler();
 $http_worker->count = 4;
 Workerman\Worker::runAll();
+```
+
+- Used in PHP-FPM
+
+```php
+<?php
+require __DIR__ . '/vendor/autoload.php';
+
+$vega = new Mix\Vega\Engine();
+$vega->handle('/hello', function (Mix\Vega\Context $ctx) {
+    $ctx->string(200, 'hello, world!');
+})->methods('GET');
+$vega->run();
 ```
 
 Request to test
@@ -323,7 +336,7 @@ $vega->handle('/html', function (Mix\Vega\Context $ctx) {
 
 ## Static file handling
 
-Based on `sendfile` zero copy
+Based on `sendfile` zero copy, not supported in `PHP-FPM`
 
 ```php
 $vega = new Mix\Vega\Engine();

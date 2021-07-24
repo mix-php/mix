@@ -345,7 +345,7 @@ $vega->handle('/html', function (Mix\Vega\Context $ctx) {
 
 ## 静态文件处理
 
-基于 `sendfile` 零拷贝
+基于 `sendfile` 零拷贝，不支持在 `PHP-FPM` 中使用
 
 ```php
 $vega = new Mix\Vega\Engine();
