@@ -53,7 +53,7 @@ interface ConnectionInterface
 
     /**
      * 返回一行
-     * @return array|object
+     * @return array|object|false
      */
     public function first();
 

@@ -324,7 +324,7 @@ abstract class AbstractConnection implements ConnectionInterface
 
     /**
      * 返回一行
-     * @return array|object
+     * @return array|object|false
      */
     public function first()
     {
@@ -408,7 +408,7 @@ abstract class AbstractConnection implements ConnectionInterface
     /**
      * 返回一行
      * @param int $fetchStyle
-     * @return array|object
+     * @return array|object|false
      */
     public function queryOne(int $fetchStyle = null)
     {
