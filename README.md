@@ -12,7 +12,7 @@
 
 中文 | [English](https://github.com/mix-php/mix/blob/master/README_EN.md)
 
-MixPHP 是一个 PHP 命令行模式开发框架；基于 `Vega` 驱动的 HTTP 可以同时支持 FPM、Swoole、WorkerMan 两大生态，并且可以无缝切换；`V3` 是一个高度解耦的版本，整体代码基于多个独立的模块构建，即便用户不使用我们的脚手架，也可以使用这些独立模块，并且全部模块都支持原生开发。例如：你可以只使用 mix/vega 来搭配 laravel orm 使用；可以在任意环境中使用 mix/database 和 mix/redis；可以使用 mix/grpc 原生代码编写 gRPC；所有的模块你可以像搭积木一样随意组合。
+MixPHP 是一个 PHP 命令行模式开发框架；基于 `Vega` 驱动的 HTTP 可以同时支持 FPM、Swoole、WorkerMan 生态，并且可以无缝切换；`V3` 是一个高度解耦的版本，整体代码基于多个独立的模块构建，即便用户不使用我们的脚手架，也可以使用这些独立模块，并且全部模块都支持原生开发。例如：你可以只使用 mix/vega 来搭配 laravel orm 使用；可以在任意环境中使用 mix/database 和 mix/redis；可以使用 mix/grpc 原生代码编写 gRPC；所有的模块你可以像搭积木一样随意组合。
 
 ## 独立模块
 
