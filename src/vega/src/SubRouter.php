@@ -32,24 +32,12 @@ class SubRouter
 
     /**
      * @param string $path
-     * @param \Closure ...$handlers
-     * @return Route
-     * @deprecated
-     */
-    public function handleF(string $path, \Closure ...$handlers): Route
-    {
-        return $this->handleFunc($path, ... $handlers);
-    }
-
-    /**
-     * @param string $path
      * @param callable ...$handlers
      * @return Route
-     * @deprecated
      */
-    public function handleC(string $path, callable ...$handlers): Route
+    public function handle(string $path, callable ...$handlers): Route
     {
-        return $this->handleCall($path, ... $handlers);
+        return $this->handleFunc($path, ... $handlers);
     }
 
     /**
@@ -66,6 +54,7 @@ class SubRouter
      * @param string $path
      * @param callable ...$handlers
      * @return Route
+     * @deprecated
      */
     public function handleCall(string $path, callable ...$handlers): Route
     {

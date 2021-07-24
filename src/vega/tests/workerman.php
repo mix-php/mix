@@ -18,7 +18,7 @@ $vega->use(function (Context $ctx) {
 
 // 多个方法
 // curl "http://0.0.0.0:2345/hello"
-$vega->handleFunc('/hello', function (Context $ctx) {
+$vega->handle('/hello', function (Context $ctx) {
     var_dump($ctx->uri()->__toString());
     $ctx->string(200, 'hello, world!');
 })->methods('GET', 'POST');
@@ -33,24 +33,24 @@ class Hello
     }
 }
 
-$vega->handleCall('/hello1', [new Hello(), 'index'])->methods('GET');
+$vega->handle('/hello1', [new Hello(), 'index'])->methods('GET');
 
 // 分组
 // curl "http://0.0.0.0:2345/foo/hello"
 $subrouter = $vega->pathPrefix('/foo');
-$subrouter->handleFunc('/hello', function (Context $ctx) {
+$subrouter->handle('/hello', function (Context $ctx) {
     var_dump($ctx->uri()->__toString());
     $ctx->string(200, 'hello, world!');
 })->methods('GET');
 // curl "http://0.0.0.0:2345/foo/hello1"
-$subrouter->handleFunc('/hello1', function (Context $ctx) {
+$subrouter->handle('/hello1', function (Context $ctx) {
     var_dump($ctx->uri()->__toString());
     $ctx->string(200, 'hello, world!');
 })->methods('GET');
 
 // 获取参数
 // curl "http://0.0.0.0:2345/users/1000?name=keda"
-$vega->handleFunc('/users/{id}', function (Context $ctx) {
+$vega->handle('/users/{id}', function (Context $ctx) {
     $id = $ctx->param('id');
     $name = $ctx->query('name');
     var_dump($id, $name);
@@ -59,7 +59,7 @@ $vega->handleFunc('/users/{id}', function (Context $ctx) {
 
 // POST发送JSON
 // curl -H "Content-Type: application/json" -X POST -d '{"user_id": "123", "coin":100}' "http://0.0.0.0:2345/users"
-$vega->handleFunc('/users', function (Context $ctx) {
+$vega->handle('/users', function (Context $ctx) {
     $obj = $ctx->mustGetJSON();
     var_dump($obj);
     $ctx->JSON(200, [
@@ -70,7 +70,7 @@ $vega->handleFunc('/users', function (Context $ctx) {
 
 // 视图
 // curl http://0.0.0.0:2345/html
-$vega->handleFunc('/html', function (Context $ctx) {
+$vega->handle('/html', function (Context $ctx) {
     $ctx->HTML(200, 'foo', [
         'id' => 1000,
         'name' => '小明',

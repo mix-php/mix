@@ -49,7 +49,7 @@ Swoole 多进程 (异步) 中使用
 require __DIR__ . '/vendor/autoload.php';
 
 $vega = new Mix\Vega\Engine();
-$vega->handleFunc('/hello', function (Mix\Vega\Context $ctx) {
+$vega->handle('/hello', function (Mix\Vega\Context $ctx) {
     $ctx->string(200, 'hello, world!');
 })->methods('GET');
 
@@ -83,7 +83,7 @@ require __DIR__ . '/vendor/autoload.php';
 
 Swoole\Coroutine\run(function () {
     $vega = new Mix\Vega\Engine();
-    $vega->handleFunc('/hello', function (Mix\Vega\Context $ctx) {
+    $vega->handle('/hello', function (Mix\Vega\Context $ctx) {
         $ctx->string(200, 'hello, world!');
     })->methods('GET');
     
@@ -100,7 +100,7 @@ WorkerMan 中使用
 require __DIR__ . '/vendor/autoload.php';
 
 $vega = new Mix\Vega\Engine();
-$vega->handleFunc('/hello', function (Mix\Vega\Context $ctx) {
+$vega->handle('/hello', function (Mix\Vega\Context $ctx) {
     $ctx->string(200, 'hello, world!');
 })->methods('GET');
 
@@ -123,7 +123,7 @@ hello, world!
 
 ```php
 $vega = new Mix\Vega\Engine();
-$vega->handleFunc('/hello', function (Mix\Vega\Context $ctx) {
+$vega->handle('/hello', function (Mix\Vega\Context $ctx) {
     $ctx->string(200, 'hello, world!');
 })->methods('GET');
 ```
@@ -137,14 +137,14 @@ class Hello {
     }
 }
 $vega = new Mix\Vega\Engine();
-$vega->handleCall('/hello', [new Hello(), 'index'])->methods('GET');
+$vega->handle('/hello', [new Hello(), 'index'])->methods('GET');
 ```
 
 配置路由变量
 
 ```php
 $vega = new Mix\Vega\Engine();
-$vega->handleFunc('/users/{id}', function (Mix\Vega\Context $ctx) {
+$vega->handle('/users/{id}', function (Mix\Vega\Context $ctx) {
     $id = $ctx->param('id');
     $ctx->string(200, 'hello, world!');
 })->methods('GET');
@@ -154,7 +154,7 @@ $vega->handleFunc('/users/{id}', function (Mix\Vega\Context $ctx) {
 
 ```php
 $vega = new Mix\Vega\Engine();
-$vega->handleFunc('hello', function (Mix\Vega\Context $ctx) {
+$vega->handle('hello', function (Mix\Vega\Context $ctx) {
     $ctx->string(200, 'hello, world!');
 })->methods('GET', 'POST');
 ```
@@ -164,10 +164,10 @@ $vega->handleFunc('hello', function (Mix\Vega\Context $ctx) {
 ```php
 $vega = new Mix\Vega\Engine();
 $sub = $vega->pathPrefix('/foo');
-$sub->handleFunc('/bar1', function (Mix\Vega\Context $ctx) {
+$sub->handle('/bar1', function (Mix\Vega\Context $ctx) {
     $ctx->string(200, 'hello, world!');
 })->methods('GET');
-$sub->handleFunc('/bar2', function (Mix\Vega\Context $ctx) {
+$sub->handle('/bar2', function (Mix\Vega\Context $ctx) {
     $ctx->string(200, 'hello1, world!');
 })->methods('GET');
 ```
@@ -236,7 +236,7 @@ $file->moveTo($targetPath);
 
 ```php
 $vega = new Mix\Vega\Engine();
-$vega->handleFunc('/users/{id}', function (Mix\Vega\Context $ctx) {
+$vega->handle('/users/{id}', function (Mix\Vega\Context $ctx) {
     if (true) {
         $ctx->string(401, 'Unauthorized');
         $ctx->abort();
@@ -260,7 +260,7 @@ $vega->handleFunc('/users/{id}', function (Mix\Vega\Context $ctx) {
 
 ```php
 $vega = new Mix\Vega\Engine();
-$vega->handleFunc('/users', function (Mix\Vega\Context $ctx) {
+$vega->handle('/users', function (Mix\Vega\Context $ctx) {
     $obj = $ctx->getJSON();
     if (!$obj) {
         throw new \Exception('Parameter error');
@@ -277,7 +277,7 @@ $vega->handleFunc('/users', function (Mix\Vega\Context $ctx) {
 
 ```php
 $vega = new Mix\Vega\Engine();
-$vega->handleFunc('/users', function (Mix\Vega\Context $ctx) {
+$vega->handle('/users', function (Mix\Vega\Context $ctx) {
     $obj = $ctx->mustGetJSON();
     var_dump($obj);
     $ctx->JSON(200, [
@@ -291,7 +291,7 @@ $vega->handleFunc('/users', function (Mix\Vega\Context $ctx) {
 
 ```php
 $vega = new Mix\Vega\Engine();
-$vega->handleFunc('/jsonp', function (Mix\Vega\Context $ctx) {
+$vega->handle('/jsonp', function (Mix\Vega\Context $ctx) {
     $ctx->JSONP(200, [
         'code' => 0,
         'message' => 'ok'
@@ -318,7 +318,7 @@ $vega->handleFunc('/jsonp', function (Mix\Vega\Context $ctx) {
 ```php
 $vega = new Mix\Vega\Engine();
 $vega->withHTMLRoot('/data/project/views');
-$vega->handleFunc('/html', function (Mix\Vega\Context $ctx) {
+$vega->handle('/html', function (Mix\Vega\Context $ctx) {
     $ctx->HTML(200, 'foo', [
         'id' => 1000,
         'name' => '小明',
@@ -350,7 +350,7 @@ $func = function (Mix\Vega\Context $ctx) {
     // do something
     $ctx->next();
 };
-$vega->handleFunc('/hello', $func, function (Mix\Vega\Context $ctx) {
+$vega->handle('/hello', $func, function (Mix\Vega\Context $ctx) {
     $ctx->string(200, 'hello, world!');
 })->methods('GET');
 ```
