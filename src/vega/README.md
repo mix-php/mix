@@ -4,15 +4,15 @@
 
 中文 | [English](https://github.com/mix-php/vega/blob/master/README_EN.md)
 
-Vega is a CLI mode HTTP web framework written in PHP support Swoole, WorkerMan
+Vega is a CLI mode HTTP web framework written in PHP support FPM, Swoole, WorkerMan
 
-Vega 是一个用 PHP 编写的 CLI 模式 HTTP 网络框架，支持 Swoole、WorkerMan
+Vega 是一个用 PHP 编写的 CLI 模式 HTTP 网络框架，支持 FPM、Swoole、WorkerMan
 
 ## 概述
 
 Vega 是 [MixPHP](https://github.com/mix-php/mix) `V3+` 内置的最核心的组件 (可独立使用)，参考
 golang [gin](https://github.com/gin-gonic/gin) [mux](https://github.com/gorilla/mux) 开发，它包含 Web 应用处理的大量功能 (数据库处理除外)
-，包括：路由、渲染、参数获取、中间件、文件上传、静态文件处理等；具有 CLI 模式下强大的兼容性，同时支持 Swoole、WorkerMan, 并且支持 Swoole 的多种进程模型。
+，包括：路由、渲染、参数获取、中间件、文件上传、静态文件处理等；具有 CLI 模式下强大的兼容性，同时支持 FPM、Swoole、WorkerMan, 并且支持 Swoole 的多种进程模型与协程。
 
 **推荐搭配以下数据库使用：**
 
@@ -42,7 +42,7 @@ composer require mix/vega
 
 ## 快速开始
 
-Swoole 多进程 (异步) 中使用
+- Swoole 多进程 (异步) 中使用
 
 ```php
 <?php
@@ -75,7 +75,7 @@ $http->set([
 ]);
 ```
 
-Swoole 单进程 (协程) 中使用
+- Swoole 单进程 (协程) 中使用
 
 ```php
 <?php
@@ -93,7 +93,7 @@ Swoole\Coroutine\run(function () {
 });
 ```
 
-WorkerMan 中使用
+- WorkerMan 中使用
 
 ```php
 <?php
@@ -108,6 +108,19 @@ $http_worker = new Workerman\Worker("http://0.0.0.0:2345");
 $http_worker->onMessage = $vega->handler();
 $http_worker->count = 4;
 Workerman\Worker::runAll();
+```
+
+- PHP-FPM 中使用
+
+```php
+<?php
+require __DIR__ . '/vendor/autoload.php';
+
+$vega = new Mix\Vega\Engine();
+$vega->handle('/hello', function (Mix\Vega\Context $ctx) {
+    $ctx->string(200, 'hello, world!');
+})->methods('GET');
+$vega->run();
 ```
 
 访问测试

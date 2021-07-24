@@ -73,6 +73,21 @@ class Context
     }
 
     /**
+     * @param Renderer $renderer
+     * @return Context
+     */
+    public static function fromFPM(Renderer $renderer): Context
+    {
+        $ctx = new static();
+        $requestFactory = new ServerRequestFactory();
+        $responseFactory = new ResponseFactory();
+        $ctx->request = $requestFactory->createServerRequestFromFPM();
+        $ctx->response = $responseFactory->createResponse();
+        $ctx->renderer = $renderer;
+        return $ctx;
+    }
+
+    /**
      */
     public function abort(): void
     {

@@ -73,6 +73,15 @@ class Engine
     }
 
     /**
+     * PHP-FPM 执行
+     */
+    public function run(): void
+    {
+        $ctx = Context::fromFPM($this->htmlRender);
+        $this->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?: '/', $ctx);
+    }
+
+    /**
      * @param array $args
      * @return bool
      */
