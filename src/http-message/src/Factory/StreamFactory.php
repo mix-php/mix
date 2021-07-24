@@ -5,6 +5,7 @@ namespace Mix\Http\Message\Factory;
 use Mix\Http\Message\Exception\UnavailableMethodException;
 use Mix\Http\Message\Stream\ContentStream;
 use Mix\Http\Message\Stream\FileStream;
+use Mix\Http\Message\Stream\IOStream;
 use Mix\Http\Message\Stream\SwooleResourceStream;
 use Mix\Http\Message\Stream\WorkerManResourceStream;
 use Psr\Http\Message\StreamFactoryInterface;
@@ -63,6 +64,20 @@ class StreamFactory implements StreamFactoryInterface
     public function createStreamFromResource($resource): StreamInterface
     {
         throw new UnavailableMethodException('Not implemented');
+    }
+
+    /**
+     * Create a new stream from an existing resource.
+     *
+     * The stream MUST be readable and may be writable.
+     *
+     * @param \Swoole\Http\Request $request PHP resource to use as basis of stream.
+     *
+     * @return StreamInterface
+     */
+    public function createStreamFromFPM(): StreamInterface
+    {
+        return new IOStream('php://input');
     }
 
     /**

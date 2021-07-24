@@ -105,6 +105,17 @@ class Response extends Message implements ResponseInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isWorkerMan(): bool
+    {
+        if (isset($this->workerManConnection)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Gets the response status code.
      *
      * The status code is a 3-digit integer result code of the server's attempt
@@ -241,8 +252,10 @@ class Response extends Message implements ResponseInterface
 
         if ($this->isSwoole()) {
             return $this->swooleSend();
-        } else {
+        } else if ($this->isWorkerMan()) {
             return $this->workerManSend();
+        } else {
+            return $this->fpmSend();
         }
     }
 
@@ -255,8 +268,10 @@ class Response extends Message implements ResponseInterface
     {
         if ($this->isSwoole()) {
             return $this->swooleSendFile($filename);
-        } else {
+        } else if ($this->isWorkerMan()) {
             return $this->workerManSendFile($filename);
+        } else {
+            throw new \RuntimeException('Swoole and Workerman are used only');
         }
     }
 
@@ -332,6 +347,42 @@ class Response extends Message implements ResponseInterface
 
         $this->sended = true;
         return $result;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function fpmSend(): bool
+    {
+        $headers = $this->getHeaders();
+        $cookies = $this->getCookies();
+        $status = $this->getStatusCode();
+        $body = $this->getBody();
+        $content = $body ? $body->getContents() : '';
+
+        foreach ($headers as $key => $value) {
+            header(sprintf('%s: %s', $key, $value));
+        }
+
+        foreach ($cookies as $cookie) {
+            setcookie(
+                $cookie->getName(),
+                $cookie->getValue(),
+                $cookie->getExpire(),
+                $cookie->getPath(),
+                $cookie->getDomain(),
+                $cookie->getSecure(),
+                $cookie->getHttpOnly()
+            );
+        }
+
+        $httpStatus = new \Lukasoppermann\Httpstatus\Httpstatus();
+        $httpStatus->setLanguage('en');
+        header(sprintf('HTTP/1.1 %d %s', $status, $httpStatus->getReasonPhrase($status)));
+        echo $content;
+
+        $this->sended = true;
+        return true;
     }
 
     /**
