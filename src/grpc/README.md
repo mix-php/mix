@@ -150,11 +150,11 @@ $http->start();
 开启多进程协程
 
 ```php
-$init = function () {
+$http->on('Request', $grpc->handler());
+$http->on('WorkerStart', function ($server, $workerId) {
     // 协程初始化
     // 比如：启动 mix/database mix/redis 的连接池
-};
-$http->on('Request', $grpc->handler($init));
+});
 $http->set([
     'enable_coroutine' => true,
     'worker_num' => 4,
