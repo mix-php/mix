@@ -57,6 +57,10 @@ composer create-project --prefer-dist mix/websocket-skeleton websocket
 composer create-project --prefer-dist mix/grpc-skeleton grpc
 ```
 
+推荐阅读
+
+- [MixPHP V3 发布前的感想, 有哪些变化和特点](https://zhuanlan.zhihu.com/p/392558932)
+
 ## 技术交流
 
 知乎：https://www.zhihu.com/people/onanying    
