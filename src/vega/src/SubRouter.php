@@ -37,7 +37,7 @@ class SubRouter
      */
     public function handle(string $path, callable ...$handlers): Route
     {
-        return $this->handleFunc($path, ... $handlers);
+        return $this->engine->handle($this->prefix . $path, ...$handlers);
     }
 
     /**
@@ -54,11 +54,11 @@ class SubRouter
      * @param string $path
      * @param callable ...$handlers
      * @return Route
-     * @deprecated
+     * @deprecated 废弃，请用 handle 替代
      */
     public function handleCall(string $path, callable ...$handlers): Route
     {
-        return $this->engine->handleCall($this->prefix . $path, ...$handlers);
+        return $this->handle($path, ...$handlers);
     }
 
 }

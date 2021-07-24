@@ -46,7 +46,9 @@ trait Router
      */
     public function handle(string $path, callable ...$handlers): Route
     {
-        return $this->handleFunc($path, ... $handlers);
+        $route = new Route($this, $path, array_merge($this->handlers, $handlers));
+        $this->routes[] = $route;
+        return $route;
     }
 
     /**
@@ -65,13 +67,11 @@ trait Router
      * @param string $path
      * @param callable ...$handlers
      * @return Route
-     * @deprecated
+     * @deprecated 废弃，请用 handle 替代
      */
     public function handleCall(string $path, callable ...$handlers): Route
     {
-        $route = new Route($this, $path, array_merge($this->handlers, $handlers));
-        $this->routes[] = $route;
-        return $route;
+        return $this->handle($path, ...$handlers);
     }
 
     /**
