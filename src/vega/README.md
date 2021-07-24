@@ -154,7 +154,7 @@ $vega->handle('/users/{id}', function (Mix\Vega\Context $ctx) {
 
 ```php
 $vega = new Mix\Vega\Engine();
-$vega->handle('hello', function (Mix\Vega\Context $ctx) {
+$vega->handle('/hello', function (Mix\Vega\Context $ctx) {
     $ctx->string(200, 'hello, world!');
 })->methods('GET', 'POST');
 ```
@@ -216,7 +216,7 @@ $sub->handle('/bar2', function (Mix\Vega\Context $ctx) {
 
 ```php
 $file = $ctx->formFile('img');
-$targetPath = '/data/uploads/' . $file->getClientFilename();
+$targetPath = '/data/project/public/uploads/' . $file->getClientFilename();
 $file->moveTo($targetPath);
 ```
 

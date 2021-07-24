@@ -145,7 +145,7 @@ Configure multiple `method`
 
 ```php
 $vega = new Mix\Vega\Engine();
-$vega->handle('hello', function (Mix\Vega\Context $ctx) {
+$vega->handle('/hello', function (Mix\Vega\Context $ctx) {
     $ctx->string(200, 'hello, world!');
 })->methods('GET', 'POST');
 ```
@@ -207,7 +207,7 @@ File save
 
 ```php
 $file = $ctx->formFile('img');
-$targetPath = '/data/uploads/' . $file->getClientFilename();
+$targetPath = '/data/project/public/uploads/' . $file->getClientFilename();
 $file->moveTo($targetPath);
 ```
 
