@@ -396,6 +396,10 @@ class Response extends Message implements ResponseInterface
             $this->swooleResponse->header($name, implode(',', $value));
         }
 
+        // 添加Last-Modified
+        $ifModifiedSince = date('D, d M Y H:i:s', filemtime($filename)) . ' ' . date_default_timezone_get();
+        $this->swooleResponse->header('last-modified', $ifModifiedSince);
+
         $result = $this->swooleResponse->sendfile($filename);
 
         $this->sended = true;
@@ -414,7 +418,7 @@ class Response extends Message implements ResponseInterface
         $result = $this->workerManConnection->send($response);
 
         $this->sended = true;
-        return $result;
+        return (bool)$result;
     }
 
 }
