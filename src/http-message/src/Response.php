@@ -271,7 +271,7 @@ class Response extends Message implements ResponseInterface
         } else if ($this->isWorkerMan()) {
             return $this->workerManSendFile($filename);
         } else {
-            throw new \RuntimeException('Swoole and Workerman are used only');
+            throw new \RuntimeException('SendFile can be used only in Swoole and Workerman');
         }
     }
 
