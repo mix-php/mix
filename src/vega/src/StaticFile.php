@@ -36,6 +36,11 @@ trait StaticFile
                 throw new NotFoundException('404 Not Found', 404);
             }
 
+            if ($this->ifModifiedSince($ctx, $absFile)) {
+                $ctx->status(304);
+                $ctx->response->send();
+                $ctx->abort();
+            }
             $ctx->response->sendfile($absFile);
         })->methods('GET');
     }
@@ -50,8 +55,26 @@ trait StaticFile
             if (!file_exists($file)) {
                 throw new NotFoundException('404 Not Found', 404);
             }
+            if ($this->ifModifiedSince($ctx, $file)) {
+                $ctx->status(304);
+                $ctx->response->send();
+                $ctx->abort();
+            }
             $ctx->response->sendFile($file);
         })->methods('GET');
+    }
+
+    /**
+     * @param Context $ctx
+     * @param string $file
+     */
+    protected function ifModifiedSince(Context $ctx, string $file)
+    {
+        $ifModifiedSince = $ctx->header('if-modified-since');
+        if (empty($ifModifiedSince) || !($mtime = filemtime($file))) {
+            return false;
+        }
+        return $ifModifiedSince === date('D, d M Y H:i:s', $mtime) . ' ' . date_default_timezone_get();
     }
 
 }
