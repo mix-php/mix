@@ -35,11 +35,11 @@ trait StaticFile
             if (!$absRoot || $absRoot !== substr($absFile, 0, strlen($absRoot))) {
                 throw new NotFoundException('404 Not Found', 404);
             }
-            
+
             if (static::ifModifiedSince($ctx, $absFile)) {
                 $ctx->status(304);
                 $ctx->response->send();
-                $ctx->abort();
+                return;
             }
             $ctx->response->sendfile($absFile);
         })->methods('GET');
@@ -59,9 +59,8 @@ trait StaticFile
             if (static::ifModifiedSince($ctx, $file)) {
                 $ctx->status(304);
                 $ctx->response->send();
-                $ctx->abort();
+                return;
             }
-
             $ctx->response->sendFile($file);
         })->methods('GET');
     }
