@@ -77,6 +77,8 @@ class Engine
      */
     public function run(): void
     {
+        $this->startDispatcher();
+
         $ctx = Context::fromFPM($this->htmlRender);
         $this->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?: '/', $ctx);
     }
