@@ -396,9 +396,13 @@ class Response extends Message implements ResponseInterface
             $this->swooleResponse->header($name, implode(',', $value));
         }
 
-        // 添加Last-Modified
-        $lastModified = date('D, d M Y H:i:s', filemtime($filename)) . ' ' . date_default_timezone_get();
-        $this->swooleResponse->header('last-modified', $lastModified);
+        // 添加 Last-Modified
+        if (!isset($headers['Last-Modified']) && !isset($headers['last-modified'])) {
+            if ($mtime = filemtime($filename)) {
+                $lastModified = gmdate('D, d M Y H:i:s', $mtime) . ' GMT';
+                $this->swooleResponse->header('Last-Modified', $lastModified);
+            }
+        }
 
         $result = $this->swooleResponse->sendfile($filename);
 
