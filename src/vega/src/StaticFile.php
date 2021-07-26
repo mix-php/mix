@@ -61,7 +61,7 @@ trait StaticFile
                 $ctx->response->send();
                 return;
             }
-            $ctx->response->sendFile($file);
+            $ctx->response->sendfile($file);
         })->methods('GET');
     }
 

@@ -264,14 +264,14 @@ class Response extends Message implements ResponseInterface
      * @param string $filename
      * @return bool
      */
-    public function sendFile(string $filename): bool
+    public function sendfile(string $filename): bool
     {
         if ($this->isSwoole()) {
             return $this->swooleSendFile($filename);
         } else if ($this->isWorkerMan()) {
             return $this->workerManSendFile($filename);
         } else {
-            throw new \RuntimeException('SendFile can be used only in Swoole and Workerman');
+            throw new \RuntimeException('Sendfile can be used only in Swoole and Workerman');
         }
     }
 
