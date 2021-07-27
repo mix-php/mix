@@ -238,6 +238,12 @@ Some information needs to be saved in the request, such as session, JWT payload,
 
 After `abort` is executed, all subsequent code, including middleware, will be stopped.
 
+|  方法名称   | 描述  |
+|  ----  | ----  |
+| $ctx->abort(): void  | 中断，需自行处理响应 |
+| $ctx->abortWithStatus(int $code): void  | 中断并响应状态码 |
+| $ctx->abortWithStatusJSON(int $code, $data): void  | 中断并响应JSON |
+
 ```php
 $vega = new Mix\Vega\Engine();
 $vega->handle('/users/{id}', function (Mix\Vega\Context $ctx) {
@@ -408,6 +414,9 @@ $vega->use(function (Mix\Vega\Context $ctx) {
     try{
         $ctx->next();
     } catch (\Throwable $ex) {
+        if ($ex instanceof Mix\Vega\Abort || $ex instanceof Mix\Vega\Exception\NotFoundException) {
+            throw $ex;
+        }
         $ctx->string(500, 'New 500 response');
         $ctx->abort();
     }
