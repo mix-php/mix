@@ -280,10 +280,11 @@ class Response extends Message implements ResponseInterface
      */
     protected function swooleSend(): bool
     {
-        $headers = $this->getHeaders();
-        foreach ($headers as $name => $value) {
-            $this->swooleResponse->header($name, implode(',', $value));
+        $headers = $this->getHeadersLine();
+        foreach ($headers as $key => $value) {
+            $this->swooleResponse->header($key, $value);
         }
+
         $cookies = $this->getCookies();
         foreach ($cookies as $cookie) {
             $this->swooleResponse->cookie(
@@ -312,7 +313,7 @@ class Response extends Message implements ResponseInterface
      */
     protected function workerManSend(): bool
     {
-        $headers = $this->getHeaders();
+        $headers = $this->getHeadersLine();
         $cookies = $this->getCookies();
 
         $status = $this->getStatusCode();
@@ -354,7 +355,7 @@ class Response extends Message implements ResponseInterface
      */
     protected function fpmSend(): bool
     {
-        $headers = $this->getHeaders();
+        $headers = $this->getHeadersLine();
         $cookies = $this->getCookies();
         $status = $this->getStatusCode();
         $body = $this->getBody();
@@ -391,9 +392,9 @@ class Response extends Message implements ResponseInterface
      */
     protected function swooleSendFile(string $filename): bool
     {
-        $headers = $this->getHeaders();
-        foreach ($headers as $name => $value) {
-            $this->swooleResponse->header($name, implode(',', $value));
+        $headers = $this->getHeadersLine();
+        foreach ($headers as $key => $value) {
+            $this->swooleResponse->header($key, $value);
         }
 
         // 添加 Last-Modified
@@ -416,7 +417,7 @@ class Response extends Message implements ResponseInterface
      */
     protected function workerManSendFile(string $filename): bool
     {
-        $headers = $this->getHeaders();
+        $headers = $this->getHeadersLine();
 
         $response = (new \Workerman\Protocols\Http\Response(200, $headers))->withFile($filename);
         $result = $this->workerManConnection->send($response);
