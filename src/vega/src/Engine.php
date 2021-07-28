@@ -75,17 +75,28 @@ class Engine
     /**
      * 立即执行
      * 支持 PHP-FPM, cli-server
+     * @return bool
      */
-    public function run(): void
+    public function run(): bool
     {
         $this->startDispatcher();
 
         $ctx = Context::fromFPM($this->htmlRender);
-        $key = 'PATH_INFO';
-        if (php_sapi_name() == 'cli-server') {
-            $key = 'SCRIPT_NAME';
+        $uri = $_SERVER['SCRIPT_NAME'] ?? '/';
+        if (PHP_SAPI == 'cli-server') {
+            // php -S localhost:8000 index.php 不带PATH_INFO
+            // php -S localhost:8000 -t public/ index.php 不带PATH_INFO
+            // php -S localhost:8000 -t public/ 带PATH_INFO, 但是/不带
+            if (isset($_SERVER['PATH_INFO'])) {
+                $uri = $_SERVER['PATH_INFO'];
+            } elseif ($_SERVER['SCRIPT_NAME'] == '/index.php') {
+                $uri = '/';
+            }
         }
-        $this->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER[$key] ?: '/', $ctx);
+        $this->dispatch($_SERVER['REQUEST_METHOD'], $uri, $ctx);
+
+        // 支持cli-server静态文件
+        return empty($GLOBALS['__sendfile__']);
     }
 
     /**

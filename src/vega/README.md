@@ -134,7 +134,7 @@ $vega = new Mix\Vega\Engine();
 $vega->handle('/hello', function (Mix\Vega\Context $ctx) {
     $ctx->string(200, 'hello, world!');
 })->methods('GET');
-$vega->run();
+return $vega->run();
 ```
 
 - PHP [cli-server](https://www.php.net/manual/zh/features.commandline.webserver.php) 中使用
@@ -149,7 +149,7 @@ $vega = new Mix\Vega\Engine();
 $vega->handle('/hello', function (Mix\Vega\Context $ctx) {
     $ctx->string(200, 'hello, world!');
 })->methods('GET');
-$vega->run();
+return $vega->run();
 ```
 
 ```
