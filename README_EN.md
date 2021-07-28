@@ -12,13 +12,13 @@
 
 [中文](https://github.com/mix-php/mix) | English
 
-MixPHP is a PHP command-line development framework; HTTP based on `Vega` can support both FPM, Swoole, WorkerMan ecosystems at the same time, and can be switched seamlessly; `V3` is a highly decoupled version, the overall code is based on multiple independent Even if users do not use our scaffolding, they can also use these independent modules, and all modules support native development. For example: you can only use mix/vega to work with laravel orm; you can use mix/database and mix/redis in any environment; you can use mix/grpc native code to write gRPC; all modules can be combined like building blocks.
+MixPHP is a PHP command-line development framework; HTTP based on `Vega` can support both Swoole, WorkerMan, CLI-Server, FPM ecosystems at the same time, and can be switched seamlessly; `V3` is a highly decoupled version, the overall code is based on multiple independent Even if users do not use our scaffolding, they can also use these independent modules, and all modules support native development. For example: you can only use mix/vega to work with laravel orm; you can use mix/database and mix/redis in any environment; you can use mix/grpc native code to write gRPC; all modules can be combined like building blocks.
 
 ## Standalone module
 
 All core modules can be used independently, and all support native code development.
 
-- [mix/vega](https://github.com/mix-php/vega) CLI mode HTTP network framework written in PHP, supports FPM, Swoole, WorkerMan, and is consistent with the gin positioning of the Go ecosystem
+- [mix/vega](https://github.com/mix-php/vega) CLI mode HTTP network framework written in PHP, supports Swoole, WorkerMan, CLI-Server, FPM, and is consistent with the gin positioning of the Go ecosystem
 - [mix/database](https://github.com/mix-php/database) Lightweight database that can be used in various environments, supports FPM, CLI, Swoole, WorkerMan, optional connection pool (coroutine)
 - [mix/redis](https://github.com/mix-php/redis) PHP Redis that can be used in various environments, supports FPM, CLI, Swoole, WorkerMan, optional connection pool (coroutine)
 - [mix/redis-subscribe](https://github.com/mix-php/redis-subscribe) Redis native protocol subscription library based on Swoole coroutine
