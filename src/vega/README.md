@@ -75,6 +75,10 @@ $http->set([
 ]);
 ```
 
+```
+php swoole.php
+```
+
 - Swoole 单进程 (协程) 中使用
 
 ```php
@@ -91,6 +95,10 @@ Swoole\Coroutine\run(function () {
     $server->handle('/', $vega->handler());
     $server->start();
 });
+```
+
+```
+php swooleco.php
 ```
 
 - WorkerMan 中使用
@@ -110,6 +118,10 @@ $http_worker->count = 4;
 Workerman\Worker::runAll();
 ```
 
+```
+php wokerman.php start
+```
+
 - PHP-FPM 中使用
 
 ```php
@@ -123,7 +135,28 @@ $vega->handle('/hello', function (Mix\Vega\Context $ctx) {
 $vega->run();
 ```
 
-访问测试
+在 `nginx` 配置 `rewrite` 重写到 `index.php`
+
+- PHP 内置 Web Server 中使用
+
+这个内置的Web服务器主要用于本地开发使用，不可用于线上产品环境。
+
+```php
+<?php
+require __DIR__ . '/vendor/autoload.php';
+
+$vega = new Mix\Vega\Engine();
+$vega->handle('/hello', function (Mix\Vega\Context $ctx) {
+    $ctx->string(200, 'hello, world!');
+})->methods('GET');
+$vega->run();
+```
+
+```
+php -S localhost:8000 router.php
+```
+
+- 访问测试
 
 ~~~
 % curl http://127.0.0.1:9501/hello

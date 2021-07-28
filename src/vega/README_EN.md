@@ -66,6 +66,10 @@ $http->set([
 ]);
 ```
 
+```
+php swoole.php
+```
+
 - Swoole is used in a single process (coroutine)
 
 ```php
@@ -82,6 +86,10 @@ Swoole\Coroutine\run(function () {
     $server->handle('/', $vega->handler());
     $server->start();
 });
+```
+
+```
+php swooleco.php
 ```
 
 - Used in the WorkerMan
@@ -101,6 +109,10 @@ $http_worker->count = 4;
 Workerman\Worker::runAll();
 ```
 
+```
+php workerman.php start
+```
+
 - Used in PHP-FPM
 
 ```php
@@ -114,7 +126,28 @@ $vega->handle('/hello', function (Mix\Vega\Context $ctx) {
 $vega->run();
 ```
 
-Request to test
+In 'nginx' configure 'rewrite' to 'index.php'
+
+- Used in PHP built-in Web Server
+
+This built-in Web server is primarily used for local development and is not available in an online production environment.
+
+```php
+<?php
+require __DIR__ . '/vendor/autoload.php';
+
+$vega = new Mix\Vega\Engine();
+$vega->handle('/hello', function (Mix\Vega\Context $ctx) {
+    $ctx->string(200, 'hello, world!');
+})->methods('GET');
+$vega->run();
+```
+
+```
+php -S localhost:8000 router.php
+```
+
+- Request to test
 
 ~~~
 % curl http://127.0.0.1:9501/hello

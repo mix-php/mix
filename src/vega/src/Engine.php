@@ -73,14 +73,19 @@ class Engine
     }
 
     /**
-     * PHP-FPM 执行
+     * 立即执行
+     * 支持 PHP-FPM, cli-server
      */
     public function run(): void
     {
         $this->startDispatcher();
 
         $ctx = Context::fromFPM($this->htmlRender);
-        $this->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?: '/', $ctx);
+        $key = 'PATH_INFO';
+        if (php_sapi_name() == 'cli-server') {
+            $key = 'SCRIPT_NAME';
+        }
+        $this->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER[$key] ?: '/', $ctx);
     }
 
     /**
