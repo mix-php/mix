@@ -115,6 +115,8 @@ php workerman.php start
 
 - Used in PHP-FPM
 
+In `nginx` configure `rewrite` to `index.php`
+
 ```php
 <?php
 require __DIR__ . '/vendor/autoload.php';
@@ -125,8 +127,6 @@ $vega->handle('/hello', function (Mix\Vega\Context $ctx) {
 })->methods('GET');
 $vega->run();
 ```
-
-In 'nginx' configure 'rewrite' to 'index.php'
 
 - Used in PHP built-in Web Server
 

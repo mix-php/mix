@@ -124,6 +124,8 @@ php wokerman.php start
 
 - PHP-FPM 中使用
 
+在 `nginx` 配置 `rewrite` 重写到 `index.php`
+
 ```php
 <?php
 require __DIR__ . '/vendor/autoload.php';
@@ -134,8 +136,6 @@ $vega->handle('/hello', function (Mix\Vega\Context $ctx) {
 })->methods('GET');
 $vega->run();
 ```
-
-在 `nginx` 配置 `rewrite` 重写到 `index.php`
 
 - PHP 内置 Web Server 中使用
 
