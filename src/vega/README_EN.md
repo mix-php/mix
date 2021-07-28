@@ -4,9 +4,9 @@
 
 [中文](https://github.com/mix-php/vega) | English
 
-Vega is a CLI mode HTTP web framework written in PHP support Swoole, WorkerMan
+Vega is a CLI mode HTTP web framework written in PHP support Swoole, WorkerMan, CLI-Server, FPM
 
-Vega 是一个用 PHP 编写的 CLI 模式 HTTP 网络框架，支持 Swoole、WorkerMan
+Vega 是一个用 PHP 编写的 CLI 模式 HTTP 网络框架，支持 Swoole、WorkerMan、CLI-Server、FPM
 
 ## Overview
 
@@ -14,7 +14,7 @@ Vega is the core component of [MixPHP](https://github.com/mix-php/mix) `V3+` (wh
 developed by referring to golang [gin](https://github.com/gin-gonic/gin) [mux](https://github.com/gorilla/mux). It
 contains a lot of functions for Web application processing (excluding database processing), including: routing,
 rendering, parameter acquisition, middleware, file uploading, static file processing, strong compatibility with CLI mode, and support
-for Swoole, WorkerMan, and Swoole's various process models.
+for Swoole, WorkerMan, CLI-Server, FPM, and Swoole's various process models.
 
 **Recommended with the following databases:**
 
@@ -113,21 +113,6 @@ Workerman\Worker::runAll();
 php workerman.php start
 ```
 
-- Used in PHP-FPM
-
-In `nginx` configure `rewrite` to `index.php`
-
-```php
-<?php
-require __DIR__ . '/vendor/autoload.php';
-
-$vega = new Mix\Vega\Engine();
-$vega->handle('/hello', function (Mix\Vega\Context $ctx) {
-    $ctx->string(200, 'hello, world!');
-})->methods('GET');
-$vega->run();
-```
-
 - Used in PHP [cli-server](https://www.php.net/manual/zh/features.commandline.webserver.php)
 
 This built-in Web server is primarily used for local development and is not available in an online production environment.
@@ -145,6 +130,21 @@ $vega->run();
 
 ```
 php -S localhost:8000 router.php
+```
+
+- Used in PHP-FPM
+
+In `nginx` configure `rewrite` to `index.php`
+
+```php
+<?php
+require __DIR__ . '/vendor/autoload.php';
+
+$vega = new Mix\Vega\Engine();
+$vega->handle('/hello', function (Mix\Vega\Context $ctx) {
+    $ctx->string(200, 'hello, world!');
+})->methods('GET');
+$vega->run();
 ```
 
 - Request to test

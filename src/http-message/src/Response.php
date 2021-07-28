@@ -272,8 +272,7 @@ class Response extends Message implements ResponseInterface
             return $this->workerManSendFile($filename);
         } else if (PHP_SAPI == 'cli-server') {
             // 支持cli-server静态文件
-            $GLOBALS['__sendfile__'] = true;
-            return true;
+            return $GLOBALS['__sendfile__'] = true;
         } else {
             throw new \RuntimeException('Sendfile can be used only in Swoole, Workerman, PHP CLI-Server');
         }
