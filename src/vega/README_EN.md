@@ -128,7 +128,7 @@ $vega->handle('/hello', function (Mix\Vega\Context $ctx) {
 $vega->run();
 ```
 
-- Used in PHP built-in Web Server
+- Used in PHP [cli-server](https://www.php.net/manual/zh/features.commandline.webserver.php)
 
 This built-in Web server is primarily used for local development and is not available in an online production environment.
 

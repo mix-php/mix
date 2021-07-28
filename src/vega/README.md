@@ -137,7 +137,7 @@ $vega->handle('/hello', function (Mix\Vega\Context $ctx) {
 $vega->run();
 ```
 
-- PHP 内置 Web Server 中使用
+- PHP [cli-server](https://www.php.net/manual/zh/features.commandline.webserver.php) 中使用
 
 这个内置的Web服务器主要用于本地开发使用，不可用于线上产品环境。
 
