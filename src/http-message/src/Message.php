@@ -101,7 +101,6 @@ class Message implements MessageInterface
      */
     public function hasHeader($name)
     {
-        $name = strtolower($name);
         return isset($this->headers[$name]);
     }
 
@@ -121,7 +120,6 @@ class Message implements MessageInterface
      */
     public function getHeader($name)
     {
-        $name = strtolower($name);
         if ($this->hasHeader($name)) {
             return $this->headers[$name];
         }
@@ -149,7 +147,6 @@ class Message implements MessageInterface
      */
     public function getHeaderLine($name)
     {
-        $name = strtolower($name);
         if ($this->hasHeader($name)) {
             return implode(',', $this->headers[$name]);
         }
@@ -186,7 +183,6 @@ class Message implements MessageInterface
      */
     public function withHeader($name, $value)
     {
-        $name = strtolower($name);
         if (is_scalar($value)) {
             $this->headers[$name] = [(string)$value];
         } else if (is_array($value)) {
@@ -219,7 +215,6 @@ class Message implements MessageInterface
      */
     public function withAddedHeader($name, $value)
     {
-        $name   = strtolower($name);
         $header = $this->getHeader($name);
         if (is_scalar($value)) {
             array_push($header, (string)$value);
@@ -248,8 +243,6 @@ class Message implements MessageInterface
      */
     public function withoutHeader($name)
     {
-        // TODO: Implement withoutHeader() method.
-        $name = strtolower($name);
         unset($this->headers[$name]);
         return $this;
     }
@@ -261,7 +254,6 @@ class Message implements MessageInterface
      */
     public function getBody()
     {
-        // TODO: Implement getBody() method.
         return $this->body;
     }
 
@@ -280,7 +272,6 @@ class Message implements MessageInterface
      */
     public function withBody(StreamInterface $body)
     {
-        // TODO: Implement withBody() method.
         $this->body = $body;
         return $this;
     }
