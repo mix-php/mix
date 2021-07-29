@@ -113,6 +113,21 @@ Workerman\Worker::runAll();
 php workerman.php start
 ```
 
+- Used in PHP-FPM
+
+In `nginx` configure `rewrite` to `index.php`
+
+```php
+<?php
+require __DIR__ . '/vendor/autoload.php';
+
+$vega = new Mix\Vega\Engine();
+$vega->handle('/hello', function (Mix\Vega\Context $ctx) {
+    $ctx->string(200, 'hello, world!');
+})->methods('GET');
+$vega->run();
+```
+
 - Used in PHP [cli-server](https://www.php.net/manual/zh/features.commandline.webserver.php)
 
 This built-in Web server is primarily used for local development and is not available in an online production environment.
@@ -130,21 +145,6 @@ $vega->run();
 
 ```
 php -S localhost:8000 router.php
-```
-
-- Used in PHP-FPM
-
-In `nginx` configure `rewrite` to `index.php`
-
-```php
-<?php
-require __DIR__ . '/vendor/autoload.php';
-
-$vega = new Mix\Vega\Engine();
-$vega->handle('/hello', function (Mix\Vega\Context $ctx) {
-    $ctx->string(200, 'hello, world!');
-})->methods('GET');
-$vega->run();
 ```
 
 - Request to test

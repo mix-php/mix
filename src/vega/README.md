@@ -122,6 +122,21 @@ Workerman\Worker::runAll();
 php wokerman.php start
 ```
 
+- PHP-FPM 中使用
+
+在 `nginx` 配置 `rewrite` 重写到 `index.php`
+
+```php
+<?php
+require __DIR__ . '/vendor/autoload.php';
+
+$vega = new Mix\Vega\Engine();
+$vega->handle('/hello', function (Mix\Vega\Context $ctx) {
+    $ctx->string(200, 'hello, world!');
+})->methods('GET');
+return $vega->run();
+```
+
 - PHP [cli-server](https://www.php.net/manual/zh/features.commandline.webserver.php) 中使用
 
 这个内置的Web服务器主要用于本地开发使用，不可用于线上产品环境。
@@ -139,21 +154,6 @@ return $vega->run();
 
 ```
 php -S localhost:8000 router.php
-```
-
-- PHP-FPM 中使用
-
-在 `nginx` 配置 `rewrite` 重写到 `index.php`
-
-```php
-<?php
-require __DIR__ . '/vendor/autoload.php';
-
-$vega = new Mix\Vega\Engine();
-$vega->handle('/hello', function (Mix\Vega\Context $ctx) {
-    $ctx->string(200, 'hello, world!');
-})->methods('GET');
-return $vega->run();
 ```
 
 - 访问测试
