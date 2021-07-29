@@ -4,9 +4,9 @@
 
 [中文](https://github.com/mix-php/vega) | English
 
-Vega is a CLI mode HTTP web framework written in PHP support Swoole, WorkerMan, CLI-Server, FPM
+Vega is a CLI mode HTTP web framework written in PHP support Swoole, WorkerMan, FPM, CLI-Server
 
-Vega 是一个用 PHP 编写的 CLI 模式 HTTP 网络框架，支持 Swoole、WorkerMan、CLI-Server、FPM
+Vega 是一个用 PHP 编写的 CLI 模式 HTTP 网络框架，支持 Swoole、WorkerMan、FPM、CLI-Server
 
 ## Overview
 
@@ -14,7 +14,7 @@ Vega is the core component of [MixPHP](https://github.com/mix-php/mix) `V3+` (wh
 developed by referring to golang [gin](https://github.com/gin-gonic/gin) [mux](https://github.com/gorilla/mux). It
 contains a lot of functions for Web application processing (excluding database processing), including: routing,
 rendering, parameter acquisition, middleware, file uploading, static file processing, strong compatibility with CLI mode, and support
-for Swoole, WorkerMan, CLI-Server, FPM, and Swoole's various process models.
+for Swoole, WorkerMan, FPM, CLI-Server and Swoole's various process models.
 
 **Recommended with the following databases:**
 
