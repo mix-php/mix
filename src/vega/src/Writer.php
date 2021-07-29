@@ -53,7 +53,7 @@ trait Writer
      * @return bool
      * @throws ViewException
      */
-    public function HTML(int $code, string $name, array $data): bool
+    public function HTML(int $code, string $name, array $data = []): bool
     {
         $body = new StringStream($this->renderer->render($name, $data));
         $this->response->withContentType('text/html', 'utf-8');
