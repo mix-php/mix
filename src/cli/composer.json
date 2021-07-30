@@ -1,0 +1,29 @@
+{
+  "name": "mix/cli",
+  "description": "PHP CLI Interactive Commander",
+  "type": "library",
+  "keywords": [
+    "mix",
+    "cli",
+    "commander"
+  ],
+  "homepage": "https://openmix.org/mix-php",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "liu,jian",
+      "email": "coder.keda@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mix\\Cli\\": "src/"
+    }
+  }
+}
