@@ -125,6 +125,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
 
         $headers = $request->header ?? [];
         foreach ($headers as $name => $value) {
+            $name = str_replace(' ', '-', ucwords(strtolower(str_replace('-', ' ', $name))));
             $serverRequest->withHeader($name, $value);
         }
 
