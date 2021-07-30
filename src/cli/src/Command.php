@@ -65,13 +65,21 @@ class Command
     }
 
     /**
-     * @param Option $option
+     * @param Option ...$options
      * @return $this
      */
-    public function addCommand(Option $option): Command
+    public function addOption(Option ...$options): Command
     {
-        $this->options[] = $option;
+        array_push($this->options, ...$options);
         return $this;
+    }
+
+    /**
+     * @param \Closure ...$handlerFunc
+     */
+    public function use(\Closure ...$handlerFunc)
+    {
+        array_push($this->handlers, ...$handlerFunc);
     }
 
 }

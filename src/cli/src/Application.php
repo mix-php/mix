@@ -64,11 +64,12 @@ class Application
     }
 
     /**
+     * @param Command ...$commands
      * @return $this
      */
-    public function addCommand(Command $command): Application
+    public function addCommand(Command ...$commands): Application
     {
-        $this->commands[] = $command;
+        array_push($this->commands, ...$commands);
         // init
         foreach ($this->commands as $command) {
             if ($command->singleton) {
@@ -80,6 +81,14 @@ class Application
             Flag::parse();
         }
         return $this;
+    }
+
+    /**
+     * @param \Closure ...$handlerFunc
+     */
+    public function use(\Closure ...$handlerFunc)
+    {
+        array_push($this->handlers, ...$handlerFunc);
     }
 
     public function run(): void
@@ -291,6 +300,7 @@ class Application
                 $run->main();
             }
         };
+
         $exec();
     }
 
