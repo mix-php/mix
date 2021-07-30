@@ -25,6 +25,11 @@ class Command
     public $long = '';
 
     /**
+     * @var \Closure|RunInterface
+     */
+    public $run;
+
+    /**
      * 子命令：'Usage: %s %s [ARG...]'
      * 单命令：'Usage: %s [ARG...]'
      * @var string
@@ -37,11 +42,6 @@ class Command
     public $options = [];
 
     /**
-     * @var \Closure|RunInterface
-     */
-    public $run;
-
-    /**
      * @var bool
      */
     public $singleton = false;
@@ -49,18 +49,24 @@ class Command
     /**
      * @var \Closure[]
      */
-    protected $handlers = [];
+    public $handlers = [];
 
     /**
      * Command constructor.
      * @param string $name
      * @param string $short
+     * @param string $long
      * @param \Closure|RunInterface $run
      */
-    public function __construct(string $name, string $short, $run)
+    public function __construct(string $name, string $short, string $long, $run)
     {
+        if (!$run instanceof \Closure && !$run instanceof RunInterface) {
+            throw new \RuntimeException('\'$run\' type is invalid');
+        }
+
         $this->name = $name;
         $this->short = $short;
+        $this->long = $long;
         $this->run = $run;
     }
 

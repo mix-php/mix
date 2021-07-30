@@ -300,8 +300,33 @@ class Application
                 $run->main();
             }
         };
-
-        $exec();
+        if (count($this->handlers) > 0) {
+            $tmp = array_merge($this->handlers, $cmd->handlers);
+            $tmp = array_reverse($tmp);
+            $next = null;
+            foreach ($tmp as $k => $f) {
+                if ($k == 0) {
+                    $n = $exec;
+                    $c = $f;
+                    $next = function () use ($n, $c) {
+                        $c($n);
+                    };
+                    if (count($tmp) == 1) {
+                        $c($n);
+                    }
+                } elseif (count($tmp) - 1 == $k) {
+                    $f($next);
+                } else {
+                    $n = $next;
+                    $c = $f;
+                    $next = function () use ($n, $c) {
+                        $c($n);
+                    };
+                }
+            }
+        } else {
+            $exec();
+        }
     }
 
     /**

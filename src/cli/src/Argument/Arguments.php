@@ -20,6 +20,7 @@ class Arguments
     public static function parse(bool $singleton = false): void
     {
         if ($singleton) {
+            static::$command = '';
             return;
         }
         $argv = $GLOBALS['argv'];
