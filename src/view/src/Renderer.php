@@ -38,7 +38,7 @@ class Renderer
      * @return string
      * @throws ViewException
      */
-    public function render(string $__template__, array $__data__):string
+    public function render(string $__template__, array $__data__ = []):string
     {
         // 传入变量
         extract($__data__);
