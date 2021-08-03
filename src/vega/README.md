@@ -2,7 +2,7 @@
 
 # Mix Vega
 
-中文 | [English](https://github.com/mix-php/vega/blob/master/README_EN.md)
+中文 | [English](README_EN.md)
 
 Vega is a CLI mode HTTP web framework written in PHP support Swoole, WorkerMan, FPM, CLI-Server
 
