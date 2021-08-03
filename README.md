@@ -33,25 +33,25 @@ MixPHP 是一个 PHP 命令行模式开发框架；基于 `Vega` 驱动的 HTTP 
 
 提供了现成的脚手架，快速创建项目，立即产出。
 
-- [编写一个 API 接口](https://github.com/mix-php/api-skeleton#readme)
+- [编写一个 API 接口](examples/api-skeleton#readme)
 
 ```
 composer create-project --prefer-dist mix/api-skeleton api
 ```
 
-- [编写一个 Web 页面](https://github.com/mix-php/web-skeleton#readme)
+- [编写一个 Web 页面](examples/web-skeleton#readme)
 
 ```
 composer create-project --prefer-dist mix/web-skeleton web
 ```
 
-- [编写一个 WebSocket 服务](https://github.com/mix-php/websocket-skeleton#readme)
+- [编写一个 WebSocket 服务](examples/websocket-skeleton#readme)
 
 ```
 composer create-project --prefer-dist mix/websocket-skeleton websocket
 ```
 
-- [编写一个 gRPC 接口](https://github.com/mix-php/grpc-skeleton#readme)
+- [编写一个 gRPC 接口](examples/grpc-skeleton#readme)
 
 ```
 composer create-project --prefer-dist mix/grpc-skeleton grpc

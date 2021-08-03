@@ -33,25 +33,25 @@ All core modules can be used independently, and all support native code developm
 
 Provide ready-made scaffolding, quickly create projects, immediate output.
 
-- [Write an API interface](https://github.com/mix-php/api-skeleton#readme)
+- [Write an API interface](examples/api-skeleton#readme)
 
 ```
 composer create-project --prefer-dist mix/api-skeleton api
 ```
 
-- [Write a web page](https://github.com/mix-php/web-skeleton#readme)
+- [Write a web page](examples/web-skeleton#readme)
 
 ```
 composer create-project --prefer-dist mix/web-skeleton web
 ```
 
-- [Write a WebSocket service](https://github.com/mix-php/websocket-skeleton#readme)
+- [Write a WebSocket service](examples/websocket-skeleton#readme)
 
 ```
 composer create-project --prefer-dist mix/websocket-skeleton websocket
 ```
 
-- [Write a gRPC interface](https://github.com/mix-php/grpc-skeleton#readme)
+- [Write a gRPC interface](examples/grpc-skeleton#readme)
 
 ```
 composer create-project --prefer-dist mix/grpc-skeleton grpc
