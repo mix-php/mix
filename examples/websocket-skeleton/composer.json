@@ -1,0 +1,31 @@
+{
+  "name": "mix/websocket-skeleton",
+  "description": "WebSocket development skeleton",
+  "type": "project",
+  "homepage": "https://openmix.org/mix-php",
+  "license": "Apache-2.0",
+  "scripts": {
+    "swooleco:start": "php bin/swooleco.php",
+    "cli:clearcache": "php bin/cli.php clearcache"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    },
+    "files": [
+      "src/functions.php"
+    ]
+  },
+  "require": {
+    "mix/vega": "~3.0",
+    "mix/websocket": "~3.0",
+    "mix/database": "~3.0",
+    "mix/redis": "~3.0",
+    "vlucas/phpdotenv": "^5.3",
+    "hassankhan/config": "^2.2",
+    "monolog/monolog": "^2.3"
+  },
+  "require-dev": {
+    "swoole/ide-helper": "^4.6"
+  }
+}
