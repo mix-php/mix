@@ -4,6 +4,7 @@ set -e
 set -x
 
 NOW=$(date +%s)
+TOKEN=""
 WORKDIR="src"
 CURRENT_BRANCH="master"
 BASEPATH=$(cd `dirname $0`; cd ../$WORKDIR/; pwd)
@@ -27,7 +28,7 @@ if [[ $# -eq 0 ]]; then
 fi
 
 for REPO in $REPOS ; do
-    remote $REPO git@github.com:mix-php/$REPO.git
+    remote $REPO https://$TOKEN@github.com/mix-php/$REPO.git
 
     split "$WORKDIR/$REPO" $REPO
 done

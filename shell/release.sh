@@ -9,6 +9,7 @@ then
 fi
 
 NOW=$(date +%s)
+TOKEN=""
 WORKDIR="src"
 CURRENT_BRANCH="master"
 VERSION=$1
@@ -28,7 +29,7 @@ do
     echo ""
     echo "Cloning $REMOTE";
     TMP_DIR="/tmp/mix-split"
-    REMOTE_URL="https://github.com/mix-php/$REMOTE.git"
+    REMOTE_URL="https://$TOKEN@github.com/mix-php/$REMOTE.git"
 
     rm -rf $TMP_DIR;
     mkdir $TMP_DIR;
