@@ -9,9 +9,10 @@ then
 fi
 
 NOW=$(date +%s)
+WORKDIR="src"
 CURRENT_BRANCH="master"
 VERSION=$1
-BASEPATH=$(cd `dirname $0`; cd ../src/; pwd)
+BASEPATH=$(cd `dirname $0`; cd ../$WORKDIR/; pwd)
 
 # Always prepend with "v"
 if [[ $VERSION != v*  ]]
@@ -47,5 +48,4 @@ do
 done
 
 TIME=$(echo "$(date +%s) - $NOW" | bc)
-
-printf "Execution time: %f seconds" $TIME
+printf "Execution time: %f seconds\n" $TIME

@@ -3,8 +3,10 @@
 set -e
 set -x
 
+NOW=$(date +%s)
+WORKDIR="src"
 CURRENT_BRANCH="master"
-BASEPATH=$(cd `dirname $0`; cd ../src/; pwd)
+BASEPATH=$(cd `dirname $0`; cd ../$WORKDIR/; pwd)
 REPOS=$@
 
 function split()
@@ -27,5 +29,8 @@ fi
 for REPO in $REPOS ; do
     remote $REPO https://github.com/mix-php/$REPO.git
 
-    split "src/$REPO" $REPO
+    split "$WORKDIR/$REPO" $REPO
 done
+
+TIME=$(echo "$(date +%s) - $NOW" | bc)
+printf "Execution time: %f seconds\n" $TIME
