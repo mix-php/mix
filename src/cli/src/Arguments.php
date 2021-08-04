@@ -1,10 +1,10 @@
 <?php
 
-namespace Mix\Cli\Flag;
+namespace Mix\Cli;
 
 /**
  * Class Arguments
- * @package Mix\Cli\Flag
+ * @package Mix\Cli
  */
 class Arguments
 {

@@ -1,12 +1,10 @@
 <?php
 
-namespace Mix\Cli\Flag;
-
-use Mix\Cli\Argument\ArgumentVector;
+namespace Mix\Cli;
 
 /**
  * Class Flag
- * @package Mix\Cli\Flag
+ * @package Mix\Cli
  */
 class Flag
 {
@@ -27,7 +25,7 @@ class Flag
     public static function parse(): void
     {
         $start = 1;
-        if (ArgumentVector::command() == '') {
+        if (Argv::command() == '') {
             $start = 0;
         }
         $opts = $args = [];

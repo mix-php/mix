@@ -1,13 +1,18 @@
 <?php
 
-namespace Mix\Cli\Argument;
+namespace Mix\Cli;
 
 /**
- * Class Arguments
- * @package Mix\Cli\Argument
+ * Class ArgumentVector
+ * @package Mix\Cli
  */
-class ArgumentVector
+class Argv
 {
+
+    /**
+     * @var Program
+     */
+    protected static $program;
 
     /**
      * @var string
@@ -19,11 +24,18 @@ class ArgumentVector
      */
     public static function parse(bool $singleton = false): void
     {
+        $argv = $GLOBALS['argv'];
+        $program = new Program();
+        $program->path = $argv[0];
+        $program->absPath = realpath($argv[0]);
+        $program->dir = dirname($program->absPath);
+        $program->file = basename($program->absPath);
+        static::$program = $program;
+
         if (count($GLOBALS['argv']) <= 1 || $singleton) {
             static::$command = '';
             return;
         }
-        $argv = $GLOBALS['argv'];
         $command = $argv[1] ?? '';
         $command = preg_match('/^[a-zA-Z0-9_\-:]+$/i', $command) ? $command : '';
         $command = substr($command, 0, 1) == '-' ? '' : $command;
@@ -31,12 +43,11 @@ class ArgumentVector
     }
 
     /**
-     * @return string
+     * @return Program
      */
-    public static function script(): string
+    public static function program(): Program
     {
-        $argv = $GLOBALS['argv'];
-        return $argv[0];
+        return static::$program;
     }
 
     /**

@@ -2,8 +2,6 @@
 
 namespace Mix\Cli;
 
-use Mix\Cli\Argument\ArgumentVector;
-use Mix\Cli\Flag\Flag;
 use Mix\Cli\Exception\NotFoundException;
 
 /**
@@ -57,9 +55,9 @@ class Application
     {
         $this->name = $name;
         $this->version = $version;
-        $this->basePath = dirname(realpath(ArgumentVector::script()));
+        $this->basePath = Argv::program()->dir;
 
-        ArgumentVector::parse();
+        Argv::parse();
         Flag::parse();
     }
 
@@ -77,7 +75,7 @@ class Application
             }
         }
         if ($this->singleton) {
-            ArgumentVector::parse(true);
+            Argv::parse(true);
             Flag::parse();
         }
         return $this;
@@ -104,7 +102,7 @@ class Application
             throw new \RuntimeException('Command cannot be empty');
         }
 
-        if (ArgumentVector::command() == '') {
+        if (Argv::command() == '') {
             if (Flag::match('h', 'help')->bool()) {
                 $this->globalHelp();
                 return;
@@ -124,10 +122,10 @@ class Application
             }
             $keys = array_keys($options);
             $flag = array_shift($keys);
-            $script = ArgumentVector::script();
+            $script = Argv::program()->path;
             throw new NotFoundException("flag provided but not defined: '{$flag}', see '{$script} --help'."); // 这里只是全局flag效验
         }
-        if (ArgumentVector::command() !== '' && Flag::match('help')->bool()) {
+        if (Argv::command() !== '' && Flag::match('help')->bool()) {
             $this->commandHelp();
             return;
         }
@@ -137,7 +135,7 @@ class Application
 
     protected function globalHelp(): void
     {
-        $script = ArgumentVector::script();
+        $script = Argv::program()->path;
         static::println("Usage: {$script}" . ($this->singleton ? '' : ' [OPTIONS] COMMAND') . " [opt...]");
         $this->printGlobalOptions();
         if ($this->singleton) {
@@ -153,8 +151,8 @@ class Application
 
     protected function commandHelp(): void
     {
-        $script = ArgumentVector::script();
-        $command = ArgumentVector::command();
+        $script = Argv::program()->path;
+        $command = Argv::command();
         $cmd = $this->getCommand($command);
         if (!$cmd) {
             return;
@@ -202,7 +200,7 @@ class Application
 
     protected function printCommandOptions(): void
     {
-        $cmd = $this->getCommand(ArgumentVector::command());
+        $cmd = $this->getCommand(Argv::command());
         if (!$cmd) {
             return;
         }
@@ -254,7 +252,7 @@ class Application
 
     protected function validateOptions(): void
     {
-        $command = ArgumentVector::command();
+        $command = Argv::command();
         $cmd = $this->getCommand($command);
         if (!$cmd) {
             return;
@@ -272,8 +270,8 @@ class Application
         }
         foreach (array_keys(Flag::options()) as $flag) {
             if (!in_array($flag, $flags)) {
-                $script = ArgumentVector::script();
-                $command = ArgumentVector::command();
+                $script = Argv::program()->path;
+                $command = Argv::command();
                 $command = $command ? " {$command}" : $command;
                 throw new NotFoundException("flag provided but not defined: '{$flag}', see '{$script}{$command} --help'.");
             }
@@ -284,7 +282,7 @@ class Application
     {
         $this->validateOptions();
 
-        $command = ArgumentVector::command();
+        $command = Argv::command();
         $cmd = $this->getCommand($command);
         if (!$cmd) {
             return;
