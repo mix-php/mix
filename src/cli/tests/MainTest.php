@@ -8,11 +8,13 @@ final class MainTest extends TestCase
 
     public function test(): void
     {
-        $GLOBALS['argv'] = [$GLOBALS['argv'][0], 'foo'];
-        $app = new \Mix\Cli\Application('test', '1.0.0');
-        $cmd = new \Mix\Cli\Command('foo', 'bar', function () {
+        $GLOBALS['argv'] = [$GLOBALS['argv'][0], 'hello'];
+        $app = new \Mix\Cli\Application('app', '0.0.0-alpha');
+        $cmd = new \Mix\Cli\Command('hello', 'Echo demo', function () {
             $this->assertTrue(true);
         });
+        $opt = new Mix\Cli\Option(['n', 'name'], 'Your name');
+        $cmd->addOption($opt);
         $app->addCommand($cmd);
         $app->run();
 

@@ -83,10 +83,12 @@ class Application
 
     /**
      * @param \Closure ...$handlerFunc
+     * @return $this
      */
-    public function use(\Closure ...$handlerFunc)
+    public function use(\Closure ...$handlerFunc): Application
     {
         array_push($this->handlers, ...$handlerFunc);
+        return $this;
     }
 
     /**
@@ -176,7 +178,7 @@ class Application
     {
         $appName = $this->name;
         $appVersion = $this->version;
-        static::println("{$appName} version {$appVersion}");
+        static::println("{$appName} {$appVersion}");
     }
 
     protected function printGlobalOptions(): void

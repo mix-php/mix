@@ -80,10 +80,12 @@ class Command
 
     /**
      * @param \Closure ...$handlerFunc
+     * @return $this
      */
-    public function use(\Closure ...$handlerFunc)
+    public function use(\Closure ...$handlerFunc): Command
     {
         array_push($this->handlers, ...$handlerFunc);
+        return $this;
     }
 
 }
