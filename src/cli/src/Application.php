@@ -24,7 +24,7 @@ class Application
     /**
      * @var bool
      */
-    public $debug = true;
+    public $debug = false;
 
     /**
      * @var string
@@ -50,14 +50,16 @@ class Application
      * Application constructor.
      * @param string $name
      * @param string $version
+     * @param bool $debug
      */
-    public function __construct(string $name, string $version)
+    public function __construct(string $name, string $version, bool $debug = false)
     {
         Argv::parse();
         Flag::parse();
 
         $this->name = $name;
         $this->version = $version;
+        $this->debug = $debug;
         $this->basePath = Argv::program()->dir;
     }
 

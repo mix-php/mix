@@ -149,13 +149,16 @@ $app->use($h)->addCommand($cmd)->run();
 
 ```
 // 获取基础路径(入口文件所在目录路径)
-$app->BasePath
+$app->basePath
 
 // App名称
-$app->Name
+$app->name
 
 // App版本号
-$app->Version
+$app->version
+
+// 是否开启debug
+$app->debug
 ```
 
 ## Singleton 单命令
