@@ -6,6 +6,8 @@ PHP CLI Interactive Commander
 
 PHP 命令行交互指挥官
 
+> go 版本：https://github.com/mix-go/xcli
+
 ## Installation
 
 ```
