@@ -55,19 +55,17 @@ class Command
      * Command constructor.
      * @param string $name
      * @param string $short
-     * @param string $long
      * @param \Closure|RunInterface $run
      */
-    public function __construct(string $name, string $short, string $long, $run)
+    public function __construct(string $name, string $short, $run)
     {
+        $this->name = $name;
+        $this->short = $short;
+        $this->run = $run;
+
         if (!$run instanceof \Closure && !$run instanceof RunInterface) {
             throw new \RuntimeException('\'$run\' type is invalid');
         }
-
-        $this->name = $name;
-        $this->short = $short;
-        $this->long = $long;
-        $this->run = $run;
     }
 
     /**

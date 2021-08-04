@@ -53,12 +53,12 @@ class Application
      */
     public function __construct(string $name, string $version)
     {
+        Argv::parse();
+        Flag::parse();
+
         $this->name = $name;
         $this->version = $version;
         $this->basePath = Argv::program()->dir;
-
-        Argv::parse();
-        Flag::parse();
     }
 
     /**
@@ -232,7 +232,7 @@ class Application
     protected function getCommand(string $command): ?Command
     {
         $cmd = null;
-        if (!$this->singleton) {
+        if ($this->singleton) {
             foreach ($this->commands as $c) {
                 if ($c->singleton) {
                     $cmd = $c;

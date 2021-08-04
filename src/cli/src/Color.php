@@ -90,7 +90,7 @@ class Color
      */
     public function printf(string $format, ...$values)
     {
-        echo $this->sprintf($format, ... $values);
+        file_put_contents('php://stdout', $this->sprintf($format, ... $values));
     }
 
     /**
