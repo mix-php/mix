@@ -9,71 +9,57 @@ namespace Mix\Cli\Flag;
 class FlagValue
 {
 
-    protected $names = [];
+    /**
+     * @var string
+     */
+    protected $value;
+
+    /**
+     * @var bool
+     */
+    protected $exist;
 
     /**
      * FlagValue constructor.
-     * @param string ...$names
+     * @param string $value
+     * @param bool $exist
      */
-    public function __construct(string ...$names)
+    public function __construct(string $value = '', bool $exist = false)
     {
-        $this->names = $names;
+        $this->value = $value;
+        $this->exist = $exist;
     }
 
     /**
-     * 获取布尔值
-     * @param bool $default
-     * @return bool
-     */
-    public function bool(bool $default = false): bool
-    {
-        $flags = [];
-        foreach ($this->names as $item) {
-            if (strlen($item) == 1) {
-                $flags[] = "-{$item}";
-            } else {
-                $flags[] = "--{$item}";
-            }
-        }
-        foreach (Flag::options() as $key => $value) {
-            if (in_array($key, $flags, true)) {
-                if ($value === 'false') {
-                    return false;
-                }
-                return true;
-            }
-        }
-        return $default;
-    }
-
-    /**
-     * 获取字符值
      * @param string $default
      * @return string
      */
     public function string(string $default = ''): string
     {
-        $flags = [];
-        foreach ($this->names as $item) {
-            if (strlen($item) == 1) {
-                $flags[] = "-{$item}";
-            } else {
-                $flags[] = "--{$item}";
-            }
+        if ($this->value === '') {
+            return $default;
         }
-        foreach (Flag::options() as $key => $value) {
-            if (in_array($key, $flags, true)) {
-                if ($value === '') {
-                    return $default;
-                }
-                return $value;
-            }
-        }
-        return $default;
+        return $this->value;
     }
 
     /**
-     * 获取整数
+     * @param bool $default
+     * @return bool
+     */
+    public function bool(bool $default = false): bool
+    {
+        if (!$this->exist) {
+            return $default;
+        }
+        switch ($this->value) {
+            case 'false':
+                return false;
+            default:
+                return true;
+        }
+    }
+
+    /**
      * @param int $default
      * @return int
      */
@@ -87,7 +73,6 @@ class FlagValue
     }
 
     /**
-     * 获取浮点数
      * @param float $default
      * @return float
      */

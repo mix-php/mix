@@ -2,7 +2,7 @@
 
 namespace Mix\Cli\Flag;
 
-use Mix\Cli\Argument\Arguments;
+use Mix\Cli\Argument\ArgumentVector;
 
 /**
  * Class Flag
@@ -16,40 +16,52 @@ class Flag
      */
     protected static $options = [];
 
+    /**
+     * @var array
+     */
+    protected static $arguments = [];
+
+    /**
+     * parse
+     */
     public static function parse(): void
     {
         $start = 1;
-        if (Arguments::command() == '') {
+        if (ArgumentVector::command() == '') {
             $start = 0;
         }
-        $argv = $GLOBALS['argv'];
-        $tmp = [];
-        foreach ($argv as $key => $item) {
+        $opts = $args = [];
+        $ignore = '';
+        foreach ($GLOBALS['argv'] as $key => $val) {
             if ($key <= $start) {
                 continue;
             }
-            $name = $item;
+            $name = $val;
             $value = '';
             if (strpos($name, '=') !== false) {
-                list($name) = explode('=', $item);
-                $value = ltrim(strstr($item, "="), "=");
+                list($name) = explode('=', $val);
+                $value = ltrim(strstr($val, "="), "=");
             }
-            if (substr($name, 0, 2) == '--' || substr($name, 0, 1) == '-') {
-                // 无值参数处理
+            if (substr($name, 0, 1) == '-' || substr($name, 0, 2) == '--') {
                 if (substr($name, 0, 1) == '-' && $value === '' && isset($argv[$key + 1]) && substr($argv[$key + 1], 0, 1) != '-') {
                     $next = $argv[$key + 1];
                     if (preg_match('/^[\S\s]+$/i', $next)) {
                         $value = $next;
+                        $ignore = $next;
                     }
                 }
             } else {
                 $name = '';
+                if ($val != $ignore) {
+                    $args[] = $val;
+                }
             }
             if ($name !== '') {
-                $tmp[$name] = $value;
+                $opts[$name] = $value;
             }
         }
-        self::$options = $tmp;
+        static::$options = $opts;
+        static::$arguments = $args;
     }
 
     /**
@@ -58,36 +70,37 @@ class Flag
      */
     public static function match(string ...$names): FlagValue
     {
-        return new FlagValue(...$names);
+        $find = function (string $key) {
+            if (strlen($key) == 1) {
+                $flag = "-{$key}";
+            } else {
+                $flag = "--{$key}";
+            }
+            return static::options()[$flag] ?? null;
+        };
+        foreach ($names as $name) {
+            $v = $find($name);
+            if (!is_null($v)) {
+                return new FlagValue($v, true);
+            }
+        }
+        return new FlagValue();
     }
 
     /**
-     * 全部命令行选项
-     * @return array
+     * @return array ['--foo' => 'bar']
      */
     public static function options(): array
     {
-        return self::$options;
+        return static::$options;
     }
 
     /**
-     * 全部命令行值
-     * @return array
+     * @return Arguments
      */
-    public static function values(): array
+    public static function arguments(): Arguments
     {
-        $values = [];
-        foreach (static::options() as $flag => $value) {
-            if (substr($flag, 0, 2) == '--') {
-                $values[substr($flag, 2)] = $value;
-                continue;
-            }
-            if (substr($flag, 0, 1) == '-') {
-                $values[substr($flag, 1)] = $value;
-                continue;
-            }
-        }
-        return $values;
+        return new Arguments(static::$arguments);
     }
 
 }
