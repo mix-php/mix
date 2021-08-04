@@ -90,59 +90,60 @@ class Application
     }
 
     /**
-     * run
+     * Run
      */
     public function run(): void
     {
         if (PHP_SAPI != 'cli') {
             throw new \RuntimeException('Please run in cli mode.');
         }
-
         if (count($this->commands) == 0) {
             throw new \RuntimeException('Command cannot be empty');
         }
 
-        if (Argv::command() == '') {
-            if (Flag::match('h', 'help')->bool()) {
-                $this->globalHelp();
+        try {
+            if (Argv::command() == '') {
+                if (Flag::match('h', 'help')->bool()) {
+                    $this->globalHelp();
+                    return;
+                }
+                if (Flag::match('v', 'version')->bool()) {
+                    $this->version();
+                    return;
+                }
+                $options = Flag::options();
+                if (empty($options)) {
+                    $this->globalHelp();
+                    return;
+                } elseif ($this->singleton) {
+                    $this->call();
+                    return;
+                }
+                $keys = array_keys($options);
+                $flag = array_shift($keys);
+                $script = Argv::program()->path;
+                throw new NotFoundException("flag provided but not defined: '{$flag}', see '{$script} --help'."); // 这里只是全局flag效验
+            }
+            if (Argv::command() !== '' && Flag::match('help')->bool()) {
+                $this->commandHelp();
                 return;
             }
-            if (Flag::match('v', 'version')->bool()) {
-                $this->version();
-                return;
-            }
-            $options = Flag::options();
-            if (empty($options)) {
-                $this->globalHelp();
-                return;
-            } elseif ($this->singleton) {
-                // 单命令执行
-                $this->call();
-                return;
-            }
-            $keys = array_keys($options);
-            $flag = array_shift($keys);
-            $script = Argv::program()->path;
-            throw new NotFoundException("flag provided but not defined: '{$flag}', see '{$script} --help'."); // 这里只是全局flag效验
+            $this->call();
+        } catch (NotFoundException $ex) {
+            static::println($ex->getMessage());
         }
-        if (Argv::command() !== '' && Flag::match('help')->bool()) {
-            $this->commandHelp();
-            return;
-        }
-        // 非单命令执行
-        $this->call();
     }
 
     protected function globalHelp(): void
     {
         $script = Argv::program()->path;
-        static::println("Usage: {$script}" . ($this->singleton ? '' : ' [OPTIONS] COMMAND') . " [opt...]");
-        $this->printGlobalOptions();
+        static::println("Usage: {$script}" . ($this->singleton ? '' : ' [OPTIONS] COMMAND') . " [ARG...]");
         if ($this->singleton) {
             $this->printCommandOptions();
         } else {
             $this->printCommands();
         }
+        $this->printGlobalOptions();
         static::println('');
         static::println("Run '{$script}" . ($this->singleton ? '' : ' COMMAND') . " --help' for more information on a command.");
         static::println('');
@@ -285,7 +286,8 @@ class Application
         $command = Argv::command();
         $cmd = $this->getCommand($command);
         if (!$cmd) {
-            return;
+            $script = Argv::program()->path;
+            throw new NotFoundException("'{$command}' is not command, see '{$script} --help'.");
         }
         $run = $cmd->run;
         if (empty($run)) {
