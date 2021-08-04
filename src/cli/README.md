@@ -45,7 +45,7 @@ $ php app.php
 Usage: app.php [OPTIONS] COMMAND [ARG...]
 
 Commands:
-  hello Echo demo
+  hello         Echo demo
 
 Global Options:
   -h, --help    Print usage
@@ -122,7 +122,7 @@ foreach (Mix\Cli\Flag::arguments()->values() as $k => $v) {
 
 ## Handle panic 错误处理
 
-使用中间件处理异常，也可以单独对命令配置中间件
+使用中间件处理异常，也可以单独对某个命令配置中间件
 
 ```php
 $h = function ($next) {
