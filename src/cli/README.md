@@ -8,6 +8,10 @@ PHP 命令行交互指挥官
 
 > go 版本：https://github.com/mix-go/xcli
 
+## Overview
+
+一个命令行交互与指挥管理工具，它可以让单个 CLI 可执行多种功能，同时它还包括命令行参数获取、全局异常捕获与处理等命令行开发常用功能。
+
 ## Installation
 
 ```
