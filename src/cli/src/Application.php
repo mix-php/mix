@@ -2,7 +2,7 @@
 
 namespace Mix\Cli;
 
-use Mix\Cli\Argument\Arguments;
+use Mix\Cli\Argument\ArgumentVector;
 use Mix\Cli\Flag\Flag;
 use Mix\Cli\Exception\NotFoundException;
 
@@ -57,9 +57,9 @@ class Application
     {
         $this->name = $name;
         $this->version = $version;
-        $this->basePath = dirname(Arguments::script());
+        $this->basePath = dirname(realpath(ArgumentVector::script()));
 
-        Arguments::parse();
+        ArgumentVector::parse();
         Flag::parse();
     }
 
@@ -77,7 +77,7 @@ class Application
             }
         }
         if ($this->singleton) {
-            Arguments::parse(true);
+            ArgumentVector::parse(true);
             Flag::parse();
         }
         return $this;
@@ -91,6 +91,9 @@ class Application
         array_push($this->handlers, ...$handlerFunc);
     }
 
+    /**
+     * run
+     */
     public function run(): void
     {
         if (PHP_SAPI != 'cli') {
@@ -101,12 +104,12 @@ class Application
             throw new \RuntimeException('Command cannot be empty');
         }
 
-        if (Arguments::command() == '') {
-            if (Flag::bool(['h', 'help'], false)) {
+        if (ArgumentVector::command() == '') {
+            if (Flag::match('h', 'help')->bool()) {
                 $this->globalHelp();
                 return;
             }
-            if (Flag::bool(['v', 'version'], false)) {
+            if (Flag::match('v', 'version')->bool()) {
                 $this->version();
                 return;
             }
@@ -121,10 +124,10 @@ class Application
             }
             $keys = array_keys($options);
             $flag = array_shift($keys);
-            $script = Arguments::script();
+            $script = ArgumentVector::script();
             throw new NotFoundException("flag provided but not defined: '{$flag}', see '{$script} --help'."); // 这里只是全局flag效验
         }
-        if (Arguments::command() !== '' && Flag::bool('help', false)) {
+        if (ArgumentVector::command() !== '' && Flag::match('help')->bool()) {
             $this->commandHelp();
             return;
         }
@@ -134,7 +137,7 @@ class Application
 
     protected function globalHelp(): void
     {
-        $script = Arguments::script();
+        $script = ArgumentVector::script();
         static::println("Usage: {$script}" . ($this->singleton ? '' : ' [OPTIONS] COMMAND') . " [opt...]");
         $this->printGlobalOptions();
         if ($this->singleton) {
@@ -150,8 +153,8 @@ class Application
 
     protected function commandHelp(): void
     {
-        $script = Arguments::script();
-        $command = Arguments::command();
+        $script = ArgumentVector::script();
+        $command = ArgumentVector::command();
         $cmd = $this->getCommand($command);
         if (!$cmd) {
             return;
@@ -199,7 +202,7 @@ class Application
 
     protected function printCommandOptions(): void
     {
-        $cmd = $this->getCommand(Arguments::command());
+        $cmd = $this->getCommand(ArgumentVector::command());
         if (!$cmd) {
             return;
         }
@@ -251,7 +254,7 @@ class Application
 
     protected function validateOptions(): void
     {
-        $command = Arguments::command();
+        $command = ArgumentVector::command();
         $cmd = $this->getCommand($command);
         if (!$cmd) {
             return;
@@ -269,8 +272,8 @@ class Application
         }
         foreach (array_keys(Flag::options()) as $flag) {
             if (!in_array($flag, $flags)) {
-                $script = Arguments::script();
-                $command = Arguments::command();
+                $script = ArgumentVector::script();
+                $command = ArgumentVector::command();
                 $command = $command ? " {$command}" : $command;
                 throw new NotFoundException("flag provided but not defined: '{$flag}', see '{$script}{$command} --help'.");
             }
@@ -281,7 +284,7 @@ class Application
     {
         $this->validateOptions();
 
-        $command = Arguments::command();
+        $command = ArgumentVector::command();
         $cmd = $this->getCommand($command);
         if (!$cmd) {
             return;
