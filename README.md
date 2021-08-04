@@ -24,10 +24,10 @@ MixPHP 是一个 PHP 命令行模式开发框架；基于 `Vega` 驱动的 HTTP 
 - [mix/redis-subscribe](src/redis-subscribe) 基于 Swoole 协程的 Redis 原生协议订阅库
 - [mix/grpc](src/grpc) 基于 Swoole 协程的 PHP gRPC 库，包含 protoc 代码生成器、服务器、客户端
 - [mix/websocket](src/websocket) 基于 Swoole 协程的 PHP WebSocket 服务器与客户端
-- [mix/validator](src/validator) 基于 PSR-7 的验证库
-- [mix/worker-pool](src/worker-pool) 基于 Swoole 的协程池、工作池库
-- [mix/event](src/event) 基于 PSR-14 标准的事件调度库
 - [mix/cli](src/cli) PHP 命令行交互指挥官
+- [mix/worker-pool](src/worker-pool) 基于 Swoole 的协程池、工作池库
+- [mix/validator](src/validator) 基于 PSR-7 的验证库
+- [mix/event](src/event) 基于 PSR-14 标准的事件调度库
 
 ## 快速开始
 

@@ -24,10 +24,10 @@ All core modules can be used independently, and all support native code developm
 - [mix/redis-subscribe](src/redis-subscribe) Redis native protocol subscription library based on Swoole coroutine
 - [mix/grpc](src/grpc) PHP gRPC library based on Swoole coroutine, including protoc code generator, server, client
 - [mix/websocket](src/websocket) PHP WebSocket server and client based on Swoole coroutine
-- [mix/validate](src/validate) PSR-7-based verification library
-- [mix/worker-pool](src/worker-pool) Swoole-based worker pool, coroutine pool
-- [mix/event](src/event) Event dispatcher based on PSR-14 standard
 - [mix/cli](src/cli) PHP command line interactive commander
+- [mix/worker-pool](src/worker-pool) Swoole-based worker pool, coroutine pool
+- [mix/validator](src/validator) PSR-7-based verification library
+- [mix/event](src/event) Event dispatcher based on PSR-14 standard
 
 ## Quick start
 
