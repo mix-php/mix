@@ -33,6 +33,12 @@ MixPHP 是一个 PHP 命令行模式开发框架；基于 `Vega` 驱动的 HTTP 
 
 提供了现成的脚手架，快速创建项目，立即产出。
 
+- [编写一个 CLI 程序](examples/cli-skeleton#readme)
+
+```
+composer create-project --prefer-dist mix/cli-skeleton cli
+```
+
 - [编写一个 API 接口](examples/api-skeleton#readme)
 
 ```

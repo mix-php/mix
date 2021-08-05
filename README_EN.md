@@ -31,9 +31,15 @@ All core modules can be used independently, and all support native code developm
 
 ## Quick start
 
+- [Write a CLI program](examples/cli-skeleton#readme)
+
+```
+composer create-project --prefer-dist mix/cli-skeleton cli
+```
+
 Provide ready-made scaffolding, quickly create projects, immediate output.
 
-- [Write an API interface](examples/api-skeleton#readme)
+- [Write a API interface](examples/api-skeleton#readme)
 
 ```
 composer create-project --prefer-dist mix/api-skeleton api
