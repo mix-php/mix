@@ -23,9 +23,9 @@ composer require mix/cli
 ```php
 Mix\Cli\Cli::setName('app')->setVersion('0.0.0-alpha');
 $cmd = new Mix\Cli\Command([
-    'name'=>'hello',
-    'short'=> 'Echo demo', 
-    'run'=> function () {
+    'name' => 'hello',
+    'short' => 'Echo demo', 
+    'run' => function () {
         $name = Mix\Cli\Flag::match('n', 'name')->string('default');
         // do something
     }
@@ -154,9 +154,9 @@ $h = function ($next) {
     }
 };
 $cmd = new Mix\Cli\Command([
-    'name'=>'hello',
-    'short'=> 'Echo demo', 
-    'run'=> function () {
+    'name' => 'hello',
+    'short' => 'Echo demo', 
+    'run' => function () {
         // do something
     }
 ]);
@@ -187,9 +187,9 @@ Mix\Cli\Cli::app()->debug
 
 ~~~php
 $cmd = new Mix\Cli\Command([
-    'name'=>'hello',
-    'short'=> 'Echo demo', 
-    'run'=> function () {
+    'name' => 'hello',
+    'short' => 'Echo demo', 
+    'run' => function () {
         // do something
     },
     'singleton' => true,
