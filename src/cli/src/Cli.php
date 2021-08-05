@@ -36,8 +36,7 @@ class Cli
      */
     public static function setName(string $name): Application
     {
-        static::$app->name = $name;
-        return static::$app;
+        return static::$app->setName($name);
     }
 
     /**
@@ -46,8 +45,7 @@ class Cli
      */
     public static function setVersion(string $version): Application
     {
-        static::$app->version = $version;
-        return static::$app;
+        return static::$app->setVersion($version);
     }
 
     /**
@@ -56,8 +54,7 @@ class Cli
      */
     public static function setDebug(bool $debug): Application
     {
-        static::$app->debug = $debug;
-        return static::$app;
+        return static::$app->setDebug($debug);
     }
 
     /**

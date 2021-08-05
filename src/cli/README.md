@@ -169,16 +169,16 @@ Mix\Cli\Cli::use($h)->addCommand($cmd)->run();
 
 ```
 // 获取基础路径(入口文件所在目录路径)
-Mix\Cli\Cli::$app->basePath
+Mix\Cli\Cli::app()->basePath
 
 // App名称
-Mix\Cli\Cli::$app->name
+Mix\Cli\Cli::app()->name
 
 // App版本号
-Mix\Cli\Cli::$app->version
+Mix\Cli\Cli::app()->version
 
 // 是否开启debug
-Mix\Cli\Cli::$app->debug
+Mix\Cli\Cli::app()->debug
 ```
 
 ## Singleton 单命令

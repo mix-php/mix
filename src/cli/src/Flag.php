@@ -24,13 +24,14 @@ class Flag
      */
     public static function parse(): void
     {
+        $argv = $GLOBALS['argv'];
+        $opts = $args = [];
         $start = 1;
         if (Argv::command() == '') {
             $start = 0;
         }
-        $opts = $args = [];
         $ignore = '';
-        foreach ($GLOBALS['argv'] as $key => $val) {
+        foreach ($argv as $key => $val) {
             if ($key <= $start) {
                 continue;
             }
@@ -40,7 +41,7 @@ class Flag
                 list($name) = explode('=', $val);
                 $value = ltrim(strstr($val, "="), "=");
             }
-            if (substr($name, 0, 1) == '-' || substr($name, 0, 2) == '--') {
+            if ((strlen($name) >= 1 && substr($name, 0, 1) == '-') || (strlen($name) >= 2 && substr($name, 0, 2) == '--')) {
                 if (substr($name, 0, 1) == '-' && $value === '' && isset($argv[$key + 1]) && substr($argv[$key + 1], 0, 1) != '-') {
                     $next = $argv[$key + 1];
                     if (preg_match('/^[\S\s]+$/i', $next)) {

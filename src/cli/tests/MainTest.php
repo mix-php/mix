@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 final class MainTest extends TestCase
 {
 
-    public function test(): void
+    public function testPrint(): void
     {
         $GLOBALS['argv'] = [$GLOBALS['argv'][0], 'hello'];
         $app = new \Mix\Cli\Application('app', '0.0.0-alpha');
@@ -65,6 +65,22 @@ final class MainTest extends TestCase
         ]));
         $app->addCommand($cmd);
         $app->run();
+    }
+
+    public function testFlag(): void
+    {
+        $GLOBALS['argv'] = [$GLOBALS['argv'][0], "foo", "-a=a1", "-b", "--cd", "--ab=ab1", "--de", "de1", "-c", "c1", "--sw", "false"];
+        Mix\Cli\Argv::parse();
+        Mix\Cli\Flag::parse();
+        $this->assertEquals(Mix\Cli\Flag::options(), [
+            '-a' => 'a1',
+            '-b' => '',
+            '--cd' => '',
+            '--ab' => 'ab1',
+            '--de' => 'de1',
+            '-c' => 'c1',
+            '--sw' => 'false',
+        ]);
     }
 
 }

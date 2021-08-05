@@ -47,9 +47,10 @@ class Command
     public $singleton = false;
 
     /**
+     * 外部要用,无法私有
      * @var \Closure[]
      */
-    protected $handlers = [];
+    public $handlers = [];
 
     /**
      * Command constructor.
