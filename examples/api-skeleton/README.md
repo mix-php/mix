@@ -48,7 +48,7 @@ composer run-script --timeout=0 workerman:start
     "swooleco:start": "php bin/swooleco.php",
     "workerman:start": "php bin/workerman.php start",
     "cli:clearcache": "php bin/cli.php clearcache"
-},
+}
 ```
 
 当然也可以直接下面这样启动，效果是一样的，但是 `scripts` 能帮你记录到底有哪些可用的命令，同时在IDE中调试更加方便。

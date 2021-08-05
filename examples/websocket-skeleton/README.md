@@ -29,7 +29,7 @@ composer run-script --timeout=0 swooleco:start
 "scripts": {
     "swooleco:start": "php bin/swooleco.php",
     "cli:clearcache": "php bin/cli.php clearcache"
-},
+}
 ```
 
 
