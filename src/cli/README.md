@@ -21,14 +21,21 @@ composer require mix/cli
 ## Quick start
 
 ```php
-$app = new Mix\Cli\Application('app', '0.0.0-alpha');
-$cmd = new Mix\Cli\Command('hello', 'Echo demo', function () {
-    $name = Mix\Cli\Flag::match('', 'name')->string('default');
-    // do something
-});
-$opt = new Mix\Cli\Option(['n', 'name'], 'Your name');
+Mix\Cli\Cli::setName('app')->setVersion('0.0.0-alpha');
+$cmd = new Mix\Cli\Command([
+    'name'=>'hello',
+    'short'=> 'Echo demo', 
+    'run'=> function () {
+        $name = Mix\Cli\Flag::match('n', 'name')->string('default');
+        // do something
+    }
+]);
+$opt = new Mix\Cli\Option([
+    'names' => ['n', 'name'],
+    'usage' => 'Your name'
+]);
 $cmd->addOption($opt);
-$app->addCommand($cmd)->run();
+Mix\Cli\Cli::addCommand($cmd)->run();
 ```
 
 上面是采用闭包，也可以使用对象
@@ -41,7 +48,11 @@ class FooCommand implements Mix\Cli\RunInterface
         // do something
     }
 }
-$cmd = new Mix\Cli\Command('hello', 'Echo demo', new FooCommand());
+$cmd = new Mix\Cli\Command([
+    'name' => 'hello',
+    'short' => 'Echo demo', 
+    'run' => new FooCommand(),
+]);
 ```
 
 查看整个命令行程序的帮助
@@ -94,6 +105,7 @@ $ php app.php hello
 ```
 php /examples/app.php home -d -rf --debug -v vvv --page 23 -s=test --name=john arg0
 ```
+
 - 命令：
     - 第一个参数，可以为空：`home`
 - 选项：
@@ -141,10 +153,14 @@ $h = function ($next) {
         // handle panic
     }
 };
-$cmd = new Mix\Cli\Command('hello', 'Echo demo', function () {
-    // do something
-});
-$app->use($h)->addCommand($cmd)->run();
+$cmd = new Mix\Cli\Command([
+    'name'=>'hello',
+    'short'=> 'Echo demo', 
+    'run'=> function () {
+        // do something
+    }
+]);
+Mix\Cli\Cli::use($h)->addCommand($cmd)->run();
 ```
 
 ## Application
@@ -153,16 +169,16 @@ $app->use($h)->addCommand($cmd)->run();
 
 ```
 // 获取基础路径(入口文件所在目录路径)
-$app->basePath
+Mix\Cli\Cli::$app->basePath
 
 // App名称
-$app->name
+Mix\Cli\Cli::$app->name
 
 // App版本号
-$app->version
+Mix\Cli\Cli::$app->version
 
 // 是否开启debug
-$app->debug
+Mix\Cli\Cli::$app->debug
 ```
 
 ## Singleton 单命令
@@ -170,7 +186,14 @@ $app->debug
 当我们的 CLI 只有一个命令时，只需要配置一下 `Singleton`：
 
 ~~~php
-$cmd->singleton = true;
+$cmd = new Mix\Cli\Command([
+    'name'=>'hello',
+    'short'=> 'Echo demo', 
+    'run'=> function () {
+        // do something
+    },
+    'singleton' => true,
+]);
 ~~~
 
 命令的 Options 将会在 `-h/--help` 中打印

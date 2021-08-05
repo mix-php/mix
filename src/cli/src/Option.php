@@ -21,13 +21,13 @@ class Option
 
     /**
      * Option constructor.
-     * @param array $names
-     * @param string $usage
+     * @param array $config
      */
-    public function __construct(array $names, string $usage)
+    public function __construct(array $config)
     {
-        $this->names = $names;
-        $this->usage = $usage;
+        foreach ($config as $key => $value) {
+            $this->$key = $value;
+        }
     }
 
 }

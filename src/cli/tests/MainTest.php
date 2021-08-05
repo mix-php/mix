@@ -10,10 +10,17 @@ final class MainTest extends TestCase
     {
         $GLOBALS['argv'] = [$GLOBALS['argv'][0], 'hello'];
         $app = new \Mix\Cli\Application('app', '0.0.0-alpha');
-        $cmd = new \Mix\Cli\Command('hello', 'Echo demo', function () {
-            $this->assertTrue(true);
-        });
-        $opt = new Mix\Cli\Option(['n', 'name'], 'Your name');
+        $cmd = new \Mix\Cli\Command([
+            'name' => 'hello',
+            'short' => 'Echo demo',
+            'run' => function () {
+                $this->assertTrue(true);
+            }
+        ]);
+        $opt = new Mix\Cli\Option([
+            'names' => ['n', 'name'],
+            'usage' => 'Your name'
+        ]);
         $cmd->addOption($opt);
         $app->addCommand($cmd);
         $app->run();
@@ -21,26 +28,41 @@ final class MainTest extends TestCase
         echo PHP_EOL . "---------------------------------" . PHP_EOL;
         $GLOBALS['argv'] = [$GLOBALS['argv'][0]];
         $app = new \Mix\Cli\Application('test', '1.0.0');
-        $cmd = new \Mix\Cli\Command('foo', 'bar', function () {
-            $this->assertTrue(true);
-        });
+        $cmd = new \Mix\Cli\Command([
+            'name' => 'foo',
+            'short' => 'bar',
+            'run' => function () {
+                $this->assertTrue(true);
+            }
+        ]);
         $app->addCommand($cmd);
         $app->run();
 
         echo "---------------------------------" . PHP_EOL;
         $GLOBALS['argv'] = [$GLOBALS['argv'][0], 'xxx'];
         $app = new \Mix\Cli\Application('test', '1.0.0');
-        $cmd = new \Mix\Cli\Command('foo', 'bar', function () {
-        });
+        $cmd = new \Mix\Cli\Command([
+            'name' => 'foo',
+            'short' => 'bar',
+            'run' => function () {
+            }
+        ]);
         $app->addCommand($cmd);
         $app->run();
 
         echo "---------------------------------" . PHP_EOL;
         $GLOBALS['argv'] = [$GLOBALS['argv'][0], 'foo', '--help'];
         $app = new \Mix\Cli\Application('test', '1.0.0');
-        $cmd = new \Mix\Cli\Command('foo', 'bar', function () {
-        });
-        $cmd->addOption(new \Mix\Cli\Option(['a', 'bc'], 'abc'));
+        $cmd = new \Mix\Cli\Command([
+            'name' => 'foo',
+            'short' => 'bar',
+            'run' => function () {
+            }
+        ]);
+        $cmd->addOption(new \Mix\Cli\Option([
+            'names' => ['a', 'bc'],
+            'usage' => 'abc'
+        ]));
         $app->addCommand($cmd);
         $app->run();
     }

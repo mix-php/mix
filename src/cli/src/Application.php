@@ -32,6 +32,11 @@ class Application
     public $basePath = '';
 
     /**
+     * @var bool
+     */
+    protected $singleton = false;
+
+    /**
      * @var Command[]
      */
     protected $commands = [];
@@ -42,25 +47,48 @@ class Application
     protected $handlers = [];
 
     /**
-     * @var bool
-     */
-    protected $singleton = false;
-
-    /**
      * Application constructor.
      * @param string $name
      * @param string $version
-     * @param bool $debug
      */
-    public function __construct(string $name, string $version, bool $debug = false)
+    public function __construct(string $name, string $version)
     {
         Argv::parse();
         Flag::parse();
 
         $this->name = $name;
         $this->version = $version;
-        $this->debug = $debug;
         $this->basePath = Argv::program()->dir;
+    }
+
+    /**
+     * @param string $name
+     * @return Application
+     */
+    public function setName(string $name): Application
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @param string $version
+     * @return Application
+     */
+    public function setVersion(string $version): Application
+    {
+        $this->version = $version;
+        return $this;
+    }
+
+    /**
+     * @param bool $debug
+     * @return Application
+     */
+    public function setDebug(bool $debug): Application
+    {
+        $this->debug = $debug;
+        return $this;
     }
 
     /**

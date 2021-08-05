@@ -24,6 +24,9 @@
   "autoload": {
     "psr-4": {
       "Mix\\Cli\\": "src/"
-    }
+    },
+    "files": [
+      "src/functions.php"
+    ]
   }
 }
