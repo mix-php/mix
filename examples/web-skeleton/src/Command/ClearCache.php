@@ -3,17 +3,20 @@
 namespace App\Command;
 
 use App\Container\RDS;
+use Mix\Cli\Flag;
+use Mix\Cli\RunInterface;
 
 /**
  * Class ClearCache
  * @package App\Command
  */
-class ClearCache
+class ClearCache implements RunInterface
 {
 
-    public function exec(): void
+    public function main(): void
     {
-        RDS::instance()->del('foo_cache');
+        $key = Flag::match('k', 'key')->string();
+        RDS::instance()->del($key);
         print 'ok';
     }
 

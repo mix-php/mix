@@ -81,8 +81,8 @@ $vega->handle('/websocket', [new WebSocket(), 'index'])->methods('GET');
 
 路由里使用了 `WebSocket` 控制器，我们需要创建他
 
-- 如何配置路由：[mix-php/vega](https://github.com/mix-php/vega#readme)
-- 如何使用 WebSocket 升级器：[mix-php/websocket](https://github.com/mix-php/websocket#readme)
+- 如何配置路由：[mix/vega](https://github.com/mix-php/vega#readme)
+- 如何使用 WebSocket 升级器：[mix/websocket](https://github.com/mix-php/websocket#readme)
 
 ```php
 <?php
@@ -214,37 +214,29 @@ composer run-script swoole:start
 
 容器采用了一个简单的单例模式，你可以修改为更加适合自己的方式。
 
-- 数据库
+- 数据库：[mix/database](https://github.com/mix-php/database#readme)
 
 ```
 DB::instance()
 ```
 
-文档：[mix-php/database](https://github.com/mix-php/database#readme)
-
-- Redis
+- Redis：[mix/redis](https://github.com/mix-php/redis#readme)
 
 ```
 RDS::instance()
 ```
 
-文档：[mix-php/redis](https://github.com/mix-php/redis#readme)
-
-- 日志
+- 日志：[monolog/monolog](https://seldaek.github.io/monolog/doc/01-usage.html)
 
 ```
 Logger::instance()
 ```
 
-文档：[monolog/monolog](https://seldaek.github.io/monolog/doc/01-usage.html)
-
-- 配置
+- 配置：[hassankhan/config](https://github.com/hassankhan/config#getting-values)
 
 ```
 Config::instance()
 ```
-
-文档：[hassankhan/config](https://github.com/hassankhan/config#getting-values)
 
 ## License
 

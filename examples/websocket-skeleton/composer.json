@@ -19,6 +19,7 @@
   "require": {
     "mix/vega": "~3.0",
     "mix/websocket": "~3.0",
+    "mix/cli": "~3.0",
     "mix/database": "~3.0",
     "mix/redis": "~3.0",
     "vlucas/phpdotenv": "^5.3",

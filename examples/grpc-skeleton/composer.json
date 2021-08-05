@@ -23,6 +23,7 @@
     "workerman/workerman": "^4.0",
     "mix/vega": "~3.0",
     "mix/grpc": "~3.0",
+    "mix/cli": "~3.0",
     "mix/database": "~3.0",
     "mix/redis": "~3.0",
     "vlucas/phpdotenv": "^5.3",

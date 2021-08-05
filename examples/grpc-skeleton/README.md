@@ -135,43 +135,35 @@ composer run-script swoole:start
 
 ## 如何使用 gRPC 客户端
 
-- [mix-php/grpc#客户端调用一个 gRPC 服务](https://github.com/mix-php/grpc#%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B0%83%E7%94%A8%E4%B8%80%E4%B8%AA-grpc-%E6%9C%8D%E5%8A%A1)
+- [mix/grpc#客户端调用一个 gRPC 服务](https://github.com/mix-php/grpc#%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B0%83%E7%94%A8%E4%B8%80%E4%B8%AA-grpc-%E6%9C%8D%E5%8A%A1)
 
 ## 使用容器中的对象
 
 容器采用了一个简单的单例模式，你可以修改为更加适合自己的方式。
 
-- 数据库
+- 数据库：[mix/database](https://github.com/mix-php/database#readme)
 
 ```
 DB::instance()
 ```
 
-文档：[mix-php/database](https://github.com/mix-php/database#readme)
-
-- Redis
+- Redis：[mix/redis](https://github.com/mix-php/redis#readme)
 
 ```
 RDS::instance()
 ```
 
-文档：[mix-php/redis](https://github.com/mix-php/redis#readme)
-
-- 日志
+- 日志：[monolog/monolog](https://seldaek.github.io/monolog/doc/01-usage.html)
 
 ```
 Logger::instance()
 ```
 
-文档：[monolog/monolog](https://seldaek.github.io/monolog/doc/01-usage.html)
-
-- 配置
+- 配置：[hassankhan/config](https://github.com/hassankhan/config#getting-values)
 
 ```
 Config::instance()
 ```
-
-文档：[hassankhan/config](https://github.com/hassankhan/config#getting-values)
 
 ## License
 
