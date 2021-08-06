@@ -24,12 +24,12 @@ class Upgrader
     public function upgrade(ServerRequest $request, Response $response): Connection
     {
         // Handshake verification
-        if ($request->getHeaderLine('Connection') !== 'Upgrade' || $request->getHeaderLine('Upgrade') !== 'websocket') {
+        if ($request->getHeaderLine('connection') !== 'Upgrade' || $request->getHeaderLine('upgrade') !== 'websocket') {
             throw new UpgradeException('Handshake failed, invalid WebSocket request');
         }
-        $secWebSocketKey = $request->getHeaderLine('Sec-Websocket-Key');
+        $secWebSocketKey = $request->getHeaderLine('sec-websocket-key');
         $patten = '#^[+/0-9A-Za-z]{21}[AQgw]==$#';
-        if ($request->getHeaderLine('Sec-Websocket-Version') != 13 || 0 === preg_match($patten, $secWebSocketKey) || 16 !== strlen(base64_decode($secWebSocketKey))) {
+        if ($request->getHeaderLine('sec-websocket-version') != 13 || 0 === preg_match($patten, $secWebSocketKey) || 16 !== strlen(base64_decode($secWebSocketKey))) {
             throw new UpgradeException('Handshake failed, invalid WebSocket protocol v13');
         }
 

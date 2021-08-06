@@ -62,7 +62,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $serverRequest->withProtocolVersion($protocolVersion);
         $serverRequest->withRequestTarget($uri);
 
-        $headers = getallheaders();
+        $headers = array_change_key_case(getallheaders(), CASE_LOWER);
         foreach ($headers as $name => $value) {
             $serverRequest->withHeader($name, $value);
         }
@@ -125,7 +125,6 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
 
         $headers = $request->header ?? [];
         foreach ($headers as $name => $value) {
-            $name = str_replace(' ', '-', ucwords(strtolower(str_replace('-', ' ', $name))));
             $serverRequest->withHeader($name, $value);
         }
 
@@ -192,7 +191,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $serverRequest->withProtocolVersion($protocolVersion);
         $serverRequest->withRequestTarget($uri);
 
-        $headers = $request->header();
+        $headers = array_change_key_case($request->header(), CASE_LOWER);
         foreach ($headers as $name => $value) {
             $serverRequest->withHeader($name, $value);
         }
