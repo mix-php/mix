@@ -1,3 +1,3 @@
 <?php
 
-Mix\Cli\Cli::init();
+isset($GLOBALS['argv']) and Mix\Cli\Cli::init();
