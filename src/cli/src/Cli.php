@@ -19,6 +19,9 @@ class Cli
      */
     public static function init(): void
     {
+        if (PHP_SAPI != 'cli') {
+            return;
+        }
         static::$app = new Application('app', '0.0.0');
     }
 
