@@ -1,6 +1,6 @@
 <?php
 
-namespace Mix\Redis\Subscribe;
+namespace Mix\Redis\Subscriber;
 
 use Swoole\Timer;
 use Swoole\Coroutine;
@@ -8,7 +8,7 @@ use Swoole\Coroutine\Channel;
 
 /**
  * Class CommandInvoker
- * @package Mix\Redis\Subscribe
+ * @package Mix\Redis\Subscriber
  */
 class CommandInvoker
 {

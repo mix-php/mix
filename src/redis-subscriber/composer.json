@@ -1,14 +1,15 @@
 {
-  "name": "mix/redis-subscribe",
-  "description": "Redis subscribe library based on Swoole coroutine",
+  "name": "mix/redis-subscriber",
+  "description": "Redis native protocol Subscriber based on Swoole coroutine",
   "type": "library",
   "keywords": [
     "mix",
     "swoole",
     "redis",
-    "subscribe"
+    "subscribe",
+    "subscriber"
   ],
-  "homepage": "https://openmix.org/",
+  "homepage": "https://openmix.org/mix-php",
   "license": "Apache-2.0",
   "authors": [
     {
@@ -22,7 +23,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Mix\\Redis\\Subscribe\\": "src/"
+      "Mix\\Redis\\Subscriber\\": "src/"
     }
   },
   "require-dev": {

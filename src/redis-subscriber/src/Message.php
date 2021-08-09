@@ -1,10 +1,10 @@
 <?php
 
-namespace Mix\Redis\Subscribe;
+namespace Mix\Redis\Subscriber;
 
 /**
  * Class Message
- * @package Mix\Redis\Subscribe
+ * @package Mix\Redis\Subscriber
  */
 class Message
 {
