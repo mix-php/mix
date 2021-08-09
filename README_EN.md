@@ -21,7 +21,7 @@ All core modules can be used independently, and all support native code developm
 - [mix/vega](src/vega) CLI mode HTTP network framework written in PHP, supports Swoole, WorkerMan, FPM, CLI-Server
 - [mix/database](src/database) Lightweight database that can be used in various environments, supports FPM, CLI, Swoole, WorkerMan, optional connection pool (coroutine)
 - [mix/redis](src/redis) PHP Redis that can be used in various environments, supports FPM, CLI, Swoole, WorkerMan, optional connection pool (coroutine)
-- [mix/redis-subscribe](src/redis-subscribe) Redis native protocol subscription library based on Swoole coroutine
+- [mix/redis-subscriber](src/redis-subscriber) Redis native protocol subscription library based on Swoole coroutine
 - [mix/grpc](src/grpc) PHP gRPC library based on Swoole coroutine, including protoc code generator, server, client
 - [mix/websocket](src/websocket) PHP WebSocket server and client based on Swoole coroutine
 - [mix/cli](src/cli) PHP command line interactive commander
