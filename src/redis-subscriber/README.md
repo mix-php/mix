@@ -23,7 +23,7 @@ composer require mix/redis-subscriber
 - 连接、订阅失败会抛出异常
 
 ```php
-$sub = new \Mix\Redis\Subscriberr\Subscriber('127.0.0.1', 6379, '', 5); // 连接失败将抛出异常
+$sub = new \Mix\Redis\Subscriber\Subscriber('127.0.0.1', 6379, '', 5); // 连接失败将抛出异常
 $sub->subscribe('foo', 'bar'); // 订阅失败将抛出异常
 
 $chan = $sub->channel();
@@ -43,7 +43,7 @@ while (true) {
 接收到订阅消息：
 
 ```
-object(Mix\Redis\Subscriberr\Message)#8 (2) {
+object(Mix\Redis\Subscriber\Message)#8 (2) {
   ["channel"]=>
   string(2) "foo"
   ["payload"]=>
