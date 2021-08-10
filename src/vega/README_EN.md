@@ -181,7 +181,7 @@ Configure Routing Variables
 
 ```php
 $vega = new Mix\Vega\Engine();
-$vega->handle('/users/{id}', function (Mix\Vega\Context $ctx) {
+$vega->handle('/users/{id:\d+}', function (Mix\Vega\Context $ctx) {
     $id = $ctx->param('id');
     $ctx->string(200, 'hello, world!');
 })->methods('GET');
