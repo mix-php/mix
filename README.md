@@ -65,6 +65,7 @@ composer create-project --prefer-dist mix/grpc-skeleton grpc
 
 ## 推荐阅读
 
+- [MixPHP V3 开发流程体验 Swoole, Workerman, FPM, CLI-Server 多种运行模式介绍](https://zhuanlan.zhihu.com/p/398381870)
 - [MixPHP V3 发布前的感想, 有哪些变化和特点](https://zhuanlan.zhihu.com/p/392558932)
 - [MixPHP V3 增加了 PHP-FPM、CLI-Server 的支持](https://zhuanlan.zhihu.com/p/394059925)
 
