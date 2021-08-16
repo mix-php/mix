@@ -37,6 +37,11 @@ class Client
     protected $client;
 
     /**
+     * @var bool
+     */
+    protected $reconnect = false;
+
+    /**
      * Client constructor.
      * @param string $host
      * @param int $port
@@ -101,6 +106,9 @@ class Client
         $client = $this->client;
         $result = $client->send($request);
         if ($result === false) {
+            // 断线重连, 需要下次请求才能恢复正常
+            $this->reconnect();
+
             throw new RuntimeException($client->errMsg, $client->errCode);
         }
     }
@@ -116,17 +124,27 @@ class Client
         $client = $this->client;
         $result = $client->recv($timeout);
         if ($result === false) {
+            // 断线重连, 需要下次请求才能恢复正常
+            $this->reconnect();
+
             throw new RuntimeException($client->errMsg, $client->errCode);
         }
         return $result;
     }
 
     /**
-     * @return Context
+     * @throws RuntimeException
      */
-    public function context(): Context
+    protected function reconnect(): void
     {
-        return Context::fromClient($this->client);
+        if (!$this->reconnect && strpos($this->client->errMsg, 'Broken pipe') !== false) {
+            try {
+                $this->reconnect = true;
+                $this->connect();
+            } finally {
+                $this->reconnect = false;
+            }
+        }
     }
 
 }
