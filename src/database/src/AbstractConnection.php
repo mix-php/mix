@@ -204,9 +204,6 @@ abstract class AbstractConnection implements ConnectionInterface
                     $this->lastInsertId = $this->driver->instance()->lastInsertId();
                 } catch (\Throwable $ex) {
                     // pgsql: SQLSTATE[55000]: Object not in prerequisite state: 7 ERROR:  lastval is not yet defined in this session
-                    if (strpos($ex->getMessage(), 'lastval is not yet defined in this session') === false) {
-                        throw $ex;
-                    }
                 }
                 $this->rowCount = $this->statement->rowCount();
             }
