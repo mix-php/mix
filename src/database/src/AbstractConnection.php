@@ -73,13 +73,13 @@ abstract class AbstractConnection implements ConnectionInterface
      * 归还连接前缓存处理
      * @var string
      */
-    protected $lastInsertId = '';
+    protected $lastInsertId;
 
     /**
      * 归还连接前缓存处理
      * @var int
      */
-    protected $rowCount = 0;
+    protected $rowCount;
 
     /**
      * AbstractConnection constructor.
@@ -199,11 +199,12 @@ abstract class AbstractConnection implements ConnectionInterface
             $this->sqlData[3] = $time;
 
             // 缓存常用数据，让资源可以提前回收
-            if (!isset($ex)) {
+            if (!isset($ex) && ($this->driver->pool && !$this instanceof Transaction)) {
                 try {
                     $this->lastInsertId = $this->driver->instance()->lastInsertId();
                 } catch (\Throwable $ex) {
                     // pgsql: SQLSTATE[55000]: Object not in prerequisite state: 7 ERROR:  lastval is not yet defined in this session
+                    $this->lastInsertId = '';
                 }
                 $this->rowCount = $this->statement->rowCount();
             }
@@ -460,6 +461,9 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function lastInsertId(): string
     {
+        if (!isset($this->lastInsertId) && $this->driver instanceof Driver) {
+            $this->lastInsertId = $this->driver->instance()->lastInsertId();
+        }
         return $this->lastInsertId;
     }
 
@@ -469,6 +473,9 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function rowCount(): int
     {
+        if (!isset($this->rowCount) && $this->driver instanceof Driver) {
+            $this->rowCount = $this->statement->rowCount();
+        }
         return $this->rowCount;
     }
 
