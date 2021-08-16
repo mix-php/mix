@@ -93,7 +93,7 @@ class Engine
                 $uri = '/';
             }
         } else {
-            $uri = $_SERVER['PATH_INFO'] ?? '/';
+            $uri = isset($_SERVER['PATH_INFO']) ? ($_SERVER['PATH_INFO'] ?: '/') : '/';
         }
         $this->dispatch($_SERVER['REQUEST_METHOD'], $uri, $ctx);
 
