@@ -15,7 +15,7 @@ class Auth
     /**
      * @return \Closure
      */
-    public function middleware(): \Closure
+    public static function middleware(): \Closure
     {
         return function (Context $ctx) {
             try {
