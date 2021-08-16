@@ -81,12 +81,12 @@ class Engine
     {
         $this->startDispatcher();
 
-        $ctx = Context::fromFPM($this->htmlRender);
+        $ctx = Context::fromFPM($this->htmlRender); // check cannot be used in CLI mode
         if (PHP_SAPI == 'cli-server') {
             // php -S localhost:8000 index.php 不带PATH_INFO
             // php -S localhost:8000 -t public/ index.php 不带PATH_INFO
             // php -S localhost:8000 -t public/ 带PATH_INFO, 但是/不带
-            $uri = $_SERVER['SCRIPT_NAME'] ?? '/';
+            $uri = $_SERVER['SCRIPT_NAME'];
             if (isset($_SERVER['PATH_INFO'])) {
                 $uri = $_SERVER['PATH_INFO'];
             } elseif ($_SERVER['SCRIPT_NAME'] == '/index.php') {
