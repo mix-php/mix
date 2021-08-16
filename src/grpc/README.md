@@ -196,14 +196,14 @@ var_dump($response->getMsg());
 设置 `header`
 
 ```php
-$ctx->setHeader('foo', 'bar');
+$ctx->withHeader('foo', 'bar');
 $response = $say->Hello($ctx, $request);
 ```
 
 设置 `timeout`
 
 ```php
-$ctx->setTimeout(5.0);
+$ctx->withTimeout(5.0);
 $response = $say->Hello($ctx, $request);
 ```
 

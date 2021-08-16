@@ -45,7 +45,7 @@ class Context
      * @param string $key
      * @param string $value
      */
-    public function setHeader(string $key, string $value): void
+    public function withHeader(string $key, string $value): void
     {
         $this->headers[$key] = $value;
     }
@@ -53,9 +53,21 @@ class Context
     /**
      * @param float $timeout
      */
-    public function setTimeout(float $timeout): void
+    public function withTimeout(float $timeout): void
     {
         $this->timeout = $timeout;
+    }
+
+    /**
+     * @param string $name
+     * @return string
+     */
+    public function getHeader(string $name): string
+    {
+        if ($this->request) {
+            return $this->request->header[$name] ?? '';
+        }
+        return $this->headers[$name] ?? '';
     }
 
     /**
@@ -63,6 +75,9 @@ class Context
      */
     public function getHeaders(): array
     {
+        if ($this->request) {
+            return $this->request->header ?? [];
+        }
         return $this->headers;
     }
 
