@@ -201,7 +201,11 @@ abstract class AbstractConnection implements ConnectionInterface
             // 缓存常用数据，让资源可以提前回收
             if (!isset($ex) && ($this->driver->pool && !$this instanceof Transaction)) {
                 try {
-                    $this->lastInsertId = $this->driver->instance()->lastInsertId();
+                    if (stripos($this->sql, 'INSERT') !== false) {
+                        $this->lastInsertId = $this->driver->instance()->lastInsertId();
+                    } else {
+                        $this->lastInsertId = '';
+                    }
                 } catch (\Throwable $ex) {
                     // pgsql: SQLSTATE[55000]: Object not in prerequisite state: 7 ERROR:  lastval is not yet defined in this session
                     $this->lastInsertId = '';
