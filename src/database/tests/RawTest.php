@@ -20,15 +20,24 @@ final class RawTest extends TestCase
             $_this->assertEquals($log['sql'], $sql);
             $_this->assertEquals($log['bindings'], [1]);
         })->raw('SELECT * FROM users WHERE id = ?', 1)->get();
-        $this->assertEquals(4, count(array_pop($res)));
+        $obj = array_pop($res);
+        $this->assertIsObject($obj);
+        $this->assertObjectHasAttribute('id', $obj);
+        $this->assertObjectHasAttribute('name', $obj);
+        $this->assertObjectHasAttribute('balance', $obj);
+        $this->assertObjectHasAttribute('add_time', $obj);
 
-        $res = $db->debug(function (\Mix\Database\ConnectionInterface $conn) use ($_this) {
+        $obj = $db->debug(function (\Mix\Database\ConnectionInterface $conn) use ($_this) {
             $log = $conn->queryLog();
             $sql = "SELECT * FROM users WHERE id = ?";
             $_this->assertEquals($log['sql'], $sql);
             $_this->assertEquals($log['bindings'], [1]);
         })->raw('SELECT * FROM users WHERE id = ?', 1)->first();
-        $this->assertEquals(4, count($res));
+        $this->assertIsObject($obj);
+        $this->assertObjectHasAttribute('id', $obj);
+        $this->assertObjectHasAttribute('name', $obj);
+        $this->assertObjectHasAttribute('balance', $obj);
+        $this->assertObjectHasAttribute('add_time', $obj);
     }
 
 }

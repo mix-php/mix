@@ -14,10 +14,12 @@ final class PoolTest extends TestCase
             $db->startPool(1, 1);
             for ($i = 0; $i < 100; $i++) {
                 go(function () use ($db, $i) {
-                    $stat = $db->raw('select sleep(0.1)')->statement();
-                    while ($row = $stat->fetch()) {
-                        usleep(100000);
-                    }
+                    $db->debug(function (\Mix\Database\ConnectionInterface $conn) {
+                        $stat = $conn->statement();
+                        while ($row = $stat->fetch()) {
+                            usleep(100000);
+                        }
+                    })->raw('select sleep(0.1)');
                     // echo sprintf("%d: %s\n", $i, json_encode($db->poolStats()));
                 });
             }
