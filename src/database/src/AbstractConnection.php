@@ -52,12 +52,6 @@ abstract class AbstractConnection implements ConnectionInterface
     protected $values = [];
 
     /**
-     * 回收数据
-     * @var array [$sql, $params, $values]
-     */
-    protected $recycleData = [];
-
-    /**
      * 查询数据
      * @var array [$sql, $params, $values, $time]
      */
@@ -213,10 +207,6 @@ abstract class AbstractConnection implements ConnectionInterface
                 $this->rowCount = $this->statement->rowCount();
             }
 
-            // debug
-            $debug = $this->debug;
-            $debug and $debug($this);
-
             // logger
             if ($this->logger) {
                 $log = $this->queryLog();
@@ -228,6 +218,10 @@ abstract class AbstractConnection implements ConnectionInterface
                     $ex ?? null
                 );
             }
+
+            // debug
+            $debug = $this->debug;
+            $debug and $debug($this);
         }
 
         // 执行完立即回收
@@ -401,15 +395,15 @@ abstract class AbstractConnection implements ConnectionInterface
 
     /**
      * 返回结果集
-     * 连接会被丢弃，为了避免析构导致连接回收的问题
-     * 注意：该方法不适合高频调用
+     * 注意：只能在 debug 闭包中使用，因为连接归还到池后，如果还有调用结果集会有一致性问题
      * @return \PDOStatement
      */
     public function statement(): \PDOStatement
     {
-        // 丢弃该连接
-        $this->driver->__discard();
-        $this->driver = new EmptyDriver();
+        // check debug
+        if (!$this->debug) {
+            throw new \RuntimeException('Can only be used in debug closure');
+        }
 
         return $this->statement;
     }
