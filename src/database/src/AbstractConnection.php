@@ -195,7 +195,7 @@ abstract class AbstractConnection implements ConnectionInterface
             // 缓存常用数据，让资源可以提前回收
             if (!isset($ex) && ($this->driver->pool && !$this instanceof Transaction)) {
                 try {
-                    if (stripos($this->sql, 'INSERT') !== false) {
+                    if (stripos($this->sql, 'INSERT INTO') !== false) {
                         $this->lastInsertId = $this->driver->instance()->lastInsertId();
                     } else {
                         $this->lastInsertId = '';
