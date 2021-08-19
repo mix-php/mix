@@ -16,9 +16,9 @@
     ]
   },
   "require": {
-    "mix/cli": "~3.0",
-    "mix/database": "~3.0",
-    "mix/redis": "~3.0",
+    "mix/cli": "~3.0.0",
+    "mix/database": "~3.0.0",
+    "mix/redis": "~3.0.0",
     "vlucas/phpdotenv": "^5.3",
     "hassankhan/config": "^2.2",
     "monolog/monolog": "^2.3"
