@@ -34,7 +34,7 @@ MixPHP 是一个 PHP 命令行模式开发框架；基于 `Vega` 驱动的 HTTP 
 支持多种服务器驱动，并且可以无缝切换。
 
 - [PHP Built-in CLI-Server](examples/api-skeleton/composer.json#L8) `零扩展依赖` `热更新` `适合本机开发`
-- [PHP-FPM](examples/api-skeleton/public/index.php) `热更新` `适合 admin 开发`
+- [PHP-FPM](examples/api-skeleton/public/index.php) `热更新` `适合共享开发` `适合 admin 开发`
 - [Swoole](examples/api-skeleton/composer.json#L9) `常驻内存` `兼容 composer 生态`
 - [Swoole Coroutine](examples/api-skeleton/composer.json#L10) `常驻内存` `协程性能强劲`
 - [WorkerMan](examples/api-skeleton/composer.json#L11) `常驻内存` `兼容 composer 生态`
