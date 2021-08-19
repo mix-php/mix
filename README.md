@@ -29,6 +29,16 @@ MixPHP 是一个 PHP 命令行模式开发框架；基于 `Vega` 驱动的 HTTP 
 - [mix/validator](src/validator) 基于 PSR-7 的验证库
 - [mix/event](src/event) 基于 PSR-14 标准的事件调度库
 
+## 服务器
+
+支持多种服务器驱动，并且可以无缝切换。
+
+- [PHP Built-in CLI-Server](examples/api-skeleton/composer.json#L8)
+- [PHP-FPM](examples/api-skeleton/public/index.php)
+- [Swoole](examples/api-skeleton/composer.json#L9)
+- [Swoole Coroutine](examples/api-skeleton/composer.json#L10)
+- [WorkerMan](examples/api-skeleton/composer.json#L11)
+
 ## 快速开始
 
 提供了现成的脚手架，快速创建项目，立即产出。

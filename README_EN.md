@@ -29,6 +29,16 @@ All core modules can be used independently, and all support native code developm
 - [mix/validator](src/validator) PSR-7-based verification library
 - [mix/event](src/event) Event dispatcher based on PSR-14 standard
 
+## Server
+
+Support multiple server drivers, and can switch seamlessly.
+
+- [PHP Built-in CLI-Server](examples/api-skeleton/composer.json#L8)
+- [PHP-FPM](examples/api-skeleton/public/index.php)
+- [Swoole](examples/api-skeleton/composer.json#L9)
+- [Swoole Coroutine](examples/api-skeleton/composer.json#L10)
+- [WorkerMan](examples/api-skeleton/composer.json#L11)
+
 ## Quick start
 
 Provide ready-made scaffolding, quickly create projects, immediate output.
