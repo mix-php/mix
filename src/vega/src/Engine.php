@@ -93,7 +93,12 @@ class Engine
                 $uri = '/';
             }
         } else {
-            $uri = isset($_SERVER['PATH_INFO']) ? ($_SERVER['PATH_INFO'] ?: '/') : '/';
+            // PHP-FPM
+            $uriPath = function () {
+                $uri = explode('?', $_SERVER['REQUEST_URI']);
+                return '/' . trim($uri[0], '/');
+            };
+            $uri = isset($_SERVER['PATH_INFO']) ? ($_SERVER['PATH_INFO'] ?: '/') : $uriPath();
         }
         $this->dispatch($_SERVER['REQUEST_METHOD'], $uri, $ctx);
 
