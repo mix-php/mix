@@ -29,7 +29,7 @@ EOL;
 printf("System    Name:       %s\n", strtolower(PHP_OS));
 printf("PHP       Version:    %s\n", PHP_VERSION);
 printf("Swoole    Version:    %s\n", swoole_version());
-printf("Listen    Port:       %s\n", $addr);
+printf("Listen    Addr:       %s\n", $addr);
 Logger::instance()->info('Start workerman server');
 
 Workerman\Worker::runAll();

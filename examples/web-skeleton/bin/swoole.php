@@ -47,7 +47,7 @@ EOL;
 printf("System    Name:       %s\n", strtolower(PHP_OS));
 printf("PHP       Version:    %s\n", PHP_VERSION);
 printf("Swoole    Version:    %s\n", swoole_version());
-printf("Listen    Port:       http://%s:%d\n", $host, $port);
+printf("Listen    Addr:       http://%s:%d\n", $host, $port);
 Logger::instance()->info('Start swoole server');
 
 $http->start();
