@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "cliserver:start": "php -S localhost:8000 public/index.php",
-    "swoole:start": "php8 bin/swoole.php",
+    "swoole:start": "php bin/swoole.php",
     "swooleco:start": "php bin/swooleco.php",
     "workerman:start": "php bin/workerman.php start",
     "cli:clearcache": "php bin/cli.php clearcache"

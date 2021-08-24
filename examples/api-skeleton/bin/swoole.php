@@ -16,7 +16,9 @@ App\Error::register();
  */
 
 $vega = Vega::new();
-$http = new Swoole\Http\Server('0.0.0.0', 9501);
+$host = '0.0.0.0';
+$port = 9501;
+$http = new Swoole\Http\Server($host, $port);
 $http->on('Request', $vega->handler());
 $http->on('WorkerStart', function ($server, $workerId) {
     // swoole 协程不支持 set_exception_handler 需要手动捕获异常
@@ -31,5 +33,21 @@ $http->set([
     'enable_coroutine' => true,
     'worker_num' => 4,
 ]);
+
+echo <<<EOL
+                              ____
+ ______ ___ _____ ___   _____  / /_ _____
+  / __ `__ \/ /\ \/ /__ / __ \/ __ \/ __ \
+ / / / / / / / /\ \/ _ / /_/ / / / / /_/ /
+/_/ /_/ /_/_/ /_/\_\  / .___/_/ /_/ .___/
+                     /_/         /_/
+
+
+EOL;
+printf("System    Name:       %s\n", strtolower(PHP_OS));
+printf("PHP       Version:    %s\n", PHP_VERSION);
+printf("Swoole    Version:    %s\n", swoole_version());
+printf("Listen    Port:       http://%s:%d\n", $host, $port);
 Logger::instance()->info('Start swoole server');
+
 $http->start();
