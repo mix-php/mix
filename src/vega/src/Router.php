@@ -4,6 +4,7 @@ namespace Mix\Vega;
 
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
+use Mix\Http\Message\ServerRequest;
 use Mix\Http\Message\Stream\StringStream;
 use Mix\Vega\Exception\NotFoundException;
 
@@ -121,7 +122,11 @@ trait Router
                 $handler = $routeInfo[1];
                 $vars = $routeInfo[2];
                 // with $vars
-                $ctx->request->withRouteParams($vars);
+                if ($ctx->request instanceof ServerRequest) {
+                    $ctx->request->withRouteParams($vars);
+                } else {
+                    $ctx->request->param = $vars;
+                }
                 // call $handler
                 $handler($ctx);
                 break;
