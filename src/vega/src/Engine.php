@@ -12,6 +12,14 @@ use Mix\View\Renderer;
 class Engine
 {
 
+    const FAST_MODE = 1;
+    const NORMAL_MODE = 2;
+
+    /**
+     * @var int
+     */
+    protected $mode = self::NORMAL_MODE;
+
     use Router;
     use StaticFile;
 
@@ -34,7 +42,15 @@ class Engine
     }
 
     /**
-     * @param \Closure|null $init
+     * @param int $mode
+     */
+    public function mode(int $mode)
+    {
+        $this->mode = $mode;
+    }
+
+    /**
+     * @param \Closure|null $init Deprecated
      * @return \Closure
      */
     public function handler(?\Closure $init = null): \Closure
@@ -42,6 +58,7 @@ class Engine
         $this->startDispatcher();
 
         return function (...$args) use ($init) {
+            // Deprecated
             static $ok = false;
             if (!$ok && $init) {
                 // 即便提前锁定，在协程中依然无法防止请求击穿后因没有init导致的异常
@@ -56,7 +73,7 @@ class Engine
                  * @var $response \Swoole\Http\Response
                  */
                 list($request, $response) = $args;
-                $ctx = Context::fromSwoole($request, $response, $this->htmlRender);
+                $ctx = Context::fromSwoole($this->mode, $request, $response, $this->htmlRender);
                 $this->dispatch($request->server['request_method'], $request->server['path_info'] ?: '/', $ctx);
             } elseif (static::isWorkerMan($args)) {
                 /**
@@ -64,7 +81,7 @@ class Engine
                  * @var $request \Workerman\Protocols\Http\Request
                  */
                 list($connection, $request) = $args;
-                $ctx = Context::fromWorkerMan($request, $connection, $this->htmlRender);
+                $ctx = Context::fromWorkerMan($this->mode, $request, $connection, $this->htmlRender);
                 $this->dispatch($request->method(), $request->path(), $ctx);
             } else {
                 throw new RuntimeException('The current usage scenario is not supported');

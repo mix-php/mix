@@ -26,7 +26,7 @@ class Context
     public $response;
 
     /**
-     * @var ServerRequest
+     * @var ServerRequest|\Swoole\Http\Request|\Workerman\Protocols\Http\Request
      */
     public $request;
 
@@ -41,33 +41,45 @@ class Context
     protected $handlers = [];
 
     /**
+     * @param int $mode
      * @param \Swoole\Http\Request $request
      * @param \Swoole\Http\Response $response
+     * @param Renderer $renderer
      * @return Context
      */
-    public static function fromSwoole(\Swoole\Http\Request $request, \Swoole\Http\Response $response, Renderer $renderer): Context
+    public static function fromSwoole(int $mode, \Swoole\Http\Request $request, \Swoole\Http\Response $response, Renderer $renderer): Context
     {
         $ctx = new static();
-        $requestFactory = new ServerRequestFactory();
-        $responseFactory = new ResponseFactory();
-        $ctx->request = $requestFactory->createServerRequestFromSwoole($request);
-        $ctx->response = $responseFactory->createResponseFromSwoole($response);
+        switch ($mode) {
+            case Engine::FAST_MODE:
+                $ctx->request = $request;
+                break;
+            default:
+                $ctx->request = (new ServerRequestFactory())->createServerRequestFromSwoole($request);
+        }
+        $ctx->response = (new ResponseFactory())->createResponseFromSwoole($response);
         $ctx->renderer = $renderer;
         return $ctx;
     }
 
     /**
+     * @param int $mode
      * @param \Workerman\Protocols\Http\Request $request
      * @param \Workerman\Connection\TcpConnection $connection
+     * @param Renderer $renderer
      * @return Context
      */
-    public static function fromWorkerMan(\Workerman\Protocols\Http\Request $request, \Workerman\Connection\TcpConnection $connection, Renderer $renderer): Context
+    public static function fromWorkerMan(int $mode, \Workerman\Protocols\Http\Request $request, \Workerman\Connection\TcpConnection $connection, Renderer $renderer): Context
     {
         $ctx = new static();
-        $requestFactory = new ServerRequestFactory();
-        $responseFactory = new ResponseFactory();
-        $ctx->request = $requestFactory->createServerRequestFromWorkerMan($request);
-        $ctx->response = $responseFactory->createResponseFromWorkerMan($connection);
+        switch ($mode) {
+            case Engine::FAST_MODE:
+                $ctx->request = $request;
+                break;
+            default:
+                $ctx->request = (new ServerRequestFactory())->createServerRequestFromWorkerMan($request);
+        }
+        $ctx->response = (new ResponseFactory())->createResponseFromWorkerMan($connection);
         $ctx->renderer = $renderer;
         return $ctx;
     }
@@ -79,10 +91,8 @@ class Context
     public static function fromFPM(Renderer $renderer): Context
     {
         $ctx = new static();
-        $requestFactory = new ServerRequestFactory();
-        $responseFactory = new ResponseFactory();
-        $ctx->request = $requestFactory->createServerRequestFromFPM();
-        $ctx->response = $responseFactory->createResponse();
+        $ctx->request = (new ServerRequestFactory())->createServerRequestFromFPM();
+        $ctx->response = (new ResponseFactory())->createResponseFromFPM();
         $ctx->renderer = $renderer;
         return $ctx;
     }
