@@ -2,7 +2,6 @@
 
 namespace Mix\Vega;
 
-use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Vega\Exception\RuntimeException;
 use Psr\Http\Message\UploadedFileInterface;
@@ -16,14 +15,20 @@ trait Input
 {
 
     /**
-     * @var Response
-     */
-    public $response;
-
-    /**
      * @var ServerRequest
      */
     public $request;
+
+    /**
+     * @return ServerRequest
+     */
+    protected function request(): ServerRequest
+    {
+        if ($this->request instanceof ServerRequest) {
+            return $this->request;
+        }
+        throw new \RuntimeException('Fast mode does not support this method');
+    }
 
     /**
      * /user/{id} --> GET /user/10000
@@ -33,7 +38,7 @@ trait Input
      */
     public function param(string $key): string
     {
-        return $this->request->getRouteParams()[$key] ?? '';
+        return $this->request()->getRouteParams()[$key] ?? '';
     }
 
     /**
@@ -45,7 +50,7 @@ trait Input
      */
     public function query(string $key): string
     {
-        return $this->request->getQueryParams()[$key] ?? '';
+        return $this->request()->getQueryParams()[$key] ?? '';
     }
 
     /**
@@ -55,7 +60,7 @@ trait Input
      */
     public function defaultQuery(string $key, string $default): string
     {
-        return $this->request->getQueryParams()[$key] ?? $default;
+        return $this->request()->getQueryParams()[$key] ?? $default;
     }
 
     /**
@@ -68,7 +73,7 @@ trait Input
      */
     public function getQuery(string $key)
     {
-        return $this->request->getQueryParams()[$key] ?? null;
+        return $this->request()->getQueryParams()[$key] ?? null;
     }
 
     /**
@@ -77,7 +82,7 @@ trait Input
      */
     public function postForm(string $key): string
     {
-        return $this->request->getParsedBody()[$key] ?? '';
+        return $this->request()->getParsedBody()[$key] ?? '';
     }
 
     /**
@@ -87,7 +92,7 @@ trait Input
      */
     public function defaultPostForm(string $key, string $default): string
     {
-        return $this->request->getParsedBody()[$key] ?? $default;
+        return $this->request()->getParsedBody()[$key] ?? $default;
     }
 
     /**
@@ -100,7 +105,7 @@ trait Input
      */
     public function getPostForm(string $key)
     {
-        return $this->request->getParsedBody()[$key] ?? null;
+        return $this->request()->getParsedBody()[$key] ?? null;
     }
 
     /**
@@ -110,7 +115,7 @@ trait Input
      */
     public function formFile(string $name): UploadedFileInterface
     {
-        $files = $this->request->getUploadedFiles();
+        $files = $this->request()->getUploadedFiles();
         if (empty($files)) {
             throw new RuntimeException('No uploaded files were found');
         }
@@ -122,7 +127,7 @@ trait Input
      */
     public function multipartForm()
     {
-        return $this->request->getUploadedFiles();
+        return $this->request()->getUploadedFiles();
     }
 
     /**
@@ -165,8 +170,8 @@ trait Input
      */
     public function clientIP(): string
     {
-        $rorwarded = $this->request->getHeaderLine('x-forwarded-for') ?? '';
-        $real = $this->request->getHeaderLine('x-real-ip') ?? '';
+        $rorwarded = $this->request()->getHeaderLine('x-forwarded-for') ?? '';
+        $real = $this->request()->getHeaderLine('x-real-ip') ?? '';
         if ($rorwarded == '') {
             return $real;
         }
@@ -179,7 +184,7 @@ trait Input
      */
     public function remoteIP(): string
     {
-        return $this->request->getHeaderLine('remote_addr') ?? '';
+        return $this->request()->getHeaderLine('remote_addr') ?? '';
     }
 
     /**
@@ -187,7 +192,7 @@ trait Input
      */
     public function contentType(): string
     {
-        return $this->request->getHeaderLine('content-type');
+        return $this->request()->getHeaderLine('content-type');
     }
 
     /**
@@ -196,7 +201,7 @@ trait Input
      */
     public function header(string $key): string
     {
-        return $this->request->getHeaderLine($key);
+        return $this->request()->getHeaderLine($key);
     }
 
     /**
@@ -205,7 +210,7 @@ trait Input
      */
     public function cookie(string $name): string
     {
-        return $this->request->getCookieParams()[$name] ?? '';
+        return $this->request()->getCookieParams()[$name] ?? '';
     }
 
     /**
@@ -213,7 +218,7 @@ trait Input
      */
     public function uri(): UriInterface
     {
-        return $this->request->getUri();
+        return $this->request()->getUri();
     }
 
     /**
@@ -221,7 +226,7 @@ trait Input
      */
     public function rawData(): string
     {
-        $body = $this->request->getBody();
+        $body = $this->request()->getBody();
         return $body ? $body->getContents() : '';
     }
 

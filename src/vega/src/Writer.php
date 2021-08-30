@@ -4,7 +4,6 @@ namespace Mix\Vega;
 
 use Mix\Http\Message\Cookie;
 use Mix\Http\Message\Response;
-use Mix\Http\Message\ServerRequest;
 use Mix\Http\Message\Stream\StringStream;
 use Mix\Vega\Exception\RuntimeException;
 use Mix\View\Exception\ViewException;
@@ -21,11 +20,6 @@ trait Writer
      * @var Response
      */
     public $response;
-
-    /**
-     * @var ServerRequest
-     */
-    public $request;
 
     /**
      * @var Renderer
