@@ -12,8 +12,8 @@ use Mix\View\Renderer;
 class Engine
 {
 
-    const FAST_MODE = 1;
-    const NORMAL_MODE = 2;
+    const NORMAL_MODE = 1;
+    const FAST_MODE = 2;
 
     /**
      * @var int
