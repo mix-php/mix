@@ -30,6 +30,15 @@ class ResponseFactory implements ResponseFactoryInterface
     }
 
     /**
+     * Create a new response.
+     * @return ResponseInterface
+     */
+    public function createResponseFromFPM(): ResponseInterface
+    {
+        return $this->createResponse(200, '');
+    }
+
+    /**
      * Create a new ResponseInterface.
      *
      * @param \Swoole\Http\Response $response

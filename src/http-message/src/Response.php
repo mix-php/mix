@@ -54,12 +54,15 @@ class Response extends Message implements ResponseInterface
     }
 
     /**
-     * Get swoole response
-     * @return \Swoole\Http\Response
+     * Get raw response
+     * @return \Swoole\Http\Response|\Workerman\Connection\TcpConnection|null
      */
-    public function getSwooleResponse()
+    public function getRawResponse()
     {
-        return $this->swooleResponse;
+        if ($this->swooleResponse) {
+            return $this->swooleResponse;
+        }
+        return $this->workerManConnection;
     }
 
     /**
@@ -71,15 +74,6 @@ class Response extends Message implements ResponseInterface
     {
         $this->swooleResponse = $response;
         return $this;
-    }
-
-    /**
-     * Get WorkerMan Connection
-     * @return \Workerman\Connection\TcpConnection
-     */
-    public function getWorkerManConnection()
-    {
-        return $this->workerManConnection;
     }
 
     /**
