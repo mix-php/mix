@@ -26,7 +26,7 @@ class Context
     public $response;
 
     /**
-     * @var ServerRequest|\Swoole\Http\Request|\Workerman\Protocols\Http\Request
+     * @var ServerRequest
      */
     public $request;
 
