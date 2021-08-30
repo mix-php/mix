@@ -72,12 +72,15 @@ class ServerRequest extends Request implements ServerRequestInterface
     }
 
     /**
-     * Get swoole request
-     * @return \Swoole\Http\Request
+     * Get raw request
+     * @return \Swoole\Http\Request|\Workerman\Protocols\Http\Request|null
      */
-    public function getSwooleRequest()
+    public function getRawRequest()
     {
-        return $this->swooleRequest;
+        if ($this->swooleRequest) {
+            return $this->swooleRequest;
+        }
+        return $this->workerManRequest;
     }
 
     /**
