@@ -102,10 +102,7 @@ trait Writer
      * @param string $default
      * @return string
      */
-    public function defaultQuery(string $key, string $default): string
-    {
-        return $this->request->getQueryParams()[$key] ?? $default;
-    }
+    abstract public function defaultQuery(string $key, string $default): string;
 
     /**
      * @param $data

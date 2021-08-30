@@ -49,6 +49,16 @@ trait Input
     }
 
     /**
+     * @param string $key
+     * @param string $default
+     * @return string
+     */
+    public function defaultQuery(string $key, string $default): string
+    {
+        return $this->request->getQueryParams()[$key] ?? $default;
+    }
+
+    /**
      * GET /?name=Manu&lastname=
      * $ctx->GetQuery("name") == 'Manu'
      * $ctx->GetQuery("lastname") == ''
