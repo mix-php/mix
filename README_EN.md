@@ -39,6 +39,12 @@ Support multiple server drivers, and can switch seamlessly.
 - [Swoole Coroutine](examples/api-skeleton/composer.json#L10)
 - [WorkerMan](examples/api-skeleton/composer.json#L11)
 
+## Benchmarks
+
+- [Web Frameworks Benchmark](https://web-frameworks-benchmark.netlify.app/result?l=php)
+
+![web-frameworks-benchmark.png](web-frameworks-benchmark.png)
+
 ## Quick start
 
 Provide ready-made scaffolding, quickly create projects, immediate output.
