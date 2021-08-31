@@ -26,10 +26,10 @@ echo <<<EOL
 
 
 EOL;
-printf("System    Name:       %s\n", strtolower(PHP_OS));
-printf("PHP       Version:    %s\n", PHP_VERSION);
-printf("Swoole    Version:    %s\n", swoole_version());
-printf("Listen    Addr:       %s\n", $addr);
+printf("System       Name:       %s\n", strtolower(PHP_OS));
+printf("PHP          Version:    %s\n", PHP_VERSION);
+printf("Workerman    Version:    %s\n", Workerman\Worker::VERSION);
+printf("Listen       Addr:       %s\n", $addr);
 Logger::instance()->info('Start workerman server');
 
 Workerman\Worker::runAll();
