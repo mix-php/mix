@@ -57,7 +57,8 @@ class Connection extends AbstractConnection
                 return $this->call($name, $arguments);
             } else {
                 // 丢弃连接
-                if ($this->driver) {
+                // 有可能多次抛出异常，需要判断是否为 EmptyDriver
+                if ($this->driver && !$this->driver instanceof EmptyDriver) {
                     $this->driver->__discard();
                     $this->driver = new EmptyDriver();
                 }
