@@ -16,6 +16,15 @@ final class InsertTest extends TestCase
         ])->lastInsertId();
         $this->assertGreaterThan(0, (int)$id);
 
+        try {
+            $db->insert('users_11111', [
+                'name' => 'foo1',
+                'balance' => 1,
+            ])->lastInsertId();
+        } catch (\Throwable $ex) {
+            $this->assertContains('Base table or view not found', $ex->getMessage());
+        }
+
         $data = [
             [
                 'name' => 'foo2',
