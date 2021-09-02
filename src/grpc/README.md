@@ -33,7 +33,7 @@ nginx+h2+phpfpm 来搭建，这样就不需要 server 代码了，但是短生�
 
 ## Installation
 
-- Swoole >= 4.4.4: https://wiki.swoole.com/#/environment
+- Swoole >= 4.5.0: https://wiki.swoole.com/#/environment
 - 需要开启 `--enable-http2`
 
 ```
