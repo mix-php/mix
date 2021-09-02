@@ -39,12 +39,6 @@ MixPHP 是一个 PHP 命令行模式开发框架；基于 `Vega` 驱动的 HTTP 
 - [Swoole Coroutine](examples/api-skeleton/composer.json#L10) `常驻内存` `协程性能强劲`
 - [WorkerMan](examples/api-skeleton/composer.json#L11) `常驻内存` `兼容 composer 生态`
 
-## 性能测试
-
-- [Web Frameworks Benchmark](https://web-frameworks-benchmark.netlify.app/result?l=php)
-
-![web-frameworks-benchmark.png](web-frameworks-benchmark.png)
-
 ## 快速开始
 
 提供了现成的脚手架，快速创建项目，立即产出。
@@ -78,6 +72,12 @@ composer create-project --prefer-dist mix/websocket-skeleton websocket
 ```
 composer create-project --prefer-dist mix/grpc-skeleton grpc
 ```
+
+## 性能测试
+
+- [Web Frameworks Benchmark](https://web-frameworks-benchmark.netlify.app/result?l=php)
+
+![web-frameworks-benchmark.png](web-frameworks-benchmark.png)
 
 ## 推荐阅读
 
