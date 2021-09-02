@@ -114,7 +114,7 @@ class Server
             $reflectParameter = $reflectMethod->getParameters()[1];
             $rpcRequestClass = $reflectParameter->getType()->getName();
             $rpcRequest = new $rpcRequestClass;
-            GrpcHelper::deserialize($rpcRequest, $ctx->request->getContent());
+            GrpcHelper::deserialize($rpcRequest, $ctx->request->rawContent());
 
             // 执行
             if (!is_object($objectOrClass)) {

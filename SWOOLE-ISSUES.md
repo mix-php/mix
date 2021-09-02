@@ -4,7 +4,7 @@
 - [WebScoket] Coroutine\Http\Response->close 在 4.4.8 才加入，能实现 websocket 关闭连接
 - [WebScoket] Coroutine\Http\Client->send "incorrect mask flag" 在 4.4.13 才修复
 - [ALL] Coroutine\Server $reuse_port 在 4.4.4 或更高版本中可用
-- [HTTP] Coroutine\Http\Request->rawContent 在 4.4.1 才解决内存溢出问题
+- [HTTP] Coroutine\Http\Request->rawContent() 在 4.4.1 才解决内存溢出问题，4.5.0 修改为 getContent()
 - [Micro] 4.5.0 才解决 http_compression = false 的问题 https://github.com/swoole/swoole-src/issues/3256
 - [HTTP2] 4.5.0 才解决 open_http2_protocol Server Keep-Alive shutdown 问题 https://github.com/swoole/swoole-src/issues/2837#issuecomment-618308281
 - [Signal] 发现 signal 之前执行 fopen 和其他文件操作，因为是串行，会导致 signal 失效，Swoole >= 4.5.3 已经解决该问题
