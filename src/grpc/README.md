@@ -1,6 +1,6 @@
 > OpenMix 出品：[https://openmix.org](https://openmix.org/mix-php)
 
-# Mix Grpc
+# Mix gRPC
 
 PHP gRPC based on Swoole coroutine, including protoc code generator, server, and client
 
@@ -182,15 +182,15 @@ Swoole\Coroutine\run(function () use ($grpc) {
 通过 IP 端口调用 gRPC 服务
 
 ```php
-$client    = new Mix\Grpc\Client('127.0.0.1', 9595);
-
-$say  = new Php\Micro\Grpc\Greeter\SayClient($client);
-$request = new Php\Micro\Grpc\Greeter\Request();
-$request->setName('xiaoming');
-$ctx = new Mix\Grpc\Context();
-$response = $say->Hello($ctx, $request);
-
-var_dump($response->getMsg());
+Swoole\Coroutine\run(function () {
+    $client = new Mix\Grpc\Client('127.0.0.1', 9595);
+    $say  = new Php\Micro\Grpc\Greeter\SayClient($client);
+    $request = new Php\Micro\Grpc\Greeter\Request();
+    $request->setName('xiaoming');
+    $ctx = new Mix\Grpc\Context();
+    $response = $say->Hello($ctx, $request);
+    var_dump($response->getMsg());
+});
 ```
 
 设置 `header`
