@@ -17,8 +17,9 @@ class Context
 {
 
     use Store;
-    use Input;
-    use Writer;
+    use Input, Writer {
+        Input::defaultQuery insteadof Writer;
+    }
 
     /**
      * @var Response

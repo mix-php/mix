@@ -229,7 +229,8 @@ $sub->handle('/bar2', function (Mix\Vega\Context $ctx) {
 
 |  方法名称   | 描述  |
 |  ----  | ----  |
-| $ctx->contentType(): string  | 请求类型 |
+| $ctx->method(): string  | 请求类型 |
+| $ctx->contentType(): string  | 文档类型 |
 | $ctx->header(string $key): string  | 请求头 |
 | $ctx->cookie(string $name): string  | cookies |
 | $ctx->uri(): UriInterface  | 完整uri |

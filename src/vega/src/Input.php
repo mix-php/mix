@@ -190,6 +190,14 @@ trait Input
     /**
      * @return string
      */
+    public function method(): string
+    {
+        return $this->request()->getMethod();
+    }
+
+    /**
+     * @return string
+     */
     public function contentType(): string
     {
         return $this->request()->getHeaderLine('content-type');
