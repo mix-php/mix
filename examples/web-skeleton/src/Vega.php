@@ -38,7 +38,7 @@ class Vega
                 $ctx->next();
                 Logger::instance()->debug(sprintf(
                     '%s|%s|%s|%s',
-                    $ctx->request->getMethod(),
+                    $ctx->method(),
                     $ctx->uri(),
                     $ctx->response->getStatusCode(),
                     $ctx->remoteIP()
