@@ -9,20 +9,14 @@ use Psr\Http\Message\UriInterface;
 /**
  * Class ServerRequest
  * @package Mix\Http\Message
- * @author liu,jian <coder.keda@gmail.com>
  */
 class ServerRequest extends Request implements ServerRequestInterface
 {
 
     /**
-     * @var \Swoole\Http\Request
+     * @var \Swoole\Http\Request|\Workerman\Protocols\Http\Request
      */
-    protected $swooleRequest;
-
-    /**
-     * @var \Workerman\Protocols\Http\Request
-     */
-    protected $workerManRequest;
+    protected $rawRequest;
 
     /**
      * @var array
@@ -77,31 +71,17 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function getRawRequest()
     {
-        if ($this->swooleRequest) {
-            return $this->swooleRequest;
-        }
-        return $this->workerManRequest;
+        return $this->rawRequest;
     }
 
     /**
-     * With swoole request
-     * @param \Swoole\Http\Request $request
+     * With raw request
+     * @param \Swoole\Http\Request|\Workerman\Protocols\Http\Request $request
      * @return $this
      */
-    public function withSwooleRequest(\Swoole\Http\Request $request)
+    public function withRawRequest(object $request)
     {
-        $this->swooleRequest = $request;
-        return $this;
-    }
-
-    /**
-     * With swoole request
-     * @param \Workerman\Protocols\Http\Request $request
-     * @return $this
-     */
-    public function withWorkerManRequest(\Workerman\Protocols\Http\Request $request)
-    {
-        $this->workerManRequest = $request;
+        $this->rawRequest = $request;
         return $this;
     }
 

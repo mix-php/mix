@@ -7,20 +7,14 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * Class Response
  * @package Mix\Http\Message
- * @author liu,jian <coder.keda@gmail.com>
  */
 class Response extends Message implements ResponseInterface
 {
 
     /**
-     * @var \Swoole\Http\Response
+     * @var \Swoole\Http\Response|\Workerman\Connection\TcpConnection
      */
-    protected $swooleResponse;
-
-    /**
-     * @var \Workerman\Connection\TcpConnection
-     */
-    protected $workerManConnection;
+    protected $rawResponse;
 
     /**
      * @var int
@@ -59,31 +53,17 @@ class Response extends Message implements ResponseInterface
      */
     public function getRawResponse()
     {
-        if ($this->swooleResponse) {
-            return $this->swooleResponse;
-        }
-        return $this->workerManConnection;
+        return $this->rawResponse;
     }
 
     /**
-     * With swoole response
-     * @param \Swoole\Http\Response $response
+     * With raw response
+     * @param \Swoole\Http\Response|\Workerman\Connection\TcpConnection $response
      * @return $this
      */
-    public function withSwooleResponse(\Swoole\Http\Response $response)
+    public function withRawResponse(object $response)
     {
-        $this->swooleResponse = $response;
-        return $this;
-    }
-
-    /**
-     * With WorkerMan Connection
-     * @param \Workerman\Connection\TcpConnection $conn
-     * @return $this
-     */
-    public function withWorkerManConnection(\Workerman\Connection\TcpConnection $conn)
-    {
-        $this->workerManConnection = $conn;
+        $this->rawResponse = $response;
         return $this;
     }
 
@@ -92,7 +72,7 @@ class Response extends Message implements ResponseInterface
      */
     public function isSwoole(): bool
     {
-        if (isset($this->swooleResponse)) {
+        if ($this->rawResponse instanceof \Swoole\Http\Response) {
             return true;
         }
         return false;
@@ -103,7 +83,7 @@ class Response extends Message implements ResponseInterface
      */
     public function isWorkerMan(): bool
     {
-        if (isset($this->workerManConnection)) {
+        if ($this->rawResponse instanceof \Workerman\Connection\TcpConnection) {
             return true;
         }
         return false;
@@ -279,12 +259,12 @@ class Response extends Message implements ResponseInterface
     {
         $headers = $this->getHeadersLine();
         foreach ($headers as $key => $value) {
-            $this->swooleResponse->header($key, $value);
+            $this->rawResponse->header($key, $value);
         }
 
         $cookies = $this->getCookies();
         foreach ($cookies as $cookie) {
-            $this->swooleResponse->cookie(
+            $this->rawResponse->cookie(
                 $cookie->getName(),
                 $cookie->getValue(),
                 $cookie->getExpire(),
@@ -296,10 +276,10 @@ class Response extends Message implements ResponseInterface
         }
 
         $status = $this->getStatusCode();
-        $this->swooleResponse->status($status);
+        $this->rawResponse->status($status);
         $body = $this->getBody();
         $content = $body ? $body->getContents() : '';
-        $result = $this->swooleResponse->end($content);
+        $result = $this->rawResponse->end($content);
 
         $this->sended = true;
         return $result;
@@ -341,7 +321,7 @@ class Response extends Message implements ResponseInterface
                 $cookie->getHttpOnly()
             );
         }
-        $result = $this->workerManConnection->send($response);
+        $result = $this->rawResponse->send($response);
 
         $this->sended = true;
         return $result;
@@ -391,18 +371,18 @@ class Response extends Message implements ResponseInterface
     {
         $headers = $this->getHeadersLine();
         foreach ($headers as $key => $value) {
-            $this->swooleResponse->header($key, $value);
+            $this->rawResponse->header($key, $value);
         }
 
         // 添加 Last-Modified
         if (!isset($headers['Last-Modified']) && !isset($headers['last-modified'])) {
             if ($mtime = filemtime($filename)) {
                 $lastModified = gmdate('D, d M Y H:i:s', $mtime) . ' GMT';
-                $this->swooleResponse->header('Last-Modified', $lastModified);
+                $this->rawResponse->header('Last-Modified', $lastModified);
             }
         }
 
-        $result = $this->swooleResponse->sendfile($filename);
+        $result = $this->rawResponse->sendfile($filename);
 
         $this->sended = true;
         return $result;
@@ -417,7 +397,7 @@ class Response extends Message implements ResponseInterface
         $headers = $this->getHeadersLine();
 
         $response = (new \Workerman\Protocols\Http\Response(200, $headers))->withFile($filename);
-        $result = $this->workerManConnection->send($response);
+        $result = $this->rawResponse->send($response);
 
         $this->sended = true;
         return (bool)$result;

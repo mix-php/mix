@@ -9,7 +9,6 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * Class ResponseFactory
  * @package Mix\Http\Message\Factory
- * @author liu,jian <coder.keda@gmail.com>
  */
 class ResponseFactory implements ResponseFactoryInterface
 {
@@ -48,7 +47,7 @@ class ResponseFactory implements ResponseFactoryInterface
     {
         /** @var Response $response */
         $response = $this->createResponse();
-        $response->withSwooleResponse($resp);
+        $response->withRawResponse($resp);
         return $response;
     }
 
@@ -62,7 +61,7 @@ class ResponseFactory implements ResponseFactoryInterface
     {
         /** @var Response $response */
         $response = $this->createResponse();
-        $response->withWorkerManConnection($conn);
+        $response->withRawResponse($conn);
         return $response;
     }
 

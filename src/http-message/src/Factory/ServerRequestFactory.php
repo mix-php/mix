@@ -10,7 +10,6 @@ use Psr\Http\Message\UriInterface;
 /**
  * Class ServerRequestFactory
  * @package Mix\Http\Message\Factory
- * @author liu,jian <coder.keda@gmail.com>
  */
 class ServerRequestFactory implements ServerRequestFactoryInterface
 {
@@ -119,7 +118,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
 
         /** @var ServerRequest $serverRequest */
         $serverRequest = $this->createServerRequest($method, $uri, $serverParams);
-        $serverRequest->withSwooleRequest($request);
+        $serverRequest->withRawRequest($request);
         $serverRequest->withProtocolVersion($protocolVersion);
         $serverRequest->withRequestTarget($uri);
 
@@ -187,7 +186,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
 
         /** @var ServerRequest $serverRequest */
         $serverRequest = $this->createServerRequest($method, $uri, $serverParams);
-        $serverRequest->withWorkerManRequest($request);
+        $serverRequest->withRawRequest($request);
         $serverRequest->withProtocolVersion($protocolVersion);
         $serverRequest->withRequestTarget($uri);
 

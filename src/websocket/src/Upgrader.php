@@ -34,8 +34,8 @@ class Upgrader
         }
 
         // Upgrade
-        $swooleResponse = $response->getSwooleResponse();
-        if (!$swooleResponse) {
+        $swooleResponse = $response->getRawResponse();
+        if (!$swooleResponse || !$swooleResponse instanceof \Swoole\Http\Response) {
             throw new UpgradeException('Handshake failed, only the swoole coroutine environment is supported');
         }
         if (!$swooleResponse->upgrade()) {
