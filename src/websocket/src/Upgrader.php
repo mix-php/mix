@@ -72,7 +72,6 @@ class Upgrader
         if (!$response->upgrade()) {
             throw new UpgradeException('Handshake failed, upgrade error');
         }
-        $response->status(101);
         $connection = new Connection($response, $this);
         $this->add($connection);
         return $connection;
