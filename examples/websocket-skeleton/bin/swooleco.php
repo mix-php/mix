@@ -1,4 +1,9 @@
 <?php
+ini_set('display_errors', 'on');
+ini_set('display_startup_errors', 'on');
+ini_set('error_reporting', E_ALL ^ E_NOTICE);
+ini_set('memory_limit', '1G');
+
 require __DIR__ . '/../vendor/autoload.php';
 
 use App\Container\Logger;
