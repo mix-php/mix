@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MixPHP V3.0 开发文档</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+</head>
+<body>
+<div id="app"></div>
+<script>
+    window.$docsify = {
+        name: 'MixPHP V3.0',
+        repo: 'mix-php/mix',
+        homepage: 'zh-cn/README.md',
+        loadSidebar: 'summary.md',
+        loadNavbar: true,
+        fallbackLanguages: ['zh-cn'],
+        mergeNavbar: true,
+        themeColor: '#4f5d95',
+        // logo: '/logo.png',
+        auto2top: true,
+        subMaxLevel: 4,
+        topMargin: 20,
+        search: {
+            depth: 6,
+            noData: {
+                '/en/': 'No results!',
+                '/zh-cn/': '没有找到结果!',
+                '/zh-hk/': '沒有找到結果!',
+                '/zh-tw/': '沒有找到結果!',
+                '/': '没有找到结果!'
+            },
+            paths: 'auto',
+            placeholder: {
+                '/en/': 'Type to Search',
+                '/zh-cn/': '输入关键词搜索',
+                '/zh-hk/': '輸入關鍵詞搜索',
+                '/zh-tw/': '輸入關鍵詞搜索',
+                '/': '输入关键词搜索'
+            },
+            pathNamespaces: ['/zh-cn']
+        },
+        alias: {
+            '/summary.md': './zh-cn/summary.md'
+        },
+        plugins: [
+            function (hook, vm) {
+                hook.beforeEach(function (html) {
+                    if (/githubusercontent\.com/.test(vm.route.file)) {
+                        url = vm.route.file
+                            .replace('raw.githubusercontent.com', 'github.com')
+                            .replace(/\/master/, '/blob/master');
+                    } else if (/jsdelivr\.net/.test(vm.route.file)) {
+                        url = vm.route.file
+                            .replace('cdn.jsdelivr.net/gh', 'github.com')
+                            .replace('@master', '/blob/master');
+                    } else {
+                        url =
+                            'https://github.com/mix-php/mix/blob/master/docs/' +
+                            vm.route.file;
+                    }
+                    var editHtml = '<p style="text-align: right"><a href="https://github.com/mix-php/mix/blob/master/docs/zh-cn/README.md" target="_blank" rel="noopener"><img class="emoji" src="https://github.githubassets.com/images/icons/emoji/memo.png" alt="memo"> Edit Document</a></p>\n\n';
+                    return (
+                        editHtml +
+                        html
+                    );
+                });
+            },
+        ]
+    }
+</script>
+<!-- Docsify v4 -->
+<script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+</body>
+</html>
