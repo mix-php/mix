@@ -58,10 +58,10 @@
                             .replace('@master', '/blob/master');
                     } else {
                         url =
-                            'https://github.com/mix-php/mix/blob/master/docs/' +
+                            'https://github.com/mix-php/mix/blob/master/docs/3.0/' +
                             vm.route.file;
                     }
-                    var editHtml = '<p style="text-align: right"><a href="https://github.com/mix-php/mix/blob/master/docs/3.0/zh-cn/README.md" target="_blank" rel="noopener"><img class="emoji" src="https://github.githubassets.com/images/icons/emoji/memo.png" alt="memo"> Edit on github</a></p>\n\n';
+                    var editHtml = '<p style="text-align: right"><a href="' + url + '" target="_blank" rel="noopener"><img class="emoji" src="https://github.githubassets.com/images/icons/emoji/memo.png" alt="memo"> Edit on github</a></p>\n\n';
                     return (
                         editHtml +
                         html
