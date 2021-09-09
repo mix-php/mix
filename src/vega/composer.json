@@ -16,7 +16,7 @@
     }
   ],
   "require": {
-    "php": ">=7.2.0",
+    "php": ">=7.3.0",
     "nikic/fast-route": "^1.3",
     "mix/http-message": "~3.0.0",
     "mix/view": "~3.0.0"

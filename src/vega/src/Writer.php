@@ -105,14 +105,9 @@ trait Writer
      */
     protected static function jsonMarshal($data): string
     {
-        $flags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
-        // php >= 7.3
-        if (defined('JSON_THROW_ON_ERROR')) {
-            $flags |= JSON_THROW_ON_ERROR;
-        }
-        $result = json_encode($data, $flags);
+        $result = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
         if ($result === false) {
-            throw new RuntimeException('json_encode failed');
+            throw new RuntimeException(sprintf('json_encode failed: %d %s', json_last_error(), json_last_error_msg()));
         }
         return $result;
     }
