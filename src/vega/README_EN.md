@@ -357,6 +357,12 @@ Create view file `foo.php`
 </ul>
 ```
 
+Import other Views
+
+```php
+<?= $this->render('header', $__data__); ?>
+```
+
 Configure the view path and respond to html
 
 ```php

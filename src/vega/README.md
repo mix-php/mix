@@ -366,6 +366,12 @@ $vega->handle('/jsonp', function (Mix\Vega\Context $ctx) {
 </ul>
 ```
 
+导入其他视图
+
+```php
+<?= $this->render('header', $__data__); ?>
+```
+
 配置视图路径，并响应html
 
 ```php
