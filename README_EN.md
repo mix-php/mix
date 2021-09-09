@@ -39,6 +39,14 @@ Support multiple server drivers, and can switch seamlessly.
 - [Swoole Coroutine](examples/api-skeleton/composer.json#L10)
 - [WorkerMan](examples/api-skeleton/composer.json#L11)
 
+## Documentation
+
+- `V3.0` https://openmix.org/mix-php/docs/3.0/
+- `V2.2` https://www.kancloud.cn/onanying/mixphp2-2/content
+- `V2.1` https://www.kancloud.cn/onanying/mixphp2-1/content
+- `V2.0` https://www.kancloud.cn/onanying/mixphp2/content
+- `V1.*` https://www.kancloud.cn/onanying/mixphp1/content
+
 ## Quick start
 
 Provide ready-made scaffolding, quickly create projects, immediate output.
@@ -84,13 +92,6 @@ composer create-project --prefer-dist mix/grpc-skeleton grpc
 OpenMix also has Golang ecological framework
 
 - https://github.com/mix-go/mix
-
-## Old version documentation
-
-- `V2.2` https://www.kancloud.cn/onanying/mixphp2-2/content
-- `V2.1` https://www.kancloud.cn/onanying/mixphp2-1/content
-- `V2.0` https://www.kancloud.cn/onanying/mixphp2/content
-- `V1.*` https://www.kancloud.cn/onanying/mixphp1/content
 
 ## License
 

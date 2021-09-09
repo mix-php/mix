@@ -39,6 +39,14 @@ MixPHP 是一个 PHP 命令行模式开发框架；基于 `Vega` 驱动的 HTTP 
 - [Swoole Coroutine](examples/api-skeleton/composer.json#L10) `常驻内存` `协程性能强劲`
 - [WorkerMan](examples/api-skeleton/composer.json#L11) `常驻内存` `兼容 composer 生态`
 
+## 开发文档
+
+- `V3.0` https://openmix.org/mix-php/docs/3.0/
+- `V2.2` https://www.kancloud.cn/onanying/mixphp2-2/content
+- `V2.1` https://www.kancloud.cn/onanying/mixphp2-1/content
+- `V2.0` https://www.kancloud.cn/onanying/mixphp2/content
+- `V1.*` https://www.kancloud.cn/onanying/mixphp1/content
+
 ## 快速开始
 
 提供了现成的脚手架，快速创建项目，立即产出。
@@ -95,13 +103,6 @@ composer create-project --prefer-dist mix/grpc-skeleton grpc
 OpenMix 同时还有 Golang 生态的框架
 
 - https://github.com/mix-go/mix
-
-## 旧版文档
-
-- `V2.2` https://www.kancloud.cn/onanying/mixphp2-2/content
-- `V2.1` https://www.kancloud.cn/onanying/mixphp2-1/content
-- `V2.0` https://www.kancloud.cn/onanying/mixphp2/content
-- `V1.*` https://www.kancloud.cn/onanying/mixphp1/content
 
 ## License
 
