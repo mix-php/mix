@@ -16,8 +16,8 @@ MixPHP 是一个 PHP 命令行模式开发框架；基于 `Vega` 驱动的 HTTP 
 
 ## 请帮忙 Star 一下
 
-- Github: https://github.com/mix-go/mix
-- Gitee: https://gitee.com/mix-go/mix
+- Github: https://github.com/mix-php/mix
+- Gitee: https://gitee.com/mix-php/mix
 
 ## 独立模块
 
