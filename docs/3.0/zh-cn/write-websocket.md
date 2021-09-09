@@ -208,7 +208,7 @@ composer run-script swoole:start
 
 ## 如何使用 WebSocket 客户端
 
-- [mix-php/websocket#客户端-client](https://github.com/mix-php/websocket#%E5%AE%A2%E6%88%B7%E7%AB%AF-client)
+- [mix-php/websocket#客户端-client](https://gitee.com/mix-php/mix/tree/master/src/websocket#%E5%AE%A2%E6%88%B7%E7%AB%AF-client)
 
 ## 使用容器中的对象
 
