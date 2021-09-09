@@ -139,7 +139,7 @@ $vega->handle('/users/{id}', [new Users(), 'index'])->methods('GET');
 
 路由里使用了 `Users` 控制器，我们需要创建他
 
-- 如何配置路由：[mix/vega](zh-cn/mix-vega.md)
+- 如何配置路由：[mix/vega](zh-cn/mix-vega.md?id=路由配置)
 - 如何调用数据库：[mix/database](zh-cn/mix-database.md)
 
 ```php

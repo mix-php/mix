@@ -81,7 +81,7 @@ $vega->handle('/websocket', [new WebSocket(), 'index'])->methods('GET');
 
 路由里使用了 `WebSocket` 控制器，我们需要创建他
 
-- 如何配置路由：[mix/vega](zh-cn/mix-vega.md)
+- 如何配置路由：[mix/vega](zh-cn/mix-vega.md?id=路由配置)
 - 如何使用 WebSocket 升级器：[mix/websocket](https://github.com/mix-php/websocket#readme)
 
 ```php

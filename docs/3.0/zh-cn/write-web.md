@@ -139,7 +139,7 @@ $vega->handle('/', [new Hello(), 'index'])->methods('GET');
 
 路由里使用了 `Hello` 控制器，我们需要创建他
 
-- 如何配置路由：[mix/vega](zh-cn/mix-vega.md)
+- 如何配置路由：[mix/vega](zh-cn/mix-vega.md?id=路由配置)
 
 ```php
 <?php
