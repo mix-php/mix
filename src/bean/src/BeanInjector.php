@@ -72,8 +72,8 @@ class BeanInjector
             }
 
             // 注释类型检测
-            // php8不检查
-            if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            // 关闭该检测：php-di/phpdoc-reader 在 swoole >= 4.6 时会在执行过程中切换协程，导致 ApplicationContext->get($beanName) 会多次实例化
+            if (true) {
                 // 导入
                 $object->$name = $value;
                 continue;
