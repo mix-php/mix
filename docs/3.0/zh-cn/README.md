@@ -49,6 +49,7 @@ MixPHP 是一个 PHP 命令行模式开发框架；基于 `Vega` 驱动的 HTTP 
 OpenMix 同时还有 Golang 生态的框架
 
 - https://github.com/mix-go/mix
+- https://gitee.com/mix-go/mix
 
 ## 旧版文档
 
