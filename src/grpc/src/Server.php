@@ -59,12 +59,13 @@ class Server
     }
 
     /**
-     * @param \Closure|null $init
+     * @param \Closure|null $init Deprecated
      * @return \Closure
      */
     public function handler(?\Closure $init = null): \Closure
     {
         return function (...$args) use ($init) {
+            // Deprecated
             static $ok = false;
             if (!$ok && $init) {
                 $init();
