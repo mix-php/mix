@@ -92,7 +92,7 @@ class Server
      * @param Context $ctx
      * @throws NotFoundException
      */
-    protected function dispatch(string $method, string $uri, Context $ctx)
+    protected function dispatch(string $method, string $uri, Context $ctx): void
     {
         try {
             if (!in_array($ctx->request->header['content-type'] ?? '', [
@@ -133,7 +133,11 @@ class Server
         } catch (\Throwable $ex) {
             $status = 500;
         } finally {
-            $ctx->response->header('content-type', 'application/grpc');
+            $result = $ctx->response->header('content-type', 'application/grpc');
+            // E_WARNING http response is unavailable 处理
+            if (!$result) {
+                return;
+            }
             if (isset($rpcResponse)) {
                 $content = GrpcHelper::serialize($rpcResponse);
             }

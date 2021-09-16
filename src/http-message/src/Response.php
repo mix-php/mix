@@ -259,7 +259,11 @@ class Response extends Message implements ResponseInterface
     {
         $headers = $this->getHeadersLine();
         foreach ($headers as $key => $value) {
-            $this->rawResponse->header($key, $value);
+            $result = $this->rawResponse->header($key, $value);
+            // E_WARNING http response is unavailable 处理
+            if (!$result) {
+                return false;
+            }
         }
 
         $cookies = $this->getCookies();
