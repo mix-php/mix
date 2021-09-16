@@ -56,7 +56,21 @@ class Error
      */
     public function exception(\Throwable $ex): void
     {
-        Logger::instance()->error(sprintf('%s in %s on line %d', $ex->getMessage(), $ex->getFile(), $ex->getLine()));
+        $message = sprintf('%s in %s on line %d', $ex->getMessage(), $ex->getFile(), $ex->getLine());
+        switch ($ex->getCode()) {
+            case E_NOTICE:
+            case E_USER_NOTICE:
+                Logger::instance()->notice($message);
+                break;
+            case E_WARNING:
+            case E_CORE_WARNING:
+            case E_COMPILE_WARNING:
+            case E_USER_WARNING:
+                Logger::instance()->warning($message);
+                break;
+            default:
+                Logger::instance()->error($message);
+        }
     }
 
     /**
