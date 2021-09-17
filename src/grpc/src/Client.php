@@ -37,6 +37,11 @@ class Client
     protected $client;
 
     /**
+     * @var \Swoole\Coroutine\Channel
+     */
+    protected $channel;
+
+    /**
      * @var array
      */
     protected $channels = [];
@@ -65,6 +70,8 @@ class Client
         $this->ssl = $ssl;
         $this->timeout = $timeout;
         $this->connect();
+
+        $this->channel = new \Swoole\Coroutine\Channel(100);
         go(function () {
             while (true) {
                 $response = $this->client->recv(-1);
@@ -80,8 +87,31 @@ class Client
                     }
                     continue;
                 }
-                if (isset($this->channels[$response->streamId])) {
-                    $this->channels[$response->streamId]->push($response);
+                $streamId = $response->streamId;
+                if (isset($this->channels[$streamId]) && !is_string($this->channels[$streamId])) {
+                    $this->channels[$streamId]->push($response);
+                } else {
+                    $this->channel->push($response);
+                }
+            }
+        });
+        go(function () {
+            while (true) {
+                $response = $this->channel->pop();
+                if (!$response) {
+                    return;
+                }
+                $streamId = $response->streamId;
+                if (isset($this->channels[$streamId])) {
+                    // timeout
+                    if (is_string($this->channels[$streamId])) {
+                        unset($this->channels[$streamId]);
+                        continue;
+                    }
+                    $this->channels[$streamId]->push($response);
+                } else {
+                    // 因为 send 后才返回 streamId，但是在 send 时就会切换协程，所以这里会找不到
+                    $this->channel->push($response);
                 }
             }
         });
@@ -105,7 +135,8 @@ class Client
     public function close(): void
     {
         $this->closed = true;
-        $this->client and $this->client->close();
+        $this->client->close();
+        $this->channel->close();
     }
 
     /**
@@ -134,9 +165,13 @@ class Client
         $streamId = $this->send($request);
         $channel = new \Swoole\Coroutine\Channel(1);
         $this->channels[$streamId] = $channel;
-        $response = $channel->pop($this->timeout);
-        $this->channels[$streamId] = null;
-        unset($this->channels[$streamId]);
+        $response = $channel->pop($timeout);
+        if (!$response) {
+            $this->channels[$streamId] = 'timeout';
+        } else {
+            $this->channels[$streamId] = null;
+            unset($this->channels[$streamId]);
+        }
         if (!$response) {
             throw new RuntimeException(sprintf('Client stream %d request timeout', $streamId));
         }
