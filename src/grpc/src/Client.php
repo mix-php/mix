@@ -134,7 +134,7 @@ class Client
         $this->channels[$streamId] = null;
         unset($this->channels[$streamId]);
         if (!$response) {
-            throw new RuntimeException(sprintf('Stream %d request timeout', $streamId));
+            throw new RuntimeException(sprintf('Client stream %d request timeout', $streamId));
         }
         return $response;
     }
