@@ -28,7 +28,7 @@ class Subscriber
      * 超时
      * @var float
      */
-    public $timeout = 10.0;
+    public $timeout = 5.0;
 
     /**
      * 密码
@@ -56,7 +56,7 @@ class Subscriber
      * @param float $timeout
      * @throws \Swoole\Exception
      */
-    public function __construct(string $host, int $port = 6379, string $password = '', float $timeout = 10.0)
+    public function __construct(string $host, int $port = 6379, string $password = '', float $timeout = 5.0)
     {
         $this->host = $host;
         $this->port = $port;

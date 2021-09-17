@@ -43,7 +43,7 @@ class Redis implements ConnectionInterface
      * 全局超时
      * @var float
      */
-    protected $timeout = 10.0;
+    protected $timeout = 5.0;
 
     /**
      * 重连间隔
@@ -113,7 +113,7 @@ class Redis implements ConnectionInterface
      * @param float|int $readTimeout
      * @throws \RedisException
      */
-    public function __construct(string $host, int $port = 6379, string $password = '', int $database = 0, float $timeout = 10.0, int $retryInterval = 0, float $readTimeout = -1)
+    public function __construct(string $host, int $port = 6379, string $password = '', int $database = 0, float $timeout = 5.0, int $retryInterval = 0, float $readTimeout = -1)
     {
         $this->host = $host;
         $this->port = $port;
