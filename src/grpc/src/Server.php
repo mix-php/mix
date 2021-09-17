@@ -133,11 +133,7 @@ class Server
         } catch (\Throwable $ex) {
             $status = 500;
         } finally {
-            $result = $ctx->response->header('content-type', 'application/grpc');
-            // E_WARNING http response is unavailable 处理
-            if (!$result) {
-                return;
-            }
+            $ctx->response->header('content-type', 'application/grpc');
             if (isset($rpcResponse)) {
                 $content = GrpcHelper::serialize($rpcResponse);
             }

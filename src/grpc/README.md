@@ -183,13 +183,14 @@ Swoole\Coroutine\run(function () use ($grpc) {
 
 ```php
 Swoole\Coroutine\run(function () {
-    $client = new Mix\Grpc\Client('127.0.0.1', 9595);
+    $client = new Mix\Grpc\Client('127.0.0.1', 9595); // 复用该客户端
     $say  = new Php\Micro\Grpc\Greeter\SayClient($client);
     $request = new Php\Micro\Grpc\Greeter\Request();
     $request->setName('xiaoming');
     $ctx = new Mix\Grpc\Context();
     $response = $say->Hello($ctx, $request);
     var_dump($response->getMsg());
+    $client->close();
 });
 ```
 

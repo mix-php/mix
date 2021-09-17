@@ -29,7 +29,7 @@ class Client
     /**
      * @var float
      */
-    protected $timeout;
+    protected $timeout = 5.0;
 
     /**
      * @var \Swoole\Coroutine\Http2\Client
@@ -37,9 +37,19 @@ class Client
     protected $client;
 
     /**
+     * @var array
+     */
+    protected $channels = [];
+
+    /**
      * @var bool
      */
     protected $reconnect = false;
+
+    /**
+     * @var bool
+     */
+    protected $closed = false;
 
     /**
      * Client constructor.
@@ -55,6 +65,22 @@ class Client
         $this->ssl = $ssl;
         $this->timeout = $timeout;
         $this->connect();
+        go(function () {
+            while (true) {
+                if ($this->closed) {
+                    return;
+                }
+                $response = $this->client->recv(-1);
+                if ($response === false) {
+                    // 断线重连
+                    $this->reconnect();
+                    continue;
+                }
+                if (isset($this->channels[$response->streamId])) {
+                    $this->channels[$response->streamId]->push($response);
+                }
+            }
+        });
     }
 
     /**
@@ -72,6 +98,12 @@ class Client
         $this->client = $client;
     }
 
+    public function close(): void
+    {
+        $this->closed = true;
+        $this->client and $this->client->close();
+    }
+
     /**
      * Request
      * @param string $method
@@ -84,6 +116,9 @@ class Client
      */
     public function request(string $method, string $path, array $headers = [], string $body = '', float $timeout = 5.0): \Swoole\Http2\Response
     {
+        if ($this->closed) {
+            throw new RuntimeException('The client has been closed');
+        }
         $request = new \Swoole\Http2\Request();
         $request->method = $method;
         $request->path = $path;
@@ -92,44 +127,34 @@ class Client
                 'user-agent' => sprintf('Mix gRPC/PHP %s/Swoole %s', PHP_VERSION, SWOOLE_VERSION),
             ];
         $request->data = $body;
-        $this->send($request);
-        return $this->recv($timeout);
+        $streamId = $this->send($request);
+        $channel = new \Swoole\Coroutine\Channel(1);
+        $this->channels[$streamId] = $channel;
+        $response = $channel->pop($this->timeout);
+        $this->channels[$streamId] = null;
+        unset($this->channels[$streamId]);
+        if (!$response) {
+            throw new RuntimeException(sprintf('Stream %d request timeout', $streamId));
+        }
+        return $response;
     }
 
     /**
      * Send
      * @param \Swoole\Http2\Request $request
+     * @return int
      * @throws RuntimeException
      */
-    protected function send(\Swoole\Http2\Request $request): void
+    protected function send(\Swoole\Http2\Request $request): int
     {
         $client = $this->client;
-        $result = $client->send($request);
-        if ($result === false) {
+        $streamId = $client->send($request);
+        if ($streamId === false) {
             // 断线重连, 需要下次请求才能恢复正常
             $this->reconnect();
-
             throw new RuntimeException($client->errMsg, $client->errCode);
         }
-    }
-
-    /**
-     * Recv
-     * @param float $timeout
-     * @return \Swoole\Http2\Response
-     * @throws RuntimeException
-     */
-    protected function recv(float $timeout): \Swoole\Http2\Response
-    {
-        $client = $this->client;
-        $result = $client->recv($timeout);
-        if ($result === false) {
-            // 断线重连, 需要下次请求才能恢复正常
-            $this->reconnect();
-
-            throw new RuntimeException($client->errMsg, $client->errCode);
-        }
-        return $result;
+        return $streamId;
     }
 
     /**
