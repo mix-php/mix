@@ -28,7 +28,7 @@ class Subscriber
      * 超时
      * @var float
      */
-    public $timeout = 0.0;
+    public $timeout = 10.0;
 
     /**
      * 密码
@@ -55,25 +55,23 @@ class Subscriber
      * @param string $password
      * @param float $timeout
      * @throws \Swoole\Exception
-     * @throws \Throwable
      */
-    public function __construct(string $host, int $port, string $password = '', float $timeout = 5.0)
+    public function __construct(string $host, int $port = 6379, string $password = '', float $timeout = 10.0)
     {
-        $this->host     = $host;
-        $this->port     = $port;
+        $this->host = $host;
+        $this->port = $port;
         $this->password = $password;
-        $this->timeout  = $timeout;
+        $this->timeout = $timeout;
         $this->connect();
     }
 
     /**
      * Connect
      * @throws \Swoole\Exception
-     * @throws \Throwable
      */
     protected function connect()
     {
-        $connection           = new Connection($this->host, $this->port, $this->timeout);
+        $connection = new Connection($this->host, $this->port, $this->timeout);
         $this->commandInvoker = new CommandInvoker($connection);
         if ('' != (string)$this->password) {
             $this->commandInvoker->invoke("auth {$this->password}", 1);

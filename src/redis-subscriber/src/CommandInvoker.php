@@ -114,7 +114,7 @@ class CommandInvoker
      * @param string $command
      * @param int $number
      * @return array
-     * @throws \Throwable
+     * @throws \Swoole\Exception
      */
     public function invoke(string $command, int $number)
     {

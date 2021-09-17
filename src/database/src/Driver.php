@@ -45,6 +45,7 @@ class Driver
     protected $defaultOptions = [
         \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
         \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_OBJ,
+        \PDO::ATTR_TIMEOUT => 10,
     ];
 
     /**
@@ -55,7 +56,7 @@ class Driver
      * @param array $options
      * @throws \PDOException
      */
-    public function __construct(string $dsn, string $username, string $password, array $options)
+    public function __construct(string $dsn, string $username, string $password, array $options = [])
     {
         $this->dsn = $dsn;
         $this->username = $username;
