@@ -67,10 +67,10 @@ class Client
         $this->connect();
         go(function () {
             while (true) {
+                $response = $this->client->recv(-1);
                 if ($this->closed) {
                     return;
                 }
-                $response = $this->client->recv(-1);
                 if ($response === false) {
                     // 断线重连
                     $this->reconnect();
