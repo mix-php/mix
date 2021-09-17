@@ -73,7 +73,11 @@ class Client
                 }
                 if ($response === false) {
                     // 断线重连
-                    $this->reconnect();
+                    try {
+                        $this->reconnect();
+                    } catch (\Throwable $ex) {
+                        usleep(100000); // 0.1s
+                    }
                     continue;
                 }
                 if (isset($this->channels[$response->streamId])) {
