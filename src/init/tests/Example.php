@@ -7,7 +7,7 @@ class Example
 
     public static function init()
     {
-        print 'init';
+        echo 'init' . PHP_EOL;
     }
 
 }
