@@ -1,0 +1,29 @@
+{
+  "name": "mix/init",
+  "description": "Help execute static initialization, usually for preloading singletons",
+  "type": "library",
+  "keywords": [
+    "mix",
+    "init"
+  ],
+  "homepage": "https://openmix.org/mix-php",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "liu,jian",
+      "email": "coder.keda@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.2.0",
+    "hanneskod/classtools": "^1.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mix\\Init\\": "src/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.0.0"
+  }
+}
