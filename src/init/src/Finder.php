@@ -32,17 +32,23 @@ class Finder
         return new Finder(...$paths);
     }
 
-    public function exec(string $methodname = 'init'): void
+    /**
+     * @param string ...$methods
+     * @throws \ReflectionException
+     */
+    public function exec(string ...$methods): void
     {
         $finder = new \Symfony\Component\Finder\Finder;
         $iter = new \hanneskod\classtools\Iterator\ClassIterator($finder->in($this->paths));
-        foreach ($iter->getClassMap() as $classname => $splFileInfo) {
-            if (!class_exists($classname) || !method_exists($classname, $methodname)) {
-                continue;
-            }
-            $ref = new \ReflectionMethod($classname, $methodname);
-            if ($ref->isPublic() && $ref->isStatic()) {
-                $classname::$methodname();
+        foreach ($iter->getClassMap() as $class => $splFileInfo) {
+            foreach ($methods as $method) {
+                if (!class_exists($class) || !method_exists($class, $method)) {
+                    continue;
+                }
+                $ref = new \ReflectionMethod($class, $method);
+                if ($ref->isPublic() && $ref->isStatic()) {
+                    $class::$method();
+                }
             }
         }
     }
