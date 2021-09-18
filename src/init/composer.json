@@ -15,7 +15,7 @@
     }
   ],
   "require": {
-    "php": ">=7.2.0",
+    "php": ">=7.1.0",
     "hanneskod/classtools": "^1.2"
   },
   "autoload": {
