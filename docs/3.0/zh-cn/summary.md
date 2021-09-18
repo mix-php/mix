@@ -6,6 +6,7 @@
 
 * 快速开始
 
+  * [编程须知](zh-cn/instructions.md)
   * [编写 CLI 程序](zh-cn/write-cli.md)
   * [编写 API 接口](zh-cn/write-api.md)
   * [编写 Web 页面](zh-cn/write-web.md)
@@ -32,3 +33,4 @@
   * [mix/worker-pool](zh-cn/mix-worker-pool.md)
   * [mix/validator](zh-cn/mix-validator.md)
   * [mix/event](zh-cn/mix-event.md)
+  * [mix/init](zh-cn/mix-init.md)
