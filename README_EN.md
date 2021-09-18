@@ -28,6 +28,7 @@ All core modules can be used independently, and all support native code developm
 - [mix/worker-pool](src/worker-pool) Swoole-based worker pool, coroutine pool
 - [mix/validator](src/validator) PSR-7-based verification library
 - [mix/event](src/event) Event dispatcher based on PSR-14 standard
+- [mix/init](src/init) Help execute static initialization of the class, usually for preloading singletons
 
 ## Server
 
