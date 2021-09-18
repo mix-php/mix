@@ -2,9 +2,9 @@
 
 # Mix Init
 
-Help execute static initialization, usually for preloading singletons
+Help execute static initialization of the class, usually for preloading singletons
 
-帮助执行静态初始化，通常用于预加载单例
+帮助执行类的静态初始化，通常用于预加载单例
 
 ## Installation
 
