@@ -29,7 +29,8 @@ final class MainTest extends TestCase
             $response = $say->Hello(new \Mix\Grpc\Context(), $request);
 
             $_this->assertEquals($response->getMsg(), 'hello, xiaoming');
-            
+
+            $client->close();
             $server->shutdown();
         };
         run($func);
