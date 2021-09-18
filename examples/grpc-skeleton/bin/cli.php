@@ -6,13 +6,16 @@ ini_set('error_reporting', E_ALL ^ E_NOTICE);
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use App\Error;
 use Dotenv\Dotenv;
 use Mix\Cli\Cli;
+use Mix\Init\Finder;
 
 Dotenv::createUnsafeImmutable(__DIR__ . '/../', '.env')->load();
 define("APP_DEBUG", env('APP_DEBUG'));
 
-App\Error::register();
+Error::register();
+Finder::in(__DIR__ . '/../src/Container')->exec('init', 'connect');
 
 Cli::setName('app')->setVersion('0.0.0-alpha');
 $cmds = [

@@ -12,20 +12,22 @@ class RDS
      */
     static private $instance;
 
+    public static function connect(): void
+    {
+        $host = $_ENV['REDIS_HOST'];
+        $port = $_ENV['REDIS_PORT'];
+        $password = $_ENV['REDIS_PASSWORD'];
+        $database = $_ENV['REDIS_DATABASE'];
+        $rds = new Redis($host, $port, $password, $database);
+        APP_DEBUG and $rds->setLogger(new RDSLogger());
+        self::$instance = $rds;
+    }
+
     /**
      * @return Redis
      */
     public static function instance(): Redis
     {
-        if (!isset(self::$instance)) {
-            $host = $_ENV['REDIS_HOST'];
-            $port = $_ENV['REDIS_PORT'];
-            $password = $_ENV['REDIS_PASSWORD'];
-            $database = $_ENV['REDIS_DATABASE'];
-            $rds = new Redis($host, $port, $password, $database);
-            APP_DEBUG and $rds->setLogger(new RDSLogger());
-            self::$instance = $rds;
-        }
         return self::$instance;
     }
 

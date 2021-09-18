@@ -7,16 +7,22 @@ ini_set('memory_limit', '1G');
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use App\Error;
 use App\Container\Logger;
 use App\Grpc;
 use Dotenv\Dotenv;
+use Mix\Init\Finder;
 
 Dotenv::createUnsafeImmutable(__DIR__ . '/../', '.env')->load();
 define("APP_DEBUG", env('APP_DEBUG'));
 
-App\Error::register();
+Error::register();
 
 Swoole\Coroutine\run(function () {
+    Finder::in(__DIR__ . '/../src/Container')->exec('init', 'connect');
+    App\Container\DB::enableCoroutine();
+    App\Container\RDS::enableCoroutine();
+
     $grpc = Grpc::new();
     $host = '0.0.0.0';
     $port = 9502;
@@ -26,9 +32,6 @@ Swoole\Coroutine\run(function () {
         'open_http2_protocol' => true,
         'http_compression' => false,
     ]);
-
-    App\Container\DB::enableCoroutine();
-    App\Container\RDS::enableCoroutine();
 
     foreach ([SIGHUP, SIGINT, SIGTERM] as $signal) {
         Swoole\Process::signal($signal, function () use ($server) {

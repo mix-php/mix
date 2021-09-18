@@ -12,19 +12,21 @@ class DB
      */
     static private $instance;
 
+    public static function connect(): void
+    {
+        $dsn = $_ENV['DATABASE_DSN'];
+        $username = $_ENV['DATABASE_USERNAME'];
+        $password = $_ENV['DATABASE_PASSWORD'];
+        $db = new Database($dsn, $username, $password);
+        APP_DEBUG and $db->setLogger(new DBLogger());
+        self::$instance = $db;
+    }
+
     /**
      * @return Database
      */
     public static function instance(): Database
     {
-        if (!isset(self::$instance)) {
-            $dsn = $_ENV['DATABASE_DSN'];
-            $username = $_ENV['DATABASE_USERNAME'];
-            $password = $_ENV['DATABASE_PASSWORD'];
-            $db = new Database($dsn, $username, $password);
-            APP_DEBUG and $db->setLogger(new DBLogger());
-            self::$instance = $db;
-        }
         return self::$instance;
     }
 

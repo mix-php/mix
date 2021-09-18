@@ -14,14 +14,16 @@ class Upgrader
      */
     static private $instance;
 
+    public static function init(): void
+    {
+        self::$instance = new \Mix\WebSocket\Upgrader();
+    }
+
     /**
      * @return \Mix\WebSocket\Upgrader
      */
     public static function instance(): \Mix\WebSocket\Upgrader
     {
-        if (!isset(self::$instance)) {
-            self::$instance = new \Mix\WebSocket\Upgrader();
-        }
         return self::$instance;
     }
 

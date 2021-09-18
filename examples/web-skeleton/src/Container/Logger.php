@@ -15,19 +15,21 @@ class Logger implements HandlerInterface
 
     static private $instance;
 
+    public static function init(): void
+    {
+        $logger = new \Monolog\Logger('MIX');
+        $rotatingFileHandler = new RotatingFileHandler(__DIR__ . '/../../runtime/logs/mix.log', 7);
+        $rotatingFileHandler->setFormatter(new LineFormatter("[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n", 'Y-m-d H:i:s.u'));
+        $logger->pushHandler($rotatingFileHandler);
+        $logger->pushHandler(new Logger());
+        self::$instance = $logger;
+    }
+
     /**
      * @return \Monolog\Logger
      */
     public static function instance(): \Monolog\Logger
     {
-        if (!isset(self::$instance)) {
-            $logger = new \Monolog\Logger('MIX');
-            $rotatingFileHandler = new RotatingFileHandler(__DIR__ . '/../../runtime/logs/mix.log', 7);
-            $rotatingFileHandler->setFormatter(new LineFormatter("[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n", 'Y-m-d H:i:s.u'));
-            $logger->pushHandler($rotatingFileHandler);
-            $logger->pushHandler(new Logger());
-            self::$instance = $logger;
-        }
         return self::$instance;
     }
 
