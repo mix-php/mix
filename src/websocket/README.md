@@ -89,7 +89,7 @@ $upgrader->closeAll();
 
 ## 客户端 Client
 
-可以连接任何 websocket v13 的服务器
+可以连接任何 websocket v13 的服务器，**注意：请提前预加载客户端，不要在并发请求中实例化**
 
 ```php
 $cli   = Mix\WebSocket\Client('ws://127.0.0.1:9502/websocket');

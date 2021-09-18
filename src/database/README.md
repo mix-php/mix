@@ -22,6 +22,8 @@ composer require mix/database
 
 ## Quick start
 
+注意：协程环境中，请提前预加载客户端，不要在并发请求中实例化
+
 ```php
 $db = new Mix\Database\Database('mysql:host=127.0.0.1;port=3306;charset=utf8;dbname=test', 'username', 'password');
 ```

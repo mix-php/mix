@@ -22,6 +22,8 @@ composer require mix/redis
 
 ## Quick start
 
+注意：协程环境中，请提前预加载客户端，不要在并发请求中实例化
+
 ```php
 $rds = new Mix\Redis\Redis('127.0.0.1', 6379, 'password', 0);
 

@@ -179,7 +179,7 @@ Swoole\Coroutine\run(function () use ($grpc) {
 
 ## 客户端调用一个 gRPC 服务
 
-通过 IP 端口调用 gRPC 服务
+通过 IP 端口调用 gRPC 服务，**注意：请提前预加载客户端，不要在并发请求中实例化**
 
 ```php
 Swoole\Coroutine\run(function () {
