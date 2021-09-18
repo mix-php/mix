@@ -30,6 +30,9 @@ class Logger implements HandlerInterface
      */
     public static function instance(): \Monolog\Logger
     {
+        if (!isset(self::$instance)) {
+            static::init();
+        }
         return self::$instance;
     }
 

@@ -19,7 +19,7 @@ define("APP_DEBUG", env('APP_DEBUG'));
 Error::register();
 
 Swoole\Coroutine\run(function () {
-    Finder::in(__DIR__ . '/../src/Container')->exec('init', 'connect');
+    Finder::in(__DIR__ . '/../src/Container')->exec('init');
     App\Container\DB::enableCoroutine();
     App\Container\RDS::enableCoroutine();
 

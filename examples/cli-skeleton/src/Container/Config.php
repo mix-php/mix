@@ -24,6 +24,9 @@ class Config
      */
     public static function instance(): \Noodlehaus\Config
     {
+        if (!isset(self::$instance)) {
+            static::init();
+        }
         return self::$instance;
     }
 

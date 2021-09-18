@@ -17,7 +17,6 @@ Dotenv::createUnsafeImmutable(__DIR__ . '/../', '.env')->load();
 define("APP_DEBUG", env('APP_DEBUG'));
 
 Error::register();
-Finder::in(__DIR__ . '/../src/Container')->exec('init');
 
 /**
  * 多进程默认开启了协程
@@ -32,7 +31,7 @@ $http->on('Request', $vega->handler());
 $http->on('WorkerStart', function ($server, $workerId) {
     // swoole 协程不支持 set_exception_handler 需要手动捕获异常
     try {
-        Finder::in(__DIR__ . '/../src/Container')->exec('connect');
+        Finder::in(__DIR__ . '/../src/Container')->exec('init');
         App\Container\DB::enableCoroutine();
         App\Container\RDS::enableCoroutine();
     } catch (\Throwable $ex) {

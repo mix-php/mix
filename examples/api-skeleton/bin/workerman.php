@@ -17,13 +17,12 @@ Dotenv::createUnsafeImmutable(__DIR__ . '/../', '.env')->load();
 define("APP_DEBUG", env('APP_DEBUG'));
 
 Error::register();
-Finder::in(__DIR__ . '/../src/Container')->exec('init');
 
 $vega = Vega::new();
 $addr = 'http://0.0.0.0:2345';
 $http = new Workerman\Worker($addr);
 $http->onWorkerStart = function ($worker) {
-    Finder::in(__DIR__ . '/../src/Container')->exec('connect');
+    Finder::in(__DIR__ . '/../src/Container')->exec('init');
 };
 $http->onMessage = $vega->handler();
 $http->count = 4;

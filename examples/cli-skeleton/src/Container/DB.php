@@ -12,7 +12,7 @@ class DB
      */
     static private $instance;
 
-    public static function connect(): void
+    public static function init(): void
     {
         $dsn = $_ENV['DATABASE_DSN'];
         $username = $_ENV['DATABASE_USERNAME'];
@@ -27,6 +27,9 @@ class DB
      */
     public static function instance(): Database
     {
+        if (!isset(self::$instance)) {
+            static::init();
+        }
         return self::$instance;
     }
 

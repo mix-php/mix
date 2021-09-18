@@ -24,6 +24,9 @@ class Upgrader
      */
     public static function instance(): \Mix\WebSocket\Upgrader
     {
+        if (!isset(self::$instance)) {
+            static::init();
+        }
         return self::$instance;
     }
 

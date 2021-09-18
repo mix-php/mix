@@ -12,7 +12,7 @@ class RDS
      */
     static private $instance;
 
-    public static function connect(): void
+    public static function init(): void
     {
         $host = $_ENV['REDIS_HOST'];
         $port = $_ENV['REDIS_PORT'];
@@ -28,6 +28,9 @@ class RDS
      */
     public static function instance(): Redis
     {
+        if (!isset(self::$instance)) {
+            static::init();
+        }
         return self::$instance;
     }
 
