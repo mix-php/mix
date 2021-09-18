@@ -37,11 +37,6 @@ class Client
     protected $client;
 
     /**
-     * @var \Swoole\Coroutine\Channel
-     */
-    protected $channel;
-
-    /**
      * @var array
      */
     protected $channels = [];
@@ -71,7 +66,6 @@ class Client
         $this->timeout = $timeout;
         $this->connect();
 
-        $this->channel = new \Swoole\Coroutine\Channel(100);
         go(function () {
             while (true) {
                 $response = $this->client->recv(-1);
@@ -114,7 +108,6 @@ class Client
     {
         $this->closed = true;
         $this->client->close();
-        $this->channel->close();
     }
 
     /**
