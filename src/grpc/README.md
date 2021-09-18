@@ -190,7 +190,7 @@ Swoole\Coroutine\run(function () {
     $ctx = new Mix\Grpc\Context();
     $response = $say->Hello($ctx, $request);
     var_dump($response->getMsg());
-    $client->close();
+    $client->close(); // 使用完必须关闭，否则会残留在内存
 });
 ```
 
