@@ -14,10 +14,28 @@ composer require mix/init
 
 ## Quick start
 
-- 从目录执行
+定义类的静态初始化方法
+
+```php
+class Example
+{
+    public static function init()
+    {
+        // do something
+    }
+}
+```
+
+从目录执行
 
 ```php
 Mix\Init\Finder::in('/path/classdir')->exec();
+```
+
+指定初始化方法名称
+
+```php
+Mix\Init\Finder::in('/path/classdir')->exec('init');
 ```
 
 ## License
