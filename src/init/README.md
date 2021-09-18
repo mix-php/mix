@@ -14,6 +14,8 @@ composer require mix/init
 
 ## Quick start
 
+- 从目录执行
+
 ```php
 Mix\Init\Finder::in('/path/classdir')->exec();
 ```
