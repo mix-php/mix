@@ -11,7 +11,7 @@ use App\Error;
 use App\Container\Logger;
 use App\Vega;
 use Dotenv\Dotenv;
-use Mix\Init\Finder;
+use Mix\Init\StaticInit;
 
 Dotenv::createUnsafeImmutable(__DIR__ . '/../', '.env')->load();
 define("APP_DEBUG", env('APP_DEBUG'));
@@ -19,7 +19,7 @@ define("APP_DEBUG", env('APP_DEBUG'));
 Error::register();
 
 Swoole\Coroutine\run(function () {
-    Finder::in(__DIR__ . '/../src/Container')->exec('init');
+    StaticInit::finder(__DIR__ . '/../src/Container')->exec('init');
     App\Container\DB::enableCoroutine();
     App\Container\RDS::enableCoroutine();
 

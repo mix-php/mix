@@ -24,15 +24,6 @@ class Finder
     }
 
     /**
-     * @param string ...$paths
-     * @return Finder
-     */
-    public static function in(string ...$paths): Finder
-    {
-        return new Finder(...$paths);
-    }
-
-    /**
      * @param string ...$methods
      * @throws \ReflectionException
      */

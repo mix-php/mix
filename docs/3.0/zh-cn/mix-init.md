@@ -29,5 +29,5 @@ class Example
 > 可以通过定制方法名称，达到在不同的场景初始化的目的
 
 ```php
-Mix\Init\Finder::in('/path/classdir')->exec('init');
+Mix\Init\StaticInit::finder('/path/classdir')->exec('init');
 ```
