@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 package php.micro.grpc.greeter;
+option go_package = "./;protos";
 
 service Say {
 	rpc Hello(Request) returns (Response) {}
