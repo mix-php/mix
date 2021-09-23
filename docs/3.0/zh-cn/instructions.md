@@ -7,7 +7,7 @@
 ```php
 class DB
 {
-    static private $instance;
+    private static $instance;
     
     public static function instance(): Database
     {

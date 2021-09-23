@@ -22,7 +22,7 @@ composer require mix/database
 
 ## Quick start
 
-注意：协程环境中，请提前预加载客户端，不要在并发请求中实例化
+注意：[协程环境中，不可在并发请求中使用单例](https://openmix.org/mix-php/docs/3.0/#/zh-cn/instructions?id=%e5%8d%8f%e7%a8%8b%e5%8d%95%e4%be%8b%e5%ae%9e%e4%be%8b%e5%8c%96)
 
 ```php
 $db = new Mix\Database\Database('mysql:host=127.0.0.1;port=3306;charset=utf8;dbname=test', 'username', 'password');
