@@ -19,7 +19,7 @@ class DB
 }
 ```
 
-我们提供了 [mix/init](zh-cn/mix-init.md) 库帮助自动化预加载，你只需要在骨架目录 `src/Container` 定义的单例 class 增加一个 `init` 静态方法，在入口文件中有对应代码会在 `server` 启动前先执行该初始化方法，由于实例化是在并发请求之前就已经完成，因此就避免了上面的问题。
+我们提供了 [mix/init](zh-cn/mix-init.md) 库帮助自动化预加载，你只需要在骨架目录 `src/Container` 定义的单例 class 增加一个 `init` 静态方法，在入口文件中有对应代码会在 `server` 启动前先执行该初始化方法提前预加载对象，由于实例化是在并发请求之前就已经完成，因此就避免了上面的问题。
 
 - `src/Container` 数据库单例
 
@@ -50,7 +50,7 @@ class DB
 }
 ```
 
-- 入口文件执行初始化，提前预加载对象
+- 入口文件默认已经包含以下代码
 
 ```php
 StaticInit::finder(__DIR__ . '/../src/Container')->exec('init');
