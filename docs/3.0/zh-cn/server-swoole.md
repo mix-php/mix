@@ -19,14 +19,16 @@ ini_set('memory_limit', '1G');
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use App\Error;
 use App\Container\Logger;
 use App\Vega;
 use Dotenv\Dotenv;
+use Mix\Init\StaticInit;
 
 Dotenv::createUnsafeImmutable(__DIR__ . '/../', '.env')->load();
 define("APP_DEBUG", env('APP_DEBUG'));
 
-App\Error::register();
+Error::register();
 
 /**
  * 多进程默认开启了协程
@@ -41,10 +43,11 @@ $http->on('Request', $vega->handler());
 $http->on('WorkerStart', function ($server, $workerId) {
     // swoole 协程不支持 set_exception_handler 需要手动捕获异常
     try {
+        StaticInit::finder(__DIR__ . '/../src/Container')->exec('init');
         App\Container\DB::enableCoroutine();
         App\Container\RDS::enableCoroutine();
     } catch (\Throwable $ex) {
-        App\Error::handle($ex);
+        Error::handle($ex);
     }
 });
 $http->set([
