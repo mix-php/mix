@@ -46,27 +46,6 @@ composer run-script --timeout=0 swooleco:start
 php bin/swoole.php start
 ```
 
-## 部署
-
-线上部署启动时，修改 `shell/server.sh` 脚本中的绝对路径和参数
-
-```
-php=/usr/local/bin/php
-file=/project/bin/swoole.php
-cmd=start
-numprocs=1
-```
-
-启动管理
-
-```
-sh shell/server.sh start
-sh shell/server.sh stop
-sh shell/server.sh restart
-```
-
-gRPC 通常都是内部使用，使用内网 `SLB` 代理到服务器IP或者直接使用 IP:PORT 调用
-
 ## 编写一个 gRPC 接口
 
 首先修改根目录 `.env` 文件的数据库信息
@@ -164,6 +143,27 @@ Logger::instance()
 ```
 Config::instance()
 ```
+
+## 部署
+
+线上部署启动时，修改 `shell/server.sh` 脚本中的绝对路径和参数
+
+```
+php=/usr/local/bin/php
+file=/project/bin/swoole.php
+cmd=start
+numprocs=1
+```
+
+启动管理
+
+```
+sh shell/server.sh start
+sh shell/server.sh stop
+sh shell/server.sh restart
+```
+
+gRPC 通常都是内部使用，使用内网 `SLB` 代理到服务器IP或者直接使用 IP:PORT 调用
 
 ## License
 

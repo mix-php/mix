@@ -39,36 +39,6 @@ composer run-script --timeout=0 swooleco:start
 php bin/swooleco.php start
 ```
 
-## 部署
-
-线上部署启动时，修改 `shell/server.sh` 脚本中的绝对路径和参数
-
-```
-php=/usr/local/bin/php
-file=/project/bin/swooleco.php
-cmd=start
-numprocs=1
-```
-
-启动管理
-
-```
-sh shell/server.sh start
-sh shell/server.sh stop
-sh shell/server.sh restart
-```
-
-使用 `nginx` 或者 `SLB` 代理到服务器端口即可
-
-```
-location /websocket {
-    proxy_pass http://127.0.0.1:9502;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "Upgrade";
-}
-```
-
 ## 编写一个 WebSocket 服务
 
 首先修改根目录 `.env` 文件的数据库信息
@@ -236,6 +206,36 @@ Logger::instance()
 
 ```
 Config::instance()
+```
+
+## 部署
+
+线上部署启动时，修改 `shell/server.sh` 脚本中的绝对路径和参数
+
+```
+php=/usr/local/bin/php
+file=/project/bin/swooleco.php
+cmd=start
+numprocs=1
+```
+
+启动管理
+
+```
+sh shell/server.sh start
+sh shell/server.sh stop
+sh shell/server.sh restart
+```
+
+使用 `nginx` 或者 `SLB` 代理到服务器端口即可
+
+```
+location /websocket {
+    proxy_pass http://127.0.0.1:9502;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "Upgrade";
+}
 ```
 
 ## License
