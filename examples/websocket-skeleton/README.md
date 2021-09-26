@@ -163,13 +163,13 @@ class Session
 
 ```
 // 查找进程 PID
-ps -ef | grep swoole
+ps -ef | grep swooleco
 
 // 通过 PID 停止进程
 kill PID
 
 // 重新启动进程
-composer run-script swoole:start
+composer run-script swooleco:start
 ```
 
 使用测试工具测试
@@ -178,7 +178,7 @@ composer run-script swoole:start
 
 ## 如何使用 WebSocket 客户端
 
-- [mix-php/websocket#客户端-client](https://github.com/mix-php/websocket#%E5%AE%A2%E6%88%B7%E7%AB%AF-client)
+- [mix/websocket#客户端-client](https://github.com/mix-php/websocket#%E5%AE%A2%E6%88%B7%E7%AB%AF-client)
 
 ## 使用容器中的对象
 
