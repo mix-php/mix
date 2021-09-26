@@ -13,7 +13,7 @@ use Monolog\Handler\RotatingFileHandler;
 class Logger implements HandlerInterface
 {
 
-    static private $instance;
+    private static $instance;
 
     public static function init(): void
     {

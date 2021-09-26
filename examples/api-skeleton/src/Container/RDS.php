@@ -10,7 +10,7 @@ class RDS
     /**
      * @var Redis
      */
-    static private $instance;
+    private static $instance;
 
     public static function init(): void
     {

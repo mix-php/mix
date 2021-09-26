@@ -12,7 +12,7 @@ class Config
     /**
      * @var \Noodlehaus\Config
      */
-    static private $instance;
+    private static $instance;
 
     public static function init(): void
     {

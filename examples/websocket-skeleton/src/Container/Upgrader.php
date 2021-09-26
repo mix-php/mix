@@ -12,7 +12,7 @@ class Upgrader
     /**
      * @var \Mix\WebSocket\Upgrader
      */
-    static private $instance;
+    private static $instance;
 
     public static function init(): void
     {

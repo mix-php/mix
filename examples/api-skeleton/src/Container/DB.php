@@ -10,7 +10,7 @@ class DB
     /**
      * @var Database
      */
-    static private $instance;
+    private static $instance;
 
     public static function init(): void
     {

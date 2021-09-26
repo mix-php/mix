@@ -14,7 +14,7 @@ class Error
     /**
      * @var Error
      */
-    static private $instance;
+    private static $instance;
 
     public static function register(): void
     {
