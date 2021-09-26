@@ -12,6 +12,7 @@
   * [编写 Web 页面](zh-cn/write-web.md)
   * [编写 WebSocket 服务](zh-cn/write-websocket.md)
   * [编写 gRPC 接口](zh-cn/write-grpc.md)
+  * [常见问题](zh-cn/faq.md)
   
 * 服务器
 
