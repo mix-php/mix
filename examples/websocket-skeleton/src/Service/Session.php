@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Container\Logger;
 use App\Handler\Hello;
 use Mix\WebSocket\Connection;
+use Mix\WebSocket\Exception\CloseFrameException;
 use Swoole\Coroutine\Channel;
 
 class Session
@@ -46,11 +47,12 @@ class Session
                 try {
                     $frame = $this->conn->readMessage();
                 } catch (\Throwable $ex) {
-                    // 忽略一些异常日志
-                    if (!in_array($ex->getMessage(), ['Active closure of the user', 'Connection reset by peer'])) {
-                        Logger::instance()->error(sprintf('ReadMessage: %s', $ex->getMessage()));
-                    }
                     $this->stop();
+                    // 忽略一些异常日志
+                    if ($ex instanceof CloseFrameException) {
+                        return;
+                    }
+                    Logger::instance()->error(sprintf('ReadMessage: %s: %s', get_class($ex), $ex->getMessage()));
                     return;
                 }
                 $message = $frame->data;

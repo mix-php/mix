@@ -25,12 +25,12 @@ class Upgrader
     {
         // Handshake verification
         if ($request->getHeaderLine('connection') !== 'Upgrade' || $request->getHeaderLine('upgrade') !== 'websocket') {
-            throw new UpgradeException('Handshake failed, invalid WebSocket request');
+            throw new UpgradeException('Handshake failed, invalid websocket request');
         }
         $secWebSocketKey = $request->getHeaderLine('sec-websocket-key');
         $patten = '#^[+/0-9A-Za-z]{21}[AQgw]==$#';
         if ($request->getHeaderLine('sec-websocket-version') != 13 || 0 === preg_match($patten, $secWebSocketKey) || 16 !== strlen(base64_decode($secWebSocketKey))) {
-            throw new UpgradeException('Handshake failed, invalid WebSocket protocol v13');
+            throw new UpgradeException('Handshake failed, invalid websocket protocol v13');
         }
 
         // Upgrade
@@ -57,12 +57,12 @@ class Upgrader
     {
         // Handshake verification
         if (($request->header['connection'] ?? '') !== 'Upgrade' || ($request->header['upgrade'] ?? '') !== 'websocket') {
-            throw new UpgradeException('Handshake failed, invalid WebSocket request');
+            throw new UpgradeException('Handshake failed, invalid websocket request');
         }
         $secWebSocketKey = $request->header['sec-websocket-key'] ?? '';
         $patten = '#^[+/0-9A-Za-z]{21}[AQgw]==$#';
         if (($request->header['sec-websocket-version'] ?? '') != 13 || 0 === preg_match($patten, $secWebSocketKey) || 16 !== strlen(base64_decode($secWebSocketKey))) {
-            throw new UpgradeException('Handshake failed, invalid WebSocket protocol v13');
+            throw new UpgradeException('Handshake failed, invalid websocket protocol v13');
         }
 
         // Upgrade

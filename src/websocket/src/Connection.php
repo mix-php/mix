@@ -54,9 +54,11 @@ class Connection
         $this->receiving = false;
         if (!$frame) { // 接收失败
             $this->close(); // 需要移除管理器内的连接，所以还要 close
+            // 连接关闭返回空字符串
             if ($frame === '') {
                 throw new ReadMessageException('Connection is closed');
             }
+            // 失败返回 false，请使用 swoole_last_error() 获取错误码
             $errCode = swoole_last_error();
             if ($errCode != 0) {
                 $errMsg = swoole_strerror($errCode, 9);
@@ -66,7 +68,8 @@ class Connection
         if ($frame instanceof \Swoole\WebSocket\CloseFrame) { // CloseFrame
             $this->close(); // 需要移除管理器内的连接，所以还要 close
             $errCode = $frame->code;
-            $errMsg = $frame->reason;
+            // Active closure of the user
+            $errMsg = $frame->reason ?: 'Reason is empty';
             throw new CloseFrameException($errMsg, $errCode);
         }
         return $frame;
