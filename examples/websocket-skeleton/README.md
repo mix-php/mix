@@ -174,7 +174,7 @@ composer run-script swoole:start
 
 使用测试工具测试
 
-- [WEBSOCKET 在线测试工具](http://www.easyswoole.com/wstool.html)
+- [WEBSOCKET 在线测试工具](http://www.easyswoole.com/wstool.html) `ws://127.0.0.1:9502/websocket`
 
 ## 如何使用 WebSocket 客户端
 
