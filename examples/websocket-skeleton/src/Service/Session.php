@@ -6,6 +6,7 @@ use App\Container\Logger;
 use App\Handler\Hello;
 use Mix\WebSocket\Connection;
 use Mix\WebSocket\Exception\CloseFrameException;
+use Mix\WebSocket\Exception\ReadMessageException;
 use Swoole\Coroutine\Channel;
 
 class Session
@@ -50,6 +51,9 @@ class Session
                     $this->stop();
                     // 忽略一些异常日志
                     if ($ex instanceof CloseFrameException) {
+                        return;
+                    }
+                    if ($ex instanceof ReadMessageException && $ex->getMessage() == 'Connection reset by peer') {
                         return;
                     }
                     Logger::instance()->error(sprintf('ReadMessage: %s: %s', get_class($ex), $ex->getMessage()));
