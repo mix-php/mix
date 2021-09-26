@@ -9,7 +9,6 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use App\Error;
 use App\Container\Logger;
-use App\Container\Upgrader;
 use App\Vega;
 use Dotenv\Dotenv;
 use Mix\Init\StaticInit;
@@ -34,7 +33,8 @@ Swoole\Coroutine\run(function () {
         Swoole\Process::signal($signal, function () use ($server) {
             Logger::instance()->info('Shutdown swoole coroutine server');
             $server->shutdown();
-            Upgrader::instance()->closeAll();
+            App\Container\Upgrader::instance()->closeAll();
+            App\Container\Shutdown::trigger();
         });
     }
 

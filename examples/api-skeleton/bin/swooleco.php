@@ -33,6 +33,7 @@ Swoole\Coroutine\run(function () {
         Swoole\Process::signal($signal, function () use ($server) {
             Logger::instance()->info('Shutdown swoole coroutine server');
             $server->shutdown();
+            App\Container\Shutdown::trigger();
         });
     }
 
