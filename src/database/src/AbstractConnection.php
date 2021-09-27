@@ -78,6 +78,7 @@ abstract class AbstractConnection implements ConnectionInterface
     /**
      * 因为协程模式下每次执行完，Driver 会被回收，因此不允许复用 Connection，必须每次都从 Database->borrow()
      * 为了保持与同步模式的兼容性，因此限制 Connection 不可多次执行
+     * 事务在 commit rollback __destruct 之前可以多次执行
      * @var bool
      */
     protected $executed = false;
@@ -198,7 +199,11 @@ abstract class AbstractConnection implements ConnectionInterface
         } catch (\Throwable $ex) {
             throw $ex;
         } finally {
-            $this->executed = true;
+            // 只可执行一次
+            // 事务除外，事务在 commit rollback __destruct 中处理
+            if (!$this instanceof Transaction) {
+                $this->executed = true;
+            }
 
             // 记录执行时间
             $time = round((microtime(true) - $beginTime) * 1000, 2);
@@ -239,6 +244,8 @@ abstract class AbstractConnection implements ConnectionInterface
             // debug
             $debug = $this->debug;
             $debug and $debug($this);
+
+            $this->clear();
         }
 
         // 执行完立即回收
@@ -250,6 +257,17 @@ abstract class AbstractConnection implements ConnectionInterface
         }
 
         return $this;
+    }
+
+    /**
+     * 事务还是要复用 Connection 清理依然需要
+     */
+    protected function clear()
+    {
+        $this->sql = '';
+        $this->params = [];
+        $this->values = [];
+        $this->debug = null;
     }
 
     protected function prepare()

@@ -9,6 +9,8 @@ namespace Mix\Database;
 class Connection extends AbstractConnection
 {
 
+    protected $exceptional = false;
+
     public function queryOne(int $fetchStyle = null)
     {
         return $this->call(__FUNCTION__, func_get_args());
@@ -56,12 +58,10 @@ class Connection extends AbstractConnection
                 // 重新执行方法
                 return $this->call($name, $arguments);
             } else {
-                // 丢弃连接
-                // 有可能多次抛出异常，需要判断是否为 EmptyDriver
-                if ($this->driver && !$this->driver instanceof EmptyDriver) {
-                    $this->driver->__discard();
-                    $this->driver = new EmptyDriver();
-                }
+                // 不可在这里处理丢弃连接，会影响用户 try/catch 事务处理业务逻辑
+                // 会导致 commit rollback 时为 EmptyDriver
+                $this->exceptional = true;
+
                 // 抛出其他异常
                 throw $ex;
             }
@@ -70,12 +70,13 @@ class Connection extends AbstractConnection
 
     public function __destruct()
     {
+        $this->executed = true;
+
+        // 回收
         if (!$this->driver || $this->driver instanceof EmptyDriver) {
             return;
         }
-
-        // 回收
-        if ($this->inTransaction()) {
+        if ($this->exceptional || $this->inTransaction()) {
             $this->driver->__discard();
             $this->driver = new EmptyDriver();
             return;
