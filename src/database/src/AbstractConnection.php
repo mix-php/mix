@@ -76,6 +76,13 @@ abstract class AbstractConnection implements ConnectionInterface
     protected $rowCount;
 
     /**
+     * 因为协程模式下每次执行完，Driver 会被回收，因此不允许复用 Connection，必须每次都从 Database->borrow()
+     * 为了保持与同步模式的兼容性，因此限制 Connection 不可多次执行
+     * @var bool
+     */
+    protected $executed = false;
+
+    /**
      * AbstractConnection constructor.
      * @param Driver $driver
      * @param LoggerInterface|null $logger
@@ -176,8 +183,11 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     public function execute(): ConnectionInterface
     {
-        $beginTime = microtime(true);
+        if ($this->executed) {
+            throw new \RuntimeException('The connection cannot be executed repeatedly, please use the database call');
+        }
 
+        $beginTime = microtime(true);
         try {
             $this->prepare();
             $success = $this->statement->execute();
@@ -188,6 +198,8 @@ abstract class AbstractConnection implements ConnectionInterface
         } catch (\Throwable $ex) {
             throw $ex;
         } finally {
+            $this->executed = true;
+
             // 记录执行时间
             $time = round((microtime(true) - $beginTime) * 1000, 2);
             $this->sqlData[3] = $time;
