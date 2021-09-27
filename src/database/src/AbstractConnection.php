@@ -184,7 +184,7 @@ abstract class AbstractConnection implements ConnectionInterface
     public function execute(): ConnectionInterface
     {
         if ($this->executed) {
-            throw new \RuntimeException('The Connection cannot be executed repeatedly, please use the Database call');
+            throw new \RuntimeException('The Connection::class cannot be executed repeatedly, please use the Database::class call');
         }
 
         $beginTime = microtime(true);
