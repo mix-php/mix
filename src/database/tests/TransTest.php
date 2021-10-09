@@ -6,12 +6,25 @@ use PHPUnit\Framework\TestCase;
 final class TransTest extends TestCase
 {
 
-    // 事务内，因为复用连接，lastInsertId, rowCount 值为第一个查询的值
+    // 没有pool，因为复用连接，lastInsertId, rowCount 值为第一个查询的值
     public function testLastInsertIdRowCount(): void
     {
-        // 没有pool
         $db = db();
 
+        // 没有pool + 非事务
+        $data = [
+            'name' => 'foo8',
+            'balance' => 8,
+        ];
+        $id1 = $db->insert('users', $data)->lastInsertId();
+        $id2 = $db->insert('users', $data)->lastInsertId();
+        $this->assertNotEquals($id1, $id2);
+
+        $count1 = $db->table('users')->where('id = ?', $id1)->update('balance', new Mix\Database\Expr('balance + ?', 1))->rowCount();
+        $count2 = $db->table('users')->update('balance', new Mix\Database\Expr('balance + ?', 1))->rowCount();
+        $this->assertNotEquals($count1, $count2);
+
+        // 没有pool + 事务
         $tx = $db->beginTransaction();
         $data = [
             'name' => 'foo8',
@@ -26,10 +39,10 @@ final class TransTest extends TestCase
         $this->assertNotEquals($count1, $count2);
     }
 
-    // 事务内，因为复用连接，lastInsertId, rowCount 值为第一个查询的值
+    // 有pool，因为复用连接，lastInsertId, rowCount 值为第一个查询的值
     public function testPoolLastInsertIdRowCount(): void
     {
-        // pool 非事务
+        // 有pool + 非事务
         swoole_co_run(function () {
             $pool = pool();
 
@@ -46,7 +59,7 @@ final class TransTest extends TestCase
             $this->assertNotEquals($count1, $count2);
         });
 
-        // pool 事务
+        // 有pool + 事务
         swoole_co_run(function () {
             $pool = pool();
 
