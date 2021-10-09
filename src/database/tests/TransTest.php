@@ -6,12 +6,11 @@ use PHPUnit\Framework\TestCase;
 final class TransTest extends TestCase
 {
 
-    public function test(): void
+    // 事务多次执行 bind params 残留的问题
+    public function testBindParams(): void
     {
-        $_this = $this;
         $db = db();
 
-        // 事务多次执行 bind params 残留的问题
         // PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens
         $tx = $db->beginTransaction();
         try {
@@ -31,8 +30,13 @@ final class TransTest extends TestCase
             $tx->rollback();
             $this->assertContains("Field 'balance' doesn't have a default value", $ex->getMessage());
         }
+    }
 
-        // 事务异常
+    // 事务异常
+    public function testRollback(): void
+    {
+        $db = db();
+
         $tx = $db->beginTransaction();
         try {
             $data = [
@@ -46,6 +50,13 @@ final class TransTest extends TestCase
             $tx->rollback();
             $this->assertTrue(true);
         }
+    }
+
+    // 自动事务
+    public function testAuto(): void
+    {
+        $_this = $this;
+        $db = db();
 
         $db->transaction(function (Mix\Database\Transaction $tx) use ($_this) {
             $data = [
