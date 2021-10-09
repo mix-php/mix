@@ -264,10 +264,12 @@ abstract class AbstractConnection implements ConnectionInterface
      */
     protected function clear()
     {
+        $this->debug = null;
         $this->sql = '';
         $this->params = [];
         $this->values = [];
-        $this->debug = null;
+        $this->lastInsertId = null;
+        $this->rowCount = null;
     }
 
     protected function prepare()
