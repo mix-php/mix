@@ -210,6 +210,9 @@ abstract class AbstractConnection implements ConnectionInterface
             $this->sqlData[3] = $time;
 
             // 缓存常用数据，让资源可以提前回收
+            // 包含 pool 并且在非事务的情况下才执行缓存，并且提前归还连接到池，提高并发性能并且降低死锁概率
+            isset($this->lastInsertId) and $this->lastInsertId = null;
+            isset($this->rowCount) and $this->rowCount = null;
             if (isset($ex)) {
                 // 有异常: 使用默认值, 不调用 driver, statement
                 $this->lastInsertId = '';
@@ -268,8 +271,6 @@ abstract class AbstractConnection implements ConnectionInterface
         $this->sql = '';
         $this->params = [];
         $this->values = [];
-        $this->lastInsertId = null;
-        $this->rowCount = null;
     }
 
     protected function prepare()
