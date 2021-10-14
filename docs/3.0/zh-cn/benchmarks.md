@@ -13,6 +13,6 @@ TechEmpower 的测试比较科学，包含 SQL 查询、JSON 序列化等各种�
 这个测试只包含路由与 echo 测试，因此只能证明基础平台协议解析与框架路由的性能。
 
 - [Web Frameworks Benchmark](https://web-frameworks-benchmark.netlify.app/result?l=php)
-- 由于这个测试的规则特性，很多框架采用 TCP 直接解析请求参数、TCP 直接发送 HTTP 协议字符串的方式投机，MixPHP 没有这么做，性能依然高于流行的大部分其他框架。
+- 由于这个测试的规则特性，有些框架采用 TCP 直接解析请求参数、TCP 直接发送 HTTP 协议字符串的方式投机，MixPHP 没有这么做，性能依然高于流行的大部分其他框架。
 
 ![web-frameworks-benchmark.png](images/web-frameworks-benchmark.png)
