@@ -55,6 +55,7 @@ final class WhereTest extends TestCase
         $db = db();
         $_this = $this;
 
+        // 全部都是in
         $db->table('users')
             ->where('id IN (?) or id IN (?)', [1, 2], [3, 4])
             ->debug(function (ConnectionInterface $conn) use ($_this) {
@@ -62,6 +63,28 @@ final class WhereTest extends TestCase
                 $sql = "SELECT * FROM users WHERE id IN (1,2) or id IN (3,4)";
                 $_this->assertEquals($log['sql'], $sql);
                 $_this->assertEquals($log['bindings'], []);
+            })
+            ->get();
+
+        // 包含不是in的条件，并且in位置在前面
+        $db->table('users')
+            ->where('id IN (?) or id = ?', [1, 2], 3)
+            ->debug(function (ConnectionInterface $conn) use ($_this) {
+                $log = $conn->queryLog();
+                $sql = "SELECT * FROM users WHERE id IN (1,2) or id = ?";
+                $_this->assertEquals($log['sql'], $sql);
+                $_this->assertEquals($log['bindings'], [3]);
+            })
+            ->get();
+
+        // 包含不是in的条件，并且in位置在后面
+        $db->table('users')
+            ->where('id = ? or id IN (?)', 3, [1, 2])
+            ->debug(function (ConnectionInterface $conn) use ($_this) {
+                $log = $conn->queryLog();
+                $sql = "SELECT * FROM users WHERE id = ? or id IN (1,2)";
+                $_this->assertEquals($log['sql'], $sql);
+                $_this->assertEquals($log['bindings'], [3]);
             })
             ->get();
     }
