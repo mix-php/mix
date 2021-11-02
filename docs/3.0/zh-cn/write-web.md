@@ -59,17 +59,17 @@ php bin/swoole.php start
 
 ## 编写一个 Web 页面
 
-首先修改根目录 `.env` 文件的数据库信息
+**请先仔细阅读以下章节的内容，帮助理解下面的源码**
 
-然后在 `routes/index.php` 定义一个新的路由
+- 如何使用路由配置、参数获取、响应处理、上传文件、静态文件处理、中间件等：[mix/vega](zh-cn/mix-vega.md)
+
+首先修改根目录 `.env` 文件的数据库信息，然后在 `routes/index.php` 定义一个新的路由
 
 ```php
 $vega->handle('/', [new Hello(), 'index'])->methods('GET');
 ```
 
 路由里使用了 `Hello` 控制器，我们需要创建他
-
-- 如何配置路由：[mix/vega](zh-cn/mix-vega.md?id=路由配置)
 
 ```php
 <?php

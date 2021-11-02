@@ -24,7 +24,7 @@
 
 * 独立模块
 
-  * [mix/vega](zh-cn/mix-vega.md)
+  * [mix/vega [必读]](zh-cn/mix-vega.md)
   * [mix/database](zh-cn/mix-database.md)
   * [mix/redis](zh-cn/mix-redis.md)
   * [mix/redis-subscriber](zh-cn/mix-redis-subscriber.md)

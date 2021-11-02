@@ -48,9 +48,11 @@ php bin/swoole.php start
 
 ## 编写一个 gRPC 接口
 
-首先修改根目录 `.env` 文件的数据库信息
+**请先仔细阅读以下章节的内容，帮助理解下面的源码**
 
-然后在 `proto` 目录创建 `greeter.proto` 文件，并根据 [使用说明](https://github.com/mix-php/grpc#%E9%80%9A%E8%BF%87-proto-%E7%94%9F%E6%88%90-php-%E4%BB%A3%E7%A0%81) 将 .proto 文件生成为 PHP 代码
+- 如何使用gRPC：[mix/grpc](zh-cn/mix-grpc.md)
+
+首先修改根目录 `.env` 文件的数据库信息，然后在 `proto` 目录创建 `greeter.proto` 文件，并根据 [使用说明](https://github.com/mix-php/grpc#%E9%80%9A%E8%BF%87-proto-%E7%94%9F%E6%88%90-php-%E4%BB%A3%E7%A0%81) 将 .proto 文件生成为 PHP 代码
 
 ```
 protoc --php_out=. --mix_out=. greeter.proto
@@ -114,7 +116,7 @@ composer run-script swoole:start
 
 ## 如何使用 gRPC 客户端
 
-- [mix/grpc#客户端调用一个 gRPC 服务](https://gitee.com/mix-php/mix/tree/master/src/grpc#%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B0%83%E7%94%A8%E4%B8%80%E4%B8%AA-grpc-%E6%9C%8D%E5%8A%A1)
+- [mix/grpc#客户端调用一个 gRPC 服务](zh-cn/mix-grpc?id=客户端调用一个-grpc-服务)
 
 ## 使用容器中的对象
 

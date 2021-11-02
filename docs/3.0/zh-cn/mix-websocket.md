@@ -25,7 +25,7 @@ composer require mix/websocket
 
 ## 服务器 Server
 
-在 [Mix Vega](https://github.com/mix-php/vega) 中使用 (只支持 Swoole 单进程协程)
+在 [Mix Vega](https://github.com/mix-php/vega) 中升级连接 (只支持 Swoole 单进程协程)
 
 ```php
 $upgrader = new Mix\WebSocket\Upgrader();
@@ -48,7 +48,7 @@ $vega->handle('/websocket', function (Mix\Vega\Context $ctx) use ($upgrader) {
 })->methods('GET');
 ```
 
-在 Swoole 原生中使用 (只支持单进程协程)
+在 Swoole 原生中升级连接 (只支持单进程协程)
 
 ```php
 Swoole\Coroutine\run(function () {

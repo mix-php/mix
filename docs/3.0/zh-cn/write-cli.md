@@ -35,9 +35,11 @@ php bin/cli.php clearcache
 
 ## 编写一个 CLI 程序
 
-首先我们在 `bin/cli.php` 入口文件中增加一个命令
+**请先仔细阅读以下章节的内容，帮助理解下面的源码**
 
-- 如何配置命令：[mix/cli](https://github.com/mix-php/cli#readme)
+- 如何使用命令行：[mix/cli](zh-cn/mix-cli.md)
+
+首先我们在 `bin/cli.php` 入口文件中增加一个命令
 
 ```php
 Cli::setName('app')->setVersion('0.0.0-alpha');

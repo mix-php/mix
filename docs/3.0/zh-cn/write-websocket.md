@@ -41,18 +41,18 @@ php bin/swooleco.php start
 
 ## 编写一个 WebSocket 服务
 
-首先修改根目录 `.env` 文件的数据库信息
+**请先仔细阅读以下章节的内容，帮助理解下面的源码**
 
-然后在 `routes/index.php` 定义一个新的路由
+- 如何使用路由配置、参数获取、响应处理、上传文件、静态文件处理、中间件等：[mix/vega](zh-cn/mix-vega.md)
+- 如何使用 WebSocket 升级器：[mix/websocket](zh-cn/mix-websocket)
+
+首先修改根目录 `.env` 文件的数据库信息，然后在 `routes/index.php` 定义一个新的路由
 
 ```php
 $vega->handle('/websocket', [new WebSocket(), 'index'])->methods('GET');
 ```
 
 路由里使用了 `WebSocket` 控制器，我们需要创建他
-
-- 如何配置路由：[mix/vega](zh-cn/mix-vega.md?id=路由配置)
-- 如何使用 WebSocket 升级器：[mix/websocket](https://github.com/mix-php/websocket#readme)
 
 ```php
 <?php
@@ -178,7 +178,7 @@ composer run-script swooleco:start
 
 ## 如何使用 WebSocket 客户端
 
-- [mix/websocket#客户端-client](https://gitee.com/mix-php/mix/tree/master/src/websocket#%E5%AE%A2%E6%88%B7%E7%AB%AF-client)
+- [mix/websocket#客户端-client](zh-cn/mix-websocket?id=客户端-client)
 
 ## 使用容器中的对象
 
