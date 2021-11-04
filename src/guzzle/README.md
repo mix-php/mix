@@ -1,4 +1,4 @@
-注意：Swoole 已经推出内置 [SWOOLE_HOOK_NATIVE_CURL](https://wiki.swoole.com/#/runtime?id=swoole_hook_native_curl)、[SWOOLE_HOOK_CURL](https://wiki.swoole.com/#/runtime?id=swoole_hook_curl) 功能，该库已经废弃，请使用官方提供的 Hook 功能。
+注意：Swoole 已经推出内置 [SWOOLE_HOOK_NATIVE_CURL](https://wiki.swoole.com/#/runtime?id=swoole_hook_native_curl)、[SWOOLE_HOOK_CURL](https://wiki.swoole.com/#/runtime?id=swoole_hook_curl) 功能，请使用官方提供的 Hook 功能，本项目将停止维护。
 
 ## Mix Guzzle
 
