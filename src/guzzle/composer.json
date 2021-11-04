@@ -17,7 +17,7 @@
     }
   ],
   "require": {
-    "guzzlehttp/guzzle": "^6.0",
+    "guzzlehttp/guzzle": ">=6.0,<6.5",
     "ezimuel/ringphp": "^1.1.2"
   },
   "require-dev": {

@@ -1,3 +1,5 @@
+注意：Swoole 已经推出内置 [SWOOLE_HOOK_NATIVE_CURL](https://wiki.swoole.com/#/runtime?id=swoole_hook_native_curl)、[SWOOLE_HOOK_CURL](https://wiki.swoole.com/#/runtime?id=swoole_hook_curl) 功能，该库已经废弃，请使用官方提供的 Hook 功能。
+
 ## Mix Guzzle
 
 支持 Swoole 协程的 Guzzle, 可无感 Hook 第三方库，同时支持调低 PHP 错误级别
