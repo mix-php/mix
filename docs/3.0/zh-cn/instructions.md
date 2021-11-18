@@ -55,7 +55,7 @@ StaticInit::finder(__DIR__ . '/../src/Container')->exec('init');
 
 ### 需要注意哪些库
 
-在 `mix` 官方提供的骨架中, redis, database 本身就使用 [mix/init](zh-cn/mix-init.md) 处理好了预加载，因此用户无需处理，只有在当我们使用 `mix/grpc` 的客户端时，由于我们需要常驻复用这些客户端，但是不能在并发请求中去实例化，因此需要提前预加载：
+在 `mix` 官方提供的骨架中, redis、database 本身就使用 [mix/init](zh-cn/mix-init.md) 处理好了预加载，因此用户无需处理，只有在当我们使用 `mix/grpc` 的客户端时，由于我们需要常驻复用这些客户端，但是不能在并发请求中去实例化，因此需要提前预加载：
 
 - 在 `src/Container` 创建一个gRPC客户端单例
 
@@ -90,7 +90,7 @@ class GrpcClients
 }
 ```
 
-使用方法和 `src/Container` 目录内的 redis, database 类似
+使用方法和 `src/Container` 目录内的 redis、database 类似
 
 ```
 $client1 = GrpcClients::client1();
