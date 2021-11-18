@@ -41,6 +41,11 @@ class Client
     protected $client;
 
     /**
+     * @var bool
+     */
+    protected $closed = false;
+
+    /**
      * Client constructor.
      * @param string $url
      * @param array $headers
@@ -62,7 +67,7 @@ class Client
      */
     protected static function defaultHeaders(): array
     {
-        return $defaultHeaders = [
+        return [
             'User-Agent' => sprintf('Mix WebSocket/PHP %s/Swoole %s', PHP_VERSION, SWOOLE_VERSION),
         ];
     }
@@ -142,6 +147,11 @@ class Client
      */
     public function close(): void
     {
+        if ($this->closed) {
+            return;
+        }
+        $this->closed = true;
+
         if ($this->client->close()) {
             return;
         }
