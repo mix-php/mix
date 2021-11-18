@@ -42,6 +42,9 @@ class Connection
     }
 
     /**
+     * 浏览器连接中，服务器端主动close连接：type=ReadMessageException code=54,104 message=Connection reset by peer
+     * 浏览器js正常关闭：type=CloseFrameException code=1000 message=Active closure of the user
+     * 浏览器直接刷新：type=CloseFrameException code=1001 message=Reason is empty
      * @param float $timeout
      * @return Frame
      * @throws ReadMessageException
