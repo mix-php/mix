@@ -28,6 +28,11 @@ class Connection
     /**
      * @var bool
      */
+    protected $closed = false;
+
+    /**
+     * @var bool
+     */
     protected $receiving = false;
 
     /**
@@ -100,6 +105,11 @@ class Connection
      */
     public function close(): void
     {
+        if ($this->closed) {
+            return;
+        }
+        $this->closed = true;
+
         $this->upgrader->remove($this);
 
         // 丢弃socket缓冲区的消息，避免 ngx 抛出 104: Connection reset by peer
