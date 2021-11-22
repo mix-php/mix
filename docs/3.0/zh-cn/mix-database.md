@@ -350,3 +350,7 @@ interface LoggerInterface
     public function trace(float $time, string $sql, array $bindings, int $rowCount, ?\Throwable $exception): void;
 }
 ```
+
+## 常见问题
+
+- [抛出异常：`The Connection::class cannot be executed repeatedly, please use the Database::class call`](zh-cn/faq?id=%e6%8a%9b%e5%87%ba%e5%bc%82%e5%b8%b8%ef%bc%9athe-connectionclass-cannot-be-executed-repeatedly-please-use-the-databaseclass-call)
