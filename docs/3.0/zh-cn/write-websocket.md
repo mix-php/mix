@@ -176,7 +176,7 @@ composer run-script swooleco:start
 
 - [WEBSOCKET 在线测试工具](http://www.easyswoole.com/wstool.html) `ws://127.0.0.1:9502/websocket`
 
-## 如何实现主动推送给其他客户端
+## 如何实现主动推送到其他客户端
 
 - [mix/redis-subscriber](zh-cn/mix-redis-subscriber)
 
