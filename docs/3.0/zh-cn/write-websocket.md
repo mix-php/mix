@@ -176,6 +176,12 @@ composer run-script swooleco:start
 
 - [WEBSOCKET 在线测试工具](http://www.easyswoole.com/wstool.html) `ws://127.0.0.1:9502/websocket`
 
+## 如何实现主动推送给其他客户端
+
+- [mix/redis-subscriber](zh-cn/mix-redis-subscriber)
+
+使用上面的官方库采用 [PubSub](https://www.cnblogs.com/klb561/p/13922054.html) 的方式实现主动推送，该方法具有可集群部署、代码简单的优势。
+
 ## 如何使用 WebSocket 客户端
 
 - [mix/websocket#客户端-client](zh-cn/mix-websocket?id=客户端-client)
