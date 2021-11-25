@@ -8,6 +8,13 @@
 - 这样设计的原因是：当使用协程带有连接池时，`Connection::class` 是一次性的，当他执行完查询会自动归还到池，为了实现用户无感的自动归还，因此不能复用这个连接对象，同时为了让用户的代码可以在协程和同步中都可以兼容，同步模式也人为的增加了以上限制。
 - 关于连接复用：底层已经处理好了，`$db->table()`、`$db->insert()` 方法返回的 `Connection::class` 虽然是一次性的，但是底层的数据库连接是复用的，用户无需自己去复用这个对象，只需要每次都从 `$db->` 开始一个新的查询。
 
+## 抛出异常：`General error: 2014 Cannot execute queries while other unbuffered queries are active.  Consider using PDOStatement::fetchAll().  Alternatively, if your code is only ever going to run against mysql, you may enable query buffering by setting the PDO::MYSQL_ATTR_USE_BUFFERED_QUERY attribute.`
+
+这是 `mix/database` 抛出的异常，原因是：
+
+- 这个错误是 `PDO` 本身抛出的异常，是由于同一个连接在多个协程中同时调用导致
+- 为何会同时调用：通常是用户自己增加了一个新的数据库配置，然后没有调用 `$db->startPool()` 启动连接池
+
 ## WorkerMan 增加 max_request
 
 常驻内存最大优点就是性能强劲，但是对于不太细心的程序员，就非常容易写出内存溢出的问题，通常不太严重的问题都可以通过 `max_request` 解决，Swoole 官方就提供了该配置参数，但是 WorkerMan 则需要自己实现。

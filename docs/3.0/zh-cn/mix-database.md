@@ -354,3 +354,4 @@ interface LoggerInterface
 ## 常见问题
 
 - [抛出异常：`The Connection::class cannot be executed repeatedly, please use the Database::class call`](zh-cn/faq?id=%e6%8a%9b%e5%87%ba%e5%bc%82%e5%b8%b8%ef%bc%9athe-connectionclass-cannot-be-executed-repeatedly-please-use-the-databaseclass-call)
+- [抛出异常：`General error: 2014 Cannot execute queries while other unbuffered queries are active.  Consider using PDOStatement::fetchAll().  Alternatively, if your code is only ever going to run against mysql, you may enable query buffering by setting the PDO::MYSQL_ATTR_USE_BUFFERED_QUERY attribute.`](zh-cn/faq?id=抛出异常：general-error-2014-cannot-execute-queries-while-other-unbuffered-queries-are-active-consider-using-pdostatementfetchall-alternatively-if-your-code-is-only-ever-going-to-run-against-mysql-you-may-enable-query-buffering-by-setting-the-pdomysql_attr_use_buffered_query-attribute)
