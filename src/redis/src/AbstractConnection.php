@@ -67,6 +67,7 @@ abstract class AbstractConnection implements ConnectionInterface
     protected static function isDisconnectException(\Throwable $ex)
     {
         $disconnectMessages = [
+            'went away',
             'failed with errno',
             'connection lost',
         ];
