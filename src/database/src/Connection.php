@@ -55,6 +55,8 @@ class Connection extends AbstractConnection
             if (static::isDisconnectException($ex) && !$this->inTransaction()) {
                 // 断开连接异常处理
                 $this->reconnect();
+                // 重连后允许再次执行
+                $this->executed = false;
                 // 重新执行方法
                 return $this->call($name, $arguments);
             } else {

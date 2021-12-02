@@ -247,12 +247,14 @@ abstract class AbstractConnection implements ConnectionInterface
             // debug
             $debug = $this->debug;
             $debug and $debug($this);
-
-            $this->clear();
         }
 
+        // 事务还是要复用 Connection 清理依然需要
+        // 抛出异常时不清理，因为需要重连后重试
+        $this->clear();
+
         // 执行完立即回收
-        // 抛出异常时不回收
+        // 抛出异常时不回收，重连那里还需要验证是否在事务中
         // 事务除外，事务在 commit rollback __destruct 中回收
         if ($this->driver->pool && !$this instanceof Transaction) {
             $this->driver->__return();
