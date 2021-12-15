@@ -48,16 +48,16 @@ class Connection
      */
     public function __construct(string $host, int $port, float $timeout = 5.0)
     {
-        $this->host    = $host;
-        $this->port    = $port;
+        $this->host = $host;
+        $this->port = $port;
         $this->timeout = $timeout;
-        $client        = new \Swoole\Coroutine\Client(SWOOLE_SOCK_TCP);
+        $client = new \Swoole\Coroutine\Client(SWOOLE_SOCK_TCP);
         $client->set([
             'open_eof_check' => true,
-            'package_eof'    => static::EOF,
+            'package_eof' => static::EOF,
         ]);
         if (!$client->connect($host, $port, $timeout)) {
-            throw new \Swoole\Exception(sprintf('Redis connect failed (host: %s, port: %s)', $host, $port));
+            throw new \Swoole\Exception(sprintf('Redis connect failed (host: %s, port: %s) %d %s', $host, $port, $client->errCode, $client->errMsg));
         }
         $this->client = $client;
     }
@@ -70,7 +70,7 @@ class Connection
      */
     public function send(string $data)
     {
-        $len  = strlen($data);
+        $len = strlen($data);
         $size = $this->client->send($data);
         if ($size === false) {
             throw new \Swoole\Exception($this->client->errMsg, $this->client->errCode);
@@ -96,7 +96,7 @@ class Connection
     public function close()
     {
         if (!$this->closed && !$this->client->close()) {
-            $errMsg  = $this->client->errMsg;
+            $errMsg = $this->client->errMsg;
             $errCode = $this->client->errCode;
             if ($errMsg == '' && $errCode == 0) {
                 return;
