@@ -71,6 +71,8 @@ class Connection
             if ($errCode != 0) {
                 $errMsg = swoole_strerror($errCode, 9);
                 throw new ReadMessageException($errMsg, $errCode);
+            } else {
+                throw new ReadMessageException('Connection is closed');
             }
         }
         if ($frame instanceof \Swoole\WebSocket\CloseFrame) { // CloseFrame
