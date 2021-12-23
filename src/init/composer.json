@@ -16,11 +16,16 @@
   ],
   "require": {
     "php": ">=7.1.0",
-    "hanneskod/classtools": "^1.2"
+    "composer/composer": "^2.2"
   },
   "autoload": {
     "psr-4": {
       "Mix\\Init\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Test\\": "tests/"
     }
   },
   "require-dev": {

@@ -10,12 +10,12 @@ class StaticInit
 {
 
     /**
-     * @param string ...$paths
+     * @param string ...$dirs
      * @return Finder
      */
-    public static function finder(string ...$paths): Finder
+    public static function finder(string ...$dirs): Finder
     {
-        return new Finder(...$paths);
+        return new Finder(...$dirs);
     }
 
 }

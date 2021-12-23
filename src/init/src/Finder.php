@@ -2,6 +2,8 @@
 
 namespace Mix\Init;
 
+use Composer\Autoload\ClassMapGenerator;
+
 /**
  * Class Finder
  * @package Mix\Init
@@ -12,15 +14,15 @@ class Finder
     /**
      * @var string[]
      */
-    protected $paths = [];
+    protected $dirs = [];
 
     /**
      * Finder constructor.
-     * @param string ...$paths
+     * @param string ...$dirs
      */
-    public function __construct(string ...$paths)
+    public function __construct(string ...$dirs)
     {
-        $this->paths = $paths;
+        $this->dirs = $dirs;
     }
 
     /**
@@ -29,9 +31,12 @@ class Finder
      */
     public function exec(string ...$methods): void
     {
-        $finder = new \Symfony\Component\Finder\Finder;
-        $iter = new \hanneskod\classtools\Iterator\ClassIterator($finder->in($this->paths));
-        foreach ($iter->getClassMap() as $class => $splFileInfo) {
+        $maps = array();
+        foreach ($this->dirs as $dir) {
+            $maps = array_merge($maps, ClassMapGenerator::createMap($dir));
+        }
+
+        foreach ($maps as $class => $path) {
             foreach ($methods as $method) {
                 if (!class_exists($class) || !method_exists($class, $method)) {
                     continue;
