@@ -38,28 +38,6 @@ class Preg
     }
 
     /**
-     * Runs preg_match_all with PREG_OFFSET_CAPTURE
-     *
-     * @param string   $pattern
-     * @param string   $subject
-     * @param array<int|string, array{string|null, int}> $matches Set by method
-     * @param int      $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
-     * @param int      $offset
-     * @return int
-     *
-     * @phpstan-param array<int|string, array{string|null, int<-1, max>}> $matches
-     */
-    public static function matchWithOffsets($pattern, $subject, &$matches, $flags = 0, $offset = 0)
-    {
-        $result = preg_match($pattern, $subject, $matches, $flags | PREG_OFFSET_CAPTURE, $offset);
-        if ($result === false) {
-            throw PcreException::fromFunction('preg_match', $pattern);
-        }
-
-        return $result;
-    }
-
-    /**
      * @param string   $pattern
      * @param string   $subject
      * @param array<int|string, list<string|null>> $matches Set by method
@@ -78,28 +56,6 @@ class Preg
         }
 
         $result = preg_match_all($pattern, $subject, $matches, $flags, $offset);
-        if ($result === false || $result === null) {
-            throw PcreException::fromFunction('preg_match_all', $pattern);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Runs preg_match_all with PREG_OFFSET_CAPTURE
-     *
-     * @param string   $pattern
-     * @param string   $subject
-     * @param array<int|string, list<array{string|null, int}>> $matches Set by method
-     * @param int      $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
-     * @param int      $offset
-     * @return int
-     *
-     * @phpstan-param array<int|string, list<array{string|null, int<-1, max>}>> $matches
-     */
-    public static function matchAllWithOffsets($pattern, $subject, &$matches, $flags = 0, $offset = 0)
-    {
-        $result = preg_match_all($pattern, $subject, $matches, $flags | PREG_OFFSET_CAPTURE, $offset);
         if ($result === false || $result === null) {
             throw PcreException::fromFunction('preg_match_all', $pattern);
         }
@@ -130,62 +86,6 @@ class Preg
     }
 
     /**
-     * @param string|string[] $pattern
-     * @param callable        $replacement
-     * @param string          $subject
-     * @param int             $limit
-     * @param int             $count Set by method
-     * @param int             $flags PREG_OFFSET_CAPTURE or PREG_UNMATCHED_AS_NULL, only available on PHP 7.4+
-     * @return string
-     */
-    public static function replaceCallback($pattern, $replacement, $subject, $limit = -1, &$count = null, $flags = 0)
-    {
-        if (is_array($subject)) { // @phpstan-ignore-line
-            throw new \InvalidArgumentException(static::ARRAY_MSG);
-        }
-
-        if (PHP_VERSION_ID >= 70400) {
-            $result = preg_replace_callback($pattern, $replacement, $subject, $limit, $count, $flags);
-        } else {
-            $result = preg_replace_callback($pattern, $replacement, $subject, $limit, $count);
-        }
-        if ($result === null) {
-            throw PcreException::fromFunction('preg_replace_callback', $pattern);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Available from PHP 7.0
-     *
-     * @param array<string, callable> $pattern
-     * @param string $subject
-     * @param int    $limit
-     * @param int    $count Set by method
-     * @param int    $flags PREG_OFFSET_CAPTURE or PREG_UNMATCHED_AS_NULL, only available on PHP 7.4+
-     * @return string
-     */
-    public static function replaceCallbackArray(array $pattern, $subject, $limit = -1, &$count = null, $flags = 0)
-    {
-        if (is_array($subject)) { // @phpstan-ignore-line
-            throw new \InvalidArgumentException(static::ARRAY_MSG);
-        }
-
-        if (PHP_VERSION_ID >= 70400) {
-            $result = preg_replace_callback_array($pattern, $subject, $limit, $count, $flags);
-        } else {
-            $result = preg_replace_callback_array($pattern, $subject, $limit, $count);
-        }
-        if ($result === null) {
-            $pattern = array_keys($pattern);
-            throw PcreException::fromFunction('preg_replace_callback_array', $pattern);
-        }
-
-        return $result;
-    }
-
-    /**
      * @param string $pattern
      * @param string $subject
      * @param int    $limit
@@ -203,25 +103,6 @@ class Preg
             throw PcreException::fromFunction('preg_split', $pattern);
         }
 
-        return $result;
-    }
-
-    /**
-     * @param string $pattern
-     * @param string $subject
-     * @param int    $limit
-     * @param int    $flags PREG_SPLIT_NO_EMPTY or PREG_SPLIT_DELIM_CAPTURE
-     * @return list<array{string, int}>
-     * @phpstan-return list<array{string, int<0, max>}>
-     */
-    public static function splitWithOffsets($pattern, $subject, $limit = -1, $flags = 0)
-    {
-        $result = preg_split($pattern, $subject, $limit, $flags | PREG_SPLIT_OFFSET_CAPTURE);
-        if ($result === false) {
-            throw PcreException::fromFunction('preg_split', $pattern);
-        }
-
-        // @phpstan-ignore-next-line See https://github.com/phpstan/phpstan/issues/6155
         return $result;
     }
 
@@ -253,52 +134,5 @@ class Preg
     public static function isMatch($pattern, $subject, &$matches = null, $flags = 0, $offset = 0)
     {
         return (bool) static::match($pattern, $subject, $matches, $flags, $offset);
-    }
-
-    /**
-     * @param string   $pattern
-     * @param string   $subject
-     * @param array<int|string, list<string|null>> $matches Set by method
-     * @param int      $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
-     * @param int      $offset
-     * @return bool
-     */
-    public static function isMatchAll($pattern, $subject, &$matches = null, $flags = 0, $offset = 0)
-    {
-        return (bool) static::matchAll($pattern, $subject, $matches, $flags, $offset);
-    }
-
-    /**
-     * Runs preg_match_all with PREG_OFFSET_CAPTURE
-     *
-     * @param string   $pattern
-     * @param string   $subject
-     * @param array<int|string, array{string|null, int}> $matches Set by method
-     * @param int      $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
-     * @param int      $offset
-     * @return bool
-     *
-     * @phpstan-param array<int|string, array{string|null, int<-1, max>}> $matches
-     */
-    public static function isMatchWithOffsets($pattern, $subject, &$matches, $flags = 0, $offset = 0)
-    {
-        return (bool) static::matchWithOffsets($pattern, $subject, $matches, $flags, $offset);
-    }
-
-    /**
-     * Runs preg_match_all with PREG_OFFSET_CAPTURE
-     *
-     * @param string   $pattern
-     * @param string   $subject
-     * @param array<int|string, list<array{string|null, int}>> $matches Set by method
-     * @param int      $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
-     * @param int      $offset
-     * @return bool
-     *
-     * @phpstan-param array<int|string, list<array{string|null, int<-1, max>}>> $matches
-     */
-    public static function isMatchAllWithOffsets($pattern, $subject, &$matches, $flags = 0, $offset = 0)
-    {
-        return (bool) static::matchAllWithOffsets($pattern, $subject, $matches, $flags, $offset);
     }
 }
