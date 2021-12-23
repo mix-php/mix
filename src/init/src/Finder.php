@@ -2,7 +2,7 @@
 
 namespace Mix\Init;
 
-use Composer\Autoload\ClassMapGenerator;
+use Mix\Init\Composer\ClassMapGenerator;
 
 /**
  * Class Finder

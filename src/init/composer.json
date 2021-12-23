@@ -16,7 +16,7 @@
   ],
   "require": {
     "php": ">=7.1.0",
-    "composer/composer": "^2.2"
+    "symfony/finder": "^5.4"
   },
   "autoload": {
     "psr-4": {
