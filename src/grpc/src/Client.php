@@ -168,7 +168,9 @@ class Client
      */
     protected function reconnect(): void
     {
-        if (!$this->reconnect && strpos($this->client->errMsg, 'Broken pipe') !== false) {
+        // $this->client->errMsg = Broken pipe | Connection reset by peer
+        // 重连会有并发
+        if (!$this->reconnect) {
             try {
                 $this->reconnect = true;
                 $this->connect();
