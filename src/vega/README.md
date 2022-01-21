@@ -307,6 +307,13 @@ $vega->handle('/users/{id}', function (Mix\Vega\Context $ctx) {
 | $ctx->setCookie(string $name, string $value, int $expire = 0, ...): void  | 设置cookie |
 | $ctx->redirect(string $location, int $code = 302): void  | 重定向 |
 
+### 重定向
+
+```php
+$ctx->redirect($url);
+$ctx->abort();
+```
+
 ## JSON 请求与输出
 
 获取 JSON 请求数据

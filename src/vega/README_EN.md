@@ -298,6 +298,13 @@ $vega->handle('/users/{id}', function (Mix\Vega\Context $ctx) {
 | $ctx->setCookie(string $name, string $value, int $expire = 0, ...): void  | 设置cookie |
 | $ctx->redirect(string $location, int $code = 302): void  | 重定向 |
 
+### Redirect
+
+```php
+$ctx->redirect($url);
+$ctx->abort();
+```
+
 ## JSON request and output
 
 Get JSON request data

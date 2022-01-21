@@ -160,6 +160,8 @@ trait Router
             try {
                 $ctx->next();
             } catch (Abort $abort) {
+                // 主动中断
+                // 没有信息的Abort，只中断不执行send()
                 $code = $abort->getCode();
                 $message = $abort->getMessage();
                 if ($code != 0) {
@@ -170,6 +172,11 @@ trait Router
                     $ctx->response->withBody($body);
                 }
                 if ($code || $message) {
+                    $ctx->response->send();
+                }
+
+                // redirect 中断
+                if ($ctx->response->getHeaderLine('Location') !== '') {
                     $ctx->response->send();
                 }
             }
