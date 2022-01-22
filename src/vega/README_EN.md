@@ -301,7 +301,7 @@ $vega->handle('/users/{id}', function (Mix\Vega\Context $ctx) {
 ### Redirect
 
 ```php
-$ctx->redirect($url);
+$ctx->redirect('https://www.baidu.com/');
 $ctx->abort();
 ```
 
