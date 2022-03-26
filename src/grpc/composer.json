@@ -22,7 +22,7 @@
   "require": {
     "php": ">=7.0.0",
     "ext-swoole": ">=4.4.4",
-    "google/protobuf": "^3.11"
+    "google/protobuf": "^3.20"
   },
   "autoload": {
     "psr-4": {
