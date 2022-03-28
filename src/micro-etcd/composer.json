@@ -28,7 +28,7 @@
     "mix/micro-server": "~2.2.0",
     "mix/runtime": "~2.2.0",
     "mix/guzzle": "~2.2.0",
-    "hassankhan/config": "^2.1"
+    "hassankhan/config": "^3.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^7.0.0"
