@@ -253,13 +253,15 @@ class Response extends Message implements ResponseInterface
     {
         if ($this->isSwoole()) {
             return $this->swooleSendFile($filename);
-        } else if ($this->isWorkerMan()) {
+        } elseif ($this->isWorkerMan()) {
             return $this->workerManSendFile($filename);
         } else if (PHP_SAPI == 'cli-server') {
             // 支持cli-server静态文件
             return $GLOBALS['__sendfile__'] = true;
+        } elseif($this->isSwow())  {
+            return $this->swowSendFile($filename);
         } else {
-            throw new \RuntimeException('Sendfile can be used only in Swoole, Workerman, PHP CLI-Server');
+            throw new \RuntimeException('Sendfile can be used only in Swoole, Workerman, Swow, PHP CLI-Server');
         }
     }
 
@@ -308,7 +310,7 @@ class Response extends Message implements ResponseInterface
         }
         $result = $this->rawResponse->write([packResponse(\Swow\Http\Status::OK, $headers), $body]);
         $this->sended = true;
-        return $this->sended;
+        return true;
     }
 
     /**
@@ -412,6 +414,31 @@ class Response extends Message implements ResponseInterface
 
         $this->sended = true;
         return $result;
+    }
+
+    /**
+     * @param string $filename
+     * @return bool
+     */
+    protected function swowSendFile(string $filename): bool
+    {
+        $headers = $this->getHeadersLine();
+        foreach ($headers as $key => $value) {
+            $this->rawResponse->header($key, $value);
+        }
+
+        // 添加 Last-Modified
+        if (!isset($headers['Last-Modified']) && !isset($headers['last-modified'])) {
+            if ($mtime = filemtime($filename)) {
+                $lastModified = gmdate('D, d M Y H:i:s', $mtime) . ' GMT';
+                $this->rawResponse->header('Last-Modified', $lastModified);
+            }
+        }
+        // TODO
+//        $result = $this->rawResponse->sendfile($filename);
+
+        $this->sended = true;
+        return true;
     }
 
     /**
