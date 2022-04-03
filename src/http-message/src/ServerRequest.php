@@ -14,7 +14,7 @@ class ServerRequest extends Request implements ServerRequestInterface
 {
 
     /**
-     * @var \Swoole\Http\Request|\Workerman\Protocols\Http\Request
+     * @var \Swoole\Http\Request|\Workerman\Protocols\Http\Request|\Swow\Http\Server\Request
      */
     protected $rawRequest;
 
@@ -67,7 +67,7 @@ class ServerRequest extends Request implements ServerRequestInterface
 
     /**
      * Get raw request
-     * @return \Swoole\Http\Request|\Workerman\Protocols\Http\Request|null
+     * @return \Swoole\Http\Request|\Workerman\Protocols\Http\Request|\Swow\Http\Server\Request|null
      */
     public function getRawRequest()
     {
@@ -76,7 +76,7 @@ class ServerRequest extends Request implements ServerRequestInterface
 
     /**
      * With raw request
-     * @param \Swoole\Http\Request|\Workerman\Protocols\Http\Request $request
+     * @param \Swoole\Http\Request|\Workerman\Protocols\Http\Request|\Swow\Http\Server\Request $request
      * @return $this
      */
     public function withRawRequest(object $request)
