@@ -434,8 +434,8 @@ class Response extends Message implements ResponseInterface
                 $this->rawResponse->header('Last-Modified', $lastModified);
             }
         }
-        // TODO
-        // $result = $this->rawResponse->sendfile($filename);
+        
+        $this->rawResponse->respond(file_get_contents($filename));
 
         $this->sended = true;
         return true;
