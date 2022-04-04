@@ -255,11 +255,11 @@ class Response extends Message implements ResponseInterface
             return $this->swooleSendFile($filename);
         } else if ($this->isWorkerMan()) {
             return $this->workerManSendFile($filename);
+        } else if($this->isSwow()) {
+            return $this->swowSendFile($filename);
         } else if (PHP_SAPI == 'cli-server') {
             // 支持cli-server静态文件
             return $GLOBALS['__sendfile__'] = true;
-        } else if($this->isSwow()) {
-            return $this->swowSendFile($filename);
         } else {
             throw new \RuntimeException('Sendfile can be used only in Swoole, Workerman, Swow, PHP CLI-Server');
         }
@@ -435,7 +435,7 @@ class Response extends Message implements ResponseInterface
             }
         }
         // TODO
-//        $result = $this->rawResponse->sendfile($filename);
+        // $result = $this->rawResponse->sendfile($filename);
 
         $this->sended = true;
         return true;
