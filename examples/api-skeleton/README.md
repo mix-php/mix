@@ -31,7 +31,7 @@ composer run-script --timeout=0 swooleco:start
 ```
 
 启动 Swow 协程服务
-> 注意: swow最低需要php8.0及以上版本
+> 注意: swow 协程服务不支持 PHP 8.0 以下版本
 ```
 composer run-script --timeout=0 swow:start
 ```
