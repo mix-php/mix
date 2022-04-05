@@ -30,6 +30,12 @@ composer run-script --timeout=0 swoole:start
 composer run-script --timeout=0 swooleco:start
 ```
 
+启动 Swow 协程服务
+> 注意: swow最低需要php8.0及以上版本
+```
+composer run-script --timeout=0 swow:start
+```
+
 启动 WorkerMan 多进程服务
 
 ```
@@ -46,6 +52,7 @@ composer run-script --timeout=0 workerman:start
     "cliserver:start": "php -S localhost:8000 public/index.php",
     "swoole:start": "php bin/swoole.php",
     "swooleco:start": "php bin/swooleco.php",
+    "swow:start": "php bin/swow.php",
     "workerman:start": "php bin/workerman.php start",
     "cli:clearcache": "php bin/cli.php clearcache"
 }
