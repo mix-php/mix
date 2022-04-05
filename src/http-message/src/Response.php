@@ -237,7 +237,7 @@ class Response extends Message implements ResponseInterface
             return $this->swooleSend();
         } else if ($this->isWorkerMan()) {
             return $this->workerManSend();
-        } elseif($this->isSwow()) {
+        } else if($this->isSwow()) {
             return $this->swowSend();
         } else {
             return $this->fpmSend();
@@ -253,13 +253,13 @@ class Response extends Message implements ResponseInterface
     {
         if ($this->isSwoole()) {
             return $this->swooleSendFile($filename);
-        } elseif ($this->isWorkerMan()) {
+        } else if ($this->isWorkerMan()) {
             return $this->workerManSendFile($filename);
+        } else if($this->isSwow()) {
+            return $this->swowSendFile($filename);
         } else if (PHP_SAPI == 'cli-server') {
             // 支持cli-server静态文件
             return $GLOBALS['__sendfile__'] = true;
-        } elseif($this->isSwow())  {
-            return $this->swowSendFile($filename);
         } else {
             throw new \RuntimeException('Sendfile can be used only in Swoole, Workerman, Swow, PHP CLI-Server');
         }
@@ -434,8 +434,8 @@ class Response extends Message implements ResponseInterface
                 $this->rawResponse->header('Last-Modified', $lastModified);
             }
         }
-        // TODO
-//        $result = $this->rawResponse->sendfile($filename);
+        
+        $this->rawResponse->respond(file_get_contents($filename));
 
         $this->sended = true;
         return true;
