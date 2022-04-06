@@ -36,6 +36,8 @@ composer run-script --timeout=0 swooleco:start
 composer run-script --timeout=0 swow:start
 ```
 
+> 在启动文件加一行 `\Swow\Debug\showExecutedSourceLines(true);` 就可以看到你程序的整个运行流程了
+
 启动 WorkerMan 多进程服务
 
 ```
