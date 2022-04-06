@@ -7,6 +7,7 @@ use Mix\Http\Message\Stream\ContentStream;
 use Mix\Http\Message\Stream\FileStream;
 use Mix\Http\Message\Stream\IOStream;
 use Mix\Http\Message\Stream\SwooleResourceStream;
+use Mix\Http\Message\Stream\SwowResourceStream;
 use Mix\Http\Message\Stream\WorkerManResourceStream;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
@@ -92,6 +93,20 @@ class StreamFactory implements StreamFactoryInterface
     public function createStreamFromSwoole($request): StreamInterface
     {
         return new SwooleResourceStream($request);
+    }
+
+    /**
+     * Create a new stream from an existing resource.
+     *
+     * The stream MUST be readable and may be writable.
+     *
+     * @param \Swow\Http\Server\Request $request PHP resource to use as basis of stream.
+     *
+     * @return StreamInterface
+     */
+    public function createStreamFromSwow($request): StreamInterface
+    {
+        return new SwowResourceStream($request);
     }
 
     /**

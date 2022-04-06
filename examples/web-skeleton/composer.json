@@ -8,6 +8,7 @@
     "cliserver:start": "php -S localhost:8000 -t public",
     "swoole:start": "php bin/swoole.php",
     "swooleco:start": "php bin/swooleco.php",
+    "swow:start": "php bin/swow.php",
     "workerman:start": "php bin/workerman.php start",
     "cli:clearcache": "php bin/cli.php clearcache"
   },
@@ -28,7 +29,8 @@
     "mix/redis": "~3.0.0",
     "vlucas/phpdotenv": "^5.3",
     "hassankhan/config": "^3.0",
-    "monolog/monolog": "^2.3"
+    "monolog/monolog": "^2.3",
+    "swow/swow": "dev-develop"
   },
   "require-dev": {
     "swoole/ide-helper": "^4.6"

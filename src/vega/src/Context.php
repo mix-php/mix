@@ -63,6 +63,22 @@ class Context
         return $ctx;
     }
 
+
+    public static function fromSwow(int $mode, \Swow\Http\Server\Request $request, \Swow\Http\Server\Connection $response, Renderer $renderer): Context
+    {
+        $ctx = new static();
+        switch ($mode) {
+            case Engine::FAST_MODE:
+                $ctx->request = $request;
+                break;
+            default:
+                $ctx->request = (new ServerRequestFactory())->createServerRequestFromSwow($request);
+        }
+        $ctx->response = (new ResponseFactory())->createResponseFromSwow($response);
+        $ctx->renderer = $renderer;
+        return $ctx;
+    }
+
     /**
      * @param int $mode
      * @param \Workerman\Protocols\Http\Request $request

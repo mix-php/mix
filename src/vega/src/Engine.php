@@ -83,6 +83,14 @@ class Engine
                 list($connection, $request) = $args;
                 $ctx = Context::fromWorkerMan($this->mode, $request, $connection, $this->htmlRender);
                 $this->dispatch($request->method(), $request->path(), $ctx);
+            } elseif (static::isSwow($args)) {
+                /**
+                 * @var $request \Swow\Http\Server\Request
+                 * @var $response \Swow\Http\Server\Connection
+                 */
+                list($request, $response) = $args;
+                $ctx = Context::fromSwow($this->mode, $request, $response, $this->htmlRender);
+                $this->dispatch($request->getMethod(), $request->getPath(), $ctx);
             } else {
                 throw new RuntimeException('The current usage scenario is not supported');
             }
@@ -150,6 +158,22 @@ class Engine
         }
         list($connection, $request) = $args;
         if ($connection instanceof \Workerman\Connection\TcpConnection && $request instanceof \Workerman\Protocols\Http\Request) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param array $args
+     * @return bool
+     */
+    private static function isSwow(array $args): bool
+    {
+        if (count($args) != 2) {
+            return false;
+        }
+        list($request, $response) = $args;
+        if ($request instanceof \Swow\Http\Server\Request && $response instanceof \Swow\Http\Server\Connection) {
             return true;
         }
         return false;

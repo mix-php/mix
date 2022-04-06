@@ -3,6 +3,7 @@
 namespace Mix\Http\Message;
 
 use Psr\Http\Message\ResponseInterface;
+use function Swow\Http\packResponse;
 
 /**
  * Class Response
@@ -12,7 +13,7 @@ class Response extends Message implements ResponseInterface
 {
 
     /**
-     * @var \Swoole\Http\Response|\Workerman\Connection\TcpConnection
+     * @var \Swoole\Http\Response|\Workerman\Connection\TcpConnection|\Swow\Http\Server\Connection
      */
     protected $rawResponse;
 
@@ -49,7 +50,7 @@ class Response extends Message implements ResponseInterface
 
     /**
      * Get raw response
-     * @return \Swoole\Http\Response|\Workerman\Connection\TcpConnection|null
+     * @return \Swoole\Http\Response|\Workerman\Connection\TcpConnection|\Swow\Http\Server\Connection|null
      */
     public function getRawResponse()
     {
@@ -58,7 +59,7 @@ class Response extends Message implements ResponseInterface
 
     /**
      * With raw response
-     * @param \Swoole\Http\Response|\Workerman\Connection\TcpConnection $response
+     * @param \Swoole\Http\Response|\Workerman\Connection\TcpConnection|\Swow\Http\Server\Connection $response
      * @return $this
      */
     public function withRawResponse(object $response)
@@ -73,6 +74,14 @@ class Response extends Message implements ResponseInterface
     public function isSwoole(): bool
     {
         if ($this->rawResponse instanceof \Swoole\Http\Response) {
+            return true;
+        }
+        return false;
+    }
+
+    public function isSwow(): bool
+    {
+        if ($this->rawResponse instanceof \Swow\Http\Server\Connection) {
             return true;
         }
         return false;
@@ -228,6 +237,8 @@ class Response extends Message implements ResponseInterface
             return $this->swooleSend();
         } else if ($this->isWorkerMan()) {
             return $this->workerManSend();
+        } else if($this->isSwow()) {
+            return $this->swowSend();
         } else {
             return $this->fpmSend();
         }
@@ -244,11 +255,13 @@ class Response extends Message implements ResponseInterface
             return $this->swooleSendFile($filename);
         } else if ($this->isWorkerMan()) {
             return $this->workerManSendFile($filename);
+        } else if($this->isSwow()) {
+            return $this->swowSendFile($filename);
         } else if (PHP_SAPI == 'cli-server') {
             // 支持cli-server静态文件
             return $GLOBALS['__sendfile__'] = true;
         } else {
-            throw new \RuntimeException('Sendfile can be used only in Swoole, Workerman, PHP CLI-Server');
+            throw new \RuntimeException('Sendfile can be used only in Swoole, Workerman, Swow, PHP CLI-Server');
         }
     }
 
@@ -283,6 +296,21 @@ class Response extends Message implements ResponseInterface
 
         $this->sended = true;
         return $result;
+    }
+
+    protected function swowSend(): bool
+    {
+        $headers = $this->getHeaders();
+        $body = $this->getBody()->getContents();
+        if ($this->rawResponse->getKeepAlive() !== null) {
+            $headers['Connection'] = $this->rawResponse->getKeepAlive() ? 'Keep-Alive' : 'Closed';
+        }
+        if (! $this->hasHeader('Content-Length')) {
+            $headers['Content-Length'] = strlen($body);
+        }
+        $result = $this->rawResponse->write([packResponse(\Swow\Http\Status::OK, $headers), $body]);
+        $this->sended = true;
+        return true;
     }
 
     /**
@@ -386,6 +414,31 @@ class Response extends Message implements ResponseInterface
 
         $this->sended = true;
         return $result;
+    }
+
+    /**
+     * @param string $filename
+     * @return bool
+     */
+    protected function swowSendFile(string $filename): bool
+    {
+        $headers = $this->getHeadersLine();
+        foreach ($headers as $key => $value) {
+            $this->rawResponse->header($key, $value);
+        }
+
+        // 添加 Last-Modified
+        if (!isset($headers['Last-Modified']) && !isset($headers['last-modified'])) {
+            if ($mtime = filemtime($filename)) {
+                $lastModified = gmdate('D, d M Y H:i:s', $mtime) . ' GMT';
+                $this->rawResponse->header('Last-Modified', $lastModified);
+            }
+        }
+        
+        $this->rawResponse->respond(file_get_contents($filename));
+
+        $this->sended = true;
+        return true;
     }
 
     /**
