@@ -193,7 +193,7 @@ trait Router
             try {
                 $ctx->next();
             } catch (NotFoundException $ex) {
-                if (in_array($ex->getCode(), [404, 405]) == 404 && in_array($ex->getMessage(), ['404 Not Found', '405 Method Not Allowed'])) {
+                if (in_array($ex->getCode(), [404, 405]) && in_array($ex->getMessage(), ['404 Not Found', '405 Method Not Allowed'])) {
                     $ctx->abortWithStatusException($ex->getCode(), $ex);
                 }
             }
