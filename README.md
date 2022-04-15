@@ -12,14 +12,14 @@
 
 中文 | [English](README_EN.md)
 
-MixPHP 是一个 PHP 命令行模式开发框架；基于 `Vega` 驱动的 HTTP 可以同时支持 Swoole、WorkerMan、FPM、CLI-Server 生态，并且可以无缝切换；`V3` 是一个高度解耦的版本，整体代码基于多个独立的模块构建，即便用户不使用我们的脚手架，也可以使用这些独立模块，并且全部模块都支持原生开发。例如：你可以只使用 mix/vega 来搭配 laravel orm 使用；可以在任意环境中使用 mix/database 和 mix/redis；可以使用 mix/grpc 原生代码编写 gRPC；所有的模块你可以像搭积木一样随意组合。
+MixPHP 是一个 PHP 命令行模式开发框架；基于 `Vega` 驱动的 HTTP 可以同时支持 Swoole、Swow、WorkerMan、FPM、CLI-Server 生态，并且可以无缝切换；`V3` 是一个高度解耦的版本，整体代码基于多个独立的模块构建，即便用户不使用我们的脚手架，也可以使用这些独立模块，并且全部模块都支持原生开发。例如：你可以只使用 mix/vega 来搭配 laravel orm 使用；可以在任意环境中使用 mix/database 和 mix/redis；可以使用 mix/grpc 原生代码编写 gRPC；所有的模块你可以像搭积木一样随意组合。
 
 ## 独立模块
 
 核心模块全部可独立使用，并且都支持原生代码开发。
 
-- [mix/vega](src/vega) PHP 编写的 CLI 模式 HTTP 网络框架，支持 Swoole、WorkerMan、FPM、CLI-Server
-- [mix/database](src/database) 可在各种环境中使用的轻量数据库，支持 FPM、CLI、Swoole、WorkerMan，可选的连接池 (协程)
+- [mix/vega](src/vega) PHP 编写的 CLI 模式 HTTP 网络框架，支持 Swoole、Swow、WorkerMan、FPM、CLI-Server
+- [mix/database](src/database) 可在各种环境中使用的轻量数据库，支持 FPM、CLI、Swoole、Swow、WorkerMan，可选的连接池 (协程)
 - [mix/redis](src/redis) 可在各种环境中使用的 PHP Redis，支持 FPM、CLI、Swoole、WorkerMan，可选的连接池 (协程)
 - [mix/redis-subscriber](src/redis-subscriber) 基于 Swoole 协程的 Redis 原生协议订阅库
 - [mix/grpc](src/grpc) 基于 Swoole 协程的 PHP gRPC 库，包含 protoc 代码生成器、服务器、客户端
@@ -37,8 +37,9 @@ MixPHP 是一个 PHP 命令行模式开发框架；基于 `Vega` 驱动的 HTTP 
 - [PHP Built-in CLI-Server](examples/api-skeleton/composer.json#L8) `零扩展依赖` `热更新` `适合本机开发`
 - [PHP-FPM](examples/api-skeleton/public/index.php) `热更新` `适合共享开发` `适合 admin 开发`
 - [Swoole](examples/api-skeleton/composer.json#L9) `常驻内存` `兼容 composer 生态`
+- [Swow](examples/api-skeleton/composer.json#L11) `常驻内存` `兼容 composer 生态`
 - [Swoole Coroutine](examples/api-skeleton/composer.json#L10) `常驻内存` `协程性能强劲`
-- [WorkerMan](examples/api-skeleton/composer.json#L11) `常驻内存` `兼容 composer 生态`
+- [WorkerMan](examples/api-skeleton/composer.json#L12) `常驻内存` `兼容 composer 生态`
 
 ## 开发文档
 
