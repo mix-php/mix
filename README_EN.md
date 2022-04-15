@@ -12,13 +12,13 @@
 
 [中文](README.md) | English
 
-MixPHP is a PHP command-line development framework; HTTP based on `Vega` can support both Swoole, WorkerMan, FPM, CLI-Server ecosystems at the same time, and can be switched seamlessly; `V3` is a highly decoupled version, the overall code is based on multiple independent Even if users do not use our scaffolding, they can also use these independent modules, and all modules support native development. For example: you can only use mix/vega to work with laravel orm; you can use mix/database and mix/redis in any environment; you can use mix/grpc native code to write gRPC; all modules can be combined like building blocks.
+MixPHP is a PHP command-line development framework; HTTP based on `Vega` can support both Swoole, Swow, WorkerMan, FPM, CLI-Server ecosystems at the same time, and can be switched seamlessly; `V3` is a highly decoupled version, the overall code is based on multiple independent Even if users do not use our scaffolding, they can also use these independent modules, and all modules support native development. For example: you can only use mix/vega to work with laravel orm; you can use mix/database and mix/redis in any environment; you can use mix/grpc native code to write gRPC; all modules can be combined like building blocks.
 
 ## Standalone module
 
 All core modules can be used independently, and all support native code development.
 
-- [mix/vega](src/vega) CLI mode HTTP network framework written in PHP, supports Swoole, WorkerMan, FPM, CLI-Server
+- [mix/vega](src/vega) CLI mode HTTP network framework written in PHP, supports Swoole, Swow, WorkerMan, FPM, CLI-Server
 - [mix/database](src/database) Lightweight database that can be used in various environments, supports FPM, CLI, Swoole, WorkerMan, optional connection pool (coroutine)
 - [mix/redis](src/redis) PHP Redis that can be used in various environments, supports FPM, CLI, Swoole, WorkerMan, optional connection pool (coroutine)
 - [mix/redis-subscriber](src/redis-subscriber) Redis native protocol subscription library based on Swoole coroutine
@@ -38,7 +38,8 @@ Support multiple server drivers, and can switch seamlessly.
 - [PHP-FPM](examples/api-skeleton/public/index.php)
 - [Swoole](examples/api-skeleton/composer.json#L9)
 - [Swoole Coroutine](examples/api-skeleton/composer.json#L10)
-- [WorkerMan](examples/api-skeleton/composer.json#L11)
+- [Swow](examples/api-skeleton/composer.json#L11)
+- [WorkerMan](examples/api-skeleton/composer.json#L12)
 
 ## Documentation
 
