@@ -424,7 +424,6 @@ class Response extends Message implements ResponseInterface
     {
         $headers = $this->getHeadersLine();
         $this->rawResponse->respond(file_get_contents($filename), $headers);
-
         $this->sended = true;
         return true;
     }
