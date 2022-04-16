@@ -424,17 +424,11 @@ class Response extends Message implements ResponseInterface
     {
         $headers = $this->getHeadersLine();
         foreach ($headers as $key => $value) {
-            $this->rawResponse->header($key, $value);
+            $this->rawResponse->respond([
+                $key, $value
+            ]);
         }
 
-        // 添加 Last-Modified
-        if (!isset($headers['Last-Modified']) && !isset($headers['last-modified'])) {
-            if ($mtime = filemtime($filename)) {
-                $lastModified = gmdate('D, d M Y H:i:s', $mtime) . ' GMT';
-                $this->rawResponse->header('Last-Modified', $lastModified);
-            }
-        }
-        
         $this->rawResponse->respond(file_get_contents($filename));
 
         $this->sended = true;
