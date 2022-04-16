@@ -423,13 +423,7 @@ class Response extends Message implements ResponseInterface
     protected function swowSendFile(string $filename): bool
     {
         $headers = $this->getHeadersLine();
-        foreach ($headers as $key => $value) {
-            $this->rawResponse->respond([
-                $key, $value
-            ]);
-        }
-
-        $this->rawResponse->respond(file_get_contents($filename));
+        $this->rawResponse->respond(file_get_contents($filename), $headers);
 
         $this->sended = true;
         return true;
