@@ -423,6 +423,15 @@ class Response extends Message implements ResponseInterface
     protected function swowSendFile(string $filename): bool
     {
         $headers = $this->getHeadersLine();
+        
+        // 添加 Last-Modified
+        if (!isset($headers['Last-Modified']) && !isset($headers['last-modified'])) {
+            if ($mtime = filemtime($filename)) {
+                $lastModified = gmdate('D, d M Y H:i:s', $mtime) . ' GMT';
+                $headers['Last-Modified'] = $lastModified;
+            }
+        }
+        
         $this->rawResponse->respond(file_get_contents($filename), $headers);
         $this->sended = true;
         return true;
