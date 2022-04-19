@@ -32,6 +32,8 @@ composer run-script --timeout=0 swooleco:start
 
 启动 Swow 协程服务
 
+> 需自行安装 `composer require swow/swow:develop`
+
 > 注意：swow 协程服务不支持 PHP 8.0 以下版本
 
 ```
