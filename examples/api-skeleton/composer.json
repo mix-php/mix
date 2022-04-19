@@ -30,8 +30,7 @@
     "vlucas/phpdotenv": "^5.3",
     "hassankhan/config": "^3.0",
     "monolog/monolog": "^2.3",
-    "firebase/php-jwt": "^5.4",
-    "swow/swow": "dev-develop"
+    "firebase/php-jwt": "^5.4"
   },
   "require-dev": {
     "swoole/ide-helper": "^4.6"
