@@ -52,8 +52,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $scheme = strtolower($scheme);
         $host = $_SERVER['HTTP_HOST'] ?? '';
         $requestUri = $_SERVER['REQUEST_URI'] ?? '';
-        $queryString = $_SERVER['QUERY_STRING'] ?? '';
-        $uri = $scheme . '://' . $host . $requestUri . ($queryString ? "?{$queryString}" : '');
+        $uri = $scheme . '://' . $host . $requestUri;
         $serverParams = $_SERVER;
 
         /** @var ServerRequest $serverRequest */
