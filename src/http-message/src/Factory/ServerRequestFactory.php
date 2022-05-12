@@ -191,7 +191,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $serverRequest->withProtocolVersion($protocolVersion);
         $serverRequest->withRequestTarget($uri);
 
-        $headers = $request->getHeaders() ?? [];
+        $headers = $request->getHeaders() ?: [];
         foreach ($headers as $name => $value) {
             $serverRequest->withHeader($name, $value);
         }
@@ -199,16 +199,16 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $body = (new StreamFactory())->createStreamFromSwow($request); // 减少内存占用
         $serverRequest->withBody($body);
 
-        $cookieParams = $request->getCookieParams() ?? [];
+        $cookieParams = $request->getCookieParams() ?: [];
         $serverRequest->withCookieParams($cookieParams);
 
-        $queryParams = $request->getQueryParams() ?? [];
+        $queryParams = $request->getQueryParams() ?: [];
         $serverRequest->withQueryParams($queryParams);
 
         $uploadedFiles = $request->getUploadedFiles();
         $serverRequest->withUploadedFiles($uploadedFiles);
 
-        $parsedBody = $request->getParsedBody() ?? [];
+        $parsedBody = $request->getParsedBody() ?: [];
         $serverRequest->withParsedBody($parsedBody);
 
         return $serverRequest;
