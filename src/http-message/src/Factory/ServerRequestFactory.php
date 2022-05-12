@@ -190,7 +190,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $serverRequest->withProtocolVersion($protocolVersion);
         $serverRequest->withRequestTarget($uri);
 
-        $headers = $request->header ?? [];
+        $headers = $request->getHeaders() ?? [];
         foreach ($headers as $name => $value) {
             $serverRequest->withHeader($name, $value);
         }
@@ -198,17 +198,16 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $body = (new StreamFactory())->createStreamFromSwow($request); // 减少内存占用
         $serverRequest->withBody($body);
 
-        $cookieParams = $request->cookie ?? [];
+        $cookieParams = $request->getCookieParams() ?? [];
         $serverRequest->withCookieParams($cookieParams);
 
-        $queryParams = $request->get ?? [];
+        $queryParams = $request->getQueryParams() ?? [];
         $serverRequest->withQueryParams($queryParams);
 
         $uploadedFiles = [];
         $uploadedFileFactory = new UploadedFileFactory;
         $streamFactory = new StreamFactory();
         foreach ($request->files ?? [] as $name => $file) {
-            // swoole 概率性出现 files 存在，但是 file 内无数据的情况
             if (count($file) != 5) {
                 continue;
             }
@@ -229,7 +228,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         }
         $serverRequest->withUploadedFiles($uploadedFiles);
 
-        $parsedBody = $request->post ?? [];
+        $parsedBody = $request->getParsedBody() ?? [];
         $serverRequest->withParsedBody($parsedBody);
 
         return $serverRequest;
