@@ -205,28 +205,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $queryParams = $request->getQueryParams() ?? [];
         $serverRequest->withQueryParams($queryParams);
 
-        $uploadedFiles = [];
-        $uploadedFileFactory = new UploadedFileFactory;
-        $streamFactory = new StreamFactory();
-        foreach ($request->files ?? [] as $name => $file) {
-            if (count($file) != 5) {
-                continue;
-            }
-            if ($file['error'] !== 0) {
-                continue;
-            }
-            $tmpFile = $file['tmp_name'];
-            if (rename($tmpFile, $tmpFile . '.mix')) {
-                $tmpFile .= '.mix';
-            }
-            $uploadedFiles[$name] = $uploadedFileFactory->createUploadedFile(
-                $streamFactory->createStreamFromFile($tmpFile),
-                $file['size'],
-                $file['error'],
-                $file['name'],
-                $file['type']
-            );
-        }
+        $uploadedFiles = $request->getUploadedFiles();
         $serverRequest->withUploadedFiles($uploadedFiles);
 
         $parsedBody = $request->getParsedBody() ?? [];
