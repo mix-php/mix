@@ -57,13 +57,13 @@ class RequestFactory implements RequestFactoryInterface
             $request->withHeader($name, $value);
         }
 
-        $contentType = $serverRequest->getHeaderLine('content-type');
+        $contentType = $request->getHeaderLine('content-type');
         $content     = '';
         if (strpos($contentType, 'multipart/form-data') === false) {
             $content = $req->rawContent();
         }
         $body = (new StreamFactory())->createStream($content);
-        $serverRequest->withBody($body);
+        $request->withBody($body);
 
         return $request;
     }
