@@ -51,9 +51,9 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $method = $_SERVER['REQUEST_METHOD'] ?? '';
         $scheme = strtolower($scheme);
         $host = $_SERVER['HTTP_HOST'] ?? '';
-        $requestestUri = $_SERVER['REQUEST_URI'] ?? '';
+        $requestUri = $_SERVER['REQUEST_URI'] ?? '';
         $queryString = $_SERVER['QUERY_STRING'] ?? '';
-        $uri = $scheme . '://' . $host . $requestestUri . ($queryString ? "?{$queryString}" : '');
+        $uri = $scheme . '://' . $host . $requestUri . ($queryString ? "?{$queryString}" : '');
         $serverParams = $_SERVER;
 
         /** @var ServerRequest $serverRequest */
@@ -111,9 +111,9 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $method = $request->server['request_method'] ?? '';
         $scheme = strtolower($scheme);
         $host = $request->header['host'] ?? '';
-        $requestestUri = $request->server['request_uri'] ?? '';
+        $requestUri = $request->server['request_uri'] ?? '';
         $queryString = $request->server['query_string'] ?? '';
-        $uri = $scheme . '://' . $host . $requestestUri . ($queryString ? "?{$queryString}" : '');
+        $uri = $scheme . '://' . $host . $requestUri . ($queryString ? "?{$queryString}" : '');
         $serverParams = $request->server ?? [];
 
         /** @var ServerRequest $serverRequest */
@@ -181,9 +181,9 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $scheme = 'http';
         $method = $request->getMethod();
         $host = $request->getHeaderLine('host');
-        $requestestUri = $request->getUriAsString();
+        $requestUri= $request->getUri()->getQuery();
         $queryString = $request->getQuery();
-        $uri = $scheme . '://' . $host . $requestestUri . ($queryString ? "?{$queryString}" : '');
+        $uri = $scheme . '://' . $host . $requestUri . ($queryString ? "?{$queryString}" : '');
         $serverParams = $request->getServerParams();
 
         /** @var ServerRequest $serverRequest */
