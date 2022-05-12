@@ -180,8 +180,8 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $scheme = 'http';
         $method = $request->getMethod();
         $host = $request->getHeaderLine('host');
-        $uri = $request->getUri();
-        $uri = $scheme . '://' . $host . $uri->getPath() . ($uri->getQuery() ? "?{$uri->getQuery()}" : '');
+        $requestUri = $request->getUri();
+        $uri = $scheme . '://' . $host . $requestUri->getPath() . ($requestUri->getQuery() ? "?{$requestUri->getQuery()}" : '');
         $serverParams = $request->getServerParams();
 
         /** @var ServerRequest $serverRequest */
