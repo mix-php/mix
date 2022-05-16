@@ -9,13 +9,13 @@ use Mix\Vega\Context;
  * Class Auth
  * @package App\Middleware
  */
-class Auth
+class AuthMiddleware
 {
 
     /**
      * @return \Closure
      */
-    public static function middleware(): \Closure
+    public static function callback(): \Closure
     {
         return function (Context $ctx) {
             try {

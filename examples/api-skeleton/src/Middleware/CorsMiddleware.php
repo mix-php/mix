@@ -8,13 +8,13 @@ use Mix\Vega\Context;
  * Class Cors
  * @package App\Middleware
  */
-class Cors
+class CorsMiddleware
 {
 
     /**
      * @return \Closure
      */
-    public static function middleware(): \Closure
+    public static function callback(): \Closure
     {
         return function (Context $ctx) {
             $ctx->setHeader('Access-Control-Allow-Origin', '*');
