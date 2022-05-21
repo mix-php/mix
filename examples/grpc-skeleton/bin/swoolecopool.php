@@ -11,7 +11,6 @@ use App\Error;
 use App\Container\Logger;
 use App\Grpc;
 use Dotenv\Dotenv;
-use Mix\Init\StaticInit;
 
 Dotenv::createUnsafeImmutable(__DIR__ . '/../', '.env')->load();
 define("APP_DEBUG", env('APP_DEBUG'));
@@ -24,7 +23,6 @@ $worker_num = 4;
 $pool = new \Swoole\Process\Pool($worker_num, SWOOLE_IPC_NONE);
 $pool->set(['enable_coroutine' => true]);
 $pool->on('WorkerStart', function ($pool, $id) use ($host, $port) {
-    StaticInit::finder(__DIR__ . '/../src/Container')->exec('init');
     App\Container\DB::enableCoroutine();
     App\Container\RDS::enableCoroutine();
 

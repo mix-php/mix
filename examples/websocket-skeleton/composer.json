@@ -17,7 +17,6 @@
     ]
   },
   "require": {
-    "mix/init": "~3.0.0",
     "mix/vega": "~3.0.0",
     "mix/websocket": "~3.0.0",
     "mix/cli": "~3.0.0",

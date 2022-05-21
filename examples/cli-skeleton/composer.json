@@ -16,7 +16,6 @@
     ]
   },
   "require": {
-    "mix/init": "~3.0.0",
     "mix/cli": "~3.0.0",
     "mix/database": "~3.0.0",
     "mix/redis": "~3.0.0",

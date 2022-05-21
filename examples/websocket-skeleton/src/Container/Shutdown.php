@@ -22,6 +22,9 @@ class Shutdown
         static::$onShutdown[] = $func;
     }
 
+    /**
+     * @return void
+     */
     public static function trigger(): void
     {
         foreach (static::$onShutdown as $func) {

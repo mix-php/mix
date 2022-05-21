@@ -2,6 +2,7 @@
 
 namespace App\Container;
 
+use App\Once;
 use Mix\Redis\Redis;
 
 class RDS
@@ -12,15 +13,17 @@ class RDS
      */
     private static $instance;
 
+    /**
+     * @var Once
+     */
+    private static $once;
+
+    /**
+     * @return void
+     */
     public static function init(): void
     {
-        $host = $_ENV['REDIS_HOST'];
-        $port = $_ENV['REDIS_PORT'];
-        $password = $_ENV['REDIS_PASSWORD'];
-        $database = $_ENV['REDIS_DATABASE'];
-        $rds = new Redis($host, $port, $password, $database);
-        APP_DEBUG and $rds->setLogger(new RDSLogger());
-        self::$instance = $rds;
+        self::$once = new Once();
     }
 
     /**
@@ -29,12 +32,23 @@ class RDS
     public static function instance(): Redis
     {
         if (!isset(self::$instance)) {
-            static::init();
+            static::$once->do(function () {
+                $host = $_ENV['REDIS_HOST'];
+                $port = $_ENV['REDIS_PORT'];
+                $password = $_ENV['REDIS_PASSWORD'];
+                $database = $_ENV['REDIS_DATABASE'];
+                $rds = new Redis($host, $port, $password, $database);
+                APP_DEBUG and $rds->setLogger(new RDSLogger());
+                self::$instance = $rds;
+            });
         }
         return self::$instance;
     }
 
-    public static function enableCoroutine()
+    /**
+     * @return void
+     */
+    public static function enableCoroutine(): void
     {
         $maxOpen = 30;        // 最大开启连接数
         $maxIdle = 10;        // 最大闲置连接数
@@ -45,3 +59,5 @@ class RDS
     }
 
 }
+
+RDS::init();

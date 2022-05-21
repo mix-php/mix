@@ -11,7 +11,6 @@ use App\Error;
 use App\Container\Logger;
 use App\Vega;
 use Dotenv\Dotenv;
-use Mix\Init\StaticInit;
 
 Dotenv::createUnsafeImmutable(__DIR__ . '/../', '.env')->load();
 define("APP_DEBUG", env('APP_DEBUG'));
@@ -31,7 +30,6 @@ $http->on('Request', $vega->handler());
 $http->on('WorkerStart', function ($server, $workerId) {
     // swoole 协程不支持 set_exception_handler 需要手动捕获异常
     try {
-        StaticInit::finder(__DIR__ . '/../src/Container')->exec('init');
         App\Container\DB::enableCoroutine();
         App\Container\RDS::enableCoroutine();
     } catch (\Throwable $ex) {

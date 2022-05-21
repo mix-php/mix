@@ -2,6 +2,8 @@
 
 namespace App\Container;
 
+use App\Once;
+
 /**
  * Class Config
  * @package App\Container
@@ -14,9 +16,17 @@ class Config
      */
     private static $instance;
 
+    /**
+     * @var Once
+     */
+    private static $once;
+
+    /**
+     * @return void
+     */
     public static function init(): void
     {
-        self::$instance = new \Noodlehaus\Config(__DIR__ . '/../../conf');
+        self::$once = new Once();
     }
 
     /**
@@ -25,9 +35,13 @@ class Config
     public static function instance(): \Noodlehaus\Config
     {
         if (!isset(self::$instance)) {
-            static::init();
+            self::$once->do(function () {
+                self::$instance = new \Noodlehaus\Config(__DIR__ . '/../../conf');
+            });
         }
         return self::$instance;
     }
 
 }
+
+Config::init();

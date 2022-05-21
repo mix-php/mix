@@ -2,6 +2,7 @@
 
 namespace App\Container;
 
+use App\Once;
 use Mix\Database\Database;
 
 class DB
@@ -12,17 +13,17 @@ class DB
      */
     private static $instance;
 
+    /**
+     * @var Once
+     */
+    private static $once;
+
+    /**
+     * @return void
+     */
     public static function init(): void
     {
-        $dsn = $_ENV['DATABASE_DSN'];
-        $username = $_ENV['DATABASE_USERNAME'];
-        $password = $_ENV['DATABASE_PASSWORD'];
-        $db = new Database($dsn, $username, $password, [
-            \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-            \PDO::ATTR_EMULATE_PREPARES => false
-        ]);
-        APP_DEBUG and $db->setLogger(new DBLogger());
-        self::$instance = $db;
+        self::$once = new Once();
     }
 
     /**
@@ -31,12 +32,25 @@ class DB
     public static function instance(): Database
     {
         if (!isset(self::$instance)) {
-            static::init();
+            static::$once->do(function () {
+                $dsn = $_ENV['DATABASE_DSN'];
+                $username = $_ENV['DATABASE_USERNAME'];
+                $password = $_ENV['DATABASE_PASSWORD'];
+                $db = new Database($dsn, $username, $password, [
+                    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+                    \PDO::ATTR_EMULATE_PREPARES => false
+                ]);
+                APP_DEBUG and $db->setLogger(new DBLogger());
+                self::$instance = $db;
+            });
         }
         return self::$instance;
     }
 
-    public static function enableCoroutine()
+    /**
+     * @return void
+     */
+    public static function enableCoroutine(): void
     {
         $maxOpen = 30;        // 最大开启连接数
         $maxIdle = 10;        // 最大闲置连接数
@@ -47,3 +61,5 @@ class DB
     }
 
 }
+
+DB::init();

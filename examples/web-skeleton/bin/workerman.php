@@ -11,7 +11,6 @@ use App\Error;
 use App\Container\Logger;
 use App\Vega;
 use Dotenv\Dotenv;
-use Mix\Init\StaticInit;
 
 Dotenv::createUnsafeImmutable(__DIR__ . '/../', '.env')->load();
 define("APP_DEBUG", env('APP_DEBUG'));
@@ -22,7 +21,7 @@ $vega = Vega::new();
 $addr = 'http://0.0.0.0:2345';
 $http = new Workerman\Worker($addr);
 $http->onWorkerStart = function ($worker) {
-    StaticInit::finder(__DIR__ . '/../src/Container')->exec('init');
+    // init
 };
 $http->onMessage = $vega->handler();
 $http->count = 4;
