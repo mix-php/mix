@@ -21,6 +21,7 @@ use function Swow\Sync\waitAll;
 
 Dotenv::createUnsafeImmutable(__DIR__ . '/../', '.env')->load();
 define("APP_DEBUG", env('APP_DEBUG'));
+
 Error::register();
 
 class SwowServer extends HttpServer
