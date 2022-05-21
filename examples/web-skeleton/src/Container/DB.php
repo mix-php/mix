@@ -17,7 +17,10 @@ class DB
         $dsn = $_ENV['DATABASE_DSN'];
         $username = $_ENV['DATABASE_USERNAME'];
         $password = $_ENV['DATABASE_PASSWORD'];
-        $db = new Database($dsn, $username, $password);
+        $db = new Database($dsn, $username, $password, [
+            \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+            \PDO::ATTR_EMULATE_PREPARES => false
+        ]);
         APP_DEBUG and $db->setLogger(new DBLogger());
         self::$instance = $db;
     }
