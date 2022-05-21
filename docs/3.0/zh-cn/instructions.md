@@ -54,7 +54,7 @@ DB::init();
 
 ### 需要注意哪些库
 
-在 `mix` 官方提供的骨架中，redis、database 本身就使用处理好了并发因此用户无需处理，只有在当我们使用 `mix/grpc` 的客户端时，由于我们需要常驻复用这些客户端，因此需要使用 `App\Once::class` 来处理：
+在官方提供的骨架中，redis、database 默认就处理好了并发问题，因此用户无需处理，只有在当我们使用 `mix/grpc` 的客户端时，由于我们需要常驻复用这些客户端，因此需要使用 `App\Once::class` 来处理。
 
 - 在 `src/Container` 创建一个gRPC客户端单例
 
