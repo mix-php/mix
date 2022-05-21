@@ -19,7 +19,11 @@ class AuthMiddleware
     {
         return function (Context $ctx) {
             try {
-                list(, $token) = explode(' ', $ctx->header('authorization'));
+                $auth = explode(' ', $ctx->header('authorization'));
+                if (count($auth) != 2) {
+                    throw new \RuntimeException('Header Authorization not found');
+                }
+                list(, $token) = $auth;
                 $payload = JWT::decode($token, $_ENV['JWT_KEY'], ['HS256']);
             } catch (\Throwable $e) {
                 $ctx->abortWithStatus(403);
