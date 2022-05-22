@@ -38,7 +38,7 @@ class DB
                 $password = $_ENV['DATABASE_PASSWORD'];
                 $db = new Database($dsn, $username, $password, [
                     \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-                    \PDO::ATTR_EMULATE_PREPARES => false
+                    // \PDO::ATTR_EMULATE_PREPARES => false
                 ]);
                 APP_DEBUG and $db->setLogger(new DBLogger());
                 self::$instance = $db;
