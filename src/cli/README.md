@@ -138,7 +138,19 @@ foreach (Mix\Cli\Flag::arguments()->values() as $k => $v) {
 }
 ```
 
-## Handle panic 错误处理
+## Daemon 后台执行
+
+我们可以通过配合 `flag` 获取参数，实现通过某几个参数控制程序后台执行。
+
+- 使用了 [Swoole Daemon](https://wiki.swoole.com/#/process/process?id=daemon) 方法
+
+```php
+if (Mix\Cli\Flag::match('d', 'daemon')->bool()) {
+    \Swoole\Process::daemon();
+}
+```
+
+## Middleware 与 Handle panic 错误处理
 
 使用中间件处理异常，也可以单独对某个命令配置中间件
 
