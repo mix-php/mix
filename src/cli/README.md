@@ -150,9 +150,9 @@ if (Mix\Cli\Flag::match('d', 'daemon')->bool()) {
 }
 ```
 
-## Middleware 与 Handle exception 异常处理
+## Middleware 与 Handle exception
 
-使用中间件处理异常，也可以单独对某个命令配置中间件
+可以使用全局中间件给所有命令捕获异常，也可以单独对某个命令配置中间件
 
 ```php
 $h = function ($next) {
@@ -162,7 +162,7 @@ $h = function ($next) {
         if ($ex instanceof Mix\Cli\Exception\NotFoundException) {
             throw $ex;
         }
-        // handle panic
+        // handle exception
     }
 };
 $cmd = new Mix\Cli\Command([
