@@ -158,11 +158,9 @@ if (Mix\Cli\Flag::match('d', 'daemon')->bool()) {
 $h = function ($next) {
     try {
         $next();
-    } catch (\Throwable $ex){
-        if ($ex instanceof Mix\Cli\Exception\NotFoundException) {
-            throw $ex;
-        }
+    } catch (\Throwable $ex) {
         // handle exception
+        echo(sprintf("ERROR: %s\n", $ex->getMessage()));
     }
 };
 $cmd = new Mix\Cli\Command([
