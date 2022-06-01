@@ -150,7 +150,7 @@ if (Mix\Cli\Flag::match('d', 'daemon')->bool()) {
 }
 ```
 
-## Middleware 与 Handle panic 错误处理
+## Middleware 与 Handle exception 异常处理
 
 使用中间件处理异常，也可以单独对某个命令配置中间件
 
