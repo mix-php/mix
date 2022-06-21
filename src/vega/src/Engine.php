@@ -90,7 +90,7 @@ class Engine
                  */
                 list($request, $response) = $args;
                 $ctx = Context::fromSwow($this->mode, $request, $response, $this->htmlRender);
-                $this->dispatch($request->getMethod(), $request->getPath(), $ctx);
+                $this->dispatch($request->getMethod(), $request->getUri()->getPath(), $ctx);
             } else {
                 throw new RuntimeException('The current usage scenario is not supported');
             }
