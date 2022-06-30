@@ -35,8 +35,6 @@
     "psr/http-server-handler": "^1.0",
     "opis/closure": "^3.5",
     "funkjedi/composer-include-files": "^1.0",
-    "guzzlehttp/guzzle": ">=6.4,<=6.5",
-    "ezimuel/ringphp": "^1.1.2",
     "ramsey/uuid": "^3.9",
     "start-point/etcd-php": "^1.1",
     "mix/opentracing": "^1.0",
@@ -75,7 +73,6 @@
     "mix/sync-invoke": "self.version",
     "mix/grpc": "self.version",
     "mix/json-rpc": "self.version",
-    "mix/guzzle": "self.version",
     "mix/micro": "self.version",
     "mix/micro-config": "self.version",
     "mix/micro-hystrix": "self.version",
@@ -116,7 +113,6 @@
       "Mix\\SyncInvoke\\": "src/sync-invoke/src/",
       "Mix\\Grpc\\": "src/grpc/src/",
       "Mix\\JsonRpc\\": "src/json-rpc/src/",
-      "Mix\\Guzzle\\": "src/guzzle/src/",
       "Mix\\Micro\\": "src/micro/src/",
       "Mix\\Micro\\Config\\": "src/micro-config/src/",
       "Mix\\Micro\\Hystrix\\": "src/micro-hystrix/src/",
@@ -128,11 +124,7 @@
       "Mix\\Tracing\\Zipkin\\": "src/tracing-zipkin/src/"
     },
     "classmap": [
-      "src/console/src/Mix.php",
-      "src/guzzle/src/hook/Handler/CurlHandler.php",
-      "src/guzzle/src/hook/Handler/StreamHandler.php",
-      "src/guzzle/src/hook/Handler/Ring/CurlHandler.php",
-      "src/guzzle/src/hook/Handler/Ring/StreamHandler.php"
+      "src/console/src/Mix.php"
     ],
     "files": [
       "src/runtime/src/functions.php",
