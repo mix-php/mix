@@ -37,6 +37,12 @@ class Subscriber
     public $password = '';
 
     /**
+     * 前缀
+     * @var string
+     */
+    public $prefix = '';
+
+    /**
      * 命令调用器
      * @var CommandInvoker
      */
@@ -56,12 +62,13 @@ class Subscriber
      * @param float $timeout
      * @throws \Swoole\Exception
      */
-    public function __construct(string $host, int $port = 6379, string $password = '', float $timeout = 5.0)
+    public function __construct(string $host, int $port = 6379, string $password = '', float $timeout = 5.0, string $prefix = '')
     {
         $this->host = $host;
         $this->port = $port;
         $this->password = $password;
         $this->timeout = $timeout;
+        $this->prefix = $prefix;
         $this->connect();
     }
 
@@ -86,6 +93,9 @@ class Subscriber
      */
     public function subscribe(string ...$channels)
     {
+        $channels = array_map(function ($channel) {
+            return $this->prefix . $channel;
+        }, $channels);
         $result = $this->commandInvoker->invoke("subscribe " . join(' ', $channels), count($channels));
         foreach ($result as $value) {
             if ($value === false) {
@@ -103,6 +113,9 @@ class Subscriber
      */
     public function unsubscribe(string ...$channels)
     {
+        $channels = array_map(function ($channel) {
+            return $this->prefix . $channel;
+        }, $channels);
         $result = $this->commandInvoker->invoke("unsubscribe " . join(' ', $channels), count($channels));
         foreach ($result as $value) {
             if ($value === false) {
