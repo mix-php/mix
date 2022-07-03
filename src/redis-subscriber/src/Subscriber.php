@@ -62,13 +62,12 @@ class Subscriber
      * @param float $timeout
      * @throws \Swoole\Exception
      */
-    public function __construct(string $host, int $port = 6379, string $password = '', float $timeout = 5.0, string $prefix = '')
+    public function __construct(string $host, int $port = 6379, string $password = '', float $timeout = 5.0)
     {
         $this->host = $host;
         $this->port = $port;
         $this->password = $password;
         $this->timeout = $timeout;
-        $this->prefix = $prefix;
         $this->connect();
     }
 
