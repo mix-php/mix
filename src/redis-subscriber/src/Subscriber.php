@@ -95,7 +95,7 @@ class Subscriber
         $channels = array_map(function ($channel) {
             return $this->prefix . $channel;
         }, $channels);
-        $result = $this->commandInvoker->invoke("subscribe " . join(' ', $channels), count($channels));
+        $result = $this->commandInvoker->invoke("subscribe " . implode(' ', $channels), count($channels));
         foreach ($result as $value) {
             if ($value === false) {
                 $this->commandInvoker->interrupt();
@@ -115,7 +115,7 @@ class Subscriber
         $channels = array_map(function ($channel) {
             return $this->prefix . $channel;
         }, $channels);
-        $result = $this->commandInvoker->invoke("unsubscribe " . join(' ', $channels), count($channels));
+        $result = $this->commandInvoker->invoke("unsubscribe " . implode(' ', $channels), count($channels));
         foreach ($result as $value) {
             if ($value === false) {
                 $this->commandInvoker->interrupt();

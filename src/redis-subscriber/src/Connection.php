@@ -37,7 +37,7 @@ class Connection
     /**
      * EOF
      */
-    const EOF = "\r\n";
+    protected const EOF = "\r\n";
 
     /**
      * Connection constructor.
