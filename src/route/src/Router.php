@@ -307,10 +307,10 @@ class Router implements \Mix\Http\Server\ServerHandlerInterface, RouterInterface
     public function error500(\Throwable $exception, Response $response): Response
     {
         $content = [
-            'message' => $e->getMessage(),
-            'code'    => $e->getCode(),
+            'message' => $exception->getMessage(),
+            'code'    => $exception->getCode(),
         ];
-        $body    = (new StreamFactory())->createStream(json_encode($content, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $body    = (new StreamFactory())->createStream(json_encode($content, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         return $response
             ->withContentType('application/json', 'utf-8')
             ->withBody($body)
