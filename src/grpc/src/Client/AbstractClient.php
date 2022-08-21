@@ -34,7 +34,6 @@ abstract class AbstractClient
      * @param Context $context
      * @param Message $request
      * @param Message $response
-     * @param array $options
      * @return Message
      * @throws RuntimeException
      */
