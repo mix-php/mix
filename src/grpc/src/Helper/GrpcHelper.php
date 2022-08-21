@@ -25,7 +25,7 @@ class GrpcHelper
      * @param string $data
      * @throws \Exception
      */
-    public static function deserialize(\Google\Protobuf\Internal\Message &$message, string $data)
+    public static function deserialize(\Google\Protobuf\Internal\Message $message, string $data)
     {
         $message->mergeFromString(static::unpack($data));
     }
