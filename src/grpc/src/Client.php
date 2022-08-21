@@ -10,7 +10,6 @@ use Mix\Grpc\Exception\RuntimeException;
  */
 class Client
 {
-
     /**
      * @var string
      */
@@ -179,5 +178,4 @@ class Client
             }
         }
     }
-
 }

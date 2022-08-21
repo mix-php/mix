@@ -8,7 +8,6 @@ namespace Mix\Grpc\Helper;
  */
 class GrpcHelper
 {
-
     /**
      * Serialize
      * @param \Google\Protobuf\Internal\Message $message
@@ -63,5 +62,4 @@ class GrpcHelper
         list($usec, $sec) = explode(" ", microtime());
         return ((float)$usec + (float)$sec);
     }
-
 }

@@ -1,11 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
 final class GoServerTest extends TestCase
 {
-
     public function test(): void
     {
         $_this = $this;
@@ -26,5 +26,4 @@ final class GoServerTest extends TestCase
         };
         run($func);
     }
-
 }

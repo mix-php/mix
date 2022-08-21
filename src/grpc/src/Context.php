@@ -7,7 +7,6 @@ use Swoole\Http\Response;
 
 class Context
 {
-
     /**
      * @var Request
      */
@@ -88,5 +87,4 @@ class Context
     {
         return $this->timeout;
     }
-
 }

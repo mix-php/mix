@@ -13,7 +13,6 @@ use Mix\Grpc\Helper\GrpcHelper;
  */
 abstract class AbstractClient
 {
-
     /**
      * @var \Mix\Grpc\Client
      */
@@ -53,5 +52,4 @@ abstract class AbstractClient
         GrpcHelper::deserialize($response, $resp->data ?? '');
         return $response;
     }
-
 }

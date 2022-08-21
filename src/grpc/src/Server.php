@@ -12,7 +12,6 @@ use Mix\Grpc\Helper\GrpcHelper;
  */
 class Server
 {
-
     /**
      * @var callable[]
      */
@@ -114,12 +113,12 @@ class Server
             $reflectMethod = $reflectClass->getMethod($method);
             $reflectParameter = $reflectMethod->getParameters()[1];
             $rpcRequestClass = $reflectParameter->getType()->getName();
-            $rpcRequest = new $rpcRequestClass;
+            $rpcRequest = new $rpcRequestClass();
             GrpcHelper::deserialize($rpcRequest, $ctx->request->rawContent());
 
             // 执行
             if (!is_object($objectOrClass)) {
-                $object = new $objectOrClass;
+                $object = new $objectOrClass();
             } else {
                 $object = $objectOrClass;
             }
@@ -174,5 +173,4 @@ class Server
             $response->trailer('grpc-message', '');
         }
     }
-
 }

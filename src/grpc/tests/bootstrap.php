@@ -3,7 +3,7 @@
 if (!function_exists('run')) {
     function run($func)
     {
-        $scheduler = new \Swoole\Coroutine\Scheduler;
+        $scheduler = new \Swoole\Coroutine\Scheduler();
         $scheduler->set([
             'hook_flags' => SWOOLE_HOOK_ALL,
         ]);

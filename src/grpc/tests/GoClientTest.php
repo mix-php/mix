@@ -1,11 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
 final class GoClientTest extends TestCase
 {
-
     public function test(): void
     {
         $_this = $this;
@@ -28,17 +28,14 @@ final class GoClientTest extends TestCase
         };
         run($func);
     }
-
 }
 
 class SayService1 implements \Php\Micro\Grpc\Greeter\SayInterface
 {
-
     public function Hello(\Mix\Grpc\Context $context, \Php\Micro\Grpc\Greeter\Request $request): \Php\Micro\Grpc\Greeter\Response
     {
         $response = new \Php\Micro\Grpc\Greeter\Response();
         $response->setMsg(sprintf('hello, %s', $request->getName()));
         return $response;
     }
-
 }
