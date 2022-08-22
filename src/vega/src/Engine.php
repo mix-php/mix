@@ -2,6 +2,7 @@
 
 namespace Mix\Vega;
 
+use Mix\Vega\Exception\NotFoundException;
 use Mix\Vega\Exception\RuntimeException;
 use Mix\View\Renderer;
 
@@ -101,6 +102,7 @@ class Engine
      * 立即执行
      * 支持 PHP-FPM, cli-server
      * @return bool
+     * @throws NotFoundException
      */
     public function run(): bool
     {

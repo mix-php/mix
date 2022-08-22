@@ -183,8 +183,7 @@ abstract class Validator implements \JsonSerializable
             return '';
         }
         $item = array_shift($errors);
-        $error = array_shift($item);
-        return $error;
+        return array_shift($item);
     }
 
     /**
