@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
@@ -6,7 +7,6 @@ use Mix\Database\ConnectionInterface;
 
 final class WhereTest extends TestCase
 {
-
     public function testAnd(): void
     {
         $db = db();
@@ -88,5 +88,4 @@ final class WhereTest extends TestCase
             })
             ->get();
     }
-
 }

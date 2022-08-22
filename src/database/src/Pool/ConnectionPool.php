@@ -12,7 +12,6 @@ use Mix\ObjectPool\AbstractObjectPool;
  */
 class ConnectionPool extends AbstractObjectPool
 {
-
     /**
      * 借用连接
      * @return Driver
@@ -21,5 +20,4 @@ class ConnectionPool extends AbstractObjectPool
     {
         return parent::borrow();
     }
-
 }

@@ -8,7 +8,6 @@ namespace Mix\Database;
  */
 class Expr
 {
-
     /**
      * @var string
      */
@@ -41,5 +40,4 @@ class Expr
         }
         return vsprintf($expr, $this->values);
     }
-
 }

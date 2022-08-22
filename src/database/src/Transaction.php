@@ -8,7 +8,6 @@ namespace Mix\Database;
  */
 class Transaction extends Connection
 {
-
     /**
      * Transaction constructor.
      * @param Driver $driver
@@ -45,5 +44,4 @@ class Transaction extends Connection
         }
         $this->__destruct();
     }
-
 }

@@ -18,13 +18,13 @@ function db()
 function pool()
 {
     $db = new \Mix\Database\Database(DATABASE_DSN, DATABASE_USERNAME, DATABASE_PASSWORD);
-    $db->startPool(10,10);
+    $db->startPool(10, 10);
     return $db;
 }
 
 function swoole_co_run($func)
 {
-    $scheduler = new \Swoole\Coroutine\Scheduler;
+    $scheduler = new \Swoole\Coroutine\Scheduler();
     $scheduler->set([
         'hook_flags' => SWOOLE_HOOK_ALL,
     ]);

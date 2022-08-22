@@ -1,11 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
 final class RawTest extends TestCase
 {
-
     public function test(): void
     {
         $db = db();
@@ -39,5 +39,4 @@ final class RawTest extends TestCase
         $this->assertObjectHasAttribute('balance', $obj);
         $this->assertObjectHasAttribute('add_time', $obj);
     }
-
 }

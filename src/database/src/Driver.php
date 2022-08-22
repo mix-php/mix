@@ -10,7 +10,6 @@ use Mix\ObjectPool\ObjectTrait;
  */
 class Driver
 {
-
     use ObjectTrait;
 
     /**
@@ -104,5 +103,4 @@ class Driver
     {
         $this->pdo = null;
     }
-
 }

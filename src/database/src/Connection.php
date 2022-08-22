@@ -8,7 +8,6 @@ namespace Mix\Database;
  */
 class Connection extends AbstractConnection
 {
-
     protected $exceptional = false;
 
     public function queryOne(int $fetchStyle = null)
@@ -86,5 +85,4 @@ class Connection extends AbstractConnection
         $this->driver->__return();
         $this->driver = new EmptyDriver();
     }
-
 }

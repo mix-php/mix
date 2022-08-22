@@ -1,11 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
 final class UpdateTest extends TestCase
 {
-
     public function test(): void
     {
         $db = db();
@@ -34,5 +34,4 @@ final class UpdateTest extends TestCase
         $rowsAffected = $db->table('users')->where('id = ?', 1)->updates($data)->rowCount();
         $this->assertEquals(0, $rowsAffected);
     }
-
 }
