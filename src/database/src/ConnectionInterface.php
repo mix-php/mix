@@ -8,7 +8,6 @@ namespace Mix\Database;
  */
 interface ConnectionInterface
 {
-
     public function debug(\Closure $func): ConnectionInterface;
 
     public function raw(string $sql, ...$values): ConnectionInterface;
@@ -87,5 +86,4 @@ interface ConnectionInterface
     public function rowCount(): int;
 
     public function queryLog(): array;
-
 }

@@ -1,11 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
 final class InsertTest extends TestCase
 {
-
     public function test(): void
     {
         $db = db();
@@ -45,5 +45,4 @@ final class InsertTest extends TestCase
         ];
         $db->insert('users', $data);
     }
-
 }

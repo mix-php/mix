@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
@@ -6,7 +7,6 @@ use Mix\Database\ConnectionInterface;
 
 final class SelectTest extends TestCase
 {
-
     public function testOrder(): void
     {
         $db = db();
@@ -70,5 +70,4 @@ final class SelectTest extends TestCase
             $_this->assertEquals([0], $log['bindings']);
         })->table('news AS n')->select('n.*, u.name')->leftJoin('users AS u', 'n.uid = u.id AND u.balance > ?', 0)->get();
     }
-
 }

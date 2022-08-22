@@ -8,7 +8,6 @@ namespace Mix\Database;
  */
 class EmptyDriver
 {
-
     protected $errorMessage = 'The connection has been returned to the pool, the current operation cannot be performed';
 
     public function __construct()
@@ -34,5 +33,4 @@ class EmptyDriver
     {
         throw new \RuntimeException($this->errorMessage);
     }
-
 }

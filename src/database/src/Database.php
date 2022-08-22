@@ -12,7 +12,6 @@ use Mix\ObjectPool\Exception\WaitTimeoutException;
  */
 class Database
 {
-
     /**
      * 数据源格式
      * @var string
@@ -308,5 +307,4 @@ class Database
     {
         return $this->borrow()->table($table);
     }
-
 }

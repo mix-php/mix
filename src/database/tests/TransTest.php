@@ -1,11 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
 final class TransTest extends TestCase
 {
-
     // 没有pool，因为复用连接，lastInsertId, rowCount 值为第一个查询的值
     public function testLastInsertIdRowCount(): void
     {
@@ -139,5 +139,4 @@ final class TransTest extends TestCase
             $_this->assertTrue(true);
         });
     }
-
 }

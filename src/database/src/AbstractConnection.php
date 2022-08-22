@@ -8,7 +8,6 @@ namespace Mix\Database;
  */
 abstract class AbstractConnection implements ConnectionInterface
 {
-
     use QueryBuilder;
 
     /**
@@ -618,5 +617,4 @@ abstract class AbstractConnection implements ConnectionInterface
         $this->driver = null; // 使其在析构时不回收
         return new Transaction($driver, $this->logger);
     }
-
 }

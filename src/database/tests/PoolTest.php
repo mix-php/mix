@@ -1,11 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
 final class PoolTest extends TestCase
 {
-
     public function testConnReturn(): void
     {
         $_this = $this;
@@ -90,5 +90,4 @@ final class PoolTest extends TestCase
         swoole_run($func);
     }
     */
-
 }

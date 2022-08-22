@@ -11,7 +11,6 @@ use Mix\ObjectPool\DialerInterface;
  */
 class Dialer implements DialerInterface
 {
-
     /**
      * 数据源格式
      * @var string
@@ -64,5 +63,4 @@ class Dialer implements DialerInterface
             $this->options
         );
     }
-
 }
