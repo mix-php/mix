@@ -188,7 +188,7 @@ class Message implements MessageInterface
         } else if (is_array($value)) {
             $header = [];
             foreach ($value as $v) {
-                array_push($header, (string)$v);
+                $header[] = (string)$v;
             }
             $this->headers[$name] = $header;
         } else {
@@ -217,10 +217,10 @@ class Message implements MessageInterface
     {
         $header = $this->getHeader($name);
         if (is_scalar($value)) {
-            array_push($header, (string)$value);
+            $header[] = (string)$value;
         } else if (is_array($value)) {
             foreach ($value as $v) {
-                array_push($header, (string)$v);
+                $header[] = (string)$v;
             }
         } else {
             throw new \InvalidArgumentException('Header value can only be of type string');
