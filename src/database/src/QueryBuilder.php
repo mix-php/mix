@@ -87,7 +87,7 @@ trait QueryBuilder
      */
     public function join(string $table, string $on, ...$values): ConnectionInterface
     {
-        array_push($this->join, ['INNER JOIN', $table, $on, $values]);
+        $this->join[] = ['INNER JOIN', $table, $on, $values];
         return $this;
     }
 
@@ -99,7 +99,7 @@ trait QueryBuilder
      */
     public function leftJoin(string $table, string $on, ...$values): ConnectionInterface
     {
-        array_push($this->join, ['LEFT JOIN', $table, $on, $values]);
+        $this->join[] = ['LEFT JOIN', $table, $on, $values];
         return $this;
     }
 
@@ -111,7 +111,7 @@ trait QueryBuilder
      */
     public function rightJoin(string $table, string $on, ...$values): ConnectionInterface
     {
-        array_push($this->join, ['RIGHT JOIN', $table, $on, $values]);
+        $this->join[] = ['RIGHT JOIN', $table, $on, $values];
         return $this;
     }
 
@@ -123,7 +123,7 @@ trait QueryBuilder
      */
     public function fullJoin(string $table, string $on, ...$values): ConnectionInterface
     {
-        array_push($this->join, ['FULL JOIN', $table, $on, $values]);
+        $this->join[] = ['FULL JOIN', $table, $on, $values];
         return $this;
     }
 
@@ -134,7 +134,7 @@ trait QueryBuilder
      */
     public function where(string $expr, ...$values): ConnectionInterface
     {
-        array_push($this->where, ['AND', $expr, $values]);
+        $this->where[] = ['AND', $expr, $values];
         return $this;
     }
 
@@ -145,7 +145,7 @@ trait QueryBuilder
      */
     public function or(string $expr, ...$values): ConnectionInterface
     {
-        array_push($this->where, ['OR', $expr, $values]);
+        $this->where[] = ['OR', $expr, $values];
         return $this;
     }
 
@@ -159,7 +159,7 @@ trait QueryBuilder
         if (!in_array($order, ['asc', 'desc'])) {
             throw new \RuntimeException('Sort can only be asc or desc.');
         }
-        array_push($this->order, [$field, strtoupper($order)]);
+        $this->order[] = [$field, strtoupper($order)];
         return $this;
     }
 
@@ -180,7 +180,7 @@ trait QueryBuilder
      */
     public function having(string $expr, ...$values): ConnectionInterface
     {
-        array_push($this->having, [$expr, $values]);
+        $this->having[] = [$expr, $values];
         return $this;
     }
 
@@ -257,10 +257,10 @@ trait QueryBuilder
                 $set = [];
                 foreach ($data as $k => $v) {
                     if ($v instanceof Expr) {
-                        array_push($set, "$k = {$v->__toString()}");
+                        $set[] = "$k = {$v->__toString()}";
                     } else {
                         $set[] = "$k = ?";
-                        array_push($values, $v);
+                        $values[] = $v;
                     }
                 }
                 $sqls[] = "UPDATE {$this->table} SET " . implode(', ', $set);
@@ -292,6 +292,7 @@ trait QueryBuilder
                                 $value = "'$value'";
                             }
                         }
+                        unset($value);
                         $expr = preg_replace('/\(\?\)/', sprintf('(%s)', implode(',', $val)), $expr, 1);
                         unset($vals[$k]);
                     }

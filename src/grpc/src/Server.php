@@ -123,10 +123,7 @@ class Server
             } else {
                 $object = $objectOrClass;
             }
-            $parameters = [];
-            array_push($parameters, $ctx);
-            array_push($parameters, $rpcRequest);
-            $rpcResponse = call_user_func_array([$object, $method], $parameters);
+            $rpcResponse = call_user_func_array([$object, $method], [$ctx, $rpcRequest]);
         } catch (NotFoundException $ex) {
             $status = $ex->getCode();
             $ex = null;
