@@ -14,10 +14,7 @@ class Connection extends AbstractConnection
      */
     protected function inTransaction(): bool
     {
-        if ($this instanceof Multi) {
-            return true;
-        }
-        return false;
+        return $this instanceof Multi;
     }
 
     /**
