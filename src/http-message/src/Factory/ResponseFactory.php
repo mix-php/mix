@@ -51,7 +51,12 @@ class ResponseFactory implements ResponseFactoryInterface
         return $response;
     }
 
-    public function createResponseFromSwow(\Swow\Http\Server\Connection $resp): ResponseInterface
+    /**
+     * Create a new ResponseInterface
+     * @param \Swow\Psr7\Server\ServerConnection $resp
+     * @return ResponseInterface
+     */
+    public function createResponseFromSwow(\Swow\Psr7\Server\ServerConnection $resp): ResponseInterface
     {
         /** @var Response $response */
         $response = $this->createResponse();

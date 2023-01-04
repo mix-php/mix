@@ -11,12 +11,14 @@ use App\Container\Logger;
 use App\Error;
 use App\Vega;
 use Dotenv\Dotenv;
-use Swow\CoroutineException;
-use Swow\Errno;
-use Swow\Http\ResponseException;
-use Swow\Http\Server as HttpServer;
 use Swow\Socket;
+use Swow\Errno;
+use Swow\Http\Protocol\ProtocolException as HttpProtocolException;
+use Swow\Psr7\Psr7;
+use Swow\Psr7\Server\Server as HttpServer;
 use Swow\SocketException;
+use Swow\CoroutineException;
+
 use function Swow\Sync\waitAll;
 
 Dotenv::createUnsafeImmutable(__DIR__ . '/../', '.env')->load();
@@ -40,6 +42,11 @@ class SwowServer extends HttpServer
      * @var callable
      */
     protected $handler;
+
+    public function __construct(int $type = self::TYPE_TCP)
+    {
+        HttpServer::__construct($type);
+    }
 
     /**
      * @param string $name
@@ -76,10 +83,10 @@ class SwowServer extends HttpServer
                                     $request = $connection->recvHttpRequest();
                                     $handler = $this->handler;
                                     $handler($request, $connection);
-                                } catch (ResponseException $exception) {
+                                } catch (HttpProtocolException $exception) {
                                     $connection->error($exception->getCode(), $exception->getMessage());
                                 }
-                                if (!$request || !$request->getKeepAlive()) {
+                                if (!$request || !Psr7::detectShouldKeepAlive($request)) {
                                     break;
                                 }
                             }
@@ -124,7 +131,7 @@ echo <<<EOL
 EOL;
 printf("System    Name:       %s\n", strtolower(PHP_OS));
 printf("PHP       Version:    %s\n", PHP_VERSION);
-printf("Swow      Version:    %s\n", '0.1.0');
+printf("Swow      Version:    %s\n", \Swow\Extension::VERSION);
 printf("Listen    Addr:       http://%s:%d\n", $host, $port);
 Logger::instance()->info('Start swow coroutine server');
 $server->start();

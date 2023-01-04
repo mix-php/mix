@@ -171,10 +171,10 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
     /**
      * Create a new server request.
      *
-     * @param \Swow\Http\Server\Request $request
+     * @param \Psr\Http\Message\RequestInterface $request
      * @return ServerRequestInterface
      */
-    public function createServerRequestFromSwow(\Swow\Http\Server\Request $request): ServerRequestInterface
+    public function createServerRequestFromSwow(\Psr\Http\Message\RequestInterface $request): ServerRequestInterface
     {
         $protocolVersion = $request->getProtocolVersion();
         $scheme = 'http';
