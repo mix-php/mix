@@ -12,7 +12,7 @@ use Psr\Http\Message\StreamInterface;
 class SwowResourceStream implements StreamInterface
 {
     /**
-     * @var \Swow\Http\Server\Request
+     * @var \Psr\Http\Message\RequestInterface
      */
     protected $request;
 
@@ -203,7 +203,7 @@ class SwowResourceStream implements StreamInterface
      */
     public function getContents()
     {
-        return $this->request->rawContent();
+        return (string)$this->request->getBody();
     }
 
     /**

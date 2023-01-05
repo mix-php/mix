@@ -100,7 +100,7 @@ class StreamFactory implements StreamFactoryInterface
      *
      * The stream MUST be readable and may be writable.
      *
-     * @param \Swow\Http\Server\Request $request PHP resource to use as basis of stream.
+     * @param \Psr\Http\Message\RequestInterface $request PHP resource to use as basis of stream.
      *
      * @return StreamInterface
      */

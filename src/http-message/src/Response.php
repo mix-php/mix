@@ -3,7 +3,6 @@
 namespace Mix\Http\Message;
 
 use Psr\Http\Message\ResponseInterface;
-use function Swow\Http\packResponse;
 
 /**
  * Class Response
@@ -13,7 +12,7 @@ class Response extends Message implements ResponseInterface
 {
 
     /**
-     * @var \Swoole\Http\Response|\Workerman\Connection\TcpConnection|\Swow\Http\Server\Connection
+     * @var \Swoole\Http\Response|\Workerman\Connection\TcpConnection|\Swow\Psr7\Server\ServerConnection
      */
     protected $rawResponse;
 
@@ -50,7 +49,7 @@ class Response extends Message implements ResponseInterface
 
     /**
      * Get raw response
-     * @return \Swoole\Http\Response|\Workerman\Connection\TcpConnection|\Swow\Http\Server\Connection|null
+     * @return \Swoole\Http\Response|\Workerman\Connection\TcpConnection|\Swow\Psr7\Server\ServerConnection|null
      */
     public function getRawResponse()
     {
@@ -59,7 +58,7 @@ class Response extends Message implements ResponseInterface
 
     /**
      * With raw response
-     * @param \Swoole\Http\Response|\Workerman\Connection\TcpConnection|\Swow\Http\Server\Connection $response
+     * @param \Swoole\Http\Response|\Workerman\Connection\TcpConnection|\Swow\Psr7\Server\ServerConnection $response
      * @return $this
      */
     public function withRawResponse(object $response)
@@ -81,7 +80,7 @@ class Response extends Message implements ResponseInterface
 
     public function isSwow(): bool
     {
-        if ($this->rawResponse instanceof \Swow\Http\Server\Connection) {
+        if ($this->rawResponse instanceof \Swow\Psr7\Server\ServerConnection) {
             return true;
         }
         return false;
@@ -301,14 +300,19 @@ class Response extends Message implements ResponseInterface
     protected function swowSend(): bool
     {
         $headers = $this->getHeaders();
-        $body = $this->getBody()->getContents();
-        if ($this->rawResponse->getKeepAlive() !== null) {
-            $headers['Connection'] = $this->rawResponse->getKeepAlive() ? 'Keep-Alive' : 'Closed';
+        $response = new \Swow\Psr7\Message\Response();
+
+        $body = (string)$this->getBody();
+        if (!$this->rawResponse->shouldKeepAlive() !== null) {
+            $headers['Connection'] = $this->rawResponse->shouldKeepAlive() ? 'Keep-Alive' : 'Closed';
         }
         if (! $this->hasHeader('Content-Length')) {
             $headers['Content-Length'] = strlen($body);
         }
-        $result = $this->rawResponse->write([packResponse(\Swow\Http\Status::OK, $headers), $body]);
+        $response->setHeaders($headers);
+        $response->setBody($body);
+
+        $result = $this->rawResponse->sendHttpResponse($response);
         $this->sended = true;
         return true;
     }
@@ -423,7 +427,7 @@ class Response extends Message implements ResponseInterface
     protected function swowSendFile(string $filename): bool
     {
         $headers = $this->getHeadersLine();
-        
+
         // 添加 Last-Modified
         if (!isset($headers['Last-Modified']) && !isset($headers['last-modified'])) {
             if ($mtime = filemtime($filename)) {
@@ -431,7 +435,7 @@ class Response extends Message implements ResponseInterface
                 $headers['Last-Modified'] = $lastModified;
             }
         }
-        
+
         $this->rawResponse->respond(file_get_contents($filename), $headers);
         $this->sended = true;
         return true;

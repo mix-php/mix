@@ -64,7 +64,7 @@ class Context
     }
 
 
-    public static function fromSwow(int $mode, \Swow\Http\Server\Request $request, \Swow\Http\Server\Connection $response, Renderer $renderer): Context
+    public static function fromSwow(int $mode, \Psr\Http\Message\RequestInterface $request, \Swow\Psr7\Server\ServerConnection $response, Renderer $renderer): Context
     {
         $ctx = new static();
         switch ($mode) {

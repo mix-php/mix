@@ -1,3 +1,20 @@
+# Swow
+
+[Swow](https://github.com/swow/swow/) 是一个使用PHP和C编写的高性能纯协程网络通信引擎。
+
+Swow实现了一套有史以来最完整的PHP协程模型，它全面释放了PHP的真正实力，使得开发者可以做到以往难以想象的事情。
+
+## 安装 Swow
+
+```php
+composer require swow/swow:dev-develop
+```
+
+## 入口文件
+
+骨架路径 `bin/swow.php`
+
+```php
 #!/usr/bin/env php
 <?php
 ini_set('display_errors', 'on');
@@ -135,6 +152,10 @@ printf("Swow      Version:    %s\n", \Swow\Extension::VERSION);
 printf("Listen    Addr:       http://%s:%d\n", $host, $port);
 Logger::instance()->info('Start swow coroutine server');
 $server->start();
+```
 
+## 启动服务
 
-
+```
+php bin/swow.php
+```

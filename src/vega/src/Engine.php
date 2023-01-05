@@ -2,6 +2,7 @@
 
 namespace Mix\Vega;
 
+use Mix\Vega\Exception\NotFoundException;
 use Mix\Vega\Exception\RuntimeException;
 use Mix\View\Renderer;
 
@@ -85,8 +86,8 @@ class Engine
                 $this->dispatch($request->method(), $request->path(), $ctx);
             } elseif (static::isSwow($args)) {
                 /**
-                 * @var $request \Swow\Http\Server\Request
-                 * @var $response \Swow\Http\Server\Connection
+                 * @var $request \Psr\Http\Message\RequestInterface
+                 * @var $response \Swow\Psr7\Server\ServerConnection
                  */
                 list($request, $response) = $args;
                 $ctx = Context::fromSwow($this->mode, $request, $response, $this->htmlRender);
@@ -101,6 +102,7 @@ class Engine
      * 立即执行
      * 支持 PHP-FPM, cli-server
      * @return bool
+     * @throws NotFoundException
      */
     public function run(): bool
     {
@@ -173,7 +175,7 @@ class Engine
             return false;
         }
         list($request, $response) = $args;
-        if ($request instanceof \Swow\Http\Server\Request && $response instanceof \Swow\Http\Server\Connection) {
+        if ($request instanceof \Psr\Http\Message\RequestInterface && $response instanceof \Swow\Psr7\Server\ServerConnection) {
             return true;
         }
         return false;
