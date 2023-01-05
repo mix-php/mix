@@ -43,8 +43,8 @@ MixPHP 是一个 PHP 命令行模式开发框架；基于 `Vega` 驱动的 HTTP 
 - [PHP-FPM](zh-cn/server-php-fpm.md) `热更新` `适合共享开发` `适合 admin 开发`
 - [Swoole](zh-cn/server-swoole.md) `常驻内存` `兼容 composer 生态`
 - [Swoole Coroutine](zh-cn/server-swoole-coroutine.md) `常驻内存` `协程性能强劲`
-- [WorkerMan](zh-cn/server-workerman.md) `常驻内存` `兼容 composer 生态`
 - [Swow](zh-ch/server-swow.md) `常驻内存` `纯C协程` `兼容 composer 生态`
+- [WorkerMan](zh-cn/server-workerman.md) `常驻内存` `兼容 composer 生态`
 
 ## MixGo 框架
 
