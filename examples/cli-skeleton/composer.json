@@ -5,7 +5,10 @@
   "homepage": "https://openmix.org/mix-php",
   "license": "Apache-2.0",
   "scripts": {
-    "cli:clearcache": "php bin/cli.php clearcache"
+    "cli:clearcache": [
+      "Composer\\Config::disableProcessTimeout",
+      "php bin/cli.php clearcache"
+    ]
   },
   "autoload": {
     "psr-4": {

@@ -5,12 +5,30 @@
   "homepage": "https://openmix.org/mix-php",
   "license": "Apache-2.0",
   "scripts": {
-    "cliserver:start": "php -S localhost:8000 -t public",
-    "swoole:start": "php bin/swoole.php",
-    "swooleco:start": "php bin/swooleco.php",
-    "swow:start": "php bin/swow.php",
-    "workerman:start": "php bin/workerman.php start",
-    "cli:clearcache": "php bin/cli.php clearcache"
+    "cliserver:start": [
+      "Composer\\Config::disableProcessTimeout",
+      "php -S localhost:8000 -t public"
+    ],
+    "swoole:start": [
+      "Composer\\Config::disableProcessTimeout",
+      "php bin/swoole.php"
+    ],
+    "swooleco:start": [
+      "Composer\\Config::disableProcessTimeout",
+      "php bin/swooleco.php"
+    ],
+    "swow:start": [
+      "Composer\\Config::disableProcessTimeout",
+      "php bin/swow.php"
+    ],
+    "workerman:start": [
+      "Composer\\Config::disableProcessTimeout",
+      "php bin/workerman.php start"
+    ],
+    "cli:clearcache": [
+      "Composer\\Config::disableProcessTimeout",
+      "php bin/cli.php clearcache"
+    ]
   },
   "autoload": {
     "psr-4": {
