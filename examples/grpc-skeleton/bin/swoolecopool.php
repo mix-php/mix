@@ -14,13 +14,15 @@ use Dotenv\Dotenv;
 
 Dotenv::createUnsafeImmutable(__DIR__ . '/../', '.env')->load();
 define("APP_DEBUG", env('APP_DEBUG'));
+
 Error::register();
+Logger::instance()->useLoggingLoopDetection(false); // 协程专用
 
 $host = '0.0.0.0';
 $port = 9502;
-$worker_num = 4;
+$workerNum = 4;
 
-$pool = new \Swoole\Process\Pool($worker_num, SWOOLE_IPC_NONE);
+$pool = new \Swoole\Process\Pool($workerNum, SWOOLE_IPC_NONE);
 $pool->set(['enable_coroutine' => true]);
 $pool->on('WorkerStart', function ($pool, $id) use ($host, $port) {
     App\Container\DB::enableCoroutine();
@@ -51,7 +53,7 @@ EOL;
 printf("System     Name:       %s\n", strtolower(PHP_OS));
 printf("PHP        Version:    %s\n", PHP_VERSION);
 printf("Swoole     Version:    %s\n", swoole_version());
-printf("WorkerNum  Version:    %s\n", $worker_num);
+printf("WorkerNum  Version:    %s\n", $workerNum);
 printf("Listen     Addr:       http://%s:%d\n", $host, $port);
 Logger::instance()->info('Start swoole coroutine server');
 $pool->start();

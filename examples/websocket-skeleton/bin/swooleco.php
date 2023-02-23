@@ -16,6 +16,7 @@ Dotenv::createUnsafeImmutable(__DIR__ . '/../', '.env')->load();
 define("APP_DEBUG", env('APP_DEBUG'));
 
 Error::register();
+Logger::instance()->useLoggingLoopDetection(false); // 协程专用
 
 Swoole\Coroutine\run(function () {
     App\Container\DB::enableCoroutine();

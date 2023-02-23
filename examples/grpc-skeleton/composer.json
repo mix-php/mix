@@ -28,7 +28,7 @@
     "mix/redis": "~3.0.0",
     "vlucas/phpdotenv": "^5.3",
     "hassankhan/config": "^3.0",
-    "monolog/monolog": "^2.3"
+    "monolog/monolog": "^3.1"
   },
   "require-dev": {
     "swoole/ide-helper": "^4.6"
