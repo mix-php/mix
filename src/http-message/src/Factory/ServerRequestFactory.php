@@ -109,7 +109,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         list($scheme, $protocolVersion) = explode('/', $request->server['server_protocol']);
         $method = $request->server['request_method'] ?? '';
         $scheme = strtolower($scheme);
-        $host = $request->header['host'] ?? '';
+        $host = $request->header['host'] ?? 'unknown';
         $requestUri = $request->server['request_uri'] ?? '';
         $queryString = $request->server['query_string'] ?? '';
         $uri = $scheme . '://' . $host . $requestUri . ($queryString ? "?{$queryString}" : '');
