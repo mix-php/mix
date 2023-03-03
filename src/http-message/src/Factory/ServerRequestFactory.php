@@ -109,7 +109,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         list($scheme, $protocolVersion) = explode('/', $request->server['server_protocol']);
         $method = $request->server['request_method'] ?? '';
         $scheme = strtolower($scheme);
-        $host = $request->header['host'] ?? 'unknown';
+        $host = $request->header['host'] ?? 'unknown'; // 兼容http1.0
         $requestUri = $request->server['request_uri'] ?? '';
         $queryString = $request->server['query_string'] ?? '';
         $uri = $scheme . '://' . $host . $requestUri . ($queryString ? "?{$queryString}" : '');
@@ -179,7 +179,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $protocolVersion = $request->getProtocolVersion();
         $scheme = 'http';
         $method = $request->getMethod();
-        $host = $request->getHeaderLine('host');
+        $host = $request->getHeaderLine('host') ?: 'unknown'; // 兼容http1.0
         $requestUri = $request->getUri();
         $requestQuery = $requestUri->getQuery();
         $uri = $scheme . '://' . $host . $requestUri->getPath() . ($requestQuery ? "?{$requestQuery}" : '');
@@ -225,7 +225,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $protocolVersion = $request->protocolVersion();
         $method = $request->method();
         $scheme = 'http';
-        $host = $request->host();
+        $host = $request->host() ?: 'unknown'; // 兼容http1.0
         $uri = $scheme . '://' . $host . $request->uri();
         $serverParams = [];
 
