@@ -50,7 +50,7 @@ class Connection extends AbstractConnection
     {
         try {
             // 执行父类方法
-            return call_user_func_array((parent::class . "::{$name}")(...), $arguments);
+            return call_user_func_array(\Closure::fromCallable(parent::class . "::{$name}"), $arguments);
         } catch (\Throwable $ex) {
             if (static::isDisconnectException($ex) && !$this->inTransaction()) {
                 // 断开连接异常处理
