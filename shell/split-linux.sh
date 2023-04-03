@@ -5,9 +5,7 @@ set -x
 
 NOW=$(date +%s)
 TOKEN=`echo $TOKEN`
-WORKDIR="src"
 CURRENT_BRANCH="master"
-BASEPATH=$(cd `dirname $0`; cd ../$WORKDIR/; pwd)
 REPOS=$@
 
 function split()
@@ -23,13 +21,23 @@ function remote()
 
 git pull origin $CURRENT_BRANCH
 
+WORKDIR="src"
+BASEPATH=$(cd `dirname $0`; cd ../$WORKDIR/; pwd)
 if [[ $# -eq 0 ]]; then
     REPOS=$(ls $BASEPATH)
 fi
-
 for REPO in $REPOS ; do
     remote $REPO https://$TOKEN@github.com/mix-php/$REPO.git
+    split "$WORKDIR/$REPO" $REPO
+done
 
+WORKDIR="examples"
+BASEPATH=$(cd `dirname $0`; cd ../$WORKDIR/; pwd)
+if [[ $# -eq 0 ]]; then
+    REPOS=$(ls $BASEPATH)
+fi
+for REPO in $REPOS ; do
+    remote $REPO https://$TOKEN@github.com/mix-php/$REPO.git
     split "$WORKDIR/$REPO" $REPO
 done
 
