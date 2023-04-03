@@ -125,7 +125,8 @@ trait Router
                 if ($ctx->request instanceof ServerRequest) {
                     $ctx->request->withRouteParams($vars);
                 } else {
-                    $ctx->request->param = $vars;
+                    // 原本是为了在 FAST_MODE 下也可以获取到路由参数，但是php8.2废弃了动态增加属性，因此注释该功能
+                    // $ctx->request->param = $vars;
                 }
                 // call $handler
                 $handler($ctx);
