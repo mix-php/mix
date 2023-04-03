@@ -2,6 +2,7 @@
 
 namespace Mix\Http\Message;
 
+use AllowDynamicProperties;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
@@ -10,7 +11,7 @@ use Psr\Http\Message\UriInterface;
  * Class ServerRequest
  * @package Mix\Http\Message
  */
-class ServerRequest extends Request implements ServerRequestInterface
+#[AllowDynamicProperties] class ServerRequest extends Request implements ServerRequestInterface
 {
 
     /**
