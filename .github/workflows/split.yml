@@ -7,8 +7,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Split
-        env:
-          TOKEN: ${{ secrets.TOKEN }}
-        run: |
-          sh shell/split-linux.sh
+    - uses: actions/checkout@v3
+    
+    - name: Run
+      env:
+        TOKEN: ${{ secrets.TOKEN }}
+      run: |
+        sh shell/split-linux.sh
