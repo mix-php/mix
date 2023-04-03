@@ -1,0 +1,14 @@
+name: Split
+
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Split
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
+        run: |
+          sh shell/split-linux.sh

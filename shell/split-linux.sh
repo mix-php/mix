@@ -4,7 +4,7 @@ set -e
 set -x
 
 NOW=$(date +%s)
-TOKEN=""
+TOKEN=`echo $TOKEN`
 WORKDIR="src"
 CURRENT_BRANCH="master"
 BASEPATH=$(cd `dirname $0`; cd ../$WORKDIR/; pwd)
