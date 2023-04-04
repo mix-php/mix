@@ -25,7 +25,7 @@ IGNORE="guzzle|"
 WORKDIR="src"
 BASEPATH=$(cd `dirname $0`; cd ../$WORKDIR/; pwd)
 if [[ $# -eq 0 ]]; then
-    REPOS=$(`ls $BASEPATH | grep -vE $IGNORE`)
+    REPOS=`ls $BASEPATH | grep -vE $IGNORE`
 fi
 for REPO in $REPOS ; do
     remote $REPO https://$TOKEN@github.com/mix-php/$REPO.git
@@ -36,7 +36,7 @@ done
 WORKDIR="examples"
 BASEPATH=$(cd `dirname $0`; cd ../$WORKDIR/; pwd)
 if [[ $# -eq 0 ]]; then
-    REPOS=$(`ls $BASEPATH | grep -vE $IGNORE`)
+    REPOS=`ls $BASEPATH | grep -vE $IGNORE`
 fi
 for REPO in $REPOS ; do
     remote $REPO https://$TOKEN@github.com/mix-php/$REPO.git
