@@ -18,6 +18,7 @@ function remote()
     git remote add $1 $2 || true
 }
 
+git status
 git pull origin $CURRENT_BRANCH
 
 WORKDIR="src"
