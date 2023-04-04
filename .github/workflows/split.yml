@@ -13,4 +13,4 @@ jobs:
       env:
         TOKEN: ${{ secrets.TOKEN }}
       run: |
-        sh shell/split-linux.sh
+        bash shell/split-linux.sh
