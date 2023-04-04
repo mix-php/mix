@@ -12,7 +12,7 @@ REPOS=$@
 
 function split()
 {
-    SHA1=`./shell/splitsh-lite-darwin-amd64 --prefix=$1`
+    SHA1=`./shell/splitsh-lite-darwin --prefix=$1`
     git push $2 "$SHA1:refs/heads/$CURRENT_BRANCH" -f
 }
 
