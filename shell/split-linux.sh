@@ -27,6 +27,7 @@ if [[ $# -eq 0 ]]; then
 fi
 for REPO in $REPOS ; do
     remote $REPO https://$TOKEN@github.com/mix-php/$REPO.git
+
     split "$WORKDIR/$REPO" $REPO
 done
 
@@ -37,6 +38,7 @@ if [[ $# -eq 0 ]]; then
 fi
 for REPO in $REPOS ; do
     remote $REPO https://$TOKEN@github.com/mix-php/$REPO.git
+
     split "$WORKDIR/$REPO" $REPO
 done
 
