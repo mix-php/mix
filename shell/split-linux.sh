@@ -18,13 +18,14 @@ function remote()
     git remote add $1 $2 || true
 }
 
-git status
 git pull origin $CURRENT_BRANCH
+
+IGNORE="guzzle|"
 
 WORKDIR="src"
 BASEPATH=$(cd `dirname $0`; cd ../$WORKDIR/; pwd)
 if [[ $# -eq 0 ]]; then
-    REPOS=$(ls $BASEPATH)
+    REPOS=$(ls $BASEPATH | grep -vE $IGNORE)
 fi
 for REPO in $REPOS ; do
     remote $REPO https://$TOKEN@github.com/mix-php/$REPO.git
@@ -35,7 +36,7 @@ done
 WORKDIR="examples"
 BASEPATH=$(cd `dirname $0`; cd ../$WORKDIR/; pwd)
 if [[ $# -eq 0 ]]; then
-    REPOS=$(ls $BASEPATH)
+    REPOS=$(ls $BASEPATH | grep -vE $IGNORE)
 fi
 for REPO in $REPOS ; do
     remote $REPO https://$TOKEN@github.com/mix-php/$REPO.git
