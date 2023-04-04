@@ -4,16 +4,17 @@ on:
   push:
     branches: [ master ]
 jobs:
-  build:
+  split:
     runs-on: ubuntu-latest
+    env:
+      TOKEN: ${{ secrets.TOKEN }}
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Run
-      env:
-        TOKEN: ${{ secrets.TOKEN }}
-      run: |
-        git config --global user.email "onanying@126.com"
-        git config --global user.name "liujian"
-        chmod 777 shell/*
-        bash shell/split-linux.sh
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Run
+        run: |
+          git config --global user.email "onanying@126.com"
+          git config --global user.name "liujian"
+          chmod 777 shell/*
+          bash shell/split-linux.sh
