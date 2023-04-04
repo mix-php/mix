@@ -13,6 +13,7 @@ jobs:
       env:
         TOKEN: ${{ secrets.TOKEN }}
       run: |
+        git config pull.rebase true
         git config --global user.email "onanying@126.com"
         git config --global user.name "liujian"
         bash shell/split-linux.sh
