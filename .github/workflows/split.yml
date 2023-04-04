@@ -16,4 +16,5 @@ jobs:
         git config pull.rebase true
         git config --global user.email "onanying@126.com"
         git config --global user.name "liujian"
+        chmod 777 shell/*
         bash shell/split-linux.sh
