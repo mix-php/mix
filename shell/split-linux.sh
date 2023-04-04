@@ -4,7 +4,6 @@ set -e
 set -x
 
 NOW=$(date +%s)
-TOKEN=`echo $TOKEN`
 CURRENT_BRANCH="master"
 REPOS=$@
 
