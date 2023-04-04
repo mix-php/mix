@@ -10,10 +10,12 @@ jobs:
       TOKEN: ${{ secrets.TOKEN }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Run
         run: |
+          git config pull.rebase true
           git config --global user.email "onanying@126.com"
           git config --global user.name "liujian"
           chmod 777 shell/*
