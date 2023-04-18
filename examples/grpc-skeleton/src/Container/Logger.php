@@ -6,6 +6,7 @@ use App\Once;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Handler\RotatingFileHandler;
+use Monolog\LogRecord;
 
 /**
  * Class Logger
@@ -51,24 +52,24 @@ class Logger implements HandlerInterface
     }
 
     /**
-     * @param array $record
+     * @param LogRecord $record
      * @return bool
      */
-    public function isHandling(array $record): bool
+    public function isHandling(LogRecord $record): bool
     {
         if (APP_DEBUG) {
-            return $record['level'] >= \Monolog\Logger::DEBUG;
+            return $record->level->toRFC5424Level() >= \Monolog\Level::Debug;
         }
-        return $record['level'] >= \Monolog\Logger::INFO;
+        return $record->level->toRFC5424Level() >= \Monolog\Level::Info;
     }
 
     /**
-     * @param array $record
+     * @param LogRecord $record
      * @return bool
      */
-    public function handle(array $record): bool
+    public function handle(LogRecord $record): bool
     {
-        $message = sprintf("%s  %s  %s\n", $record['datetime']->format('Y-m-d H:i:s.u'), $record['level_name'], $record['message']);
+        $message = sprintf("%s  %s  %s\n", $record->datetime->format('Y-m-d H:i:s.u'), $record->level->toPsrLogLevel(), $record->message);
         switch (PHP_SAPI) {
             case 'cli':
             case 'cli-server':
