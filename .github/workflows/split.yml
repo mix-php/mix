@@ -7,7 +7,7 @@ jobs:
   split:
     runs-on: ubuntu-latest
     env:
-      TOKEN: ${{ secrets.TOKEN }}
+      TOKEN: ${{ secrets.ACCESS_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -19,4 +19,4 @@ jobs:
           git config pull.rebase true
           git config --global user.email "actions@github.com"
           git config --global user.name "actions-bot"
-          bash ./shell/split-linux.sh
+          bash ./bin/split-linux.sh
