@@ -410,9 +410,9 @@ $vega->handle('/hello', $func, function (Mix\Vega\Context $ctx) {
 })->methods('GET');
 ```
 
-Configure the global middleware, it will be executed even if the route is not matched
+Configure the global middleware
 
-- Global middleware
+- Global middleware: it will be executed even if the route is not matched
 
 ```php
 $vega = new Mix\Vega\Engine();

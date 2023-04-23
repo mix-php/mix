@@ -419,9 +419,9 @@ $vega->handle('/hello', $func, function (Mix\Vega\Context $ctx) {
 })->methods('GET');
 ```
 
-配置全局中间件，即便没有匹配到路由也会执行
+配置全局中间件
 
-- 全局中间件
+- 全局中间件：即便没有匹配到路由也会执行
 
 ```php
 $vega = new Mix\Vega\Engine();
