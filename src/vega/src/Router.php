@@ -140,6 +140,7 @@ trait Router
     /**
      * @param array $handlers
      * @param Context $ctx
+     * @return void
      */
     public function runHandlers(array $handlers, Context $ctx): void
     {
@@ -157,6 +158,7 @@ trait Router
 
     /**
      * @param array $handlers
+     * @return void
      */
     protected function unshiftAbortHandler(array &$handlers): void
     {
@@ -191,7 +193,6 @@ trait Router
     /**
      * @param array $handlers
      * @return void
-     * @throws Abort
      */
     protected function unshift404Handler(array &$handlers): void
     {
