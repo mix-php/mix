@@ -200,12 +200,10 @@ $vega->handle('/hello', function (Mix\Vega\Context $ctx) {
 
 ```php
 $vega = new Mix\Vega\Engine();
-$sub = $vega->pathPrefix('/foo');
-$sub->handle('/bar1', function (Mix\Vega\Context $ctx) {
+$foo = $vega->pathPrefix('/foo');
+$bar = $foo->pathPrefix('/bar');
+$bar->handle('/baz', function (Mix\Vega\Context $ctx) { // path=/foo/bar/baz
     $ctx->string(200, 'hello, world!');
-})->methods('GET');
-$sub->handle('/bar2', function (Mix\Vega\Context $ctx) {
-    $ctx->string(200, 'hello1, world!');
 })->methods('GET');
 ```
 
@@ -414,9 +412,21 @@ $vega->handle('/hello', $func, function (Mix\Vega\Context $ctx) {
 
 Configure the global middleware, it will be executed even if the route is not matched
 
+- Global middleware
+
 ```php
 $vega = new Mix\Vega\Engine();
 $vega->use(function (Mix\Vega\Context $ctx) {
+    $ctx->next();
+});
+```
+
+- Routing prefix global middleware
+
+```php
+$vega = new Mix\Vega\Engine();
+$foo = $vega->pathPrefix('/foo');
+$foo->use(function (Mix\Vega\Context $ctx) {
     $ctx->next();
 });
 ```

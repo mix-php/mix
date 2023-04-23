@@ -41,6 +41,15 @@ trait Router
     }
 
     /**
+     * @param string $prefix
+     * @return RouterPrefix
+     */
+    public function pathPrefix(string $prefix): RouterPrefix
+    {
+        return new RouterPrefix($prefix, $this);
+    }
+
+    /**
      * @param string $path
      * @param callable ...$handlers
      * @return Route
@@ -76,14 +85,8 @@ trait Router
     }
 
     /**
-     * @param string $prefix
-     * @return SubRouter
+     * @return void
      */
-    public function pathPrefix(string $prefix): SubRouter
-    {
-        return new SubRouter($prefix, $this);
-    }
-
     protected function startDispatcher(): void
     {
         $this->dispatcher = \FastRoute\simpleDispatcher(function (RouteCollector $r) {
@@ -187,6 +190,8 @@ trait Router
 
     /**
      * @param array $handlers
+     * @return void
+     * @throws Abort
      */
     protected function unshift404Handler(array &$handlers): void
     {

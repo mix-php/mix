@@ -3,10 +3,10 @@
 namespace Mix\Vega;
 
 /**
- * Class SubRouter
+ * Class RouterPrefix
  * @package Mix\Vega
  */
-class SubRouter
+class RouterPrefix
 {
 
     /**
@@ -20,7 +20,12 @@ class SubRouter
     protected $engine;
 
     /**
-     * Subrouter constructor.
+     * @var \Closure[]
+     */
+    protected $handlers = [];
+
+    /**
+     * RouterPrefix constructor.
      * @param string $prefix
      * @param Engine $engine
      */
@@ -31,13 +36,32 @@ class SubRouter
     }
 
     /**
+     * @param \Closure ...$handlers
+     * @return Engine
+     */
+    public function use(\Closure ...$handlers): RouterPrefix
+    {
+        $this->handlers = array_merge($this->handlers, $handlers);
+        return $this;
+    }
+
+    /**
+     * @param string $prefix
+     * @return RouterPrefix
+     */
+    public function pathPrefix(string $prefix): RouterPrefix
+    {
+        return new RouterPrefix($this->prefix . $prefix, $this->engine);
+    }
+
+    /**
      * @param string $path
      * @param callable ...$handlers
      * @return Route
      */
     public function handle(string $path, callable ...$handlers): Route
     {
-        return $this->engine->handle($this->prefix . $path, ...$handlers);
+        return $this->engine->handle($this->prefix . $path, ...array_merge($this->handlers, $handlers));
     }
 
     /**
@@ -47,7 +71,7 @@ class SubRouter
      */
     public function handleFunc(string $path, \Closure ...$handlers): Route
     {
-        return $this->engine->handleFunc($this->prefix . $path, ...$handlers);
+        return $this->engine->handleFunc($this->prefix . $path, ...array_merge($this->handlers, $handlers));
     }
 
     /**
@@ -58,7 +82,7 @@ class SubRouter
      */
     public function handleCall(string $path, callable ...$handlers): Route
     {
-        return $this->handle($path, ...$handlers);
+        return $this->handle($this->prefix . $path, ...array_merge($this->handlers, $handlers));
     }
 
 }
