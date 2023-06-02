@@ -99,6 +99,12 @@ composer create-project --prefer-dist mix/grpc-skeleton grpc
 - [MixPHP V3 增加了 PHP-FPM、CLI-Server 的支持](https://zhuanlan.zhihu.com/p/394059925)
 - [MixPHP V3 发布前的感想, 有哪些变化和特点](https://zhuanlan.zhihu.com/p/392558932)
 
+## `AD` 可编程分布式长连接网关
+
+<img src="https://openstr.oss-cn-shanghai.aliyuncs.com/static/img/logo.361fcd05.svg" width="200" alt="MixPHP">
+
+[> connmix.com](https://connmix.com/) 几行代码，免费搞定socket、websocket实时通讯。
+
 ## 技术交流
 
 知乎：https://www.zhihu.com/people/onanying    
