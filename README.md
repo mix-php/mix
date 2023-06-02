@@ -99,11 +99,12 @@ composer create-project --prefer-dist mix/grpc-skeleton grpc
 - [MixPHP V3 增加了 PHP-FPM、CLI-Server 的支持](https://zhuanlan.zhihu.com/p/394059925)
 - [MixPHP V3 发布前的感想, 有哪些变化和特点](https://zhuanlan.zhihu.com/p/392558932)
 
-## `AD` 可编程分布式长连接网关
+## `AD` 混联网关
 
-<img src="https://openstr.oss-cn-shanghai.aliyuncs.com/static/img/logo.361fcd05.svg" width="200" alt="MixPHP">
+[混联网关](https://connmix.com/) - 可编程分布式长连接网关
 
-[> connmix.com](https://connmix.com/) 几行代码，免费搞定socket、websocket实时通讯。
+- 可用于聊天室、直播弹幕、IM即时通讯、在线客服、网络游戏、硬件通讯、智能家居、物联网等领域的开发
+- 几行代码，免费搞定socket、websocket实时通讯
 
 ## 技术交流
 
