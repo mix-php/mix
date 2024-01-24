@@ -161,8 +161,8 @@ class Engine
     public static function isWorkerMan(array $args): bool
     {
         if (count($args) == 1) {
-            list($connection) = $args;
-            if ($connection instanceof \Workerman\Connection\TcpConnection) {
+            list($request) = $args;
+            if ($request instanceof \Workerman\Protocols\Http\Request) {
                 return true;
             }
         }
