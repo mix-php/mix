@@ -137,14 +137,19 @@ class Engine
      * @param array $args
      * @return bool
      */
-    private static function isSwoole(array $args): bool
+    public static function isSwoole(array $args): bool
     {
-        if (count($args) != 2) {
-            return false;
+        if (count($args) == 1) {
+            list($request) = $args;
+            if ($request instanceof \Swoole\Http\Request) {
+                return true;
+            }
         }
-        list($request, $response) = $args;
-        if ($request instanceof \Swoole\Http\Request && $response instanceof \Swoole\Http\Response) {
-            return true;
+        if (count($args) == 2) {
+            list($request, $response) = $args;
+            if ($request instanceof \Swoole\Http\Request && $response instanceof \Swoole\Http\Response) {
+                return true;
+            }
         }
         return false;
     }
@@ -153,14 +158,19 @@ class Engine
      * @param array $args
      * @return bool
      */
-    private static function isWorkerMan(array $args): bool
+    public static function isWorkerMan(array $args): bool
     {
-        if (count($args) != 2) {
-            return false;
+        if (count($args) == 1) {
+            list($connection) = $args;
+            if ($connection instanceof \Workerman\Connection\TcpConnection) {
+                return true;
+            }
         }
-        list($connection, $request) = $args;
-        if ($connection instanceof \Workerman\Connection\TcpConnection && $request instanceof \Workerman\Protocols\Http\Request) {
-            return true;
+        if (count($args) == 2) {
+            list($connection, $request) = $args;
+            if ($connection instanceof \Workerman\Connection\TcpConnection && $request instanceof \Workerman\Protocols\Http\Request) {
+                return true;
+            }
         }
         return false;
     }
@@ -171,12 +181,17 @@ class Engine
      */
     private static function isSwow(array $args): bool
     {
-        if (count($args) != 2) {
-            return false;
+        if (count($args) == 1) {
+            list($request) = $args;
+            if ($request instanceof \Psr\Http\Message\RequestInterface) {
+                return true;
+            }
         }
-        list($request, $response) = $args;
-        if ($request instanceof \Psr\Http\Message\RequestInterface && $response instanceof \Swow\Psr7\Server\ServerConnection) {
-            return true;
+        if (count($args) == 2) {
+            list($request, $response) = $args;
+            if ($request instanceof \Psr\Http\Message\RequestInterface && $response instanceof \Swow\Psr7\Server\ServerConnection) {
+                return true;
+            }
         }
         return false;
     }
