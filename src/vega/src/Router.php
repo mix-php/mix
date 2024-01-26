@@ -131,7 +131,7 @@ trait Router
                     // 为了在 FAST_MODE 下也可以获取到路由参数，但是php8.2废弃了动态增加属性
                     if (Engine::isSwoole([$ctx->request])) {
                         // 只能放在get里面
-                        $ctx->request->get = $params + (array)$ctx->request->get;
+                        $ctx->request->get = $params + ($ctx->request->get ?? []);
                     } elseif (Engine::isWorkerMan([$ctx->request])) {
                         // WorkerMan有__set方法，可以动态增加属性
                         $ctx->request->param = $params;
