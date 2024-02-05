@@ -19,9 +19,9 @@ class CommandInvoker
     protected $connection;
 
     /**
-     * EOF
+     * CRLF
      */
-    const EOF = "\r\n";
+    const CRLF = "\r\n";
 
     /**
      * @var Channel
@@ -61,7 +61,7 @@ class CommandInvoker
                 $this->interrupt();
                 break;
             }
-            $line = substr($line, 0, -(strlen(static::EOF)));
+            $line = substr($line, 0, -(strlen(static::CRLF)));
 
             if ($line == '+OK') {
                 $this->resultChannel->push($line);
@@ -116,10 +116,10 @@ class CommandInvoker
      * @return array
      * @throws \Swoole\Exception
      */
-    public function invoke(string $command, int $number)
+    public function invoke(mixed $command, int $number)
     {
         try {
-            $this->connection->send($command . static::EOF);
+            $this->connection->send(Resp::build($command));
         } catch (\Throwable $e) {
             $this->interrupt();
             throw $e;

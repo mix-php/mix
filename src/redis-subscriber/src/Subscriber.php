@@ -80,7 +80,7 @@ class Subscriber
         $connection = new Connection($this->host, $this->port, $this->timeout);
         $this->commandInvoker = new CommandInvoker($connection);
         if ('' != (string)$this->password) {
-            $this->commandInvoker->invoke("auth {$this->password}", 1);
+            $this->commandInvoker->invoke(["auth", $this->password], 1);
         }
     }
 
@@ -95,7 +95,7 @@ class Subscriber
         $channels = array_map(function ($channel) {
             return $this->prefix . $channel;
         }, $channels);
-        $result = $this->commandInvoker->invoke("subscribe " . join(' ', $channels), count($channels));
+        $result = $this->commandInvoker->invoke(["subscribe", ...$channels], count($channels));
         foreach ($result as $value) {
             if ($value === false) {
                 $this->commandInvoker->interrupt();
@@ -115,7 +115,7 @@ class Subscriber
         $channels = array_map(function ($channel) {
             return $this->prefix . $channel;
         }, $channels);
-        $result = $this->commandInvoker->invoke("unsubscribe " . join(' ', $channels), count($channels));
+        $result = $this->commandInvoker->invoke(["unsubscribe", ...$channels], count($channels));
         foreach ($result as $value) {
             if ($value === false) {
                 $this->commandInvoker->interrupt();
