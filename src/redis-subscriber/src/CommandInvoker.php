@@ -81,7 +81,8 @@ class CommandInvoker
 
             if ($line == '*3') {
                 if (!empty($buffer)) {
-                    $this->resultChannel->push($buffer);
+                    // 这里如果用 resultChannel 去 push 的话,会出现一种情况,就是这里 push 消息过后,没有地方去将消息 pop 出来,导致后续的消息都会被阻塞
+                    $this->messageChannel->push($buffer);
                     $buffer = null;
                 }
                 $buffer[] = $line;
