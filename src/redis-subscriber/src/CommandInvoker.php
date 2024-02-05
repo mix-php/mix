@@ -69,7 +69,7 @@ class CommandInvoker
             }
             $line = substr($line, 0, -(strlen(static::CRLF)));
 
-            if ($line == 'pong') {
+            if ($line === 'pong') {
                 $this->pingChannel->push($line);
                 continue;
             }
