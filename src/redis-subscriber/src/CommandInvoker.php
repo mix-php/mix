@@ -34,6 +34,11 @@ class CommandInvoker
     protected $messageChannel;
 
     /**
+     * @var Channel
+     */
+    private $pingChannel;
+
+    /**
      * CommandInvoker constructor.
      * @param Connection $connection
      */
@@ -41,6 +46,7 @@ class CommandInvoker
     {
         $this->connection     = $connection;
         $this->resultChannel  = new Channel();
+        $this->pingChannel  = new Channel();
         $this->messageChannel = new Channel(100);
         Coroutine::create(function () use ($connection) {
             $this->receive($connection);
@@ -62,6 +68,11 @@ class CommandInvoker
                 break;
             }
             $line = substr($line, 0, -(strlen(static::CRLF)));
+
+            if ($line == 'pong') {
+                $this->pingChannel->push($line);
+                continue;
+            }
 
             if ($line == '+OK') {
                 $this->resultChannel->push($line);
@@ -151,6 +162,18 @@ class CommandInvoker
         $this->resultChannel->close();
         $this->messageChannel->close();
         return true;
+    }
+
+    /**
+     * Ping
+     * @param int $timeout
+     * @return string
+     * @throws \Swoole\Exception
+     */
+    public function ping(int $timeout = 1)
+    {
+        $this->connection->send(Resp::build('ping'));
+        return $this->pingChannel->pop($timeout);
     }
 
     /**
