@@ -69,11 +69,6 @@ class CommandInvoker
             }
             $line = substr($line, 0, -(strlen(static::CRLF)));
 
-            if ($line === 'pong') {
-                $this->pingChannel->push($line);
-                continue;
-            }
-
             if ($line == '+OK') {
                 $this->resultChannel->push($line);
                 continue;
@@ -81,8 +76,7 @@ class CommandInvoker
 
             if ($line == '*3') {
                 if (!empty($buffer)) {
-                    // 这里如果用 resultChannel 去 push 的话,会出现一种情况,就是这里 push 消息过后,没有地方去将消息 pop 出来,导致后续的消息都会被阻塞
-                    $this->messageChannel->push($buffer);
+                    $this->resultChannel->push($buffer);
                     $buffer = null;
                 }
                 $buffer[] = $line;
@@ -115,6 +109,12 @@ class CommandInvoker
                 });
                 $this->messageChannel->push($message);
                 Timer::clear($timerID);
+                $buffer = null;
+                continue;
+            }
+
+            if ($type == 'pong' && count($buffer) == 5) {
+                $this->pingChannel->push('pong');
                 $buffer = null;
                 continue;
             }
