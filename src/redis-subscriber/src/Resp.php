@@ -16,6 +16,11 @@ use function strlen;
 class Resp
 {
     /**
+     * CRLF
+     */
+    public const CRLF = "\r\n";
+
+    /**
      * build resp text
      *
      * @param int|string|array<mixed>|null $args
@@ -24,18 +29,18 @@ class Resp
     public static function build(mixed $args): string
     {
         if ($args == 'ping') {
-            return "PING\r\n";
+            return "PING" .  static::CRLF;
         }
 
         switch (true) {
             case is_null($args):
-                return "$-1\r\n";
+                return "$-1". static::CRLF;
             case is_int($args):
-                return ':' . $args . "\r\n";
+                return ':' . $args .  static::CRLF;
             case is_string($args):
-                return '$' . strlen($args) . "\r\n" . $args . "\r\n";
+                return '$' . strlen($args) .  static::CRLF . $args . static::CRLF;
             case is_array($args):
-                $result = '*' . count($args) . "\r\n";
+                $result = '*' . count($args) . static::CRLF;
                 foreach ($args as $arg) {
                     $result .= static::build($arg);
                 }
