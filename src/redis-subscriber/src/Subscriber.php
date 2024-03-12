@@ -143,4 +143,14 @@ class Subscriber
         $this->commandInvoker->interrupt();
     }
 
+    /**
+     * Ping
+     * @param int $timeout
+     * @throws \Swoole\Exception
+     */
+    public function ping(int $timeout = 1)
+    {
+        return $this->commandInvoker->ping($timeout);
+    }
+
 }
