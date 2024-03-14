@@ -25,16 +25,16 @@ class Subscriber
     public $port = 6379;
 
     /**
-     * 超时
-     * @var float
-     */
-    public $timeout = 5.0;
-
-    /**
      * 密码
      * @var string
      */
     public $password = '';
+
+    /**
+     * 超时
+     * @var float
+     */
+    public $timeout = 5.0;
 
     /**
      * 前缀
@@ -62,12 +62,13 @@ class Subscriber
      * @param float $timeout
      * @throws \Swoole\Exception
      */
-    public function __construct(string $host, int $port = 6379, string $password = '', float $timeout = 5.0)
+    public function __construct(string $host, int $port = 6379, string $password = '', float $timeout = 5.0, string $prefix = '')
     {
         $this->host = $host;
         $this->port = $port;
         $this->password = $password;
         $this->timeout = $timeout;
+        $this->prefix = $prefix;
         $this->connect();
     }
 
