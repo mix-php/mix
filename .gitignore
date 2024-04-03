@@ -22,3 +22,13 @@ composer.phar
 phpunit.phar
 # local phpunit config
 /phpunit.xml
+
+# composer
+/vendor
+/composer.lock
+
+# vscode
+/.vscode
+
+# other
+/.bashrc
