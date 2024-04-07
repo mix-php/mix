@@ -158,7 +158,7 @@ class Session
             ->withPath($this->cookiePath)
             ->withSecure($this->cookieSecure)
             ->withHttpOnly($this->cookieHttpOnly);
-        $this->response->withCookie($cookie);
+        $this->response->withAddedCookie($cookie);
         return true;
     }
 
@@ -179,7 +179,7 @@ class Session
             ->withPath($this->cookiePath)
             ->withSecure($this->cookieSecure)
             ->withHttpOnly($this->cookieHttpOnly);
-        $this->response->withCookie($cookie);
+        $this->response->withAddedCookie($cookie);
         // 返回值
         return $this->handler->get($this->getId(), $name, $default);
     }
