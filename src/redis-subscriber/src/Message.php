@@ -12,6 +12,11 @@ class Message
     /**
      * @var string
      */
+    public $pattern;
+
+    /**
+     * @var string
+     */
     public $channel;
 
     /**

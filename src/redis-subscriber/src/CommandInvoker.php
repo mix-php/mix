@@ -113,6 +113,33 @@ class CommandInvoker
                 continue;
             }
 
+            if ($type == 'psubscribe' && count($buffer) == 6) {
+                $this->resultChannel->push($buffer);
+                $buffer = null;
+                continue;
+            }
+
+            if ($type == 'punsubscribe' && count($buffer) == 6) {
+                $this->resultChannel->push($buffer);
+                $buffer = null;
+                continue;
+            }
+
+            if ($type == 'pmessage' && count($buffer) == 9) {
+                $message = new Message();
+                $message->pattern = $buffer[4];
+                $message->channel = $buffer[6];
+                $message->payload = $buffer[8];
+                $timerID = Timer::after(30 * 1000, function () use ($message) {
+                    static::error(sprintf('Message channel (%s) is 30 seconds full, disconnected', $message->channel));
+                    $this->interrupt();
+                });
+                $this->messageChannel->push($message);
+                Timer::clear($timerID);
+                $buffer = null;
+                continue;
+            }
+
             if ($type == 'pong' && count($buffer) == 5) {
                 $this->pingChannel->push('pong');
                 $buffer = null;

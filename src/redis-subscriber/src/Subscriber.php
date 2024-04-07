@@ -126,6 +126,44 @@ class Subscriber
     }
 
     /**
+     * PSubscribe.
+     * @throws \Swoole\Exception
+     * @throws Throwable
+     */
+    public function psubscribe(string ...$channels)
+    {
+        $channels = array_map(function ($channel) {
+            return $this->prefix . $channel;
+        }, $channels);
+        $result = $this->commandInvoker->invoke(['psubscribe', ...$channels], count($channels));
+        foreach ($result as $value) {
+            if ($value === false) {
+                $this->commandInvoker->interrupt();
+                throw new SubscribeException('Psubscribe failed');
+            }
+        }
+    }
+
+    /**
+     * PUnsubscribe.
+     * @throws \Swoole\Exception
+     * @throws Throwable
+     */
+    public function punsubscribe(string ...$channels)
+    {
+        $channels = array_map(function ($channel) {
+            return $this->prefix . $channel;
+        }, $channels);
+        $result = $this->commandInvoker->invoke(['punsubscribe', ...$channels], count($channels));
+        foreach ($result as $value) {
+            if ($value === false) {
+                $this->commandInvoker->interrupt();
+                throw new UnsubscribeException('Punsubscribe failed');
+            }
+        }
+    }
+
+    /**
      * Channel
      * @return \Swoole\Coroutine\Channel
      */
