@@ -33,7 +33,7 @@ MixPHP 是一个 PHP 命令行模式开发框架；基于 `Vega` 驱动的 HTTP 
 
 ## 开发文档
 
-- `V3.0` [快速开始](#快速开始) [服务器](#服务器) [独立模块](#独立模块)
+- `V3.0` 1.[快速开始](#快速开始) 2.[服务器](#服务器) 3.[独立模块](#独立模块)
 - `V2.2` https://www.kancloud.cn/onanying/mixphp2-2/content
 - `V2.1` https://www.kancloud.cn/onanying/mixphp2-1/content
 - `V2.0` https://www.kancloud.cn/onanying/mixphp2/content
@@ -88,13 +88,6 @@ composer create-project --prefer-dist mix/grpc-skeleton grpc
 - [MixPHP V3 开发流程体验 Swoole, Workerman, FPM, CLI-Server 多种运行模式介绍](https://zhuanlan.zhihu.com/p/398381870)
 - [MixPHP V3 增加了 PHP-FPM、CLI-Server 的支持](https://zhuanlan.zhihu.com/p/394059925)
 - [MixPHP V3 发布前的感想, 有哪些变化和特点](https://zhuanlan.zhihu.com/p/392558932)
-
-## `AD` 混联网关
-
-[混联网关](https://connmix.com/) - 可编程分布式长连接网关
-
-- 可用于聊天室、直播弹幕、IM即时通讯、在线客服、网络游戏、硬件通讯、智能家居、物联网等领域的开发
-- 几行代码，免费搞定socket、websocket实时通讯
 
 ## 技术交流
 

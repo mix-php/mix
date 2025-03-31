@@ -33,7 +33,7 @@ Support multiple server drivers, and can switch seamlessly.
 
 ## Documentation
 
-- `V3.0` [Quick start](#Quick-start) [Server](#Server) [Standalone module](#Standalone-module)
+- `V3.0` 1.[Quick start](#Quick-start) 2.[Server](#Server) 3.[Standalone module](#Standalone-module)
 - `V2.2` https://www.kancloud.cn/onanying/mixphp2-2/content
 - `V2.1` https://www.kancloud.cn/onanying/mixphp2-1/content
 - `V2.0` https://www.kancloud.cn/onanying/mixphp2/content
