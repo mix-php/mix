@@ -1,13 +1,3 @@
-> OpenMix 出品：https://openmix.org
-
-<p align="center">
-    <br>
-    <br>
-    <img src="https://openmix.org/static/image/logo_php.png" width="120" alt="MixPHP">
-    <br>
-    <br>
-</p>
-
 <h1 align="center">Mix PHP</h1>
 
 [中文](README.md) | English
@@ -43,7 +33,7 @@ Support multiple server drivers, and can switch seamlessly.
 
 ## Documentation
 
-- `V3.0` https://openmix.org/mix-php/docs/3.0/
+- `V3.0` [Quick start](#Quick-start) [Server](#Server) [Standalone module](#Standalone-module)
 - `V2.2` https://www.kancloud.cn/onanying/mixphp2-2/content
 - `V2.1` https://www.kancloud.cn/onanying/mixphp2-1/content
 - `V2.0` https://www.kancloud.cn/onanying/mixphp2/content

@@ -1,13 +1,3 @@
-> OpenMix 出品：https://openmix.org
-
-<p align="center">
-    <br>
-    <br>
-    <img src="https://openmix.org/static/image/logo_php.png" width="120" alt="MixPHP">
-    <br>
-    <br>
-</p>
-
 <h1 align="center">Mix PHP</h1>
 
 中文 | [English](README_EN.md)
@@ -43,7 +33,7 @@ MixPHP 是一个 PHP 命令行模式开发框架；基于 `Vega` 驱动的 HTTP 
 
 ## 开发文档
 
-- `V3.0` https://openmix.org/mix-php/docs/3.0/
+- `V3.0` [快速开始](#快速开始) [服务器](#服务器) [独立模块](#独立模块)
 - `V2.2` https://www.kancloud.cn/onanying/mixphp2-2/content
 - `V2.1` https://www.kancloud.cn/onanying/mixphp2-1/content
 - `V2.0` https://www.kancloud.cn/onanying/mixphp2/content
