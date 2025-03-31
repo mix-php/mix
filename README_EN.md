@@ -88,7 +88,6 @@ composer create-project --prefer-dist mix/grpc-skeleton grpc
 OpenMix also has Golang ecological framework
 
 - https://github.com/mix-go/mix
-- https://gitee.com/mix-go/mix
 
 ## License
 

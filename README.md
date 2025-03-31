@@ -99,7 +99,6 @@ composer create-project --prefer-dist mix/grpc-skeleton grpc
 OpenMix 同时还有 Golang 生态的框架
 
 - https://github.com/mix-go/mix
-- https://gitee.com/mix-go/mix
 
 ## License
 
